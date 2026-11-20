@@ -17,6 +17,12 @@ import { useTranslations } from "next-intl";
 
 import { cn } from "~/lib/utils";
 import { StudioTabs, type PaneTab } from "./StudioTabs";
+import {
+    BeforePaneMutation,
+    capturePaneDomState,
+    restorePaneDomState,
+    type PaneDomState,
+} from "./paneDomState";
 import { SOURCE_DRAG_MIME, droppedTabId, isPaneDrag } from "./dragData";
 import {
     MAX_GROUPS,
@@ -164,6 +170,15 @@ export function StudioSplitView({
     const [slots, setSlots] = useState<Record<string, HTMLElement | null>>({});
     /** One stable host node per open tab, created once and reparented after. */
     const hosts = useRef(new Map<string, HTMLDivElement>());
+    const beforeReparent = useRef(new Map<string, PaneDomState>());
+    const placement = JSON.stringify(layout.groups.map(group => [group.id, group.tabIds]));
+    const captureBeforeReparent = useCallback(() => {
+        for (const [id, host] of hosts.current) {
+            if (host.isConnected && !host.closest("[hidden]")) {
+                beforeReparent.current.set(id, capturePaneDomState(host));
+            }
+        }
+    }, []);
     const rootRef = useRef<HTMLDivElement>(null);
     const paneCount = useRef(layout.groups.length);
 
@@ -318,7 +333,19 @@ export function StudioSplitView({
         for (const id of ids) {
             const slot = slots[id];
             const host = hosts.current.get(id);
-            if (!slot || !host || host.parentElement === slot) continue;
+            // Slot registrations settle in a second commit. Retain the
+            // pre-mutation snapshot while the old slot is disconnected.
+            if (!slot?.isConnected || !host) continue;
+            const snapshot = beforeReparent.current.get(id);
+            const restore = () => {
+                if (!snapshot || slot.closest("[hidden]")) return;
+                restorePaneDomState(snapshot);
+                beforeReparent.current.delete(id);
+            };
+            if (host.parentElement === slot) {
+                restore();
+                continue;
+            }
 
             // Taking a node out of the document blurs whatever was focused in
             // it, resets every scroller inside and reloads every frame.
@@ -330,29 +357,25 @@ export function StudioSplitView({
             if (typeof moveBefore === "function" && host.isConnected) {
                 try {
                     moveBefore.call(slot, host, null);
+                    restore();
                     continue;
                 } catch {
                     // Not a move the browser can make state-preserving.
                 }
             }
-            const focused = host.contains(document.activeElement)
-                ? (document.activeElement as HTMLElement)
-                : null;
-            const scrolled = [...host.querySelectorAll<HTMLElement>("*")]
-                .filter(el => el.scrollTop || el.scrollLeft)
-                .map(el => ({ el, top: el.scrollTop, left: el.scrollLeft }));
+            const fallback = snapshot ?? capturePaneDomState(host);
             slot.appendChild(host);
-            for (const { el, top, left } of scrolled) {
-                el.scrollTop = top;
-                el.scrollLeft = left;
+            if (!slot.closest("[hidden]")) {
+                restorePaneDomState(fallback);
+                beforeReparent.current.delete(id);
             }
-            focused?.focus({ preventScroll: true });
         }
         const open = new Set(ids);
         for (const [id, host] of hosts.current) {
             if (!open.has(id)) {
                 host.remove();
                 hosts.current.delete(id);
+                beforeReparent.current.delete(id);
             }
         }
     });
@@ -476,7 +499,7 @@ export function StudioSplitView({
 
     const zoomedId = layout.zoomedGroupId;
 
-    return (
+    const content = (
         <div ref={rootRef} className="relative min-h-0 min-w-0 flex-1 overflow-hidden">
             {layout.groups.map((group, index) => {
                 const zoomed = zoomedId === group.id;
@@ -631,6 +654,11 @@ export function StudioSplitView({
                 />
             )}
         </div>
+    );
+    return (
+        <BeforePaneMutation placement={placement} capture={captureBeforeReparent}>
+            {content}
+        </BeforePaneMutation>
     );
 }
 

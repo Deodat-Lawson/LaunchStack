@@ -17,6 +17,7 @@
  *     edits cost one round trip instead of 2N.
  */
 
+import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import {
@@ -36,6 +37,7 @@ import { uploadFile } from "~/lib/storage";
 import { validateRequestBody } from "~/lib/validation";
 import { getActiveDriveLink } from "~/server/services/google-drive/links";
 import { DOCX_MIME, adeuErrorResponse, loadDocument } from "../_shared";
+import { planObjectDeletion } from "~/server/storage/deletion/plan";
 
 export const runtime = "nodejs";
 
@@ -125,9 +127,8 @@ export async function POST(request: Request) {
             result = response.result;
         }
 
-        // Store as a new object and repoint the document, rather than
-        // overwriting in place: a failed write must never leave a document
-        // half-rewritten, and the previous bytes stay recoverable.
+        // Repoint atomically with cleanup of the URL actually replaced.
+        // The worker retains bytes still referenced by a historical version.
         const stored = await uploadFile({
             filename: loaded.data.filename,
             data: modified,
@@ -137,10 +138,28 @@ export async function POST(request: Request) {
             companyId: loaded.data.companyId,
         });
 
-        await db
-            .update(document)
-            .set({ url: stored.url, updatedAt: new Date() })
-            .where(eq(document.id, documentId));
+        await db.transaction(async tx => {
+            const [previous] = await tx
+                .select({ url: document.url, companyId: document.companyId })
+                .from(document)
+                .where(eq(document.id, documentId))
+                .for("update");
+            const obsoleteUrl = previous ? previous.url : stored.url;
+            if (obsoleteUrl !== stored.url || !previous) {
+                await planObjectDeletion(tx, {
+                    companyId: previous?.companyId ?? loaded.data.companyId,
+                    urls: [obsoleteUrl],
+                    requestedBy: loaded.userId,
+                    reason: "replaced_object",
+                    traceId: randomUUID(),
+                });
+            }
+            if (!previous) return;
+            await tx
+                .update(document)
+                .set({ url: stored.url, updatedAt: new Date() })
+                .where(eq(document.id, documentId));
+        });
 
         return NextResponse.json({
             success: true,

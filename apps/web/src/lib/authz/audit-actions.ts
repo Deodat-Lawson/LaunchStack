@@ -15,6 +15,7 @@ export const AUDIT_ACTIONS = [
     "ownership.transferred",
     "invitation.resent",
     "invitation.revoked",
+    "invitation.declined",
     "join_link.created",
     "join_link.updated",
     "join_link.revoked",

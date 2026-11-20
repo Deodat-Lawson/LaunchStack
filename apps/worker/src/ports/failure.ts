@@ -1,9 +1,9 @@
 /**
- * Failure visibility (ADR-003): when a pipeline event goes dead, mark the
- * underlying OCR job failed AND stamp the document and version's failure
- * metadata so the product UI shows the terminal state instead of an eternal
- * "processing". Mirrors the completion writes to both source records.
- * Both metadata writes are best-effort: neither blocks the other on failure.
+ * Failure visibility (ADR-003): dead storage deletion events block their
+ * durable request; dead ingestion events mark the underlying OCR job failed
+ * AND stamp the document and version's failure metadata so the product UI
+ * shows the terminal state instead of an eternal "processing".
+ * Both OCR metadata writes are best-effort: neither blocks the other on failure.
  */
 import { and, eq, inArray } from "drizzle-orm";
 
@@ -11,6 +11,8 @@ import type { ClaimedEvent } from "@launchstack/orchestration";
 import type { LoggerPort } from "@launchstack/runtime";
 import { getDb } from "@launchstack/store/client";
 import { document, documentVersions, ocrJobs } from "@launchstack/store/schema";
+
+import { markStorageDeletionRequestDead } from "~/server/storage/deletion/worker";
 
 const JOB_BEARING_EVENTS = new Set([
     "source.version.created",
@@ -21,6 +23,10 @@ const JOB_BEARING_EVENTS = new Set([
 export function createDeadEventHandler(logger: LoggerPort) {
     return async (claimed: ClaimedEvent, error: string): Promise<void> => {
         const { event } = claimed;
+        if (event.eventType === "storage.deletion.requested") {
+            await markStorageDeletionRequestDead(event.payload.requestId, event.traceId);
+            return;
+        }
         if (!JOB_BEARING_EVENTS.has(event.eventType)) return;
         const payload = event.payload as {
             ocrJobId?: string;
@@ -127,14 +133,23 @@ export function createDeadEventHandler(logger: LoggerPort) {
  * Failure visibility for rows the outbox store dead-letters at claim time
  * because their payload fails protocol validation. Those rows never become
  * a `ClaimedEvent` (the payload cannot be parsed), so the tick-level onDead
- * hook above cannot see them; the ocrJobId is instead recovered from the
- * deterministic event id (`<eventType>:<ocrJobId>` for the job-bearing
- * events — see protocol `eventIds`). Best-effort: a non-job-bearing or
- * unparseable id only logs, matching onDead's behavior for such events.
+ * hook above cannot see them; the target id is instead recovered from the
+ * deterministic event id (see protocol `eventIds`). Storage deletion ids
+ * identify a durable request; job-bearing ids identify an OCR job.
+ * Best-effort: an unparseable or unrelated id only logs.
  * Wired into DrizzleOutboxStore via its `onValidationDead` option.
  */
 export function createValidationDeadHandler(logger: LoggerPort) {
     return async (outboxId: number, eventId: string): Promise<void> => {
+        const storageMatch = /^storage\.deletion\.requested:([1-9]\d*)$/.exec(eventId);
+        if (storageMatch) {
+            const requestId = Number(storageMatch[1]);
+            if (Number.isSafeInteger(requestId)) {
+                await markStorageDeletionRequestDead(requestId);
+                return;
+            }
+        }
+
         for (const eventType of JOB_BEARING_EVENTS) {
             const prefix = `${eventType}:`;
             if (!eventId.startsWith(prefix)) continue;
@@ -166,7 +181,7 @@ export function createValidationDeadHandler(logger: LoggerPort) {
         }
         logger.error(
             { outboxId, eventId },
-            "outbox payload failed validation; no job-bearing event id — nothing to mark failed"
+            "outbox payload failed validation; no recognized target event id — nothing to mark failed"
         );
     };
 }

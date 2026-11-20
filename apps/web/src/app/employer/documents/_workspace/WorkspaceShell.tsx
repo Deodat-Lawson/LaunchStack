@@ -2118,18 +2118,22 @@ export function WorkspaceShell() {
             // Folder when the callback says folder access was being granted.
             const tabByProvider: Record<string, string> = {
                 "google-drive": tabParam === "folder" ? "folder" : "files",
+                "microsoft-365": "microsoft-365",
                 slack: "slack",
                 github: "github",
                 gmail: "gmail",
+                outlook: "outlook",
                 notion: "notion",
             };
             // LinkedIn returns into Growth › Brand › Accounts (`feature=growth`
             // above), so it has no Add-source tab to reopen.
             const label: Record<string, string> = {
                 "google-drive": "Google Drive",
+                "microsoft-365": "Microsoft 365",
                 slack: "Slack",
                 github: "GitHub",
                 gmail: "Gmail",
+                outlook: "Outlook",
                 notion: "Notion",
                 linkedin: "LinkedIn",
                 bluesky: "Bluesky",

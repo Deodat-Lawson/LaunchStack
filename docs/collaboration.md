@@ -46,8 +46,26 @@ and writers of the same log, with nothing to keep in sync.
 | Policy | Behaviour |
 | --- | --- |
 | `round_robin` | Fixed rotation. Deterministic, and nobody gets crowded out. |
-| `moderated` | A chair opens and closes, and hands the floor to whoever they name with `@handle`. Unclaimed turns return to the chair rather than stalling. |
-| `reactive` | Whoever was addressed speaks next; failing that, the persona whose role words best match the last message. Falls back to rotation so one voice cannot dominate. |
+| `moderated` | A chair opens each round and takes the meeting's last turn, and the floor goes to whoever is asked with `@handle, …` (or a question to them). When nobody still waiting is asked, the next seat still waiting speaks. |
+| `reactive` | Whoever was addressed speaks next; failing that, the persona whose role words best match the last message; failing that, the next seat still waiting. |
+
+Under `moderated` and `reactive` a room — a phase's listed speakers, or the
+whole meeting when it has no phases — works in rounds: everyone in it speaks
+once before anyone speaks twice, and nobody speaks twice in a row while someone
+else is waiting. A chair that framed the previous phase speaks last in the next
+one instead of twice in a row. A person naming an agent always gets that agent
+next, even one that has already spoken.
+
+Each agent speaks only for its own seat. A reply that comes back written as
+another participant (`Dana (@finance): …`, the transcript's own label) is asked
+for again once and fails the turn if it happens twice; later lines written in
+another seat's name are cut before the turn is posted.
+
+A turn asks the model for its lowest reasoning effort (`low`, else `minimal`)
+and caps output at `MEETING_TURN_MAX_OUTPUT_TOKENS`, sized for that reasoning
+plus a full reply — some endpoints count reasoning against the cap
+(`apps/web/src/server/collab/turn-budget.ts`). A reply that still reaches the
+cap is posted up to its last full sentence.
 
 A meeting ends when an agent emits the completion marker (`MEETING_COMPLETE` by
 default, stripped before the message is stored), when a human closes it, or
@@ -237,6 +255,7 @@ pnpm exec jest __tests__/collab __tests__/api/collab
 | `__tests__/collab/two-machine.test.ts` | Three OS processes, one meeting, over the host's routable address |
 | `__tests__/collab/slack-bridge.test.ts` | Mirroring, echo loops, duplicate delivery, commands, signatures |
 | `__tests__/collab/meeting-evals.test.ts` | The scoring function and the scenario suite |
+| `packages/collab/src/__tests__/*.test.ts` | Rounds and nominations, one voice per seat, trimming (`pnpm --filter @launchstack/collab test`) |
 | `__tests__/api/collab/*.test.ts` | Route auth, validation, the hub mount, the Slack receiver |
 
 `two-machine.test.ts` is the one to read if you want to know whether the

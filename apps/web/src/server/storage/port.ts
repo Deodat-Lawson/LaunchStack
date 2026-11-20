@@ -11,7 +11,7 @@
 
 import type { StoragePort, UploadInput, UploadResult } from "@launchstack/runtime/storage";
 
-import { uploadFile, fetchFile, deleteFileByUrl, resolveStorageBackend } from "~/lib/storage";
+import { uploadFile, fetchFile, resolveStorageBackend } from "~/lib/storage";
 
 export function createAppStoragePort(): StoragePort {
     const provider = resolveStorageBackend();
@@ -39,10 +39,6 @@ export function createAppStoragePort(): StoragePort {
 
         download(urlOrKey, init) {
             return fetchFile(urlOrKey, init);
-        },
-
-        delete(urlOrKey) {
-            return deleteFileByUrl(urlOrKey);
         },
     };
 }

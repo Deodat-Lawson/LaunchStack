@@ -30,7 +30,11 @@ jest.mock("next-themes", () => ({
 jest.mock("next/navigation", () => ({
     useRouter: () => ({ push: jest.fn(), replace: jest.fn(), refresh: jest.fn() }),
 }));
-jest.mock("~/lib/auth-client", () => ({ useAuth: () => ({ signOut: jest.fn() }) }));
+// The account menu reads the session; the server and the browser see the same one.
+jest.mock("~/lib/auth-client", () => ({
+    authClient: { useSession: () => ({ data: null }) },
+    listDeviceAccounts: () => Promise.resolve([]),
+}));
 jest.mock("~/lib/profile/use-my-profile", () => ({
     useMyProfile: () => ({ data: undefined }),
     resetMyProfile: jest.fn(),

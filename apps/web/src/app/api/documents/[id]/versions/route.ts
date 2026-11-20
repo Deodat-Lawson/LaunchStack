@@ -216,6 +216,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
             // will later fetch with a signed token. Prove the workspace owns it
             // before the version exists.
             let resolvedDocumentUrl = documentUrl;
+            let storedDocumentUrl = documentUrl;
             try {
                 const internalFileId = await authorizeInternalFileRef(
                     documentUrl,
@@ -223,6 +224,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                     effectiveProvider
                 );
                 if (internalFileId !== null) {
+                    storedDocumentUrl = `/api/files/${internalFileId}`;
                     resolvedDocumentUrl = buildInternalFileUrl(
                         getOcrConfig().appPublicUrl ?? new URL(request.url).origin,
                         internalFileId
@@ -278,8 +280,9 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
                 userId,
                 title: doc.title,
                 category: doc.category,
-                url: resolvedDocumentUrl,
-                creationKey: `version:${parsed.documentId}:${resolvedDocumentUrl}`,
+                url: storedDocumentUrl,
+                processingUrl: resolvedDocumentUrl,
+                creationKey: `version:${parsed.documentId}:${storedDocumentUrl}`,
                 mimeType,
                 fileSize,
                 changelog,

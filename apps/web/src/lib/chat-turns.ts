@@ -73,12 +73,34 @@ export interface ChatTurnMetadata {
     createdSources?: ChatCreatedSource[];
 }
 
-/** A document a chat answer wrote into the workspace. */
-export interface ChatCreatedSource {
-    documentId: number;
-    title: string;
-    /** Its folder path; Unfiled is the person's Private section. */
-    folder: string;
+/**
+ * Something a chat answer made or changed in the workspace: a document it
+ * wrote (no `kind`, as saved before diagrams existed) or a diagram it drew or
+ * edited in the Mindmap editor.
+ */
+export type ChatCreatedSource =
+    | {
+          kind?: "document";
+          documentId: number;
+          title: string;
+          /** Its folder path; Unfiled is the person's Private section. */
+          folder: string;
+      }
+    | {
+          kind: "diagram";
+          mindmapId: number;
+          title: string;
+          folder: string;
+          /** True when the answer changed a diagram that already existed. */
+          edited?: boolean;
+      };
+
+export type ChatCreatedDocument = Extract<ChatCreatedSource, { documentId: number }>;
+export type ChatCreatedDiagram = Extract<ChatCreatedSource, { kind: "diagram" }>;
+
+/** The diagram an item names, or null for a document. */
+export function createdDiagramId(item: ChatCreatedSource): number | null {
+    return item.kind === "diagram" ? item.mindmapId : null;
 }
 
 export interface ChatQueueItem {

@@ -41,7 +41,7 @@ import {
     normalizeFolderPath,
 } from "~/lib/folders/path";
 
-import { isPersonalMailboxPath } from "~/server/services/connectors/gmail/config";
+import { isPersonalMailboxPath } from "~/server/services/connectors/mailboxes";
 
 import type { Executor } from "./db-types";
 import { loadDocumentFacts, loadFolderLineage, type GrantFact } from "./item-access";
@@ -655,8 +655,9 @@ function isManageLevel(level: string): boolean {
 }
 
 /**
- * A member's mailbox is never handed on. ADR-014 kept the `Gmail` subtree
- * out of the admin carry-over, and what is still in a mailbox when its owner
+ * A member's mailbox (Gmail or Outlook) is never handed on. ADR-014 kept the
+ * `Gmail` subtree out of the admin carry-over, `Outlook` follows the same
+ * rule, and what is still in a mailbox when its owner
  * goes is deleted with their connection (`closePersonalConnections`). These
  * two filters are the backstop: no heir is granted anything there, whatever
  * state an older mailbox was left in.

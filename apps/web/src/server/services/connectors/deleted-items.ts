@@ -20,7 +20,7 @@ import { connectorDeletedItem } from "~/server/db/schema";
 import type { Executor } from "~/server/workspace/db-types";
 
 /** The connectors that sync by reach, and so need a delete remembered. */
-const SYNCED_CONNECTORS = new Set(["google-drive", "notion"]);
+const SYNCED_CONNECTORS = new Set(["google-drive", "notion", "microsoft-365"]);
 
 export interface DeletedDocumentFacts {
     readonly title: string;

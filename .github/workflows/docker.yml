@@ -11,6 +11,12 @@ on:
       - docker-compose*.yml
       - apps/web/**
       - apps/worker/**
+      # The compute-service images and the self-host bundle (deploy/compose.yml
+      # plus the docker/ files it mounts) are built here too.
+      - services/**
+      - deploy/**
+      - docker/**
+      - scripts/ops/build-self-host-bundle.sh
       - packages/**
       - patches/**
       - pnpm-lock.yaml
@@ -72,13 +78,30 @@ jobs:
             type=sha,format=short
             type=raw,value=latest,enable={{is_default_branch}}
 
-      - name: Build migration target (smoke only)
+      # The `migrate` target is published as its own image: the self-host
+      # stack (deploy/compose.yml) has no source tree to build it from, and it
+      # also carries the preflight script `launchstack doctor` runs.
+      - name: Derive migrate tags
+        id: migrate-meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}-migrate
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build migrate ${{ github.event_name == 'push' && 'and push' || '(smoke only)' }}
         uses: docker/build-push-action@v6
         with:
           context: .
           file: apps/web/Dockerfile
           target: migrate
-          push: false
+          push: ${{ github.event_name == 'push' }}
+          tags: ${{ steps.migrate-meta.outputs.tags }}
+          labels: ${{ steps.migrate-meta.outputs.labels }}
           cache-from: type=gha,scope=source
 
       - name: Build ${{ github.event_name == 'push' && 'and push' || '(smoke only)' }}
@@ -120,6 +143,172 @@ jobs:
           labels: ${{ steps.worker-meta.outputs.labels }}
           cache-from: type=gha,scope=worker
           cache-to: type=gha,scope=worker,mode=max
+
+  # The compute services (ADR-004). Published so a self-hosted install pulls
+  # them instead of building from a checkout; each is its own build context
+  # under services/. Same tag scheme as the app images.
+  services:
+    name: Build ${{ matrix.name }}
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      # One service failing to build says nothing about the others.
+      fail-fast: false
+      matrix:
+        include:
+          - name: adeu-docs-editing
+            context: services/adeu-ai-docs-editing
+          - name: document-converter
+            context: services/document-converter
+          # Only started by the self-host stack's `whisper` profile.
+          - name: transcription
+            context: services/transcription
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        if: github.event_name == 'push'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Derive tags
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ github.repository }}-${{ matrix.name }}
+          tags: |
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=sha,format=short
+            type=raw,value=latest,enable={{is_default_branch}}
+
+      - name: Build ${{ github.event_name == 'push' && 'and push' || '(smoke only)' }}
+        uses: docker/build-push-action@v6
+        with:
+          context: ${{ matrix.context }}
+          push: ${{ github.event_name == 'push' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,scope=${{ matrix.name }},mode=max
+
+  # The self-host bundle: deploy/compose.yml, the docker/ files it mounts, the
+  # CLI and a VERSION file, as one tarball (scripts/ops/build-self-host-bundle.sh).
+  # Built and checked on every run so a broken bundle is caught in the PR, not
+  # at release time; attached to the GitHub release by the job below.
+  bundle:
+    name: Build self-host bundle
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build bundle
+        env:
+          # A release is named after its tag; anything else is an edge build.
+          BUNDLE_VERSION: ${{ github.ref_type == 'tag' && github.ref_name || 'edge' }}
+        run: |
+          set -euo pipefail
+          scripts/ops/build-self-host-bundle.sh "$BUNDLE_VERSION" "$RUNNER_TEMP/bundle"
+          # The installer ships beside the bundle as its own release asset.
+          cp deploy/install.sh "$RUNNER_TEMP/bundle/install.sh"
+
+      # Unpack it the way the installer does and let Compose parse the result,
+      # in both access modes. `config` resolves every variable and every
+      # mounted path's syntax without pulling or starting anything.
+      - name: Validate the unpacked bundle
+        run: |
+          set -euo pipefail
+          home="$RUNNER_TEMP/launchstack-home"
+          mkdir -p "$home"
+          tar -xzf "$RUNNER_TEMP/bundle/launchstack-self-host.tar.gz" -C "$home"
+          cd "$home"
+          test -x bin/launchstack
+          test -s VERSION
+          # Every bind-mount source in compose.yml must be in the bundle.
+          sed -n 's|^[[:space:]]*-[[:space:]]*\./\(docker/[^:[:space:]]*\):.*$|\1|p' compose.yml | sort -u | while read -r f; do
+            test -e "$f" || { echo "::error::compose.yml mounts ./$f but the bundle does not contain it"; exit 1; }
+          done
+          {
+            echo "BETTER_AUTH_URL=http://localhost:3000"
+            for v in POSTGRES_PASSWORD BETTER_AUTH_SECRET FILE_ACCESS_TOKEN_SECRET \
+              EMBEDDING_SECRETS_KEY S3_ACCESS_KEY S3_SECRET_KEY ADEU_SERVICE_API_KEY \
+              DOCUMENT_CONVERTER_API_KEY TRANSCRIPTION_SERVICE_API_KEY \
+              GOTENBERG_SERVICE_PASSWORD INNGEST_EVENT_KEY INNGEST_SIGNING_KEY \
+              SEARXNG_SECRET; do
+              echo "$v=$(openssl rand -hex 32)"
+            done
+          } > .env
+          echo "::group::local mode"
+          docker compose config --quiet
+          docker compose config --services
+          echo "::endgroup::"
+          echo "::group::domain mode, every optional profile"
+          DOMAIN=app.example.com BETTER_AUTH_URL=https://app.example.com \
+            COMPOSE_PROFILES=domain,ocr,whisper,search docker compose config --quiet
+          echo "::endgroup::"
+          # No fallback secrets: with one missing, Compose must refuse.
+          grep -v '^INNGEST_SIGNING_KEY=' .env > .env.missing
+          if docker compose --env-file .env.missing config --quiet 2>/dev/null; then
+            echo "::error::compose.yml accepted an environment with INNGEST_SIGNING_KEY missing"
+            exit 1
+          fi
+
+      - name: Upload bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: launchstack-self-host
+          path: ${{ runner.temp }}/bundle/
+          if-no-files-found: error
+          retention-days: 14
+
+  # On a version tag, attach the bundle and the installer to the GitHub
+  # release, after every image the bundle's compose.yml names has been pushed
+  # under that version. Separate from release.yml on purpose: that workflow is
+  # the Changesets npm flow (package tags, not v*.*.* ones) and is untouched.
+  release-bundle:
+    name: Attach self-host bundle to the release
+    if: github.event_name == 'push' && github.ref_type == 'tag'
+    needs: [build, services, bundle]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Download bundle
+        uses: actions/download-artifact@v4
+        with:
+          name: launchstack-self-host
+          path: ${{ runner.temp }}/release
+
+      - name: Create the release if needed and upload
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_REPO: ${{ github.repository }}
+          TAG: ${{ github.ref_name }}
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/release"
+          test -s launchstack-self-host.tar.gz
+          test -s install.sh
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --title "$TAG" --generate-notes --verify-tag
+          fi
+          gh release upload "$TAG" launchstack-self-host.tar.gz install.sh --clobber
 
   prebuilt:
     name: Build prebuilt runner

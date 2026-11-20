@@ -44,11 +44,14 @@ DialogOverlay.displayName = DialogPrimitive.Overlay.displayName;
 function DialogContent({
     className,
     overlayClassName,
+    showCloseButton = true,
     children,
     ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
     /** Classes for the backdrop, e.g. to lift it with the panel above a raised surface. */
     overlayClassName?: string;
+    /** Off for a dialog that must be answered (shadcn's own prop name). */
+    showCloseButton?: boolean;
 }) {
     const t = useTranslations("common.a11y");
     return (
@@ -63,10 +66,12 @@ function DialogContent({
                 {...props}
             >
                 {children}
-                <DialogPrimitive.Close className="ring-offset-background focus:ring-brand data-[state=open]:bg-brand-soft data-[state=open]:text-ink-3 rounded-xs focus:outline-hidden absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0">
-                    <XIcon />
-                    <span className="sr-only">{t("close")}</span>
-                </DialogPrimitive.Close>
+                {showCloseButton ? (
+                    <DialogPrimitive.Close className="ring-offset-background focus:ring-brand data-[state=open]:bg-brand-soft data-[state=open]:text-ink-3 rounded-xs focus:outline-hidden absolute right-4 top-4 opacity-70 transition-opacity hover:opacity-100 focus:ring-2 focus:ring-offset-2 disabled:pointer-events-none [&_svg:not([class*='size-'])]:size-4 [&_svg]:pointer-events-none [&_svg]:shrink-0">
+                        <XIcon />
+                        <span className="sr-only">{t("close")}</span>
+                    </DialogPrimitive.Close>
+                ) : null}
             </DialogPrimitive.Content>
         </DialogPortal>
     );

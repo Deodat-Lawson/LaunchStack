@@ -77,7 +77,12 @@ describeDb("connector deleted items (integration)", () => {
         const { deleteDocumentCore } = await import("~/server/services/document-delete");
         await test.db.transaction(async tx => {
             for (const id of ids) {
-                await deleteDocumentCore(tx, id, { deletedByUserPk: pk[name] });
+                await deleteDocumentCore(tx, id, {
+                    requestedBy: `auth_${name}`,
+                    reason: "user_delete",
+                    traceId: crypto.randomUUID(),
+                    deletedByUserPk: pk[name],
+                });
             }
         });
     }

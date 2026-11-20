@@ -611,11 +611,19 @@ export const GUIDES: Guide[] = [
                         detail: "The Google OAuth pair plus GMAIL_CONNECTOR_ENABLED=true. Uses a separate mailbox grant and the shared Google callback; reads mail without sending or deleting it.",
                     },
                     {
+                        name: "Microsoft 365 (OneDrive and SharePoint)",
+                        detail: "MICROSOFT_OAUTH_CLIENT_ID + MICROSOFT_OAUTH_CLIENT_SECRET from one Microsoft Entra app registration, separate from the AUTH_MICROSOFT_* sign-in app. Callback: /api/connectors/microsoft/oauth/callback. Delegated Microsoft Graph permissions: Files.Read.All, Sites.Read.All, offline_access, openid, email, profile. MICROSOFT_OAUTH_TENANT_ID limits connections to one organisation; it defaults to common. Reads files without changing or deleting them.",
+                    },
+                    {
+                        name: "Outlook · opt-in",
+                        detail: "The Microsoft OAuth pair plus OUTLOOK_CONNECTOR_ENABLED=true, with the delegated Mail.Read permission added to the same app registration. Each member connects their own mailbox through the shared Microsoft callback; reads mail without sending or deleting it.",
+                    },
+                    {
                         name: "Drive folder import · opt-in",
                         detail: "GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED=true lets an admin add read-only Drive access after connecting (Allow folder access), so a picked or pasted folder imports with its subfolders, including folders shared with the account and shared drives. Connecting itself asks only for the files picked one by one, so it never shows Google's unverified-app warning; only allowing folder access does, until the app is verified. Without the flag, only files picked one by one can be imported. The connection belongs to the workspace, so once folder access is allowed every admin can import from the connected account's whole Drive, and the short-lived token the Google Picker receives in the browser can read all of it.",
                     },
                 ],
-                note: "Gmail uses the restricted gmail.readonly scope, and Drive folder import the restricted drive.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling either for users.",
+                note: "Gmail uses the restricted gmail.readonly scope, and Drive folder import the restricted drive.readonly scope. Prepare the Google consent screen and the verification or internal-app setup before enabling either for users. For Microsoft 365, Sites.Read.All needs an administrator's consent in most tenants, and tenants that restrict user consent need the same for Mail.Read: grant admin consent in your own directory, or expect each customer's administrator to approve the app the first time someone there connects.",
             },
             {
                 title: "Google Picker and linked editing",

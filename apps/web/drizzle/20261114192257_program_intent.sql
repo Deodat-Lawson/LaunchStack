@@ -1,1 +1,0 @@
-ALTER TABLE "pdr_ai_v2_distribution_programs" ADD COLUMN "intent" varchar(16) DEFAULT 'partners' NOT NULL;

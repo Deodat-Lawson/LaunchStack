@@ -23,9 +23,24 @@ import { DocIngestionPipeline } from "@launchstack/indexing";
 
 import { uploaderOfVersion, uploaderOrNull } from "~/server/ai-usage/uploader";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { eq } from "drizzle-orm";
+import { ocrJobs } from "@launchstack/store/schema";
+import { db } from "~/server/db";
+import { deleteDocumentCore } from "~/server/services/document-delete";
 
 export function createIngestionPipelinePort(logger: LoggerPort): ExtractionPipelinePort {
-    const pipeline = new DocIngestionPipeline(logger);
+    const pipeline = new DocIngestionPipeline(logger, async input => {
+        await db.transaction(async tx => {
+            // Snapshot job URLs before the original ZIP's job is removed.
+            await deleteDocumentCore(tx, input.sourceId, {
+                requestedBy: input.userId,
+                reason: "archive_expanded",
+                traceId: input.traceId,
+                rememberConnectorDeletion: false,
+            });
+            await tx.delete(ocrJobs).where(eq(ocrJobs.id, input.ocrJobId));
+        });
+    });
     return {
         extract: (job: ExtractionJob) => {
             const aiUse = { feature: "ingestion", userId: job.actorId, enforce: false } as const;

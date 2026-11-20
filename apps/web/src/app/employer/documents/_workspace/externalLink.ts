@@ -20,8 +20,11 @@ export type ExternalLinkTranslator = ReturnType<typeof useTranslations<"sources.
 
 const OPEN_KEYS = {
     "google-drive": "openGoogleDrive",
+    onedrive: "openOneDrive",
+    sharepoint: "openSharePoint",
     notion: "openNotion",
     gmail: "openGmail",
+    outlook: "openOutlook",
     obsidian: "openObsidian",
     github: "openGithub",
     youtube: "openYoutube",
@@ -48,10 +51,16 @@ export function externalLinkPlace(t: ExternalLinkTranslator, link: SourceExterna
     switch (link.kind) {
         case "google-drive":
             return t("placeGoogleDrive");
+        case "onedrive":
+            return t("placeOneDrive");
+        case "sharepoint":
+            return t("placeSharePoint");
         case "notion":
             return t("placeNotion");
         case "gmail":
             return t("placeGmail");
+        case "outlook":
+            return t("placeOutlook");
         case "obsidian":
             return t("placeObsidian");
         case "youtube":

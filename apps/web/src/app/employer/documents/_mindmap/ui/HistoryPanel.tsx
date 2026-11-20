@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { Button } from "~/components/ui/button";
 import { ScrollArea } from "~/components/ui/scroll-area";
 
+import { AI_EDIT_SNAPSHOT_LABEL } from "../model/agent-edits";
 import { parseDoc } from "../model/serialize";
 import { useStore } from "./EditorContext";
 
@@ -172,6 +173,7 @@ function revisionLabel(
 ): string {
     if (row.label === null) return t("version", { revision: row.revision });
     if (row.label === SEED_SNAPSHOT_LABEL) return t("createdFromTemplate");
+    if (row.label === AI_EDIT_SNAPSHOT_LABEL) return t("beforeAiEdit");
     const restored = RESTORED_LABEL.exec(row.label);
     if (restored) return t("restoredFrom", { revision: Number(restored[1]) });
     return row.label;

@@ -26,7 +26,9 @@ export type SourceKind =
     | "website"
     | "mindmap"
     | "google-drive"
+    | "microsoft-365"
     | "gmail"
+    | "outlook"
     | "conversation"
     | "artifact"
     | "other";
@@ -84,6 +86,7 @@ export function sourceKindOf(doc: {
     )
         return "conversation";
     if (meta.connector === "gmail" || key.startsWith("connector:gmail:")) return "gmail";
+    if (meta.connector === "outlook" || key.startsWith("connector:outlook:")) return "outlook";
     if (
         meta.connector === "google-drive" ||
         key.startsWith("connector:google-drive:") ||
@@ -91,6 +94,8 @@ export function sourceKindOf(doc: {
         key.startsWith("gdocs:")
     )
         return "google-drive";
+    if (meta.connector === "microsoft-365" || key.startsWith("connector:microsoft-365:"))
+        return "microsoft-365";
     // Creation keys are stored hashed, so the importers' marker is what says it.
     if (meta.kind === "website" || key.startsWith("website:") || key.startsWith("crawl:"))
         return "website";

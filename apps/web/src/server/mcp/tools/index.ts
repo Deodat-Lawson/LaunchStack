@@ -5,6 +5,7 @@
  */
 import type { McpTool } from "../protocol";
 import { addDocumentTool } from "./add-document";
+import { createDiagramTool, editDiagramTool, listDiagramsTool, readDiagramTool } from "./diagrams";
 import { fetchTool } from "./fetch";
 import { findSimilarCompaniesTool } from "./find-similar-companies";
 import { listProspectsTool } from "./list-prospects";
@@ -22,4 +23,8 @@ export const MCP_TOOLS: readonly McpTool[] = [
     saveConversationTool,
     addDocumentTool,
     startUploadTool,
+    listDiagramsTool,
+    readDiagramTool,
+    createDiagramTool,
+    editDiagramTool,
 ];

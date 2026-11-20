@@ -22,17 +22,17 @@ pnpm add @launchstack/simulation
 import { createWorld, runRound, buildReportRequest, parseReport } from "@launchstack/simulation";
 
 let world = createWorld({
-    subject: "Acme raises prices by 20%",
-    brief: "Acme sells invoicing software to small firms.",
-    personas, // from buildCastRequest / parseCast, or your own
-    accounts: [{ id: "narrator", name: "Newswire", handle: "@newswire" }],
-    seedPosts: [{ authorId: "narrator", text: "Acme announces a 20% price increase." }],
-    config: { seed: 42 },
+  subject: "Acme raises prices by 20%",
+  brief: "Acme sells invoicing software to small firms.",
+  personas, // from buildCastRequest / parseCast, or your own
+  accounts: [{ id: "narrator", name: "Newswire", handle: "@newswire" }],
+  seedPosts: [{ authorId: "narrator", text: "Acme announces a 20% price increase." }],
+  config: { seed: 42 },
 });
 
 for (let r = 0; r < 8; r++) {
-    ({ world } = await runRound(world, { model, concurrency: 6 }));
-    // persist `world` here; a crash resumes from the last saved round
+  ({ world } = await runRound(world, { model, concurrency: 6 }));
+  // persist `world` here; a crash resumes from the last saved round
 }
 
 const reply = await model.complete(buildReportRequest(world));
@@ -72,6 +72,12 @@ with `skepticShortfall` and, when it comes back too warm, recasts the seats
 `seatsToRecast` picks (invented people first, fans grounded in evidence last)
 and puts the newcomers in with `fillSeats`.
 
+A host may also cast its own personas. Two optional fields serve one that
+casts by slot: `slotId` names the slot a persona fills, and `knows` holds up
+to five short facts from the evidence the persona was built from, which
+`buildDecisionRequest` shows on their turns ("What you know from your own
+work"). Without them, prompts are exactly as before.
+
 Every random choice is seeded by (run seed, round, purpose) and `runRound`
 never mutates its input, so retrying a round gives the same feeds and the
 same activations. If more than half the turns fail, it throws
@@ -79,13 +85,13 @@ same activations. If more than half the turns fail, it throws
 
 ## Honesty
 
-A run shows what *these simulated people* did. It is a scenario to think
+A run shows what _these simulated people_ did. It is a scenario to think
 with, not a forecast; `buildReportRequest` tells the model so, and
 `calibration.ts` (`spearman`, `directionHits`) exists to check runs against
 what really happened.
 
 ## API
 
-| Subpath | What it is |
-| --- | --- |
-| `.` | world, feeds, actions, rounds, cast, brief, report, interviews, estimates, calibration |
+| Subpath | What it is                                                                             |
+| ------- | -------------------------------------------------------------------------------------- |
+| `.`     | world, feeds, actions, rounds, cast, brief, report, interviews, estimates, calibration |

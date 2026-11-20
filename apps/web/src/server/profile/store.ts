@@ -399,6 +399,37 @@ export async function removeProfilePhoto(
     return loadMyProfile(caller);
 }
 
+/**
+ * Each person's own photo (not a workspace override) by auth user id, for
+ * the account menu's list of accounts signed in on this browser. The caller
+ * passes ids it has already verified from the browser's session cookies.
+ */
+export async function globalPhotoUrls(
+    authUserIds: readonly string[]
+): Promise<Map<string, string | null>> {
+    const out = new Map<string, string | null>();
+    if (authUserIds.length === 0) return out;
+    const rows = await db
+        .select({ authUserId: users.userId, imageId: profileImages.id })
+        .from(users)
+        .leftJoin(
+            profileImages,
+            and(sql`${profileImages.userId} = ${users.id}`, isNull(profileImages.companyId))
+        )
+        .where(inArray(users.userId, [...authUserIds]));
+    for (const row of rows) out.set(row.authUserId, profileImageUrl(row.imageId));
+    return out;
+}
+
+/** The auth user id behind a product user row, or null. */
+export async function authUserIdOf(userPk: bigint): Promise<string | null> {
+    const [row] = await db
+        .select({ authUserId: users.userId })
+        .from(users)
+        .where(eq(users.id, Number(userPk)));
+    return row?.authUserId ?? null;
+}
+
 // ---------------------------------------------------------------------------
 // Serving
 // ---------------------------------------------------------------------------
@@ -424,7 +455,9 @@ const ownerMembership = alias(userCompanyMemberships, "owner_membership");
  * Who may see a photo. Yourself, always. A workspace photo: active members
  * of that workspace. Your own photo: anyone active in a workspace you share
  * *where you have no workspace photo* — an override replaces the photo
- * there, so that workspace never gets the other one's URL.
+ * there, so that workspace never gets the other one's URL. (The image route
+ * also shows someone's own photo to the other accounts signed in on the
+ * same browser: see `/api/profile-images/[id]`.)
  */
 export async function canViewProfileImage(
     viewerPk: bigint,

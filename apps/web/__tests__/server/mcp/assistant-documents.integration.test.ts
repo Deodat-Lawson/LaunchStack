@@ -10,7 +10,7 @@
  * rows, grants, folder rows and ADR-014 defaults are the real code. Gated like
  * the other integration suites (LAUNCHSTACK_TEST_DATABASE_URL on a local server).
  */
-import { and, eq } from "drizzle-orm";
+import { and, eq, inArray } from "drizzle-orm";
 
 import { company, document, documentVersions } from "@launchstack/store/schema";
 import { configureDatabase, type DbClient } from "@launchstack/store/client";
@@ -33,6 +33,7 @@ import {
     userCompanyMemberships,
     users,
 } from "~/server/db/schema";
+import { storageDeletionItems } from "~/server/db/schema/storage";
 import {
     MAX_STAGED_BYTES,
     StagingError,
@@ -64,10 +65,18 @@ jest.mock("~/lib/storage", () => ({
     uploadFile: jest.fn(async (input: { filename: string; data: Buffer }) => {
         const url = `mem://${++mockFileCounter}/${input.filename}`;
         mockStored.set(url, Buffer.from(input.data));
-        return { url, pathname: input.filename, provider: "s3" };
+        return {
+            url,
+            pathname: input.filename,
+            provider: "s3",
+            ref: { adapter: "s3", storageLocationId: "mem", key: url },
+        };
     }),
-    deleteFile: jest.fn(async (url: string) => {
-        mockStored.delete(url);
+}));
+jest.mock("~/server/storage/stored-url", () => ({
+    refFromStoredUrl: (url: string) => ({
+        ok: true,
+        ref: { adapter: "s3", storageLocationId: "mem", key: url },
     }),
 }));
 
@@ -333,7 +342,7 @@ describeDb("assistant documents: staging and filing (integration)", () => {
             });
         });
 
-        it("expire, and the sweep deletes unfiled bytes but never a filed document's", async () => {
+        it("expire, and the sweep queues unfiled bytes for deletion but never a filed document's", async () => {
             const stale = await draft("ada");
             const filed = await draft("ada");
             await claimStagedFile(filed.id);
@@ -351,8 +360,13 @@ describeDb("assistant documents: staging and filing (integration)", () => {
             });
 
             expect(await sweepExpiredStagedFiles()).toBeGreaterThanOrEqual(2);
-            expect(mockStored.has(stale.storageUrl!)).toBe(false);
-            expect(mockStored.has(filed.storageUrl!)).toBe(true);
+            const queued = await test.db
+                .select({ sourceUrl: storageDeletionItems.sourceUrl })
+                .from(storageDeletionItems)
+                .where(
+                    inArray(storageDeletionItems.sourceUrl, [stale.storageUrl!, filed.storageUrl!])
+                );
+            expect(queued).toEqual([{ sourceUrl: stale.storageUrl }]);
             const left = await test.db
                 .select()
                 .from(mcpStagedFiles)

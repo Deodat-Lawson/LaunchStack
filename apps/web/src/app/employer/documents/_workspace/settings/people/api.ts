@@ -35,7 +35,7 @@ export interface MemberCounts {
     suspended: number;
 }
 
-export type InvitationStatus = "pending" | "accepted" | "revoked" | "expired";
+export type InvitationStatus = "pending" | "accepted" | "revoked" | "declined" | "expired";
 
 export interface Invitation {
     id: number;

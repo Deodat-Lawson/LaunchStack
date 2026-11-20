@@ -1,0 +1,1 @@
+ALTER TABLE "pdr_ai_v2_workspace_invitations" ADD COLUMN "declined_at" timestamp with time zone;

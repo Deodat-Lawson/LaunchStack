@@ -22,6 +22,7 @@ import {
 } from "~/lib/validation";
 import { appendMessages, truncateMessages } from "~/server/sessions/repository";
 import { requestTranslator } from "~/i18n/server";
+import { UploadAuthorizationError } from "~/server/services/upload-authorization-error";
 
 export const runtime = "nodejs";
 
@@ -49,6 +50,12 @@ export async function POST(request: Request, { params }: Params) {
                   { status: 404 }
               );
     } catch (error) {
+        if (error instanceof UploadAuthorizationError) {
+            return NextResponse.json(
+                { error: requestTranslator(request, "upload.server.errors")("fileNotInWorkspace") },
+                { status: error.status }
+            );
+        }
         console.error("[workspace/sessions] append failed:", error);
         return serverError(
             requestTranslator(request, "workspace.server.errors")("saveMessageFailed")

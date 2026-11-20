@@ -85,12 +85,16 @@ export async function GET(request: Request, { params }: { params: Promise<{ id: 
         const access = draftAccessView(await draftAccess(ctx.data, row), ctx.data);
 
         // Best-effort recency stamp for the "Recent" rail — a failure here must
-        // never stop the document from opening.
-        void db
-            .update(mindmaps)
-            .set({ openedAt: new Date() })
-            .where(eq(mindmaps.id, id))
-            .catch((err: unknown) => console.error("[mindmaps] openedAt stamp failed:", err));
+        // never stop the document from opening. `?quiet=1` is a glance, not an
+        // opening: a chat answer drawing its diagram's preview, scrolled past
+        // weeks later, must not make that map the "recent" one.
+        if (new URL(request.url).searchParams.get("quiet") !== "1") {
+            void db
+                .update(mindmaps)
+                .set({ openedAt: new Date() })
+                .where(eq(mindmaps.id, id))
+                .catch((err: unknown) => console.error("[mindmaps] openedAt stamp failed:", err));
+        }
 
         return NextResponse.json({ mindmap: { ...toDetail(row), access } }, { status: 200 });
     } catch (error) {

@@ -163,7 +163,7 @@ describe("the tool registry", () => {
         return body.result.tools;
     }
 
-    it("offers the read tools, save_conversation, add_document and start_upload", () => {
+    it("offers the read tools, save_conversation, add_document, start_upload and the diagram tools", () => {
         expect(MCP_TOOLS.map(tool => tool.name)).toEqual([
             "search",
             "fetch",
@@ -173,13 +173,25 @@ describe("the tool registry", () => {
             "save_conversation",
             "add_document",
             "start_upload",
+            "list_diagrams",
+            "read_diagram",
+            "create_diagram",
+            "edit_diagram",
         ]);
     });
 
     it("lists the read tools to a read-only key and every tool to a read-write key of a member", async () => {
         expect(
             (await listed(principal({ scopes: ["launchstack:read"] }))).map(t => t.name)
-        ).toEqual(["search", "fetch", "list_sources", "find_similar_companies", "list_prospects"]);
+        ).toEqual([
+            "search",
+            "fetch",
+            "list_sources",
+            "find_similar_companies",
+            "list_prospects",
+            "list_diagrams",
+            "read_diagram",
+        ]);
         expect((await listed(principal())).map(t => t.name)).toEqual([
             "search",
             "fetch",
@@ -189,6 +201,10 @@ describe("the tool registry", () => {
             "save_conversation",
             "add_document",
             "start_upload",
+            "list_diagrams",
+            "read_diagram",
+            "create_diagram",
+            "edit_diagram",
         ]);
     });
 
@@ -199,6 +215,8 @@ describe("the tool registry", () => {
             "list_sources",
             "find_similar_companies",
             "list_prospects",
+            "list_diagrams",
+            "read_diagram",
         ]);
     });
 
@@ -222,7 +240,13 @@ describe("the tool registry", () => {
             // Only find_similar_companies reads outside the workspace (maps, company indexes).
             expect(annotations.openWorldHint).toBe(tool.name === "find_similar_companies");
             expect(annotations.readOnlyHint).toBe(
-                !["save_conversation", "add_document", "start_upload"].includes(tool.name as string)
+                ![
+                    "save_conversation",
+                    "add_document",
+                    "start_upload",
+                    "create_diagram",
+                    "edit_diagram",
+                ].includes(tool.name as string)
             );
         }
     });

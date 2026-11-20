@@ -35,6 +35,7 @@ export function PdfViewerPreview() {
     const [highlight, setHighlight] = useState<ViewerHighlight | null>(null);
     const [lastAsk, setLastAsk] = useState<string | null>(null);
     const [scrollToNoteId, setScrollToNoteId] = useState<number | null>(null);
+    const [scrollToNoteNonce, setScrollToNoteNonce] = useState(0);
     const nextId = useRef(1);
     const nonce = useRef(0);
 
@@ -199,8 +200,11 @@ export function PdfViewerPreview() {
                         <PdfViewerWithNotes
                             key={url}
                             url={url}
-                            notes={notes}
+                            // Match the workspace host, which maps its stored
+                            // notes into fresh viewer rows on each render.
+                            notes={notes.map(note => ({ ...note }))}
                             scrollToNoteId={scrollToNoteId}
+                            scrollToNoteNonce={scrollToNoteNonce}
                             persistKey={`dev:${url}`}
                             citationHighlight={highlight}
                             downloadUrl={url}
@@ -238,7 +242,10 @@ export function PdfViewerPreview() {
                             onRemoveHighlight={id =>
                                 setNotes(list => list.filter(n => n.id !== id))
                             }
-                            onNotePinClick={id => setScrollToNoteId(id)}
+                            onNotePinClick={id => {
+                                setScrollToNoteId(id);
+                                setScrollToNoteNonce(value => value + 1);
+                            }}
                             onAskAi={selection => setLastAsk(selection.text)}
                         />
                     ) : (

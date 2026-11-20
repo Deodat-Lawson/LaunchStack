@@ -6,10 +6,11 @@ import { Toaster } from "~/components/ui/sonner";
 
 import { DriveSyncPanel } from "~/app/employer/documents/_workspace/settings/DriveSyncPanel";
 import { GmailConnectPanel } from "~/app/employer/documents/_workspace/GmailConnectPanel";
+import { OutlookConnectPanel } from "~/app/employer/documents/_workspace/OutlookConnectPanel";
 import { ADD_TABS, type AddSourceTab } from "~/app/employer/documents/_workspace/types";
 
 /**
- * Local harness for the Drive and Gmail panels' sync states. Mounts the real
+ * Local harness for the Drive, Gmail and Outlook panels' sync states. Mounts the real
  * panels (Drive's is the Settings card) with their session-guarded routes
  * stubbed.
  *
@@ -20,7 +21,7 @@ import { ADD_TABS, type AddSourceTab } from "~/app/employer/documents/_workspace
  * `?reject=1` makes the sync route fail. Gated by the page.
  */
 
-type Provider = "google-drive" | "gmail";
+type Provider = "google-drive" | "gmail" | "outlook";
 
 interface RunState {
     requestedPolls: number | null;
@@ -64,6 +65,11 @@ function installFetchStub(flags: URLSearchParams): () => void {
             lastSyncAt: "2026-10-16T09:12:00.000Z",
             lastSyncStatus: "ok",
         },
+        outlook: {
+            requestedPolls: null,
+            lastSyncAt: "2026-10-16T09:14:00.000Z",
+            lastSyncStatus: "ok",
+        },
     };
     const report = { stored: 3, unchanged: 12, failed: 0, discovered: 15 };
 
@@ -77,6 +83,57 @@ function installFetchStub(flags: URLSearchParams): () => void {
             const provider: Provider = url.includes("gmail") ? "gmail" : "google-drive";
             runs[provider].requestedPolls = 0;
             return jsonResponse({ success: true, data: { queued: true } }, 202);
+        }
+
+        if (url === "/api/connectors/outlook/sync") {
+            if (reject) return jsonResponse({ success: false, message: "Sync failed" }, 500);
+            runs.outlook.requestedPolls = 0;
+            return jsonResponse({ success: true, data: { queued: true } }, 202);
+        }
+
+        if (url === "/api/connectors/outlook" && method === "GET") {
+            const run = runs.outlook;
+            advance(run, runnerUp);
+            return jsonResponse({
+                success: true,
+                data: {
+                    configured: true,
+                    connected: true,
+                    canConnect: true,
+                    canConfigure: true,
+                    connectionId: "3",
+                    status: "active",
+                    accountEmail: "owner@launchstack.test",
+                    folder: "Outlook/owner@launchstack.test",
+                    scope: [
+                        { id: "o1", kind: "folder", value: "AAMkInbox", name: "Inbox" },
+                        { id: "o2", kind: "query", value: "from:fund", name: "from:fund" },
+                    ],
+                    lastSyncAt: run.lastSyncAt,
+                    lastSyncStatus: run.lastSyncStatus,
+                    lastSyncError: null,
+                    lastSyncReport: { ...report, conversations: 2, attachments: 1 },
+                },
+            });
+        }
+
+        if (url === "/api/connectors/outlook/folders") {
+            return jsonResponse({
+                success: true,
+                data: {
+                    folders: [
+                        { id: "AAMkInbox", name: "Inbox", path: "Inbox", parentId: null },
+                        { id: "AAMkSent", name: "Sent Items", path: "Sent Items", parentId: null },
+                        { id: "AAMkClients", name: "Clients", path: "Clients", parentId: null },
+                        {
+                            id: "AAMkAcme",
+                            name: "Acme",
+                            path: "Clients/Acme",
+                            parentId: "AAMkClients",
+                        },
+                    ],
+                },
+            });
         }
 
         if (url === "/api/connectors/google-drive/status") {
@@ -157,6 +214,10 @@ export function ConnectorSyncPreview() {
                 <section className="border-line bg-panel rounded-xl border p-5">
                     <h2 className="text-ink-3 mb-4 text-xs font-semibold">GMAIL</h2>
                     <GmailConnectPanel tab={tab("gmail")} />
+                </section>
+                <section className="border-line bg-panel rounded-xl border p-5">
+                    <h2 className="text-ink-3 mb-4 text-xs font-semibold">OUTLOOK</h2>
+                    <OutlookConnectPanel tab={tab("outlook")} />
                 </section>
             </div>
             <Toaster />

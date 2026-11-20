@@ -591,7 +591,8 @@
     "ungroup": "取消组合",
     "lock": "锁定 / 解锁",
     "selectShape": "选择所有同类形状",
-    "selectConnected": "选择相连项"
+    "selectConnected": "选择相连项",
+    "expandWithAi": "用 AI 展开"
   },
   "commands": {
     "groups": {
@@ -629,7 +630,8 @@
     "edgeCurved": "连线样式：曲线",
     "description": "按名称搜索操作",
     "placeholder": "输入命令…",
-    "noMatch": "没有与“{query}”匹配的命令。"
+    "noMatch": "没有与“{query}”匹配的命令。",
+    "expandWithAi": "用 AI 展开主题"
   },
   "help": {
     "title": "键盘快捷键",
@@ -715,7 +717,9 @@
     },
     "previousPage": "上一页",
     "nextPage": "下一页",
-    "exitPresent": "退出 · Esc"
+    "exitPresent": "退出 · Esc",
+    "updatedElsewhere": "已载入在别处保存的更改",
+    "updatedElsewhereBody": "有人（或聊天）修改了这张图。按 ⌘Z 可撤销此更改。"
   },
   "clipboard": {
     "readFailed": "无法读取 {name}",
@@ -822,7 +826,8 @@
     "createdFromTemplate": "由模板创建",
     "restoredFrom": "从 v{revision} 恢复",
     "meta": "{when} · {count, plural, other {# 个形状}}",
-    "restore": "恢复版本 {revision}"
+    "restore": "恢复版本 {revision}",
+    "beforeAiEdit": "AI 修改前"
   },
   "emptyCanvas": {
     "start": "输入你的想法",
@@ -875,7 +880,17 @@
       "editDenied": "你可以查看此思维导图，但不能修改它。",
       "deleteDenied": "只有创建此思维导图的人，或管理其所在文件夹的人，才能删除它。",
       "unfiledDenied": "只有创建此思维导图的人才能将它移到“未归档”：那里的草稿仅对其创建者可见。",
-      "moveWidens": "把此思维导图移到那里，会让目前看不到它的人看到它。草稿沿用所在文件夹的访问权限，因此如需共享，请发布它，或更改该文件夹的可见范围。"
+      "moveWidens": "把此思维导图移到那里，会让目前看不到它的人看到它。草稿沿用所在文件夹的访问权限，因此如需共享，请发布它，或更改该文件夹的可见范围。",
+      "generateFailed": "无法绘制该图表。换一种方式描述试试。",
+      "expandFailed": "暂时无法建议子主题，请重试。"
     }
+  },
+  "ai": {
+    "pickTopic": "请选择一个要展开的主题。",
+    "expanding": "正在为“{topic}”构思子主题…",
+    "expanded": "{count, plural, other {已添加 # 个子主题}}。按 ⌘Z 可撤销。",
+    "expandFailed": "暂时无法建议子主题，请重试。",
+    "topicGone": "在建议生成期间，该主题已被删除。",
+    "expandUndo": "用 AI 展开"
   }
 }

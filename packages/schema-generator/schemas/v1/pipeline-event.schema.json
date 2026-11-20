@@ -482,6 +482,60 @@
             "payload"
           ],
           "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "eventId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 160
+            },
+            "eventType": {
+              "type": "string",
+              "const": "storage.deletion.requested"
+            },
+            "schemaVersion": {
+              "type": "number",
+              "const": 1
+            },
+            "occurredAt": {
+              "type": "string",
+              "format": "date-time"
+            },
+            "traceId": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 128
+            },
+            "companyId": {
+              "type": "integer",
+              "exclusiveMinimum": 0
+            },
+            "payload": {
+              "type": "object",
+              "properties": {
+                "requestId": {
+                  "type": "integer",
+                  "exclusiveMinimum": 0
+                }
+              },
+              "required": [
+                "requestId"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "eventId",
+            "eventType",
+            "schemaVersion",
+            "occurredAt",
+            "traceId",
+            "companyId",
+            "payload"
+          ],
+          "additionalProperties": false
         }
       ]
     }

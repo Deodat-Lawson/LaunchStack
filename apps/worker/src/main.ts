@@ -76,19 +76,25 @@ async function main(): Promise<void> {
         { createCompanyProjectionPort },
         { createNoteEmbeddingPort, createNoteRehydrationPort },
         { createDeadEventHandler, createValidationDeadHandler },
+        { createStorageDeletionPort },
+        { createMetricsHandler },
+        { env },
     ] = await Promise.all([
         import("./inngest"),
         import("./ports/ingestion"),
         import("./ports/projection"),
         import("./ports/notes"),
         import("./ports/failure"),
+        import("./ports/storage-deletion"),
+        import("./metrics-http"),
+        import("~/env"),
     ]);
 
     const clock = { now: () => new Date() };
     const outbox = new DrizzleOutboxStore(engine.db, logger, {
         // Rows dead-lettered at claim time (payload failed protocol validation)
-        // never reach the tick-level onDead hook; this restores their failure
-        // visibility (OCR job marked failed → UI shows the terminal state).
+        // never reach the tick-level onDead hook; this restores failure
+        // visibility for OCR jobs and durable storage deletion requests.
         onValidationDead: createValidationDeadHandler(logger),
     });
     const processor = createPipelineProcessor({
@@ -96,6 +102,7 @@ async function main(): Promise<void> {
         projection: createCompanyProjectionPort(logger),
         noteRehydration: createNoteRehydrationPort(logger),
         noteEmbedding: createNoteEmbeddingPort(logger),
+        storageDeletion: createStorageDeletionPort(logger),
         clock,
         logger,
     });
@@ -105,6 +112,12 @@ async function main(): Promise<void> {
     let tickRunning = false;
 
     const inngestHandler = createInngestHandler();
+    const metricsHandler = createMetricsHandler({
+        scrapeToken: env.server.METRICS_SCRAPE_TOKEN,
+        isProduction:
+            process.env.VERCEL_ENV === "production" || process.env.NODE_ENV === "production",
+        logger,
+    });
 
     const server = createServer((req, res) => {
         const url = req.url ?? "/";
@@ -149,6 +162,10 @@ async function main(): Promise<void> {
                     );
                 }
             })();
+            return;
+        }
+        if (url === "/metrics") {
+            metricsHandler(req, res);
             return;
         }
         if (url.startsWith("/api/inngest")) {
@@ -207,7 +224,7 @@ async function main(): Promise<void> {
     server.listen(workerEnv.WORKER_PORT, () => {
         logger.info(
             { port: workerEnv.WORKER_PORT },
-            "worker http listening (healthz/readyz/api/inngest)"
+            "worker http listening (healthz/readyz/metrics/api/inngest)"
         );
     });
 

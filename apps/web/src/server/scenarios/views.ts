@@ -23,15 +23,19 @@ import { author, findAgent, followeesOf, followersOf, type World } from "@launch
 
 import type { Locale } from "~/i18n/locales";
 import { translatorFor, wordEnglish } from "~/i18n/translate";
-import type {
-    PostTestResult,
-    ScenarioDetail,
-    ScenarioInjection,
-    ScenarioPerson,
-    ScenarioPost,
-    ScenarioSource,
-    ScenarioSummary,
-    Stance,
+import {
+    outcomeOf,
+    type PostTestResult,
+    type ScenarioDetail,
+    type ScenarioFieldBasis,
+    type ScenarioStage,
+    type ScenarioV2Detail,
+    type ScenarioInjection,
+    type ScenarioPerson,
+    type ScenarioPost,
+    type ScenarioSource,
+    type ScenarioSummary,
+    type Stance,
 } from "~/lib/scenarios/types";
 
 export const LEFT_WORKSPACE = "Someone who has left";
@@ -88,12 +92,24 @@ type SummaryInput = Pick<
     | "createdAt"
     | "finishedAt"
     | "headline"
->;
+    | "campSizes"
+> & { contractVersion?: number };
+
+/**
+ * Where a v2 run is. v1 progress is read off `step`; a v2 run has many more
+ * units, so its stage comes from its next unfinished unit and its round from
+ * the world.
+ */
+export interface V2Progress {
+    stage: ScenarioStage;
+    round: number;
+}
 
 export function toSummary(
     run: SummaryInput,
     viewerUserId: string,
-    names: Map<string, string>
+    names: Map<string, string>,
+    v2?: V2Progress
 ): ScenarioSummary {
     return {
         id: run.id,
@@ -101,8 +117,8 @@ export function toSummary(
         title: run.title,
         subject: run.subject,
         status: run.status,
-        stage: stageOf(run),
-        round: roundsDone(run),
+        stage: v2 ? v2.stage : stageOf(run),
+        round: v2 ? Math.min(run.roundCount, v2.round) : roundsDone(run),
         rounds: run.roundCount,
         agents: run.agentCount,
         createdAt: run.createdAt.toISOString(),
@@ -111,15 +127,30 @@ export function toSummary(
         createdByName: names.get(run.createdByUserId) ?? LEFT_WORKSPACE,
         shared: run.sharedAt !== null,
         headline: run.headline,
+        contractVersion: run.contractVersion === 2 ? 2 : 1,
+        outcome: run.campSizes
+            ? {
+                  critical: run.campSizes.critical ?? 0,
+                  neutral: run.campSizes.neutral ?? 0,
+                  supportive: run.campSizes.supportive ?? 0,
+              }
+            : null,
     };
 }
 
 export function recordSummary(
     run: ScenarioRunRecord,
     viewerUserId: string,
-    names: Map<string, string>
+    names: Map<string, string>,
+    v2?: V2Progress
 ): ScenarioSummary {
-    return toSummary({ ...run, headline: run.report?.headline ?? null }, viewerUserId, names);
+    const outcome = outcomeOf(run.report?.factions);
+    return toSummary(
+        { ...run, headline: run.report?.headline ?? null, campSizes: outcome },
+        viewerUserId,
+        names,
+        v2
+    );
 }
 
 /** Whether a reader may see this evidence item's label and text. */
@@ -203,9 +234,13 @@ export function toPosts(world: World): ScenarioPost[] {
     });
 }
 
-export function toPeople(world: World): ScenarioPerson[] {
+/** v2 cast fields' basis, by cast slot id. */
+export type BasisBySlot = ReadonlyMap<string, ScenarioPerson["basis"]>;
+
+export function toPeople(world: World, basisBySlot?: BasisBySlot): ScenarioPerson[] {
     return world.agents.map(a => {
         const id = a.persona.id;
+        const slotId = (a.persona as { slotId?: string }).slotId;
         return {
             id,
             name: a.persona.name,
@@ -231,8 +266,22 @@ export function toPeople(world: World): ScenarioPerson[] {
             firstObjection: a.persona.objection ?? null,
             wouldPay: a.wouldPay ?? null,
             objection: a.objection ?? null,
+            basis: (slotId ? basisBySlot?.get(slotId) : undefined) ?? null,
         };
     });
+}
+
+/** A v2 attributed field as the wire's basis: the value itself stays on the person. */
+export function toFieldBasis(attributed: {
+    basis: ScenarioFieldBasis["basis"];
+    evidenceIds: string[];
+    explanation?: string | null;
+}): ScenarioFieldBasis {
+    return {
+        basis: attributed.basis,
+        sources: attributed.evidenceIds,
+        explanation: attributed.explanation ?? null,
+    };
 }
 
 export interface DetailContext {
@@ -243,17 +292,19 @@ export interface DetailContext {
     injections: ScenarioInjection[];
     /** The reader's language, for the labels and errors the server composed. English when absent. */
     locale?: Locale;
+    /** v2 runs: progress, people's field basis and the grounding block. */
+    v2?: { progress: V2Progress; basisBySlot: BasisBySlot; detail: ScenarioV2Detail };
 }
 
 export function toDetail(run: ScenarioRunRecord, ctx: DetailContext): ScenarioDetail {
     const isCreator = run.createdByUserId === ctx.viewerUserId;
     const world = run.world;
     return {
-        ...recordSummary(run, ctx.viewerUserId, ctx.names),
+        ...recordSummary(run, ctx.viewerUserId, ctx.names, ctx.v2?.progress),
         brief: run.brief && run.brief.brief.length > 0 ? run.brief.brief : null,
         sourcesUsed: run.sources,
         sources: toSources(run.evidence ?? [], isCreator, ctx.visibleDocIds, ctx.locale),
-        people: world ? toPeople(world) : [],
+        people: world ? toPeople(world, ctx.v2?.basisBySlot) : [],
         posts: world ? toPosts(world) : [],
         roundStats: (world?.rounds ?? []).map(r => ({
             round: r.round,
@@ -283,15 +334,17 @@ export function toDetail(run: ScenarioRunRecord, ctx: DetailContext): ScenarioDe
               }
             : null,
         injections: ctx.injections,
+        // A v2 run closes the window itself when its final round starts.
         eventsOpen:
             (run.status === "queued" || run.status === "running") &&
             !run.eventsClosedAt &&
-            run.step < 2 + run.roundCount,
+            (run.contractVersion === 2 || run.step < 2 + run.roundCount),
         error: runErrorText(run.error, ctx.locale),
         estimate: { calls: run.estimate.calls, credits: run.estimate.credits },
         usage: { calls: run.usage.calls, credits: run.usage.credits },
         canManage: isCreator,
         draft: run.draft ? { text: run.draft.text, networks: run.draft.networks } : null,
+        v2: ctx.v2?.detail ?? null,
     };
 }
 

@@ -302,6 +302,21 @@ export const INK_DARK = "oklch(0.95 0.004 280)";
 export const INK_SOFT_DARK = "oklch(0.74 0.008 280)";
 export const HAIRLINE_DARK = "oklch(0.52 0.02 280)";
 
+/**
+ * A frame's default surface: a slightly raised patch of paper, one per
+ * lighting. Shared by the factory (a frame placed from the palette) and the
+ * theme (a paper frame stays paper when the board is relit).
+ */
+export const FRAME_PAPER: Record<ThemeMode, { fill: string; stroke: string }> = {
+    light: { fill: "oklch(0.972 0.005 280)", stroke: "oklch(0.74 0.012 280)" },
+    dark: { fill: "oklch(0.245 0.018 285)", stroke: "oklch(0.42 0.02 285)" },
+};
+
+/** Is this fill one of the paper-frame surfaces (in either lighting)? */
+export function isFramePaper(fill: string): boolean {
+    return fill === FRAME_PAPER.light.fill || fill === FRAME_PAPER.dark.fill;
+}
+
 export interface Neutrals {
     paper: string;
     ink: string;

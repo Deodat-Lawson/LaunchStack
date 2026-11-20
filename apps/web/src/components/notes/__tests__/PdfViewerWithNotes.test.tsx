@@ -918,6 +918,83 @@ describe("PdfViewerWithNotes citations", () => {
 });
 
 describe("PdfViewerWithNotes highlights", () => {
+    it("does not replay a previous note jump when a header render rebuilds the notes", async () => {
+        const props = {
+            url: "/api/files/9",
+            notes: [{ ...NOTE, page: 2 }],
+            scrollToNoteId: NOTE.id,
+            onCreateAnchoredNote: jest.fn(),
+        };
+        const { rerender } = render(<PdfViewerWithNotes {...props} />);
+        await toolbar();
+        await waitFor(() => expect(screen.getByTestId("pdf-scroll").scrollTop).toBeGreaterThan(0));
+        scrollPagesTo(pageTop(3));
+        const before = screen.getByTestId("pdf-scroll").scrollTop;
+
+        rerender(<PdfViewerWithNotes {...props} notes={[{ ...NOTE, page: 2 }]} />);
+
+        expect(screen.getByTestId("pdf-scroll").scrollTop).toBe(before);
+    });
+
+    it("does not jump to the previous note when another note is saved or removed", async () => {
+        const props = {
+            url: "/api/files/9",
+            notes: [{ ...NOTE, page: 2 }],
+            scrollToNoteId: NOTE.id,
+            onCreateAnchoredNote: jest.fn(),
+        };
+        const { rerender } = render(<PdfViewerWithNotes {...props} />);
+        await toolbar();
+        await waitFor(() => expect(screen.getByTestId("pdf-scroll").scrollTop).toBeGreaterThan(0));
+        scrollPagesTo(pageTop(3));
+        const before = screen.getByTestId("pdf-scroll").scrollTop;
+
+        rerender(
+            <PdfViewerWithNotes {...props} notes={[...props.notes, { ...NOTE, id: 3, page: 3 }]} />
+        );
+        expect(screen.getByTestId("pdf-scroll").scrollTop).toBe(before);
+        rerender(<PdfViewerWithNotes {...props} notes={[...props.notes]} />);
+        expect(screen.getByTestId("pdf-scroll").scrollTop).toBe(before);
+    });
+
+    it("jumps to the same note again only for an explicit new request", async () => {
+        const props = {
+            url: "/api/files/9",
+            notes: [{ ...NOTE, page: 2 }],
+            scrollToNoteId: NOTE.id,
+            scrollToNoteNonce: 1,
+            onCreateAnchoredNote: jest.fn(),
+        };
+        const { rerender } = render(<PdfViewerWithNotes {...props} />);
+        await toolbar();
+        await waitFor(() => expect(screen.getByTestId("pdf-scroll").scrollTop).toBeGreaterThan(0));
+        const atNote = screen.getByTestId("pdf-scroll").scrollTop;
+        scrollPagesTo(pageTop(3));
+
+        rerender(<PdfViewerWithNotes {...props} scrollToNoteNonce={2} />);
+
+        expect(screen.getByTestId("pdf-scroll").scrollTop).toBe(atNote);
+    });
+
+    it("waits for a requested note to load and consumes its jump once", async () => {
+        const props = {
+            url: "/api/files/9",
+            notes: [] as PdfNoteLite[],
+            scrollToNoteId: NOTE.id,
+            onCreateAnchoredNote: jest.fn(),
+        };
+        const { rerender } = render(<PdfViewerWithNotes {...props} />);
+        await toolbar();
+        rerender(<PdfViewerWithNotes {...props} notes={[{ ...NOTE, page: 2 }]} />);
+        await waitFor(() => expect(screen.getByTestId("pdf-scroll").scrollTop).toBeGreaterThan(0));
+        scrollPagesTo(pageTop(3));
+        const before = screen.getByTestId("pdf-scroll").scrollTop;
+
+        rerender(<PdfViewerWithNotes {...props} notes={[{ ...NOTE, page: 2 }]} />);
+
+        expect(screen.getByTestId("pdf-scroll").scrollTop).toBe(before);
+    });
+
     it("draws a highlight in its colour with no pin, and numbers only the notes", async () => {
         renderViewer({ notes: [NOTE, HIGHLIGHT] });
 

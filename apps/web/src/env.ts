@@ -501,6 +501,23 @@ const serverSchema = z.object({
     // stand-in `next dev` serves under /dev/stand-ins/google. Ignored when
     // the /dev routes are off.
     GOOGLE_STAND_IN_URL: optionalString(),
+    // Microsoft 365 connectors: OneDrive and SharePoint files for the
+    // workspace, and (with OUTLOOK_CONNECTOR_ENABLED) each member's own
+    // Outlook mailbox. One Entra app registration, separate from the sign-in
+    // one (AUTH_MICROSOFT_*): this one holds Graph permissions and its
+    // redirect is `${BETTER_AUTH_URL}/api/connectors/microsoft/oauth/callback`.
+    MICROSOFT_OAUTH_CLIENT_ID: optionalString(),
+    MICROSOFT_OAUTH_CLIENT_SECRET: optionalString(),
+    // `common` (any work, school or personal account) unless set to one
+    // tenant's id or domain, which keeps other organisations out.
+    MICROSOFT_OAUTH_TENANT_ID: optionalString(),
+    // Outlook mail is opt-in per deployment: Mail.Read reaches a whole
+    // mailbox, and many tenants want an admin to consent to it first.
+    OUTLOOK_CONNECTOR_ENABLED: optionalString(),
+    // Development only: answer for Microsoft (sign-in consent and Graph) from
+    // the stand-in `next dev` serves under /dev/stand-ins/microsoft. Ignored
+    // when the /dev routes are off.
+    MICROSOFT_STAND_IN_URL: optionalString(),
     // In-app feedback (bug reports + feature requests). The triagers' emails,
     // comma/space/semicolon separated; unset keeps the feature off. Read per
     // call by ~/server/feedback/access.
@@ -742,6 +759,11 @@ function parseServerEnv() {
         GMAIL_CONNECTOR_ENABLED: process.env.GMAIL_CONNECTOR_ENABLED,
         GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED: process.env.GOOGLE_DRIVE_FOLDER_ACCESS_ENABLED,
         GOOGLE_STAND_IN_URL: process.env.GOOGLE_STAND_IN_URL,
+        MICROSOFT_OAUTH_CLIENT_ID: process.env.MICROSOFT_OAUTH_CLIENT_ID,
+        MICROSOFT_OAUTH_CLIENT_SECRET: process.env.MICROSOFT_OAUTH_CLIENT_SECRET,
+        MICROSOFT_OAUTH_TENANT_ID: process.env.MICROSOFT_OAUTH_TENANT_ID,
+        OUTLOOK_CONNECTOR_ENABLED: process.env.OUTLOOK_CONNECTOR_ENABLED,
+        MICROSOFT_STAND_IN_URL: process.env.MICROSOFT_STAND_IN_URL,
         COLLAB_HUB_SECRET: process.env.COLLAB_HUB_SECRET,
         COLLAB_HUB_ID: process.env.COLLAB_HUB_ID,
         SLACK_BOT_TOKEN: process.env.SLACK_BOT_TOKEN,

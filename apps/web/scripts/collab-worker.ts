@@ -24,9 +24,11 @@ import {
     HubClient,
     LlmAgentRuntime,
     ScriptedAgentRuntime,
+    trimToCompleteSentence,
     type AgentRuntime,
     type CollabChatFn,
 } from "@launchstack/collab";
+import { MEETING_TURN_MAX_OUTPUT_TOKENS } from "~/server/collab/turn-budget";
 
 interface WorkerEnv {
     hubUrl: string;
@@ -93,7 +95,8 @@ function buildChatFn(): CollabChatFn {
                 model,
                 messages,
                 temperature: temperature ?? 0.6,
-                max_tokens: maxTokens ?? 700,
+                // Room for a model that reasons inside the cap as well as for the reply.
+                max_tokens: maxTokens ?? MEETING_TURN_MAX_OUTPUT_TOKENS,
             }),
             signal,
         });
@@ -102,9 +105,12 @@ function buildChatFn(): CollabChatFn {
             throw new Error(`Chat endpoint returned ${response.status}: ${await response.text()}`);
         }
         const body = (await response.json()) as {
-            choices?: Array<{ message?: { content?: string } }>;
+            choices?: Array<{ message?: { content?: string }; finish_reason?: string }>;
         };
-        const content = body.choices?.[0]?.message?.content;
+        const choice = body.choices?.[0];
+        const raw = choice?.message?.content ?? "";
+        // A reply the cap cut off is posted up to its last full sentence.
+        const content = choice?.finish_reason === "length" ? trimToCompleteSentence(raw) : raw;
         if (!content) throw new Error("Chat endpoint returned no content");
         return content;
     };

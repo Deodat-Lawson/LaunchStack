@@ -27,7 +27,10 @@ import { descendantPattern } from "~/server/folders";
 /** What each connector's imports are called, keyed by its connector id. */
 export const SOURCE_ORIGINS = {
     "google-drive": "Google Drive",
+    // OneDrive and SharePoint files (one connector, two places).
+    "microsoft-365": "Microsoft 365",
     gmail: "Gmail",
+    outlook: "Outlook",
     notion: "Notion",
     // Imported Obsidian vaults (a browser upload, not a connection).
     obsidian: "Obsidian",

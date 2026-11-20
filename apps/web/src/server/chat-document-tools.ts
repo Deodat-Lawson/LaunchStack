@@ -26,7 +26,7 @@ import { z } from "zod";
 
 import type { Locale } from "~/i18n/locales";
 import { translatorFor } from "~/i18n/translate";
-import type { ChatCreatedSource } from "~/lib/chat-turns";
+import type { ChatCreatedDocument } from "~/lib/chat-turns";
 import {
     UNFILED_FOLDER,
     isUnfiledFolder,
@@ -81,7 +81,7 @@ export function documentFilename(title: string): string {
 export async function writeWorkspaceDocument(
     ctx: WorkspaceContext,
     input: WriteDocumentInput
-): Promise<ChatCreatedSource> {
+): Promise<ChatCreatedDocument> {
     const folder = isUnfiledFolder(input.folder) ? UNFILED_FOLDER : input.folder;
     if (!(await canEditFolder(ctx, folder))) throw new DocumentWriteDenied(folder);
 
@@ -116,13 +116,13 @@ export async function writeWorkspaceDocument(
 }
 
 export interface DocumentToolPorts {
-    write?: (ctx: WorkspaceContext, input: WriteDocumentInput) => Promise<ChatCreatedSource>;
+    write?: (ctx: WorkspaceContext, input: WriteDocumentInput) => Promise<ChatCreatedDocument>;
 }
 
 export interface DocumentToolSession {
     tools: ChatTool[];
     /** Every document the model created, in order. */
-    created: ChatCreatedSource[];
+    created: ChatCreatedDocument[];
 }
 
 const CreateArgs = z.object({
@@ -156,7 +156,7 @@ function folderFrom(raw: string | undefined): string {
     return path;
 }
 
-function where(source: ChatCreatedSource): string {
+function where(source: ChatCreatedDocument): string {
     return isUnfiledFolder(source.folder)
         ? "in the person's Private section: only they can open it until they share it"
         : `in the folder "${source.folder}", with that folder's sharing (a new top-level folder starts private to the person)`;
@@ -173,9 +173,9 @@ export function createDocumentTools(
 ): DocumentToolSession {
     const write = ports.write ?? writeWorkspaceDocument;
     const status = translatorFor(options.locale ?? "en", "chat.server.toolStatus");
-    const created: ChatCreatedSource[] = [];
+    const created: ChatCreatedDocument[] = [];
     /** A repeated call with the same document gets the first one back. */
-    const byContent = new Map<string, ChatCreatedSource>();
+    const byContent = new Map<string, ChatCreatedDocument>();
 
     const createTool: ChatTool = {
         name: "create_document",
@@ -230,7 +230,7 @@ export function createDocumentTools(
             if (created.length >= MAX_CREATES) {
                 throw new Error("The document budget for this answer is used up. Answer now.");
             }
-            let source: ChatCreatedSource;
+            let source: ChatCreatedDocument;
             try {
                 source = await write(ctx, {
                     title,

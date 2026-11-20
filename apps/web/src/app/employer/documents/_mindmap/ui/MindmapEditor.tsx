@@ -35,6 +35,7 @@ import {
     viewportCentre,
 } from "../model/commands";
 import { createNodeAt } from "../model/factory";
+import { getMindmap } from "../lib/api";
 import { isImageFile } from "../lib/images";
 import { shapeHoldsText } from "../model/shapes";
 import { parseDoc } from "../model/serialize";
@@ -46,6 +47,7 @@ import { Canvas } from "./Canvas";
 import { useContextTarget } from "~/components/context-menu";
 import { buildCanvasMenuItems } from "./canvasContextMenu";
 import { buildCommands, CommandPalette } from "./CommandPalette";
+import { useAiExpand } from "./useAiExpand";
 import { CommentsPanel } from "./CommentsPanel";
 import { EditorProvider, useCommittedDoc, useEditor } from "./EditorContext";
 import { ExportDialog, ImportDialog } from "./ExportDialog";
@@ -191,6 +193,36 @@ export function MindmapEditor(props: MindmapEditorProps) {
     const autosave = useAutosave(store, props.mindmapId, props.initialRevision, getSvgElement);
     const presence = usePresence(store, props.mindmapId, props.author, autosave.revision);
 
+    // A save made elsewhere — a colleague's, or the chat changing this map —
+    // lands here by itself when nothing here is unsaved: the newer version
+    // replaces the document as one undo step (⌘Z takes it back, and autosave
+    // saves that), so no Reload is needed for a change nothing conflicts
+    // with. With unsaved work the stale banner stays: that is a real conflict.
+    const staleBy = presence.staleBy;
+    const acknowledge = presence.acknowledge;
+    useEffect(() => {
+        if (staleBy <= 0 || store.getState().dirty) return;
+        let cancelled = false;
+        void getMindmap(props.mindmapId, { quiet: true })
+            .then(detail => {
+                if (cancelled || store.getState().dirty) return;
+                if (detail.revision <= autosave.revision()) return;
+                store.replaceDoc(parseDoc(detail.doc, detail.title), {
+                    label: t("editor.updatedElsewhere"),
+                });
+                store.markSaved();
+                autosave.setRevision(detail.revision);
+                acknowledge(detail.revision);
+                toast(t("editor.updatedElsewhere"), {
+                    description: t("editor.updatedElsewhereBody"),
+                });
+            })
+            .catch(() => undefined);
+        return () => {
+            cancelled = true;
+        };
+    }, [acknowledge, autosave, props.mindmapId, staleBy, store, t]);
+
     // Frame the board, and keep framing it until the author moves it. The
     // canvas is not at its final size on mount — the panels are still sliding
     // in — and a template framed against that half-width stage is what opened
@@ -313,10 +345,15 @@ export function MindmapEditor(props: MindmapEditorProps) {
     // the document-level one), so the menu built here always acts on what
     // was clicked. Right-drags pan, and the handler swallows their event.
     const onAskAboutNode = props.onAskAboutNode;
+    const aiExpand = useAiExpand(store);
+    const onExpandWithAi = useCallback(
+        (nodeId: string) => void aiExpand.expand(nodeId),
+        [aiExpand]
+    );
     const canvasTarget = useContextTarget({
         kind: "mindmap-canvas",
         label: t("contextMenu.label"),
-        items: () => buildCanvasMenuItems(store, t, { onAskAboutNode }),
+        items: () => buildCanvasMenuItems(store, t, { onAskAboutNode, onExpandWithAi }),
     });
 
     const canvasCallbacks = useMemo(
@@ -358,10 +395,11 @@ export function MindmapEditor(props: MindmapEditorProps) {
                     onPresent: togglePresent,
                     onShortcuts: () => setShortcutsOpen(true),
                     onFit: () => frame(stageSize),
+                    onExpandWithAi: () => void aiExpand.expand(),
                 },
                 t
             ),
-        [autosave, frame, stageSize, store, togglePresent, t]
+        [aiExpand, autosave, frame, stageSize, store, togglePresent, t]
     );
 
     /** Screen point → world, for drops. Falls back to the viewport centre. */

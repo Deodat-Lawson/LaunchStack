@@ -28,14 +28,23 @@ jest.mock("~/lib/require-workspace-context", () =>
 
 const mockFetchFile = jest.fn();
 const mockUploadFile = jest.fn();
-const mockDeleteFile = jest.fn();
-const mockDeleteFileByUrl = jest.fn();
+const mockPlanObjectDeletion = jest.fn();
 
 jest.mock("~/lib/storage", () => ({
     fetchFile: (url: string) => mockFetchFile(url),
     uploadFile: (input: unknown) => mockUploadFile(input),
-    deleteFile: (url: string, provider: string) => mockDeleteFile(url, provider),
-    deleteFileByUrl: (url: string) => mockDeleteFileByUrl(url),
+}));
+
+jest.mock("~/server/storage/deletion/plan", () => ({
+    planObjectDeletion: (...args: unknown[]) => mockPlanObjectDeletion(...args),
+}));
+jest.mock("~/env", () => ({
+    env: {
+        server: {
+            NEXT_PUBLIC_S3_ENDPOINT: "http://localhost:8333",
+            S3_BUCKET_NAME: "pdr-documents",
+        },
+    },
 }));
 
 const mockGetGotenbergClient = jest.fn();
@@ -49,10 +58,11 @@ jest.mock("~/server/rendering", () => ({
 const mockSelectQueue: unknown[][] = [];
 const mockUpdateQueue: unknown[][] = [];
 const mockUpdates: unknown[] = [];
+let mockLockedRows: unknown[] = [];
 
 function mockThenable(next: () => unknown[]) {
     const builder: Record<string, unknown> = {};
-    for (const method of ["from", "where", "set", "returning"]) {
+    for (const method of ["from", "where", "for", "set", "returning"]) {
         builder[method] = (value?: unknown) => {
             if (method === "set") mockUpdates.push(value);
             return builder;
@@ -65,6 +75,11 @@ function mockThenable(next: () => unknown[]) {
 
 jest.mock("~/server/db", () => ({
     db: {
+        transaction: (callback: (tx: unknown) => Promise<unknown>) =>
+            callback({
+                select: () => mockThenable(() => mockLockedRows),
+                update: () => mockThenable(() => mockUpdateQueue.shift() ?? []),
+            }),
         select: () => mockThenable(() => mockSelectQueue.shift() ?? []),
         update: () => mockThenable(() => mockUpdateQueue.shift() ?? []),
     },
@@ -116,6 +131,7 @@ function storedRecord(overrides: Partial<WebsitePreviewRecord> = {}): WebsitePre
 
 function queueDocument(ocrMetadata: Record<string, unknown> | null = marker) {
     mockSelectQueue.push([{ id: 7, url: HTML_URL, ocrMetadata }]);
+    mockLockedRows = [{ id: 7, url: HTML_URL, ocrMetadata }];
 }
 
 /** What Gotenberg sends back: a 2× full-page JPEG of a 1,280-wide window. */
@@ -138,6 +154,8 @@ beforeEach(async () => {
     mockSelectQueue.length = 0;
     mockUpdateQueue.length = 0;
     mockUpdates.length = 0;
+    mockLockedRows = [];
+    mockPlanObjectDeletion.mockResolvedValue(null);
     const shot = await chromiumShot();
     htmlToScreenshot = jest.fn().mockResolvedValue({
         image: shot,
@@ -252,7 +270,7 @@ describe("GET /api/documents/:id/website-preview", () => {
         expect(htmlToScreenshot).not.toHaveBeenCalled();
     });
 
-    it("takes a new picture for a new version of the page, and deletes the old one", async () => {
+    it("plans cleanup of the replaced picture in the metadata transaction", async () => {
         grantContext();
         queueDocument({
             ...marker,
@@ -265,7 +283,13 @@ describe("GET /api/documents/:id/website-preview", () => {
 
         expect(res.status).toBe(200);
         expect(htmlToScreenshot).toHaveBeenCalledTimes(1);
-        expect(mockDeleteFileByUrl).toHaveBeenCalledWith(storedRecord().url);
+        expect(mockPlanObjectDeletion).toHaveBeenCalledWith(expect.anything(), {
+            companyId: BigInt(42),
+            urls: [storedRecord().url],
+            requestedBy: "user_1",
+            reason: "replaced_object",
+            traceId: expect.any(String),
+        });
     });
 
     it("takes the picture again when the stored file has gone", async () => {
@@ -286,14 +310,53 @@ describe("GET /api/documents/:id/website-preview", () => {
         grantContext();
         queueDocument();
         mockFetchFile.mockResolvedValue(okBody(SAVED_HTML));
-        mockUpdateQueue.push([]); // no row still pointing at that HTML
+        mockLockedRows = [{ url: "stored://new-html", ocrMetadata: marker }];
 
         const res = await call();
 
         expect(res.status).toBe(200);
-        expect(mockDeleteFileByUrl).toHaveBeenCalledWith(
-            "http://localhost:8333/pdr-documents/documents/new-preview.webp"
+        expect(mockPlanObjectDeletion).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({
+                urls: ["http://localhost:8333/pdr-documents/documents/new-preview.webp"],
+                reason: "replaced_object",
+            })
         );
+        expect(mockUpdates).toHaveLength(0);
+    });
+
+    it("snapshots the actual preview under the lock instead of the caller's cached record", async () => {
+        grantContext();
+        queueDocument({ ...marker, websitePreview: storedRecord({ source: "stored://old-html" }) });
+        mockLockedRows = [
+            {
+                url: HTML_URL,
+                ocrMetadata: {
+                    ...marker,
+                    websitePreview: storedRecord({ url: "/api/files/concurrent-preview" }),
+                },
+            },
+        ];
+        mockFetchFile.mockResolvedValue(okBody(SAVED_HTML));
+        expect((await call()).status).toBe(200);
+        expect(mockPlanObjectDeletion).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({ urls: ["/api/files/concurrent-preview"] })
+        );
+    });
+
+    it("does not publish new preview metadata if durable planning fails", async () => {
+        grantContext();
+        queueDocument({ ...marker, websitePreview: storedRecord({ source: "stored://old-html" }) });
+        mockFetchFile.mockResolvedValue(okBody(SAVED_HTML));
+        mockPlanObjectDeletion.mockRejectedValueOnce(new Error("outbox unavailable"));
+        const quiet = jest.spyOn(console, "error").mockImplementation(() => undefined);
+        try {
+            expect((await call()).status).toBe(500);
+            expect(mockUpdates).toHaveLength(0);
+        } finally {
+            quiet.mockRestore();
+        }
     });
 
     it("503s with a typed error when there is no renderer", async () => {

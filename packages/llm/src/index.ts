@@ -21,6 +21,7 @@ export {
 } from "./usage-meter";
 export { applyMessageBehavior, systemMessageFor } from "./messages";
 export { addSystemInstructions, createEndpointFetch, neutralErrorMessage } from "./endpoint-fetch";
+export { longWaitFetch, NODE_FETCH_HEADERS_TIMEOUT_MS } from "./long-wait-fetch";
 export { modelContentToText, normalizeModelContent } from "./normalize-content";
 export {
     KEYLESS_PLACEHOLDER_API_KEY,

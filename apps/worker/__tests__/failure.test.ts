@@ -129,7 +129,15 @@ vi.mock("@launchstack/store/client", () => ({
     },
 }));
 
-import { createDeadEventHandler } from "../src/ports/failure";
+const { markStorageDeletionRequestDead } = vi.hoisted(() => ({
+    markStorageDeletionRequestDead: vi.fn(async (_requestId: number, _traceId?: string) => {}),
+}));
+
+vi.mock("~/server/storage/deletion/worker", () => ({
+    markStorageDeletionRequestDead,
+}));
+
+import { createDeadEventHandler, createValidationDeadHandler } from "../src/ports/failure";
 
 const JOB_BEARING_EVENTS = [
     "source.version.created",
@@ -201,6 +209,29 @@ beforeEach(() => {
 });
 
 describe("createDeadEventHandler", () => {
+    it("blocks a dead storage deletion request without touching OCR rows", async () => {
+        await createDeadEventHandler(makeLogger())(
+            makeClaimed("storage.deletion.requested", { requestId: 17 }),
+            "provider unavailable"
+        );
+
+        expect(markStorageDeletionRequestDead).toHaveBeenCalledExactlyOnceWith(17, "trace-dead");
+        expect(getDbCalls.count).toBe(0);
+        expect(updates).toEqual([]);
+    });
+
+    it("propagates a storage dead-letter write failure", async () => {
+        const error = new Error("deletion request update failed");
+        markStorageDeletionRequestDead.mockRejectedValueOnce(error);
+
+        await expect(
+            createDeadEventHandler(makeLogger())(
+                makeClaimed("storage.deletion.requested", { requestId: 17 }),
+                "dead"
+            )
+        ).rejects.toBe(error);
+    });
+
     it("marks the OCR job failed for every job-bearing event type, truncating the error", async () => {
         const longError = "x".repeat(3000);
 
@@ -450,5 +481,47 @@ describe("createDeadEventHandler", () => {
             expect.objectContaining({ ocrJobId: "job-1" }),
             expect.any(String)
         );
+    });
+});
+
+describe("createValidationDeadHandler", () => {
+    it("recovers a storage deletion request id from the deterministic event id", async () => {
+        await createValidationDeadHandler(makeLogger())(99, "storage.deletion.requested:17");
+
+        expect(markStorageDeletionRequestDead).toHaveBeenCalledExactlyOnceWith(17);
+        expect(getDbCalls.count).toBe(0);
+        expect(updates).toEqual([]);
+    });
+
+    it.each(["", "0", "-1", "1.5", "17:extra", "17oops", "9007199254740993"])(
+        "does not block an unrelated request for an invalid event-id suffix %s",
+        async suffix => {
+            const logger = makeLogger();
+            await createValidationDeadHandler(logger)(99, `storage.deletion.requested:${suffix}`);
+
+            expect(markStorageDeletionRequestDead).not.toHaveBeenCalled();
+            expect(getDbCalls.count).toBe(0);
+            expect(logger.error).toHaveBeenCalled();
+        }
+    );
+
+    it("propagates a storage validation-dead write failure", async () => {
+        const error = new Error("deletion request update failed");
+        markStorageDeletionRequestDead.mockRejectedValueOnce(error);
+
+        await expect(
+            createValidationDeadHandler(makeLogger())(99, "storage.deletion.requested:17")
+        ).rejects.toBe(error);
+    });
+
+    it.each(JOB_BEARING_EVENTS)("keeps OCR validation-dead handling for %s", async eventType => {
+        await createValidationDeadHandler(makeLogger())(99, `${eventType}:job-1`);
+
+        expect(state.job.status).toBe("failed");
+        expect(state.job.errorMessage).toContain("payload failed protocol validation");
+        expect(jobUpdates()).toHaveLength(1);
+        expect(documentUpdates()).toHaveLength(0);
+        expect(versionUpdates()).toHaveLength(0);
+        expect(markStorageDeletionRequestDead).not.toHaveBeenCalled();
     });
 });

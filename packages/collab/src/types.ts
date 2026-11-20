@@ -137,10 +137,15 @@ export type TurnPolicyKind = (typeof TurnPolicyKinds)[number];
  * How the next speaker is chosen.
  *
  * - `round_robin` — fixed rotation. Deterministic; the default.
- * - `moderated`   — the first persona (or `moderatorId`) opens and closes the
- *   meeting and nominates the next speaker by writing `@persona-id`.
+ * - `moderated`   — the first persona (or `moderatorId`) opens each round it
+ *   sits in, takes the meeting's last turn, and nominates the next speaker by
+ *   writing `@persona-id`.
  * - `reactive`    — whoever the last message addressed, else the persona whose
  *   role words best match the last message. Deterministic tie-break by order.
+ *
+ * Under `moderated` and `reactive` a room works in rounds: everyone in it (a
+ * phase's speakers, or the whole meeting) speaks once before anyone speaks
+ * again. A human naming an agent always gets that agent next.
  */
 export interface TurnPolicy {
     kind: TurnPolicyKind;

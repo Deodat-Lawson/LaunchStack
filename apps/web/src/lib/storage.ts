@@ -9,6 +9,10 @@ import {
 } from "@launchstack/store/crypto";
 
 import { env } from "~/env";
+import { discardUnrecordedObject } from "~/server/storage/compensate";
+import { recordStoredObject, removeStoredObject } from "~/server/storage/ledger";
+import { currentStorageLocationId } from "~/server/storage/location";
+import type { ObjectRef } from "~/server/storage/object-ref";
 
 // ---------------------------------------------------------------------------
 // StorageError — wraps provider errors with provider name context
@@ -80,6 +84,7 @@ export interface UploadResult {
     pathname: string;
     contentType?: string;
     provider: StorageBackend;
+    ref: ObjectRef;
 }
 
 // ---------------------------------------------------------------------------
@@ -111,20 +116,46 @@ async function uploadToS3(input: UploadInput): Promise<UploadResult> {
         const { putObject, getObjectUrl, ensureBucketExists } = await import(
             "~/server/storage/s3-client"
         );
+        const storageLocationId = currentStorageLocationId("s3");
+        if (!storageLocationId) throw new StorageError("S3 location is not configured", "s3");
 
         const safeName = sanitizeFilename(input.filename);
         const key = `documents/${randomUUID()}-${safeName || "upload"}`;
         const body = toBuffer(input.data);
 
         await ensureBucketExists();
-        await putObject(key, body, input.contentType);
-
-        return {
-            url: getObjectUrl(key),
-            pathname: key,
+        const ref: ObjectRef = { adapter: "s3", storageLocationId, key };
+        const url = getObjectUrl(key);
+        // Commit inventory before writing bytes: a crash may leave an empty ledger
+        // entry, never an object invisible to orphan cleanup.
+        // Defer engine loading: its static storage/port import re-enters this module.
+        const { getEngine } = await import("~/server/engine");
+        const db = getEngine().db;
+        await recordStoredObject(db, {
+            ref,
+            url,
+            companyId: input.companyId ?? null,
+            source: "upload-file",
             contentType: input.contentType,
-            provider: "s3",
-        };
+            sizeBytes: body.length,
+        });
+        try {
+            await putObject(key, body, input.contentType);
+        } catch (error) {
+            // A failed request can still have reached S3. Remove the inventory
+            // only once deletion is confirmed; otherwise retain it for audit.
+            if (await discardUnrecordedObject(ref, "uploadFile S3 put failed")) {
+                await removeStoredObject(db, ref).catch((cleanupError: unknown) => {
+                    console.warn("Failed to remove unused storage ledger row", {
+                        ref,
+                        cleanupError,
+                    });
+                });
+            }
+            throw error;
+        }
+
+        return { url, pathname: key, contentType: input.contentType, provider: "s3", ref };
     } catch (err) {
         if (err instanceof StorageError) throw err;
         throw new StorageError(
@@ -149,31 +180,39 @@ async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
         const safeName = sanitizeFilename(input.filename);
         const pathname = `documents/${randomUUID()}-${safeName || "upload"}`;
 
-        const [row] = await db
-            .insert(fileUploads)
-            .values({
-                userId: input.userId,
+        return await db.transaction(async tx => {
+            const [row] = await tx
+                .insert(fileUploads)
+                .values({
+                    userId: input.userId,
+                    companyId: input.companyId ?? null,
+                    filename: input.filename,
+                    mimeType: input.contentType ?? "application/octet-stream",
+                    fileData: body.toString("base64"),
+                    fileSize: body.length,
+                    storageProvider: "database",
+                    storageUrl: null,
+                    storagePathname: pathname,
+                })
+                .returning({ id: fileUploads.id });
+
+            if (!row) throw new Error("Insert into fileUploads returned no row");
+            const ref: ObjectRef = {
+                adapter: "database",
+                storageLocationId: currentStorageLocationId("database")!,
+                key: String(row.id),
+            };
+            const url = `/api/files/${row.id}`;
+            await recordStoredObject(tx, {
+                ref,
+                url,
                 companyId: input.companyId ?? null,
-                filename: input.filename,
-                mimeType: input.contentType ?? "application/octet-stream",
-                fileData: body.toString("base64"),
-                fileSize: body.length,
-                storageProvider: "database",
-                storageUrl: null,
-                storagePathname: pathname,
-            })
-            .returning({ id: fileUploads.id });
-
-        if (!row) {
-            throw new Error("Insert into fileUploads returned no row");
-        }
-
-        return {
-            url: `/api/files/${row.id}`,
-            pathname,
-            contentType: input.contentType,
-            provider: "database",
-        };
+                source: "upload-file",
+                contentType: input.contentType,
+                sizeBytes: body.length,
+            });
+            return { url, pathname, contentType: input.contentType, provider: "database", ref };
+        });
     } catch (err) {
         if (err instanceof StorageError) throw err;
         throw new StorageError(
@@ -182,107 +221,6 @@ async function uploadToDatabase(input: UploadInput): Promise<UploadResult> {
             err instanceof Error ? err : undefined
         );
     }
-}
-
-// ---------------------------------------------------------------------------
-// getFileUrl — resolve a storage key to a URL
-// ---------------------------------------------------------------------------
-
-export function getFileUrl(key: string, provider?: StorageBackend): string {
-    const resolvedProvider = provider ?? resolveStorageBackend();
-
-    if (resolvedProvider === "s3") {
-        const endpoint = env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
-        if (!endpoint) {
-            throw new StorageError("NEXT_PUBLIC_S3_ENDPOINT is not configured", "s3");
-        }
-        const bucket = env.server.S3_BUCKET_NAME;
-        const base = endpoint.replace(/\/+$/, "");
-        return bucket ? `${base}/${bucket}/${key}` : `${base}/${key}`;
-    }
-
-    // database: key is already a /api/files/<id> URL
-    return key;
-}
-
-// ---------------------------------------------------------------------------
-// deleteFile — remove an object from storage
-// ---------------------------------------------------------------------------
-
-export async function deleteFile(keyOrUrl: string, provider?: StorageBackend): Promise<void> {
-    const resolvedProvider = provider ?? resolveStorageBackend();
-
-    if (resolvedProvider === "s3") {
-        try {
-            const { deleteObject } = await import("~/server/storage/s3-client");
-            await deleteObject(keyOrUrl);
-        } catch (err) {
-            if (err instanceof StorageError) throw err;
-            throw new StorageError(
-                err instanceof Error ? err.message : String(err),
-                "s3",
-                err instanceof Error ? err : undefined
-            );
-        }
-        return;
-    }
-
-    // database: remove the fileUploads row matching this /api/files/<id> URL
-    try {
-        const match = /\/api\/files\/(\d+)/.exec(keyOrUrl);
-        if (!match?.[1]) return;
-        const id = parseInt(match[1], 10);
-        if (isNaN(id)) return;
-        // Use getEngine().db (hoisted fn) rather than the ~/server/db Proxy const:
-        // lib/storage sits inside the server/db → engine → storage/port → lib/storage
-        // cycle, so a dynamic import of the un-hoisted `db` const can resolve to
-        // undefined mid-init. getEngine() is immune (function declaration).
-        const { getEngine } = await import("~/server/engine");
-        const db = getEngine().db;
-        const { fileUploads } = await import("@launchstack/store/schema");
-        const { eq } = await import("drizzle-orm");
-        await db.delete(fileUploads).where(eq(fileUploads.id, id));
-    } catch (err) {
-        if (err instanceof StorageError) throw err;
-        throw new StorageError(
-            err instanceof Error ? err.message : String(err),
-            "database",
-            err instanceof Error ? err : undefined
-        );
-    }
-}
-
-/**
- * Delete a stored file by its URL, regardless of provider.
- *
- * This is the friendlier counterpart to `deleteFile(key, provider)` — most
- * callers only have the URL stored in the DB (e.g. `document_versions.url`)
- * and don't know which provider put it there. This helper inspects the URL,
- * strips the SeaweedFS endpoint prefix to recover the object key when needed,
- * and dispatches to `deleteFile` with the correct provider.
- *
- * Database-backed URLs (`/api/files/{id}`) are silently ignored because there
- * is nothing to delete from a blob provider — the row itself is the storage.
- */
-export async function deleteFileByUrl(url: string): Promise<void> {
-    if (!url) return;
-
-    // Database-backed storage: nothing to delete at the blob layer.
-    if (url.startsWith("/api/files/")) return;
-
-    const s3Endpoint = env.server.NEXT_PUBLIC_S3_ENDPOINT ?? env.client.NEXT_PUBLIC_S3_ENDPOINT;
-
-    if (s3Endpoint && url.startsWith(s3Endpoint)) {
-        // SeaweedFS is S3-compatible; recover the object key from the endpoint prefix.
-        // e.g. "http://localhost:8333/pdr-documents/documents/abc-file.pdf"
-        //   -> "pdr-documents/documents/abc-file.pdf"
-        const key = url.slice(s3Endpoint.replace(/\/+$/, "").length + 1);
-        return deleteFile(key, "s3");
-    }
-
-    // Vercel Blob has no delete handler wired up; fall through as a no-op via
-    // the database branch (the regex won't match a blob URL).
-    return deleteFile(url, "database");
 }
 
 // ---------------------------------------------------------------------------

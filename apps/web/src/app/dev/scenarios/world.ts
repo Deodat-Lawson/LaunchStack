@@ -414,6 +414,7 @@ function person(seed: PersonSeed, index: number): ScenarioPerson {
         firstObjection: seed.firstObjection ?? null,
         wouldPay: seed.wouldPay ?? null,
         objection: seed.objection ?? null,
+        basis: null,
         startStance: history[0]!,
         stance: history[history.length - 1]!,
         activity: seed.activity ?? 0.4 + ((index * 7) % 5) / 10,
@@ -1385,6 +1386,7 @@ export function generateScript(o: GenerateOptions): Script {
             firstObjection: null,
             wouldPay: history[history.length - 1]! > 0 ? "maybe" : "no",
             objection: null,
+            basis: null,
         });
     }
 

@@ -17,8 +17,11 @@ jest.mock("~/server/db", () => ({
     db: {
         update: jest.fn(),
         select: jest.fn(),
+        transaction: (callback: (tx: unknown) => Promise<unknown>) =>
+            callback(jest.requireMock("~/server/db").db),
     },
 }));
+jest.mock("~/server/storage/deletion/plan", () => ({ planObjectDeletion: jest.fn() }));
 
 jest.mock("~/server/storage/vercel-blob", () => ({
     fetchBlob: jest.fn(),
@@ -43,6 +46,19 @@ import { modifyDocument } from "~/server/inngest/functions/modifyDocument";
 import { db } from "~/server/db";
 import { fetchBlob, putFile } from "~/server/storage/vercel-blob";
 import { processDocumentBatch } from "@launchstack/editing";
+
+beforeEach(() => {
+    (db.select as jest.Mock).mockReturnValue({
+        from: jest.fn().mockReturnValue({
+            where: jest.fn().mockReturnValue({
+                limit: jest.fn().mockResolvedValue([{ companyId: BigInt(7) }]),
+                for: jest
+                    .fn()
+                    .mockResolvedValue([{ companyId: BigInt(7), url: "/api/files/old-current" }]),
+            }),
+        }),
+    });
+});
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -263,6 +279,7 @@ describe("Preservation: Normal-sized DOCX (< 1 MB) processes through modifyDocum
         expect(putFile).toHaveBeenCalledWith(
             expect.objectContaining({
                 filename: expect.stringContaining("modified-42"),
+                companyId: BigInt(7),
                 contentType:
                     "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
             })

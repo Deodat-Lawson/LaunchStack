@@ -14,13 +14,15 @@
  * stored bytes included. Filed rows keep their bytes: the document points at
  * them.
  */
-import { createHash, randomBytes } from "node:crypto";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
 
 import { and, eq, gt, inArray, isNotNull, lt, ne, sql } from "drizzle-orm";
 
-import { deleteFile, uploadFile, type StorageBackend } from "~/lib/storage";
+import { uploadFile } from "~/lib/storage";
 import { db } from "~/server/db";
 import { mcpStagedFiles, users, type McpStagedFile, type McpStagedKind } from "~/server/db/schema";
+import { planObjectDeletion } from "~/server/storage/deletion/plan";
+import type { Tx } from "~/server/workspace/db-types";
 
 /** A draft or upload must be filed within this long. */
 export const STAGED_TTL_MS = 60 * 60 * 1000;
@@ -56,42 +58,55 @@ export function hashUploadToken(token: string): string {
 }
 
 /**
+ * Queues the bytes of staged rows that were never filed for deletion. Bytes a
+ * document points at survive: the deletion worker checks every reference.
+ */
+async function planUnfiledBytesDeletion(
+    tx: Tx,
+    rows: readonly Pick<McpStagedFile, "companyId" | "status" | "storageUrl">[],
+    context: { requestedBy: string; reason: string }
+): Promise<void> {
+    const byCompany = new Map<bigint, string[]>();
+    for (const row of rows) {
+        if (row.status === "used" || !row.storageUrl) continue;
+        byCompany.set(row.companyId, [...(byCompany.get(row.companyId) ?? []), row.storageUrl]);
+    }
+    const traceId = randomUUID();
+    for (const [companyId, urls] of byCompany) {
+        await planObjectDeletion(tx, { companyId, urls, traceId, ...context });
+    }
+}
+
+/**
  * Removes expired rows, deleting the stored bytes of any that were never
  * filed. Best effort: a failure is logged and never fails the caller.
  */
 export async function sweepExpiredStagedFiles(now = new Date()): Promise<number> {
     try {
-        const expired = await db
-            .select({
-                id: mcpStagedFiles.id,
-                status: mcpStagedFiles.status,
-                storageUrl: mcpStagedFiles.storageUrl,
-                storageProvider: mcpStagedFiles.storageProvider,
-            })
-            .from(mcpStagedFiles)
-            .where(lt(mcpStagedFiles.expiresAt, now))
-            .limit(SWEEP_BATCH);
-        if (expired.length === 0) return 0;
-        for (const row of expired) {
-            if (row.status !== "used" && row.storageUrl) {
-                await deleteFile(
-                    row.storageUrl,
-                    (row.storageProvider as StorageBackend | null) ?? undefined
-                ).catch((error: unknown) =>
-                    console.warn("[mcp] could not delete an expired staged file", {
-                        id: row.id,
-                        error,
-                    })
-                );
-            }
-        }
-        await db.delete(mcpStagedFiles).where(
-            inArray(
-                mcpStagedFiles.id,
-                expired.map(row => row.id)
-            )
-        );
-        return expired.length;
+        return await db.transaction(async tx => {
+            const expired = await tx
+                .select({
+                    id: mcpStagedFiles.id,
+                    companyId: mcpStagedFiles.companyId,
+                    status: mcpStagedFiles.status,
+                    storageUrl: mcpStagedFiles.storageUrl,
+                })
+                .from(mcpStagedFiles)
+                .where(lt(mcpStagedFiles.expiresAt, now))
+                .limit(SWEEP_BATCH);
+            if (expired.length === 0) return 0;
+            await planUnfiledBytesDeletion(tx, expired, {
+                requestedBy: "system:mcp_staging",
+                reason: "staged_file_expired",
+            });
+            await tx.delete(mcpStagedFiles).where(
+                inArray(
+                    mcpStagedFiles.id,
+                    expired.map(row => row.id)
+                )
+            );
+            return expired.length;
+        });
     } catch (error) {
         console.warn("[mcp] staged-file sweep failed", error);
         return 0;
@@ -359,25 +374,23 @@ export async function releaseStagedFile(id: string): Promise<void> {
 
 /** Drops a staged row the person declined to file, with its bytes. */
 export async function discardStagedFile(owner: StagingOwner, id: string): Promise<void> {
-    const [row] = await db
-        .delete(mcpStagedFiles)
-        .where(
-            and(
-                eq(mcpStagedFiles.id, id),
-                eq(mcpStagedFiles.companyId, owner.companyId),
-                eq(mcpStagedFiles.userId, owner.userPk),
-                ne(mcpStagedFiles.status, "used")
+    await db.transaction(async tx => {
+        const rows = await tx
+            .delete(mcpStagedFiles)
+            .where(
+                and(
+                    eq(mcpStagedFiles.id, id),
+                    eq(mcpStagedFiles.companyId, owner.companyId),
+                    eq(mcpStagedFiles.userId, owner.userPk),
+                    ne(mcpStagedFiles.status, "used")
+                )
             )
-        )
-        .returning();
-    if (row?.storageUrl) {
-        await deleteFile(
-            row.storageUrl,
-            (row.storageProvider as StorageBackend | null) ?? undefined
-        ).catch((error: unknown) =>
-            console.warn("[mcp] could not delete a discarded staged file", { id, error })
-        );
-    }
+            .returning();
+        await planUnfiledBytesDeletion(tx, rows, {
+            requestedBy: owner.authUserId,
+            reason: "staged_file_discarded",
+        });
+    });
 }
 
 /** Staged rows still waiting in this person's workspace (for tests and Settings). */

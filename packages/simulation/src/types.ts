@@ -66,6 +66,14 @@ export interface Persona {
     switchingCost?: SwitchingCost;
     /** Their first doubt about the subject, in their own words. */
     objection?: string;
+    /** The cast slot this persona fills, when a host casts by slot (contract v2). */
+    slotId?: string;
+    /**
+     * A few short facts this person knows from their own work, drawn from the
+     * evidence they were cast from (at most five). Turns include them only
+     * when present, so worlds cast without them read exactly as before.
+     */
+    knows?: string[];
 }
 
 /** Accounts that post but are not simulated: the scenario narrator, the brand under test. */
@@ -276,7 +284,18 @@ export interface FeedItem {
 
 /** The model port. The engine builds prompts and parses replies; the host only completes text. */
 export interface ModelRequest {
-    purpose: "decide" | "interview" | "report" | "cast" | "brief";
+    purpose:
+        | "decide"
+        | "interview"
+        | "report"
+        | "cast"
+        | "brief"
+        /** Contract v2: the graph ontology planner. */
+        | "ontology"
+        /** Contract v2: the cast's role slots (segment and retrieval query per slot). */
+        | "cast_plan"
+        /** Contract v2: one batch of slot-bound personas with attributed fields. */
+        | "cast_v2";
     system: string;
     prompt: string;
     /** JSON schema of the expected reply, for hosts whose model supports structured output. */

@@ -585,4 +585,45 @@ describeDb("public links (integration)", () => {
         expect(kept.status).toBe(200);
         expect(JSON.stringify(kept.body)).not.toContain("unpublished");
     });
+
+    it("gives an agent a recording's transcript, timed, from the recording's own link", async () => {
+        const recording = await addFile({
+            title: "Standup.m4a",
+            mimeType: "audio/mp4",
+            body: "not really audio",
+            folder: "Meetings",
+        });
+        const transcript = await addFile({
+            title: "Standup.m4a (Transcription)",
+            mimeType: "text/plain",
+            body: "Good morning. We ship the importer fix today.",
+            folder: "Meetings",
+        });
+        await test.db
+            .update(document)
+            .set({
+                ocrMetadata: {
+                    source: "transcription",
+                    audioDocumentId: recording,
+                    segments: [
+                        { start: 0, end: 3, text: "Good morning." },
+                        { start: 65, end: 70, text: "We ship the importer fix today." },
+                    ],
+                },
+            })
+            .where(eq(document.id, transcript));
+
+        const token = tokenOf((await call("ada", createRoute, "POST", recording)).body);
+        const text = await (await publicGet(markdownRoute, token, "/markdown")).text();
+        expect(text).toContain("[0:00] Good morning.");
+        expect(text).toContain("[1:05] We ship the importer fix today.");
+
+        // A transcript in another folder is not this recording's to give.
+        await test.db
+            .update(document)
+            .set({ category: "Elsewhere" })
+            .where(eq(document.id, transcript));
+        const none = await (await publicGet(markdownRoute, token, "/markdown")).text();
+        expect(none).toContain("no readable text yet");
+    });
 });

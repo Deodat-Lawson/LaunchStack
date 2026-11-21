@@ -250,6 +250,11 @@ export async function publicDocumentText(
             row.title
         );
     }
+    // A recording's words are its transcript, which is a row of its own: a
+    // meeting recording handed to an agent should read as what was said.
+    if (!markdown && (displayType === "audio" || displayType === "video")) {
+        markdown = await transcriptMarkdown(link, row);
+    }
 
     const truncated = markdown.length > PUBLIC_TEXT_MAX_CHARS;
     return {
@@ -257,6 +262,36 @@ export async function publicDocumentText(
         available: markdown.trim().length > 0,
         truncated,
     };
+}
+
+/** "[1:05] Words", one timed line each; or the transcript file's text. */
+async function transcriptMarkdown(
+    link: ResolvedPublicLink,
+    row: PublicDocumentRow
+): Promise<string> {
+    // Imported here: `./media` builds on this module.
+    const { resolvePublicMedia } = await import("./media");
+    const resolved = await resolvePublicMedia(link, row).catch(() => null);
+    const segments = resolved?.preview.transcript?.segments ?? null;
+    if (segments && segments.length > 0) {
+        return segments
+            .map(segment => `[${clock(segment.start)}] ${segment.text.trim()}`)
+            .join("\n\n");
+    }
+    const transcript = resolved?.transcriptDocument;
+    if (!transcript) return "";
+    const raw = await readStoredText(transcript.url, link.companyId, RAW_TEXT_MAX_BYTES).catch(
+        () => null
+    );
+    return raw?.trim() ?? "";
+}
+
+function clock(seconds: number): string {
+    const total = Math.max(0, Math.floor(seconds));
+    const h = Math.floor(total / 3600);
+    const m = Math.floor((total % 3600) / 60);
+    const s = String(total % 60).padStart(2, "0");
+    return h > 0 ? `${h}:${String(m).padStart(2, "0")}:${s}` : `${m}:${s}`;
 }
 
 function fenced(source: string, title: string): string {

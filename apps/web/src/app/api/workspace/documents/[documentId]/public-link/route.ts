@@ -93,9 +93,7 @@ export async function DELETE(request: Request, { params }: Params) {
     const id = parseIdParam((await params).documentId);
     if (id === null) return invalidIdResponse(request);
     try {
-        return NextResponse.json(
-            await revokePublicLink(ctx.data, id, requestOrigin(request))
-        );
+        return NextResponse.json(await revokePublicLink(ctx.data, id, requestOrigin(request)));
     } catch (error) {
         return workspaceErrorResponse(error, "[workspace/documents/public-link DELETE]", request);
     }

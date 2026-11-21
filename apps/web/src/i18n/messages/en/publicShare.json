@@ -10,7 +10,8 @@
       "sharedFrom": "Shared from {workspace} with a LaunchStack public link. Last updated {updated}.",
       "noText": "This file has no readable text yet. Open the link in a browser to view it.",
       "truncated": "The text was cut here because the file is very long."
-    }
+    },
+    "tooMany": "Too many requests from your network. Try again in a minute."
   },
   "page": {
     "metaTitle": "Shared file",

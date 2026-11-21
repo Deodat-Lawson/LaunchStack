@@ -10,7 +10,8 @@
       "sharedFrom": "通过 LaunchStack 公开链接从 {workspace} 分享。最后更新于 {updated}。",
       "noText": "此文件还没有可读取的文字。请在浏览器中打开链接查看。",
       "truncated": "文件过长，文字在此处被截断。"
-    }
+    },
+    "tooMany": "来自你所在网络的请求过多，请稍后再试。"
   },
   "page": {
     "metaTitle": "分享的文件",

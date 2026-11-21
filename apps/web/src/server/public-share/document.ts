@@ -85,10 +85,17 @@ async function uploadedMimeType(url: string, companyId: bigint): Promise<string 
     return file?.mimeType?.trim().length ? file.mimeType.trim() : null;
 }
 
-/** Keys a viewer reads to pick and label its renderer. Everything else stays home. */
+/** What a public mindmap document's marker says its map is: a stand-in, not an id. */
+export const PUBLIC_MINDMAP_ID = 1;
+
+/**
+ * Keys a viewer reads to pick and label its renderer. Everything else stays
+ * home — ids above all: a transcript's recording, or the map behind a
+ * mindmap, is another row the visitor has no business naming. The server
+ * pairs them itself (`/media`, `/mindmap`), keyed on the token.
+ */
 const VIEWER_METADATA_KEYS = [
     "kind",
-    "mindmapId",
     "capturedAt",
     "connector",
     "clientName",
@@ -97,7 +104,7 @@ const VIEWER_METADATA_KEYS = [
     "endedAt",
     "savedAt",
     "source",
-    "audioDocumentId",
+    "mediaMimeType",
     "language",
     "artifactType",
     "importedAt",
@@ -115,6 +122,9 @@ export function publicViewerMetadata(
             out[key] = value;
         }
     }
+    // The mindmap viewer needs *a* map id to ask for the map; on a public
+    // link it asks `/api/s/<token>/mindmap`, which ignores it. Never the real one.
+    if (meta.kind === "mindmap" && meta.mindmapId !== undefined) out.mindmapId = PUBLIC_MINDMAP_ID;
     // A saved web page's address is what the page is; a public address by construction.
     if (meta.kind === "website" && typeof meta.url === "string") out.url = meta.url;
     // `isFromClaude` reads where an artifact came from, not who sent it.

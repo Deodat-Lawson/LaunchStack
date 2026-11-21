@@ -1214,11 +1214,16 @@ export function DocumentViewer({
                       onSelect: () => onRestrictAccess(source),
                       disabled: !persisted,
                       // Who can open it now, on hover: "Only you", "Shared with 3"…
-                      hint: source.access
+                      // A live public link outranks them all (ADR-016).
+                      hint: source.publicLink
                           ? t("documentViewer.shareHint", {
-                                audience: audienceLabel(source.access, null, tAudience),
+                                audience: t("documentViewer.anyoneWithLink"),
                             })
-                          : tc("actions.share"),
+                          : source.access
+                            ? t("documentViewer.shareHint", {
+                                  audience: audienceLabel(source.access, null, tAudience),
+                              })
+                            : tc("actions.share"),
                       testId: "viewer-share",
                   },
               ]

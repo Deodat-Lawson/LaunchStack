@@ -4,7 +4,7 @@ import {
     stepKindOf,
     stepOnLine,
     type StepsParse,
-} from "../variants/d-write/syntax";
+} from "../model/flowchart/syntax";
 
 /**
  * Direction D's step language: one step per line, `?` for a decision,

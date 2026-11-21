@@ -5,11 +5,11 @@
  * look (`look.ts`) and the key handlers (`actions.ts`) both call these.
  */
 
-import { graphIndex, insertEdgesBeside, nodeById, removeNodes } from "../../model/doc";
-import { createEdge } from "../../model/factory";
-import { layeredLayout } from "../../model/layered";
-import { isContainer } from "../../model/shapes";
-import type { DiagramEdge, DiagramNode, DiagramPage } from "../../model/types";
+import { graphIndex, insertEdgesBeside, nodeById, removeNodes } from "../doc";
+import { createEdge } from "../factory";
+import { layeredLayout } from "../layered";
+import { isContainer } from "../shapes";
+import type { DiagramEdge, DiagramNode, DiagramPage } from "../types";
 
 /** Every step's starting size. Taller only when its words wrap. */
 export const STEP_SIZE = { w: 176, h: 56 } as const;

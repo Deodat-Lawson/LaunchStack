@@ -13,21 +13,14 @@
  * never imports `../looks` (which imports this direction's look).
  */
 
-import { createEdge, createNode } from "../../model/factory";
-import { GROW_MAX_TEXT_WIDTH } from "../../model/grow";
-import { layeredLayout } from "../../model/layered";
-import { neutralsFor, type ThemeMode } from "../../model/palette";
-import { isContainer, shapeDef, shapeHoldsText, shapeTextBox } from "../../model/shapes";
-import { layoutText } from "../../model/text";
-import type {
-    DiagramEdge,
-    DiagramNode,
-    DiagramPage,
-    Point,
-    ShapeId,
-    TextStyle,
-} from "../../model/types";
-import type { FlowLook } from "../types";
+import { createEdge, createNode } from "../factory";
+import { GROW_MAX_TEXT_WIDTH } from "../grow";
+import { layeredLayout } from "../layered";
+import { neutralsFor, type ThemeMode } from "../palette";
+import { isContainer, shapeDef, shapeHoldsText, shapeTextBox } from "../shapes";
+import { layoutText } from "../text";
+import type { DiagramEdge, DiagramNode, DiagramPage, Point, ShapeId, TextStyle } from "../types";
+import type { FlowLook } from "./lookTypes";
 import { normalizeLabel, oneLine, type StepKind, type StepsParse } from "./syntax";
 
 /** Space between ranks (down the page) and between neighbours in a rank. */

@@ -9,7 +9,7 @@ import {
     startChart,
     walk,
 } from "./actions";
-import type { Walk } from "./chart";
+import type { Walk } from "../../model/flowchart/arrange";
 import { EmptyHint } from "./EmptyHint";
 import { KeyLegend } from "./KeyLegend";
 

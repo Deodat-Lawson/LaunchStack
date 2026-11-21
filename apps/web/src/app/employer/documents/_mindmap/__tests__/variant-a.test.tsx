@@ -24,7 +24,7 @@ import {
     tidyChart,
     treePositions,
     walkFrom,
-} from "../variants/a-keyboard/chart";
+} from "../model/flowchart/arrange";
 import { EmptyHint } from "../variants/a-keyboard/EmptyHint";
 import { KeyLegend } from "../variants/a-keyboard/KeyLegend";
 import { lookA } from "../variants/a-keyboard/look";

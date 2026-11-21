@@ -22,7 +22,7 @@ import {
     tidyChart,
     walkFrom,
     type Walk,
-} from "./chart";
+} from "../../model/flowchart/arrange";
 import { flowEnv } from "./env";
 import { lookA } from "./look";
 

@@ -117,6 +117,7 @@ export function defaultSettings(overrides: Partial<DocSettings> = {}): DocSettin
         showRulers: false,
         defaultEdgeKind: "elbow",
         paletteId: "default",
+        flowLayout: "manual",
         ...overrides,
     };
 }

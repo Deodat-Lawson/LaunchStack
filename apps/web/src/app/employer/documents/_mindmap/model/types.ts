@@ -268,7 +268,16 @@ export interface DocSettings {
     defaultEdgeKind: EdgeKind;
     /** Theme applied to freshly inserted shapes. */
     paletteId: string;
+    /**
+     * How a flowchart's boxes are placed. `auto`: the chart lays itself out
+     * top to bottom as steps are added, until someone moves a box by hand.
+     * `manual`: boxes stay where they are put. A document saved before this
+     * existed is `manual`, so opening one never re-arranges it.
+     */
+    flowLayout: FlowLayout;
 }
+
+export type FlowLayout = "auto" | "manual";
 
 // ---------------------------------------------------------------------------
 // Shape ids

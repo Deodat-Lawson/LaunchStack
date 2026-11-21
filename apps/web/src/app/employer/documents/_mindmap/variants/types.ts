@@ -20,20 +20,8 @@
 
 import type { ComponentType, KeyboardEvent as ReactKeyboardEvent } from "react";
 
-import type { ThemeMode } from "../model/palette";
-import type { ChromeDepth, EditorStore } from "../model/store";
-import type {
-    ArrowId,
-    DiagramNode,
-    DiagramPage,
-    EdgeKind,
-    EdgeStyle,
-    NodeStyle,
-    Point,
-    PortId,
-    ShapeId,
-    TextStyle,
-} from "../model/types";
+import type { EditorStore } from "../model/store";
+import type { Point, PortId } from "../model/types";
 
 export type FlowVariantId = "a" | "b" | "c" | "d";
 
@@ -43,62 +31,7 @@ export function isFlowVariantId(value: unknown): value is FlowVariantId {
     return typeof value === "string" && (FLOW_VARIANT_IDS as readonly string[]).includes(value);
 }
 
-/** What a new box of one shape looks like under a direction. */
-export interface BoxLook {
-    style: Partial<NodeStyle>;
-    text: Partial<TextStyle>;
-    /** Its starting size. Omitted: the shape's own default. */
-    size?: { w: number; h: number };
-}
-
-export interface EdgeLook {
-    kind: EdgeKind;
-    style: Partial<EdgeStyle>;
-    startArrow?: ArrowId;
-    endArrow?: ArrowId;
-    /** The type of its labels. Omitted: the editor's default (12px grey). */
-    text?: Partial<TextStyle>;
-}
-
-/** The pure half of a direction. See the file comment. */
-export interface FlowLook {
-    id: FlowVariantId;
-    /** Chrome the direction opens with (`focus` = Simple, `everything`). */
-    chrome: ChromeDepth;
-    /** The shape of a first box, a double-clicked box, and a plain step. */
-    stepShape: ShapeId;
-    /** Which way a step goes when nothing on the page says otherwise. */
-    direction: "right" | "down";
-    /** Every new box, by every path, is given this. */
-    boxLook(shape: ShapeId, mode: ThemeMode): BoxLook;
-    /** Every new arrow, by every path, is given this. */
-    edgeLook(mode: ThemeMode): EdgeLook;
-    /**
-     * The shape of the step Tab adds after `source`. Omitted: the same shape
-     * (the base behaviour).
-     */
-    nextShape?(source: DiagramNode): ShapeId;
-    /**
-     * Re-lay the page after a step is added (`addNextStep`). Pure: given the
-     * page with the new box and arrow in, return it arranged. `added` is the
-     * new box's id.
-     */
-    relayout?: (page: DiagramPage, added: string) => DiagramPage;
-    /**
-     * A box whose label was just committed may change with its words (a label
-     * ending in "?" becoming a decision, say). Return the fields to change, or
-     * null. Applied in the same undo step as the words.
-     */
-    afterText?(
-        node: DiagramNode,
-        text: string
-    ): Partial<Pick<DiagramNode, "shape" | "x" | "y" | "w" | "h">> | null;
-    /**
-     * Boxes keep the width they were made with and grow down as their label
-     * wraps (a sticky note's rule), instead of widening first. Omitted: false.
-     */
-    fixedWidth?: boolean;
-}
+export type { BoxLook, EdgeLook, FlowLook } from "../model/flowchart/lookTypes";
 
 /** Where a pointer is: on the board, and on the stage (CSS px from its top-left). */
 export interface CanvasPoint {

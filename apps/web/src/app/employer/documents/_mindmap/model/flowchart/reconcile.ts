@@ -18,8 +18,8 @@
  * chart drawn from it keeps every box (`applySteps`'s `ids`).
  */
 
-import type { DiagramEdge, DiagramNode, DiagramPage } from "../../model/types";
-import { edgeLabel, isStepNode } from "./chart";
+import type { DiagramEdge, DiagramNode, DiagramPage } from "../types";
+import { edgeLabel, isStepNode } from "./steps";
 import { oneLine, parseSteps, type StepLine, type StepsParse } from "./syntax";
 
 /** Lines and the boxes they were drawn as. */

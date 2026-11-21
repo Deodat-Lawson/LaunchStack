@@ -838,6 +838,9 @@ export function buildTemplate(
         ...doc.settings,
         kind: kindForTemplate(t.id, TEMPLATE_META_BY_ID[t.id]?.category),
         autoLayout: AUTO_ARRANGED.has(t.id) ? ({ kind: "mindmap" } as const) : null,
+        // A blank flowchart arranges itself as steps are added; a template's
+        // sample was laid out by hand and keeps its places.
+        flowLayout: t.id === "blank" ? ("auto" as const) : ("manual" as const),
     };
     return applyThemeToDoc({ ...doc, settings }, defaultThemeFor(mode));
 }

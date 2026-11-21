@@ -1008,7 +1008,7 @@ export function commitNodeText(store: EditorStore, start: DiagramNode, text: str
                     const fitted = nd.shape === "text" ? fitToLabel(next) : next;
                     // A direction being tried may change a box with its words
                     // (a question becoming a decision), in this same step.
-                    const patch = look?.afterText?.(fitted, text);
+                    const patch = look?.afterText?.(fitted, text, docMode(store));
                     return patch ? { ...fitted, ...patch } : fitted;
                 }),
             { label: "Edit text", coalesceKey: `text:${start.id}` }

@@ -23,10 +23,10 @@ import { activePage } from "../../model/doc";
 import type { EditorStore } from "../../model/store";
 import type { DiagramPage, MindmapDoc, Point, SelectionRef } from "../../model/types";
 import { boardMode } from "../looks";
-import { applySteps, structureOf } from "./chart";
+import { applySteps, structureOf } from "../../model/flowchart/steps";
 import { lookD } from "./look";
-import { reconcileSteps, serializeSteps, type StepsBinding } from "./reconcile";
-import { parseSteps, type StepsParse } from "./syntax";
+import { reconcileSteps, serializeSteps, type StepsBinding } from "../../model/flowchart/reconcile";
+import { parseSteps, type StepsParse } from "../../model/flowchart/syntax";
 
 export const PREVIEW_DELAY = 180;
 export const PREVIEW_MAX_WAIT = 300;

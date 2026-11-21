@@ -7,7 +7,7 @@
  */
 
 import type { EditorStore } from "../../model/store";
-import type { BranchWords } from "./chart";
+import type { BranchWords } from "../../model/flowchart/arrange";
 
 export interface KeyboardFlowEnv {
     stage: { w: number; h: number };

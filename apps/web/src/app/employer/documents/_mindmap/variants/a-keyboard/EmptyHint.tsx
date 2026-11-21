@@ -12,7 +12,7 @@ import type { EditorState } from "../../model/store";
 import styles from "../../ui/Canvas.module.css";
 import { useCommittedDoc, useEditor, useStore } from "../../ui/EditorContext";
 import { startChart } from "./actions";
-import { STEP_SIZE } from "./chart";
+import { STEP_SIZE } from "../../model/flowchart/arrange";
 import { keyCap } from "./KeyLegend";
 
 /**

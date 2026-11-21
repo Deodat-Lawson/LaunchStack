@@ -3,7 +3,7 @@ import { neutralsFor } from "../../model/palette";
 import { isContainer } from "../../model/shapes";
 import type { DiagramNode, ShapeId } from "../../model/types";
 import type { FlowLook } from "../types";
-import { DECISION_SIZE, isQuestion, STEP_SIZE, tidyChart } from "./chart";
+import { DECISION_SIZE, isQuestion, STEP_SIZE, tidyChart } from "../../model/flowchart/arrange";
 
 /**
  * A · Keyboard flow. Whimsical-style: steps run top to bottom, every box is

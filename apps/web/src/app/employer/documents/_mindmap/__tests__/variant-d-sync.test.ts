@@ -11,11 +11,11 @@ import { createEdge } from "../model/factory";
 import { EditorStore } from "../model/store";
 import { buildTemplate } from "../model/templates";
 import type { DiagramNode, DiagramPage } from "../model/types";
-import { applySteps, isStepNode, matchSteps, structureOf } from "../variants/d-write/chart";
+import { applySteps, isStepNode, matchSteps, structureOf } from "../model/flowchart/steps";
 import { lookD } from "../variants/d-write/look";
-import { reconcileSteps, serializeSteps } from "../variants/d-write/reconcile";
+import { reconcileSteps, serializeSteps } from "../model/flowchart/reconcile";
 import { BURST_IDLE, PREVIEW_MAX_WAIT, StepsSync } from "../variants/d-write/sync";
-import { parseSteps } from "../variants/d-write/syntax";
+import { parseSteps } from "../model/flowchart/syntax";
 
 /**
  * Direction D keeps a panel of lines and the chart in step, both ways. These

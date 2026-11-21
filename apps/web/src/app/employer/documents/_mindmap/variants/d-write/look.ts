@@ -1,8 +1,8 @@
 import { neutralsFor } from "../../model/palette";
 import type { ShapeId } from "../../model/types";
 import type { FlowLook } from "../types";
-import { isStepNode, relayoutAfterStep, shapeForKind } from "./chart";
-import { oneLine, stepKindOf } from "./syntax";
+import { isStepNode, relayoutAfterStep, shapeForKind } from "../../model/flowchart/steps";
+import { oneLine, stepKindOf } from "../../model/flowchart/syntax";
 
 /**
  * D · Write it, see it. Mermaid-style: the steps are typed as lines in a

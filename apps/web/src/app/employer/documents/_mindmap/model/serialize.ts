@@ -328,6 +328,7 @@ export function parseDoc(raw: unknown, fallbackTitle = "Untitled mindmap"): Mind
                 ? edgeKind
                 : "elbow") as EdgeKind,
             paletteId: str(settings.paletteId, "default"),
+            flowLayout: settings.flowLayout === "auto" ? "auto" : "manual",
         }),
     };
 }

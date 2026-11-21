@@ -24,7 +24,7 @@ import type { EditorStore } from "../../model/store";
 import type { ShapeId } from "../../model/types";
 import { useSelectedNodeIds, useStore } from "../../ui/EditorContext";
 import { stepsSyncFor } from "./sync";
-import { isIndented, type StepKind, type StepsParse } from "./syntax";
+import { isIndented, type StepKind, type StepsParse } from "../../model/flowchart/syntax";
 
 /**
  * The Steps panel: the process as lines, docked left of the canvas.

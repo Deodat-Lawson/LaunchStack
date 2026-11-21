@@ -74,7 +74,7 @@ export class StepsSync {
 
     constructor(
         private readonly store: EditorStore,
-        private readonly options: StepsSyncOptions = {}
+        private options: StepsSyncOptions = {}
     ) {
         const page = activePage(store.getState().doc);
         const out = serializeSteps(page);
@@ -113,6 +113,11 @@ export class StepsSync {
         this.endBurst();
         this.unsubscribe?.();
         this.unsubscribe = null;
+    }
+
+    /** Where a first step goes on an empty board; the panel knows the view. */
+    setOrigin(origin: () => Point | undefined): void {
+        this.options.origin = origin;
     }
 
     // -- text → chart --------------------------------------------------------
@@ -325,4 +330,20 @@ export class StepsSync {
         const step = ids.indexOf(id);
         return step >= 0 ? (parse.steps[step]?.line ?? null) : null;
     }
+}
+
+const controllers = new WeakMap<EditorStore, StepsSync>();
+
+/**
+ * The one controller for an editor's store. The panel starts and stops it as
+ * it mounts (presenting unmounts it), and the canvas's empty-board prompt
+ * reaches the same one, so the lines survive both.
+ */
+export function stepsSyncFor(store: EditorStore): StepsSync {
+    let sync = controllers.get(store);
+    if (!sync) {
+        sync = new StepsSync(store);
+        controllers.set(store, sync);
+    }
+    return sync;
 }

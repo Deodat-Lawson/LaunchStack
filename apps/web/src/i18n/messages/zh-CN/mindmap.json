@@ -923,6 +923,45 @@
       "blurb": "把箭头拖到空白处，再选择放在那里的形状。"
     },
     "d": {
+      "panel": {
+        "title": "步骤",
+        "count": "{count, plural, =0 {还没有画出内容} other {# 个方框}}",
+        "editorLabel": "步骤，每行一个",
+        "placeholder": "每行写一个步骤，例如：\n\n开始\n接单\n已付款？\n  是：发货\n  否：-> 接单\n结束",
+        "useExample": "使用示例",
+        "example": "开始\n收到订单\n检查库存\n有货吗？\n  有：拣货并打包\n  没有：向供应商补货 -> 检查库存\n发货并发送物流单号\n结束",
+        "keys": "Tab 缩进为分支 · Esc 回到流程图"
+      },
+      "kind": {
+        "step": "步骤",
+        "decision": "判断",
+        "start": "开始",
+        "end": "结束",
+        "arrow": "箭头"
+      },
+      "syntax": {
+        "title": "写法",
+        "stepCode": "打包订单",
+        "step": "一个步骤；各行按顺序相连",
+        "decisionCode": "有货吗？",
+        "decision": "以问号结尾：判断",
+        "branchCode": "  是：发货",
+        "branch": "缩进在判断下：分支",
+        "jumpCode": "-> 打包订单",
+        "jump": "改为跳到那个步骤",
+        "endsCode": "开始 · 结束",
+        "ends": "圆角的开始或结束"
+      },
+      "notes": {
+        "missingTarget": "第 {line} 行：没有名为“{target}”的步骤。",
+        "notUnderQuestion": "第 {line} 行：只有问题（以问号结尾的行）才能有分支，所以这一行画成普通步骤。",
+        "arrowWithoutStep": "第 {line} 行：箭头上方需要有一个步骤。"
+      },
+      "hint": {
+        "title": "在左侧写下你的步骤",
+        "body": "每一行都会变成一个方框，流程图会自动画出来。",
+        "useExample": "或者从示例开始"
+      },
       "name": "边写边看",
       "blurb": "按行输入步骤，流程图自动画出来。"
     }

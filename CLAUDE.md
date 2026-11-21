@@ -37,6 +37,11 @@ compositions — product verticals; may import bricks, never the reverse),
 - Touch-it-migrate-it: when editing existing UI for feature work, convert the
   region you touch to kit + tokens; never launch a bulk rewrite.
 - Full conventions: `apps/web/README.md`.
+- Designing a screen or a feature's UI: read `apps/web/DESIGN.md` first —
+  which surface it goes on (sidebar, Studio tab, ToolFrame screen, Settings,
+  dialog, sheet), the type scale, layout, components, states and copy rules,
+  plus a review checklist. `/dev/design` shows all of it live, and
+  `src/app/dev/design/template/` is a complete tool to copy.
 - The Mindmap editor (`app/employer/documents/_mindmap`) has its own README
   and one deliberate exception: shape colours are literal OKLCH values stored
   in the document, not tokens — a token would repaint when the _viewer_

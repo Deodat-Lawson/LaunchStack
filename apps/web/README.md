@@ -6,6 +6,13 @@ site lives in `apps/landing`. Both apps share one visual language through
 frontend work consistent. ESLint enforces the hard rules (see the
 "Design-system guardrails" blocks in the root `eslint.config.js`).
 
+**Designing UI?** [`DESIGN.md`](DESIGN.md) is the design guide: where each
+kind of UI goes, the type scale, layout, components, states, copy and a
+review checklist. `/dev/design` on a dev server is the live library — every
+kit component and a complete template tool (`src/app/dev/design/template/`),
+in both themes and languages. This page is the engineering side of the same
+rules.
+
 ## Component sourcing order
 
 When you need UI, take the first thing that exists:
@@ -194,8 +201,10 @@ the next visit.
   but only one is focused. Anything that owns the keyboard — the mindmap
   editor, above all — gates on focus, or it eats keys meant for the pane next
   to it.
-- **An app is a tab unless it is a route tree.** Growth has its own layout and
-  nested pages, so it keeps `external: true` and Studio navigates to it.
+- **Every app is a tab.** No Studio app is a page of its own any more —
+  Growth, Proposals and Vantage moved into tabs on `ToolFrame` in October
+  2026, and `__tests__/studio/registry.test.ts` fails if an entry points
+  anywhere but a tab (see `src/components/tool-app/README.md`).
 - **Every id the shell can open must resolve** through `resolveStudioFeature`,
   because a tab needs a label and an icon. Panes reachable only by link —
   Workflows, Mindmap — are named there rather than in `STUDIO_GROUPS`, which

@@ -911,6 +911,33 @@
       "hint": "Each direction starts a fresh blank flowchart."
     },
     "a": {
+      "empty": {
+        "prompt": "Start typing your first step",
+        "next": "<key>Tab</key> next step",
+        "branch": "<key>⇧Tab</key> branch",
+        "decision": "end with <key>?</key> for a decision"
+      },
+      "legend": {
+        "title": "Keys",
+        "label": "Keyboard shortcuts for drawing the chart",
+        "hide": "Hide keys",
+        "show": "Show keys",
+        "next": "Next step",
+        "branch": "Branch beside",
+        "decision": "At the end → decision",
+        "move": "Move around",
+        "remove": "Remove step"
+      },
+      "keys": {
+        "next": "Tab",
+        "branch": "⇧Tab",
+        "decision": "?",
+        "remove": "Delete"
+      },
+      "branch": {
+        "yes": "Yes",
+        "no": "No"
+      },
       "name": "Keyboard flow",
       "blurb": "Tab and Enter draw the chart; it lays itself out top to bottom."
     },

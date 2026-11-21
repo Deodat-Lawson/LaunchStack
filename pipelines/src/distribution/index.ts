@@ -17,6 +17,8 @@ export * from "./judge";
 export * from "./render";
 export * from "./dossier-agent";
 export * from "./run";
+export * from "./pool";
+export * from "./pictures";
 export * from "./ports";
 export * from "./fixture";
 export * from "./keyless";

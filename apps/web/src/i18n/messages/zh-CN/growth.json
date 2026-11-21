@@ -305,6 +305,11 @@
       "shortcuts": "<k>j</k> <k>k</k> 移动 · <k>x</k> 选择 · <k>Enter</k> 打开 · <k>o</k> 加入外联 · <k>/</k> 搜索",
       "moveToQualified": "移至“已确认”",
       "newBadge": "新",
+      "simulate": "模拟这个细分市场",
+      "simulateSelected": "模拟 {count} 家公司",
+      "simulateHint": "打开情景模拟，基于这个细分市场的潜在客户，或你选定的公司。",
+      "simulateSubject": "这个细分市场中的企业会如何回应我们的产品？",
+      "layout": { "cards": "卡片", "table": "表格", "aria": "公司的显示方式" },
       "foundInLastRun": "在上次运行中发现"
     },
     "company": {
@@ -318,6 +323,9 @@
       "staff": "{size} 名员工",
       "noPeopleYet": "尚未找到联系人",
       "addPeople": "将联系人加入外联",
+      "simulate": "模拟买家",
+      "simulateHint": "打开情景模拟，以这家公司作为模拟人物的潜在客户来源。",
+      "simulateSubject": "{name} 以及类似的企业会如何回应我们的产品？",
       "excludedNote": "已排除。它不会出现在后续运行中，也无法加入外联。",
       "excludedNoteReason": "已排除：{reason}。它不会出现在后续运行中，也无法加入外联。",
       "notProfiled": "尚未生成画像",

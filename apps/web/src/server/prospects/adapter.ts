@@ -561,6 +561,8 @@ export function toCompanyRow(item: PartnerListItem, ctx: RowContext): CompanyRow
         sizeBand: org.sizeBand,
         archetype: rel.dossier?.roles.join(", ") ?? rel.kind,
         why: whyOf(item),
+        imageUrl: org.imageUrl ?? null,
+        iconUrl: org.iconUrl ?? null,
         fit: rel.fitScore,
         fitThreshold: FIT_THRESHOLD,
         stage: rel.stage,

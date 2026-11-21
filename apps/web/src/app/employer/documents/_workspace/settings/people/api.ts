@@ -189,6 +189,38 @@ export interface DocumentAccess {
     workspaceName: string;
 }
 
+/** How long a public link lasts, counted from now: until it is turned off (null), 7 or 30 days. */
+export type PublicLinkExpiryDays = null | 7 | 30;
+
+/** A file's live public link (ADR-016). */
+export interface PublicLink {
+    /** The page anyone with it can open, without signing in. */
+    url: string;
+    /** The same file as Markdown, for AI agents. */
+    markdownUrl: string;
+    allowDownload: boolean;
+    /** ISO time, or null for never. */
+    expiresAt: string | null;
+    createdAt: string;
+    /** Auth id of whoever made it. */
+    createdBy: string;
+}
+
+/** What the Share dialog reads about a file's public link. */
+export interface PublicLinkState {
+    /** The live link, or null (never made, turned off, or expired). */
+    link: PublicLink | null;
+    /** May the caller make, change or turn off the link. */
+    canManage: boolean;
+    /** The workspace switch (`sharing.publicLinks`). Off, no link opens and none can be made. */
+    enabled: boolean;
+}
+
+export interface PublicLinkInput {
+    allowDownload?: boolean;
+    expiresInDays?: PublicLinkExpiryDays;
+}
+
 export interface Principals {
     users: { id: number; authUserId?: string; name: string; email: string }[];
     groups: { id: number; name: string }[];
@@ -464,6 +496,26 @@ export const peopleApi = {
             request<DocumentAccess>(`/api/workspace/documents/${documentId}/access`, {
                 method: "PUT",
                 body: json(body),
+            }),
+        /** The file's public link, whether the caller may change it, and the workspace switch. */
+        publicLink: (documentId: number) =>
+            request<PublicLinkState>(`/api/workspace/documents/${documentId}/public-link`),
+        /** Make the file's public link (or get the live one back). */
+        createPublicLink: (documentId: number, body: PublicLinkInput = {}) =>
+            request<PublicLinkState>(`/api/workspace/documents/${documentId}/public-link`, {
+                method: "POST",
+                body: json(body),
+            }),
+        /** Change the live link's download switch or expiry (counted from now). */
+        updatePublicLink: (documentId: number, body: PublicLinkInput) =>
+            request<PublicLinkState>(`/api/workspace/documents/${documentId}/public-link`, {
+                method: "PATCH",
+                body: json(body),
+            }),
+        /** Turn the link off; its URL never opens again. */
+        revokePublicLink: (documentId: number) =>
+            request<PublicLinkState>(`/api/workspace/documents/${documentId}/public-link`, {
+                method: "DELETE",
             }),
         principals: (q: string) => request<Principals>(`/api/workspace/principals${query({ q })}`),
     },

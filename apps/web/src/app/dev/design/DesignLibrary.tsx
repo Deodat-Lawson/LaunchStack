@@ -82,6 +82,17 @@ export function DesignLibrary() {
     }, [setTheme]);
     // Client-only, like the other harnesses: the kit generates ids, and a
     // server pass with no theme would hydrate every specimen mismatched.
+    // Once it has rendered: take keyboard focus so PageDown and the arrow keys
+    // scroll this scroller (the window no longer does), and follow a #section
+    // in the URL, which the browser tried before the content existed.
+    const scroller = useRef<HTMLDivElement | null>(null);
+    useEffect(() => {
+        const el = scroller.current;
+        if (!mounted || !el) return;
+        el.focus({ preventScroll: true });
+        const id = decodeURIComponent(window.location.hash.slice(1));
+        if (id) document.getElementById(id)?.scrollIntoView({ block: "start" });
+    }, [mounted]);
     if (!mounted) return null;
 
     return (
@@ -90,9 +101,11 @@ export function DesignLibrary() {
                 body, which makes body a scroller that never scrolls, so sticky
                 children of the window never stick. */}
             <div
+                ref={scroller}
+                tabIndex={-1}
                 data-preview="design-library"
                 data-library-scroller
-                className="bg-surface text-ink h-dvh overflow-y-auto"
+                className="bg-surface text-ink h-dvh overflow-y-auto outline-none"
             >
                 <header className="border-line bg-panel/90 z-sticky sticky top-0 border-b backdrop-blur">
                     <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-3 px-5">

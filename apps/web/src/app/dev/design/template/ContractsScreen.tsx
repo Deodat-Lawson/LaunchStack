@@ -240,7 +240,6 @@ function ContractRow({
     items: () => ActionMenuItem[];
 }) {
     const t = useTranslations("designTemplate.contracts");
-    const tc = useTranslations("common");
     const f = useRenewalsFormat();
     const { navigate } = useToolNav();
     const menu = useActionMenu();
@@ -276,7 +275,7 @@ function ContractRow({
                 <StatusBadge status={c.status} />
             </TableCell>
             <TableCell className="pr-2 text-right">
-                <IconTooltip label={tc("actions.moreActions")}>
+                <IconTooltip label={t("rowActions", { vendor: c.vendor })}>
                     <Button
                         variant="ghost"
                         size="icon"

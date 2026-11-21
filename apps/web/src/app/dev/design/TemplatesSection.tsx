@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { toast } from "sonner";
 
 import type { ToolHost } from "~/components/tool-app/nav";
@@ -58,6 +58,17 @@ export function TemplatesSection() {
         setRequest({ at, nonce: nonce.current });
     };
     const px = WIDTHS.find(w => w.id === width)!.px;
+    const pane = useRef<HTMLDivElement | null>(null);
+    const [paneWidth, setPaneWidth] = useState(0);
+    useEffect(() => {
+        const el = pane.current;
+        if (!el || typeof ResizeObserver === "undefined") return;
+        const observer = new ResizeObserver(() =>
+            setPaneWidth(Math.round(el.getBoundingClientRect().width))
+        );
+        observer.observe(el);
+        return () => observer.disconnect();
+    }, []);
 
     return (
         <DocSection
@@ -132,9 +143,15 @@ export function TemplatesSection() {
                             ))}
                         </ToggleGroup>
                     </Control>
+                    {/* The real width, so a narrow window can't pass for a full tab. */}
+                    <span className="text-ink-3 text-xs tabular-nums">
+                        Pane {paneWidth}px
+                        {paneWidth < px && " — widen the window for the full width"}
+                    </span>
                 </div>
                 <div className="bg-surface-2 border-line overflow-x-auto rounded-lg border p-3">
                     <div
+                        ref={pane}
                         data-template-pane
                         className="border-line mx-auto h-[780px] overflow-hidden rounded-md border transition-[width] duration-200 [container-type:inline-size]"
                         style={{ width: px, maxWidth: "100%" }}

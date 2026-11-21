@@ -111,8 +111,15 @@ export function MindmapPreview() {
         const params = new URLSearchParams(window.location.search);
         if (next) params.set("variant", next);
         else params.delete("variant");
+        // Every choice, Today included, is a blank flowchart: without this,
+        // Today fell back to the harness's default template, the mindmap.
+        if (!params.get("template")) params.set("template", "blank");
         window.history.replaceState(null, "", `${window.location.pathname}?${params}`);
         setQuery(params);
+        // Hand the keyboard back to the board. Left on the switcher, a
+        // keyboard-first direction's keys moved between its buttons (and
+        // Enter picked one) instead of drawing.
+        if (document.activeElement instanceof HTMLElement) document.activeElement.blur();
     }, []);
     const showSwitcher = !preview && doc !== null && doc.settings.kind !== "mindmap";
 

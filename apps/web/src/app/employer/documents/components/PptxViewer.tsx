@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { Loader2, AlertTriangle, ExternalLink, Monitor } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useViewerEndpoints } from "~/lib/viewer-endpoints";
 import { ViewerNotice } from "./ViewerNotice";
 import { Button } from "~/components/ui/button";
 
@@ -31,8 +32,23 @@ function isPublicUrl(url: string): boolean {
  */
 export function PptxViewer({ url, title }: PptxViewerProps) {
     const t = useTranslations("viewers.pptx");
+    const { isPublic } = useViewerEndpoints();
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(false);
+
+    // A public link's bytes are never handed to Office Online: the link is
+    // a secret, and Microsoft would fetch (and could keep) the file. Nor is
+    // there a download button here; whether one shows is the link's call.
+    if (isPublic) {
+        return (
+            <ViewerNotice
+                tone="warn"
+                icon={<Monitor />}
+                title={t("publicPreviewOff")}
+                detail={t("publicPreviewOffDetail")}
+            />
+        );
+    }
 
     // Build absolute URL for Office Online
     const absoluteUrl = url.startsWith("http") ? url : `${window.location.origin}${url}`;

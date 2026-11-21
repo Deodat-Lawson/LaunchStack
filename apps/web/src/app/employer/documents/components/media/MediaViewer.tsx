@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import type { ViewerHighlight } from "~/lib/find-text-range";
 import { activeSegmentIndex, type MediaPreview } from "~/lib/media-document";
+import { useViewerEndpoints } from "~/lib/viewer-endpoints";
 import type { DocumentType } from "../../types";
 import { EmbedPlayer } from "./EmbedPlayer";
 import { FilePlayer } from "./FilePlayer";
@@ -28,7 +29,7 @@ type LoadState =
  * The viewer for an audio or video source, opened from either half of the
  * pair — the recording or its transcript: the player on top, the transcript
  * under it, wired together. `/api/documents/[id]/media` says what to play and
- * which transcript belongs to it.
+ * which transcript belongs to it (on a public link, the route under its token).
  */
 export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
     const t = useTranslations("viewers.media");
@@ -37,6 +38,7 @@ export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
     const [reload, setReload] = useState(0);
     const [activeIndex, setActiveIndex] = useState(-1);
     const playerRef = useRef<PlayerHandle>(null);
+    const mediaUrl = useViewerEndpoints().media(document.id);
 
     useEffect(() => {
         let cancelled = false;
@@ -44,7 +46,7 @@ export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
         setActiveIndex(-1);
         void (async () => {
             try {
-                const res = await fetch(`/api/documents/${document.id}/media`);
+                const res = await fetch(mediaUrl);
                 const body = (await res.json().catch(() => null)) as
                     | (MediaPreview & { error?: undefined })
                     | { error?: string }
@@ -69,7 +71,7 @@ export function MediaViewer({ document, highlight = null }: MediaViewerProps) {
         return () => {
             cancelled = true;
         };
-    }, [document.id, reload]);
+    }, [mediaUrl, reload]);
 
     const segments = state.status === "ready" ? (state.preview.transcript?.segments ?? null) : null;
 

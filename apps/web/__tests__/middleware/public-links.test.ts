@@ -68,3 +68,12 @@ describe("middleware and public links", () => {
         expect(res?.headers.get("x-middleware-rewrite") ?? null).toBeNull();
     });
 });
+
+describe("the public link page's headers", () => {
+    it("is never indexed, cached, or sent on as a Referer", async () => {
+        const res = await run(`/s/${TOKEN}`, "text/html");
+        expect(res?.headers.get("x-robots-tag")).toContain("noindex");
+        expect(res?.headers.get("referrer-policy")).toBe("no-referrer");
+        expect(res?.headers.get("cache-control")).toBe("private, no-store");
+    });
+});

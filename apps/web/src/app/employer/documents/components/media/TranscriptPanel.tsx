@@ -28,6 +28,7 @@ import {
     nativeLanguageName,
     suggestedTranslation,
 } from "~/lib/languages";
+import { useViewerEndpoints } from "~/lib/viewer-endpoints";
 
 type Transcript = NonNullable<MediaPreview["transcript"]>;
 
@@ -107,7 +108,9 @@ function segmentIndexOf(node: Node): number {
  * The transcript is in the language spoken, named in the header. Translate
  * shows it in another language line for line, so a translated line still
  * plays from its moment; citations always point into the original, so one
- * arriving switches back to it.
+ * arriving switches back to it. On a public link there is no Translate: a
+ * translation is a model call, and an anonymous reader never spends the
+ * workspace's budget.
  */
 export function TranscriptPanel({
     transcript,
@@ -123,6 +126,9 @@ export function TranscriptPanel({
     // The translate request reads the words through this, keeping its identity.
     const tRef = useRef(t);
     tRef.current = t;
+    const endpoints = useViewerEndpoints();
+    const textUrl = endpoints.transcriptText(transcript.documentId);
+    const translationsUrl = endpoints.transcriptTranslations(transcript.documentId);
     const segments = transcript.segments;
     const scrollRef = useRef<HTMLDivElement>(null);
     const bodyRef = useRef<HTMLDivElement>(null);
@@ -158,18 +164,16 @@ export function TranscriptPanel({
 
     const translateTo = useCallback(
         async (language: string) => {
+            if (!translationsUrl) return;
             rememberTranslateTo(language);
             const request = ++translateRequest.current;
             setTranslation({ status: "loading", language });
             try {
-                const res = await fetch(
-                    `/api/documents/${transcript.documentId}/transcript/translations`,
-                    {
-                        method: "POST",
-                        headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify({ language }),
-                    }
-                );
+                const res = await fetch(translationsUrl, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ language }),
+                });
                 const body = (await res.json().catch(() => null)) as
                     | (TranscriptTranslationResponse & { error?: undefined })
                     | { error?: string }
@@ -197,7 +201,7 @@ export function TranscriptPanel({
                 }
             }
         },
-        [transcript.documentId]
+        [translationsUrl]
     );
 
     const showOriginal = () => {
@@ -212,7 +216,7 @@ export function TranscriptPanel({
         setTextState("loading");
         void (async () => {
             try {
-                const res = await fetch(`/api/documents/${transcript.documentId}/content`);
+                const res = await fetch(textUrl);
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 const body = await res.text();
                 if (cancelled) return;
@@ -225,7 +229,7 @@ export function TranscriptPanel({
         return () => {
             cancelled = true;
         };
-    }, [segments, transcript.documentId, reload]);
+    }, [segments, textUrl, reload]);
 
     // Keep the playing line in view, unless the reader is scrolling.
     useEffect(() => {
@@ -366,7 +370,7 @@ export function TranscriptPanel({
                     </span>
                 )}
                 <span className="flex-1" />
-                {hasText && (
+                {hasText && translationsUrl && (
                     <DropdownMenu>
                         <DropdownMenuTrigger asChild>
                             <Button

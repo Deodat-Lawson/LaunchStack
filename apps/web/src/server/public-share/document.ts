@@ -81,7 +81,8 @@ async function uploadedMimeType(url: string, companyId: bigint): Promise<string 
         .from(fileUploads)
         .where(and(eq(fileUploads.id, Number(match[1])), eq(fileUploads.companyId, companyId)))
         .limit(1);
-    return file?.mimeType?.trim() || null;
+    // An empty stored type is no type.
+    return file?.mimeType?.trim().length ? file.mimeType.trim() : null;
 }
 
 /** Keys a viewer reads to pick and label its renderer. Everything else stays home. */
@@ -229,7 +230,7 @@ export async function publicDocumentText(
         const raw = await readStoredText(row.url, link.companyId, RAW_TEXT_MAX_BYTES).catch(
             () => null
         );
-        if (raw !== null && raw.trim()) {
+        if (raw?.trim()) {
             markdown = displayType === "code" ? fenced(raw, row.title) : raw;
         }
     }

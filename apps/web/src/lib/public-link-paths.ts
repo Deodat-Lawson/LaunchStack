@@ -14,6 +14,18 @@ export const PUBLIC_LINK_TOKEN_PATTERN = "[A-Za-z0-9_-]{43}";
 const MARKDOWN_PATH = new RegExp(`^/s/(${PUBLIC_LINK_TOKEN_PATTERN})\\.md$`);
 const PAGE_PATH = new RegExp(`^/s/(${PUBLIC_LINK_TOKEN_PATTERN})$`);
 
+/** A public link's page or its Markdown: an address whose path is a secret. */
+export function isPublicLinkPath(pathname: string | null | undefined): boolean {
+    return typeof pathname === "string" && /^\/s\/[^/]+/.test(pathname);
+}
+
+/** Headers every public link page carries: never indexed, never cached, never a Referer. */
+export const PUBLIC_LINK_PAGE_HEADERS: Readonly<Record<string, string>> = {
+    "X-Robots-Tag": "noindex, nofollow, noarchive",
+    "Referrer-Policy": "no-referrer",
+    "Cache-Control": "private, no-store",
+};
+
 /** The internal path that answers a Markdown request for a public link, or null. */
 export function publicLinkMarkdownRewrite(pathname: string, accept: string | null): string | null {
     const explicit = MARKDOWN_PATH.exec(pathname);

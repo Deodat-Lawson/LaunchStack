@@ -105,6 +105,13 @@ describe("mapMindmap", () => {
         expect(source.citability).toBe("none");
     });
 
+    it("carries its published copy's public link, which is what the link opens (ADR-016)", () => {
+        const row = summary({ publishedDocumentId: 99, publishedRevision: 4 });
+        expect(mapMindmap(row, { publicLink: true } as never).publicLink).toBe(true);
+        expect(mapMindmap(row, { publicLink: false } as never).publicLink).toBe(false);
+        expect(mapMindmap(summary()).publicLink).toBe(false);
+    });
+
     it("skips the thumbnail URL when there is no image to serve", () => {
         expect(mapMindmap(summary({ hasThumbnail: false })).thumbnailUrl).toBeUndefined();
     });

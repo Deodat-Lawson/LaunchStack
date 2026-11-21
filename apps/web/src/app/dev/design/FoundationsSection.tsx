@@ -219,13 +219,17 @@ const COLOUR_GROUPS: { title: string; note: string; swatches: Swatch[] }[] = [
 
 /* ── Type ───────────────────────────────────────────────────────────── */
 
-/** Shows the computed size and weight of its first element child, live. */
+/**
+ * Shows the computed size and weight of the text it wraps, live: the first
+ * heading, paragraph or code inside (a PageHeader's own wrapper carries the
+ * inherited 16px, not the title's size).
+ */
 function Measured({ children }: { children: ReactNode }) {
     const ref = useRef<HTMLDivElement>(null);
     const [spec, setSpec] = useState("");
     const { resolvedTheme } = useTheme();
     useEffect(() => {
-        const el = ref.current?.querySelector("[data-measure]") ?? ref.current?.firstElementChild;
+        const el = ref.current?.querySelector("h1, h2, h3, p, code");
         if (!el) return;
         const cs = getComputedStyle(el);
         setSpec(`${parseFloat(cs.fontSize)}px / ${cs.fontWeight}`);

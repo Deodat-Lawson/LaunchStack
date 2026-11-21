@@ -59,8 +59,9 @@ function WorkspaceMap() {
                         <Bell className="text-ink-3 size-3.5" />
                     </span>
                 </div>
-                <div className="border-line bg-panel text-ink-3 flex items-center gap-1.5 rounded-md border px-2 py-1">
-                    <Search className="size-3" /> Jump to anything
+                <div className="border-line bg-panel text-ink-3 flex items-center gap-1.5 whitespace-nowrap rounded-md border px-2 py-1">
+                    <Search className="size-3 shrink-0" />{" "}
+                    <span className="truncate">Jump to…</span>
                     <span className="ml-auto flex items-center gap-1">
                         <Command className="size-3" />K <Pin n={8} />
                     </span>
@@ -154,7 +155,7 @@ function WorkspaceMap() {
                         ))}
                     </div>
                     {/* A sheet, scoped to this tab */}
-                    <div className="border-line bg-panel shadow-3 @max-md:hidden absolute bottom-3 right-3 top-3 flex w-40 flex-col gap-2 rounded-md border p-2.5">
+                    <div className="border-line bg-panel shadow-3 @max-md:hidden absolute bottom-3 right-3 top-[72px] flex w-40 flex-col gap-2 rounded-md border p-2.5">
                         <div className="flex items-center gap-1.5">
                             <span className="text-ink font-medium">History</span>
                             <Pin n={5} className="ml-auto" />

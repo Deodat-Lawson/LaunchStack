@@ -82,8 +82,8 @@ export function Specimen({
     padded?: boolean;
 }) {
     return (
-        <figure className="border-line m-0 overflow-hidden rounded-lg border">
-            <div className={cn("bg-panel", padded && "p-5", className)}>{children}</div>
+        <figure className="border-line bg-panel m-0 flex flex-col overflow-hidden rounded-lg border">
+            <div className={cn("bg-panel flex-1", padded && "p-5", className)}>{children}</div>
             {(source !== undefined || note !== undefined) && (
                 <figcaption className="border-line bg-panel-2 text-ink-3 flex flex-col gap-0.5 border-t px-4 py-2 text-xs">
                     {source && <code className="text-ink-2 font-mono text-[12px]">{source}</code>}

@@ -11,5 +11,32 @@
       "noText": "This file has no readable text yet. Open the link in a browser to view it.",
       "truncated": "The text was cut here because the file is very long."
     }
+  },
+  "page": {
+    "metaTitle": "Shared file",
+    "sharedFrom": "Shared from {workspace} · updated {date}",
+    "download": "Download",
+    "markdown": "Markdown for AI",
+    "markdownTitle": "This file's text as Markdown, for AI agents and other tools",
+    "actions": "File actions",
+    "viewer": "File preview",
+    "textVersion": "Text version",
+    "textVersionHint": "The words in this file, for reading without the preview, copying, or handing to an AI agent.",
+    "noText": "This file has no readable text yet.",
+    "truncated": "The text stops here because the file is very long.",
+    "truncatedOnPage": "The text on this page stops here because the file is very long. <link>Read the full text as Markdown</link>.",
+    "noPreview": {
+      "pptx": "Presentations can't be previewed here, so this is the text from its slides.",
+      "zip": "Archives can't be previewed here, so this is the text read from the files inside.",
+      "unknown": "This kind of file can't be previewed here, so this is the text read from it."
+    },
+    "noPreviewTitle": "This file can't be previewed here",
+    "noPreviewNoTextDownload": "There's no text we could read from it either. Download it to open it on your computer.",
+    "noPreviewNoTextAsk": "There's no text we could read from it either. Ask the person who shared it to send you a copy.",
+    "unavailable": {
+      "metaTitle": "Link not available",
+      "title": "This link isn't available",
+      "body": "It may have been turned off or expired, or the file was deleted. If you still need the file, ask the person who shared it for a new link."
+    }
   }
 }

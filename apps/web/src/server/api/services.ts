@@ -300,6 +300,16 @@ export const PLATFORM_SERVICES: readonly ServiceDefinition[] = [
             "the same document store, so it belongs here rather than with the connectors.",
     },
     {
+        id: "public-links",
+        tier: "platform",
+        summary: "Open one file from its public link, without signing in (ADR-016).",
+        scope: "unscoped",
+        routes: ["s"],
+        unscopedRoutes: {
+            "s/*": "Public: whoever holds the link reads that one file. The token in the path is the credential, resolved by resolvePublicLink; making and changing links is under workspace/documents.",
+        },
+    },
+    {
         id: "retrieval",
         tier: "platform",
         summary: "Answer a question over the workspace's sources, with references.",

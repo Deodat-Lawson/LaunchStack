@@ -5,6 +5,7 @@ import { Loader2, AlertTriangle, RotateCw, Download } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { Button } from "~/components/ui/button";
+import { useViewerEndpoints } from "~/lib/viewer-endpoints";
 
 import { DocxCanvas } from "./docx/DocxCanvas";
 
@@ -23,6 +24,8 @@ interface DocxViewerProps {
 export function DocxViewer({ url, title }: DocxViewerProps) {
     const t = useTranslations("viewers.docxPreview");
     const tc = useTranslations("common");
+    // A public link with downloads off offers none here either.
+    const { allowDownload } = useViewerEndpoints();
     const [bytes, setBytes] = useState<ArrayBuffer | null>(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
@@ -70,12 +73,14 @@ export function DocxViewer({ url, title }: DocxViewerProps) {
                             <RotateCw className="h-4 w-4" />
                             {tc("actions.retry")}
                         </Button>
-                        <Button size="sm" variant="outline" asChild>
-                            <a href={url} download>
-                                <Download className="h-4 w-4" />
-                                {tc("actions.download")}
-                            </a>
-                        </Button>
+                        {allowDownload && (
+                            <Button size="sm" variant="outline" asChild>
+                                <a href={url} download>
+                                    <Download className="h-4 w-4" />
+                                    {tc("actions.download")}
+                                </a>
+                            </Button>
+                        )}
                     </div>
                 </div>
             </div>
@@ -86,12 +91,14 @@ export function DocxViewer({ url, title }: DocxViewerProps) {
         <div className="flex h-full w-full flex-col overflow-hidden" aria-label={title}>
             <div className="border-line bg-panel-2/30 flex flex-shrink-0 items-center justify-between border-b px-4 py-2">
                 <span className="text-ink-3 text-xs font-medium">{t("header")}</span>
-                <Button size="sm" variant="ghost" asChild>
-                    <a href={url} download>
-                        <Download className="h-3.5 w-3.5" />
-                        {tc("actions.download")}
-                    </a>
-                </Button>
+                {allowDownload && (
+                    <Button size="sm" variant="ghost" asChild>
+                        <a href={url} download>
+                            <Download className="h-3.5 w-3.5" />
+                            {tc("actions.download")}
+                        </a>
+                    </Button>
+                )}
             </div>
             <div className="min-h-0 flex-1">
                 <DocxCanvas

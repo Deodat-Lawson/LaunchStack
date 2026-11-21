@@ -28,6 +28,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Slider } from "~/components/ui/slider";
 import { formatMediaTime, type MediaKind } from "~/lib/media-document";
+import { useViewerEndpoints } from "~/lib/viewer-endpoints";
 import { PLAYBACK_RATES, SKIP_SECONDS, type PlayerHandle } from "./types";
 
 interface FilePlayerProps {
@@ -60,6 +61,8 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
     ref
 ) {
     const t = useTranslations("viewers.media");
+    // A public link with downloads off offers none here either.
+    const { allowDownload } = useViewerEndpoints();
     const mediaRef = useRef<HTMLVideoElement>(null);
     const [loadState, setLoadState] = useState<LoadState>("loading");
     const [hasPicture, setHasPicture] = useState(kind === "video");
@@ -184,11 +187,13 @@ export const FilePlayer = forwardRef<PlayerHandle, FilePlayerProps>(function Fil
                     </DropdownMenuRadioGroup>
                 </DropdownMenuContent>
             </DropdownMenu>
-            <Button variant="ghost" size="icon" asChild className="text-ink-2 size-8">
-                <a href={src} download aria-label={t("downloadFile")} title={t("download")}>
-                    <Download />
-                </a>
-            </Button>
+            {allowDownload && (
+                <Button variant="ghost" size="icon" asChild className="text-ink-2 size-8">
+                    <a href={src} download aria-label={t("downloadFile")} title={t("download")}>
+                        <Download />
+                    </a>
+                </Button>
+            )}
         </div>
     );
 
@@ -358,6 +363,7 @@ function PlaybackError({
 }) {
     const t = useTranslations("viewers.media");
     const tc = useTranslations("common");
+    const { allowDownload } = useViewerEndpoints();
     return (
         <div
             role="alert"
@@ -375,12 +381,14 @@ function PlaybackError({
                     <RotateCw />
                     {tc("actions.tryAgain")}
                 </Button>
-                <Button size="sm" asChild>
-                    <a href={src} download>
-                        <Download />
-                        {tc("actions.download")}
-                    </a>
-                </Button>
+                {allowDownload && (
+                    <Button size="sm" asChild>
+                        <a href={src} download>
+                            <Download />
+                            {tc("actions.download")}
+                        </a>
+                    </Button>
+                )}
             </div>
         </div>
     );

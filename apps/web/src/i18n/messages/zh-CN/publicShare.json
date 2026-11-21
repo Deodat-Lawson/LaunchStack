@@ -11,5 +11,32 @@
       "noText": "此文件还没有可读取的文字。请在浏览器中打开链接查看。",
       "truncated": "文件过长，文字在此处被截断。"
     }
+  },
+  "page": {
+    "metaTitle": "分享的文件",
+    "sharedFrom": "分享自 {workspace} · 更新于 {date}",
+    "download": "下载",
+    "markdown": "供 AI 读取的 Markdown",
+    "markdownTitle": "此文件文字的 Markdown 版本，供 AI 智能体和其他工具读取",
+    "actions": "文件操作",
+    "viewer": "文件预览",
+    "textVersion": "文字版本",
+    "textVersionHint": "此文件中的文字，可在不打开预览的情况下阅读、复制，或交给 AI 智能体。",
+    "noText": "此文件还没有可读取的文字。",
+    "truncated": "文件过长，文字在此处截止。",
+    "truncatedOnPage": "文件过长，此页面上的文字在此处截止。<link>以 Markdown 格式阅读全文</link>。",
+    "noPreview": {
+      "pptx": "无法在此预览演示文稿，以下是其幻灯片中的文字。",
+      "zip": "无法在此预览压缩包，以下是从其中文件读取的文字。",
+      "unknown": "无法在此预览此类文件，以下是从中读取的文字。"
+    },
+    "noPreviewTitle": "无法在此预览此文件",
+    "noPreviewNoTextDownload": "也无法从中读取任何文字。请下载后在电脑上打开。",
+    "noPreviewNoTextAsk": "也无法从中读取任何文字。请向分享者索取一份副本。",
+    "unavailable": {
+      "metaTitle": "链接不可用",
+      "title": "此链接不可用",
+      "body": "它可能已被关闭或已过期，或者文件已被删除。如果你仍需要该文件，请向分享者索取新的链接。"
+    }
   }
 }

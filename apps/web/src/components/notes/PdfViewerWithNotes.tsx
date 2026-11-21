@@ -123,9 +123,10 @@ interface Props {
     /**
      * Fires when the user highlights text and clicks the floating
      * "Add note here" button. Parent is expected to open the note editor
-     * with the anchor pre-filled.
+     * with the anchor pre-filled. Without it (a reader who cannot keep
+     * notes, such as a public link's visitor) there is no "+ Note".
      */
-    onCreateAnchoredNote: (anchor: PdfAnchorCapture) => void;
+    onCreateAnchoredNote?: (anchor: PdfAnchorCapture) => void;
     /**
      * When set, the selection popup offers a highlighter in each colour: the
      * passage is marked and kept, with nothing to write.
@@ -1544,7 +1545,7 @@ export function PdfViewerWithNotes({
     }, []);
 
     const handleCreateFromSelection = () => {
-        if (!selectionDraft) return;
+        if (!selectionDraft || !onCreateAnchoredNote) return;
         onCreateAnchoredNote({
             page: selectionDraft.page,
             quads: selectionDraft.quads,
@@ -2039,51 +2040,57 @@ export function PdfViewerWithNotes({
                         </div>
                     )}
 
-                    {selectionDraft && (
-                        <div
-                            data-note-anchor-btn
-                            // w-max: near the column's right edge the box would
-                            // otherwise shrink to fit and wrap "+ Note" in two.
-                            className="border-line bg-panel absolute z-20 flex w-max -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-[9px] border p-[3px] shadow-[0_6px_18px_oklch(0_0_0/0.18)]"
-                            style={{ left: selectionDraft.buttonX, top: selectionDraft.buttonY }}
-                        >
-                            <button
-                                type="button"
-                                onClick={handleCreateFromSelection}
-                                className="bg-brand text-brand-fg rounded-md px-2.5 py-[5px] text-xs font-semibold"
+                    {selectionDraft &&
+                        (onCreateAnchoredNote ?? onCreateHighlight ?? onAskAi) !== undefined && (
+                            <div
+                                data-note-anchor-btn
+                                // w-max: near the column's right edge the box would
+                                // otherwise shrink to fit and wrap "+ Note" in two.
+                                className="border-line bg-panel absolute z-20 flex w-max -translate-x-1/2 items-center gap-1 whitespace-nowrap rounded-[9px] border p-[3px] shadow-[0_6px_18px_oklch(0_0_0/0.18)]"
+                                style={{
+                                    left: selectionDraft.buttonX,
+                                    top: selectionDraft.buttonY,
+                                }}
                             >
-                                {t("addNote")}
-                            </button>
-                            {onCreateHighlight && (
-                                <div
-                                    role="group"
-                                    aria-label={t("highlight")}
-                                    className="border-line-2 flex items-center gap-1 border-x px-1.5"
-                                >
-                                    {HIGHLIGHT_COLORS.map(color => (
-                                        <ColorSwatch
-                                            key={color}
-                                            color={color}
-                                            label={t("highlightIn", {
-                                                color: t(`colors.${color}`),
-                                            })}
-                                            onClick={() => handleHighlight(color)}
-                                        />
-                                    ))}
-                                </div>
-                            )}
-                            {onAskAi && (
-                                <button
-                                    type="button"
-                                    onClick={handleAskAi}
-                                    title={t("askAiTitle")}
-                                    className="border-line-2 bg-panel-2 text-ink-2 rounded-md border px-2 py-[5px] text-[11px] font-semibold"
-                                >
-                                    {t("askAi")}
-                                </button>
-                            )}
-                        </div>
-                    )}
+                                {onCreateAnchoredNote && (
+                                    <button
+                                        type="button"
+                                        onClick={handleCreateFromSelection}
+                                        className="bg-brand text-brand-fg rounded-md px-2.5 py-[5px] text-xs font-semibold"
+                                    >
+                                        {t("addNote")}
+                                    </button>
+                                )}
+                                {onCreateHighlight && (
+                                    <div
+                                        role="group"
+                                        aria-label={t("highlight")}
+                                        className="border-line-2 flex items-center gap-1 border-x px-1.5"
+                                    >
+                                        {HIGHLIGHT_COLORS.map(color => (
+                                            <ColorSwatch
+                                                key={color}
+                                                color={color}
+                                                label={t("highlightIn", {
+                                                    color: t(`colors.${color}`),
+                                                })}
+                                                onClick={() => handleHighlight(color)}
+                                            />
+                                        ))}
+                                    </div>
+                                )}
+                                {onAskAi && (
+                                    <button
+                                        type="button"
+                                        onClick={handleAskAi}
+                                        title={t("askAiTitle")}
+                                        className="border-line-2 bg-panel-2 text-ink-2 rounded-md border px-2 py-[5px] text-[11px] font-semibold"
+                                    >
+                                        {t("askAi")}
+                                    </button>
+                                )}
+                            </div>
+                        )}
 
                     {highlightMenu && menuNote?.highlight && (
                         <div

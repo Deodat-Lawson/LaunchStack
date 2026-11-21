@@ -227,6 +227,8 @@ export function mapMindmap(
         indexStatus: publishedDocument ? documentIndexStatus(publishedDocument) : undefined,
         errorMessage: publishedDocument ? documentIndexError(publishedDocument) : undefined,
         processing: publishedDocument?.processing ?? undefined,
+        // A public link belongs to the published copy (ADR-016).
+        publicLink: publishedDocument?.publicLink === true,
     };
 }
 

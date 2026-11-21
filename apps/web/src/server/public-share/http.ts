@@ -15,17 +15,15 @@ import { NextResponse } from "next/server";
 
 import { localeOfRequest } from "~/i18n/server";
 import { translatorFor } from "~/i18n/translate";
+import { PUBLIC_LINK_PAGE_HEADERS } from "~/lib/public-link-paths";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { clientIpKey, type RateLimitConfig } from "~/lib/rate-limiter";
 import { resolvePublicLink, type ResolvedPublicLink } from "~/server/workspace/public-links";
 
 import { loadPublicDocumentRow, type PublicDocumentRow } from "./document";
 
-export const PUBLIC_SHARE_HEADERS: Readonly<Record<string, string>> = {
-    "X-Robots-Tag": "noindex, nofollow, noarchive",
-    "Referrer-Policy": "no-referrer",
-    "Cache-Control": "private, no-store",
-};
+/** One list with the page (`~/lib/public-link-paths`). */
+export const PUBLIC_SHARE_HEADERS = PUBLIC_LINK_PAGE_HEADERS;
 
 /** JSON and text reads: generous for a person, slow for a guesser. */
 export const PUBLIC_READ_LIMIT: RateLimitConfig = {

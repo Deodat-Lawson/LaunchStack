@@ -37,6 +37,7 @@ import {
 import { Button } from "~/components/ui/button";
 import { useContextTarget } from "~/components/context-menu";
 import { copyText } from "~/lib/context-menu";
+import { useViewerEndpoints } from "~/lib/viewer-endpoints";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "~/components/ui/tooltip";
 import {
@@ -262,6 +263,7 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
     const t = useTranslations("viewers.conversation");
     const tc = useTranslations("common");
     const router = useRouter();
+    const { isPublic } = useViewerEndpoints();
     const [content, setContent] = useState<string | null>(null);
     // "" when the failure carried no message — the fallback is worded at render.
     const [error, setError] = useState<string | null>(null);
@@ -314,8 +316,9 @@ export function ConversationViewer({ document }: ConversationViewerProps) {
         };
     }, [parsed]);
 
+    // Continuing opens a chat in the workspace; a public link has none.
     const continueHref =
-        typeof document.id === "number"
+        typeof document.id === "number" && !isPublic
             ? `/employer/documents?feature=chat&continue=${document.id}`
             : null;
 

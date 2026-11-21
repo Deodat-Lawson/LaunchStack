@@ -32,8 +32,10 @@ in a browser after the app hydrates is a blank page to it.
   token that never existed.
 - **Live, not a snapshot.** A link shows the file's current version. A
   mindmap is the exception: its document is the published copy, so the link
-  shows the revision that copy was made from, never the draft's unpublished
-  edits.
+  draws the revision that copy was made from (from the map's history, or the
+  map itself while nothing has been saved since). It never draws unpublished
+  edits; when it cannot draw the published revision it shows the published
+  outline.
 - Turning a link off keeps the row with `revoked_at`; making a new link
   mints a new token, so an old URL never comes back.
 - Expiry is never, 7 or 30 days, counted from when it is set. Download is on
@@ -106,6 +108,12 @@ requests per 15 minutes).
 - Viewers read their endpoints from a context (`lib/viewer-endpoints.tsx`)
   instead of building `/api/documents/<id>/…` themselves, so the same viewers
   render a public link.
+- The public page draws its viewer in the browser, after hydration; the
+  server's HTML carries the words. A PDF opens in the workspace's pdf.js
+  reader (it pages on phones, and offers Download only when allowed), without
+  notes, highlights or Ask.
+- No product analytics on `/s/…`: the address is the secret, and the visitor
+  is not a member who could have opted out.
 - A link is as strong as its secrecy: anyone it is forwarded to can open it.
   That is the product (Drive's "anyone with the link"); the dialog says so.
 - Not in this change:

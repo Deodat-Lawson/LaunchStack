@@ -29,6 +29,8 @@ import {
     documentGrants,
     documentPublicLinks,
     documentSettings,
+    mindmapRevisions,
+    mindmaps,
     settingsValues,
     userCompanyMemberships,
     users,
@@ -45,6 +47,7 @@ import { GET as metaRoute } from "~/app/api/s/[token]/route";
 import { GET as contentRoute } from "~/app/api/s/[token]/content/route";
 import { GET as textRoute } from "~/app/api/s/[token]/text/route";
 import { GET as markdownRoute } from "~/app/api/s/[token]/markdown/route";
+import { GET as mindmapRoute } from "~/app/api/s/[token]/mindmap/route";
 
 import { createFounderWeeklyReviewTestDatabase } from "../founderWeeklyReview/testDb";
 
@@ -527,5 +530,59 @@ describeDb("public links (integration)", () => {
         for (const bogus of ["nope", "A".repeat(43), "../../etc/passwd", "x".repeat(200)]) {
             expect((await publicGet(metaRoute, bogus)).status).toBe(404);
         }
+    });
+
+    it("shows a mindmap as published, never the edits made since", async () => {
+        const published = {
+            title: "Plan",
+            pages: [{ id: "p", name: "Page 1", nodes: [{ id: "a" }] }],
+        };
+        const [map] = await test.db
+            .insert(mindmaps)
+            .values({
+                companyId,
+                createdByUserId: "auth_ada",
+                title: "Plan",
+                folder: "Unfiled",
+                doc: published,
+                revision: 3,
+            })
+            .returning({ id: mindmaps.id });
+        const id = await addFile({ title: "Plan", mimeType: "text/markdown", body: "# Plan\n" });
+        await test.db
+            .update(document)
+            .set({ ocrMetadata: { kind: "mindmap", mindmapId: map!.id, revision: 3 } })
+            .where(eq(document.id, id));
+        const token = tokenOf((await call("ada", createRoute, "POST", id)).body);
+        const read = async () => {
+            const res = await publicGet(mindmapRoute, token, "/mindmap");
+            return {
+                status: res.status,
+                body: (await res.json()) as { mindmap?: { doc: unknown; id: number } },
+            };
+        };
+
+        // Nothing saved since publishing: the map is the published revision.
+        const live = await read();
+        expect(live.status).toBe(200);
+        expect(live.body.mindmap).toMatchObject({ id: 0, doc: published });
+
+        // Edited since: never shown; the viewer falls back to the published outline.
+        await test.db
+            .update(mindmaps)
+            .set({ revision: 4, doc: { title: "Plan", pages: [], secret: "unpublished" } })
+            .where(eq(mindmaps.id, map!.id));
+        expect((await read()).status).toBe(404);
+
+        // …unless history kept the published revision.
+        await test.db.insert(mindmapRevisions).values({
+            mindmapId: map!.id,
+            revision: 3,
+            doc: published,
+            nodeCount: 1,
+        });
+        const kept = await read();
+        expect(kept.status).toBe(200);
+        expect(JSON.stringify(kept.body)).not.toContain("unpublished");
     });
 });

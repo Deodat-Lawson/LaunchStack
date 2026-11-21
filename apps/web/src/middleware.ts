@@ -6,7 +6,11 @@ import { eq, count } from "drizzle-orm";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { getSessionFromHeaders } from "~/server/auth";
 import { isAddAccountMode } from "~/lib/auth/device-accounts";
-import { publicLinkMarkdownRewrite } from "~/lib/public-link-paths";
+import {
+    PUBLIC_LINK_PAGE_HEADERS,
+    isPublicLinkPath,
+    publicLinkMarkdownRewrite,
+} from "~/lib/public-link-paths";
 
 // Same matching semantics as the Clerk helper this file used to import:
 // a literal path, or a "(.*)"-suffixed prefix (which, like path-to-regexp,
@@ -207,6 +211,15 @@ export default async function middleware(req: NextRequest) {
         const markdown = publicLinkMarkdownRewrite(pathname, req.headers.get("accept"));
         if (markdown) {
             return NextResponse.rewrite(new URL(markdown, req.url));
+        }
+        // The page itself: no sign-in, and the same never-indexed, never-cached,
+        // never-a-Referer headers as its API routes.
+        if (isPublicLinkPath(pathname)) {
+            const page = NextResponse.next();
+            for (const [key, value] of Object.entries(PUBLIC_LINK_PAGE_HEADERS)) {
+                page.headers.set(key, value);
+            }
+            return page;
         }
 
         // Join links used to be `/signup?code=…`; links already shared still

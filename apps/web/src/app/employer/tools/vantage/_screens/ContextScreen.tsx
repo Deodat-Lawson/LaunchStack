@@ -26,6 +26,7 @@ import { weeklyReviewApi, type WeeklyReviewContextDto, type WeeklyReviewRoleDto 
 import { useWeeklyReviewData } from "../_lib/useWeeklyReviewData";
 import { useWeeklyReviewErrorText } from "../_lib/weekly-review-errors";
 import { ReviewBusinessRoleForm } from "../_components/ReviewBusinessRoleForm";
+import { PersonalTopics } from "../_components/PersonalTopics";
 import {
     SourceScopeEditor,
     type SourceChoice,
@@ -67,6 +68,7 @@ export function ContextScreen({ week: initialWeek }: { week?: string | null }) {
                     </p>
                 ) : null}
                 {data.enabled === false ? <p>{t("contextDisabled")}</p> : null}
+                {data.enabled ? <PersonalTopics /> : null}
                 {data.enabled && loaded && context && role ? (
                     <ContextForms
                         key={`${context.policy?.version ?? 0}:${context.preferences?.version ?? 0}:${role.version}`}

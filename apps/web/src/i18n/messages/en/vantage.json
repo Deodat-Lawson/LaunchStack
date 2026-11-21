@@ -775,6 +775,25 @@
     },
     "openContextSection": "Open {section}",
     "contextCompanySummary": "Architecture + {count} required",
-    "contextStarsSummary": "{count} of {total} starred"
+    "contextStarsSummary": "{count} of {total} starred",
+    "personalTopics": {
+      "title": "My topics",
+      "name": "Topic title",
+      "openQuestions": "Open questions (one per line)",
+      "decisionChangers": "What would change the decision (one per line)",
+      "keywords": "Keywords (one per line)",
+      "people": "People (one per line)",
+      "metrics": "Metrics (one per line)",
+      "watches": "Watch documents",
+      "edit": "Edit",
+      "close": "Close",
+      "reopen": "Reopen",
+      "save": "Save topic",
+      "cancel": "Cancel",
+      "active": "Active",
+      "closed": "Closed",
+      "failed": "Could not save or load topics. Try again.",
+      "conflict": "This topic changed. Reload before editing again."
+    }
   }
 }

@@ -775,6 +775,25 @@
     },
     "openContextSection": "打开{section}",
     "contextCompanySummary": "架构文档 + {count} 份必读文档",
-    "contextStarsSummary": "已星标 {count}/{total} 份"
+    "contextStarsSummary": "已星标 {count}/{total} 份",
+    "personalTopics": {
+      "title": "\u6211\u7684\u4e3b\u9898",
+      "name": "\u4e3b\u9898\u540d\u79f0",
+      "openQuestions": "\u5f85\u89e3\u95ee\u9898\uff08\u6bcf\u884c\u4e00\u9879\uff09",
+      "decisionChangers": "\u54ea\u4e9b\u60c5\u51b5\u4f1a\u6539\u53d8\u51b3\u5b9a\uff08\u6bcf\u884c\u4e00\u9879\uff09",
+      "keywords": "\u5173\u952e\u8bcd\uff08\u6bcf\u884c\u4e00\u9879\uff09",
+      "people": "\u76f8\u5173\u4eba\u5458\uff08\u6bcf\u884c\u4e00\u9879\uff09",
+      "metrics": "\u6307\u6807\uff08\u6bcf\u884c\u4e00\u9879\uff09",
+      "watches": "\u5173\u6ce8\u6587\u6863",
+      "edit": "\u7f16\u8f91",
+      "close": "\u5173\u95ed",
+      "reopen": "\u91cd\u65b0\u6253\u5f00",
+      "save": "\u4fdd\u5b58\u4e3b\u9898",
+      "cancel": "\u53d6\u6d88",
+      "active": "\u8fdb\u884c\u4e2d",
+      "closed": "\u5df2\u5173\u95ed",
+      "failed": "\u65e0\u6cd5\u4fdd\u5b58\u6216\u52a0\u8f7d\u4e3b\u9898\uff0c\u8bf7\u91cd\u8bd5\u3002",
+      "conflict": "\u4e3b\u9898\u5df2\u66f4\u65b0\uff0c\u8bf7\u91cd\u65b0\u52a0\u8f7d\u540e\u518d\u7f16\u8f91\u3002"
+    }
   }
 }

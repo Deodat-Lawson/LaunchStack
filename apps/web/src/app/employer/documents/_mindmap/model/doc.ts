@@ -15,6 +15,7 @@
 import { nodeBounds, rectCenter, unionRects } from "./geometry";
 import type {
     DiagramEdge,
+    DiagramKind,
     DiagramNode,
     DiagramPage,
     MindmapDoc,
@@ -535,6 +536,29 @@ export function topicInDirection(
         if (!best || score < best.score) best = { id: nd.id, score };
     }
     return best?.id ?? null;
+}
+
+/**
+ * Whether a document is worked as boxes and arrows (a flowchart, a board)
+ * rather than as an outline. Tab, Enter, Delete, the collapse buttons and
+ * auto-arrange all ask this: on a flowchart, Tab adds the next step, Delete
+ * removes only the box, and nothing re-flows a layout someone placed by
+ * hand — even when the boxes are topic shapes. A freeform drawing (an import,
+ * an untyped document) answers per shape instead: see `stepsFrom`.
+ */
+export function worksAsFlow(kind: DiagramKind): boolean {
+    return kind === "flowchart" || kind === "board";
+}
+
+/**
+ * Whether Tab on this box adds the next step (an arrow to a box like it)
+ * rather than a child topic. On a flowchart, always; on a mindmap, never;
+ * on a freeform drawing, for every box that is not a topic — Tab on a
+ * process box there used to hang a mindmap topic off it.
+ */
+export function stepsFrom(kind: DiagramKind, node: DiagramNode): boolean {
+    if (worksAsFlow(kind)) return true;
+    return kind !== "mindmap" && !isTopicShape(node.shape);
 }
 
 /**

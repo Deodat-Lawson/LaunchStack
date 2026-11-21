@@ -506,7 +506,12 @@ describe("a label whose field lost focus", () => {
 
 describe("the demo path", () => {
     it("centre → Tab → Budget, Enter, Enter → Timeline makes two ordered branches", () => {
-        const { store } = mount(buildTemplate("blank", "Plan"));
+        // A blank canvas is a flowchart now; the outliner's demo runs on a mindmap.
+        const blank = buildTemplate("blank", "Plan");
+        const { store } = mount({
+            ...blank,
+            settings: { ...blank.settings, kind: "mindmap", autoLayout: { kind: "mindmap" } },
+        });
         const root = createNode({ shape: "mind-root", x: 0, y: 0, w: 210, h: 78 });
         act(() => {
             store.updatePage(p => ({ ...p, nodes: [root] }));

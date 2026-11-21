@@ -347,6 +347,11 @@
     "redo": "重做",
     "redoTip": "重做 ⇧⌘Z",
     "layout": "布局",
+    "worksAs": "用作",
+    "kinds": {
+      "flowchart": "流程图 — Tab 添加下一步",
+      "mindmap": "思维导图 — Tab 添加子主题"
+    },
     "arrangeNow": "立即整理",
     "autoArrange": "输入时自动整理",
     "arrangeAs": "排列方式",
@@ -544,6 +549,7 @@
     "label": "所选内容",
     "addChild": "添加子主题",
     "addChildTopic": "添加子主题",
+    "addStep": "添加下一步",
     "colour": "颜色",
     "smaller": "缩小文字",
     "larger": "放大文字",
@@ -553,7 +559,7 @@
   "contextMenu": {
     "label": "画布操作",
     "addSibling": "添加同级主题",
-    "addConnected": "添加相连形状",
+    "addConnected": "添加下一步",
     "more": "更多",
     "paste": "粘贴",
     "autoLayout": "自动布局",
@@ -665,7 +671,7 @@
       "quickShapes": "矩形 / 椭圆 / 菱形 / 圆角矩形",
       "finishNext": "完成输入 · 再按一次添加下一个主题",
       "topicBefore": "在此主题之前新建主题",
-      "addChild": "添加子主题",
+      "addChild": "添加子主题 · 流程图中为添加下一步",
       "outdent": "主题升级",
       "nearest": "跳到该方向上最近的主题",
       "moveTopic": "上移 / 下移主题",
@@ -834,7 +840,11 @@
     "enter": "<key>Enter</key> 完成 / 下一个",
     "tab": "<key>Tab</key> 子主题",
     "palette": "<key>⌘K</key> 其他所有操作",
-    "paste": "改为粘贴大纲"
+    "paste": "改为粘贴大纲",
+    "startFlow": "添加第一步",
+    "enterFlow": "<key>Enter</key> 完成",
+    "tabFlow": "<key>Tab</key> 下一步",
+    "pasteFlow": "改为粘贴 Mermaid 或大纲"
   },
   "presenter": {
     "overview": "概览",
@@ -855,7 +865,8 @@
     "failed": "保存失败 — 稍后将自动重试"
   },
   "canvas": {
-    "dropImage": "拖入图片"
+    "dropImage": "拖入图片",
+    "bendHint": "拖动可改走线 · 双击可删除此折点"
   },
   "viewer": {
     "opening": "正在打开…"

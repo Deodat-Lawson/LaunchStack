@@ -116,19 +116,73 @@ describe("text marks", () => {
         expect(after.text).toBe("one\ntwo\nthree\nfour\nfive\nsix");
         expect(after.h).toBeGreaterThan(44);
     });
+});
 
-    it("does not resize other shapes on commit", () => {
+describe("boxes grow with their words", () => {
+    it("grows a box while typing, and keeps the size on commit", () => {
         const box = createNode({ shape: "rectangle", x: 10, y: 10, w: 160, h: 90, text: "" });
         const { store, view } = mountWith([box]);
         act(() => store.setEditing({ kind: "node", id: box.id }));
         const el = field(view.container);
         fireEvent.change(el, { target: { value: "one\ntwo\nthree\nfour\nfive\nsix" } });
+        // Already grown before the label is finished: the box is what you see.
+        const live = pageNodes(store).find(n => n.id === box.id)!;
+        expect(live.h).toBeGreaterThan(90);
+        expect(live.w).toBe(160);
         fireEvent.blur(el);
         const after = pageNodes(store).find(n => n.id === box.id)!;
-        expect(after.w).toBe(160);
-        expect(after.h).toBe(90);
+        expect(after.text).toBe("one\ntwo\nthree\nfour\nfive\nsix");
+        expect(after.h).toBe(live.h);
+        // Centred text grows on both sides, so the box keeps its centre line.
+        expect(after.y + after.h / 2).toBeCloseTo(10 + 90 / 2, 5);
     });
 
+    it("gives back the drawn size when the words are deleted", () => {
+        const box = createNode({ shape: "rectangle", x: 10, y: 10, w: 160, h: 90, text: "" });
+        const { store, view } = mountWith([box]);
+        act(() => store.setEditing({ kind: "node", id: box.id }));
+        const el = field(view.container);
+        fireEvent.change(el, { target: { value: "a long label that runs well past the box" } });
+        expect(pageNodes(store).find(n => n.id === box.id)!.w).toBeGreaterThan(160);
+        fireEvent.change(el, { target: { value: "ok" } });
+        const back = pageNodes(store).find(n => n.id === box.id)!;
+        expect([back.x, back.y, back.w, back.h]).toEqual([10, 10, 160, 90]);
+        fireEvent.blur(el);
+    });
+
+    it("takes the words and the growth back in one undo", () => {
+        const box = createNode({ shape: "rectangle", x: 10, y: 10, w: 160, h: 90, text: "" });
+        const { store, view } = mountWith([box]);
+        act(() => store.setEditing({ kind: "node", id: box.id }));
+        const el = field(view.container);
+        fireEvent.change(el, { target: { value: "one" } });
+        fireEvent.change(el, { target: { value: "one\ntwo\nthree\nfour\nfive\nsix" } });
+        fireEvent.blur(el);
+        expect(pageNodes(store).find(n => n.id === box.id)!.h).toBeGreaterThan(90);
+        act(() => store.undo());
+        const undone = pageNodes(store).find(n => n.id === box.id)!;
+        expect(undone.text).toBe("");
+        expect([undone.x, undone.y, undone.w, undone.h]).toEqual([10, 10, 160, 90]);
+    });
+
+    it("leaves the box alone when the label is opened and closed unchanged", () => {
+        const box = createNode({
+            shape: "rectangle",
+            x: 10,
+            y: 10,
+            w: 60,
+            h: 40,
+            text: "words that overflow this little box",
+        });
+        const { store, view } = mountWith([box]);
+        act(() => store.setEditing({ kind: "node", id: box.id }));
+        fireEvent.blur(field(view.container));
+        const after = pageNodes(store).find(n => n.id === box.id)!;
+        expect([after.w, after.h]).toEqual([60, 40]);
+    });
+});
+
+describe("text marks, continued", () => {
     it("evaporates when committed empty", () => {
         // A bare text mark has no fill and no stroke: an empty one can never
         // be seen or selected again, so nothing may leave one behind.

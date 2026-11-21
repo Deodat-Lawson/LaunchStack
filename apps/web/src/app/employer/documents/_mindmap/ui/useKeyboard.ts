@@ -3,7 +3,7 @@
 import { useEffect, useRef } from "react";
 
 import {
-    addChildTopic,
+    addConnected,
     addSiblingTopic,
     alignSelection,
     copySelection,
@@ -27,7 +27,7 @@ import {
     zoomByStep,
     zoomToSelection,
 } from "../model/commands";
-import { activePage, isTopicShape, nodeById, type NavDirection } from "../model/doc";
+import { activePage, isTopicShape, nodeById, worksAsFlow, type NavDirection } from "../model/doc";
 import { shapeHoldsText } from "../model/shapes";
 import type { EditorStore } from "../model/store";
 import type { DiagramNode, ShapeId, ToolId } from "../model/types";
@@ -141,7 +141,11 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
                 state.selection.length === 1 && state.selection[0]!.kind === "node"
                     ? nodeById(page, state.selection[0]!.id)
                     : undefined;
-            const topic = only && isTopicShape(only.shape) ? only : undefined;
+            // On a flowchart a topic-shaped box is still a box: the outliner's
+            // keys (walk, reorder, outdent, Enter-for-sibling) belong to
+            // mindmaps, and arrows nudge it like any other shape.
+            const flow = worksAsFlow(state.doc.settings.kind);
+            const topic = only && !flow && isTopicShape(only.shape) ? only : undefined;
 
             // -- always available ------------------------------------------
             if (key === "Escape") {
@@ -340,14 +344,15 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
                     if (topic) outdentTopic(store, topic.id);
                     return;
                 }
-                if (firstNode) addChildTopic(store, firstNode.id);
+                // A child topic on a mindmap; the next step on a flowchart.
+                if (firstNode) addConnected(store, firstNode.id);
                 return;
             }
 
             if (key === "Enter") {
                 e.preventDefault();
                 const nd = firstNode ? nodeById(page, firstNode.id) : undefined;
-                if (nd && isTopicShape(nd.shape)) {
+                if (nd && !flow && isTopicShape(nd.shape)) {
                     // The label was finished by the Enter before this one;
                     // this one is "next". On the centre that is a child.
                     addSiblingTopic(store, nd.id, shift ? "before" : "after");

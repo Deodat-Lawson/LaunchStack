@@ -463,13 +463,20 @@ describe("dragging", () => {
         const page = store.getState().doc.pages[0]!;
         expect(page.nodes).toHaveLength(2);
         expect(page.edges).toHaveLength(1);
-        expect(page.edges[0]!.from).toEqual({ nodeId: a.id, port: "e" });
+        // Dropped on B's body, so joined by the sides facing each other: the
+        // dot it left from was only a handle (pinned, a drag from a right-hand
+        // dot to a box on the left ran back through its own box).
+        expect(page.edges[0]!.from).toEqual({ nodeId: a.id, port: "auto" });
         expect(page.edges[0]!.to).toEqual({ nodeId: b.id, port: "auto" });
+        // And the new connector is what is selected, so Delete takes it back.
+        expect(store.getState().selection).toEqual([{ kind: "edge", id: page.edges[0]!.id }]);
     });
 
-    it("spawns a connected twin when a port is clicked without dragging", () => {
-        // Lucid's click-a-port: the next shape in that direction, already
-        // wired up. Same shape and size as the source, not a mindmap topic.
+    it("makes nothing when a dot is clicked without dragging — it selects the box", () => {
+        // A plain click on a dot used to mint a connected twin (Lucid's
+        // click-a-port). The dots reach a few pixels into the shape, so
+        // clicking near a box's edge to select it made a new box nobody
+        // asked for. Tab and the toolbar's + add the next step instead.
         const box = createNode({ shape: "rectangle", x: 100, y: 100, w: 160, h: 90, text: "A" });
         const doc = createDoc("Flow", [{ ...createPage(), nodes: [box], edges: [] }]);
         const { store, view } = mount(doc);
@@ -503,15 +510,83 @@ describe("dragging", () => {
         });
 
         const page = store.getState().doc.pages[0]!;
-        expect(page.nodes).toHaveLength(2);
-        const spawned = page.nodes[1]!;
-        expect(spawned.shape).toBe("rectangle");
-        expect(spawned.w).toBe(box.w);
-        expect(spawned.x).toBeGreaterThan(box.x + box.w);
+        expect(page.nodes).toHaveLength(1);
+        expect(page.edges).toHaveLength(0);
+        expect(store.selectedNodeIds()).toEqual([box.id]);
+        expect(store.getState().canUndo).toBe(false);
+    });
+
+    it("treats a press just inside a box's edge as a press on the box", () => {
+        const box = createNode({ shape: "rectangle", x: 100, y: 100, w: 160, h: 90, text: "A" });
+        const doc = createDoc("Flow", [{ ...createPage(), nodes: [box], edges: [] }]);
+        const { store, view } = mount(doc);
+        const svg = svgOf(view.container);
+        store.selectNodes([box.id]);
+        view.rerender(
+            <TooltipProvider>
+                <EditorProvider store={store}>
+                    <Canvas callbacks={{ onContextMenuAt: jest.fn(), onEditText: jest.fn() }} />
+                </EditorProvider>
+            </TooltipProvider>
+        );
+        // The dot's hit circle reaches into the box; 7px in is the box.
+        const port = svgOf(view.container).querySelector(
+            `[data-node-id="${box.id}"][data-port="e"] circle`
+        );
+        act(() => {
+            port!.dispatchEvent(
+                pointer("pointerdown", box.x + box.w - 7, box.y + box.h / 2, {
+                    button: 0,
+                    buttons: 1,
+                })
+            );
+        });
+        act(() => {
+            svg.dispatchEvent(
+                pointer("pointermove", box.x + box.w + 53, box.y + 5, { buttons: 1 })
+            );
+        });
+        act(() => {
+            svg.dispatchEvent(pointer("pointerup", box.x + box.w + 53, box.y + 5, { buttons: 0 }));
+        });
+        const page = store.getState().doc.pages[0]!;
+        // Moved, not connected.
+        expect(page.edges).toHaveLength(0);
+        expect(page.nodes[0]!.x).not.toBe(box.x);
+    });
+
+    it("attaches a connector released just short of a box to that box", () => {
+        const a = createNode({ shape: "rectangle", x: 100, y: 100, w: 160, h: 90, text: "A" });
+        const b = createNode({ shape: "rectangle", x: 500, y: 100, w: 160, h: 90, text: "B" });
+        const doc = createDoc("Flow", [{ ...createPage(), nodes: [a, b], edges: [] }]);
+        const { store, view } = mount(doc);
+        const svg = svgOf(view.container);
+        store.selectNodes([a.id]);
+        view.rerender(
+            <TooltipProvider>
+                <EditorProvider store={store}>
+                    <Canvas callbacks={{ onContextMenuAt: jest.fn(), onEditText: jest.fn() }} />
+                </EditorProvider>
+            </TooltipProvider>
+        );
+        const port = svgOf(view.container).querySelector(
+            `[data-node-id="${a.id}"][data-port="e"] circle`
+        );
+        act(() => {
+            port!.dispatchEvent(
+                pointer("pointerdown", a.x + a.w, a.y + a.h / 2, { button: 0, buttons: 1 })
+            );
+        });
+        // 15px short of B's left edge, over empty canvas.
+        act(() => {
+            svg.dispatchEvent(pointer("pointermove", b.x - 15, b.y + 40, { buttons: 1 }));
+        });
+        act(() => {
+            svg.dispatchEvent(pointer("pointerup", b.x - 15, b.y + 40, { buttons: 0 }));
+        });
+        const page = store.getState().doc.pages[0]!;
         expect(page.edges).toHaveLength(1);
-        expect(page.edges[0]!.from).toEqual({ nodeId: box.id, port: "e" });
-        expect(page.edges[0]!.to).toEqual({ nodeId: spawned.id, port: "auto" });
-        expect(store.selectedNodeIds()).toEqual([spawned.id]);
+        expect(page.edges[0]!.to).toEqual({ nodeId: b.id, port: "auto" });
     });
 });
 

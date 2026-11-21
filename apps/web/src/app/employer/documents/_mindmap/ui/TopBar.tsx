@@ -32,6 +32,9 @@ import {
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
     DropdownMenuSeparator,
     DropdownMenuSub,
     DropdownMenuSubContent,
@@ -43,8 +46,10 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
-import { arrangeNow, runLayout, setAutoLayout, setTitle } from "../model/commands";
+import { arrangeNow, runLayout, setAutoLayout, setDiagramKind, setTitle } from "../model/commands";
+import { worksAsFlow } from "../model/doc";
 import type { EditorState, ChromeDepth } from "../model/store";
+import type { DiagramKind } from "../model/types";
 import { useEditor, useStore } from "./EditorContext";
 import { PageSettings } from "./Inspector";
 import { PresenceAvatars } from "./PresenceLayer";
@@ -113,12 +118,22 @@ export interface TopBarProps {
 }
 
 const selectAutoLayout = (s: EditorState) => s.doc.settings.autoLayout;
+const selectKind = (s: EditorState) => s.doc.settings.kind;
+/** The Works-as choice a kind shows as; a freeform drawing shows neither. */
+const KIND_CHOICE: Record<DiagramKind, string> = {
+    flowchart: "flowchart",
+    board: "flowchart",
+    mindmap: "mindmap",
+    freeform: "",
+};
 
 export function TopBar(props: TopBarProps) {
     const t = useTranslations("mindmap.topBar");
     const tc = useTranslations("common");
     const store = useStore();
     const autoLayout = useEditor(selectAutoLayout);
+    const kind = useEditor(selectKind);
+    const flow = worksAsFlow(kind);
     const focus = props.depth === "focus";
     const docTitle = useEditor(selectTitle);
     const state = useEditor(selectSaveState, saveStateEqual);
@@ -237,21 +252,46 @@ export function TopBar(props: TopBarProps) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
+                    {/* How the document works: Tab, Enter, Delete, the collapse
+                        buttons and auto-arrange all follow this (see
+                        `worksAsFlow`). A map built as a flowchart out of
+                        topics is switched here, without redrawing it. */}
+                    <DropdownMenuLabel className="text-ink-3 text-[11px] font-medium">
+                        {t("worksAs")}
+                    </DropdownMenuLabel>
+                    <DropdownMenuRadioGroup
+                        value={KIND_CHOICE[kind]}
+                        onValueChange={value =>
+                            setDiagramKind(store, value === "mindmap" ? "mindmap" : "flowchart")
+                        }
+                    >
+                        <DropdownMenuRadioItem value="flowchart">
+                            {t("kinds.flowchart")}
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="mindmap">
+                            {t("kinds.mindmap")}
+                        </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                    <DropdownMenuSeparator />
                     <DropdownMenuItem onSelect={() => arrangeNow(store)}>
                         <Network className="size-3.5" />
                         {t("arrangeNow")}
                     </DropdownMenuItem>
-                    <DropdownMenuCheckboxItem
-                        checked={autoLayout !== null}
-                        onCheckedChange={checked =>
-                            setAutoLayout(
-                                store,
-                                checked ? (autoLayout ?? { kind: "mindmap" }) : null
-                            )
-                        }
-                    >
-                        {t("autoArrange")}
-                    </DropdownMenuCheckboxItem>
+                    {/* A flowchart is laid out by hand; arranging as you type
+                        is an outline's (and `autoArrangeIfOn` skips flowcharts). */}
+                    {!flow && (
+                        <DropdownMenuCheckboxItem
+                            checked={autoLayout !== null}
+                            onCheckedChange={checked =>
+                                setAutoLayout(
+                                    store,
+                                    checked ? (autoLayout ?? { kind: "mindmap" }) : null
+                                )
+                            }
+                        >
+                            {t("autoArrange")}
+                        </DropdownMenuCheckboxItem>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuSub>
                         <DropdownMenuSubTrigger>{t("arrangeAs")}</DropdownMenuSubTrigger>

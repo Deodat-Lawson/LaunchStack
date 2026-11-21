@@ -35,6 +35,20 @@ describe("routeEdge", () => {
         expect(routed.end).toEqual({ x: 300, y: 230 });
     });
 
+    it("aims at a bend by the box's proportions, so it never doubles back", () => {
+        // A bend just below A's bottom-right corner: by raw angle it is to
+        // the right, but it is below the box — the line leaves the bottom.
+        const bent = edgeBetween({ kind: "elbow", waypoints: [{ x: 90, y: 75 }] });
+        const routed = routeEdge(bent, lookupOf(a, b));
+        expect(routed.start.y).toBe(60);
+        // Nothing runs back inside A.
+        for (const p of routed.points) {
+            const inside =
+                p.x > a.x + 1 && p.x < a.x + a.w - 1 && p.y > a.y + 1 && p.y < a.y + a.h - 1;
+            expect(inside).toBe(false);
+        }
+    });
+
     it("always yields at least two points", () => {
         for (const kind of ["straight", "elbow", "curved"] as const) {
             const routed = routeEdge(edgeBetween({ kind }), lookupOf(a, b));

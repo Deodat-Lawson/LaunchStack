@@ -74,6 +74,9 @@ resize keeps the opposite corner pinned) rather than screenshots.
 | `snapping.ts`    | Grid quantisation, edge/centre alignment, equal-spacing detection.                                                   |
 | `resize.ts`      | Resize in the shape's own rotated frame; multi-select box scaling.                                                   |
 | `text.ts`        | Measurement and wrapping — SVG has no line breaking.                                                                 |
+| `grow.ts`        | Boxes that grow with their text: wider to a cap, then taller; never below their drawn size.                          |
+| `avoid.ts`       | Orthogonal A\* around boxes — the detour a connector takes when its plain route crosses one.                         |
+| `tidy.ts`        | Connectors as a set: nudges apart elbows sharing a channel, moves labels off each other and off their own bends.     |
 | `doc.ts`         | Queries and immutable edits. Two hierarchies: containment (`parentId`) and graph (edges).                            |
 | `commands.ts`    | Every user-facing operation. Toolbar, menu, shortcut and palette all route through here, so they cannot drift.       |
 | `store.ts`       | External store + snapshot-based undo/redo with gesture coalescing.                                                   |
@@ -165,6 +168,186 @@ focus ever slips out of an open field, the next character pulls it back in
 Every structural edit — add, outdent, reorder, delete — runs its auto-arrange
 pass inside `store.group`, so one ⌘Z takes back the edit and the layout
 together.
+
+The table is a mindmap's. On a flowchart (next section) a topic-shaped box
+is a box: Tab adds the next step, Enter opens its text, arrows nudge, Delete
+takes only the box.
+
+## Flowcharts
+
+Most people who open a blank canvas here draw boxes and arrows, not an
+outline, so **a blank canvas works as a flowchart** (`kindForTemplate`) and
+the outliner behaviour belongs to the Mindmap template. How a document works
+is `DocSettings.kind`, asked through `worksAsFlow` (flowchart and board) and
+`stepsFrom` (per box, for a freeform drawing), and switched in the top bar's
+Layout menu — **Works as: Flowchart / Mindmap** (`setDiagramKind`) — so a map
+someone built as a flowchart out of topics is fixed without redrawing it.
+
+On a flowchart:
+
+- **Tab adds the next step** (`addNextStep`): the same shape in the same
+  colours, one gap further along the flow (the way the line came in, else the
+  way the box's arrows already leave, else rightwards), joined by an arrow
+  styled like the ones already there, and straight into its label. A second
+  Tab on the same box fans out beside the first instead of stacking on it.
+  The selection toolbar's + and the menu's "Add next step" are the same
+  command (`addConnected`), so they cannot drift from the key.
+- **Delete takes the box only**, never the steps after it, topic-shaped or not.
+- **Nothing re-arranges**: `autoArrangeIfOn` skips flowcharts, and the Layout
+  menu hides "Auto-arrange as I type".
+- **No fold buttons** — a box with arrows out is not a branch to fold (one
+  already folded keeps its button: it is the way back). On a mindmap a fold
+  button shows while its topic is hovered or selected, as in XMind and
+  MindNode; drawn on every topic with a line out, it sat on each connector
+  like a stray shape that could not be deleted.
+- Double-clicking the canvas makes a process box; the empty-page prompt is
+  "Add the first step" and shows at either chrome depth.
+
+On a freeform drawing (imports, untyped documents) Tab steps from any box
+that is not a topic, and topics keep the outliner's keys.
+
+## Boxes that grow with their text
+
+Typing into a box makes it as big as its words need (`model/grow.ts`): it
+widens until its text area reaches `GROW_MAX_TEXT_WIDTH`, then the label
+wraps and the box grows taller. It never drops below the size it had when
+typing began, so deleting words gives back the box that was drawn. Growth is
+anchored by the text alignment — centred text grows on both sides, so a box
+keeps its place on a flowchart's line; left/top-aligned text grows right and
+down — and a rotated box grows about its centre. A sticky note keeps its
+width and grows down (FigJam); frames and lanes are sized by their contents,
+not their titles.
+
+The text field previews it live (`previewTextGrowth`, transient) and
+`commitNodeText` lands words and size as **one** undo step: it rolls the
+previews back first, so the entry starts from the box as it was. Opening a
+label and closing it unchanged is not an edit and does not resize anything.
+
+## Connectors
+
+**Drawing one.** Drag out of a shape's dot (dots show on hover):
+
+| Released on…                               | Result                                                                                                      |
+| ------------------------------------------ | ----------------------------------------------------------------------------------------------------------- |
+| another shape's body, or within 24px of it | joined by the sides that face each other; while you approach, that shape alone gets an outline and its dots |
+| another shape's dot                        | the end pinned to that dot (the start never is)                                                             |
+| empty space, from a topic                  | the next topic (the mindmap gesture)                                                                        |
+| empty space, from any other shape          | the arrow with a free end, to re-drag onto the right shape                                                  |
+| a few pixels away, or a plain click        | nothing — the click selects the box                                                                         |
+
+The new connector ends up selected, so Delete takes it straight back, and
+Escape during any drag abandons it. A plain click on a dot no longer mints a
+connected twin (Lucid's click-a-port): the dots reach a few pixels into the
+shape, so clicking near a box's edge to select it made boxes nobody asked
+for. A press more than 4px inside the outline is a press on the box
+(`PORT_INNER_GRACE`), and Tab or the toolbar's + add the next step instead.
+The dot a drag started from is only a handle — left pinned, a drag from a
+right-hand dot to a box on the left ran back through its own box, and a drop
+on the near dot of a box behind it made a U-turn. Re-dragging a selected
+connector's end moves the connector itself, live, rather than drawing a
+second dashed line from the old end. On a selected shape the side dots sit
+16px outside its edges and the corner and top dots are hidden, so they no
+longer cover the resize handles or the rotate handle (a corner drag used to
+draw a connector). A drag released back on its own box, or within the snap
+zone around it, makes nothing.
+
+**Where lines attach.** Two lined-up boxes (one above the other with their
+widths overlapping, or side by side) get a straight line on their shared
+span (`alignedEnds`) instead of a few-pixel zig-zag between their centres —
+or, against a diamond or circle, at its tip when the tip falls on the other
+box. Connectors that share a side are spread along it (`sideSlotInfo`),
+ordered by the direction each one leaves in (its angle from the side's
+normal), so a fan of lines to the same side never crosses itself. Two arrows
+between the same boxes, or a loop arriving where the next arrow leaves, used
+to be drawn on top of each other. A straight connector takes the slot of
+the busier of its two sides at both ends, so it stays straight without
+landing on a neighbour; a neighbour that detours round a box is not counted
+on the side it would have used; a detour arriving on a side already in use
+lands beside the lines there, on the end nearer where it comes from. Spreading and straightening only happen on
+sides that are straight along the whole box (`FLAT` — rectangles, topics,
+stickies, a cylinder's sides, a terminator's top and bottom…); a diamond's
+or a circle's ends stay on its own ports. Sides are chosen by the direction
+of the other box, except toward a bend someone placed that sits straight
+beside the box — within its width (above or below) or its height (left or
+right) — which takes that side (`autoPort`'s `proportional`): a bend just
+below a wide box's corner is below it, and read by angle as "right" the line
+doubled back through its own box. A bend off a corner diagonally is read by
+angle, so a small bend does not flip which side a line uses.
+
+**Going around boxes.** A connector nobody has routed by hand goes around the
+shapes between its ends instead of under or over them (`avoidingRoute` in
+`routing.ts`, the search in `avoid.ts`). Only when its plain route actually
+crosses a box: a clear line is drawn exactly as before. The detour is an A\*
+over a sparse grid of padded box edges, channel centres and the connector's
+possible stubs — the orthogonal-visibility approach of libavoid and draw.io —
+costed by length plus a price per bend, a little extra for leaving through a
+side other than the one facing the other end, and more for a side another
+connector already uses, which is what sends a loop back to an earlier step
+round the outside of a row instead of along the forward arrows. Elbow
+connectors keep the orthogonal route; straight and curved ones are pulled
+tight around the same detour. Containers, free text and ink are not in the
+way. Routes stay a pure function of their inputs — the edge, its two nodes,
+the obstacles in its search window and its neighbours' sides — which is what
+`routeEdgeCached` keys on, so dragging one box re-routes only the lines near
+it. Every surface that draws a route (canvas, thumbnails, the label field)
+passes the page's nodes and edges, so they agree.
+
+**As a set** (`model/tidy.ts`). Routes are found one connector at a time, so
+two elbows between the same columns took the same channel and two labels at
+the middle of their lines printed over each other. After routing, the
+canvas pulls middle segments that run within `NUDGE_GAP` (16px) of each
+other apart (libavoid's nudging; stubs at the boxes never move), ordering
+them so lines entering a channel from the same side nest their corners
+instead of crossing. A label that would cover another label or sit on a bend in
+its own line (where the bend's handle covers it while the line is selected)
+— or, where there is room, another connector's line — slides along its own
+line to the nearest free spot; this is where it is drawn, not where it is
+stored. A
+curved connector's detour gets wide rounded corners, not a spline through
+its corners (which overshot into the boxes it went round);
+`RoutedEdge.cornerRadius` carries that to the stroke shortened for
+arrowheads, so the line, its halo and its hit path coincide. Labels are
+drawn in a layer of their own above every connector (`EdgeLabels`) — inside
+their own connector's group, a connector drawn later painted straight
+through them. The label being typed has a paper-coloured backing, so its
+line does not strike through it.
+
+**Labels.** Double-click a line to label it (double-click a label to edit
+that one); drag a label to slide it along its line, which is one undo step.
+The drawn stroke ignores the pointer — the wide transparent hit path under it
+is the one target, so the cursor and the click agree all along the line.
+
+**Bends.** Dragging the body of a selected connector makes a bend and drags
+it; the bend is only made once the pointer moves, so clicking a selected
+line — or double-clicking it to label it — adds nothing (it used to, on
+pointerdown, which is how bends appeared "without knowing"). A bend comes out
+again by double-clicking its handle, or by dragging it back into line with
+its neighbours — or anywhere the line would run anyway (`isRedundantBend`) —
+and "Reset route" clears them all. An elbow route turns a corner at a bend
+rather than retracing back over itself; the retrace used to be folded away by
+`simplify`, leaving a handle off the line that moved nothing.
+
+**Pointer housekeeping.** The canvas size never lags the layout
+(`useElementSize`): it is re-measured after every render in a layout effect,
+and a ResizeObserver update is committed synchronously. Selecting a shape
+opens the inspector in the same commit, which narrows the canvas; with the
+size updated a frame late, one frame drew the whole board scaled and
+shifted, and a fast second click (the second half of a double-click on a
+line) landed on whatever had moved under it — often another shape's text
+editor. Every press re-measures the canvas, and a release always lets go of
+pointer capture: a press that started nothing used to keep
+the canvas capturing, so the second press of a quick double-click on a line
+reported the canvas as its target and the double-click made a box instead of
+a label. Fit-to-screen stops following the stage at the first selection,
+edit or drag (`useAutoFit`): selecting opened the inspector, the stage
+narrowed, the board was refitted, and the next click landed where the line
+used to be.
+
+**Moving a selection.** Pressing any part of a multi-selection — a box, a
+selected connector, or empty space inside its frame (Figma's rule) — drags
+all of it. Connectors whose ends all sit on moving boxes, and selected
+connectors, carry their bends and free ends along (`edgesMovingWith`); a lasso
+also selects the connectors running between the boxes it catches.
 
 ## Colours are data, not tokens
 
@@ -437,8 +620,8 @@ Three things follow from the depth being _chrome_ and nothing more:
 - **The document renders identically in both.** Depth is `EditorState`, never
   `DocSettings`; a file does not know or care how it was last looked at.
 - **Auto-arrange is document data** (`settings.autoLayout`), on for the
-  `blank` and `mindmap` templates. `commands.ts` re-runs it after every
-  structural edit — but only on a page that is nothing but topics
+  `mindmap` template. `commands.ts` re-runs it after every structural edit —
+  but only on a mindmap, and only on a page that is nothing but topics
   (`isMindmapPage`), so a flowchart is never re-flowed into a tree because one
   box was deleted. A hand-placed Move or Resize pauses it, with Resume in the
   toast.

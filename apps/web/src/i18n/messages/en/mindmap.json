@@ -347,6 +347,11 @@
     "redo": "Redo",
     "redoTip": "Redo ⇧⌘Z",
     "layout": "Layout",
+    "worksAs": "Works as",
+    "kinds": {
+      "flowchart": "Flowchart — Tab adds the next step",
+      "mindmap": "Mindmap — Tab adds a child topic"
+    },
     "arrangeNow": "Arrange now",
     "autoArrange": "Auto-arrange as I type",
     "arrangeAs": "Arrange as",
@@ -544,6 +549,7 @@
     "label": "Selection",
     "addChild": "Add child",
     "addChildTopic": "Add child topic",
+    "addStep": "Add next step",
     "colour": "Colour",
     "smaller": "Smaller text",
     "larger": "Larger text",
@@ -553,7 +559,7 @@
   "contextMenu": {
     "label": "Canvas actions",
     "addSibling": "Add sibling topic",
-    "addConnected": "Add connected shape",
+    "addConnected": "Add next step",
     "more": "More",
     "paste": "Paste",
     "autoLayout": "Auto-layout",
@@ -665,7 +671,7 @@
       "quickShapes": "Rectangle / ellipse / diamond / rounded",
       "finishNext": "Finish typing · again for the next topic",
       "topicBefore": "New topic before this one",
-      "addChild": "Add child topic",
+      "addChild": "Add child topic · next step on a flowchart",
       "outdent": "Outdent topic",
       "nearest": "Go to the nearest topic that way",
       "moveTopic": "Move topic up / down",
@@ -834,7 +840,11 @@
     "enter": "<key>Enter</key> finish / next",
     "tab": "<key>Tab</key> child",
     "palette": "<key>⌘K</key> everything else",
-    "paste": "Paste an outline instead"
+    "paste": "Paste an outline instead",
+    "startFlow": "Add the first step",
+    "enterFlow": "<key>Enter</key> finish",
+    "tabFlow": "<key>Tab</key> next step",
+    "pasteFlow": "Paste Mermaid or an outline instead"
   },
   "presenter": {
     "overview": "Overview",
@@ -855,7 +865,8 @@
     "failed": "Couldn't save — retrying shortly"
   },
   "canvas": {
-    "dropImage": "Drop an image"
+    "dropImage": "Drop an image",
+    "bendHint": "Drag to reroute · double-click to remove the bend"
   },
   "viewer": {
     "opening": "Opening…"

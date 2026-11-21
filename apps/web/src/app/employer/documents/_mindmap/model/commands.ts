@@ -40,6 +40,8 @@ import {
     updatePage,
     withDescendants,
     isMindmapPage,
+    stepsFrom,
+    worksAsFlow,
     type NavDirection,
 } from "./doc";
 import {
@@ -55,18 +57,21 @@ import {
     fitViewport,
     nextZoomStep,
     nodeBounds,
+    nodeCenter,
     nodesBounds,
     rectCenter,
+    rectsIntersect,
     unionRects,
     zoomAt,
     type ViewportLike,
 } from "./geometry";
 import { computeLayout, suggestChildPosition, type LayoutKind, type LayoutOptions } from "./layout";
 import { swatchFor, SWATCH_BY_ID, THEME_BY_ID, themeMode, type ThemeMode } from "./palette";
-import { shapeDef, shapeTextBox } from "./shapes";
+import { isContainer, shapeDef, shapeTextBox } from "./shapes";
 import { applyThemeToDoc, paintTopics, recolourTopics, topicType } from "./theme";
 import type { CommitOptions, EditorStore } from "./store";
 import { restyleMovedTopics } from "./topicStyle";
+import { sizeForText } from "./grow";
 import { layoutText } from "./text";
 import type {
     ArrowId,
@@ -84,6 +89,7 @@ import type {
     TextStyle,
     VAlign,
     AutoLayoutSetting,
+    DiagramKind,
 } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -253,8 +259,11 @@ export function deleteTopicsOrSelection(
     store: EditorStore,
     opts: { keepChildren?: boolean } = {}
 ): void {
-    const page = activePage(store.getState().doc);
-    const all = selectedTopicIds(store);
+    const { doc } = store.getState();
+    const page = activePage(doc);
+    // On a flowchart a box is a box, topic-shaped or not: deleting one must
+    // never take the steps after it too.
+    const all = worksAsFlow(doc.settings.kind) ? null : selectedTopicIds(store);
     if (!all) {
         deleteSelection(store);
         return;
@@ -625,63 +634,65 @@ export function matchSize(store: EditorStore, dimension: "w" | "h" | "both"): vo
 export function translateNodes(
     page: DiagramPage,
     ids: readonly string[],
-    delta: Point
+    delta: Point,
+    /** Connectors the person selected too: they travel whatever their ends do. */
+    selectedEdgeIds: readonly string[] = []
 ): DiagramPage {
     const all = withDescendants(page, ids);
-    if (all.length === 0 || (delta.x === 0 && delta.y === 0)) return page;
-    const set = new Set(all);
-    let next = mapNodes(page, all, nd => ({ ...nd, x: nd.x + delta.x, y: nd.y + delta.y }));
+    if ((all.length === 0 && selectedEdgeIds.length === 0) || (delta.x === 0 && delta.y === 0)) {
+        return page;
+    }
+    const next = mapNodes(page, all, nd => ({ ...nd, x: nd.x + delta.x, y: nd.y + delta.y }));
+    const carried = edgesMovingWith(next, all, selectedEdgeIds);
+    if (carried.length === 0) return next;
+    return mapEdges(
+        next,
+        carried.map(e => e.id),
+        e => shiftEdge(e, delta)
+    );
+}
 
-    const internalEdges = next.edges.filter(
-        e =>
-            e.from.nodeId &&
-            e.to.nodeId &&
-            set.has(e.from.nodeId) &&
-            set.has(e.to.nodeId) &&
-            e.waypoints.length > 0
-    );
-    if (internalEdges.length) {
-        next = mapEdges(
-            next,
-            internalEdges.map(e => e.id),
-            e => ({
-                ...e,
-                waypoints: e.waypoints.map(p => ({ x: p.x + delta.x, y: p.y + delta.y })),
-            })
-        );
-    }
-    // Free-floating endpoints anchored to nothing follow too, so a connector
-    // drawn into empty space inside a moved group keeps its shape.
-    const freeEnds = next.edges.filter(
-        e =>
-            (e.from.point !== undefined && e.to.nodeId !== undefined && set.has(e.to.nodeId)) ||
-            (e.to.point !== undefined && e.from.nodeId !== undefined && set.has(e.from.nodeId))
-    );
-    if (freeEnds.length) {
-        next = mapEdges(
-            next,
-            freeEnds.map(e => e.id),
-            e => ({
-                ...e,
-                from: e.from.point
-                    ? {
-                          ...e.from,
-                          point: { x: e.from.point.x + delta.x, y: e.from.point.y + delta.y },
-                      }
-                    : e.from,
-                to: e.to.point
-                    ? { ...e.to, point: { x: e.to.point.x + delta.x, y: e.to.point.y + delta.y } }
-                    : e.to,
-            })
-        );
-    }
-    return next;
+/**
+ * The connectors whose own geometry — bends and free-floating ends — has to
+ * travel when `nodeIds` move: every selected connector, and every connector
+ * whose attached ends all sit on moving nodes. Without this a moved group
+ * left its hand-routed lines behind, bent towards where the boxes used to be.
+ * Connectors with nothing of their own to move (no bends, no free end) are
+ * left out, since routing already follows their nodes.
+ */
+export function edgesMovingWith(
+    page: DiagramPage,
+    nodeIds: readonly string[],
+    selectedEdgeIds: readonly string[] = []
+): DiagramEdge[] {
+    const moving = new Set(nodeIds);
+    const selected = new Set(selectedEdgeIds);
+    return page.edges.filter(e => {
+        const freeEnd = (end: DiagramEdge["from"]) => !end.nodeId && end.point !== undefined;
+        const hasOwnGeometry = e.waypoints.length > 0 || freeEnd(e.from) || freeEnd(e.to);
+        if (!hasOwnGeometry || e.locked) return false;
+        if (selected.has(e.id)) return true;
+        const attached = [e.from.nodeId, e.to.nodeId].filter((id): id is string => !!id);
+        return attached.length > 0 && attached.every(id => moving.has(id));
+    });
+}
+
+/** A connector's bends and free ends, shifted by `delta`. Attached ends follow their nodes. */
+export function shiftEdge(e: DiagramEdge, delta: Point): DiagramEdge {
+    const shift = (p: Point) => ({ x: p.x + delta.x, y: p.y + delta.y });
+    return {
+        ...e,
+        waypoints: e.waypoints.map(shift),
+        from: !e.from.nodeId && e.from.point ? { ...e.from, point: shift(e.from.point) } : e.from,
+        to: !e.to.nodeId && e.to.point ? { ...e.to, point: shift(e.to.point) } : e.to,
+    };
 }
 
 export function moveSelection(store: EditorStore, delta: Point, label = "Move"): void {
     const ids = store.selectedNodeIds();
     if (ids.length === 0) return;
-    store.updatePage(page => translateNodes(page, ids, delta), {
+    const edgeIds = store.selectedEdgeIds();
+    store.updatePage(page => translateNodes(page, ids, delta, edgeIds), {
         label,
         coalesceKey: `move:${ids.join(",")}`,
     });
@@ -929,6 +940,63 @@ function fitToLabel(nd: DiagramNode): DiagramNode {
     };
 }
 
+function sameRect(a: Rect, b: Rect): boolean {
+    return a.x === b.x && a.y === b.y && a.w === b.w && a.h === b.h;
+}
+
+/**
+ * Show a box growing while its label is typed: geometry only, and no undo
+ * entry — `commitNodeText` lands the words and the size together. `start` is
+ * the node as it was when typing began; the box is never smaller than that.
+ */
+export function previewTextGrowth(store: EditorStore, start: DiagramNode, text: string): void {
+    const next = sizeForText(start, text);
+    store.updatePage(
+        page => mapNodes(page, [start.id], nd => (sameRect(nd, next) ? nd : { ...nd, ...next })),
+        { transient: true }
+    );
+}
+
+/**
+ * Finish typing into a box: the words, and the size they need, as one undo
+ * step. The preview frames are rolled back first so that step starts from
+ * the box as it was before typing. Leaving the words as they were leaves the
+ * box as it was too — opening a label and closing it is not an edit.
+ */
+export function commitNodeText(store: EditorStore, start: DiagramNode, text: string): void {
+    const current = nodeById(activePage(store.getState().doc), start.id);
+    if (!current) return;
+    if (!sameRect(current, start)) {
+        store.updatePage(
+            page =>
+                mapNodes(page, [start.id], nd => ({
+                    ...nd,
+                    x: start.x,
+                    y: start.y,
+                    w: start.w,
+                    h: start.h,
+                })),
+            { transient: true }
+        );
+    }
+    if (text === current.text) return;
+    const grown = sizeForText(start, text);
+    store.group("Edit text", () => {
+        store.updatePage(
+            page =>
+                mapNodes(page, [start.id], nd => {
+                    const next = { ...nd, ...grown, text };
+                    // A text mark hugs its words: nobody sizes a caption first
+                    // and types second, so its height follows them both ways.
+                    return nd.shape === "text" ? fitToLabel(next) : next;
+                }),
+            { label: "Edit text", coalesceKey: `text:${start.id}` }
+        );
+        // A topic that grew may now crowd its neighbours on an arranged map.
+        if (!sameRect(start, grown)) autoArrangeIfOn(store);
+    });
+}
+
 /** Grow (never shrink below the shape minimum) so the label fits. */
 export function fitNodeToText(store: EditorStore, nodeIds: readonly string[]): void {
     if (nodeIds.length === 0) return;
@@ -989,6 +1057,19 @@ export function clearWaypoints(store: EditorStore): void {
     });
 }
 
+/** Take one bend out of a connector (double-clicking its handle). */
+export function removeBend(store: EditorStore, edgeId: string, index: number): void {
+    store.updatePage(
+        page =>
+            mapEdges(page, [edgeId], e =>
+                index >= 0 && index < e.waypoints.length
+                    ? { ...e, waypoints: e.waypoints.filter((_, i) => i !== index) }
+                    : e
+            ),
+        { label: "Remove bend" }
+    );
+}
+
 // ---------------------------------------------------------------------------
 // Mindmap-specific
 // ---------------------------------------------------------------------------
@@ -1020,8 +1101,10 @@ function autoArrangeIfOn(store: EditorStore): void {
     const doc = store.getState().doc;
     const layout = doc.settings.autoLayout;
     if (!layout) return;
-    // Only a page that is nothing but topics: see `isMindmapPage`.
-    if (!isMindmapPage(activePage(doc))) return;
+    // Only a mindmap, and only a page that is nothing but topics: see
+    // `isMindmapPage`. A flowchart drawn with topic shapes is still laid out
+    // by hand.
+    if (worksAsFlow(doc.settings.kind) || !isMindmapPage(activePage(doc))) return;
     store.clearSelection();
     // Part of the edit that triggered it, not an edit of its own: one ⌘Z
     // after Tab should take the new topic away, not just un-arrange it.
@@ -1143,6 +1226,188 @@ export function addChildTopic(
     store.selectNodes([child.id]);
     store.setEditing({ kind: "node", id: child.id });
     return child.id;
+}
+
+// ---------------------------------------------------------------------------
+// Flowchart
+// ---------------------------------------------------------------------------
+
+/** The four ways a next step can go. */
+export type FlowStep = "right" | "left" | "down" | "up";
+
+function dominant(v: Point): FlowStep {
+    if (Math.abs(v.x) >= Math.abs(v.y)) return v.x >= 0 ? "right" : "left";
+    return v.y >= 0 ? "down" : "up";
+}
+
+/**
+ * Which way a flowchart reads at this box: on in the direction the line came
+ * in, else the way its existing arrows already leave, else to the right —
+ * reading order, and the long side of a screen.
+ */
+export function flowDirection(page: DiagramPage, nodeId: string): FlowStep {
+    const node = nodeById(page, nodeId);
+    if (!node) return "right";
+    const here = nodeCenter(node);
+    const idx = graphIndex(page);
+    for (const id of idx.in.get(nodeId) ?? []) {
+        const from = id !== nodeId ? nodeById(page, id) : undefined;
+        if (from) {
+            const c = nodeCenter(from);
+            return dominant({ x: here.x - c.x, y: here.y - c.y });
+        }
+    }
+    for (const id of idx.out.get(nodeId) ?? []) {
+        const to = id !== nodeId ? nodeById(page, id) : undefined;
+        if (to) {
+            const c = nodeCenter(to);
+            return dominant({ x: c.x - here.x, y: c.y - here.y });
+        }
+    }
+    return "right";
+}
+
+/** Gap between a box and the step Tab adds after it. */
+const STEP_GAP = 64;
+
+/**
+ * Tab on a box in a flowchart: the next step — the same shape in the same
+ * colours, joined by an arrow like the ones already there, one gap further
+ * along the flow, and straight into its label. A box already sitting there
+ * (a step added before) pushes the new one aside, so a second Tab makes a
+ * branch instead of a pile.
+ */
+export function addNextStep(store: EditorStore, sourceId: string): string | null {
+    const page = activePage(store.getState().doc);
+    const source = nodeById(page, sourceId);
+    if (!source) return null;
+
+    // A mindmap's centre is a filled pill; a step after it is a plain topic.
+    const shape = source.shape === "mind-root" ? "mind-branch" : source.shape;
+    const def = shapeDef(shape);
+    // Same size as the box it follows, unless that box grew to hold a long
+    // label — then the shape's own size, since the new box starts empty.
+    const grewForText =
+        source.text.trim() !== "" &&
+        (() => {
+            const asDrawn = { ...source, shape, w: def.defaultSize.w, h: def.defaultSize.h };
+            const need = sizeForText(asDrawn, source.text);
+            return need.w > def.defaultSize.w || need.h > def.defaultSize.h;
+        })();
+    const size =
+        source.shape === "mind-root" || grewForText
+            ? { w: def.defaultSize.w, h: def.defaultSize.h }
+            : { w: source.w, h: source.h };
+
+    const dir = flowDirection(page, sourceId);
+    const c = nodeCenter(source);
+    const step = {
+        right: { x: 1, y: 0 },
+        left: { x: -1, y: 0 },
+        down: { x: 0, y: 1 },
+        up: { x: 0, y: -1 },
+    }[dir];
+    const reach =
+        step.x !== 0 ? source.w / 2 + STEP_GAP + size.w / 2 : source.h / 2 + STEP_GAP + size.h / 2;
+    let at = { x: c.x + step.x * reach, y: c.y + step.y * reach };
+    // Sideways past anything already there, so branches fan out.
+    const aside = step.x !== 0 ? { x: 0, y: size.h + 32 } : { x: size.w + 32, y: 0 };
+    const occupied = (p: Point) =>
+        page.nodes.some(
+            nd =>
+                !nd.hidden &&
+                nd.id !== source.id &&
+                !isContainer(nd.shape) &&
+                rectsIntersect(
+                    {
+                        x: p.x - size.w / 2 - 8,
+                        y: p.y - size.h / 2 - 8,
+                        w: size.w + 16,
+                        h: size.h + 16,
+                    },
+                    nodeBounds(nd)
+                )
+        );
+    for (let i = 0; i < 24 && occupied(at); i++) at = { x: at.x + aside.x, y: at.y + aside.y };
+
+    const mode = docMode(store);
+    const created = createNodeAt(shape, at, { mode, w: size.w, h: size.h });
+    const next: DiagramNode = {
+        ...created,
+        style: { ...source.style },
+        textStyle: { ...source.textStyle },
+        parentId: source.parentId,
+        ...(source.data?.depth !== undefined
+            ? { data: { depth: Math.max(1, source.data.depth) } }
+            : {}),
+    };
+
+    // Look like the arrows already here: one leaving this box, else one
+    // arriving at it, else the document's default.
+    const like =
+        page.edges.find(e => e.from.nodeId === sourceId && e.to.nodeId !== sourceId) ??
+        page.edges.find(e => e.to.nodeId === sourceId && e.from.nodeId !== sourceId);
+    const edge = createEdge({
+        from: { nodeId: sourceId, port: "auto" },
+        to: { nodeId: next.id, port: "auto" },
+        kind: like?.kind ?? store.getState().doc.settings.defaultEdgeKind,
+        style: like ? { ...like.style } : undefined,
+        startArrow: like?.startArrow,
+        endArrow: like ? (like.endArrow === "none" ? "arrow" : like.endArrow) : undefined,
+    });
+
+    store.group("Add step", () => {
+        store.updatePage(
+            p =>
+                addEdges(
+                    addNodes(
+                        source.collapsed
+                            ? mapNodes(p, [sourceId], nd => ({ ...nd, collapsed: false }))
+                            : p,
+                        [next]
+                    ),
+                    [edge]
+                ),
+            { label: "Add step" }
+        );
+    });
+    store.selectNodes([next.id]);
+    store.setEditing({ kind: "node", id: next.id });
+    return next.id;
+}
+
+/**
+ * Tab and "Add connected": the next step on a flowchart, a child topic on a
+ * mindmap. One entry point so the key, the menu and the palette agree.
+ */
+export function addConnected(store: EditorStore, nodeId: string): string | null {
+    const { doc } = store.getState();
+    const node = nodeById(activePage(doc), nodeId);
+    if (!node) return null;
+    return stepsFrom(doc.settings.kind, node)
+        ? addNextStep(store, nodeId)
+        : addChildTopic(store, nodeId);
+}
+
+/**
+ * Switch how a document works. A flowchart gets no auto-arrange (its layout
+ * is the author's); a mindmap keeps whatever arranging was set, and the
+ * Arrange menu turns it on.
+ */
+export function setDiagramKind(store: EditorStore, kind: DiagramKind): void {
+    const { settings } = store.getState().doc;
+    if (settings.kind === kind) return;
+    store.update(
+        doc => ({
+            ...doc,
+            settings: {
+                ...doc.settings,
+                kind,
+                autoLayout: worksAsFlow(kind) ? null : doc.settings.autoLayout,
+            },
+        }),
+        { label: worksAsFlow(kind) ? "Work as a flowchart" : "Work as a mindmap" }
+    );
 }
 
 /**

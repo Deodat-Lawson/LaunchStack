@@ -8,13 +8,13 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip
 import { cn } from "~/lib/utils";
 
 import {
-    addChildTopic,
+    addConnected,
     applySwatch,
     deleteTopicsOrSelection,
     docMode,
     styleTextSelection,
 } from "../model/commands";
-import { activePage, nodeById } from "../model/doc";
+import { activePage, nodeById, worksAsFlow } from "../model/doc";
 import { nodesBounds, worldToScreen } from "../model/geometry";
 import { SWATCH_BY_ID, swatchFor } from "../model/palette";
 
@@ -79,6 +79,7 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
     const y = above ? top.y - TOOLBAR_HEIGHT - GAP : bottom.y + GAP;
 
     const first = nodes[0]!;
+    const flow = worksAsFlow(doc.settings.kind);
     const size = first.textStyle.size;
     const mode = docMode(store);
 
@@ -92,12 +93,17 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
             onPointerDown={e => e.stopPropagation()}
             onMouseDown={e => e.stopPropagation()}
         >
-            <Tip label={t("selectionToolbar.addChild")} hint="Tab">
+            <Tip
+                label={flow ? t("selectionToolbar.addStep") : t("selectionToolbar.addChild")}
+                hint="Tab"
+            >
                 <button
                     type="button"
-                    onClick={() => addChildTopic(store, first.id)}
+                    onClick={() => addConnected(store, first.id)}
                     className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-7 items-center justify-center rounded-md transition-colors"
-                    aria-label={t("selectionToolbar.addChildTopic")}
+                    aria-label={
+                        flow ? t("selectionToolbar.addStep") : t("selectionToolbar.addChildTopic")
+                    }
                 >
                     <Plus className="size-4" />
                 </button>

@@ -2,13 +2,20 @@
 
 import React, { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 
-import { addChildTopic, outdentTopic, setEdgeLabel, setNodeText } from "../model/commands";
-import { activePage, nodeById, nodeLookup, removeNodes } from "../model/doc";
+import {
+    addConnected,
+    commitNodeText,
+    outdentTopic,
+    previewTextGrowth,
+    setEdgeLabel,
+} from "../model/commands";
+import { activePage, nodeById, nodeLookup, removeNodes, worksAsFlow } from "../model/doc";
 import { worldToScreen } from "../model/geometry";
 import { labelAnchor, routeEdge } from "../model/routing";
 import { shapeTextBox } from "../model/shapes";
 import { fontFamilyCss, layoutText } from "../model/text";
 import type { EditorState } from "../model/store";
+import type { DiagramNode } from "../model/types";
 import { registerEditorField, useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
@@ -51,6 +58,11 @@ export function TextEditorOverlay() {
      */
     const settled = useRef(true);
     const settleRef = useRef<() => void>(() => undefined);
+    /**
+     * The shape as it was when this session began. The box grows from it as
+     * the words come in, and never drops below it (`sizeForText`).
+     */
+    const startNode = useRef<DiagramNode | null>(null);
 
     const page = activePage(doc);
     const node = editing?.kind === "node" ? nodeById(page, editing.id) : undefined;
@@ -92,6 +104,8 @@ export function TextEditorOverlay() {
             seed ?? (node ? node.text : edge ? (edge.labels[editing.index ?? 0]?.text ?? "") : "");
         setValue(initial);
         settled.current = false;
+        startNode.current = node ? { ...node } : null;
+        if (node && seed !== undefined) previewTextGrowth(store, node, seed);
         // The element is reused when the edit target changes, so the callback
         // ref won't re-fire — focus here too, and re-assert a frame later in
         // case something in the same gesture pulled focus away.
@@ -162,16 +176,19 @@ export function TextEditorOverlay() {
         store.updatePage(page => removeNodes(page, [node.id]), { label: "Remove empty text" });
     };
 
+    /** Type, and the box grows to hold what was typed (see model/grow.ts). */
+    const change = (next: string) => {
+        setValue(next);
+        if (node) previewTextGrowth(store, startNode.current ?? node, next);
+    };
+
     const commit = () => {
         settled.current = true;
         if (editing.kind === "node" && node) {
-            const isTextMark = node.shape === "text";
-            if (isTextMark && value.trim() === "") {
+            if (node.shape === "text" && value.trim() === "") {
                 removeEmptyText();
-            } else if (value !== node.text) {
-                // A text mark hugs its content: nobody sizes a caption first
-                // and types second, so the box follows the words.
-                setNodeText(store, node.id, value, { fit: isTextMark });
+            } else {
+                commitNodeText(store, startNode.current ?? node, value);
             }
         } else if (editing.kind === "edge-label" && edge) {
             setEdgeLabel(store, edge.id, editing.index ?? 0, value);
@@ -180,8 +197,9 @@ export function TextEditorOverlay() {
         followUp.current = null;
         store.setEditing(null);
         if (next && node) {
-            if (next === "child") addChildTopic(store, node.id);
-            else outdentTopic(store, node.id);
+            // Tab: a child topic on a mindmap, the next step on a flowchart.
+            if (next === "child") addConnected(store, node.id);
+            else if (!worksAsFlow(store.getState().doc.settings.kind)) outdentTopic(store, node.id);
         }
     };
 
@@ -190,6 +208,9 @@ export function TextEditorOverlay() {
         followUp.current = null;
         if (editing.kind === "node" && node?.shape === "text" && node.text.trim() === "") {
             removeEmptyText();
+        } else if (node) {
+            // Whatever was typed is dropped, and with it any growth it caused.
+            commitNodeText(store, startNode.current ?? node, node.text);
         }
         store.setEditing(null);
     };
@@ -227,7 +248,7 @@ export function TextEditorOverlay() {
         top = topLeft.y + offset;
         height = Math.max(blockH, node.textStyle.size * viewport.zoom * 1.2);
     } else if (edge) {
-        const routed = routeEdge(edge, nodeLookup(page));
+        const routed = routeEdge(edge, nodeLookup(page), page.nodes, page.edges);
         const label = edge.labels[editing.index ?? 0];
         const at = labelAnchor(routed, label?.t ?? 0.5, label?.offset ?? 0);
         const screen = worldToScreen(viewport, at);
@@ -244,7 +265,7 @@ export function TextEditorOverlay() {
         <textarea
             ref={attachRef}
             value={value}
-            onChange={e => setValue(e.target.value)}
+            onChange={e => change(e.target.value)}
             onBlur={commit}
             onKeyDown={e => {
                 // Nothing typed here may reach the canvas's window shortcuts.
@@ -278,7 +299,7 @@ export function TextEditorOverlay() {
                         // splice one in at the caret.
                         const el = e.currentTarget;
                         const at = el.selectionStart;
-                        setValue(value.slice(0, at) + "\n" + value.slice(el.selectionEnd));
+                        change(value.slice(0, at) + "\n" + value.slice(el.selectionEnd));
                         caretAfterRender.current = at + 1;
                         return;
                     }
@@ -315,7 +336,11 @@ export function TextEditorOverlay() {
                 // In-place editing, not a floating field: the real shape shows
                 // through (its own SVG label hides while this is open), so the
                 // only thing this element paints is the live text and a caret.
-                background: "transparent",
+                // A connector's label is the exception — there is a line under
+                // it, which struck through the words being typed — so it gets
+                // the label pill's backing, in the board's own paper colour.
+                background: edge ? page.background.color : "transparent",
+                borderRadius: edge ? 4 : undefined,
                 caretColor: style.color,
                 color: style.color,
                 fontSize,

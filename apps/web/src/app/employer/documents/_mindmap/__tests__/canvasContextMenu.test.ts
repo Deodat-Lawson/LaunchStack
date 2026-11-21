@@ -130,7 +130,7 @@ describe("canvas context menu", () => {
         expect(top[0]).toBe("shape");
         expect(top).not.toContain("add-sibling");
         const connected = menu.find(i => i.id === "add-child");
-        expect(connected?.type === "item" ? connected.label : null).toBe("Add connected shape");
+        expect(connected?.type === "item" ? connected.label : null).toBe("Add next step");
     });
 
     test("focus depth with nothing selected is the short paste/layout menu", () => {

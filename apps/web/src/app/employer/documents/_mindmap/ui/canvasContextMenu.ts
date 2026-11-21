@@ -1,6 +1,6 @@
 import { tidyMenuItems, type ActionMenuItem } from "~/components/ui/action-menu";
 import {
-    addChildTopic,
+    addConnected,
     addSiblingTopic,
     applySwatch,
     clearWaypoints,
@@ -31,6 +31,7 @@ import {
     isTopicShape,
     nodeById,
     topicParent,
+    worksAsFlow,
 } from "../model/doc";
 import { SWATCHES } from "../model/palette";
 import { SHAPE_CATEGORIES, SHAPES } from "../model/shapes";
@@ -267,10 +268,12 @@ function buildEverything(
         items.push({
             type: "item",
             id: "add-child",
-            label: t("contextMenu.addChild"),
+            label: worksAsFlow(state.doc.settings.kind)
+                ? t("contextMenu.addConnected")
+                : t("contextMenu.addChild"),
             icon: "plus",
             shortcut: "⇥",
-            onSelect: () => addChildTopic(store, singleNode.id),
+            onSelect: () => addConnected(store, singleNode.id),
         });
         if (hasChildren) {
             items.push(

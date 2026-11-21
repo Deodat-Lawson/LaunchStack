@@ -187,7 +187,7 @@ describe("editor shell", () => {
         mountEditor();
         await user.click(screen.getByLabelText("Keyboard shortcuts"));
         expect(await screen.findByText("Keyboard shortcuts")).toBeInTheDocument();
-        expect(screen.getByText("Add child topic")).toBeInTheDocument();
+        expect(screen.getByText("Add child topic · next step on a flowchart")).toBeInTheDocument();
     });
 
     it("adds a page from the page strip", async () => {

@@ -26,6 +26,13 @@ import type { Viewport } from "../model/types";
  * Returns `frame`, which refits *and* re-arms tracking. Give it to anything
  * that means "frame this now": a Fit control, a page change, entering
  * presentation. Asking to fit is also asking to follow along again.
+ *
+ * Tracking also stands down the moment someone starts working — selects,
+ * types, drags. Selecting a shape opens the inspector, which narrows the
+ * stage; refitting then moved the whole board out from under the pointer, so
+ * a second click on a thin connector (to drag it, or the second half of a
+ * double-click) landed on empty canvas, and a first box zoomed to 280% as it
+ * was typed into.
  */
 export interface Size {
     w: number;
@@ -49,10 +56,14 @@ export function useAutoFit(store: EditorStore, stageSize: Size): (size?: Size) =
     const latestSize = useRef(stageSize);
     latestSize.current = stageSize;
 
+    /** False once someone has started working on the board. */
+    const tracking = useRef(true);
+
     const frame = useCallback(
         (size?: Size) => {
             const target = size ?? latestSize.current;
             if (target.w < MIN_USABLE_STAGE || target.h < MIN_USABLE_STAGE) return;
+            tracking.current = true;
             fitToScreen(store, target);
             framedViewport.current = store.getState().viewport;
         },
@@ -60,6 +71,22 @@ export function useAutoFit(store: EditorStore, stageSize: Size): (size?: Size) =
     );
 
     useEffect(() => {
+        let last = store.getState();
+        return store.subscribe(() => {
+            const now = store.getState();
+            if (
+                now.selection !== last.selection ||
+                (now.editing !== null && now.editing !== last.editing) ||
+                (now.drag.kind !== "none" && now.drag.kind !== last.drag.kind)
+            ) {
+                tracking.current = false;
+            }
+            last = now;
+        });
+    }, [store]);
+
+    useEffect(() => {
+        if (!tracking.current) return;
         const framed = framedViewport.current;
         // Once the board has been moved by hand, the stage is theirs.
         if (framed && !sameViewport(framed, store.getState().viewport)) return;

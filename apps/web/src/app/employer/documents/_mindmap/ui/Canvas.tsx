@@ -1,16 +1,25 @@
 "use client";
 
 import React, { memo, useMemo, useRef } from "react";
+import { useTranslations } from "next-intl";
 
 import { toggleCollapse } from "../model/commands";
-import { graphIndex, nodeById, nodeLookup, visibleEdges, visibleNodes } from "../model/doc";
+import {
+    graphIndex,
+    nodeById,
+    nodeLookup,
+    visibleEdges,
+    visibleNodes,
+    worksAsFlow,
+} from "../model/doc";
 import { nodeBounds, nodesBounds } from "../model/geometry";
 import { routeEdgeCached, type RoutedEdge } from "../model/routing";
+import { nudgeRoutes, placeLabels } from "../model/tidy";
 import { isDarkSurface } from "../model/palette";
 import { shapeDef } from "../model/shapes";
 import type { EditorState } from "../model/store";
 import type { DiagramEdge, DiagramNode, Point, Rect } from "../model/types";
-import { EdgeView, HIT_WIDTH } from "./EdgeView";
+import { EdgeLabels, EdgeView, HIT_WIDTH } from "./EdgeView";
 import { useEditor, useStore } from "./EditorContext";
 import { RemoteCursors, RemoteSelections } from "./PresenceLayer";
 import { Rulers } from "./Rulers";
@@ -95,10 +104,15 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
     // its *values* stay identical — which is what lets `EdgeView`'s memo hit.
     const routed = useMemo(() => {
         const map = new Map<string, RoutedEdge>();
-        for (const e of edges) map.set(e.id, routeEdgeCached(e, lookup));
-        return map;
-    }, [edges, lookup]);
+        for (const e of edges) map.set(e.id, routeEdgeCached(e, lookup, nodes, edges));
+        // Connectors are routed one at a time; this pulls apart the ones that
+        // ended up on the same line (see model/tidy.ts).
+        return nudgeRoutes(map, edges);
+    }, [edges, lookup, nodes]);
+    // Labels that would print over each other slide along their lines.
+    const labelTs = useMemo(() => placeLabels(edges, routed), [edges, routed]);
 
+    const flow = worksAsFlow(doc.settings.kind);
     const childCounts = useMemo(() => {
         const idx = graphIndex(page);
         const counts = new Map<string, number>();
@@ -132,22 +146,19 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
 
     // Ports appear for the hovered shape and for a lone selected shape; showing
     // them for a whole multi-selection turns the canvas into confetti.
+    const connectTarget = render.drag.kind === "connect" ? render.drag.hoverNodeId : null;
     const portNodes = useMemo(() => {
         if (render.presenting || interacting) {
-            return render.drag.kind === "connect" ? nodes.filter(nd => !nd.locked) : [];
+            // While a connector is being drawn, only the shape it would
+            // attach to shows its dots (with an outline, below): dots on
+            // every shape said nothing about where a release would land.
+            return connectTarget ? nodes.filter(nd => nd.id === connectTarget && !nd.locked) : [];
         }
         const ids = new Set<string>();
         if (render.hoverNodeId) ids.add(render.hoverNodeId);
         if (selectedNodes.length === 1 && selectedNodes[0]) ids.add(selectedNodes[0].id);
         return nodes.filter(nd => ids.has(nd.id));
-    }, [
-        interacting,
-        nodes,
-        render.drag.kind,
-        render.hoverNodeId,
-        render.presenting,
-        selectedNodes,
-    ]);
+    }, [connectTarget, interacting, nodes, render.hoverNodeId, render.presenting, selectedNodes]);
 
     const comments = useMemo(
         () => doc.comments.filter(c => c.pageId === page.id && !c.resolved),
@@ -257,8 +268,27 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
                                 <EdgeView
                                     edge={edge}
                                     routed={r}
+                                    withLabels={false}
                                     selected={selectedEdgeIds.has(edge.id)}
                                     hovered={render.hoverEdgeId === edge.id}
+                                />
+                            </g>
+                        );
+                    })}
+                </g>
+
+                {/* Connector labels, above every connector: drawn with their
+                    own connector, a later one painted through them. */}
+                <g>
+                    {edges.map(edge => {
+                        const r = routed.get(edge.id);
+                        if (!r || !edge.labels.some(l => l.text)) return null;
+                        return (
+                            <g key={edge.id} data-edge-id={edge.id}>
+                                <EdgeLabels
+                                    edge={edge}
+                                    routed={r}
+                                    labelTs={movedLabels(edge, labelTs.get(edge.id))}
                                     editingLabelIndex={
                                         render.editing?.kind === "edge-label" &&
                                         render.editing.id === edge.id
@@ -294,6 +324,21 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
                             {[...childCounts.entries()].map(([nodeId, count]) => {
                                 const node = nodeById(page, nodeId);
                                 if (!node) return null;
+                                // A fold button sits just right of its box —
+                                // on the line leaving it — so one on every
+                                // box with a line out read as a stray shape
+                                // on each connector, and could not be
+                                // deleted. Shown the way XMind and MindNode
+                                // show theirs: while the box is hovered or
+                                // selected, and always once folded (it is the
+                                // way back). Never on a flowchart, whose
+                                // boxes are not branches.
+                                const shown =
+                                    node.collapsed === true ||
+                                    (!flow &&
+                                        (render.hoverNodeId === nodeId ||
+                                            selectedNodeIds.has(nodeId)));
+                                if (!shown) return null;
                                 return (
                                     <CollapseToggle
                                         key={nodeId}
@@ -312,12 +357,28 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
                             interacting={interacting}
                         />
 
+                        {render.drag.kind === "connect" && render.drag.hoverNodeId && (
+                            <ConnectTarget
+                                bounds={nodeBoundsById.get(render.drag.hoverNodeId)}
+                                zoom={viewport.zoom}
+                            />
+                        )}
+
                         <g>
                             {portNodes.map(nd => (
                                 <NodePorts
                                     key={nd.id}
                                     node={nd}
                                     zoom={viewport.zoom}
+                                    // On a selected shape the dots sit just
+                                    // outside its edges: on the outline they
+                                    // covered every resize handle, so dragging
+                                    // a corner drew a connector instead.
+                                    outside={
+                                        !interacting &&
+                                        selectedNodes.length === 1 &&
+                                        selectedNodes[0]?.id === nd.id
+                                    }
                                     activePort={
                                         render.drag.kind === "connect" &&
                                         render.drag.hoverNodeId === nd.id
@@ -334,7 +395,8 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
                             zoom={viewport.zoom}
                         />
 
-                        {render.drag.kind === "connect" && (
+                        {/* Re-dragging an end moves the connector itself. */}
+                        {render.drag.kind === "connect" && !render.drag.edgeId && (
                             <ConnectDraft drag={render.drag} zoom={viewport.zoom} />
                         )}
 
@@ -504,12 +566,19 @@ function CollapseToggle({
 
     return (
         <g
+            // Hovering the button counts as hovering its box, so it stays
+            // while the pointer travels to it.
+            data-node-id={node.id}
+            data-fold=""
             style={{ pointerEvents: "all", cursor: "pointer" }}
             onPointerDown={e => {
                 e.stopPropagation();
                 onToggle();
             }}
+            onDoubleClick={e => e.stopPropagation()}
         >
+            {/* Reaches back to the box's edge, so there is no gap to cross. */}
+            <circle cx={cx} cy={cy} r={px(12)} fill="transparent" />
             <circle
                 cx={cx}
                 cy={cy}
@@ -540,6 +609,11 @@ function CollapseToggle({
     );
 }
 
+/** The label positions to draw, only when some moved off their stored spot (keeps `EdgeView`'s memo). */
+function movedLabels(edge: DiagramEdge, ts: number[] | undefined): number[] | undefined {
+    return ts?.some((t, i) => t !== edge.labels[i]?.t) ? ts : undefined;
+}
+
 function EdgeHandles({
     edges,
     routed,
@@ -549,6 +623,7 @@ function EdgeHandles({
     routed: Map<string, RoutedEdge>;
     zoom: number;
 }) {
+    const t = useTranslations("mindmap.canvas");
     const px = (v: number) => v / zoom;
     return (
         <g>
@@ -591,12 +666,35 @@ function EdgeHandles({
                                 rx={px(2)}
                                 fill="var(--accent)"
                                 style={{ pointerEvents: "all", cursor: "move" }}
-                            />
+                            >
+                                <title>{t("bendHint")}</title>
+                            </rect>
                         ))}
                     </g>
                 );
             })}
         </g>
+    );
+}
+
+/** The outline on the shape a connector being drawn will attach to. */
+function ConnectTarget({ bounds, zoom }: { bounds: Rect | undefined; zoom: number }) {
+    if (!bounds) return null;
+    const px = (v: number) => v / zoom;
+    return (
+        <rect
+            data-connect-target=""
+            x={bounds.x - px(5)}
+            y={bounds.y - px(5)}
+            width={bounds.w + px(10)}
+            height={bounds.h + px(10)}
+            rx={px(8)}
+            fill="var(--accent)"
+            fillOpacity={0.06}
+            stroke="var(--accent)"
+            strokeWidth={px(2)}
+            style={{ pointerEvents: "none" }}
+        />
     );
 }
 

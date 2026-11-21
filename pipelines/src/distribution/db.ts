@@ -5,7 +5,7 @@
  */
 import { randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, gte, inArray, isNotNull, isNull, lt, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, isNotNull, isNull, lt, or, sql } from "drizzle-orm";
 import type { InferInsertModel } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
@@ -81,6 +81,7 @@ function toProgram(row: DistributionProgramRow): ProgramRecord {
         constraints: row.constraints ?? null,
         knownPartnerDomains: row.knownPartnerDomains ?? [],
         customerDomains: row.customerDomains ?? [],
+        intent: row.intent ?? "partners",
         status: row.status,
         createdAt: row.createdAt,
         updatedAt: row.updatedAt ?? null,
@@ -122,6 +123,8 @@ function toOrg(row: PartnerOrgRow): PartnerOrgRecord {
         categories: row.categories ?? [],
         sizeBand: row.sizeBand ?? null,
         description: row.description ?? null,
+        imageUrl: row.imageUrl ?? null,
+        iconUrl: row.iconUrl ?? null,
         kgEntityId: row.kgEntityId ?? null,
         firstSeenRunId: row.firstSeenRunId ?? null,
         lastEnrichedAt: row.lastEnrichedAt ?? null,
@@ -231,6 +234,7 @@ export async function createProgram(args: {
             constraints: args.input.constraints ?? null,
             knownPartnerDomains: normalizeDomains(args.input.knownPartnerDomains),
             customerDomains: normalizeDomains(args.input.customerDomains ?? []),
+            intent: args.input.intent ?? "partners",
         })
         .returning();
     if (!row) throw new Error("Failed to create distribution program");
@@ -275,6 +279,7 @@ export async function updateProgram(
         values.knownPartnerDomains = normalizeDomains(patch.knownPartnerDomains);
     if (patch.customerDomains !== undefined)
         values.customerDomains = normalizeDomains(patch.customerDomains);
+    if (patch.intent !== undefined) values.intent = patch.intent;
     if (patch.status !== undefined) values.status = patch.status;
     if (Object.keys(values).length === 0) return getProgram(id, companyId);
     const [row] = await db
@@ -478,6 +483,32 @@ export async function listOrgsByIds(
     return rows.map(toOrg);
 }
 
+/** Companies with a website and no pictures, not checked since `checkedBefore`; newest first. */
+export async function listOrgsMissingPictures(
+    companyId: bigint,
+    options: { limit: number; checkedBefore: Date }
+): Promise<PartnerOrgRecord[]> {
+    const db = getDb();
+    const rows = await db
+        .select()
+        .from(partnerOrgs)
+        .where(
+            and(
+                eq(partnerOrgs.companyId, companyId),
+                isNotNull(partnerOrgs.domain),
+                isNull(partnerOrgs.imageUrl),
+                isNull(partnerOrgs.iconUrl),
+                or(
+                    isNull(partnerOrgs.picturesCheckedAt),
+                    lt(partnerOrgs.picturesCheckedAt, options.checkedBefore)
+                )
+            )
+        )
+        .orderBy(desc(partnerOrgs.createdAt))
+        .limit(options.limit);
+    return rows.map(toOrg);
+}
+
 export async function updateOrg(
     id: string,
     companyId: bigint,
@@ -486,6 +517,9 @@ export async function updateOrg(
             InferInsertModel<typeof partnerOrgs>,
             | "sizeBand"
             | "description"
+            | "imageUrl"
+            | "iconUrl"
+            | "picturesCheckedAt"
             | "roles"
             | "categories"
             | "kgEntityId"

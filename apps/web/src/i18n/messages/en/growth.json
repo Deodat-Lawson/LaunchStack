@@ -305,7 +305,18 @@
       "shortcuts": "<k>j</k> <k>k</k> move · <k>x</k> select · <k>Enter</k> open · <k>o</k> add to outreach · <k>/</k> search",
       "moveToQualified": "Move to Qualified",
       "newBadge": "new",
-      "foundInLastRun": "found in the last run"
+      "simulate": "Simulate this segment",
+      "simulateSelected": "Simulate {count, plural, one {# company} other {# companies}}",
+      "simulateHint": "Open Scenarios built from this segment's prospects, or the ones you picked.",
+      "simulateSubject": "How would the businesses in this segment respond to what we offer?",
+      "layout": {
+        "cards": "Cards",
+        "table": "Table",
+        "aria": "How to show companies"
+      },
+      "foundInLastRun": "found in the last run",
+      "ruledOut": "Ruled out",
+      "ruledOutWhy": "Ruled out: {reason}"
     },
     "company": {
       "updateDealFailed": "Could not update the deal",
@@ -318,6 +329,9 @@
       "staff": "{size} staff",
       "noPeopleYet": "No people found yet",
       "addPeople": "Add people to outreach",
+      "simulate": "Simulate buyers",
+      "simulateHint": "Open Scenarios with this company as the prospects the simulated people come from.",
+      "simulateSubject": "How would {name}, and businesses like it, respond to what we offer?",
       "excludedNote": "Excluded. It will not appear in future runs and cannot be added to outreach.",
       "excludedNoteReason": "Excluded: {reason}. It will not appear in future runs and cannot be added to outreach.",
       "notProfiled": "Not profiled yet",
@@ -376,7 +390,16 @@
       "offeringFromProfile": "Drafted from your company profile. Edit it to fit this group of customers.",
       "submit": "Find companies",
       "failed": "Could not start the search",
-      "defaultName": "{buyers} · {where}"
+      "defaultName": "{buyers} · {where}",
+      "intent": {
+        "aria": "What to look for",
+        "partners": "Find buyers",
+        "companies": "Find companies like this"
+      },
+      "describe": "Describe the companies",
+      "describePlaceholder": "Tech companies worth $3B or more, consumer or enterprise",
+      "describeHint": "Industry, size, stage, anything else that matters. Every company found is checked against this.",
+      "whereHintCompanies": "A city, a state or a country. Separate several with “;”. Nearby cities in the same area count."
     }
   },
   "brand": {

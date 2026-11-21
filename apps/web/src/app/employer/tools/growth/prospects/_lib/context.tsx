@@ -37,6 +37,8 @@ const Ctx = createContext<ProspectsContextValue | null>(null);
 
 const SEGMENT_KEY = "prospects:segment";
 const SAMPLE_KEY = "prospects:sample";
+/** How often a running run is checked: often enough to feel live, without crowding out the screens' own requests. */
+const RUN_POLL_MS = 2000;
 
 function readSamplePreference(): boolean {
     try {
@@ -90,7 +92,7 @@ export function ProspectsProvider({
     const runRes = useResource(
         activeRunId ? `run:${activeRunId}` : null,
         () => prospectsApi.run(activeRunId!),
-        { pollMs: activeRunId ? 1000 : null }
+        { pollMs: activeRunId ? RUN_POLL_MS : null }
     );
     const activeRun = runRes.data?.run ?? null;
 

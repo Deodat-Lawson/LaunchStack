@@ -12,6 +12,7 @@ import {
     createKeylessPorts,
     enrichCandidate,
     failRun,
+    fillPicturesAfterRun,
     finalizeRun,
     prepareRun,
     type EnrichCandidateResult,
@@ -36,12 +37,21 @@ function toErrorMessage(error: unknown): string {
     }
 }
 
+/** Candidates researched at once in a live run (a model call and page reads each). */
+const ENRICH_PARALLEL = 5;
+
 export const distributionRunJob = inngest.createFunction(
     {
         id: "distribution-run",
         name: "Distribution Discovery Run",
         retries: 1,
-        concurrency: [{ key: "event.data.companyId", limit: 2 }, { limit: 8 }],
+        // Inngest counts running steps, not runs: two runs per workspace, each
+        // researching ENRICH_PARALLEL companies at once. At "2" a single run
+        // only ever researched two companies at a time.
+        concurrency: [
+            { key: "event.data.companyId", limit: 2 * ENRICH_PARALLEL },
+            { limit: 4 * ENRICH_PARALLEL },
+        ],
         onFailure: async ({ error, event }) => {
             const parsed = DistributionRunEventDataSchema.safeParse(event.data.event.data);
             if (!parsed.success) {
@@ -123,18 +133,34 @@ export const distributionRunJob = inngest.createFunction(
             inWorkspace(async () => prepareRun(ctx, await ports()))
         );
 
+        // Candidates are researched ENRICH_PARALLEL at a time: each is a model
+        // and a few page reads (~30s), so one by one a 25-company run took
+        // over ten minutes. Step ids stay `enrich-<index>`, so a retried run
+        // replays finished candidates instead of researching them again.
+        const ids = prepared.candidateRelationshipIds;
         const results: EnrichCandidateResult[] = [];
-        for (const [index, relationshipId] of prepared.candidateRelationshipIds.entries()) {
-            const result = await step.run(`enrich-${index}`, () =>
-                inWorkspace(async () =>
-                    enrichCandidate(ctx, await ports(), {
-                        relationshipId,
-                        profile: prepared.profile,
-                    })
-                )
+        for (let start = 0; start < ids.length; start += ENRICH_PARALLEL) {
+            const group = ids.slice(start, start + ENRICH_PARALLEL);
+            results.push(
+                ...(await Promise.all(
+                    group.map((relationshipId, offset) =>
+                        step.run(`enrich-${start + offset}`, () =>
+                            inWorkspace(async () =>
+                                enrichCandidate(ctx, await ports(), {
+                                    relationshipId,
+                                    profile: prepared.profile,
+                                })
+                            )
+                        )
+                    )
+                ))
             );
-            results.push(result);
         }
+
+        // A picture for every company saved, not only the ones researched.
+        await step.run("pictures", () =>
+            inWorkspace(async () => fillPicturesAfterRun(ctx, await ports()))
+        );
 
         const summary = await step.run("finalize", () =>
             finalizeRun(ctx, prepared, results, new Date(startedAtIso))

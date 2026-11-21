@@ -55,6 +55,8 @@ export const SCENARIO_LIMITS = {
     eventMax: 500,
     questionMax: 600,
     documentsMax: 20,
+    /** Companies a run can be aimed at by hand. */
+    prospectsMax: 25,
 } as const;
 
 /**
@@ -71,6 +73,10 @@ export interface ScenarioSources {
     searchFiles: boolean;
     /** Prospect companies from Growth › Prospects. */
     prospects: boolean;
+    /** Only this Prospects segment's companies; absent or null means all segments. */
+    prospectSegmentId?: string | null;
+    /** Only these companies (Prospects deal ids, at most 25); absent or empty means the best fits. */
+    prospectIds?: string[];
     /** Comments people left on the workspace's social posts. */
     brandComments: boolean;
     /** The company profile (facts the creator can see). */
@@ -135,6 +141,8 @@ export interface ScenarioSourceOptions {
     /** Newest first. */
     documents: ScenarioFileOption[];
     prospects: number;
+    /** Prospects segments with companies, to aim the prospect source at one. */
+    prospectSegments?: Array<{ id: string; name: string; companies: number }>;
     brandComments: number;
     companyProfile: boolean;
     /** The viewer may add files to the workspace from the form. */

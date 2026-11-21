@@ -16,6 +16,7 @@ import {
 
 const NewSegmentSchema = z
     .object({
+        intent: z.enum(["partners", "companies"]).optional(),
         name: z.string().min(1).max(256),
         offering: z.string().min(1).max(4000),
         industries: z.array(z.string().min(1).max(128)).max(20).default([]),

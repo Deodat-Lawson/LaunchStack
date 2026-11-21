@@ -65,6 +65,10 @@ export const distributionPrograms = pgTable(
         // CI compares the migrated table with one built from this file.
         /** Domains of customers the tenant names: lookalike seeds, never prospected themselves. */
         customerDomains: jsonb("customer_domains").$type<string[]>().notNull().default([]),
+        /** "partners" (would buy what the seller offers) or "companies" (match a description). */
+        intent: varchar("intent", { length: 16, enum: ["partners", "companies"] })
+            .notNull()
+            .default("partners"),
     },
     table => ({
         companyIdx: index("distribution_programs_company_idx").on(table.companyId),
@@ -133,6 +137,11 @@ export const partnerOrgs = pgTable(
         categories: jsonb("categories").$type<string[]>().notNull().default([]),
         sizeBand: varchar("size_band", { length: 32 }),
         description: text("description"),
+        /** The homepage's own share image and icon, as it declares them (https). */
+        imageUrl: varchar("image_url", { length: 2048 }),
+        iconUrl: varchar("icon_url", { length: 2048 }),
+        /** When the site was last checked for pictures, found or not. */
+        picturesCheckedAt: timestamp("pictures_checked_at", { withTimezone: true }),
         /** Link to a knowledge-graph organisation entity when one matches. */
         kgEntityId: bigint("kg_entity_id", { mode: "number" }),
         firstSeenRunId: varchar("first_seen_run_id", { length: 256 }),

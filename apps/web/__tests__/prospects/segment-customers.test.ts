@@ -36,6 +36,7 @@ beforeEach(() => {
         hsCodes: [],
         targetTerritories: [{ country: "NL" }],
         partnerKinds: ["distributor"],
+        intent: "partners",
         constraints: null,
         knownPartnerDomains: [],
         customerDomains: [],

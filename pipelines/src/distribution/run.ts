@@ -40,11 +40,14 @@ import {
     type SearchCompaniesPort,
 } from "./gather";
 import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
+import { fillMissingPictures } from "./pictures";
+import { mapInPool } from "./pool";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
 import { bestTerritoryFit, placeLabel } from "./locate";
 import { buildRationaleInput, computeFit, deriveRiskFlags, templateRationale } from "./score";
 import {
     buyerBrief,
+    judgeQuestionFor,
     companyText,
     relevanceOf,
     relevanceShare,
@@ -153,6 +156,12 @@ export interface DistributionPorts {
     embed?: EmbedTexts | null;
     /** Chat-model check of the closest companies; null or absent → none. */
     judgeFit?: JudgeFit | null;
+    /**
+     * Candidates `runDistributionPipeline` researches at once; absent → one at
+     * a time. Each is a different company, so its own site's requests still
+     * come one after another. A durable host schedules its own steps instead.
+     */
+    enrichConcurrency?: number;
 }
 
 /** Companies the model checks per open shortlist place, each round down the ranking. */
@@ -443,6 +452,7 @@ export async function prepareRun(
                             brief: buyerBrief(program, partnerKinds, profile),
                             where: territories.map(placeLabel).join("; "),
                             seller: profile,
+                            question: judgeQuestionFor(program),
                             candidates: batch.map(o => ({
                                 id: o.resolveKey,
                                 name: o.name,
@@ -585,11 +595,20 @@ export async function enrichCandidate(
     if (!program || !org) throw new Error("Program or organisation not found");
 
     const seedUrls = args.seedUrls ?? (org.domain ? [`https://${org.domain}/`] : []);
+    // The picture for the company's card: what its own site declares on the
+    // first of its pages research reads. No extra request.
+    let pictures: { imageUrl: string | null; iconUrl: string | null } | null = null;
+    const readPage = async (url: string) => {
+        const page = await ports.fetchPage(url, ctx.signal);
+        if (!pictures && (page.image || page.icon) && isOwnSite(page.finalUrl, org.domain))
+            pictures = { imageUrl: page.image ?? null, iconUrl: page.icon ?? null };
+        return page;
+    };
     const research = ports.profile ?? runDossierAgent;
     const agentResult: DossierAgentResult = await research(
         {
             model: ports.model,
-            fetchPage: url => ports.fetchPage(url, ctx.signal),
+            fetchPage: readPage,
             searchWeb: ports.searchWeb
                 ? async q =>
                       ports.searchWeb!([
@@ -635,6 +654,8 @@ export async function enrichCandidate(
             hsCodes: program.hsCodes,
         }
     );
+
+    if (pictures) await db.updateOrg(org.id, ctx.companyId, pictures);
 
     // screen (advisory; degradable)
     let screening: ScreeningState = { status: "not_run" };
@@ -692,9 +713,13 @@ export async function enrichCandidate(
     // company that has closed, or turns out not to buy this, must not rank on
     // its website's evidence.
     let rejectedBecause: string | null = null;
+    // For a `companies` list, the check's reason for a yes ("Snap: Santa
+    // Monica tech company, market value about $15B") is the best rationale.
+    let matchReason: string | null = null;
     if (ports.judgeFit) {
         try {
             const verdicts = await ports.judgeFit({
+                question: judgeQuestionFor(program),
                 brief: buyerBrief(program, [relationship.kind], args.profile),
                 where: relationship.territory
                     ? placeLabel(relationship.territory)
@@ -720,6 +745,8 @@ export async function enrichCandidate(
             if (verdict && !verdict.fit) {
                 rejectedBecause = verdict.reason;
                 console.info(`${LOG_PREFIX} research ruled out ${org.name}: ${verdict.reason}`);
+            } else if (verdict?.fit && program.intent === "companies") {
+                matchReason = verdict.reason;
             }
         } catch (error) {
             console.warn(`${LOG_PREFIX} fit check after research failed for ${org.name}:`, error);
@@ -749,8 +776,11 @@ export async function enrichCandidate(
     if (screening.status === "flagged")
         riskFlags.unshift("compliance screening flagged (advisory)");
 
-    let rationale = templateRationale({ breakdown, orgName: org.name, kind: relationship.kind });
-    if (ports.writeRationale) {
+    let rationale =
+        matchReason && !breakdown.excludedBecause
+            ? matchReason
+            : templateRationale({ breakdown, orgName: org.name, kind: relationship.kind });
+    if (ports.writeRationale && !matchReason) {
         try {
             const written = await ports.writeRationale(
                 buildRationaleInput({
@@ -924,13 +954,14 @@ export async function runDistributionPipeline(
     const startedAt = new Date();
     try {
         const prepared = await prepareRun(ctx, ports);
-        const enriched: EnrichCandidateResult[] = [];
-        for (const relationshipId of prepared.candidateRelationshipIds) {
-            if (ctx.signal?.aborted) break;
-            enriched.push(
-                await enrichCandidate(ctx, ports, { relationshipId, profile: prepared.profile })
-            );
-        }
+        const enriched = await mapInPool(
+            prepared.candidateRelationshipIds,
+            ports.enrichConcurrency ?? 1,
+            relationshipId =>
+                enrichCandidate(ctx, ports, { relationshipId, profile: prepared.profile }),
+            () => ctx.signal?.aborted ?? false
+        );
+        await fillPicturesAfterRun(ctx, ports);
         return await finalizeRun(ctx, prepared, enriched, startedAt);
     } catch (error) {
         await failRun(ctx, error instanceof Error ? error.message : String(error));
@@ -939,3 +970,32 @@ export async function runDistributionPipeline(
 }
 
 export type { RelationshipRecord, ProgramRecord };
+
+/** Whether a page is on the organisation's own domain (or a subdomain of it). */
+function isOwnSite(url: string, domain: string | null): boolean {
+    if (!domain) return false;
+    try {
+        const host = new URL(url).hostname.toLowerCase().replace(/^www\./, "");
+        const own = domain.toLowerCase().replace(/^www\./, "");
+        return host === own || host.endsWith(`.${own}`);
+    } catch {
+        return false;
+    }
+}
+
+/**
+ * A picture for every company the run saved, not only the ones researched:
+ * after enrichment, sites still without one are read for theirs. Never fails
+ * the run; whatever is left is picked up by the next run or the backfill.
+ */
+export async function fillPicturesAfterRun(
+    ctx: Pick<RunContext, "companyId" | "signal">,
+    ports: Pick<DistributionPorts, "fetchPage">
+): Promise<{ checked: number; found: number }> {
+    try {
+        return await fillMissingPictures(ctx.companyId, url => ports.fetchPage(url, ctx.signal));
+    } catch (error) {
+        console.warn(`${LOG_PREFIX} filling company pictures failed:`, error);
+        return { checked: 0, found: 0 };
+    }
+}

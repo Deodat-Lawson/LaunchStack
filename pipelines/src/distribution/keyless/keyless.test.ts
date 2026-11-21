@@ -44,6 +44,7 @@ const program: ProgramRecord = {
     constraints: null,
     knownPartnerDomains: [],
     customerDomains: [],
+    intent: "partners",
     status: "active",
     createdAt: new Date("2026-09-01T00:00:00Z"),
     updatedAt: null,
@@ -757,6 +758,7 @@ describe("keyless ports", () => {
         expect(ports.creditsPerCandidate).toBe(0);
         expect(ports.compliance).toBeNull();
         expect(ports.profile).toBeDefined();
+        expect(ports.enrichConcurrency).toBe(5);
         await expect(
             ports.model.respond({ system: "", transcript: [], tools: [] })
         ).rejects.toThrow(/no model/);

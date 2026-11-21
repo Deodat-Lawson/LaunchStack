@@ -19,7 +19,7 @@
  * categoryCoverage) and the run says so.
  */
 import type { SellerProfile } from "./plan";
-import type { PartnerKind, ProgramRecord } from "./types";
+import type { PartnerKind, ProgramIntent, ProgramRecord } from "./types";
 import { categoryCoverage, textTerms } from "./score";
 
 export type EmbedTexts = (texts: string[]) => Promise<number[][]>;
@@ -37,7 +37,19 @@ export type JudgeFit = (args: {
     /** The company's profile and knowledge base: what it sells and to whom. */
     seller?: SellerContext | null;
     candidates: Array<{ id: string; name: string; text: string }>;
+    /**
+     * `buyer` (default): would it buy what the seller offers? `match`: does it
+     * match the description in the brief (a `companies` segment)?
+     */
+    question?: JudgeQuestion;
 }) => Promise<Map<string, FitVerdict>>;
+
+export type JudgeQuestion = "buyer" | "match";
+
+/** The judge question a segment asks of each company. */
+export function judgeQuestionFor(program: { intent?: ProgramIntent }): JudgeQuestion {
+    return program.intent === "companies" ? "match" : "buyer";
+}
 
 /** What every company is compared against so the model's baseline cancels out. */
 export const BASELINE_TEXT = "A business.";
@@ -53,10 +65,24 @@ const SELLER_IN_BRIEF = 500;
  * own profile: the text companies are matched against.
  */
 export function buyerBrief(
-    program: Pick<ProgramRecord, "offering" | "categories" | "constraints">,
+    program: Pick<ProgramRecord, "offering" | "categories" | "constraints"> & {
+        intent?: ProgramIntent;
+    },
     partnerKinds: readonly PartnerKind[],
     seller?: SellerContext | null
 ): string {
+    // A `companies` segment describes the companies themselves: match that,
+    // with no seller, product or partner role in the way.
+    if (program.intent === "companies")
+        return [
+            `Companies matching this description: ${program.offering.trim()}`,
+            program.categories.length > 0
+                ? `Industries or kinds: ${program.categories.join(", ")}.`
+                : "",
+            program.constraints ? `Not wanted: ${program.constraints}` : "",
+        ]
+            .filter(Boolean)
+            .join(" ");
     return [
         `Businesses that would buy, stock or resell what this seller offers: ${program.offering.trim()}`,
         program.categories.length > 0

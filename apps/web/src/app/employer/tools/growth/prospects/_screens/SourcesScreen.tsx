@@ -22,8 +22,10 @@ export function SourcesScreen() {
     const word = useCopyText();
     const errorText = useErrorText();
     const { segmentId, reloadSegments } = useProspects();
-    const res = useResource(segmentId ? `sources:${segmentId}` : null, () =>
-        prospectsApi.sources(segmentId!)
+    const res = useResource(
+        segmentId ? `sources:${segmentId}` : null,
+        () => prospectsApi.sources(segmentId!),
+        { keepAcrossMounts: true }
     );
     const sources = res.data?.sources ?? [];
     const on = sources.filter(s => s.enabled && s.available).length;
@@ -58,7 +60,7 @@ export function SourcesScreen() {
                         return (
                             <div
                                 key={s.id}
-                                className="border-line-2 @max-md:grid-cols-[1fr_auto] grid grid-cols-[1fr_200px_auto] items-center gap-4 border-t px-4 py-3 first:border-t-0"
+                                className="border-line-2 grid grid-cols-[1fr_200px_auto] items-center gap-4 border-t px-4 py-3 first:border-t-0 @max-md:grid-cols-[1fr_auto]"
                             >
                                 <div className="min-w-0">
                                     <div className="flex items-center gap-2">
@@ -93,7 +95,7 @@ export function SourcesScreen() {
                                         </div>
                                     )}
                                 </div>
-                                <div className="text-ink-3 @max-md:hidden text-xs tabular-nums">
+                                <div className="text-ink-3 text-xs tabular-nums @max-md:hidden">
                                     {s.lastYield ? (
                                         <>
                                             {s.kind === "signal"

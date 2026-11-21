@@ -15,6 +15,7 @@ import {
     Underline,
 } from "lucide-react";
 import { useState } from "react";
+import { Bar, BarChart, CartesianGrid, XAxis } from "recharts";
 import { toast } from "sonner";
 
 import LoadingPage from "~/app/_components/loading";
@@ -29,6 +30,20 @@ import { Alert, AlertDescription, AlertTitle } from "~/components/ui/alert";
 import { Avatar, AvatarFallback } from "~/components/ui/avatar";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardDescription,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "~/components/ui/card";
+import {
+    ChartContainer,
+    ChartTooltip,
+    ChartTooltipContent,
+    type ChartConfig,
+} from "~/components/ui/chart";
 import { Checkbox } from "~/components/ui/checkbox";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { ConfirmDialog } from "~/components/ui/confirm-dialog";
@@ -56,6 +71,7 @@ import { Label } from "~/components/ui/label";
 import { Popover, PopoverContent, PopoverTrigger } from "~/components/ui/popover";
 import { Progress } from "~/components/ui/progress";
 import { RadioGroup, RadioGroupItem } from "~/components/ui/radio-group";
+import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/components/ui/resizable";
 import { ScrollArea } from "~/components/ui/scroll-area";
 import {
     Select,
@@ -106,6 +122,25 @@ const EVIDENCE: CiteEvidence[] = [
         href: null,
     },
 ];
+
+/** Renewals per month, for the chart specimen. */
+const MONTHS = [
+    { month: "Dec", renewals: 2 },
+    { month: "Jan", renewals: 3 },
+    { month: "Feb", renewals: 2 },
+    { month: "Mar", renewals: 1 },
+];
+
+/**
+ * Series colours are tokens with a dark-theme variant, the way Models &
+ * usage sets them (usage/format.ts SERIES_THEMES), so a chart follows the theme.
+ */
+const CHART_CONFIG: ChartConfig = {
+    renewals: {
+        label: "Renewals",
+        theme: { light: "var(--accent)", dark: "oklch(from var(--accent-2) 0.62 c h)" },
+    },
+};
 
 /** A box that is a right-click target, the way a row declares itself. */
 function MenuTargetDemo() {
@@ -637,6 +672,63 @@ export function ComponentsSection() {
                                 </div>
                             </ScrollArea>
                         </div>
+                    </Specimen>
+                </div>
+                <div className="@max-lg:grid-cols-1 grid grid-cols-3 gap-3">
+                    <Specimen
+                        source="~/components/ui/card — Card, CardHeader, CardContent, CardFooter"
+                        note="Only when a block needs a header, a body and a footer of actions. A plain group of content is the bordered panel."
+                    >
+                        <Card className="gap-3 py-4">
+                            <CardHeader className="px-4">
+                                <CardTitle className="text-sm">Harbor Cloud</CardTitle>
+                                <CardDescription className="text-xs">
+                                    Renews 31 December
+                                </CardDescription>
+                            </CardHeader>
+                            <CardContent className="text-ink-2 px-4 text-[13px]">
+                                Fees rise by no more than 7% on renewal.
+                            </CardContent>
+                            <CardFooter className="px-4">
+                                <Button size="sm" variant="outline">
+                                    Record decision
+                                </Button>
+                            </CardFooter>
+                        </Card>
+                    </Specimen>
+                    <Specimen
+                        source="~/components/ui/chart — ChartContainer (recharts)"
+                        note="Series colours are tokens with a dark variant; labels and a tooltip carry the numbers, never colour alone."
+                    >
+                        <ChartContainer config={CHART_CONFIG} className="h-36 w-full">
+                            <BarChart data={MONTHS} margin={{ left: 0, right: 0, top: 4 }}>
+                                <CartesianGrid vertical={false} />
+                                <XAxis dataKey="month" tickLine={false} axisLine={false} />
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <Bar dataKey="renewals" fill="var(--color-renewals)" radius={4} />
+                            </BarChart>
+                        </ChartContainer>
+                    </Specimen>
+                    <Specimen
+                        source="~/components/ui/resizable — ResizablePanelGroup, ResizablePanel, ResizableHandle"
+                        note="A split inside one screen (a list beside its preview). Workspace panes are StudioSplitView's job, never this."
+                    >
+                        <ResizablePanelGroup
+                            direction="horizontal"
+                            className="border-line h-36 rounded-md border"
+                        >
+                            <ResizablePanel defaultSize={45} minSize={25}>
+                                <div className="text-ink-3 flex h-full items-center justify-center text-xs">
+                                    List
+                                </div>
+                            </ResizablePanel>
+                            <ResizableHandle withHandle />
+                            <ResizablePanel defaultSize={55} minSize={25}>
+                                <div className="text-ink-3 flex h-full items-center justify-center text-xs">
+                                    Preview
+                                </div>
+                            </ResizablePanel>
+                        </ResizablePanelGroup>
                     </Specimen>
                 </div>
                 <DoDont

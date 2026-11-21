@@ -42,6 +42,9 @@ import { parseDoc } from "../model/serialize";
 import { EditorStore, type ChromeDepth, type EditorState } from "../model/store";
 import { paintNewTopics } from "../model/topicStyle";
 import type { Point, ShapeId } from "../model/types";
+import { flowVariantUi } from "../variants";
+import { activeFlowLook, dressBox, FLOW_LOOKS } from "../variants/looks";
+import type { FlowVariantId } from "../variants/types";
 import { BottomBar } from "./BottomBar";
 import { Canvas } from "./Canvas";
 import { useContextTarget } from "~/components/context-menu";
@@ -109,6 +112,11 @@ export interface MindmapEditorProps {
      */
     initialChrome?: ChromeDepth;
     /**
+     * A flowchart direction to try (`variants/`). Only the dev harness passes
+     * one; the product never does, so its editor is unchanged.
+     */
+    flowVariant?: FlowVariantId;
+    /**
      * Where the top bar's back arrow goes. The workspace mounts the editor
      * in place and hands it "return to the preview"; the standalone route
      * leaves it unset and gets a link to the library.
@@ -132,9 +140,14 @@ export function MindmapEditor(props: MindmapEditorProps) {
         const created = new EditorStore(parseDoc(props.initialDoc, props.initialTitle));
         // How much chrome to open with: an explicit request, else what this
         // person last chose for this kind of diagram, else the kind's default.
+        // A direction being tried opens with its own.
         const kind = created.getState().doc.settings.kind;
+        created.setFlowVariant(props.flowVariant ?? null);
         created.setChromeDepth(
-            props.initialChrome ?? readChromeDepth(kind) ?? defaultChromeDepth(kind)
+            props.initialChrome ??
+                (props.flowVariant ? FLOW_LOOKS[props.flowVariant].chrome : undefined) ??
+                readChromeDepth(kind) ??
+                defaultChromeDepth(kind)
         );
         return created;
     });
@@ -180,6 +193,14 @@ export function MindmapEditor(props: MindmapEditorProps) {
         () => store.getState().selection.length > 0,
         () => false
     );
+    // The flowchart direction being tried, if any (dev harness only).
+    const variantUi = useSyncExternalStore(
+        useCallback((cb: () => void) => store.subscribe(cb), [store]),
+        () => flowVariantUi(store),
+        () => null
+    );
+    const VariantPanel = presenting ? undefined : variantUi?.SidePanel;
+    const VariantOverlay = presenting ? undefined : variantUi?.StageOverlay;
     const everything = chromeDepth === "everything";
     const leftShown = leftOpen && everything;
     // The inspector is a property sheet. With nothing selected it has no
@@ -434,7 +455,9 @@ export function MindmapEditor(props: MindmapEditorProps) {
             const world = worldPointAt(e.clientX, e.clientY);
 
             if (shape) {
-                const node = createNodeAt(shape as ShapeId, world, { mode: docMode(store) });
+                const dropped = createNodeAt(shape as ShapeId, world, { mode: docMode(store) });
+                const look = activeFlowLook(store.getState());
+                const node = look ? dressBox(look, dropped, docMode(store)) : dropped;
                 store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {
                     label: "Add shape",
                 });
@@ -589,8 +612,14 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                 minSize={30}
                                 className="flex min-h-0"
                             >
+                                {VariantPanel && (
+                                    <aside className="border-line bg-panel flex min-h-0 w-[300px] shrink-0 flex-col border-r">
+                                        <VariantPanel canvasSize={stageSize} />
+                                    </aside>
+                                )}
                                 <div
                                     ref={stageRef}
+                                    data-mindmap-stage=""
                                     className="relative flex min-h-0 min-w-0 flex-1"
                                     onDragOver={e => {
                                         const types = e.dataTransfer.types;
@@ -626,6 +655,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                         canvasSize={stageSize}
                                         onPasteOutline={() => setImportOpen(true)}
                                     />
+                                    {VariantOverlay && <VariantOverlay canvasSize={stageSize} />}
 
                                     <FindBar
                                         open={findOpen}

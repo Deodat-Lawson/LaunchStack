@@ -21,6 +21,7 @@ import {
 import {
     docMode,
     edgesMovingWith,
+    insertEdge,
     insertShape,
     removeBend,
     scaleNodesToBounds,
@@ -41,6 +42,7 @@ import {
     rectsIntersect,
     screenToWorld,
     snap as snapValue,
+    worldToScreen,
     zoomAt,
 } from "../model/geometry";
 import { isContainer, shapeDef, shapeHoldsText } from "../model/shapes";
@@ -49,6 +51,8 @@ import { angleFromCentre, resizeBounds, resizeNode, type ResizeHandle } from "..
 import { computeSnap, SNAP_THRESHOLD } from "../model/snapping";
 import type { EditorStore } from "../model/store";
 import { useIsActive } from "./EditorContext";
+import { flowVariantUi } from "../variants";
+import { activeFlowLook, dressBox, edgeOptions } from "../variants/looks";
 import type {
     DiagramEdge,
     DiagramNode,
@@ -1345,7 +1349,9 @@ export function useCanvasInteractions(
                 }
 
                 case "connect": {
-                    const spawned = finishConnect(store, g, world);
+                    const spawned = finishConnect(store, g, world, w =>
+                        stagePoint(svgRef.current, store.getState().viewport, w)
+                    );
                     if (spawned && shapeHoldsText(spawned.shape)) {
                         cb.current.onEditText({ kind: "node", id: spawned.id });
                     }
@@ -1358,7 +1364,7 @@ export function useCanvasInteractions(
                     const shape = g.insertShape ?? "rectangle";
                     let insertedId: string;
                     if (g.moved && rect && rect.w > 8 && rect.h > 8) {
-                        const node = createNode({
+                        const drawn = createNode({
                             shape,
                             mode: docMode(store),
                             x: rect.x,
@@ -1366,6 +1372,10 @@ export function useCanvasInteractions(
                             w: rect.w,
                             h: rect.h,
                         });
+                        const look = activeFlowLook(store.getState());
+                        const node = look
+                            ? dressBox(look, drawn, docMode(store), { keepSize: true })
+                            : drawn;
                         store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {
                             transient: true,
                         });
@@ -1504,10 +1514,23 @@ export function useCanvasInteractions(
             // Empty canvas: drop a box where they clicked and start typing — a
             // topic on a mindmap, a process step on a flowchart.
             const world = toWorld(e.clientX, e.clientY);
+            const variant = flowVariantUi(store);
+            if (
+                variant?.onCanvasDoubleClick?.(store, {
+                    world,
+                    screen: stagePoint(svgRef.current, state.viewport, world),
+                })
+            ) {
+                return;
+            }
             const flow = worksAsFlow(state.doc.settings.kind);
-            const node = createNodeAt(flow ? "process" : "mind-branch", world, {
-                mode: docMode(store),
-            });
+            const look = activeFlowLook(state);
+            const made = createNodeAt(
+                look ? look.stepShape : flow ? "process" : "mind-branch",
+                world,
+                { mode: docMode(store) }
+            );
+            const node = look ? dressBox(look, made, docMode(store)) : made;
             store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {
                 label: flow ? "Add step" : "Add topic",
             });
@@ -1643,7 +1666,31 @@ function reparentIntoContainers(store: EditorStore, movedIds: readonly string[])
  *
  * Whatever is drawn ends up selected, so Delete takes it straight back.
  */
-function finishConnect(store: EditorStore, g: Gesture, world: Point): DiagramNode | null {
+/**
+ * Where a board point sits on the editor's stage (the element marked
+ * `data-mindmap-stage`), in CSS px from its top-left — where a direction's
+ * `StageOverlay` positions a menu. The canvas can sit below rulers, so the
+ * <svg>'s own offset inside the stage is added.
+ */
+function stagePoint(
+    svg: SVGSVGElement | null,
+    viewport: { x: number; y: number; zoom: number },
+    world: Point
+): Point {
+    const onSvg = worldToScreen(viewport, world);
+    const stage = svg?.closest("[data-mindmap-stage]");
+    if (!svg || !stage) return onSvg;
+    const a = svg.getBoundingClientRect();
+    const b = stage.getBoundingClientRect();
+    return { x: onSvg.x + a.left - b.left, y: onSvg.y + a.top - b.top };
+}
+
+function finishConnect(
+    store: EditorStore,
+    g: Gesture,
+    world: Point,
+    toStage: (world: Point) => Point
+): DiagramNode | null {
     const state = store.getState();
     const drag = state.drag;
     const hoverNodeId = drag.kind === "connect" ? drag.hoverNodeId : null;
@@ -1691,15 +1738,46 @@ function finishConnect(store: EditorStore, g: Gesture, world: Point): DiagramNod
         world.x <= home.x + home.w + reach &&
         world.y >= home.y - reach &&
         world.y <= home.y + home.h + reach;
+    const variant = flowVariantUi(store);
     if (!targetNodeId) {
-        if (!g.moved || backHome || (fromDot && travelled < MIN_CONNECT_DRAG)) {
+        const click = !g.moved || (fromDot && travelled < MIN_CONNECT_DRAG);
+        if (click || backHome) {
             store.cancelInteraction();
+            // A direction being tried may answer a plain click on a dot (or
+            // on its own marks carrying `data-port`).
+            if (click && fromNodeId && variant?.onPortClick?.(store, fromNodeId, g.fromPort)) {
+                return null;
+            }
             if (fromDot && source) store.selectNodes([source.id]);
             return null;
         }
         if (fromDot && source?.shape.startsWith("mind-")) {
             created = nextTopicLike(store, source, world);
             targetNodeId = created.id;
+        } else if (fromNodeId && variant?.onConnectDropInSpace) {
+            // An arrow let go over empty space: the direction decides what
+            // goes there. The drag is undone first, so whatever it makes is
+            // its own undo step; declining leaves the editor's dangling arrow.
+            store.cancelInteraction();
+            const handled = variant.onConnectDropInSpace(store, {
+                sourceId: fromNodeId,
+                port: g.fromPort,
+                world,
+                screen: toStage(world),
+            });
+            if (!handled) {
+                const look = activeFlowLook(store.getState());
+                insertEdge(
+                    store,
+                    createEdge({
+                        from: { nodeId: fromNodeId, port: "auto" },
+                        to: { point: world },
+                        kind: state.doc.settings.defaultEdgeKind,
+                        ...(look ? edgeOptions(look, docMode(store)) : {}),
+                    })
+                );
+            }
+            return null;
         }
     }
 
@@ -1713,12 +1791,14 @@ function finishConnect(store: EditorStore, g: Gesture, world: Point): DiagramNod
     // is (pinned too, a drop on the near dot of a box behind it made the line
     // leave by the far side and U-turn round its own box).
     const pinned = targetNodeId !== null && created === null && hoverPort !== null;
+    const look = activeFlowLook(state);
     const edge = createEdge({
         from: fromNodeId ? { nodeId: fromNodeId, port: "auto" } : { point: g.origin },
         to: targetNodeId
             ? { nodeId: targetNodeId, port: pinned ? (hoverPort as PortId) : "auto" }
             : { point: world },
         kind: state.doc.settings.defaultEdgeKind,
+        ...(look ? edgeOptions(look, docMode(store)) : {}),
     });
 
     store.updatePage(

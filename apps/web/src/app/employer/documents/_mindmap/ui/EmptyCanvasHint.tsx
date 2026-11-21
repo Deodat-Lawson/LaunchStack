@@ -11,6 +11,8 @@ import { activePage, worksAsFlow } from "../model/doc";
 import { screenToWorld } from "../model/geometry";
 import { isDarkSurface } from "../model/palette";
 import type { EditorState } from "../model/store";
+import { useFlowVariantUi } from "../variants";
+import { activeFlowLook } from "../variants/looks";
 import styles from "./Canvas.module.css";
 import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
@@ -58,16 +60,20 @@ export function EmptyCanvasHint({
     const depth = useEditor(selectDepth);
     const presenting = useEditor(selectPresenting);
     const viewport = useEditor(selectViewport);
+    const VariantHint = useFlowVariantUi()?.EmptyHint;
 
     const flow = worksAsFlow(doc.settings.kind);
     if ((!flow && depth !== "focus") || presenting) return null;
     const page = activePage(doc);
     if (page.nodes.length > 0) return null;
+    // A flowchart direction being tried may say it its own way.
+    if (VariantHint) return <VariantHint canvasSize={canvasSize} />;
 
     const start = () => {
         const at = screenToWorld(viewport, { x: canvasSize.w / 2, y: canvasSize.h / 2 });
         if (flow) {
-            const id = insertShape(store, FIRST_STEP_SHAPE, at);
+            const look = activeFlowLook(store.getState());
+            const id = insertShape(store, look?.stepShape ?? FIRST_STEP_SHAPE, at);
             store.setEditing({ kind: "node", id });
             return;
         }

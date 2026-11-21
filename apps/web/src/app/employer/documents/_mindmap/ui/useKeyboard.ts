@@ -28,6 +28,7 @@ import {
     zoomToSelection,
 } from "../model/commands";
 import { activePage, isTopicShape, nodeById, worksAsFlow, type NavDirection } from "../model/doc";
+import { flowVariantUi } from "../variants";
 import { shapeHoldsText } from "../model/shapes";
 import type { EditorStore } from "../model/store";
 import type { DiagramNode, ShapeId, ToolId } from "../model/types";
@@ -130,6 +131,9 @@ export function useKeyboard(store: EditorStore, actions: KeyboardActions): void 
                 }
                 return;
             }
+
+            // A flowchart direction being tried (`variants/`) gets first say.
+            if (flowVariantUi(store)?.onKeyDown?.(e, store)) return;
 
             const mod = e.metaKey || e.ctrlKey;
             const shift = e.shiftKey;

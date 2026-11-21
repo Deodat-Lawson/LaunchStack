@@ -16,6 +16,7 @@ import { shapeTextBox } from "../model/shapes";
 import { fontFamilyCss, layoutText } from "../model/text";
 import type { EditorState } from "../model/store";
 import type { DiagramNode } from "../model/types";
+import { flowVariantUi } from "../variants";
 import { registerEditorField, useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
@@ -275,6 +276,13 @@ export function TextEditorOverlay() {
                 e.stopPropagation();
                 // An IME composing a word owns Enter: it confirms the word.
                 if (e.nativeEvent.isComposing) return;
+                // A flowchart direction being tried (`variants/`) gets first say.
+                if (
+                    node &&
+                    flowVariantUi(store)?.onFieldKeyDown?.(e, { store, nodeId: node.id, commit })
+                ) {
+                    return;
+                }
                 if (e.key === "Escape") {
                     e.preventDefault();
                     // Escape means "I'm done", not "throw that away": people

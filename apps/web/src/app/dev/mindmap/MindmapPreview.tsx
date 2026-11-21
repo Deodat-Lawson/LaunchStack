@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { DriftShell } from "~/app/employer/_chrome/DriftShell";
 import { ToolsStudioShell } from "~/app/employer/_chrome/ToolsStudioShell";
@@ -8,6 +9,12 @@ import { buildTemplate } from "~/app/employer/documents/_mindmap/model/templates
 import { applyThemeToDoc } from "~/app/employer/documents/_mindmap/model/theme";
 import { MindmapEditor } from "~/app/employer/documents/_mindmap/ui/MindmapEditor";
 import { MindmapPreview as ReadOnlyMindmap } from "~/app/employer/documents/_mindmap/ui/MindmapPreview";
+import {
+    FLOW_VARIANT_IDS,
+    isFlowVariantId,
+    type FlowVariantId,
+} from "~/app/employer/documents/_mindmap/variants/types";
+import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
 /**
  * Local harness for the mindmap editor. It reproduces the real chrome chain —
@@ -22,6 +29,10 @@ import { MindmapPreview as ReadOnlyMindmap } from "~/app/employer/documents/_min
  * `?chrome=focus|everything` overrides the chrome depth the document's kind
  * would pick (see the mindmap README, "Chrome depths"). `?board=dark` and
  * `?theme=<id>` pick the board's lighting and theme.
+ *
+ * `?variant=a|b|c|d` tries a flowchart direction (`_mindmap/variants/`) on a
+ * blank flowchart, with a switcher pinned to the bottom of the page. The
+ * switcher shows on any flowchart, so "Today" is one click away.
  */
 
 /**
@@ -73,7 +84,10 @@ export function MindmapPreview() {
     }, []);
 
     const preview = query?.get("view") === "preview";
-    const template = query ? (query.get("template") ?? "mindmap") : null;
+    const variantParam = query?.get("variant");
+    const variant = isFlowVariantId(variantParam) ? variantParam : null;
+    // A direction is tried on a blank flowchart unless a template is named.
+    const template = query ? (query.get("template") ?? (variant ? "blank" : "mindmap")) : null;
     // The document's kind picks the chrome depth (a mindmap opens in focus,
     // a flowchart in everything); `?chrome=focus|everything` overrides it.
     const chromeParam = query?.get("chrome");
@@ -89,7 +103,18 @@ export function MindmapPreview() {
         if (!template) return null;
         const built = buildTemplate(template, "Preview mindmap", board);
         return themeId ? applyThemeToDoc(built, themeId) : built;
-    }, [template, board, themeId]);
+        // `variant` is a dependency on purpose: switching starts a fresh board.
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [template, board, themeId, variant]);
+
+    const pickVariant = useCallback((next: FlowVariantId | null) => {
+        const params = new URLSearchParams(window.location.search);
+        if (next) params.set("variant", next);
+        else params.delete("variant");
+        window.history.replaceState(null, "", `${window.location.pathname}?${params}`);
+        setQuery(params);
+    }, []);
+    const showSwitcher = !preview && doc !== null && doc.settings.kind !== "mindmap";
 
     return (
         <div style={{ minHeight: "100vh", width: "100%" }}>
@@ -98,7 +123,7 @@ export function MindmapPreview() {
                     {doc && preview && <ReadOnlyMindmap key={template} doc={doc} />}
                     {doc && !preview && (
                         <MindmapEditor
-                            key={template}
+                            key={`${template}:${variant ?? "today"}`}
                             mindmapId={1}
                             initialDoc={doc}
                             initialTitle={doc.title}
@@ -107,10 +132,64 @@ export function MindmapPreview() {
                             publishedDocumentId={null}
                             author="Preview user"
                             initialChrome={chrome}
+                            flowVariant={variant ?? undefined}
                         />
                     )}
                 </ToolsStudioShell>
             </DriftShell>
+            {showSwitcher && <VariantSwitcher value={variant} onChange={pickVariant} />}
+        </div>
+    );
+}
+
+/**
+ * Pick the flowchart direction to try. Pinned above the editor's bottom bar,
+ * outside the editor so switching remounts it on a fresh board.
+ */
+function VariantSwitcher({
+    value,
+    onChange,
+}: {
+    value: FlowVariantId | null;
+    onChange: (next: FlowVariantId | null) => void;
+}) {
+    const t = useTranslations("mindmap.variants");
+    return (
+        <div
+            data-variant-switcher=""
+            className="border-line bg-panel fixed bottom-12 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-xl border px-3 py-2 shadow-lg"
+        >
+            <span
+                className="text-ink-3 hidden whitespace-nowrap text-[12px] md:inline"
+                title={t("switcher.hint")}
+            >
+                {t("switcher.label")}
+            </span>
+            <ToggleGroup
+                type="single"
+                size="sm"
+                value={value ?? "today"}
+                onValueChange={next => {
+                    if (!next) return;
+                    onChange(isFlowVariantId(next) ? next : null);
+                }}
+                aria-label={t("switcher.label")}
+            >
+                <ToggleGroupItem value="today" className="px-2.5 text-[12.5px]">
+                    {t("switcher.today")}
+                </ToggleGroupItem>
+                {FLOW_VARIANT_IDS.map(id => (
+                    <ToggleGroupItem
+                        key={id}
+                        value={id}
+                        title={t(`${id}.blurb`)}
+                        className="gap-1.5 px-2.5 text-[12.5px]"
+                    >
+                        <span className="font-semibold">{id.toUpperCase()}</span>
+                        <span className="hidden sm:inline">{t(`${id}.name`)}</span>
+                    </ToggleGroupItem>
+                ))}
+            </ToggleGroup>
         </div>
     );
 }

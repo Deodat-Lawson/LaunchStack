@@ -903,5 +903,28 @@
     "expandFailed": "Couldn't suggest subtopics just now. Try again.",
     "topicGone": "That topic was deleted while the suggestions were on their way.",
     "expandUndo": "Expand with AI"
+  },
+  "variants": {
+    "switcher": {
+      "label": "Flowchart direction",
+      "today": "Today",
+      "hint": "Each direction starts a fresh blank flowchart."
+    },
+    "a": {
+      "name": "Keyboard flow",
+      "blurb": "Tab and Enter draw the chart; it lays itself out top to bottom."
+    },
+    "b": {
+      "name": "Quick-add arrows",
+      "blurb": "Hover a box for + arrows on every side: click to add, drag to pick."
+    },
+    "c": {
+      "name": "Drop and pick",
+      "blurb": "Drag an arrow into space and pick what goes there."
+    },
+    "d": {
+      "name": "Write it, see it",
+      "blurb": "Type the steps as lines and the chart draws itself."
+    }
   }
 }

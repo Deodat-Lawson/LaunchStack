@@ -73,6 +73,7 @@ import type { CommitOptions, EditorStore } from "./store";
 import { restyleMovedTopics } from "./topicStyle";
 import { sizeForText } from "./grow";
 import { layoutText } from "./text";
+import { activeFlowLook, dressBox, edgeOptions } from "../variants/looks";
 import type {
     ArrowId,
     DiagramEdge,
@@ -129,7 +130,14 @@ export function insertShape(
     at: Point,
     opts: { text?: string; w?: number; h?: number; parentId?: string | null } = {}
 ): string {
-    const node = createNodeAt(shape, at, { ...opts, mode: docMode(store) });
+    const made = createNodeAt(shape, at, { ...opts, mode: docMode(store) });
+    // A flowchart direction being tried dresses every new box alike.
+    const look = activeFlowLook(store.getState());
+    const node = look
+        ? dressBox(look, made, docMode(store), {
+              keepSize: opts.w !== undefined || opts.h !== undefined,
+          })
+        : made;
     const paletteId = store.getState().doc.settings.paletteId;
     store.updatePage(page => addPainted(page, [node], paletteId), {
         label: `Add ${shapeDef(shape).name}`,
@@ -981,6 +989,7 @@ export function commitNodeText(store: EditorStore, start: DiagramNode, text: str
     }
     if (text === current.text) return;
     const grown = sizeForText(start, text);
+    const look = activeFlowLook(store.getState());
     store.group("Edit text", () => {
         store.updatePage(
             page =>
@@ -988,7 +997,11 @@ export function commitNodeText(store: EditorStore, start: DiagramNode, text: str
                     const next = { ...nd, ...grown, text };
                     // A text mark hugs its words: nobody sizes a caption first
                     // and types second, so its height follows them both ways.
-                    return nd.shape === "text" ? fitToLabel(next) : next;
+                    const fitted = nd.shape === "text" ? fitToLabel(next) : next;
+                    // A direction being tried may change a box with its words
+                    // (a question becoming a decision), in this same step.
+                    const patch = look?.afterText?.(fitted, text);
+                    return patch ? { ...fitted, ...patch } : fitted;
                 }),
             { label: "Edit text", coalesceKey: `text:${start.id}` }
         );
@@ -1245,9 +1258,13 @@ function dominant(v: Point): FlowStep {
  * in, else the way its existing arrows already leave, else to the right —
  * reading order, and the long side of a screen.
  */
-export function flowDirection(page: DiagramPage, nodeId: string): FlowStep {
+export function flowDirection(
+    page: DiagramPage,
+    nodeId: string,
+    fallback: FlowStep = "right"
+): FlowStep {
     const node = nodeById(page, nodeId);
-    if (!node) return "right";
+    if (!node) return fallback;
     const here = nodeCenter(node);
     const idx = graphIndex(page);
     for (const id of idx.in.get(nodeId) ?? []) {
@@ -1264,7 +1281,7 @@ export function flowDirection(page: DiagramPage, nodeId: string): FlowStep {
             return dominant({ x: c.x - here.x, y: c.y - here.y });
         }
     }
-    return "right";
+    return fallback;
 }
 
 /** Gap between a box and the step Tab adds after it. */
@@ -1282,8 +1299,11 @@ export function addNextStep(store: EditorStore, sourceId: string): string | null
     const source = nodeById(page, sourceId);
     if (!source) return null;
 
+    const look = activeFlowLook(store.getState());
+    const mode = docMode(store);
     // A mindmap's centre is a filled pill; a step after it is a plain topic.
-    const shape = source.shape === "mind-root" ? "mind-branch" : source.shape;
+    const shape =
+        look?.nextShape?.(source) ?? (source.shape === "mind-root" ? "mind-branch" : source.shape);
     const def = shapeDef(shape);
     // Same size as the box it follows, unless that box grew to hold a long
     // label — then the shape's own size, since the new box starts empty.
@@ -1294,12 +1314,14 @@ export function addNextStep(store: EditorStore, sourceId: string): string | null
             const need = sizeForText(asDrawn, source.text);
             return need.w > def.defaultSize.w || need.h > def.defaultSize.h;
         })();
+    const lookSize = look?.boxLook(shape, mode).size;
     const size =
-        source.shape === "mind-root" || grewForText
+        lookSize ??
+        (source.shape === "mind-root" || grewForText
             ? { w: def.defaultSize.w, h: def.defaultSize.h }
-            : { w: source.w, h: source.h };
+            : { w: source.w, h: source.h });
 
-    const dir = flowDirection(page, sourceId);
+    const dir = flowDirection(page, sourceId, look?.direction ?? "right");
     const c = nodeCenter(source);
     const step = {
         right: { x: 1, y: 0 },
@@ -1330,12 +1352,14 @@ export function addNextStep(store: EditorStore, sourceId: string): string | null
         );
     for (let i = 0; i < 24 && occupied(at); i++) at = { x: at.x + aside.x, y: at.y + aside.y };
 
-    const mode = docMode(store);
     const created = createNodeAt(shape, at, { mode, w: size.w, h: size.h });
+    // Under a direction being tried, a step wears that direction's look for
+    // its shape; otherwise it copies the box it follows.
+    const dressed = look ? dressBox(look, created, mode, { keepSize: true }) : undefined;
     const next: DiagramNode = {
         ...created,
-        style: { ...source.style },
-        textStyle: { ...source.textStyle },
+        style: dressed ? dressed.style : { ...source.style },
+        textStyle: dressed ? dressed.textStyle : { ...source.textStyle },
         parentId: source.parentId,
         ...(source.data?.depth !== undefined
             ? { data: { depth: Math.max(1, source.data.depth) } }
@@ -1350,10 +1374,14 @@ export function addNextStep(store: EditorStore, sourceId: string): string | null
     const edge = createEdge({
         from: { nodeId: sourceId, port: "auto" },
         to: { nodeId: next.id, port: "auto" },
-        kind: like?.kind ?? store.getState().doc.settings.defaultEdgeKind,
-        style: like ? { ...like.style } : undefined,
-        startArrow: like?.startArrow,
-        endArrow: like ? (like.endArrow === "none" ? "arrow" : like.endArrow) : undefined,
+        ...(look
+            ? edgeOptions(look, mode)
+            : {
+                  kind: like?.kind ?? store.getState().doc.settings.defaultEdgeKind,
+                  style: like ? { ...like.style } : undefined,
+                  startArrow: like?.startArrow,
+                  endArrow: like ? (like.endArrow === "none" ? "arrow" : like.endArrow) : undefined,
+              }),
     });
 
     store.group("Add step", () => {
@@ -1370,6 +1398,10 @@ export function addNextStep(store: EditorStore, sourceId: string): string | null
                 ),
             { label: "Add step" }
         );
+        // A direction that lays the chart out for you does it here, in the
+        // same undo step as the box.
+        const relayout = look?.relayout;
+        if (relayout) store.updatePage(p => relayout(p, next.id), { label: "Add step" });
     });
     store.selectNodes([next.id]);
     store.setEditing({ kind: "node", id: next.id });

@@ -14,6 +14,7 @@
 
 import { activePage, updatePage } from "./doc";
 import { MAX_ZOOM, MIN_ZOOM, clamp } from "./geometry";
+import type { FlowVariantId } from "../variants/types";
 import type { SnapGuide } from "./snapping";
 import type {
     DiagramPage,
@@ -116,6 +117,11 @@ export interface EditorState {
     presenting: boolean;
     chromeDepth: ChromeDepth;
     /**
+     * The flowchart direction being tried (`variants/`), or null — always null
+     * in the product. Only the dev harness mounts the editor with one.
+     */
+    flowVariant: FlowVariantId | null;
+    /**
      * Branch ids shown as collapsed without being written to the document.
      * Presenting folds and unfolds through this, so a presentation never
      * dirties the file it is showing.
@@ -186,6 +192,7 @@ export class EditorStore {
             saving: false,
             presenting: false,
             chromeDepth: "everything",
+            flowVariant: null,
             folded: NO_FOLDS,
             canUndo: false,
             canRedo: false,
@@ -599,6 +606,10 @@ export class EditorStore {
 
     setChromeDepth(chromeDepth: ChromeDepth): void {
         this.set({ chromeDepth });
+    }
+
+    setFlowVariant(flowVariant: FlowVariantId | null): void {
+        this.set({ flowVariant });
     }
 
     setFolded(ids: Iterable<string>): void {

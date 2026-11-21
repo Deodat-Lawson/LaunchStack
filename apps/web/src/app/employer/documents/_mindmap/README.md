@@ -206,6 +206,32 @@ On a flowchart:
 On a freeform drawing (imports, untyped documents) Tab steps from any box
 that is not a topic, and topics keep the outliner's keys.
 
+## Flowchart directions (prototypes)
+
+Four ways of making and joining boxes on a flowchart are being tried side by
+side so one can be picked and built properly: **A Keyboard flow**, **B
+Quick-add arrows**, **C Drop and pick** and **D Write it, see it**. Open
+`/dev/mindmap?variant=a` (or `b`, `c`, `d`); a switcher pinned to the bottom
+of the page moves between them and back to **Today**.
+
+They live in `variants/`, one folder each, and plug into the editor through
+one switch, `EditorState.flowVariant`. It is null unless the editor is mounted
+with `flowVariant`, which only the dev harness does, so the product editor is
+unchanged. A direction has two halves (`variants/types.ts`):
+
+- a **look** (`FlowLook`, pure): the box and arrow every creation path makes
+  (`dressBox`, `edgeOptions` in `variants/looks.ts`, read by `insertShape`,
+  `addNextStep`, the double-click, the drawn rectangle, the palette drop and a
+  drawn connector), the way the flow runs, an optional re-layout after a step
+  is added, and an optional change a label can make to its box;
+- a **UI** (`FlowVariantUi`): first say over canvas keys and label-field keys,
+  a double-click on empty canvas, a click on a dot, an arrow let go over empty
+  space, plus marks on the canvas, a stage overlay, a docked panel and its own
+  empty-page prompt.
+
+Every hook is skipped when no direction is set or the document is not worked
+as a flowchart.
+
 ## Boxes that grow with their text
 
 Typing into a box makes it as big as its words need (`model/grow.ts`): it

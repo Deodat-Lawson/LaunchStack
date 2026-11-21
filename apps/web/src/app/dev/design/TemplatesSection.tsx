@@ -58,17 +58,27 @@ export function TemplatesSection() {
         setRequest({ at, nonce: nonce.current });
     };
     const px = WIDTHS.find(w => w.id === width)!.px;
-    const pane = useRef<HTMLDivElement | null>(null);
-    const [paneWidth, setPaneWidth] = useState(0);
+    // The room the pane has, read from the box around it rather than from the
+    // pane, whose width animates: reading the pane flashed a warning on the
+    // way from Phone to Full.
+    const stage = useRef<HTMLDivElement | null>(null);
+    const [room, setRoom] = useState(0);
     useEffect(() => {
-        const el = pane.current;
+        const el = stage.current;
         if (!el || typeof ResizeObserver === "undefined") return;
-        const observer = new ResizeObserver(() =>
-            setPaneWidth(Math.round(el.getBoundingClientRect().width))
-        );
+        const measure = () => {
+            const cs = getComputedStyle(el);
+            setRoom(
+                Math.floor(
+                    el.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight)
+                )
+            );
+        };
+        const observer = new ResizeObserver(measure);
         observer.observe(el);
         return () => observer.disconnect();
     }, []);
+    const paneWidth = Math.min(px, room);
 
     return (
         <DocSection
@@ -105,6 +115,7 @@ export function TemplatesSection() {
                     </Control>
                     <Control label="Width">
                         <ToggleGroup
+                            className="max-w-full flex-wrap"
                             type="single"
                             size="sm"
                             variant="outline"
@@ -125,6 +136,7 @@ export function TemplatesSection() {
                     </Control>
                     <Control label="State">
                         <ToggleGroup
+                            className="max-w-full flex-wrap"
                             type="single"
                             size="sm"
                             variant="outline"
@@ -146,12 +158,14 @@ export function TemplatesSection() {
                     {/* The real width, so a narrow window can't pass for a full tab. */}
                     <span className="text-ink-3 text-xs tabular-nums">
                         Pane {paneWidth}px
-                        {paneWidth < px && " — widen the window for the full width"}
+                        {room > 0 && room < px && " — widen the window for the full width"}
                     </span>
                 </div>
-                <div className="bg-surface-2 border-line overflow-x-auto rounded-lg border p-3">
+                <div
+                    ref={stage}
+                    className="bg-surface-2 border-line overflow-x-auto rounded-lg border p-3"
+                >
                     <div
-                        ref={pane}
                         data-template-pane
                         className="border-line mx-auto h-[780px] overflow-hidden rounded-md border transition-[width] duration-200 [container-type:inline-size]"
                         style={{ width: px, maxWidth: "100%" }}
@@ -295,7 +309,7 @@ export function TemplatesSection() {
 
 function Control({ label, children }: { label: string; children: React.ReactNode }) {
     return (
-        <div className="flex items-center gap-2">
+        <div className="flex min-w-0 max-w-full flex-wrap items-center gap-2">
             <span className="text-ink-3 text-xs">{label}</span>
             {children}
         </div>

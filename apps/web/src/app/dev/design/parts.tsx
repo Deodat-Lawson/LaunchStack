@@ -196,7 +196,7 @@ export function RefTable({ head, rows }: { head: string[]; rows: ReactNode[][] }
 
 export function Code({ children }: { children: ReactNode }) {
     return (
-        <code className="bg-panel-2 text-ink rounded-sm px-1 py-px font-mono text-[12px]">
+        <code className="bg-panel-2 text-ink rounded-sm px-1 py-px font-mono text-[12px] [overflow-wrap:anywhere]">
             {children}
         </code>
     );

@@ -305,7 +305,7 @@ export async function readWeeklyReviewStream(
         if (!event || typeof event !== "object" || result)
             throw new VantageApiError("review_unavailable", 503, event);
         if (event.type === "stage") {
-            if (!["gathering", "writing", "checking", "saving"].includes(event.stage))
+            if (!["gathering", "exploring", "writing", "checking", "saving"].includes(event.stage))
                 throw new VantageApiError("review_unavailable", 503, event);
             try {
                 onStage?.(event.stage);

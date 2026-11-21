@@ -96,7 +96,9 @@ export function ReviewCitationDialog({
                         </p>
                         {evidence.scope ? (
                             <p className="text-ink-2 text-[length:var(--fs-small)]">
-                                {evidence.scope.coverage.qualification}
+                                {evidence.scope.topicExcerpt
+                                    ? t("founder.topicExcerptQualification")
+                                    : evidence.scope.coverage.qualification}
                             </p>
                         ) : null}
                         <Collapsible>

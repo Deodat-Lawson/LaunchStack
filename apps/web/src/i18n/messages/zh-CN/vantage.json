@@ -670,6 +670,8 @@
       "confirmCommitment": "创建承诺",
       "cancel": "取消",
       "commitmentLink": "打开承诺",
+      "topicExcerptQualification": "\u6765\u81ea\u8be5\u786e\u5207\u7d22\u5f15\u7248\u672c\u7684\u9009\u5b9a\u6458\u5f55\u3002",
+      "excerptOffsets": "使用的摘录，字符 {start}–{end}",
       "sourcesUsed": "使用的来源",
       "otherReadable": "可读取但未被选入此报告",
       "sourceVersion": "{title} · 第 {version} 版",
@@ -685,6 +687,7 @@
       "purposeOther": "支持来源",
       "generation": {
         "starting": "开始回顾",
+        "exploring": "探索主题",
         "gathering": "正在收集来源",
         "writing": "正在撰写报告",
         "checking": "正在检查报告",

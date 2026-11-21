@@ -71,6 +71,7 @@ export function ReportSources({
                                 proof.units?.some(unit => unit.ref === source.ref)
                             )?.title ??
                             t("founder.unknownSource");
+                        const topicExcerpt = proof.authorityRevision?.startsWith("topic-first:");
                         return (
                             <section key={proof.documentId + proof.scopeHash} className="space-y-2">
                                 <h3 className="font-semibold">
@@ -79,8 +80,35 @@ export function ReportSources({
                                         version: proof.parentVersion,
                                     })}
                                 </h3>
+                                {topicExcerpt ? (
+                                    <ul className="space-y-3" data-testid="review-used-excerpts">
+                                        {proof.units.map(unit => {
+                                            const source =
+                                                review.evidence.inputSnapshot?.sources.find(
+                                                    item => item.ref === unit.ref
+                                                );
+                                            return (
+                                                <li key={unit.ref} className="space-y-1">
+                                                    <p>
+                                                        {t("founder.excerptOffsets", {
+                                                            start: unit.start,
+                                                            end: unit.end,
+                                                        })}
+                                                    </p>
+                                                    <blockquote className="border-line whitespace-pre-wrap break-words border-l-2 pl-3">
+                                                        {source?.text}
+                                                    </blockquote>
+                                                </li>
+                                            );
+                                        })}
+                                    </ul>
+                                ) : null}
                                 <p>{t(proof.coverage.state)}</p>
-                                <p>{proof.coverage.qualification}</p>
+                                <p>
+                                    {topicExcerpt
+                                        ? t("founder.topicExcerptQualification")
+                                        : proof.coverage.qualification}
+                                </p>
                                 <p>
                                     {t("coverageUnits", {
                                         included: proof.coverage.includedUnits,

@@ -73,6 +73,9 @@ export function inspectFrozenEvidence(evidence: unknown, ref: string) {
                       anchors: unit.anchors,
                       coverage: proof.coverage,
                       offsetEncoding: proof.offsetEncoding,
+                      ...(proof.authorityRevision?.startsWith("topic-first:")
+                          ? { topicExcerpt: true as const }
+                          : {}),
                   }
                 : null,
     };

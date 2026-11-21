@@ -15,7 +15,7 @@ import type {
 } from "./weekly-review-evidence-inspection";
 
 export type { WeeklyReviewSourceScope };
-export type WeeklyReviewStage = "gathering" | "writing" | "checking" | "saving";
+export type WeeklyReviewStage = "gathering" | "exploring" | "writing" | "checking" | "saving";
 export type WeeklyReviewDto = Omit<ReadWeeklyReview, "report" | "evidence"> & {
     report: Omit<WeeklyReviewV21, "topics"> & {
         topics: (WeeklyReviewV21["topics"][number] & { id: string })[];

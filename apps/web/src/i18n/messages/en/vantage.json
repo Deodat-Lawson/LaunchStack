@@ -670,6 +670,8 @@
       "confirmCommitment": "Create commitment",
       "cancel": "Cancel",
       "commitmentLink": "Open commitments",
+      "excerptOffsets": "Excerpt used, characters {start}–{end}",
+      "topicExcerptQualification": "Selected excerpts from the exact indexed version.",
       "sourcesUsed": "Sources used",
       "otherReadable": "Readable, but not selected for this report",
       "sourceVersion": "{title} — version {version}",
@@ -685,6 +687,7 @@
       "purposeOther": "Supporting source",
       "generation": {
         "starting": "Starting review",
+        "exploring": "Exploring topics",
         "gathering": "Gathering sources",
         "writing": "Writing the report",
         "checking": "Checking the report",

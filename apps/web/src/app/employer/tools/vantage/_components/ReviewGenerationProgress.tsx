@@ -8,7 +8,7 @@ import type { WeeklyReviewStage } from "../api";
 import type { ReviewGeneration } from "../_lib/useWeeklyReviewData";
 import s from "./review-layout.module.css";
 
-const stages: WeeklyReviewStage[] = ["gathering", "writing", "checking", "saving"];
+const stages: WeeklyReviewStage[] = ["gathering", "exploring", "writing", "checking", "saving"];
 
 export function ReviewGenerationProgress({ generation }: { generation: ReviewGeneration }) {
     const t = useTranslations("vantage.weeklyReview");
@@ -51,47 +51,60 @@ export function ReviewGenerationProgress({ generation }: { generation: ReviewGen
                     aria-label={t("founder.generation.progressLabel")}
                     className="grid gap-3 sm:grid-cols-4"
                 >
-                    {stages.map(item => {
-                        const failed = error !== null && failedStage === item;
-                        const active = running && stage === item;
-                        const done = visitedStages.includes(item) && !failed && !active;
-                        const state = failed
-                            ? "failedStatus"
-                            : active
-                              ? "active"
-                              : done
-                                ? "done"
-                                : "pending";
-                        const Icon = failed
-                            ? XCircle
-                            : active
-                              ? LoaderCircle
-                              : done
-                                ? CheckCircle2
-                                : Circle;
-                        return (
-                            <li
-                                key={item}
-                                data-stage={item}
-                                data-state={state}
-                                className={cn(
-                                    s.stage,
-                                    "flex min-w-0 items-center gap-2",
-                                    failed ? "text-danger" : active ? "text-brand" : "text-ink-2"
-                                )}
-                            >
-                                <Icon
-                                    aria-hidden="true"
+                    {stages
+                        .filter(
+                            item =>
+                                item !== "exploring" ||
+                                stage === "exploring" ||
+                                visitedStages.includes("exploring")
+                        )
+                        .map(item => {
+                            const failed = error !== null && failedStage === item;
+                            const active = running && stage === item;
+                            const done = visitedStages.includes(item) && !failed && !active;
+                            const state = failed
+                                ? "failedStatus"
+                                : active
+                                  ? "active"
+                                  : done
+                                    ? "done"
+                                    : "pending";
+                            const Icon = failed
+                                ? XCircle
+                                : active
+                                  ? LoaderCircle
+                                  : done
+                                    ? CheckCircle2
+                                    : Circle;
+                            return (
+                                <li
+                                    key={item}
+                                    data-stage={item}
+                                    data-state={state}
                                     className={cn(
-                                        "size-4 shrink-0",
-                                        active && "motion-reduce:animate-none"
+                                        s.stage,
+                                        "flex min-w-0 items-center gap-2",
+                                        failed
+                                            ? "text-danger"
+                                            : active
+                                              ? "text-brand"
+                                              : "text-ink-2"
                                     )}
-                                />
-                                <span>{t(`founder.generation.${item}`)}</span>
-                                <span className="sr-only">{t(`founder.generation.${state}`)}</span>
-                            </li>
-                        );
-                    })}
+                                >
+                                    <Icon
+                                        aria-hidden="true"
+                                        className={cn(
+                                            "size-4 shrink-0",
+                                            active && "motion-reduce:animate-none"
+                                        )}
+                                    />
+                                    <span>{t(`founder.generation.${item}`)}</span>
+                                    <span className="sr-only">
+                                        {t(`founder.generation.${state}`)}
+                                    </span>
+                                </li>
+                            );
+                        })}
                 </ol>
             </CardContent>
         </Card>

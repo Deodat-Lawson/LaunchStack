@@ -207,11 +207,13 @@ export function ContractsScreen() {
             <PageHeader
                 title={t("title")}
                 sub={
+                    // A skeleton only while loading: after a failure it would
+                    // promise data that is not coming.
                     contracts.status === "ready" ? (
                         t("sub", { count: list.length, sources })
-                    ) : (
+                    ) : contracts.status === "loading" ? (
                         <Skeleton className="h-3 w-48" />
-                    )
+                    ) : undefined
                 }
                 actions={newButton}
             />

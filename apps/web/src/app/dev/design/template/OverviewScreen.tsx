@@ -77,9 +77,9 @@ export function OverviewScreen() {
                             date: f.longDate(quarterEnd),
                             decide: decide.length,
                         })
-                    ) : (
+                    ) : contracts.status === "loading" ? (
                         <Skeleton className="h-3 w-64" />
-                    )
+                    ) : undefined
                 }
                 actions={newButton}
             />

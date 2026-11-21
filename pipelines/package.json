@@ -1,7 +1,7 @@
 {
   "name": "@launchstack/pipelines",
   "version": "0.1.0",
-  "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Thirteen verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals, and Vantage (the weekly founder-meeting loop).",
+  "description": "The compositions \u00e2\u20ac\u201d level two: chains of LaunchStack bricks toward business outcomes. Thirteen verticals: marketing, email outreach, founder weekly review, legal templates, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals, and Vantage (the weekly founder-meeting loop).",
   "license": "Apache-2.0",
   "type": "module",
   "sideEffects": false,
@@ -70,7 +70,11 @@
     "./accelerators/types": "./src/proposals/accelerators/types.ts",
     "./vantage/scoped-evidence": "./src/vantage/scoped-evidence.ts",
     "./vantage/weekly-review-v21": "./src/vantage/weekly-review-v21.ts",
-    "./vantage/weekly-review-validation": "./src/vantage/weekly-review-validation.ts"
+    "./vantage/weekly-review-validation": "./src/vantage/weekly-review-validation.ts",
+    "./vantage/role-aware-ranking": "./src/vantage/role-aware-ranking.ts",
+    "./vantage/internal-retrieval-decision": "./src/vantage/internal-retrieval-decision.ts",
+    "./vantage/dynamic-retrieval-v3": "./src/vantage/dynamic-retrieval-v3.ts",
+    "./vantage/topic-retrieval-v1": "./src/vantage/topic-retrieval-v1.ts"
   },
   "files": [
     "dist",
@@ -318,6 +322,22 @@
       "./vantage/weekly-review-validation": {
         "types": "./dist/vantage/weekly-review-validation.d.ts",
         "default": "./dist/vantage/weekly-review-validation.js"
+      },
+      "./vantage/role-aware-ranking": {
+        "types": "./dist/vantage/role-aware-ranking.d.ts",
+        "default": "./dist/vantage/role-aware-ranking.js"
+      },
+      "./vantage/internal-retrieval-decision": {
+        "types": "./dist/vantage/internal-retrieval-decision.d.ts",
+        "default": "./dist/vantage/internal-retrieval-decision.js"
+      },
+      "./vantage/dynamic-retrieval-v3": {
+        "types": "./dist/vantage/dynamic-retrieval-v3.d.ts",
+        "default": "./dist/vantage/dynamic-retrieval-v3.js"
+      },
+      "./vantage/topic-retrieval-v1": {
+        "types": "./dist/vantage/topic-retrieval-v1.d.ts",
+        "default": "./dist/vantage/topic-retrieval-v1.js"
       }
     }
   },

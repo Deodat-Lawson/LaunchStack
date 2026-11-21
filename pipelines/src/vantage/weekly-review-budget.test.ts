@@ -430,3 +430,74 @@ describe("weekly review deterministic preflight", () => {
         );
     });
 });
+
+const topicTrial = () => {
+    const input = trialInput();
+    input.retrievalContext = {
+        schemaVersion: "vantage-topic-retrieval/v1",
+        mode: "topic-first",
+        guidanceLabel: "owner notes, not evidence",
+        topics: [],
+        seedReasons: [],
+        lane: { outcome: "none_eligible", candidates: 0, admitted: 0 },
+        traceHash: "a".repeat(64),
+    };
+    input.sources.forEach(source => {
+        source.text += " ".repeat(Math.max(0, 5000 - source.text.length));
+    });
+    return input;
+};
+it("topic-first admits larger evidence with its own budget", () => {
+    const input = topicTrial();
+    const budget = calculateWeeklyReviewBudget(input, "topic-first");
+    expect(budget.feasible).toBe(true);
+    expect(budget.reportReserveBytes).toBe(8000);
+    expect(calculateWeeklyReviewBudget(input, "internal-v1").feasible).toBe(false);
+});
+it("topic-first caps frozen UTF-8 evidence at 80000 bytes", () => {
+    const input = topicTrial();
+    input.sources.forEach(source => {
+        source.text = "\u4e2d".repeat(6000);
+    });
+    expect(calculateWeeklyReviewBudget(input, "topic-first").reasons).toContain(
+        "evidence_budget_exceeded"
+    );
+});
+it("topic-first generation timeout fails before Judge dispatch", async () => {
+    const ports = injectedPorts();
+    const invoke = vi.fn(() => new Promise(() => {}));
+    await expect(
+        runWeeklyReviewV21(topicTrial(), {
+            ...ports,
+            invoke: invoke as never,
+            budgetProfile: "topic-first",
+            generationTimeoutMs: 5,
+        })
+    ).rejects.toThrow("provider_timeout");
+    expect(ports.authorizeDispatch.mock.calls.map(call => call[0])).toEqual(["generation"]);
+});
+it("topic-first sends large evaluation input through injected Judge", async () => {
+    const ports = injectedPorts();
+    const result = await runWeeklyReviewV21(topicTrial(), {
+        ...ports,
+        invoke: ports.invoke as never,
+        budgetProfile: "topic-first",
+    });
+    expect(result.evidence.budget?.profile).toBe("topic-first");
+});
+it("topic-first Judge timeout fails cleanly after generation", async () => {
+    const ports = injectedPorts();
+    await expect(
+        runWeeklyReviewV21(topicTrial(), {
+            ...ports,
+            invoke: ports.invoke as never,
+            budgetProfile: "topic-first",
+            judgeTimeoutMs: 5,
+            validationJudge: { ...ports.validationJudge, evaluate: () => new Promise(() => {}) },
+        })
+    ).rejects.toThrow("judge_admission_failed");
+    expect(ports.authorizeDispatch.mock.calls.map(call => call[0])).toEqual([
+        "generation",
+        "judge",
+    ]);
+});

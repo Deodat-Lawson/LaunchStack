@@ -29,8 +29,11 @@ export function fingerprint(value: unknown): string {
         .update(JSON.stringify(stable(value)))
         .digest("hex");
 }
-export function parseEvaluationInput(raw: unknown): EvaluationInput {
-    if (Buffer.byteLength(JSON.stringify(raw) ?? "", "utf8") > MAX_EVALUATION_INPUT_BYTES)
+export function parseEvaluationInput(
+    raw: unknown,
+    maxInputBytes = MAX_EVALUATION_INPUT_BYTES
+): EvaluationInput {
+    if (Buffer.byteLength(JSON.stringify(raw) ?? "", "utf8") > maxInputBytes)
         throw new Error(
             "Evaluation input exceeds 14000 bytes; explicitly prepare smaller scenario excerpts. Nothing was truncated."
         );

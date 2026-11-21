@@ -26,6 +26,16 @@ import {
 } from "./dynamic-retrieval-v3";
 export type { WeeklyReviewRetrievalContext } from "./dynamic-retrieval-v3";
 
+import { TopicRetrievalContextSchema, type TopicRetrievalContext } from "./topic-retrieval-v1";
+const validateRetrieval = (raw: WeeklyReviewInput["retrievalContext"]) =>
+    raw?.schemaVersion === "vantage-topic-retrieval/v1"
+        ? TopicRetrievalContextSchema.parse(raw)
+        : validateWeeklyReviewRetrievalContext(raw);
+const topicInput = (input: WeeklyReviewInput) =>
+    input.retrievalContext?.schemaVersion === "vantage-topic-retrieval/v1";
+const evaluationLimit = (input: WeeklyReviewInput) =>
+    topicInput(input) ? 240000 : MAX_EVALUATION_INPUT_BYTES;
+
 const text = (max: number) => z.string().trim().min(1).max(max);
 const ref = text(200);
 const fact = z.object({ text: text(600), refs: z.array(ref).min(1).max(8) }).strict();
@@ -101,7 +111,7 @@ export interface WeeklyReviewInput {
     role: string;
     mandatoryCoverage: { required: number; included: number };
     scopedEvidence?: PreparedScopedEvidence["dependency"][];
-    retrievalContext?: WeeklyReviewRetrievalContext;
+    retrievalContext?: WeeklyReviewRetrievalContext | TopicRetrievalContext;
     sources: {
         ref: string;
         version: string;
@@ -166,8 +176,7 @@ export function validateWeeklyReviewV21(raw: unknown, input: WeeklyReviewInput):
 }
 /** Structural binding only. The host must revalidate current authority and full parent hashes. */
 export function validateScopedWeeklyReviewInput(input: WeeklyReviewInput): void {
-    if (input.retrievalContext !== undefined)
-        validateWeeklyReviewRetrievalContext(input.retrievalContext);
+    if (input.retrievalContext !== undefined) validateRetrieval(input.retrievalContext);
     if (input.scopedEvidence === undefined) {
         if (input.sources.some(source => source.ref.startsWith("unit:")))
             throw Error("scoped_evidence_required");
@@ -184,7 +193,10 @@ export function weeklyReviewEvaluation(
     input: WeeklyReviewInput
 ): EvaluationInput {
     validateScopedWeeklyReviewInput(input);
-    return parseEvaluationInput(projectWeeklyReviewEvaluation(report, input));
+    return parseEvaluationInput(
+        projectWeeklyReviewEvaluation(report, input),
+        evaluationLimit(input)
+    );
 }
 /** Recompute exact evaluation and Judge transport bytes for persisted admission verification. */
 export function weeklyReviewAdmissionBytes(report: WeeklyReviewV21, input: WeeklyReviewInput) {
@@ -327,10 +339,17 @@ const preflightReport = (input: WeeklyReviewInput): WeeklyReviewV21 => ({
         },
     ],
 });
-export type WeeklyReviewBudgetProfile = "legacy" | "internal-v1" | "scoped-v2";
+export type WeeklyReviewBudgetProfile = "legacy" | "internal-v1" | "scoped-v2" | "topic-first";
 export const WEEKLY_REVIEW_BUDGET_LIMITS = Object.freeze({
     generationInputBytes: 12000,
     judgeInputBytes: MAX_EVALUATION_INPUT_BYTES,
+    sourceCount: 16,
+    sourceChars: 6000,
+});
+export const TOPIC_FIRST_BUDGET_LIMITS = Object.freeze({
+    generationInputBytes: 200000,
+    judgeInputBytes: 240000,
+    sourceTextBytes: 80000,
     sourceCount: 16,
     sourceChars: 6000,
 });
@@ -339,8 +358,9 @@ export function calculateWeeklyReviewBudget(
     input: WeeklyReviewInput,
     profile: WeeklyReviewBudgetProfile = "legacy"
 ) {
-    if (input.retrievalContext !== undefined)
-        validateWeeklyReviewRetrievalContext(input.retrievalContext);
+    const limits =
+        profile === "topic-first" ? TOPIC_FIRST_BUDGET_LIMITS : WEEKLY_REVIEW_BUDGET_LIMITS;
+    if (input.retrievalContext !== undefined) validateRetrieval(input.retrievalContext);
     const inputBytes = Buffer.byteLength(JSON.stringify(input));
     const sourceTextBytes = input.sources.reduce(
         (bytes, source) => bytes + Buffer.byteLength(source.text),
@@ -357,27 +377,38 @@ export function calculateWeeklyReviewBudget(
     const evaluationOverhead =
         Buffer.byteLength(JSON.stringify(preview)) -
         Buffer.byteLength(JSON.stringify(preview.actual));
-    const maxReportBytes = Math.floor(
-        (WEEKLY_REVIEW_BUDGET_LIMITS.judgeInputBytes - evaluationOverhead - 512) / 2
-    );
+    const maxReportBytes = Math.floor((limits.judgeInputBytes - evaluationOverhead - 512) / 2);
     // internal-v1 is an explicit experiment design choice, not an empirically optimal reserve.
-    const reportReserveBytes = profile === "internal-v1" || profile === "scoped-v2" ? 2800 : 1500;
+    const reportReserveBytes =
+        profile === "topic-first"
+            ? 8000
+            : profile === "internal-v1" || profile === "scoped-v2"
+              ? 2800
+              : 1500;
     const reasons: string[] = [];
     if (
         input.mandatoryCoverage.required !== input.mandatoryCoverage.included ||
         input.mandatoryCoverage.required < 1 ||
         !input.sources.length ||
-        input.sources.length > WEEKLY_REVIEW_BUDGET_LIMITS.sourceCount ||
+        input.sources.length > limits.sourceCount ||
         input.sources.some(source => !source.text.trim())
     )
         reasons.push("required_context_incomplete");
-    if (inputBytes > WEEKLY_REVIEW_BUDGET_LIMITS.generationInputBytes)
-        reasons.push("input_budget_exceeded");
-    if ((input.scopedEvidence !== undefined) !== (profile === "scoped-v2"))
+    if (profile === "topic-first" && sourceTextBytes > 80000)
+        reasons.push("evidence_budget_exceeded");
+    if (profile === "topic-first" && !topicInput(input)) reasons.push("topic_context_required");
+    if (inputBytes > limits.generationInputBytes) reasons.push("input_budget_exceeded");
+    if (
+        profile !== "topic-first" &&
+        (input.scopedEvidence !== undefined) !== (profile === "scoped-v2")
+    )
         reasons.push("scoped_budget_profile_mismatch");
     try {
         validateScopedWeeklyReviewInput(input);
-        parseEvaluationInput(preview);
+        parseEvaluationInput(
+            preview,
+            profile === "topic-first" ? 240000 : MAX_EVALUATION_INPUT_BYTES
+        );
     } catch {
         reasons.push("evaluation_input_invalid");
     }
@@ -390,14 +421,10 @@ export function calculateWeeklyReviewBudget(
         sourceMetadataBytes,
         sourceArrayBytes,
         sourceSerializedTextBytes,
-        limits: WEEKLY_REVIEW_BUDGET_LIMITS,
-        generationInputRemainingBytes:
-            WEEKLY_REVIEW_BUDGET_LIMITS.generationInputBytes - inputBytes,
+        limits,
+        generationInputRemainingBytes: limits.generationInputBytes - inputBytes,
         evaluationOverheadRemainingBytes:
-            WEEKLY_REVIEW_BUDGET_LIMITS.judgeInputBytes -
-            512 -
-            2 * reportReserveBytes -
-            evaluationOverhead,
+            limits.judgeInputBytes - 512 - 2 * reportReserveBytes - evaluationOverhead,
         evaluationOverhead,
         maxReportBytes,
         reportReserveBytes,
@@ -418,28 +445,38 @@ export async function runWeeklyReviewV21(
         /** Observational only; failures must not alter admission or dispatch. */
         onGenerationComplete?: () => void;
         generationTimeoutMs?: number;
-        budgetProfile?: "internal-v1" | "scoped-v2";
+        budgetProfile?: "internal-v1" | "scoped-v2" | "topic-first";
+        judgeTimeoutMs?: number;
         selectionDiagnostics?: Record<string, unknown>;
     }
 ) {
     const input = structuredClone(rawInput);
+    const topic = ports.budgetProfile === "topic-first";
+    const limits = topic ? TOPIC_FIRST_BUDGET_LIMITS : WEEKLY_REVIEW_BUDGET_LIMITS;
+    const judgeTimeoutMs = Math.max(
+        1,
+        Math.min(topic ? 120000 : 30000, ports.judgeTimeoutMs ?? (topic ? 120000 : 30000))
+    );
     validateScopedWeeklyReviewInput(input);
-    if ((input.scopedEvidence !== undefined) !== (ports.budgetProfile === "scoped-v2"))
+    if (!topic && (input.scopedEvidence !== undefined) !== (ports.budgetProfile === "scoped-v2"))
         throw Error("scoped_budget_profile_mismatch");
     if (ports.generation.modelId === ports.judge.modelId) throw Error("independent_judge_required");
     if (
         input.mandatoryCoverage.required !== input.mandatoryCoverage.included ||
         input.mandatoryCoverage.required < 1 ||
         !input.sources.length ||
-        input.sources.length > WEEKLY_REVIEW_BUDGET_LIMITS.sourceCount ||
+        input.sources.length > limits.sourceCount ||
         input.sources.some(s => !s.text.trim())
     )
         throw Error("required_context_incomplete");
     const invoke = ports.invoke ?? invokeStructuredAttempt;
     const payload = JSON.stringify(input);
-    if (Buffer.byteLength(payload) > WEEKLY_REVIEW_BUDGET_LIMITS.generationInputBytes)
+    if (Buffer.byteLength(payload) > limits.generationInputBytes)
         throw Error("context_budget_exceeded");
-    const timeoutMs = Math.max(1, Math.min(30000, ports.generationTimeoutMs ?? 30000));
+    const timeoutMs = Math.max(
+        1,
+        Math.min(topic ? 90000 : 30000, ports.generationTimeoutMs ?? (topic ? 90000 : 30000))
+    );
     const controller = new AbortController();
     const signal = controller.signal;
     const budget = calculateWeeklyReviewBudget(input, ports.budgetProfile);
@@ -450,7 +487,7 @@ export async function runWeeklyReviewV21(
     if (!budget.feasible) throw Error("context_budget_exceeded");
     await ports.authorizeDispatch("generation");
     if (
-        Buffer.byteLength(payload) > WEEKLY_REVIEW_BUDGET_LIMITS.generationInputBytes ||
+        Buffer.byteLength(payload) > limits.generationInputBytes ||
         !calculateWeeklyReviewBudget(input, ports.budgetProfile).feasible
     )
         throw Error("context_budget_exceeded");
@@ -501,10 +538,10 @@ export async function runWeeklyReviewV21(
     const evaluation = weeklyReviewEvaluation(report, input);
     const evaluationInputBytes = Buffer.byteLength(JSON.stringify(evaluation));
     const judgeInputBytes = Buffer.byteLength(judgeInputPayload(evaluation));
-    if (input.scopedEvidence && judgeInputBytes > WEEKLY_REVIEW_BUDGET_LIMITS.judgeInputBytes)
+    if ((input.scopedEvidence || topic) && judgeInputBytes > limits.judgeInputBytes)
         throw Error("judge_input_budget_exceeded");
     await ports.authorizeDispatch("judge");
-    parseEvaluationInput(evaluation);
+    parseEvaluationInput(evaluation, evaluationLimit(input));
     if (!calculateWeeklyReviewBudget(input, ports.budgetProfile).feasible)
         throw Error("context_budget_exceeded");
     const judge =
@@ -516,10 +553,15 @@ export async function runWeeklyReviewV21(
             evaluationVersion: input.scopedEvidence
                 ? SCOPED_EVALUATION_VERSION
                 : EVALUATION_VERSION,
-            timeoutMs: 30000,
+            timeoutMs: judgeTimeoutMs,
+            maxInputBytes: limits.judgeInputBytes,
             maxOutputTokens: 6000,
         });
-    const assessed = await evaluateVantage(evaluation, { judge, timeoutMs: 31000 });
+    const assessed = await evaluateVantage(evaluation, {
+        judge,
+        timeoutMs: topic ? judgeTimeoutMs + 1000 : 31000,
+        maxInputBytes: limits.judgeInputBytes,
+    });
     if (
         assessed.verdict !== "pass" ||
         assessed.status !== "assessed" ||
@@ -531,7 +573,7 @@ export async function runWeeklyReviewV21(
         report,
         evidence: {
             schemaVersion:
-                ports.budgetProfile === "scoped-v2"
+                ports.budgetProfile === "scoped-v2" || (topic && input.scopedEvidence)
                     ? "vantage-admission/v3"
                     : ports.budgetProfile
                       ? "vantage-admission/v2"

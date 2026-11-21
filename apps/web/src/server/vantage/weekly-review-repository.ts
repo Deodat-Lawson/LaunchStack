@@ -23,6 +23,7 @@ import {
     type WeeklyReviewQuery,
 } from "./weekly-review-types";
 
+import { matchesOffer, type TopicFreeze } from "./weekly-review-topic-freeze";
 import {
     TOPIC_FIRST_LIMITS,
     topicInputHash,
@@ -90,6 +91,34 @@ const hash = (value: unknown) => createHash("sha256").update(JSON.stringify(valu
 function reportReadEvidence(value: unknown): unknown {
     if (!value || typeof value !== "object") return value;
     const evidence = value as Record<string, unknown>;
+    if (evidence.retrievalMode === "topic-first") {
+        const snapshot = evidence.inputSnapshot as WeeklyReviewInput | undefined;
+        const context = snapshot?.retrievalContext;
+        if (context?.schemaVersion !== "vantage-topic-retrieval/v1") return null;
+        const publicSnapshot = {
+            candidateId: snapshot!.candidateId,
+            week: snapshot!.week,
+            asOf: snapshot!.asOf,
+            role: snapshot!.role,
+            mandatoryCoverage: snapshot!.mandatoryCoverage,
+            sources: snapshot!.sources,
+            scopedEvidence: snapshot!.scopedEvidence,
+        };
+        return {
+            schemaVersion: evidence.schemaVersion,
+            inputSnapshot: publicSnapshot,
+            sourceRegistry: evidence.sourceRegistry,
+            scopedEvidence: evidence.scopedEvidence,
+            budget: evidence.budget,
+            retrievalMode: "topic-first",
+            topicRetrieval: {
+                mode: context.mode,
+                lane: context.lane,
+                seedReasons: context.seedReasons,
+                outcome: "frozen",
+            },
+        };
+    }
     if (
         !["vantage-admission/v2", "vantage-admission/v3"].includes(
             String(evidence.schemaVersion)
@@ -379,6 +408,51 @@ export function createWeeklyReviewRepository(
                     [id, TOPIC_FIRST_LIMITS.explorationMs]
                 );
                 return Date.parse(scalarText(claimed?.exploration_deadline_at));
+            });
+        },
+        freezeTopic(
+            actor: WeeklyReviewActor,
+            id: string,
+            build: (query: WeeklyReviewQuery) => Promise<TopicFreeze>
+        ) {
+            return transact(async query => {
+                const row = await rowFor(query, actor, id, true);
+                if (
+                    row.status !== "reserved" ||
+                    row.retrieval_mode !== "topic-first" ||
+                    !row.exploration_dispatched ||
+                    row.snapshot_hash ||
+                    row.generation_dispatched
+                )
+                    throw new WeeklyReviewConflict("dispatch_already_reserved_or_invalid_order");
+                if (Date.now() >= Date.parse(scalarText(row.exploration_deadline_at)))
+                    throw new WeeklyReviewConflict("topic_exploration_failed:timeout");
+                await topicAuthority(query, actor, row);
+                const { manifest } = await checkedManifest(query, id, row);
+                await authority(query, actor, manifest.fixedDependencies, "dispatch");
+                const frozen = await build(query);
+                const snapshotHash = fingerprint(frozen.input);
+                const updated = await query(
+                    `
+                    UPDATE pdr_ai_v2_vantage_weekly_review_runs
+                    SET dependencies=$2::jsonb, snapshot_hash=$3, last_dispatch_at=clock_timestamp()
+                    WHERE id=$1::uuid AND clock_timestamp() < exploration_deadline_at RETURNING id
+                `,
+                    [id, JSON.stringify(frozen.dependencies), snapshotHash]
+                );
+                if (!updated.length)
+                    throw new WeeklyReviewConflict("topic_exploration_failed:timeout");
+                await query(
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_run_manifests SET snapshot_commitment=$2::jsonb WHERE run_id=$1::uuid",
+                    [
+                        id,
+                        JSON.stringify({
+                            snapshotHash,
+                            dependencyHash: fingerprint(frozen.dependencies),
+                        }),
+                    ]
+                );
+                return frozen;
             });
         },
         recordExploration(
@@ -714,6 +788,90 @@ export function createWeeklyReviewRepository(
                     evidence.evaluation.integrityIssues.some(issue => issue.severity === "error")
                 )
                     throw new WeeklyReviewConflict("candidate_admission_invalid");
+                const topicRun = row.retrieval_mode === "topic-first";
+                if (topicRun) {
+                    const { manifest, record } = await checkedManifest(query, id, row);
+                    const snapshot = evidence.inputSnapshot;
+                    const frozen = dependenciesOf(row);
+                    const commitment = record.snapshot_commitment as {
+                        snapshotHash?: string;
+                        dependencyHash?: string;
+                    } | null;
+                    const context = snapshot?.retrievalContext;
+                    if (
+                        !snapshot ||
+                        context?.schemaVersion !== "vantage-topic-retrieval/v1" ||
+                        evidence.schemaVersion === "vantage-admission/v1" ||
+                        snapshot.week !== manifest.week ||
+                        snapshot.asOf !== manifest.asOf ||
+                        snapshot.candidateId !== id ||
+                        manifest.expectedActiveId !== input.expectedActiveId ||
+                        fingerprint(snapshot) !== row.snapshot_hash ||
+                        commitment?.snapshotHash !== row.snapshot_hash ||
+                        commitment?.dependencyHash !== fingerprint(frozen) ||
+                        fingerprint(frozen.slice(0, manifest.fixedDependencies.length)) !==
+                            fingerprint(manifest.fixedDependencies)
+                    )
+                        throw new WeeklyReviewConflict("candidate_admission_invalid");
+                    const { traceHash, ...contextFields } = context;
+                    if (
+                        traceHash !==
+                        fingerprint([
+                            record.manifest_hash,
+                            { ...snapshot, retrievalContext: contextFields },
+                        ])
+                    )
+                        throw new WeeklyReviewConflict("candidate_admission_invalid");
+                    const fixed = new Map(manifest.fixed.map(source => [source.ref, source]));
+                    const retrieved = frozen.slice(manifest.fixedDependencies.length);
+                    if (
+                        retrieved.some(
+                            dep => !manifest.offered.some(offer => matchesOffer(offer, dep))
+                        ) ||
+                        snapshot.sources.length !==
+                            fixed.size +
+                                retrieved.reduce(
+                                    (count, dep) =>
+                                        count + (dep.scope?.dependency.units.length ?? 0),
+                                    0
+                                ) ||
+                        new Set(snapshot.sources.map(source => source.ref)).size !==
+                            snapshot.sources.length ||
+                        [...fixed.keys()].some(
+                            ref => !snapshot.sources.some(source => source.ref === ref)
+                        )
+                    )
+                        throw new WeeklyReviewConflict("candidate_admission_invalid");
+                    for (const source of snapshot.sources) {
+                        const known = fixed.get(source.ref);
+                        const parent = retrieved.find(dep =>
+                            dep.scope?.dependency.units.some(unit => unit.ref === source.ref)
+                        );
+                        const unit = parent?.scope?.dependency.units.find(
+                            unit => unit.ref === source.ref
+                        );
+                        const placed =
+                            known ??
+                            (parent && unit
+                                ? {
+                                      id: parent.id,
+                                      version: parent.version,
+                                      hash: unit.excerptHash,
+                                      purpose: parent.purpose,
+                                      audience: parent.scope?.dependency.audience,
+                                  }
+                                : undefined);
+                        if (
+                            !placed ||
+                            placed.version !== source.version ||
+                            placed.purpose !== source.purpose ||
+                            placed.hash !== source.hash ||
+                            (source as { audience?: string }).audience !== placed.audience ||
+                            createHash("sha256").update(source.text).digest("hex") !== source.hash
+                        )
+                            throw new WeeklyReviewConflict("candidate_admission_invalid");
+                    }
+                }
                 if (
                     dependenciesOf(row).some(
                         dependency => dependency.kind === "scoped-document"
@@ -732,7 +890,7 @@ export function createWeeklyReviewRepository(
                             hash(evidence.inputSnapshot) !== evidence.inputHash
                         )
                             throw new Error("invalid_input");
-                        if (evidence.inputSnapshot.retrievalContext) {
+                        if (!topicRun && evidence.inputSnapshot.retrievalContext) {
                             const context = evidence.inputSnapshot.retrievalContext;
                             const trace = evidence.selectionDiagnostics?.dynamicRetrieval as
                                 | Record<string, unknown>
@@ -748,7 +906,9 @@ export function createWeeklyReviewRepository(
                         }
                         const budget = calculateWeeklyReviewBudget(
                             evidence.inputSnapshot,
-                            evidence.schemaVersion === "vantage-admission/v3"
+                            topicRun
+                                ? "topic-first"
+                                : evidence.schemaVersion === "vantage-admission/v3"
                                   ? "scoped-v2"
                                   : "internal-v1"
                         );

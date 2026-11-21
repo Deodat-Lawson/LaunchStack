@@ -117,6 +117,16 @@ it("rejects Judge against a changed snapshot commitment", async () => {
     ).rejects.toThrow("candidate_admission_invalid");
     expect(f.row.judge_dispatched).toBe(false);
 });
+it("fences late exploration even when provider ignores abort", async () => {
+    const f = fixture();
+    f.row.exploration_dispatched = true;
+    f.row.exploration_deadline_at = new Date(Date.now() - 1).toISOString();
+    const build = jest.fn();
+    await expect(f.repository.freezeTopic(f.actor, "run", build)).rejects.toThrow(
+        "topic_exploration_failed:timeout"
+    );
+    expect(build).not.toHaveBeenCalled();
+});
 it("same-key loser keeps the originally pinned run", async () => {
     const f = fixture();
     f.state.inserted = false;
@@ -137,4 +147,14 @@ it("manifest identity binds pinned cutoff and authority", () => {
     expect(topicInputHash({ ...f.manifest, cutoff: "2026-11-16T00:00:00.000Z" })).not.toBe(
         topicInputHash(f.manifest)
     );
+});
+it("rechecks fresh mutation authority at freeze", async () => {
+    const f = fixture();
+    f.row.exploration_dispatched = true;
+    f.authority.mockRejectedValueOnce(new Error("mutation_revoked"));
+    const build = jest.fn();
+    await expect(f.repository.freezeTopic(f.actor, "run", build)).rejects.toThrow(
+        "mutation_revoked"
+    );
+    expect(build).not.toHaveBeenCalled();
 });

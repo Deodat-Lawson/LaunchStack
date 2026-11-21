@@ -19,6 +19,10 @@ import {
     type WeeklyReviewDatabase,
     type WeeklyReviewActor,
 } from "./weekly-review-types";
+import { fingerprint } from "@launchstack/pipelines/vantage/weekly-review-validation";
+import { fitTopicEvidence } from "./weekly-review-topic-freeze";
+import { prepareTopicSelection } from "./weekly-review-topic-run";
+import { TOPIC_FIRST_LIMITS, topicFirstProvider } from "./weekly-review-topic-types";
 import { weeklyReviewTestPorts } from "./weekly-review-test-provider";
 import {
     dynamicRetrievalConfiguration,
@@ -110,8 +114,6 @@ export async function generateWeeklyReview(
     if (!weeklyReviewEnabled()) throw new WeeklyReviewConflict("weekly_review_disabled", 404);
     const internalRetrievalV1 = budgetAwareInternalRetrievalEnabled();
     const dynamicRetrieval = dynamicRetrievalConfiguration();
-    if (dynamicRetrieval.mode !== "baseline" && !internalRetrievalV1)
-        throw new WeeklyReviewConflict("dynamic_retrieval_requires_internal_v1", 409);
     const { authority, repository } = weeklyReviewServices({ dynamicRetrieval });
     const replay = (run: { id: string; status: string }) => {
         if (run.status === "accepted") return repository.get(actor, run.id);
@@ -121,13 +123,23 @@ export async function generateWeeklyReview(
     };
     const prior = await repository.findByKey(actor, args.weekStart, args.key);
     if (prior) return replay(prior);
+    const topicProvider = topicFirstProvider();
+    if ((topicProvider || dynamicRetrieval.mode !== "baseline") && !internalRetrievalV1)
+        throw new WeeklyReviewConflict("dynamic_retrieval_requires_internal_v1", 409);
     const identity = internalRetrievalV1
         ? { candidateId: randomUUID(), asOf: new Date().toISOString() }
         : undefined;
     stage("gathering");
-    const context = await authority.collectWeeklyReviewContext(actor, args.weekStart, identity);
+    const context = topicProvider
+        ? await authority.collectWeeklyReviewContext(actor, args.weekStart, identity, {
+              provider: topicProvider,
+              expectedActiveId: args.expectedActiveId,
+              carryover: query => repository.topicCarryover(query, actor, args.weekStart),
+          })
+        : await authority.collectWeeklyReviewContext(actor, args.weekStart, identity);
+    const seed = context.topicSeed;
     const current = { ...actor, authorityEpoch: context.authorityEpoch };
-    const input: WeeklyReviewInput = {
+    let input: WeeklyReviewInput = {
         candidateId: context.inputIdentity?.candidateId ?? randomUUID(),
         week: args.weekStart,
         asOf: context.inputIdentity?.asOf ?? new Date().toISOString(),
@@ -159,31 +171,36 @@ export async function generateWeeklyReview(
             hash,
             purpose,
         }));
-    const reserved = await repository.reserve(
-        current,
-        args.weekStart,
-        args.key,
-        inputHash,
-        dependencies,
-        context.inputIdentity?.candidateId
-    );
-    if (!reserved.created) {
-        if (reserved.status === "accepted") return repository.get(actor, reserved.id);
-        throw new WeeklyReviewConflict(
-            reserved.status === "failed" ? "review_failed_use_new_key" : "review_dispatch_uncertain"
-        );
-    }
+    const reserved = seed
+        ? await repository.reserveTopic(current, args.key, input.candidateId, seed.manifest)
+        : await repository.reserve(
+              current,
+              args.weekStart,
+              args.key,
+              inputHash,
+              dependencies,
+              context.inputIdentity?.candidateId
+          );
+    if (!reserved.created) return replay(reserved);
     input.candidateId = reserved.id;
-    const budgetPorts = internalRetrievalV1
-        ? {
-              budgetProfile: context.scopedEvidence?.length
-                  ? ("scoped-v2" as const)
-                  : ("internal-v1" as const),
-              selectionDiagnostics: context.selectionDiagnostics,
-          }
-        : {};
+    const budgetPorts = seed
+        ? { budgetProfile: "topic-first" as const }
+        : internalRetrievalV1
+          ? {
+                budgetProfile: context.scopedEvidence?.length
+                    ? ("scoped-v2" as const)
+                    : ("internal-v1" as const),
+                selectionDiagnostics: context.selectionDiagnostics,
+            }
+          : {};
     const authorizeDispatch = async (kind: "generation" | "judge") => {
-        await repository.authorizeDispatch(current, reserved.id, kind, args.expectedActiveId);
+        await repository.authorizeDispatch(
+            current,
+            reserved.id,
+            kind,
+            args.expectedActiveId,
+            seed ? fingerprint(input) : undefined
+        );
         if (kind === "generation") stage("writing");
     };
     const onGenerationComplete = () => stage("checking");
@@ -192,6 +209,31 @@ export async function generateWeeklyReview(
             BigInt(actor.companyId),
             { feature: "vantage", userId: actor.userId },
             async () => {
+                if (seed) {
+                    // Apply the fixture guard before digest or exploration dispatch.
+                    if (seed.manifest.configuration.provider !== "configured")
+                        weeklyReviewTestPorts(input);
+                    const deadlineAt = await repository.claimExploration(current, reserved.id);
+                    if (seed.manifest.configuration.provider !== "seeds") stage("exploring");
+                    const selection = await prepareTopicSelection({
+                        seed,
+                        actor: await currentActor(),
+                        deadlineAt,
+                        query: (statement, parameters) =>
+                            weeklyReviewDatabase.transaction(async query => {
+                                await query("SET LOCAL statement_timeout='5000ms'");
+                                return query(statement, parameters);
+                            }),
+                        record: values =>
+                            repository.recordExploration(current, reserved.id, values),
+                    });
+                    const frozen = await repository.freezeTopic(current, reserved.id, query =>
+                        authority.withTopicSourceReader(query, current, read =>
+                            fitTopicEvidence(reserved.id, seed, selection, read)
+                        )
+                    );
+                    input = frozen.input;
+                }
                 const test = weeklyReviewTestPorts(input);
                 if (test)
                     return runWeeklyReviewV21(input, {
@@ -209,13 +251,13 @@ export async function generateWeeklyReview(
                     route: generationRoute,
                     maxRetries: 0,
                     maxOutputTokens: 3600,
-                    timeoutMs: 30000,
+                    timeoutMs: seed ? TOPIC_FIRST_LIMITS.generationMs : 30000,
                 });
                 const judge = resolveConfiguredChatModel({
                     route: judgeRoute,
                     maxRetries: 0,
                     maxOutputTokens: 6000,
-                    timeoutMs: 30000,
+                    timeoutMs: seed ? TOPIC_FIRST_LIMITS.judgeMs : 30000,
                 });
                 if (
                     generation.behavior.parameters.maxOutputTokens !== "supported" ||
@@ -243,8 +285,8 @@ export async function generateWeeklyReview(
             report,
             evidence: {
                 ...result.evidence,
-                retrievalMode: dynamicRetrieval.mode,
-                retrievalConfiguration: dynamicRetrieval,
+                retrievalMode: seed ? "topic-first" : dynamicRetrieval.mode,
+                ...(seed ? {} : { retrievalConfiguration: dynamicRetrieval }),
                 qualityEvidence:
                     process.env.VANTAGE_WEEKLY_REVIEW_TEST_PROVIDER === "true"
                         ? "injected-deterministic"
@@ -254,7 +296,11 @@ export async function generateWeeklyReview(
         });
         return repository.get(actor, reserved.id);
     } catch (error) {
-        await repository.fail(actor, reserved.id, "candidate_not_admitted");
+        await repository.fail(
+            actor,
+            reserved.id,
+            seed && error instanceof WeeklyReviewConflict ? error.code : "candidate_not_admitted"
+        );
         console.error("[vantage] candidate not admitted", {
             runId: reserved.id,
             code:

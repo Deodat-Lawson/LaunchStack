@@ -39,6 +39,7 @@ export function createModelValidationJudge(
     options: {
         configurationId: string;
         timeoutMs?: number;
+        maxInputBytes?: number;
         maxOutputTokens?: number;
         evaluationVersion?: EvaluationVersion;
     },
@@ -50,7 +51,7 @@ export function createModelValidationJudge(
         !options.configurationId ||
         !Number.isSafeInteger(timeoutMs) ||
         timeoutMs < 1 ||
-        timeoutMs > 60000 ||
+        timeoutMs > (options.maxInputBytes === 240000 ? 120000 : 60000) ||
         !Number.isSafeInteger(maxOutputTokens) ||
         maxOutputTokens < 256 ||
         maxOutputTokens > 6000
@@ -82,8 +83,11 @@ export function createModelValidationJudge(
                 );
             const payload = judgeInputPayload(request.input);
             if (evaluationVersion !== EVALUATION_VERSION) {
-                parseEvaluationInput(request.input);
-                if (Buffer.byteLength(payload) > MAX_EVALUATION_INPUT_BYTES)
+                parseEvaluationInput(request.input, options.maxInputBytes);
+                if (
+                    Buffer.byteLength(payload) >
+                    (options.maxInputBytes ?? MAX_EVALUATION_INPUT_BYTES)
+                )
                     throw new Error("Scoped Judge input exceeds 14000 bytes.");
             }
             const result = await invoke(

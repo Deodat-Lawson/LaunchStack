@@ -350,6 +350,31 @@ export function createWeeklyReviewAuthority(
                 };
             });
         },
+        async withTopicSourceReader<T>(
+            query: WeeklyReviewQuery,
+            expected: WeeklyReviewActor,
+            work: (read: ReturnType<typeof createScopedSourceReader>) => Promise<T>
+        ): Promise<T> {
+            const bounded = boundedInternalQuery(query, true);
+            const { actor, epoch } = await fresh(
+                bounded.query,
+                expected,
+                false,
+                bounded.deadlineAt
+            );
+            if (!actor.canMutate) throw new WeeklyReviewConflict("review_mutation_denied", 403);
+            if (expected.authorityEpoch !== epoch)
+                throw new WeeklyReviewConflict("source_authority_changed");
+            return work(
+                createScopedSourceReader(
+                    bounded.query,
+                    actor,
+                    bounded.acquisition,
+                    assertSourcePurpose,
+                    epoch
+                )
+            );
+        },
         async assertCurrentWeeklyReviewAuthority(
             query: WeeklyReviewQuery,
             expected: WeeklyReviewActor,

@@ -181,11 +181,16 @@ export async function evaluateVantage(
         judge?: ValidationJudge;
         signal?: AbortSignal;
         timeoutMs?: number;
+        maxInputBytes?: number;
     } = {}
 ): Promise<EvaluationReport> {
-    const input = parseEvaluationInput(raw);
+    const input = parseEvaluationInput(raw, options.maxInputBytes);
     const timeoutMs = options.timeoutMs ?? 25000;
-    if (!Number.isSafeInteger(timeoutMs) || timeoutMs < 1 || timeoutMs > 60000)
+    if (
+        !Number.isSafeInteger(timeoutMs) ||
+        timeoutMs < 1 ||
+        timeoutMs > (options.maxInputBytes === 240000 ? 121000 : 60000)
+    )
         throw new Error("Invalid evaluator timeout.");
     const started = performance.now();
     const issues = checkOutputIntegrity(input);

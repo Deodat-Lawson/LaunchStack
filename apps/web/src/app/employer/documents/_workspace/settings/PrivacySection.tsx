@@ -63,12 +63,13 @@ const SERVICE_KEYS = {
     slack: "slack",
     drive: "drive",
     notion: "notion",
+    "microsoft-365": "microsoft365",
     "sec-edgar": "secEdgar",
 } as const;
 type ServiceKey = (typeof SERVICE_KEYS)[keyof typeof SERVICE_KEYS];
 
 /** Services whose name is a brand, said the same in every language. */
-const BRAND_SERVICES = new Set<ServiceKey>(["ocr", "slack", "drive", "notion"]);
+const BRAND_SERVICES = new Set<ServiceKey>(["ocr", "slack", "drive", "notion", "microsoft365"]);
 
 // The server writes these in English; they are recognised here so the
 // reader's language can say them. Anything else is shown as it came.

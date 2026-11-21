@@ -128,6 +128,17 @@ export type ScenarioRunEvent = {
     };
 };
 
+/** A contract v2 scenario run to drive (the dispatch row's deterministic id is the event id). */
+export type ScenarioRunV2Event = {
+    name: "scenarios/run.v2.requested";
+    data: {
+        runId: number;
+        /** Serialized bigint — event payloads must be JSON. */
+        companyId: string;
+        generation: number;
+    };
+};
+
 export type ExtractionRunEvent = {
     name: "extraction/run.requested";
     data: {
@@ -178,6 +189,26 @@ export type NotionSyncEvent = {
     };
 };
 
+export type Microsoft365SyncEvent = {
+    name: "microsoft-365/sync.requested";
+    data: {
+        /** Serialized bigint — event payloads must be JSON. */
+        connectionId: string;
+        companyId: string;
+        force?: boolean;
+    };
+};
+
+export type OutlookSyncEvent = {
+    name: "outlook/sync.requested";
+    data: {
+        /** Serialized bigint — event payloads must be JSON. */
+        connectionId: string;
+        companyId: string;
+        force?: boolean;
+    };
+};
+
 /**
  * Write the follow-up note for one save of an assistant conversation
  * (ASSISTANT_CONVERSATIONS_EXECUTOR=worker). Ids and short values only: the
@@ -215,9 +246,12 @@ export type Events =
     | GoogleDriveSyncEvent
     | GmailSyncEvent
     | NotionSyncEvent
+    | Microsoft365SyncEvent
+    | OutlookSyncEvent
     | DistributionRunEvent
     | ProposalsRunEvent
     | ScenarioRunEvent
+    | ScenarioRunV2Event
     | ExtractionRunEvent
     | MarketingRunEvent
     | AssistantConversationFollowUpEvent;

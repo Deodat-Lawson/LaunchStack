@@ -1,9 +1,8 @@
 /**
  * DELETE /api/documents/[id]/versions/[versionId]
  *
- * Permanently remove a specific version of a document: the blob file, all
- * embeddings/structure/metadata/previews tagged with this versionId, and the
- * `document_versions` row itself.
+ * Permanently remove a version and its relational children, with durable
+ * storage cleanup scheduled in the same transaction.
  *
  * Safety rules:
  *   - Cannot delete the current version. Callers must revert to a different
@@ -17,17 +16,17 @@
  *     `document_metadata`, and `document_previews` all have `version_id` FKs
  *     with `ON DELETE CASCADE`, so deleting the `document_versions` row
  *     automatically removes all embeddings tied to it — no manual cleanup.
- *   - The blob file is deleted from storage (Vercel Blob or SeaweedFS)
- *     _before_ the DB row is removed, so a blob deletion failure aborts the
- *     operation and leaves the DB consistent with the retained blob.
+ *   - Stored objects are snapshotted before removing the row and cleaned up
+ *     asynchronously through the transactional outbox.
  */
 
+import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
 import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
-import { document, documentVersions } from "@launchstack/store/schema";
-import { deleteFileByUrl } from "~/lib/storage";
+import { document, documentVersions, ocrJobs } from "@launchstack/store/schema";
+import { planVersionDeletion } from "~/server/storage/deletion/plan";
 import { withRateLimit } from "~/lib/rate-limit-middleware";
 import { RateLimitPresets } from "~/lib/rate-limiter";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
@@ -59,122 +58,135 @@ export async function DELETE(
             const ctx = await requireWorkspacePermission("documents.delete");
             if (!ctx.success) return ctx.response;
 
-            // Scoped in SQL: a cross-company or out-of-scope id reads exactly
-            // like a missing document.
-            const [doc] = await db
+            const scope = await ctx.data.documentScope();
+            // Resolve item permissions before holding database locks.
+            const [editableDoc] = await db
                 .select()
                 .from(document)
                 .where(
-                    and(
-                        eq(document.id, documentId),
-                        scopedDocumentWhere(ctx.data.companyId, await ctx.data.documentScope())
-                    )
+                    and(eq(document.id, documentId), scopedDocumentWhere(ctx.data.companyId, scope))
                 );
-
-            if (!doc) {
+            if (!editableDoc) {
                 return NextResponse.json(
                     { error: translatorFor(locale, "errors.api")("documentNotFound") },
                     { status: 404 }
                 );
             }
-
-            // Throwing a version away is changing the file (ADR-014).
-            if (!(await canEditDocument(ctx.data, { id: documentId, category: doc.category }))) {
+            if (
+                !(await canEditDocument(ctx.data, {
+                    id: documentId,
+                    category: editableDoc.category,
+                }))
+            ) {
                 return NextResponse.json({ error: s("documentEditDenied") }, { status: 403 });
             }
-
-            // Must belong to this document — prevents cross-document row deletion.
-            const [targetVersion] = await db
-                .select({
-                    id: documentVersions.id,
-                    versionNumber: documentVersions.versionNumber,
-                    url: documentVersions.url,
-                })
-                .from(documentVersions)
-                .where(
-                    and(
-                        eq(documentVersions.id, versionId),
-                        eq(documentVersions.documentId, BigInt(documentId))
+            return await db.transaction(async tx => {
+                // Scoped in SQL: a cross-company or out-of-scope id reads exactly
+                // like a missing document.
+                const [doc] = await tx
+                    .select()
+                    .from(document)
+                    .where(
+                        and(
+                            eq(document.id, documentId),
+                            scopedDocumentWhere(ctx.data.companyId, scope)
+                        )
                     )
-                );
+                    .for("update");
 
-            if (!targetVersion) {
-                return NextResponse.json({ error: t("versionNotFound") }, { status: 404 });
-            }
+                if (!doc) {
+                    return NextResponse.json(
+                        { error: translatorFor(locale, "errors.api")("documentNotFound") },
+                        { status: 404 }
+                    );
+                }
 
-            // Safety: cannot delete the version that the document currently points at.
-            // The client must revert first.
-            if (
-                doc.currentVersionId !== null &&
-                Number(doc.currentVersionId) === targetVersion.id
-            ) {
-                return NextResponse.json(
-                    {
-                        error: t("cannotDeleteCurrent"),
-                        details: t("cannotDeleteCurrentDetail"),
-                    },
-                    { status: 409 }
-                );
-            }
+                // Must belong to this document — prevents cross-document row deletion.
+                const [targetVersion] = await tx
+                    .select({
+                        id: documentVersions.id,
+                        versionNumber: documentVersions.versionNumber,
+                        url: documentVersions.url,
+                    })
+                    .from(documentVersions)
+                    .where(
+                        and(
+                            eq(documentVersions.id, versionId),
+                            eq(documentVersions.documentId, BigInt(documentId))
+                        )
+                    )
+                    .for("update");
 
-            // Safety: cannot delete the only remaining version. The caller should
-            // delete the entire document instead — that path also cleans up things
-            // this route doesn't touch (chat history, notes, graph mentions, etc.)
-            const allVersions = await db
-                .select({ id: documentVersions.id })
-                .from(documentVersions)
-                .where(eq(documentVersions.documentId, BigInt(documentId)));
+                if (!targetVersion) {
+                    return NextResponse.json({ error: t("versionNotFound") }, { status: 404 });
+                }
 
-            if (allVersions.length <= 1) {
-                return NextResponse.json(
-                    {
-                        error: t("cannotDeleteOnly"),
-                        details: t("cannotDeleteOnlyDetail"),
-                    },
-                    { status: 409 }
-                );
-            }
+                // Safety: cannot delete the version that the document currently points at.
+                // The client must revert first.
+                if (
+                    doc.currentVersionId !== null &&
+                    Number(doc.currentVersionId) === targetVersion.id
+                ) {
+                    return NextResponse.json(
+                        {
+                            error: t("cannotDeleteCurrent"),
+                            details: t("cannotDeleteCurrentDetail"),
+                        },
+                        { status: 409 }
+                    );
+                }
 
-            // Delete the blob first. If storage is unreachable we bail out before
-            // touching the DB, leaving the system in a consistent state that can
-            // be retried. A missing blob (404 from storage) is logged but does not
-            // block DB cleanup — we still want the row and embeddings gone.
-            try {
-                await deleteFileByUrl(targetVersion.url);
-            } catch (blobError) {
-                console.warn(
-                    `[Versions] Blob delete failed for doc=${documentId} version=${versionId} url=${targetVersion.url}:`,
-                    blobError
-                );
-                return NextResponse.json(
-                    {
-                        error: t("blobDeleteFailed"),
-                        details: blobError instanceof Error ? blobError.message : String(blobError),
-                    },
-                    { status: 502 }
-                );
-            }
+                // Safety: cannot delete the only remaining version. The caller should
+                // delete the entire document instead — that path also cleans up things
+                // this route doesn't touch (chat history, notes, graph mentions, etc.)
+                const allVersions = await tx
+                    .select({ id: documentVersions.id })
+                    .from(documentVersions)
+                    .where(eq(documentVersions.documentId, BigInt(documentId)))
+                    .for("update");
 
-            // Deleting the document_versions row cascades to all RLM tables that
-            // FK against it (structure, context_chunks, retrieval_chunks, metadata,
-            // previews), so no manual cleanup is needed.
-            await db.delete(documentVersions).where(eq(documentVersions.id, versionId));
+                if (allVersions.length <= 1) {
+                    return NextResponse.json(
+                        {
+                            error: t("cannotDeleteOnly"),
+                            details: t("cannotDeleteOnlyDetail"),
+                        },
+                        { status: 409 }
+                    );
+                }
 
-            console.log(
-                `[Versions] Deleted doc=${documentId} v${targetVersion.versionNumber} ` +
-                    `(versionId=${targetVersion.id}) by user=${ctx.data.authUserId}`
-            );
-
-            return NextResponse.json(
-                {
-                    success: true,
+                await planVersionDeletion(tx, {
                     documentId,
-                    versionId: targetVersion.id,
-                    versionNumber: targetVersion.versionNumber,
-                    message: t("deleted"),
-                },
-                { status: 200 }
-            );
+                    versionId,
+                    requestedBy: ctx.data.authUserId,
+                    reason: "version_delete",
+                    traceId: randomUUID(),
+                });
+                // Jobs are not version-cascaded; remove their reference only after
+                // the planner has snapshotted any processing URL they own.
+                await tx.delete(ocrJobs).where(eq(ocrJobs.versionId, BigInt(versionId)));
+
+                // Deleting the document_versions row cascades to all RLM tables that
+                // FK against it (structure, context_chunks, retrieval_chunks, metadata,
+                // previews), so no manual cleanup is needed.
+                await tx.delete(documentVersions).where(eq(documentVersions.id, versionId));
+
+                console.log(
+                    `[Versions] Deleted doc=${documentId} v${targetVersion.versionNumber} ` +
+                        `(versionId=${targetVersion.id}) by user=${ctx.data.authUserId}`
+                );
+
+                return NextResponse.json(
+                    {
+                        success: true,
+                        documentId,
+                        versionId: targetVersion.id,
+                        versionNumber: targetVersion.versionNumber,
+                        message: t("deleted"),
+                    },
+                    { status: 200 }
+                );
+            });
         } catch (error) {
             console.error("[Versions] delete failed:", error);
             return NextResponse.json(

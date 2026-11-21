@@ -7,7 +7,9 @@
  *
  * Cast, all in Acme: Oli is the Owner, Ben an Admin. Ada, Cai, Dee, Fay,
  * Ivy, Jo and Kim are Members with Gmail connected; Eve is a Viewer with
- * Gmail connected.
+ * Gmail connected. Lea, Mo, Ned, Pia, Rex, Sam and Tia are Members with
+ * Outlook connected (Lea has Gmail too): an Outlook mailbox gets exactly the
+ * treatment a Gmail one does.
  *
  * The bug this pins down: removing Ada used to leave her Gmail connection
  * syncing, and handed her `Gmail/<address>` folder to Ben, the Admin who
@@ -53,12 +55,45 @@ jest.mock("~/server/services/connectors/gmail/sink", () => ({
     createGmailSink: async () => ({}),
 }));
 
+// The same three seams for Outlook: no token is minted, the mailbox walk is
+// the test's to script, and the sink writes nothing of its own.
+jest.mock("~/server/services/microsoft/connections", () => ({
+    ...jest.requireActual("~/server/services/microsoft/connections"),
+    getMicrosoftAccessToken: async () => "access-token",
+}));
+const mockSyncOutlook = jest.fn();
+jest.mock("@launchstack/pipelines/connectors/outlook", () => ({
+    ...jest.requireActual("@launchstack/pipelines/connectors/outlook"),
+    syncOutlook: (...args: unknown[]) => mockSyncOutlook(...args),
+}));
+jest.mock("~/server/services/connectors/outlook/sink", () => ({
+    ...jest.requireActual("~/server/services/connectors/outlook/sink"),
+    createOutlookSink: async () => ({}),
+}));
+
 const describeDb =
     process.env.LAUNCHSTACK_TEST_DATABASE_URL || process.env.DATABASE_URL
         ? describe
         : describe.skip;
 
-type Person = "oli" | "ben" | "ada" | "cai" | "dee" | "eve" | "fay" | "ivy" | "jo" | "kim";
+type Person =
+    | "oli"
+    | "ben"
+    | "ada"
+    | "cai"
+    | "dee"
+    | "eve"
+    | "fay"
+    | "ivy"
+    | "jo"
+    | "kim"
+    | "lea"
+    | "mo"
+    | "ned"
+    | "pia"
+    | "rex"
+    | "sam"
+    | "tia";
 const ROLES: Record<Person, string> = {
     oli: "owner",
     ben: "admin",
@@ -70,6 +105,13 @@ const ROLES: Record<Person, string> = {
     ivy: "member",
     jo: "member",
     kim: "member",
+    lea: "member",
+    mo: "member",
+    ned: "member",
+    pia: "member",
+    rex: "member",
+    sam: "member",
+    tia: "member",
 };
 
 describeDb("departing members' own connections (integration)", () => {
@@ -81,6 +123,7 @@ describeDb("departing members' own connections (integration)", () => {
 
     const email = (who: Person) => `${who}@acme.test`;
     const mailbox = (who: Person) => `Gmail/${email(who)}`;
+    const outlookMailbox = (who: Person) => `Outlook/${email(who)}`;
 
     async function schema() {
         return import("~/server/db/schema");
@@ -134,7 +177,50 @@ describeDb("departing members' own connections (integration)", () => {
         return row!.id;
     }
 
-    async function addDocument(title: string, folder: string, connectionId?: number) {
+    /** An Outlook connection, sync state, scope and private folder, as connecting makes them. */
+    async function connectOutlook(who: Person, account = email(who)): Promise<number> {
+        const { connectorConnections, outlookSyncScope, outlookSyncState } = await schema();
+        const { ciphertext, keyVersion } = encryptSecret(`outlook-refresh-${who}`);
+        const [row] = await test.db
+            .insert(connectorConnections)
+            .values({
+                companyId,
+                provider: "outlook",
+                providerAccountId: `entra-${account}`,
+                providerAccountEmail: account,
+                grantedByUserId: pk[who],
+                ownerUserId: pk[who],
+                refreshTokenCiphertext: ciphertext,
+                encryptionKeyVersion: keyVersion,
+                scopes: "Mail.Read offline_access openid email profile",
+                status: "active",
+            })
+            .returning();
+        await test.db.insert(outlookSyncState).values({
+            connectionId: row!.id,
+            deltaLinks: { "mf-inbox": "https://graph.example/delta?token=1" },
+        });
+        await test.db
+            .insert(outlookSyncScope)
+            .values({ connectionId: row!.id, kind: "folder", value: "mf-inbox", name: "Inbox" });
+        const { ensurePrivateOutlookFolder } = await import(
+            "~/server/services/connectors/outlook/folder"
+        );
+        await ensurePrivateOutlookFolder({
+            companyId,
+            ownerUserPk: pk[who],
+            ownerAuthUserId: `auth_${who}`,
+            accountEmail: account,
+        });
+        return row!.id;
+    }
+
+    async function addDocument(
+        title: string,
+        folder: string,
+        connectionId?: number,
+        connector: "gmail" | "outlook" = "gmail"
+    ) {
         const [row] = await test.db
             .insert(document)
             .values({
@@ -143,7 +229,7 @@ describeDb("departing members' own connections (integration)", () => {
                 category: folder,
                 title,
                 ocrMetadata: connectionId
-                    ? { connector: "gmail", connectionId: String(connectionId), sourceId: title }
+                    ? { connector, connectionId: String(connectionId), sourceId: title }
                     : {},
             })
             .returning({ id: document.id });
@@ -200,8 +286,8 @@ describeDb("departing members' own connections (integration)", () => {
         return rows.map(row => row.id).sort();
     }
 
-    /** Every grant `who` holds on a folder under `Gmail/`. */
-    async function mailboxGrantsOf(who: Person) {
+    /** Every grant `who` holds on a folder under `Gmail/` (or, when asked, `Outlook/`). */
+    async function mailboxGrantsOf(who: Person, root: "Gmail" | "Outlook" = "Gmail") {
         const { folderGrants } = await schema();
         return test.db
             .select({ name: category.name, level: folderGrants.level })
@@ -212,7 +298,7 @@ describeDb("departing members' own connections (integration)", () => {
                     eq(folderGrants.companyId, companyId),
                     eq(folderGrants.principalType, "user"),
                     eq(folderGrants.principalId, pk[who].toString()),
-                    like(category.name, "Gmail/%")
+                    like(category.name, `${root}/%`)
                 )
             );
     }
@@ -258,6 +344,7 @@ describeDb("departing members' own connections (integration)", () => {
         useTestSecretsKey();
         mockRevokeGoogleToken.mockClear();
         mockSyncGmail.mockReset();
+        mockSyncOutlook.mockReset();
     });
 
     afterAll(async () => {
@@ -540,5 +627,339 @@ describeDb("departing members' own connections (integration)", () => {
         expect(await connectionsOf("ivy")).toEqual([]);
         expect(await existingDocuments([lateMail])).toEqual([]);
         expect(await folderExists(mailbox("ivy"))).toBe(false);
+    });
+
+    // ── Outlook: the same rules, the other mailbox ─────────────────────────
+
+    /** What `syncOutlook` answers for a run that stored one conversation. */
+    function outlookReport(who: Person) {
+        return {
+            connectorId: "outlook",
+            startedAt: "2026-11-12T00:00:00.000Z",
+            finishedAt: "2026-11-12T00:00:01.000Z",
+            durationMs: 1000,
+            dirty: true,
+            discovered: 1,
+            stored: [],
+            skipped: [],
+            failed: [],
+            missingSourceIds: [],
+            notFound: [],
+            nextDeltaLinks: { "mf-inbox": "https://graph.example/delta?token=2" },
+            deltaExpired: false,
+            truncated: false,
+            changedConversations: 1,
+            removedMessages: 0,
+            accountEmail: email(who),
+        };
+    }
+
+    it("removing a member closes their Outlook and their Gmail alike: the mail in both mailboxes is deleted and none of it reaches the remover", async () => {
+        const { outlookSyncScope, outlookSyncState, workspaceAuditEvents } = await schema();
+        const outlookConnection = await connectOutlook("lea");
+        const gmailConnection = await connectGmail("lea");
+        const outlookMail = [
+            await addDocument("Salary review", outlookMailbox("lea"), outlookConnection, "outlook"),
+            await addDocument("Clinic letter", outlookMailbox("lea"), outlookConnection, "outlook"),
+        ];
+        const gmailMail = await addDocument("Mortgage offer", mailbox("lea"), gmailConnection);
+        // Mail she moved in front of the team herself, and a file of her own.
+        const filedForTeam = await addDocument(
+            "Supplier conversation",
+            "Sales",
+            outlookConnection,
+            "outlook"
+        );
+        const ownUpload = await addPrivateUpload("lea", "Lea's plan.docx");
+
+        expect(await visibleFolderPaths("lea")).toContain(outlookMailbox("lea"));
+        expect(await visibleFolderPaths("ben")).not.toContain(outlookMailbox("lea"));
+        expect(await visibleFolderPaths("oli")).not.toContain(outlookMailbox("lea"));
+
+        // Microsoft has no endpoint to revoke at, so nothing may be sent anywhere.
+        const network = jest.spyOn(global, "fetch");
+        const { removeMember } = await import("~/server/workspace/members");
+        await removeMember(await ctxFor("ben"), pk.lea);
+        expect(network).not.toHaveBeenCalled();
+        network.mockRestore();
+
+        // Both connections, and the Outlook one's state and scope with it.
+        expect(await connectionsOf("lea")).toEqual([]);
+        expect(
+            await test.db
+                .select()
+                .from(outlookSyncState)
+                .where(eq(outlookSyncState.connectionId, outlookConnection))
+        ).toEqual([]);
+        expect(
+            await test.db
+                .select()
+                .from(outlookSyncScope)
+                .where(eq(outlookSyncScope.connectionId, outlookConnection))
+        ).toEqual([]);
+        // Gmail's grant is revoked at Google as before; the Outlook token is only deleted.
+        expect(mockRevokeGoogleToken).toHaveBeenCalledTimes(1);
+        expect(mockRevokeGoogleToken).toHaveBeenCalledWith("refresh-lea");
+
+        // Both mailboxes and the mail in them are gone; the shared roots stay.
+        expect(await existingDocuments([...outlookMail, gmailMail])).toEqual([]);
+        expect(await folderExists(outlookMailbox("lea"))).toBe(false);
+        expect(await folderExists(mailbox("lea"))).toBe(false);
+        expect(await folderExists("Outlook")).toBe(true);
+        expect(await mailboxGrantsOf("ben", "Outlook")).toEqual([]);
+        expect(await mailboxGrantsOf("ben")).toEqual([]);
+        expect(await visibleFolderPaths("ben")).not.toContain(outlookMailbox("lea"));
+
+        // The audit trail: the removal's own entry, and one line per closed connection.
+        const removals = await test.db
+            .select({ detail: workspaceAuditEvents.detail })
+            .from(workspaceAuditEvents)
+            .where(
+                and(
+                    eq(workspaceAuditEvents.companyId, companyId),
+                    eq(workspaceAuditEvents.action, "member.removed")
+                )
+            );
+        expect(removals.map(row => row.detail)).toContainEqual(
+            expect.objectContaining({ email: email("lea"), closedConnections: 2, deletedMail: 3 })
+        );
+        const disconnects = await test.db
+            .select({
+                targetId: workspaceAuditEvents.targetId,
+                detail: workspaceAuditEvents.detail,
+            })
+            .from(workspaceAuditEvents)
+            .where(
+                and(
+                    eq(workspaceAuditEvents.companyId, companyId),
+                    eq(workspaceAuditEvents.action, "connector.disconnected")
+                )
+            );
+        expect(disconnects).toContainEqual({
+            targetId: "outlook",
+            detail: expect.objectContaining({
+                connectionId: outlookConnection,
+                ownerUserId: pk.lea.toString(),
+                reason: "member-departed",
+            }),
+        });
+
+        // What she put in front of the team stays, and her own file passes to Ben.
+        expect(await existingDocuments([filedForTeam, ownUpload])).toEqual(
+            [filedForTeam, ownUpload].sort()
+        );
+        const { documentAccess, accessSubject } = await import("~/server/workspace/item-access");
+        const ben = await ctxFor("ben");
+        const access = await documentAccess(
+            ben,
+            { id: ownUpload, category: "Unfiled" },
+            await accessSubject(ben)
+        );
+        expect(access.level).toBe("manage");
+    });
+
+    it("someone leaving closes their own Outlook the same way, and the Owner inherits none of it", async () => {
+        const connectionId = await connectOutlook("mo");
+        const mail = await addDocument("Payslip", outlookMailbox("mo"), connectionId, "outlook");
+
+        const { leaveWorkspace } = await import("~/server/workspace/members");
+        await leaveWorkspace(await ctxFor("mo"));
+
+        expect(await connectionsOf("mo")).toEqual([]);
+        expect(await existingDocuments([mail])).toEqual([]);
+        expect(await folderExists(outlookMailbox("mo"))).toBe(false);
+        expect(await mailboxGrantsOf("oli", "Outlook")).toEqual([]);
+        expect(await visibleFolderPaths("oli")).not.toContain(outlookMailbox("mo"));
+        expect(mockRevokeGoogleToken).not.toHaveBeenCalled();
+    });
+
+    it("pauses an Outlook sync for a suspended member or one whose role can't add files, touching nothing, and resumes it on reinstatement", async () => {
+        const { outlookSyncState, userCompanyMemberships } = await schema();
+        const { personalSyncStanding } = await import(
+            "~/server/services/connectors/personal-connections"
+        );
+        const { runOutlookSync } = await import(
+            "~/server/services/connectors/outlook/sync-service"
+        );
+        const connectionId = await connectOutlook("ned");
+        const mail = await addDocument("Lease", outlookMailbox("ned"), connectionId, "outlook");
+        mockSyncOutlook.mockImplementation(async () => outlookReport("ned"));
+
+        const { updateMember } = await import("~/server/workspace/members");
+        await updateMember(await ctxFor("ben"), pk.ned, { status: "suspended" });
+        expect(await personalSyncStanding(companyId, pk.ned)).toBe("paused");
+
+        expect(await runOutlookSync(connectionId)).toEqual({
+            outcome: "skipped",
+            reason: expect.stringContaining("paused"),
+        });
+        // Paused, not closed: Microsoft was not asked, and nothing of his moved.
+        expect(mockSyncOutlook).not.toHaveBeenCalled();
+        expect(await connectionsOf("ned")).toHaveLength(1);
+        expect(await existingDocuments([mail])).toEqual([mail]);
+        expect(await folderExists(outlookMailbox("ned"))).toBe(true);
+        const [paused] = await test.db
+            .select()
+            .from(outlookSyncState)
+            .where(eq(outlookSyncState.connectionId, connectionId));
+        expect(paused?.deltaLinks).toEqual({ "mf-inbox": "https://graph.example/delta?token=1" });
+        expect(paused?.syncLockedAt).toBeNull();
+
+        // Reinstated: the next run goes through, from where the last one stopped.
+        await updateMember(await ctxFor("ben"), pk.ned, { status: "active" });
+        expect(await runOutlookSync(connectionId)).toMatchObject({ outcome: "synced" });
+        expect(mockSyncOutlook).toHaveBeenCalledTimes(1);
+        expect(mockSyncOutlook.mock.calls[0]![0]).toMatchObject({
+            deltaLinks: { "mf-inbox": "https://graph.example/delta?token=1" },
+            selectors: [{ kind: "folder", value: "mf-inbox", name: "Inbox" }],
+        });
+        const [resumed] = await test.db
+            .select()
+            .from(outlookSyncState)
+            .where(eq(outlookSyncState.connectionId, connectionId));
+        expect(resumed?.deltaLinks).toEqual({ "mf-inbox": "https://graph.example/delta?token=2" });
+        expect(resumed?.lastSyncStatus).toBe("ok");
+        // His folder is still his alone after the run re-asserted it.
+        expect(await visibleFolderPaths("ben")).not.toContain(outlookMailbox("ned"));
+
+        // A role that can't add files pauses it too, checked from the membership row.
+        await test.db
+            .update(userCompanyMemberships)
+            .set({ role: "viewer" })
+            .where(eq(userCompanyMemberships.userId, pk.ned));
+        expect(await runOutlookSync(connectionId)).toEqual({
+            outcome: "skipped",
+            reason: expect.stringContaining("paused"),
+        });
+        expect(mockSyncOutlook).toHaveBeenCalledTimes(1);
+    });
+
+    it("an Outlook sync whose owner is already gone closes the connection itself, mail and all", async () => {
+        const { userCompanyMemberships } = await schema();
+        const connectionId = await connectOutlook("pia");
+        const mail = await addDocument(
+            "Tax return",
+            outlookMailbox("pia"),
+            connectionId,
+            "outlook"
+        );
+        // Her membership went without the departure rule running.
+        await test.db
+            .delete(userCompanyMemberships)
+            .where(eq(userCompanyMemberships.userId, pk.pia));
+
+        const { runOutlookSync } = await import(
+            "~/server/services/connectors/outlook/sync-service"
+        );
+        expect(await runOutlookSync(connectionId)).toEqual({
+            outcome: "skipped",
+            reason: expect.stringContaining("connection closed"),
+        });
+
+        expect(mockSyncOutlook).not.toHaveBeenCalled();
+        expect(await connectionsOf("pia")).toEqual([]);
+        expect(await existingDocuments([mail])).toEqual([]);
+        expect(await folderExists(outlookMailbox("pia"))).toBe(false);
+    });
+
+    it("never hands an Outlook mailbox on, even one the departing person manages alone", async () => {
+        const { folderGrants, folderSettings } = await schema();
+        const { createFolder } = await import("~/server/folders");
+        // Uma shared her mailbox with Sam and dropped her own grant: Sam holds
+        // the only manage grant, but it isn't Sam's mailbox.
+        const uma = "Outlook/uma@acme.test";
+        await createFolder(companyId, uma);
+        const [row] = await test.db
+            .select({ id: category.id })
+            .from(category)
+            .where(and(eq(category.companyId, companyId), eq(category.name, uma)));
+        const categoryId = BigInt(row!.id);
+        await test.db
+            .insert(folderSettings)
+            .values({ categoryId, companyId, visibility: "restricted", updatedBy: "auth_uma" });
+        await test.db.insert(folderGrants).values({
+            companyId,
+            categoryId,
+            principalType: "user",
+            principalId: pk.sam.toString(),
+            level: "manage",
+            grantedBy: "auth_uma",
+        });
+        const umaMail = await addDocument("Uma's flight", uma);
+
+        const { removeMember } = await import("~/server/workspace/members");
+        await removeMember(await ctxFor("oli"), pk.sam);
+
+        // Not Sam's to take with him, and not Oli's to inherit: it stays, closed to everyone.
+        expect(await mailboxGrantsOf("oli", "Outlook")).toEqual([]);
+        expect(await visibleFolderPaths("oli")).not.toContain(uma);
+        expect(await folderExists(uma)).toBe(true);
+        expect(await existingDocuments([umaMail])).toEqual([umaMail]);
+    });
+
+    it("keeps an Outlook mailbox someone else has since connected, and a Gmail folder of the same address", async () => {
+        const { deleteOutlookConnection } = await import(
+            "~/server/services/connectors/outlook/store"
+        );
+        const shared = "Outlook/billing@acme.test";
+        // Tia connected the billing inbox and disconnected it again: the folder
+        // and her own grant on it stay, as a disconnect leaves them.
+        expect(
+            await deleteOutlookConnection(await connectOutlook("tia", "billing@acme.test"))
+        ).toBe(true);
+        expect(await folderExists(shared)).toBe(true);
+        // Kim then connected the same mailbox in Outlook, and the same address in Gmail.
+        const kimOutlook = await connectOutlook("kim", "billing@acme.test");
+        const kimsMail = await addDocument("Invoice query", shared, kimOutlook, "outlook");
+
+        const { removeMember } = await import("~/server/workspace/members");
+        await removeMember(await ctxFor("oli"), pk.tia);
+
+        expect((await connectionsOf("kim")).map(row => row.id)).toContain(kimOutlook);
+        expect(await folderExists(shared)).toBe(true);
+        expect(await existingDocuments([kimsMail])).toEqual([kimsMail]);
+        expect(await visibleFolderPaths("kim")).toContain(shared);
+        expect(await mailboxGrantsOf("tia", "Outlook")).toEqual([]);
+        expect(await mailboxGrantsOf("oli", "Outlook")).toEqual([]);
+        // Kim's Gmail mailbox from earlier is a different root and was never in question.
+        expect(await folderExists("Gmail/support@acme.test")).toBe(true);
+    });
+
+    it("sweeps what an Outlook sync already running writes after its owner is removed", async () => {
+        const connectionId = await connectOutlook("rex");
+        const { ensurePrivateOutlookFolder } = await import(
+            "~/server/services/connectors/outlook/folder"
+        );
+        let lateMail = 0;
+        mockSyncOutlook.mockImplementationOnce(async () => {
+            // Rex is removed while this run is reading his mailbox...
+            const { removeMember } = await import("~/server/workspace/members");
+            await removeMember(await ctxFor("oli"), pk.rex);
+            // ...and the run carries on: it makes the folder again and stores a conversation.
+            await ensurePrivateOutlookFolder({
+                companyId,
+                ownerUserPk: pk.rex,
+                ownerAuthUserId: "auth_rex",
+                accountEmail: email("rex"),
+            });
+            lateMail = await addDocument(
+                "Late conversation",
+                outlookMailbox("rex"),
+                connectionId,
+                "outlook"
+            );
+            return outlookReport("rex");
+        });
+
+        const { runOutlookSync } = await import(
+            "~/server/services/connectors/outlook/sync-service"
+        );
+        await runOutlookSync(connectionId);
+
+        expect(mockSyncOutlook).toHaveBeenCalledTimes(1);
+        expect(lateMail).toBeGreaterThan(0);
+        expect(await connectionsOf("rex")).toEqual([]);
+        expect(await existingDocuments([lateMail])).toEqual([]);
+        expect(await folderExists(outlookMailbox("rex"))).toBe(false);
     });
 });

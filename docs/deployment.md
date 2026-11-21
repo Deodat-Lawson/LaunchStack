@@ -2,6 +2,11 @@
 
 This document covers deployment options for Launchstack.
 
+**Most people want the installer.** One machine with Docker, two commands, and
+a `launchstack` command for updates, backups and diagnostics: see the
+[self-hosting guide](./self-hosting.md). The options below are for running from
+source, composing the images yourself, or running without containers.
+
 ## Self-hosting defaults
 
 A deployment is **self-hosted unless it says otherwise** (`DEPLOYMENT_MODE`
@@ -32,9 +37,12 @@ The public marketing site is **not** part of a self-hosted deployment. It is a
 separate app (`apps/landing`, deployed independently); Docker and Compose build
 `apps/web` only. On a self-hosted instance `/` redirects to `/signin`.
 
-**The first person to sign up becomes the owner** of the workspace they create,
-already verified — there is no separate admin bootstrap step and no approval
-queue to clear for that first account.
+**Whoever signs up owns the workspace they create**, already verified — there
+is no separate admin bootstrap step and no approval queue. That also means
+sign-up is open: anyone who can reach the instance can create an account and a
+workspace of their own, which uses your model keys. There is no invite-only
+switch yet; keep a private instance off the public internet or set
+`AI_MONTHLY_TOKEN_LIMIT_PER_USER`.
 
 ## Prerequisites
 
@@ -86,6 +94,15 @@ docker compose --env-file .env up --build
   and text-file ingestion still works
 - `--profile backfill` — on-demand data backfills:
   `docker compose --profile backfill run --rm backfill --list`
+- `--profile scenarios-graph` — adds `neo4j` (Neo4j Community, unmodified,
+  heap 512 MB + page cache 256 MB by default) and `scenario-graph`, the
+  private Graphiti service behind Scenarios graph mode
+  ([`services/scenario-graph`](../services/scenario-graph/README.md)). Neither
+  publishes a port; only the worker calls the graph service. Set
+  `SCENARIOS_GRAPH_URL=http://scenario-graph:8000`, `SCENARIO_GRAPH_TOKEN` and
+  the service's own `GRAPH_LLM_*` / `GRAPH_EMBEDDING_*` provider settings
+  (see `.env.example`). Without it, runs that ask for graph mode fall back to
+  passages
 
 Example with the OCR parse engine:
 
@@ -101,13 +118,21 @@ projection. Operations (replaying dead events, monitoring) are documented in
 
 ## Option 2: Container images (any container host)
 
-`.github/workflows/docker.yml` builds and publishes two images to GHCR on every
-push to `main` and on version tags:
+`.github/workflows/docker.yml` builds and publishes these images to GHCR on
+every push to `main` and on version tags (x86-64):
 
 - `ghcr.io/<owner>/<repo>-web` — the Next.js app (`apps/web/Dockerfile`)
 - `ghcr.io/<owner>/<repo>-web-worker` — the durable worker (`apps/worker/Dockerfile`)
+- `ghcr.io/<owner>/<repo>-web-migrate` — the one-shot migration job, which also
+  carries the configuration preflight (`node scripts/deploy-check.mjs`)
+- `ghcr.io/<owner>/<repo>-document-converter`, `-adeu-docs-editing` and
+  `-transcription` — the compute services under `services/`
 
-Deploy both to any container host (Fly.io / Railway / Cloud Run / ECS / your own
+A version tag also attaches `launchstack-self-host.tar.gz` and `install.sh` to
+the GitHub release; that bundle is what the [installer](./self-hosting.md) lays
+down.
+
+Deploy the app and the worker to any container host (Fly.io / Railway / Cloud Run / ECS / your own
 Kubernetes) alongside managed PostgreSQL with pgvector:
 
 1. Provision Postgres with pgvector (Neon, Supabase, RDS, Cloud SQL, …) and set
@@ -258,6 +283,8 @@ modes, and migration from the pre-PR variables.
 | `BRAVE_SEARCH_API_KEY`                                                              | Optional    | Brave Search API credential                                                                                                                                                                                                                                             |
 | `TAVILY_API_KEY`                                                                    | Optional    | Tavily credential                                                                                                                                                                                                                                                       |
 | `SEARXNG_URL`                                                                       | Optional    | Base URL of a SearXNG instance with JSON output enabled, e.g. `http://searxng:8080` for the Compose `search` profile                                                                                                                                                    |
+| `SCENARIOS_GRAPH_URL` + `SCENARIO_GRAPH_TOKEN`                                      | Optional    | The Scenarios graph service and its shared bearer token (`http://scenario-graph:8000` with the Compose `scenarios-graph` profile). The worker needs both; the app needs the URL too, to check the service before a run starts. Unset means new runs use passages        |
+| `GRAPH_LLM_*`, `GRAPH_EMBEDDING_*`, `NEO4J_PASSWORD`                                | Optional    | The graph service's own extraction model, embeddings and Neo4j password — separate from chat. See `.env.example` and the [service README](../services/scenario-graph/README.md)                                                                                         |
 | `SEARXNG_SECRET`                                                                    | Optional    | Compose only: signs the bundled SearXNG's cookies. Override the local default in production                                                                                                                                                                             |
 | `AZURE_DOC_INTELLIGENCE_*`                                                          | Optional    | OCR for scanned PDFs                                                                                                                                                                                                                                                    |
 | `DATALAB_API_KEY`                                                                   | Optional    | Alternative OCR                                                                                                                                                                                                                                                         |

@@ -507,17 +507,35 @@ export function DocumentViewer({
     const [pdfNotes, setPdfNotes] = useState<DocumentNote[]>([]);
     const [notesNonce, setNotesNonce] = useState(0);
     const [pdfAnchorDraft, setPdfAnchorDraft] = useState<PrefilledAnchor | null>(null);
-    const [pdfScrollToNoteId, setPdfScrollToNoteId] = useState<number | null>(null);
+    const [pdfNoteRequest, setPdfNoteRequest] = useState<{ id: number; nonce: number } | null>(
+        null
+    );
+    const pdfScrollToNoteId = pdfNoteRequest?.id ?? null;
+    const pdfNoteNonce = useRef(0);
+    const requestPdfNote = useCallback((id: number) => {
+        pdfNoteNonce.current += 1;
+        setPdfNoteRequest({ id, nonce: pdfNoteNonce.current });
+    }, []);
     /**
      * A note click locates its passage by text, the same way a citation does.
      * Kept separate from the `highlight` prop so a later citation click wins:
      * the prop is the shell's intent, this is the panel's.
      */
     const [noteHighlight, setNoteHighlight] = useState<CitationHighlight | null>(null);
+    const [dismissedHighlightNonce, setDismissedHighlightNonce] = useState<number | null>(null);
+    const activeHighlight = highlight?.nonce === dismissedHighlightNonce ? null : highlight;
+    const dismissPreviousNavigation = useCallback(() => {
+        setNoteHighlight(null);
+        setPdfNoteRequest(null);
+        setDismissedHighlightNonce(highlight?.nonce ?? null);
+    }, [highlight?.nonce]);
 
     // A new citation from the shell supersedes whatever note was being shown.
     useEffect(() => {
-        if (highlight) setNoteHighlight(null);
+        if (highlight) {
+            setNoteHighlight(null);
+            setPdfNoteRequest(null);
+        }
     }, [highlight]);
     /** A passage handed to the notes panel by the context menu, as a new note's body. */
     const [noteSeed, setNoteSeed] = useState<string | null>(null);
@@ -1018,21 +1036,25 @@ export function DocumentViewer({
     };
 
     const notesAvailable = !isMindmap || Boolean(source.documentId);
-    const addNote = useCallback((text: string) => {
-        setSidebarTab("notes");
-        // In a PDF the selection carries its page and quads: anchor the note
-        // there, exactly as the viewer's own "+ Note" button would.
-        const anchored = pdfSelection.current;
-        if (anchored && anchored.quote.exact === text) {
-            setPdfAnchorDraft({
-                page: anchored.page,
-                quads: anchored.quads,
-                quote: anchored.quote,
-            });
-            return;
-        }
-        setNoteSeed(text);
-    }, []);
+    const addNote = useCallback(
+        (text: string) => {
+            dismissPreviousNavigation();
+            setSidebarTab("notes");
+            // In a PDF the selection carries its page and quads: anchor the note
+            // there, exactly as the viewer's own "+ Note" button would.
+            const anchored = pdfSelection.current;
+            if (anchored && anchored.quote.exact === text) {
+                setPdfAnchorDraft({
+                    page: anchored.page,
+                    quads: anchored.quads,
+                    quote: anchored.quote,
+                });
+                return;
+            }
+            setNoteSeed(text);
+        },
+        [dismissPreviousNavigation]
+    );
 
     /**
      * The whole viewer is one right-click target; version rows and note
@@ -1489,9 +1511,11 @@ export function DocumentViewer({
                                 <PdfViewerWithNotes
                                     url={fullDoc.url}
                                     notes={toPdfNoteLites(pdfNotes)}
-                                    citationHighlight={noteHighlight ?? highlight ?? null}
+                                    citationHighlight={noteHighlight ?? activeHighlight ?? null}
                                     scrollToNoteId={pdfScrollToNoteId}
+                                    scrollToNoteNonce={pdfNoteRequest?.nonce}
                                     onCreateAnchoredNote={anchor => {
+                                        dismissPreviousNavigation();
                                         setPdfAnchorDraft({
                                             page: anchor.page,
                                             quads: anchor.quads,
@@ -1519,11 +1543,15 @@ export function DocumentViewer({
                                     }
                                     onAskAi={
                                         onAskAboutPassage
-                                            ? selection => onAskAboutPassage(source, selection)
+                                            ? selection => {
+                                                  dismissPreviousNavigation();
+                                                  onAskAboutPassage(source, selection);
+                                              }
                                             : undefined
                                     }
                                     onNotePinClick={id => {
-                                        setPdfScrollToNoteId(id);
+                                        dismissPreviousNavigation();
+                                        requestPdfNote(id);
                                         setSidebarTab("notes");
                                         // A pin opens its card, so the rail
                                         // holding it has to be showing.
@@ -1531,6 +1559,7 @@ export function DocumentViewer({
                                     }}
                                     onSelectionDraft={draft => {
                                         pdfSelection.current = draft;
+                                        if (draft) dismissPreviousNavigation();
                                     }}
                                 />
                             ) : (
@@ -1545,7 +1574,7 @@ export function DocumentViewer({
                                     <FullDocumentViewer
                                         document={fullDoc}
                                         minimal
-                                        highlight={highlight ?? null}
+                                        highlight={activeHighlight ?? null}
                                     />
                                 </div>
                             )}
@@ -1687,6 +1716,7 @@ export function DocumentViewer({
                                 refreshKey={notesNonce}
                                 prefilledAnchor={pdfAnchorDraft}
                                 prefilledText={noteSeed}
+                                onDraftStart={dismissPreviousNavigation}
                                 // Set by a card click and by a pin click in
                                 // the page, so the open card and the shown
                                 // passage always name the same note.
@@ -1697,6 +1727,7 @@ export function DocumentViewer({
                                     setNoteSeed(null);
                                 }}
                                 onNoteClick={({ id, page, quote, located }) => {
+                                    dismissPreviousNavigation();
                                     // A note made from a selection knows where
                                     // it is, and its own pin already draws the
                                     // passage — scroll there. Searching for the
@@ -1705,7 +1736,7 @@ export function DocumentViewer({
                                     // line entirely.
                                     if (located) {
                                         setNoteHighlight(null);
-                                        setPdfScrollToNoteId(id);
+                                        requestPdfNote(id);
                                     } else if (quote) {
                                         // No position: agent-captured notes store
                                         // page 1 with no quads, so the quote is
@@ -1715,9 +1746,9 @@ export function DocumentViewer({
                                             page: null,
                                             nonce: Date.now(),
                                         });
-                                        setPdfScrollToNoteId(id);
+                                        requestPdfNote(id);
                                     } else if (page !== null) {
-                                        setPdfScrollToNoteId(id);
+                                        requestPdfNote(id);
                                     }
                                 }}
                                 onDeleted={id => {
@@ -1726,7 +1757,7 @@ export function DocumentViewer({
                                     // marking a passage nothing annotates.
                                     if (id !== pdfScrollToNoteId) return;
                                     setNoteHighlight(null);
-                                    setPdfScrollToNoteId(null);
+                                    setPdfNoteRequest(null);
                                 }}
                             />
                         </div>

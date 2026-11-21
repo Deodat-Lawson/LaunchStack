@@ -2,15 +2,16 @@
 
 import React, { useMemo } from "react";
 
+import { dashArray, ShapeText } from "./ShapeView";
 import { useAppThemeMode } from "./useAppThemeMode";
 
 import { nodeLookup, pageBounds } from "../model/doc";
 import { expandRect } from "../model/geometry";
 import { routeEdge } from "../model/routing";
-import { shapeGeometry } from "../model/shapes";
+import { shapeDef, shapeGeometry, shapeTextBox } from "../model/shapes";
 import { buildTemplate } from "../model/templates";
 import type { ThemeMode } from "../model/palette";
-import type { MindmapDoc } from "../model/types";
+import type { DiagramNode, MindmapDoc } from "../model/types";
 
 /**
  * Preview card for a template.
@@ -39,30 +40,99 @@ export function TemplateThumbnail({ templateId }: { templateId: string }) {
     // Previews are built in the same mode a new document would be seeded in,
     // so the card is not a light board that turns dark the moment you open it.
     const mode = useAppThemeMode();
-    const { viewBox, nodes, edges, background } = useMemo(() => {
-        const doc = templateDoc(templateId, mode);
-        const page = doc.pages[0];
+    const doc = useMemo(() => templateDoc(templateId, mode), [templateId, mode]);
+    return <DocThumbnail doc={doc} />;
+}
+
+/**
+ * A whole document drawn small, through the same geometry. `detail` adds
+ * the labels and each connector's own colour — for a card big enough to
+ * read, such as a diagram the chat drew. Without it, the gallery's
+ * wordless sketch.
+ */
+export function DocThumbnail({ doc, detail = false }: { doc: MindmapDoc; detail?: boolean }) {
+    const { viewBox, containers, nodes, edges, background } = useMemo(() => {
+        const page = doc.pages.find(p => p.id === doc.activePageId) ?? doc.pages[0];
         if (!page) {
-            return { viewBox: "0 0 100 75", nodes: [], edges: [], background: "var(--panel-2)" };
+            return {
+                viewBox: "0 0 100 75",
+                containers: [],
+                nodes: [],
+                edges: [],
+                background: "var(--panel-2)",
+            };
         }
         const bounds = pageBounds(page);
-        const box = bounds ? expandRect(bounds, Math.max(bounds.w, bounds.h) * 0.06) : null;
+        const box = bounds
+            ? expandRect(bounds, Math.max(bounds.w, bounds.h) * (detail ? 0.04 : 0.06))
+            : null;
         const lookup = nodeLookup(page);
         return {
             viewBox: box ? `${box.x} ${box.y} ${box.w} ${box.h}` : "0 0 100 75",
-            nodes: page.nodes,
-            edges: page.edges.map(e => routeEdge(e, lookup)),
+            // Containers first, then connectors, then shapes: the canvas's order.
+            containers: page.nodes.filter(nd => !nd.hidden && shapeDef(nd.shape).container),
+            nodes: page.nodes.filter(nd => !nd.hidden && !shapeDef(nd.shape).container),
+            edges: page.edges
+                .filter(e => !e.hidden)
+                .map(e => ({ edge: e, routed: routeEdge(e, lookup) })),
             background: page.background.color,
         };
-    }, [templateId, mode]);
+    }, [doc, detail]);
 
-    if (nodes.length === 0) {
+    if (nodes.length === 0 && containers.length === 0) {
         return (
             <div className="flex size-full items-center justify-center">
                 <div className="border-line size-10 rounded-lg border-2 border-dashed" />
             </div>
         );
     }
+
+    const drawNode = (node: DiagramNode) => {
+        const geometry = shapeGeometry(node.shape, node.w, node.h, node.style.radius);
+        const transform = node.rotation
+            ? `translate(${node.x} ${node.y}) rotate(${node.rotation} ${node.w / 2} ${node.h / 2})`
+            : `translate(${node.x} ${node.y})`;
+        const stroke = node.style.stroke === "none" ? "none" : node.style.stroke;
+        return (
+            <g key={node.id} transform={transform} opacity={node.style.opacity}>
+                {geometry.backing?.map((d, i) => (
+                    <path
+                        key={`b${i}`}
+                        d={d}
+                        fill={node.style.fill}
+                        stroke={stroke}
+                        strokeWidth={node.style.strokeWidth}
+                    />
+                ))}
+                {geometry.path ? (
+                    <path
+                        d={geometry.path}
+                        fill={node.style.fill}
+                        stroke={stroke}
+                        strokeWidth={node.style.strokeWidth}
+                        strokeLinejoin="round"
+                    />
+                ) : null}
+                {geometry.decorations?.map((d, i) => (
+                    <path
+                        key={`d${i}`}
+                        d={d}
+                        fill="none"
+                        stroke={stroke === "none" ? node.style.fill : stroke}
+                        strokeWidth={node.style.strokeWidth || 1}
+                        strokeLinecap="round"
+                    />
+                ))}
+                {detail && node.text && !node.textStyle.outside ? (
+                    <ShapeText
+                        text={node.text}
+                        style={node.textStyle}
+                        box={shapeTextBox(node.shape, node.w, node.h)}
+                    />
+                ) : null}
+            </g>
+        );
+    };
 
     return (
         <svg
@@ -72,55 +142,23 @@ export function TemplateThumbnail({ templateId }: { templateId: string }) {
             style={{ background }}
             aria-hidden
         >
-            {edges.map((routed, i) => (
+            {containers.map(drawNode)}
+            {edges.map(({ edge, routed }, i) => (
                 <path
                     key={i}
                     d={routed.path}
                     fill="none"
-                    stroke="oklch(0.62 0.02 280)"
-                    strokeWidth={2}
+                    stroke={detail ? edge.style.stroke : "oklch(0.62 0.02 280)"}
+                    strokeWidth={detail ? edge.style.strokeWidth : 2}
+                    strokeDasharray={
+                        detail
+                            ? dashArray(edge.style.strokeStyle, edge.style.strokeWidth)
+                            : undefined
+                    }
                     strokeLinecap="round"
                 />
             ))}
-            {nodes.map(node => {
-                const geometry = shapeGeometry(node.shape, node.w, node.h, node.style.radius);
-                const transform = node.rotation
-                    ? `translate(${node.x} ${node.y}) rotate(${node.rotation} ${node.w / 2} ${node.h / 2})`
-                    : `translate(${node.x} ${node.y})`;
-                const stroke = node.style.stroke === "none" ? "none" : node.style.stroke;
-                return (
-                    <g key={node.id} transform={transform} opacity={node.style.opacity}>
-                        {geometry.backing?.map((d, i) => (
-                            <path
-                                key={`b${i}`}
-                                d={d}
-                                fill={node.style.fill}
-                                stroke={stroke}
-                                strokeWidth={node.style.strokeWidth}
-                            />
-                        ))}
-                        {geometry.path ? (
-                            <path
-                                d={geometry.path}
-                                fill={node.style.fill}
-                                stroke={stroke}
-                                strokeWidth={node.style.strokeWidth}
-                                strokeLinejoin="round"
-                            />
-                        ) : null}
-                        {geometry.decorations?.map((d, i) => (
-                            <path
-                                key={`d${i}`}
-                                d={d}
-                                fill="none"
-                                stroke={stroke === "none" ? node.style.fill : stroke}
-                                strokeWidth={node.style.strokeWidth || 1}
-                                strokeLinecap="round"
-                            />
-                        ))}
-                    </g>
-                );
-            })}
+            {nodes.map(drawNode)}
         </svg>
     );
 }

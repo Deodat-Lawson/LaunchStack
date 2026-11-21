@@ -117,6 +117,7 @@ test("deployment sections render directly, with current commands and working fra
         if (section === "local-dev")
             assert.match(page, /pnpm --filter @launchstack\/web db:migrate/);
         if (section === "connections") assert.match(page, /GMAIL_CONNECTOR_ENABLED=true/);
+        if (section === "connections") assert.match(page, /OUTLOOK_CONNECTOR_ENABLED=true/);
         if (section === "production") assert.match(page, /docker-compose\.prod\.yml/);
     }
 });

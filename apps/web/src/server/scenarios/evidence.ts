@@ -58,13 +58,13 @@ export async function visibleDocumentIds(
     return new Set(rows.map(r => Number(r.id)));
 }
 
-function overlap(subject: Set<string>, text: string): number {
+export function overlap(subject: Set<string>, text: string): number {
     let n = 0;
     for (const t of tokenize(text)) if (subject.has(t)) n++;
     return n;
 }
 
-function notesDrafts(notes: string): EvidenceDraft[] {
+export function notesDrafts(notes: string): EvidenceDraft[] {
     const parts: string[] = [];
     let current = "";
     for (const para of notes.split(/\n\s*\n/)) {
@@ -185,7 +185,7 @@ export function prospectHref(dealId: string): string {
  * The prospects a run reads: the companies picked, else the best fits of the
  * segment picked, else the best fits overall. Each links back to its page.
  */
-async function prospectDrafts(
+export async function prospectDrafts(
     companyId: bigint,
     pick: { segmentId?: string | null; ids?: string[] } = {}
 ): Promise<EvidenceDraft[]> {
@@ -216,7 +216,7 @@ async function prospectDrafts(
         }));
 }
 
-async function commentDrafts(companyId: bigint): Promise<EvidenceDraft[]> {
+export async function commentDrafts(companyId: bigint): Promise<EvidenceDraft[]> {
     const rows = await db
         .select({
             id: brandComments.id,

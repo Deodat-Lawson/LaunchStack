@@ -16,6 +16,7 @@ jest.mock("~/lib/models", () => ({
     resolveConfiguredChatModel: () => ({
         route: "default",
         modelId: "vendor/secret-model-9",
+        behavior: { reasoning: { mode: "none" } },
         chat: { invoke: mockInvoke },
         prepareMessages: (messages: unknown[]) => messages,
     }),

@@ -38,6 +38,7 @@ function person(id: string, history: Stance[], more: Partial<ScenarioPerson> = {
         firstObjection: null,
         wouldPay: null,
         objection: null,
+        basis: null,
         ...more,
     };
 }

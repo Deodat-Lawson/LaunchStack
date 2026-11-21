@@ -77,6 +77,33 @@ describe("pipeline events", () => {
         expect(pipelineEventSchema.safeParse(event).success).toBe(false);
     });
 
+    it("accepts storage deletion requests with deterministic request-scoped ids", () => {
+        const event = {
+            ...baseEnvelope,
+            eventId: eventIds.storageDeletionRequested(17),
+            eventType: "storage.deletion.requested",
+            payload: { requestId: 17 },
+        };
+
+        expect(event.eventId).toBe("storage.deletion.requested:17");
+        expect(pipelineEventSchema.parse(event)).toEqual(event);
+        expect(eventIds.storageDeletionRequested(18)).not.toBe(event.eventId);
+    });
+
+    it.each([undefined, null, "17", 0, -1, 1.5])(
+        "rejects a storage deletion request with invalid requestId %s",
+        requestId => {
+            expect(
+                pipelineEventSchema.safeParse({
+                    ...baseEnvelope,
+                    eventId: "storage.deletion.requested:17",
+                    eventType: "storage.deletion.requested",
+                    payload: { requestId },
+                }).success
+            ).toBe(false);
+        }
+    );
+
     it("produces deterministic event ids", () => {
         expect(eventIds.sourceVersionCreated("j")).toBe(eventIds.sourceVersionCreated("j"));
         expect(eventIds.companyStateProjected(1, 2)).not.toBe(eventIds.companyStateProjected(1, 3));

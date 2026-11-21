@@ -169,4 +169,14 @@ describe("invitation menu builder", () => {
         );
         expect(closed.map(i => i.id)).toEqual(["title", "copy-email"]);
     });
+
+    it("offers to ask again after a decline, but not to revoke", () => {
+        const declined = buildInvitationMenuItems(
+            { ...invitation, status: "declined" },
+            { open: false, busy: false },
+            { onResend: jest.fn(), onCopyEmail: jest.fn(), onRevoke: jest.fn() },
+            t
+        );
+        expect(declined.map(i => i.id)).toEqual(["title", "resend", "copy-email"]);
+    });
 });

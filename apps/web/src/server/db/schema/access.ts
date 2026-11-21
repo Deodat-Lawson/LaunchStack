@@ -144,7 +144,8 @@ export const workspaceGroupMembers = pgTable(
 // Email invitations
 // ============================================================================
 // The token itself is never stored — only its SHA-256. An invitation is
-// pre-approval: accepting it creates an `active` membership.
+// pre-approval: accepting it creates an `active` membership. The invited
+// person can decline it instead (`declined_at`); an admin's resend reopens it.
 
 export const workspaceInvitations = pgTable(
     "workspace_invitations",
@@ -168,6 +169,12 @@ export const workspaceInvitations = pgTable(
         createdAt: timestamp("created_at", { withTimezone: true })
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
+        /**
+         * Set when the invited person turned it down; a resend clears it.
+         * Declared last because the migration appended it: the CI check that
+         * rebuilds the schema both ways compares column order too.
+         */
+        declinedAt: timestamp("declined_at", { withTimezone: true }),
     },
     table => ({
         tokenHashUnique: uniqueIndex("workspace_invitations_token_hash_unique").on(table.tokenHash),

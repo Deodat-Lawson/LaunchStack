@@ -13,6 +13,7 @@ jest.mock("~/server/auth/email", () => ({
 import { company } from "@launchstack/store/schema";
 import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { POST as ACCEPT } from "~/app/api/workspace/invitations/accept/route";
+import { POST as DECLINE } from "~/app/api/workspace/invitations/decline/route";
 import { GET as PREVIEW } from "~/app/api/workspace/invitations/preview/route";
 import { GET as LIST, POST } from "~/app/api/workspace/invitations/route";
 import { POST as RESEND } from "~/app/api/workspace/invitations/[id]/resend/route";
@@ -50,6 +51,7 @@ function invitationRow(overrides: Partial<Record<string, unknown>> = {}) {
         acceptedAt: null,
         acceptedByUserId: null,
         revokedAt: null,
+        declinedAt: null,
         createdAt: new Date("2026-01-01T00:00:00Z"),
         ...overrides,
     };
@@ -349,6 +351,160 @@ describe("POST /api/workspace/invitations/accept", () => {
         );
 
         expect(res.status).toBe(409);
+    });
+});
+
+describe("declined invitations", () => {
+    const decline = (body: unknown) =>
+        DECLINE(jsonRequest("/api/workspace/invitations/decline", "POST", body));
+
+    it("needs a session", async () => {
+        session.mockResolvedValue(null);
+
+        const res = await decline({ invitationId: 41 });
+
+        expect(res.status).toBe(401);
+        expect(fakeDb.updates).toHaveLength(0);
+    });
+
+    it("answers 404 to anyone but the invited address, and changes nothing", async () => {
+        session.mockResolvedValue({
+            user: { id: "user-x", email: "someone.else@example.com", name: "X" },
+        });
+        fakeDb.onSelect(workspaceInvitations, [invitationRow()]);
+
+        const res = await decline({ invitationId: 41 });
+
+        expect(res.status).toBe(404);
+        expect(((await res.json()) as { reason: string }).reason).toBe("not_found");
+        expect(fakeDb.updates).toHaveLength(0);
+        expect(fakeDb.insertedInto(workspaceAuditEvents)).toHaveLength(0);
+    });
+
+    it("answers 404 for an id that doesn't exist", async () => {
+        session.mockResolvedValue({
+            user: { id: "user-x", email: "bob@example.com", name: "Bob" },
+        });
+        fakeDb.onSelect(workspaceInvitations, []);
+
+        const res = await decline({ invitationId: 999 });
+
+        expect(res.status).toBe(404);
+    });
+
+    it("answers 410 for an invitation that was already accepted, revoked or expired", async () => {
+        session.mockResolvedValue({
+            user: { id: "user-x", email: "bob@example.com", name: "Bob" },
+        });
+        fakeDb.onSelect(
+            workspaceInvitations,
+            [invitationRow({ acceptedAt: new Date() })],
+            [invitationRow({ revokedAt: new Date() })],
+            [invitationRow({ expiresAt: PAST })]
+        );
+
+        const answers = [];
+        for (let attempt = 0; attempt < 3; attempt++) {
+            const res = await decline({ invitationId: 41 });
+            const body = (await res.json()) as { reason: string; error: string };
+            answers.push([res.status, body.reason]);
+        }
+        // A reason the screen can act on: "already used" is not "declined".
+        expect(answers).toEqual([
+            [410, "accepted"],
+            [410, "revoked"],
+            [410, "expired"],
+        ]);
+        expect(fakeDb.updates).toHaveLength(0);
+    });
+
+    it("records the decline for the invited address, in any letter case, and audits it", async () => {
+        session.mockResolvedValue({
+            user: { id: "user-x", email: "BOB@Example.com", name: "Bob" },
+        });
+        fakeDb.onSelect(workspaceInvitations, [invitationRow({ email: "Bob@example.com" })]);
+
+        const res = await decline({ invitationId: 41 });
+
+        expect(res.status).toBe(200);
+        await expect(res.json()).resolves.toEqual({ success: true, alreadyDeclined: false });
+        expect(fakeDb.updatesOf(workspaceInvitations)).toEqual([{ declinedAt: expect.any(Date) }]);
+        expect(fakeDb.insertedInto(workspaceAuditEvents)).toEqual([
+            expect.objectContaining({
+                companyId: 5n,
+                action: "invitation.declined",
+                actorUserId: "user-x",
+                targetType: "invitation",
+            }),
+        ]);
+    });
+
+    it("treats declining twice as done", async () => {
+        session.mockResolvedValue({
+            user: { id: "user-x", email: "bob@example.com", name: "Bob" },
+        });
+        fakeDb.onSelect(workspaceInvitations, [invitationRow({ declinedAt: new Date() })]);
+
+        const res = await decline({ invitationId: 41 });
+
+        expect(res.status).toBe(200);
+        await expect(res.json()).resolves.toEqual({ success: true, alreadyDeclined: true });
+        expect(fakeDb.updates).toHaveLength(0);
+    });
+
+    it("refuses a bad body", async () => {
+        session.mockResolvedValue({
+            user: { id: "user-x", email: "bob@example.com", name: "Bob" },
+        });
+
+        const res = await decline({ invitationId: "41; drop table" });
+
+        expect(res.status).toBe(400);
+    });
+
+    it("won't accept a declined invitation, and says why", async () => {
+        session.mockResolvedValue({
+            user: { id: "user-x", email: "bob@example.com", name: "Bob" },
+        });
+        fakeDb.onSelect(workspaceInvitations, [invitationRow({ declinedAt: new Date() })]);
+
+        const res = await ACCEPT(
+            jsonRequest("/api/workspace/invitations/accept", "POST", { token: "tok" })
+        );
+
+        expect(res.status).toBe(410);
+        await expect(res.json()).resolves.toEqual({
+            error: "You declined this invitation. Ask whoever invited you to send it again.",
+        });
+        expect(fakeDb.insertedInto(userCompanyMemberships)).toHaveLength(0);
+    });
+
+    it("shows as declined to admins, and a resend reopens it", async () => {
+        gate.mockImplementation(gateFor(makeWorkspaceContext({ role: "owner" })));
+        const declined = invitationRow({ declinedAt: new Date() });
+        fakeDb.onSelect(workspaceInvitations, [declined]);
+        fakeDb.onSelect(company, [{ name: "Acme" }]);
+        fakeDb.onSelect(users, [{ userId: "user-a", name: "Ann", email: "ann@example.com" }]);
+
+        const listed = await LIST(new Request("http://localhost/api/workspace/invitations"));
+        const { invitations } = (await listed.json()) as {
+            invitations: { status: string }[];
+        };
+        expect(invitations.map(i => i.status)).toEqual(["declined"]);
+
+        const res = await RESEND(
+            new Request("http://localhost/api/workspace/invitations/41/resend", {
+                method: "POST",
+            }),
+            params({ id: "41" })
+        );
+
+        expect(res.status).toBe(200);
+        const { invitation } = (await res.json()) as { invitation: { status: string } };
+        expect(invitation.status).toBe("pending");
+        expect(fakeDb.updatesOf(workspaceInvitations)).toEqual([
+            expect.objectContaining({ declinedAt: null }),
+        ]);
     });
 });
 

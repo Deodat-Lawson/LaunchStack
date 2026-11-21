@@ -78,6 +78,16 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
     );
 
     const nodes = useMemo(() => visibleNodes(page, render.folded), [page, render.folded]);
+    // Containers — frames, swimlanes, groups — are drawn under the
+    // connectors and everything else over them. A filled frame drawn in
+    // page order sat on top of every arrow inside it, so a flowchart in
+    // lanes (the Swimlane template, a Mermaid subgraph) lost all its arrows.
+    const [containerNodes, shapeNodes] = useMemo(() => {
+        const under: DiagramNode[] = [];
+        const over: DiagramNode[] = [];
+        for (const nd of nodes) (shapeDef(nd.shape).container ? under : over).push(nd);
+        return [under, over];
+    }, [nodes]);
     const edges = useMemo(() => visibleEdges(page, render.folded), [page, render.folded]);
     const lookup = useMemo(() => nodeLookup(page), [page]);
     // `routeEdgeCached` returns the previous `RoutedEdge` object for any edge
@@ -214,6 +224,22 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
                     idScope={idScope}
                 />
 
+                {/* Containers, under the connectors they hold */}
+                <g>
+                    {containerNodes.map(node => (
+                        <NodeHit
+                            key={node.id}
+                            node={node}
+                            hideText={
+                                render.editing?.kind === "node" && render.editing.id === node.id
+                            }
+                            highlighted={highlighted.has(node.id)}
+                            zoom={viewport.zoom}
+                            idScope={idScope}
+                        />
+                    ))}
+                </g>
+
                 {/* Connectors */}
                 <g>
                     {edges.map(edge => {
@@ -247,7 +273,7 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
 
                 {/* Shapes */}
                 <g>
-                    {nodes.map(node => (
+                    {shapeNodes.map(node => (
                         <NodeHit
                             key={node.id}
                             node={node}

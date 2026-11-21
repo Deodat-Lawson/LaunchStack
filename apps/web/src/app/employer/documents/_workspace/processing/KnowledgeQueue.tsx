@@ -42,7 +42,7 @@ import {
 import { useTranslations } from "next-intl";
 import { toast } from "sonner";
 
-import { IconDrive, IconGmail } from "~/components/icons/brand";
+import { IconDrive, IconGmail, IconMicrosoft, IconOutlook } from "~/components/icons/brand";
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { ToolLink } from "~/components/tool-app/ToolLink";
 import { ToolNavProvider, type ToolHost } from "~/components/tool-app/nav";
@@ -823,7 +823,9 @@ const CONNECTOR_META: Record<
     { name: string; Icon: React.ComponentType<{ size?: number; className?: string }> }
 > = {
     "google-drive": { name: "Google Drive", Icon: IconDrive },
+    "microsoft-365": { name: "Microsoft 365", Icon: IconMicrosoft },
     gmail: { name: "Gmail", Icon: IconGmail },
+    outlook: { name: "Outlook", Icon: IconOutlook },
 };
 
 function ConnectorCard({

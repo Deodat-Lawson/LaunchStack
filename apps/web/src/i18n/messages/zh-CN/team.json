@@ -438,6 +438,7 @@
       "invitationTokenRequired": "需要提供邀请令牌",
       "invitationUsed": "这份邀请已被使用过。",
       "invitationRevoked": "这份邀请已被撤销。",
+      "invitationDeclined": "你已拒绝这份邀请。如需加入，请让邀请你的人重新发送。",
       "invitationExpired": "这份邀请已过期，请让对方重新邀请你。",
       "invitationOtherEmail": "这份邀请是发给另一个邮箱地址的。",
       "groupCreatorOrAdmin": "只有这个群组的创建者或管理员可以修改它。",

@@ -78,9 +78,9 @@ re-upload every time, which is slower but always correct.
 `agent-sessions/` imports the one thing agent-knowledge refuses: finished
 session transcripts. Sources:
 
-| Tool        | Location                                                                        |
-| ----------- | ------------------------------------------------------------------------------- |
-| Claude Code | `~/.claude/projects/<slug>/<session-uuid>.jsonl`                                |
+| Tool        | Location                                                                                                   |
+| ----------- | ---------------------------------------------------------------------------------------------------------- |
+| Claude Code | `~/.claude/projects/<slug>/<session-uuid>.jsonl`                                                           |
 | Codex       | `~/.codex/sessions/YYYY/MM/DD/rollout-*.jsonl` (+ `archived_sessions/`), titles from `session_index.jsonl` |
 
 A raw transcript is mostly tool traffic, so each session is parsed
@@ -110,10 +110,10 @@ import { syncAgentSessions } from "@launchstack/pipelines/connectors/agent-sessi
 const report = await syncAgentSessions({ sink: myKnowledgeSink });
 ```
 
-## Remote sources — Google Drive, Gmail, Notion
+## Remote sources — Google Drive, Gmail, Microsoft 365, Outlook, Notion
 
-`google-drive/`, `gmail/` and `notion/` sync a third-party account into the
-knowledge base. Each is a thin typed `fetch` client plus a sync that compares
+`google-drive/`, `gmail/`, `microsoft-365/`, `outlook/` and `notion/` sync a
+third-party account into the knowledge base. Each is a thin typed `fetch` client plus a sync that compares
 the provider's own change markers with what the sink stored, and only reads
 what changed. OAuth, token storage and scheduling belong to the host
 (`apps/web/src/server/services/connectors/*`, run from the worker); the
@@ -129,10 +129,65 @@ connector receives an access token and a `KnowledgeSink`.
 import { createNotionClient, syncNotion } from "@launchstack/pipelines/connectors/notion";
 
 const report = await syncNotion({
-    client: createNotionClient({ accessToken }),
-    sink: myKnowledgeSink,
-    knownSourceIds,
+  client: createNotionClient({ accessToken }),
+  sink: myKnowledgeSink,
+  knownSourceIds,
 });
+```
+
+- **microsoft-365** is Google Drive's sibling over Microsoft Graph: OneDrive
+  and SharePoint files, which are one API (a document library is a drive).
+  The host passes what the person picked as `{ driveId, itemId, kind }`;
+  folders are walked recursively and a `sourceId` is `<driveId>:<itemId>`.
+  Graph has no cheap "did anything change" cursor for a set of picks, so
+  every run is a listing pass that compares each file's `cTag` with what the
+  sink stored and downloads only the ones that differ. Files are taken as
+  they are — Office formats need no export — and the rules skip what Drive's
+  would, plus OneNote notebooks. `missingSourceIds` is filled in only when
+  the walk reached everything: a truncated run, or a folder that would not
+  list, hides files that may still be there. Each item's metadata carries
+  `driveId`, `itemId`, `webUrl`, `parentPath`, `folderPath` and `pickedRoot`,
+  which is enough to file it and to link back to it.
+
+```ts
+import {
+  createMicrosoft365Client,
+  syncMicrosoft365,
+} from "@launchstack/pipelines/connectors/microsoft-365";
+
+const report = await syncMicrosoft365({
+  client: createMicrosoft365Client({ accessToken }),
+  pickedItems: [{ driveId, itemId, kind: "folder" }],
+  sink: myKnowledgeSink,
+  knownSourceIds,
+  deletedSourceIds,
+});
+```
+
+- **outlook** is Gmail's sibling over the same API: one Markdown document
+  per conversation (drafts dropped, quoted replies trimmed, oldest message
+  first) and one item per ingestible attachment. Selectors are mail folders
+  or search queries. A folder is read through its delta feed, which is both
+  the listing and the cursor: the host stores `nextDeltaLinks` and hands them
+  back as `deltaLinks`, and the next run fetches only the conversations the
+  feed names. A conversation's identity is its set of message ids, so a
+  reply makes a new version and a move between folders does not. No link, an
+  expired one (`deltaExpired`) or `force` walks the folder whole, and only
+  such a full run reports `missingSourceIds`: a removed message carries no
+  conversation id, so an incremental run counts it in `removedMessages` and
+  leaves the verdict to the next full one.
+
+```ts
+import { createOutlookClient, syncOutlook } from "@launchstack/pipelines/connectors/outlook";
+
+const report = await syncOutlook({
+  client: createOutlookClient({ accessToken }),
+  selectors: [{ kind: "folder", value: folderId, name: "Investors" }],
+  sink: myKnowledgeSink,
+  deltaLinks,
+  knownSourceIds,
+});
+// persist report.nextDeltaLinks for the next run
 ```
 
 ## obsidian — vault import

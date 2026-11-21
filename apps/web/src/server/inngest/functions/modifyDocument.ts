@@ -17,12 +17,14 @@
  *   preventing duplicate writes on replay (Fix 1.15)
  */
 
+import { randomUUID } from "node:crypto";
 import { eq } from "drizzle-orm";
 import { inngest } from "../client";
 import { db } from "~/server/db";
 import { document } from "@launchstack/store/schema";
 import { putFile, fetchBlob } from "~/server/storage/vercel-blob";
 import { processDocumentBatch, AdeuServiceError } from "@launchstack/editing";
+import { planObjectDeletion } from "~/server/storage/deletion/plan";
 
 export const modifyDocument = inngest.createFunction(
     {
@@ -71,6 +73,15 @@ export const modifyDocument = inngest.createFunction(
 
         // Step 2: Send to Adeu for modification, store result in blob storage
         const result = await step.run("modify-document", async () => {
+            const [existingDocument] = await db
+                .select({ companyId: document.companyId })
+                .from(document)
+                .where(eq(document.id, documentId))
+                .limit(1);
+            if (!existingDocument) {
+                return { summary: null, blobUrl: null, companyId: null, documentMissing: true };
+            }
+
             const buffer = Buffer.from(docBuffer, "base64");
 
             try {
@@ -87,6 +98,7 @@ export const modifyDocument = inngest.createFunction(
                 const stored = await putFile({
                     filename: `adeu-modified-${documentId}.docx`,
                     data: modifiedBuffer,
+                    companyId: existingDocument.companyId,
                     contentType:
                         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
                 });
@@ -94,6 +106,7 @@ export const modifyDocument = inngest.createFunction(
                 return {
                     summary,
                     blobUrl: stored.url,
+                    companyId: String(existingDocument.companyId),
                 };
             } catch (err) {
                 // 422 = validation error — don't retry
@@ -101,12 +114,21 @@ export const modifyDocument = inngest.createFunction(
                     console.error(
                         `[modifyDocument] Validation error for document ${documentId}: ${err.detail}`
                     );
-                    return { summary: null, blobUrl: null, validationError: err.detail };
+                    return {
+                        summary: null,
+                        blobUrl: null,
+                        companyId: String(existingDocument.companyId),
+                        validationError: err.detail,
+                    };
                 }
                 // 5xx or network error — throw to let Inngest retry
                 throw err;
             }
         });
+
+        if ("documentMissing" in result && result.documentMissing) {
+            return { success: false, error: "Document not found" };
+        }
 
         // If validation failed, record the failure and stop (no retry)
         if ("validationError" in result && result.validationError) {
@@ -132,13 +154,31 @@ export const modifyDocument = inngest.createFunction(
         // Fix 1.15: DB update is in its own step.run so Inngest memoizes it
         // separately — replays won't re-execute the write
         const storedUrl = await step.run("update-document-record", async () => {
-            await db
-                .update(document)
-                .set({
-                    url: result.blobUrl!,
-                    updatedAt: new Date(),
-                })
-                .where(eq(document.id, documentId));
+            await db.transaction(async tx => {
+                const [previous] = await tx
+                    .select({ url: document.url, companyId: document.companyId })
+                    .from(document)
+                    .where(eq(document.id, documentId))
+                    .for("update");
+                const obsoleteUrl = previous ? previous.url : result.blobUrl!;
+                if (obsoleteUrl !== result.blobUrl || !previous) {
+                    await planObjectDeletion(tx, {
+                        companyId: previous?.companyId ?? BigInt(result.companyId!),
+                        urls: [obsoleteUrl],
+                        requestedBy: "system:replaced_object",
+                        reason: "replaced_object",
+                        traceId: randomUUID(),
+                    });
+                }
+                if (!previous) return;
+                await tx
+                    .update(document)
+                    .set({
+                        url: result.blobUrl!,
+                        updatedAt: new Date(),
+                    })
+                    .where(eq(document.id, documentId));
+            });
 
             return result.blobUrl!;
         });

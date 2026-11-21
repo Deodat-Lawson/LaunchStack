@@ -2,7 +2,8 @@
  * Start a generic-provider OAuth flow (Slack, GitHub, LinkedIn, Notion):
  * build the consent URL with an HMAC-signed state, double the nonce into an
  * httpOnly cookie, and redirect. Google Drive and Gmail connect through their
- * own flow at /api/connectors/google/oauth/start. For Notion, running this
+ * own flow at /api/connectors/google/oauth/start, and Outlook through
+ * /api/connectors/microsoft/oauth/start?provider=outlook. For Notion, running this
  * again reopens Notion's page picker, which is how more pages are added.
  * Notion is a per-user connection, so any member who may upload files may
  * start it; the others connect for the whole workspace and need
@@ -45,7 +46,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ prov
                     ? t("driveConnectsElsewhere")
                     : provider === "gmail"
                       ? t("gmailConnectsElsewhere")
-                      : t("unknownProvider", { provider })
+                      : provider === "outlook"
+                        ? t("outlookConnectsElsewhere")
+                        : t("unknownProvider", { provider })
             );
         }
 

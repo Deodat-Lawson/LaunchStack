@@ -6,10 +6,16 @@
  *
  *   pnpm --filter @launchstack/web db:backfill --list
  *   pnpm --filter @launchstack/web db:backfill --only=2026-08-note-embeddings
+ *   pnpm --filter @launchstack/web db:backfill --only=2026-11-document-file-urls --batch=500
  *   pnpm --filter @launchstack/web db:backfill --all [--batch=500] [--dry-run]
  *
  * Safe to interrupt: progress is written to the `data_backfills` ledger after
  * every batch, and re-running resumes from there.
+ *
+ * `2026-11-document-file-urls` needs only DATABASE_URL. It rewrites document.url
+ * and document_versions.url only when the entire value is an HTTP(S) origin
+ * followed by /api/files/{numeric-id}; queries, fragments, trailing slashes and
+ * external object paths are left intact. Use --dry-run to estimate first.
  */
 
 import "dotenv/config";

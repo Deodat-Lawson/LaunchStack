@@ -61,6 +61,13 @@ async function revoke(
         if (provider === "gmail" && tokens.refreshToken) {
             return await revokeGoogleToken(tokens.refreshToken);
         }
+        // Microsoft 365 (OneDrive and SharePoint): Microsoft offers a web app
+        // no endpoint to revoke one delegated refresh token, so there is
+        // nothing to call. Disconnecting deletes LaunchStack's stored copy,
+        // which is the only copy; the permission itself stays listed in the
+        // person's Microsoft account until they or their administrator
+        // remove it there, and Settings says so (`microsoft365Sync`).
+        if (provider === "microsoft-365") return false;
     } catch (error) {
         console.error(`[connectors] ${provider} revocation failed:`, error);
     }

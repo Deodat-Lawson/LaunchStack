@@ -7,8 +7,17 @@ import "@testing-library/jest-dom";
 
 import { renderWithLocale } from "~/i18n/testing/render";
 
+import type { ChatCreatedSource } from "~/lib/chat-turns";
+
 import { CreatedSources, createdSourcePlace } from "../CreatedSources";
 import type { WorkspaceSource } from "../types";
+
+// The picture reads the map from the server; here it only says which map it draws.
+jest.mock("../../_mindmap/ui/DiagramCardPreview", () => ({
+    DiagramCardPreview: ({ mindmapId }: { mindmapId: number }) => (
+        <div data-testid="diagram-preview">{`preview of m${mindmapId}`}</div>
+    ),
+}));
 
 /**
  * The documents an answer wrote: listed under it with where they went and
@@ -94,5 +103,89 @@ describe("CreatedSources", () => {
         );
         expect(screen.getByText("私有 · 仅你可见")).toBeInTheDocument();
         expect(screen.getByRole("button", { name: "打开" })).toBeInTheDocument();
+    });
+
+    describe("diagrams the answer drew or changed", () => {
+        const map = (overrides: Partial<WorkspaceSource> = {}) =>
+            source({
+                id: "m7",
+                documentId: undefined,
+                mindmapId: 7,
+                type: "mindmap",
+                title: "Refunds",
+                size: "6 shapes",
+                ...overrides,
+            });
+        const DREW: ChatCreatedSource[] = [
+            { kind: "diagram", mindmapId: 7, title: "Refunds", folder: "Unfiled" },
+        ];
+
+        it("shows the diagram's picture, says it drew it, and opens it from the picture or the button", async () => {
+            const user = userEvent.setup();
+            const onOpen = jest.fn();
+            const refunds = map();
+            render(<CreatedSources created={DREW} sources={[refunds]} onOpen={onOpen} />);
+
+            const region = screen.getByRole("region", { name: "Made in your workspace" });
+            expect(region).toHaveTextContent("Drew 1 diagram");
+            expect(await screen.findByTestId("diagram-preview")).toHaveTextContent("preview of m7");
+            expect(screen.getByText("Diagram · Private · Only you")).toBeInTheDocument();
+
+            await user.click(screen.getByRole("button", { name: "Open Refunds" }));
+            await user.click(screen.getByRole("button", { name: "Open" }));
+            expect(onOpen).toHaveBeenCalledTimes(2);
+            expect(onOpen).toHaveBeenCalledWith(refunds);
+        });
+
+        it("says when it changed a diagram that was already there", () => {
+            render(
+                <CreatedSources
+                    created={[
+                        {
+                            kind: "diagram",
+                            mindmapId: 7,
+                            title: "Refunds",
+                            folder: "Unfiled",
+                            edited: true,
+                        },
+                    ]}
+                    sources={[map()]}
+                />
+            );
+            expect(
+                screen.getByRole("region", { name: "Made in your workspace" })
+            ).toHaveTextContent("Changed 1 diagram");
+            expect(screen.getByText("Changed · Private · Only you")).toBeInTheDocument();
+        });
+
+        it("counts documents and diagrams together, and never mistakes a map for a document", () => {
+            render(
+                <CreatedSources
+                    created={[...CREATED, ...DREW]}
+                    // The map's published copy shares no id with the created document.
+                    sources={[source(), map({ documentId: 91 })]}
+                    onOpen={jest.fn()}
+                />
+            );
+            expect(
+                screen.getByRole("region", { name: "Made in your workspace" })
+            ).toHaveTextContent("Made or changed 2 items");
+            expect(screen.getAllByRole("button", { name: "Open" })).toHaveLength(2);
+        });
+
+        it("leaves out a diagram the reader cannot open", () => {
+            const { container } = render(<CreatedSources created={DREW} sources={[source()]} />);
+            expect(container).toBeEmptyDOMElement();
+        });
+
+        it("reads in Chinese", () => {
+            renderWithLocale(
+                <CreatedSources created={DREW} sources={[map()]} onOpen={jest.fn()} />,
+                "zh-CN"
+            );
+            expect(screen.getByRole("region", { name: "已在工作区中创建" })).toHaveTextContent(
+                "已绘制 1 个图表"
+            );
+        });
     });
 });

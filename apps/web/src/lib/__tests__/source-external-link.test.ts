@@ -106,6 +106,38 @@ describe("sourceExternalLink", () => {
         ).toEqual({ kind: "file", url: FILE });
     });
 
+    it("opens an Outlook conversation only for the mailbox's owner", () => {
+        const conversation = {
+            connector: "outlook",
+            connectionId: "6",
+            outlookLink: "https://outlook.office365.com/owa/?ItemID=AAMk%3D&exvsurl=1",
+        };
+        expect(
+            sourceExternalLink({ ocrMetadata: conversation, fileUrl: FILE }, context({ "6": ME }))
+        ).toEqual({ kind: "outlook", url: conversation.outlookLink });
+        // Shared with someone else: Outlook would not find it, the copy opens.
+        expect(
+            sourceExternalLink({ ocrMetadata: conversation, fileUrl: FILE }, context({ "6": "99" }))
+        ).toEqual({ kind: "file", url: FILE });
+        // A link that is not Outlook's is never followed.
+        expect(
+            sourceExternalLink(
+                {
+                    ocrMetadata: { ...conversation, outlookLink: "https://outlook.evil.test/owa" },
+                    fileUrl: FILE,
+                },
+                context({ "6": ME })
+            )
+        ).toEqual({ kind: "file", url: FILE });
+        // A conversation Graph sent no link for opens as the stored copy.
+        expect(
+            sourceExternalLink(
+                { ocrMetadata: { ...conversation, outlookLink: null }, fileUrl: FILE },
+                context({ "6": ME })
+            )
+        ).toEqual({ kind: "file", url: FILE });
+    });
+
     it("opens an Obsidian note in the owner's vault, encoded", () => {
         const note = {
             connector: "obsidian",

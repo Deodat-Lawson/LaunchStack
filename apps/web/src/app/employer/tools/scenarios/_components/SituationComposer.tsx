@@ -133,7 +133,7 @@ export function SituationComposer({
                                 type="button"
                                 onClick={() => onChange(t(`starters.${id}`))}
                                 className={cn(
-                                    "border-line text-ink-2 hover:border-brand hover:text-brand-ink focus-visible:ring-brand/50 rounded-full border px-2.5 py-0.5 text-left text-xs outline-none transition-colors focus-visible:ring-2",
+                                    "border-line text-ink-2 hover:border-brand hover:text-brand-ink focus-visible:ring-brand/50 rounded-md border px-2 py-1 text-left text-xs outline-none transition-colors focus-visible:ring-2",
                                     // Two are enough on a phone.
                                     i >= 2 && "@max-sm:hidden"
                                 )}

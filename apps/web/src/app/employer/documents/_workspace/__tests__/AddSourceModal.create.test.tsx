@@ -359,9 +359,63 @@ describe("creating a mindmap", () => {
         await user.click(screen.getByRole("button", { name: "Mindmap" }));
 
         expect(screen.getByText("Diagram it, then cite it")).toBeInTheDocument();
-        expect(screen.getByText("Blank canvas")).toBeInTheDocument();
-        expect(screen.getByText("Flowchart")).toBeInTheDocument();
-        expect(screen.getByText("Org chart")).toBeInTheDocument();
+        // Template cards are buttons named by the template; the AI box's type
+        // picker names the same kinds, so look for the cards themselves.
+        expect(screen.getByRole("button", { name: /^Blank canvas/ })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /^Flowchart/ })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: /^Org chart/ })).toBeInTheDocument();
+    });
+
+    it("draws a map from a description, files it where the modal adds, and opens it", async () => {
+        const user = userEvent.setup();
+        mount({ defaultCategory: "Strategy", folderAccess: { Strategy: access("workspace") } });
+
+        await user.click(screen.getByRole("button", { name: "Mindmap" }));
+        const generate = screen.getByRole("button", { name: "Generate" });
+        // Nothing to draw yet.
+        expect(generate).toBeDisabled();
+        await user.type(
+            screen.getByLabelText("Describe it and AI draws it"),
+            "How a customer refund works"
+        );
+        await user.click(generate);
+
+        await waitFor(() => expect(callTo("/api/mindmaps/generate")).toBeDefined());
+        expect(callTo("/api/mindmaps/generate")![1]!.method).toBe("POST");
+        const body = sentBody<{ prompt: string; folder: string; type?: string; mode: string }>(
+            "/api/mindmaps/generate"
+        );
+        expect(body.prompt).toBe("How a customer refund works");
+        expect(body.folder).toBe("Strategy");
+        // "Any type" leaves the choice to the model.
+        expect(body.type).toBeUndefined();
+        expect(["light", "dark"]).toContain(body.mode);
+        await waitFor(() =>
+            expect(mockPush).toHaveBeenCalledWith("/employer/documents?source=m42&edit=1")
+        );
+    });
+
+    it("says why when the AI could not draw it, and keeps the description", async () => {
+        defaultResponse = { error: "Couldn't draw that. Try describing it another way." };
+        fetchMock.mockImplementation((url: string) =>
+            Promise.resolve(
+                url === "/api/connectors/google"
+                    ? jsonOk(googleStatus, 200)
+                    : jsonOk(defaultResponse, url === "/api/mindmaps/generate" ? 502 : 200)
+            )
+        );
+        const user = userEvent.setup();
+        mount();
+
+        await user.click(screen.getByRole("button", { name: "Mindmap" }));
+        const box = screen.getByLabelText("Describe it and AI draws it");
+        await user.type(box, "Our hiring loop");
+        await user.click(screen.getByRole("button", { name: "Generate" }));
+
+        await waitFor(() => expect(callTo("/api/mindmaps/generate")).toBeDefined());
+        await waitFor(() => expect(box).not.toBeDisabled());
+        expect(box).toHaveValue("Our hiring loop");
+        expect(mockPush).not.toHaveBeenCalled();
     });
 
     it("names the destination folder so the user knows where it lands", async () => {

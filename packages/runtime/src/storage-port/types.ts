@@ -17,9 +17,6 @@ export interface StoragePort {
      */
     download(urlOrKey: string, init?: RequestInit): Promise<Response>;
 
-    /** Delete an object, identified by URL or key. No-op if the object is gone. */
-    delete(urlOrKey: string): Promise<void>;
-
     /** Identifier for the active backend (e.g. "s3", "database"). */
     readonly provider: string;
 }

@@ -9,6 +9,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Self-host installer** - run your own instance on a machine that has only
+  Docker: `curl … | bash`, then `launchstack setup`
+  - The wizard asks for the address, a chat key and an embeddings key,
+    generates every secret, and starts a production-shaped stack from published
+    images (automatic HTTPS for a domain or a bare public IP)
+  - `launchstack doctor` names a misconfiguration and its fix before anything
+    starts, then probes each running service with the credentials it was given
+  - `launchstack update`, `backup` and `restore`; installs stay on a pinned
+    release until updated
+  - Published images now include the migration job, the document converter
+    and the Word editing service; each version tag ships a self-host bundle
+  - Guide: `docs/self-hosting.md`
+
 - **Watch and listen to media sources** - audio and video play in the source
   viewer, opened from the recording or from its transcript
   - Video plays in the browser's player; audio in a themed deck (play, skip

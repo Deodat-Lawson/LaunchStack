@@ -115,6 +115,12 @@ describe("sourceKindOf", () => {
                 ocrMetadata: { connector: "gmail" },
             })
         ).toBe("gmail");
+        expect(
+            sourceKindOf({
+                creationKey: "connector:outlook:7:AAQk",
+                ocrMetadata: { connector: "outlook" },
+            })
+        ).toBe("outlook");
         expect(sourceKindOf({ creationKey: "website:https://acme.com", ocrMetadata: null })).toBe(
             "website"
         );

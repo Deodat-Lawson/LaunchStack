@@ -187,8 +187,10 @@ services:
     command:
       - inngest
       - start
-      # Syncs the worker's functions at boot, then re-checks every 60s so a
-      # worker redeploy (new or changed functions) is picked up on its own.
+      # Syncs the worker's functions at boot and re-checks every 60s. The
+      # re-check does not reliably pick up new functions after a worker
+      # redeploy: re-sync by hand (docs/runbooks/azure-lean-deploy.md,
+      # "Deploying updates").
       - --sdk-url=http://worker:8020/api/inngest
       - --poll-interval=60
       # The shared Postgres also serves the app (max_connections 100); keep

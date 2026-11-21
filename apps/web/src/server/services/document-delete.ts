@@ -25,16 +25,25 @@ import {
     documentReferenceResolution,
     documentViews,
     googleDrivePickedItem,
+    microsoft365PickedItem,
     predictiveDocumentAnalysisResults,
 } from "~/server/db/schema";
 import type { db as DbType } from "~/server/db";
 import { rememberDeletedSource } from "~/server/services/connectors/deleted-items";
+import { planDocumentDeletion } from "~/server/storage/deletion/plan";
 
 type Tx = Parameters<Parameters<(typeof DbType)["transaction"]>[0]>[0];
 
 export interface DeleteDocumentOptions {
+    readonly requestedBy: string;
+    readonly reason: string;
+    readonly traceId: string;
     /** Who is deleting it; recorded with a synced file so Settings can name it to them. */
     readonly deletedByUserPk?: number | null;
+    /** Rollback may remove rows that reference a caller-owned, reusable upload. */
+    readonly planStorageDeletion?: boolean;
+    /** Internal transformations must not register an intentional connector deletion. */
+    readonly rememberConnectorDeletion?: boolean;
 }
 
 /**
@@ -61,21 +70,57 @@ async function forgetDrivePick(tx: Tx, metadata: Record<string, unknown> | null)
         );
 }
 
+/**
+ * The same for a OneDrive or SharePoint file picked on its own: its pick is
+ * the file itself (`pickedRootId` equals its source id), so deleting the
+ * document ends the pick. A file that came through a picked folder leaves
+ * that folder's pick alone.
+ */
+async function forgetMicrosoft365Pick(
+    tx: Tx,
+    metadata: Record<string, unknown> | null
+): Promise<void> {
+    if (metadata?.connector !== "microsoft-365") return;
+    const { driveId, itemId, sourceId } = metadata;
+    const connectionId = Number(metadata.connectionId);
+    if (typeof driveId !== "string" || typeof itemId !== "string") return;
+    if (typeof sourceId !== "string" || metadata.pickedRootId !== sourceId) return;
+    if (!Number.isSafeInteger(connectionId)) return;
+    await tx
+        .delete(microsoft365PickedItem)
+        .where(
+            and(
+                eq(microsoft365PickedItem.connectionId, connectionId),
+                eq(microsoft365PickedItem.driveId, driveId),
+                eq(microsoft365PickedItem.itemId, itemId)
+            )
+        );
+}
+
 export async function deleteDocumentCore(
     tx: Tx,
     docId: number,
-    options: DeleteDocumentOptions = {}
+    options: DeleteDocumentOptions
 ): Promise<void> {
     const docIdBig = BigInt(docId);
+    if (options.planStorageDeletion !== false) {
+        await planDocumentDeletion(tx, {
+            documentIds: [docId],
+            requestedBy: options.requestedBy,
+            reason: options.reason,
+            traceId: options.traceId,
+        });
+    }
 
     const [row] = await tx
         .select({ title: document.title, metadata: document.ocrMetadata })
         .from(document)
         .where(eq(document.id, docId))
         .limit(1);
-    if (row) {
+    if (row && options.rememberConnectorDeletion !== false) {
         const metadata = (row.metadata ?? null) as Record<string, unknown> | null;
         await forgetDrivePick(tx, metadata);
+        await forgetMicrosoft365Pick(tx, metadata);
         // A synced file stays deleted: its next sync would otherwise re-import it.
         await rememberDeletedSource(tx, {
             title: row.title,

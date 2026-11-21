@@ -136,7 +136,7 @@ const LEDGER_SHAPES: { pattern: RegExp; key: LedgerKey; names: string[] }[] = [
         names: ["title", "round"],
     },
     {
-        pattern: /^Scenario "(.+)" \((brief|cast|report)\)$/,
+        pattern: /^Scenario "(.+)" \((brief|cast|report|ontology|graph)\)$/,
         key: "scenarioUnit",
         names: ["title", "unit"],
     },

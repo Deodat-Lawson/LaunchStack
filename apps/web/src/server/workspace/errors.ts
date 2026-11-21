@@ -36,11 +36,14 @@ export const forbidden = (
     message: ErrorText = copy("errors.api.forbidden"),
     extra?: Record<string, unknown>
 ) => new WorkspaceError(403, message, extra);
-export const notFound = (message: ErrorText = copy("errors.api.notFound")) =>
-    new WorkspaceError(404, message);
+export const notFound = (
+    message: ErrorText = copy("errors.api.notFound"),
+    extra?: Record<string, unknown>
+) => new WorkspaceError(404, message, extra);
 export const conflict = (message: ErrorText, extra?: Record<string, unknown>) =>
     new WorkspaceError(409, message, extra);
-export const gone = (message: ErrorText) => new WorkspaceError(410, message);
+export const gone = (message: ErrorText, extra?: Record<string, unknown>) =>
+    new WorkspaceError(410, message, extra);
 
 export function isWorkspaceError(error: unknown): error is WorkspaceError {
     return error instanceof WorkspaceError;

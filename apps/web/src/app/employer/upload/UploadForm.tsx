@@ -485,8 +485,11 @@ const UploadForm: React.FC<UploadFormProps> = ({
                 const res = await uploadFiles("documentUploaderRestricted", {
                     files: [doc.file],
                 });
-                if (!res?.[0]?.url) throw new Error(t("cloudNoUrl"));
-                fileUrl = res[0].url;
+                const uploaded = res?.[0];
+                if (uploaded?.serverData?.ok !== true || !uploaded.ufsUrl) {
+                    throw new Error(t("cloudNoUrl"));
+                }
+                fileUrl = uploaded.ufsUrl;
                 resolvedStorageType = "s3";
             } else {
                 updateDocument(doc.id, { progress: 30 });

@@ -64,7 +64,7 @@ beforeEach(async () => {
     download = vi.fn(
         async () => new Response(new Uint8Array(docx), { headers: { "content-type": DOCX_MIME } })
     );
-    configureStorage({ provider: "test", upload: vi.fn(), delete: vi.fn(), download });
+    configureStorage({ provider: "test", upload: vi.fn(), download });
 });
 
 afterEach(() => {

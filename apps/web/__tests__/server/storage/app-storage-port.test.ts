@@ -10,7 +10,6 @@ const mockUploadFile = jest.fn();
 jest.mock("~/lib/storage", () => ({
     uploadFile: (input: unknown) => mockUploadFile(input),
     fetchFile: jest.fn(),
-    deleteFileByUrl: jest.fn(),
     resolveStorageBackend: () => "database",
 }));
 

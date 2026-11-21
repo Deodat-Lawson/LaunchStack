@@ -118,7 +118,6 @@ export async function GET(request: Request, { params }: RouteParams) {
         const preview = await renderWebsitePreview({
             documentId,
             source: row.url,
-            previous: stored,
             gotenberg,
             userId: ctx.data.authUserId,
             companyId,

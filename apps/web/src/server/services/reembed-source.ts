@@ -21,6 +21,12 @@ import { and, desc, eq, sql, type SQL } from "drizzle-orm";
 
 import { isZipFile } from "@launchstack/conversion/archive-expansion";
 import { resolveIngestIndexKey } from "@launchstack/llm/embeddings";
+import { getOcrConfig } from "@launchstack/conversion/ocr/config";
+import {
+    buildInternalFileUrl,
+    isInternalFileUrl,
+    parseInternalFileId,
+} from "@launchstack/store/crypto";
 import { document, documentVersions, ocrJobs } from "@launchstack/store/schema";
 import { mediaKindOfMime, mediaKindOfName } from "~/lib/media-document";
 import { db } from "~/server/db";
@@ -195,6 +201,14 @@ export async function reembedDocument(params: {
     }
 
     const url = version?.url ?? target.url;
+    const origin = getOcrConfig().appPublicUrl ?? "http://app:3000";
+    const fileId = parseInternalFileId(url);
+    // A relative file reference survives deployment-origin changes and legacy
+    // versions with no prior job. Only the worker URL needs the current origin.
+    const processingUrl =
+        fileId !== null && isInternalFileUrl(url, origin)
+            ? buildInternalFileUrl(origin, fileId)
+            : (job?.documentUrl ?? url);
     const lifecycle = await createDocumentVersionLifecycle({
         documentId: target.id,
         companyId: target.companyId,
@@ -202,9 +216,7 @@ export async function reembedDocument(params: {
         title: target.title,
         category: target.category,
         url,
-        // The URL the last run fetched: a stored-in-database file's row URL
-        // is relative, and the worker needs the absolute one it was given.
-        processingUrl: job?.documentUrl ?? url,
+        processingUrl,
         creationKey: `reembed:${target.id}:${version?.id ?? "legacy"}`,
         mimeType,
         fileSize: version?.fileSize ?? null,

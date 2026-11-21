@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, Sparkles } from "lucide-react";
+import { FileText, LayoutGrid, Rows3, Sparkles } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useMemo, useState } from "react";
 
@@ -13,8 +13,10 @@ import { atHandle, isLive, sourceKindLabel, type ScenarioWordsT } from "~/lib/sc
 import { signatureLine } from "../_lib/people";
 import { StanceDot, StanceTrail, stanceMove } from "./Bits";
 import { Portrait } from "./Portrait";
+import { StanceGrid } from "./StanceGrid";
 
 type Filter = "all" | "grounded" | "invented";
+type View = "cards" | "grid";
 
 type PeopleT = ReturnType<typeof useTranslations<"scenarios.people">>;
 
@@ -84,6 +86,7 @@ export function PeopleTab({
     const t = useTranslations("scenarios.people");
     const tc = useTranslations("common");
     const [filter, setFilter] = useState<Filter>("all");
+    const [view, setView] = useState<View>("cards");
     const grounded = run.people.filter(p => p.grounding === "grounded").length;
     const shown = useMemo(
         () => (filter === "all" ? run.people : run.people.filter(p => p.grounding === filter)),
@@ -116,37 +119,60 @@ export function PeopleTab({
                         invented: run.people.length - grounded,
                     })}
                 </span>
-                <ToggleGroup
-                    type="single"
-                    value={filter}
-                    onValueChange={v => v && setFilter(v as Filter)}
-                    variant="outline"
-                    size="sm"
-                    aria-label={t("filterLabel")}
-                >
-                    <ToggleGroupItem value="all" className="px-2.5 text-xs">
-                        {tc("status.all")}
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="grounded" className="px-2.5 text-xs">
-                        {t("grounded")}
-                    </ToggleGroupItem>
-                    <ToggleGroupItem value="invented" className="px-2.5 text-xs">
-                        {t("invented")}
-                    </ToggleGroupItem>
-                </ToggleGroup>
+                <div className="flex flex-wrap items-center gap-2">
+                    <ToggleGroup
+                        type="single"
+                        value={filter}
+                        onValueChange={v => v && setFilter(v as Filter)}
+                        variant="outline"
+                        size="sm"
+                        aria-label={t("filterLabel")}
+                    >
+                        <ToggleGroupItem value="all" className="px-2.5 text-xs">
+                            {tc("status.all")}
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="grounded" className="px-2.5 text-xs">
+                            {t("grounded")}
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="invented" className="px-2.5 text-xs">
+                            {t("invented")}
+                        </ToggleGroupItem>
+                    </ToggleGroup>
+                    <ToggleGroup
+                        type="single"
+                        value={view}
+                        onValueChange={v => v && setView(v as View)}
+                        variant="outline"
+                        size="sm"
+                        aria-label={t("viewLabel")}
+                    >
+                        <ToggleGroupItem value="cards" className="gap-1.5 px-2.5 text-xs">
+                            <LayoutGrid className="size-3.5" aria-hidden />
+                            {t("viewCards")}
+                        </ToggleGroupItem>
+                        <ToggleGroupItem value="grid" className="gap-1.5 px-2.5 text-xs">
+                            <Rows3 className="size-3.5" aria-hidden />
+                            {t("viewGrid")}
+                        </ToggleGroupItem>
+                    </ToggleGroup>
+                </div>
             </div>
-            <ul className="grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-3.5">
-                {shown.map(person => (
-                    <li key={person.id}>
-                        <PersonaCard
-                            person={person}
-                            run={run}
-                            sources={sources}
-                            onOpen={() => onPerson(person.id)}
-                        />
-                    </li>
-                ))}
-            </ul>
+            {view === "grid" ? (
+                <StanceGrid run={run} people={shown} onPerson={onPerson} />
+            ) : (
+                <ul className="grid grid-cols-[repeat(auto-fill,minmax(290px,1fr))] gap-3.5">
+                    {shown.map(person => (
+                        <li key={person.id}>
+                            <PersonaCard
+                                person={person}
+                                run={run}
+                                sources={sources}
+                                onOpen={() => onPerson(person.id)}
+                            />
+                        </li>
+                    ))}
+                </ul>
+            )}
         </div>
     );
 }

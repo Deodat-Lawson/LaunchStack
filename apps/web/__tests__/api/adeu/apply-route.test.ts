@@ -48,11 +48,15 @@ jest.mock("~/server/services/google-drive/links", () => ({
 // matter how the drizzle builder chain is shaped.
 const mockSelectQueue: unknown[][] = [];
 const mockUpdateSet = jest.fn();
+const mockPlanObjectDeletion = jest.fn();
+jest.mock("~/server/storage/deletion/plan", () => ({
+    planObjectDeletion: (...args: unknown[]) => mockPlanObjectDeletion(...args),
+}));
 
 function mockSelectBuilder() {
     const resolve = () => Promise.resolve(mockSelectQueue.shift() ?? []);
     const builder: Record<string, unknown> = {};
-    for (const method of ["from", "where"]) {
+    for (const method of ["from", "where", "for"]) {
         builder[method] = () => builder;
     }
     builder.then = (onFulfilled: (v: unknown) => unknown, onRejected: (e: unknown) => unknown) =>
@@ -62,6 +66,8 @@ function mockSelectBuilder() {
 
 jest.mock("~/server/db", () => ({
     db: {
+        transaction: (callback: (tx: unknown) => Promise<unknown>) =>
+            callback(jest.requireMock("~/server/db").db),
         select: () => mockSelectBuilder(),
         update: () => ({
             set: (values: unknown) => {
@@ -104,6 +110,7 @@ beforeEach(() => {
             fileType: "docx",
         },
     ]);
+    mockSelectQueue.push([{ url: "/api/files/100", companyId: BigInt(42) }]);
     mockFetchFile.mockResolvedValue(new Response(Buffer.from("PK original"), { status: 200 }));
     mockGetActiveDriveLink.mockResolvedValue(null);
     mockUploadFile.mockResolvedValue({
@@ -133,6 +140,16 @@ describe("POST /api/documents/adeu/apply", () => {
         expect(mockUpdateSet).toHaveBeenCalledWith(
             expect.objectContaining({ url: "/api/files/101" })
         );
+        expect(mockPlanObjectDeletion).toHaveBeenCalledWith(jest.requireMock("~/server/db").db, {
+            companyId: BigInt(42),
+            urls: ["/api/files/100"],
+            requestedBy: "user_1",
+            reason: "replaced_object",
+            traceId: expect.any(String),
+        });
+        expect(mockPlanObjectDeletion.mock.invocationCallOrder[0]).toBeLessThan(
+            mockUpdateSet.mock.invocationCallOrder[0]!
+        );
     });
 
     it("stamps the document's workspace on the upload after tracked edits", async () => {
@@ -149,5 +166,27 @@ describe("POST /api/documents/adeu/apply", () => {
         expect(mockUploadFile).toHaveBeenCalledWith(
             expect.objectContaining({ companyId: BigInt(42) })
         );
+    });
+
+    it("plans the URL read under the lock, not the earlier editing snapshot", async () => {
+        mockSelectQueue[1] = [{ url: "/api/files/concurrently-replaced", companyId: BigInt(42) }];
+        mockAcceptAllChanges.mockResolvedValue(new Blob(["edited"]));
+        expect((await POST(request({ documentId: 7, resolveAll: "accept" }))).status).toBe(200);
+        expect(mockPlanObjectDeletion).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({ urls: ["/api/files/concurrently-replaced"] })
+        );
+    });
+
+    it("does not repoint the document if durable cleanup cannot be planned", async () => {
+        mockAcceptAllChanges.mockResolvedValue(new Blob(["edited"]));
+        mockPlanObjectDeletion.mockRejectedValueOnce(new Error("outbox unavailable"));
+        const quiet = jest.spyOn(console, "error").mockImplementation(() => undefined);
+        try {
+            expect((await POST(request({ documentId: 7, resolveAll: "accept" }))).status).toBe(500);
+            expect(mockUpdateSet).not.toHaveBeenCalled();
+        } finally {
+            quiet.mockRestore();
+        }
     });
 });

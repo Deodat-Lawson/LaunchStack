@@ -21,6 +21,8 @@ import { draftAccess } from "~/server/mindmap/access";
 import { getMindmap } from "~/server/mindmap/repository";
 import { processDocumentUpload } from "~/server/services/document-upload";
 import { createDocumentVersionLifecycle } from "~/server/services/document-creation";
+import { uploadFile } from "~/lib/storage";
+import { authorizeInternalFileRef } from "~/server/services/internal-file-ref";
 import { canEditFolder } from "~/server/services/folder-access";
 import { recordUpload } from "~/server/workspace/added-documents";
 import { canEditDocument } from "~/server/workspace/item-access";
@@ -145,6 +147,11 @@ beforeEach(() => {
     jest.clearAllMocks();
     fakeDb.reset();
     mockRequireWorkspaceContext.mockResolvedValue({ success: true, data: member });
+    jest.mocked(uploadFile).mockResolvedValue({
+        url: "/api/files/9",
+        pathname: "/api/files/9",
+        provider: "database",
+    } as never);
     jest.mocked(canEditFolder).mockResolvedValue(true);
     jest.mocked(canEditDocument).mockResolvedValue(true);
     jest.mocked(draftAccess).mockResolvedValue({ level: "manage" } as never);
@@ -227,6 +234,37 @@ describe("POST /api/mindmaps/[id]/publish", () => {
 
         expect(response.status).toBe(201);
         expect(createDocumentVersionLifecycle).toHaveBeenCalled();
+        expect(recordUpload).not.toHaveBeenCalled();
+    });
+
+    it.each([
+        "/api/files/unused/../7",
+        "/api/./files/7",
+        "\\api\\files\\7",
+        " \t/api/fi\tles/7 \t",
+        "/api/files/9/../../../api/files/7",
+    ])("persists a canonical generated mindmap version for %j", async url => {
+        jest.mocked(getMindmap).mockResolvedValue(
+            map({ publishedDocumentId: BigInt(40) }) as never
+        );
+        fakeDb.onSelect(document, [{ category: "Sales" }]);
+        jest.mocked(uploadFile).mockResolvedValue({ url, provider: "database" } as never);
+        jest.mocked(authorizeInternalFileRef).mockResolvedValueOnce(7);
+        jest.mocked(createDocumentVersionLifecycle).mockResolvedValue({
+            document: { id: 40 },
+            jobId: "job-2",
+        } as never);
+
+        const response = await publishMindmap(post("/api/mindmaps/8/publish", {}), mapParams);
+
+        expect(response.status).toBe(201);
+        expect(authorizeInternalFileRef).toHaveBeenCalledWith(url, member.companyId, "AZURE");
+        expect(createDocumentVersionLifecycle).toHaveBeenCalledWith(
+            expect.objectContaining({
+                url: "/api/files/7",
+                processingUrl: "https://app.test/api/files/7",
+            })
+        );
         expect(recordUpload).not.toHaveBeenCalled();
     });
 });

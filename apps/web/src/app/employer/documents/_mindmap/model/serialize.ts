@@ -19,6 +19,7 @@ import {
     makeId,
 } from "./factory";
 import { graphIndex, isMindmapPage } from "./doc";
+import { mermaidToDoc } from "./mermaid";
 import { branchSwatch } from "./palette";
 import { SHAPE_BY_ID } from "./shapes";
 import { nonEmpty, trimmedOr } from "./strings";
@@ -588,93 +589,16 @@ export function toMermaid(doc: MindmapDoc, pageId?: string): string {
 }
 
 /**
- * Minimal Mermaid flowchart import — enough to bring a diagram from a README
- * into the editor. Unsupported directives are skipped rather than rejected.
+ * Mermaid flowchart import — the parser and the layered placement live in
+ * `mermaid.ts`, which the AI tools share. Unsupported directives are skipped
+ * rather than rejected.
  */
 export function fromMermaid(
     text: string,
     title = "Imported diagram",
     pageName = "Page 1"
 ): MindmapDoc {
-    const nodes = new Map<string, DiagramNode>();
-    const edges: DiagramEdge[] = [];
-    let cursor = 0;
-
-    const ensure = (key: string, label?: string, shape: ShapeId = "process"): DiagramNode => {
-        const existing = nodes.get(key);
-        if (existing) {
-            if (label && !existing.text) existing.text = label;
-            return existing;
-        }
-        const col = cursor % 4;
-        const row = Math.floor(cursor / 4);
-        cursor += 1;
-        const node = createNode({
-            shape,
-            x: col * 230,
-            y: row * 150,
-            text: label ?? key,
-        });
-        nodes.set(key, node);
-        return node;
-    };
-
-    const nodePattern =
-        /([A-Za-z0-9_]+)\s*(\(\(|\(\[|\[\(|\{\{|\[\/|\[|\(|\{)\s*"?([^"\]})/]*)"?\s*(\)\)|\]\)|\)\]|\}\}|\/\]|\]|\)|\})/g;
-    const edgePattern =
-        /([A-Za-z0-9_]+)\s*(-{2,3}>|-\.->|={2,3}>|---)\s*(?:\|\s*"?([^"|]*)"?\s*\|)?\s*([A-Za-z0-9_]+)/g;
-
-    const shapeFor = (open: string): ShapeId => {
-        switch (open) {
-            case "((":
-                return "circle";
-            case "([":
-                return "terminator";
-            case "[(":
-                return "database";
-            case "{{":
-                return "hexagon";
-            case "[/":
-                return "data";
-            case "{":
-                return "decision";
-            case "(":
-                return "rounded-rectangle";
-            default:
-                return "process";
-        }
-    };
-
-    for (const line of text.split("\n")) {
-        const trimmed = line.trim();
-        if (!trimmed || /^(flowchart|graph|subgraph|end|classDef|class |style |%%)/.test(trimmed)) {
-            continue;
-        }
-        nodePattern.lastIndex = 0;
-        let m: RegExpExecArray | null;
-        while ((m = nodePattern.exec(trimmed)) !== null) {
-            ensure(m[1]!, trimmedOr(m[3], m[1]!), shapeFor(m[2]!));
-        }
-        edgePattern.lastIndex = 0;
-        let e: RegExpExecArray | null;
-        while ((e = edgePattern.exec(trimmed)) !== null) {
-            const from = ensure(e[1]!);
-            const to = ensure(e[4]!);
-            edges.push(
-                createEdge({
-                    from: { nodeId: from.id, port: "auto" },
-                    to: { nodeId: to.id, port: "auto" },
-                    kind: "elbow",
-                    label: nonEmpty(e[3]),
-                    endArrow: e[2] === "---" ? "none" : "arrow",
-                    style: e[2] === "-.->" ? { strokeStyle: "dashed" } : undefined,
-                })
-            );
-        }
-    }
-
-    const page = createPage(pageName);
-    return createDoc(title, [{ ...page, nodes: [...nodes.values()], edges }]);
+    return mermaidToDoc(text, title, pageName);
 }
 
 // ---------------------------------------------------------------------------

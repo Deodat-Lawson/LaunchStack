@@ -264,7 +264,9 @@ curl -s -X POST http://127.0.0.1:8288/v0/gql -H 'content-type: application/json'
 
 The last command should print `"name":"pdr-ai"`, `"url":"http://worker:8020/api/inngest"`,
 `"connected":true` and `"error":null` within a minute of the worker becoming
-healthy. More checks are in [Background jobs](#background-jobs-self-hosted-inngest).
+healthy. On a fresh install the boot sync registers every function; after an
+update, re-sync by hand as shown in [Deploying updates](#deploying-updates).
+More checks are in [Background jobs](#background-jobs-self-hosted-inngest).
 
 Then in a browser:
 
@@ -293,6 +295,24 @@ ssh <ADMIN_USER>@<PUBLIC_IP> 'cd LaunchStack && git pull && \
 services when their sources changed. After changing `.env`, add
 `--force-recreate app worker` — Compose does not restart containers for env
 changes on its own.
+
+**Then re-sync the worker's functions with Inngest.** Once the new worker is
+healthy, have it register itself, and check the server's list:
+
+```bash
+docker exec pdr_ai_v2-worker node -e "fetch('http://localhost:8020/api/inngest',{method:'PUT'}).then(r=>r.text()).then(console.log)"
+# {"message":"Successfully registered","modified":true}   ← the server's list was stale and is now current
+# {"message":"Successfully registered","modified":false}  ← it was already current
+
+curl -s -X POST http://127.0.0.1:8288/v0/gql -H 'content-type: application/json' \
+  -d '{"query":"{ apps { url error connected functionCount functions { slug } } }"}'
+```
+
+Expect `"url":"http://worker:8020/api/inngest"`, `"connected":true`,
+`"error":null`, and the slug of every function the release added
+(`pdr-ai-<function id>`). The 60-second poll alone can leave new functions
+unregistered for good, and their events then trigger nothing; see
+[Background jobs](#background-jobs-self-hosted-inngest).
 
 **Releases whose migration changes an index the running app writes through**
 need the app and worker stopped first, or the old containers fail those
@@ -600,10 +620,16 @@ How it fits together:
   the same two values, in signed mode (`INNGEST_DEV` empty,
   `INNGEST_BASE_URL=http://inngest:8288`). A request with any other key gets
   a 401.
-- **Registration is automatic.** The server syncs
-  `http://worker:8020/api/inngest` at boot and re-checks every 60 seconds, so
-  new or changed functions in a worker redeploy are live within a minute. There
-  is nothing to register by hand, and Caddy no longer routes `/api/inngest`.
+- **Registration happens at boot; re-sync after every deploy.** The server
+  syncs `http://worker:8020/api/inngest` when it starts and polls it every 60
+  seconds (`--poll-interval=60`), but the poll does not reliably pick up new
+  functions from a redeployed worker. On 2026-11-14 the worker restarted with
+  17 new functions and the server kept listing the old 29 for over five
+  minutes, so Extract, Scenarios v2 and the Microsoft 365 syncs could never
+  have been triggered. Ask the worker to register itself after each deploy
+  (see [Deploying updates](#deploying-updates)). It is idempotent, and
+  `INNGEST_SERVE_HOST` makes it register `http://worker:8020` whichever
+  address the request came in on. Caddy does not route `/api/inngest`.
 - **Isolation.** The server and its Redis sit on their own Docker network
   (`inngest`) shared only with `app`, `worker` and `db`. Gotenberg and the
   document services, which fetch user-supplied URLs, cannot resolve it.

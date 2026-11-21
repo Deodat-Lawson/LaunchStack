@@ -8,13 +8,18 @@ import { cn } from "~/lib/utils";
 
 import {
     STANCE_BG,
+    STANCE_FILL,
     isLive,
     progressLabel,
     stanceLabel,
     type ScenarioWordsT,
 } from "~/lib/scenarios/words";
 
-/** A run's state as a dot and a word: "Round 3 of 8", "Done", "Failed". */
+/**
+ * A run's state as a dot and a word: "Round 3 of 8", "Done", "Failed". The dot
+ * holds still while a run is live; the word says it, and a pulse would only
+ * pull the eye from the page.
+ */
 export function StatusPill({
     run,
     className,
@@ -38,7 +43,7 @@ export function StatusPill({
                 className={cn(
                     "size-[7px] shrink-0 rounded-full",
                     run.status === "done" && "bg-success",
-                    live && "bg-brand animate-pulse motion-reduce:animate-none",
+                    live && "bg-brand",
                     run.status === "failed" && "bg-danger",
                     run.status === "cancelled" && "bg-ink-4"
                 )}
@@ -125,13 +130,7 @@ export function StanceTrail({
 }
 
 function stanceFill(s: Stance): string {
-    return {
-        [-2]: "fill-danger",
-        [-1]: "fill-danger/60",
-        [0]: "fill-ink-4",
-        [1]: "fill-info/60",
-        [2]: "fill-info",
-    }[s];
+    return STANCE_FILL[s];
 }
 
 /**
@@ -171,4 +170,22 @@ export function stanceMove(t: ScenarioWordsT, from: Stance, to: Stance): string 
     return from === to
         ? stanceLabel(t, to)
         : t("stanceMove", { from: stanceLabel(t, from), to: stanceLabel(t, to) });
+}
+
+/** The five stances as swatches and words, critical to supportive, for anything coloured by stance. */
+export function StanceKey({ className }: { className?: string }) {
+    const t = useTranslations("scenarios.words");
+    return (
+        <ul
+            className={cn("text-ink-2 flex flex-wrap gap-x-4 gap-y-1 text-xs", className)}
+            aria-hidden
+        >
+            {([-2, -1, 0, 1, 2] as const).map(s => (
+                <li key={s} className="inline-flex items-center gap-1.5">
+                    <span className={cn("size-2.5 rounded-[3px]", STANCE_BG[s])} />
+                    {stanceLabel(t, s)}
+                </li>
+            ))}
+        </ul>
+    );
 }

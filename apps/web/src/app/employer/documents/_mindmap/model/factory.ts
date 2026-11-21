@@ -7,6 +7,7 @@
 
 import {
     branchSwatch,
+    FRAME_PAPER,
     neutralsFor,
     PAPER,
     stickyColors,
@@ -185,8 +186,8 @@ function presetFor(
                     // the paper rather than sitting at a fixed lightness — but
                     // it must be *visibly* raised, or placing one reads as the
                     // tool doing nothing.
-                    fill: mode === "dark" ? "oklch(0.245 0.018 285)" : "oklch(0.972 0.005 280)",
-                    stroke: mode === "dark" ? "oklch(0.42 0.02 285)" : "oklch(0.74 0.012 280)",
+                    fill: FRAME_PAPER[mode].fill,
+                    stroke: FRAME_PAPER[mode].stroke,
                     strokeWidth: 1.5,
                     radius: 8,
                 },

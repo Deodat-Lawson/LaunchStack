@@ -279,6 +279,19 @@ export function privacyOverview(): PrivacyOverview {
             note: "Reads only the pages picked on Notion's consent screen. Nothing is written to Notion.",
         },
         {
+            id: "microsoft-365",
+            label: "Microsoft 365",
+            host:
+                server.MICROSOFT_OAUTH_CLIENT_ID && server.MICROSOFT_OAUTH_CLIENT_SECRET
+                    ? "graph.microsoft.com"
+                    : null,
+            sends: "metadata",
+            enabled: Boolean(
+                server.MICROSOFT_OAUTH_CLIENT_ID && server.MICROSOFT_OAUTH_CLIENT_SECRET
+            ),
+            note: "Reads only the OneDrive and SharePoint files and folders picked in Add source. Nothing is written to Microsoft 365.",
+        },
+        {
             id: "sec-edgar",
             label: "Investor search",
             host: "efts.sec.gov",

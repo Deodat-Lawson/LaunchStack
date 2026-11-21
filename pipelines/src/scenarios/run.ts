@@ -249,6 +249,9 @@ async function buildCast(
 export async function advanceRun(ports: ScenarioRunPorts, runId: number): Promise<AdvanceOutcome> {
     const run = await ports.store.get(runId);
     if (!run) return { state: "skipped", reason: "missing" };
+    // A v2 run belongs to v2/engine: this loop's unfenced commits and charges
+    // must never reach it, whichever poll or event routed it here.
+    if (run.contractVersion >= 2) return { state: "skipped", reason: "contract_v2" };
     if (TERMINAL_STATUSES.includes(run.status))
         return { state: run.status as "done" | "failed" | "cancelled" };
     if (run.cancelRequestedAt) {

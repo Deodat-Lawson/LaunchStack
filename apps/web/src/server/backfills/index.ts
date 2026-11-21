@@ -5,6 +5,7 @@ import { documentNoteEmbeddings, documentNotes } from "~/server/db/schema";
 
 import { embedNote } from "../notes/embed-note";
 import { countUnrepairedDocuments, repairDocumentVersions } from "./document-version-repair";
+import { countLegacyDocumentFileUrls, normalizeDocumentFileUrls } from "./document-file-urls";
 import {
     countCanonicallyOwnedUnstampedFileUploads,
     countUnstampedFileUploads,
@@ -18,6 +19,10 @@ import {
 import { prospectPicturesBackfill } from "./prospect-pictures";
 import { countUnmarkedWebsiteSources, markWebsiteSources } from "./website-source-markers";
 import { applyWorkspaceAccessBackfill, countWorkspaceAccessRows } from "./workspace-access";
+import {
+    backfillStorageLedgerFromFileUploads,
+    countStorageLedgerPointers,
+} from "./storage-ledger-from-file-uploads";
 
 /**
  * The backfill registry.
@@ -150,6 +155,28 @@ const fileUploadsCompanyId: Backfill = {
 };
 
 /**
+ * Remove deployment origins from exact legacy internal file URLs. The document
+ * and version rows keep the same file identity when APP_PUBLIC_URL changes.
+ * Processing jobs still receive an absolute URL at dispatch time.
+ */
+const documentFileUrls: Backfill = {
+    id: "2026-11-document-file-urls",
+    description: "Normalize exact absolute document and version file URLs to relative paths",
+    requiresEngine: false,
+
+    estimate: ({ db, cursor }) => countLegacyDocumentFileUrls(db, cursor),
+    step: normalizeDocumentFileUrls,
+};
+
+const storageLedgerFromFileUploads: Backfill = {
+    id: "2026-11-storage-ledger-from-file-uploads",
+    description: "Inventory owned database files and current-location S3 file-upload pointers",
+    requiresEngine: false,
+    estimate: ({ db, cursor }) => countStorageLedgerPointers(db, cursor),
+    step: backfillStorageLedgerFromFileUploads,
+};
+
+/**
  * Stamp file_uploads rows written without company_id after the backfill above
  * completed (the ledger never re-runs a finished entry). The Drive, Gmail and
  * agent-knowledge sinks uploaded unstamped until 2026-10, so their files were
@@ -245,9 +272,11 @@ export const BACKFILLS: Backfill[] = [
     noteEmbeddings,
     documentVersionsBackfill,
     fileUploadsCompanyId,
+    documentFileUrls,
     userCompanyMembershipsBackfill,
     workspaceAccessBackfill,
     websiteSourceMarkersBackfill,
     fileUploadsRestamp,
+    storageLedgerFromFileUploads,
     prospectPicturesBackfill,
 ];

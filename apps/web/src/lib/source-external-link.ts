@@ -2,7 +2,8 @@
  * Where a source opens outside LaunchStack.
  *
  * A file that came from somewhere opens there: a Drive file in Drive, a
- * Notion page in Notion, a Gmail thread in Gmail, a saved page on its site, a
+ * Notion page in Notion, a Gmail thread in Gmail, an Outlook conversation in
+ * Outlook, a saved page on its site, a
  * video on its platform, an artifact on claude.ai, a vault note in Obsidian, a
  * repository on GitHub. Everything else (an upload, a note written here, a
  * saved conversation) opens as the stored file in a browser tab, where the
@@ -17,12 +18,16 @@ import { artifactMarkerOf } from "~/lib/artifact-document";
 import { isClaudeHostedUrl } from "~/lib/artifact-content";
 import { transcriptMarkerOf } from "~/lib/media-document";
 import { mediaEmbedFor } from "~/lib/media-embed";
+import { microsoft365PlaceOfHost } from "~/lib/integrations/microsoft-365-link";
 import { websiteMarkerOf } from "~/lib/website-document";
 
 export const EXTERNAL_LINK_KINDS = [
     "google-drive",
+    "onedrive",
+    "sharepoint",
     "notion",
     "gmail",
+    "outlook",
     "obsidian",
     "github",
     "youtube",
@@ -136,6 +141,20 @@ function isDriveHost(host: string): boolean {
     return host === "drive.google.com" || host === "docs.google.com";
 }
 
+/**
+ * Outlook on the web, where Graph's `webLink` points: work and school
+ * mailboxes, personal ones, and the US government cloud.
+ */
+function isOutlookHost(host: string): boolean {
+    return (
+        host === "outlook.office365.com" ||
+        host === "outlook.office.com" ||
+        host === "outlook.live.com" ||
+        host === "outlook.cloud.microsoft" ||
+        host === "outlook.office365.us"
+    );
+}
+
 function isNotionHost(host: string): boolean {
     return (
         host === "notion.so" ||
@@ -164,6 +183,13 @@ function fromConnector(
             const url = driveFileUrl(id, metadata.driveMimeType);
             return url ? { kind: "google-drive", url } : null;
         }
+        case "microsoft-365": {
+            // One connector, two places: the address Microsoft gave for the
+            // file says whether it opens in OneDrive or in SharePoint.
+            const url = webUrl(metadata.webUrl, host => microsoft365PlaceOfHost(host) !== null);
+            const place = url ? microsoft365PlaceOfHost(new URL(url).hostname) : null;
+            return url && place && url.startsWith("https:") ? { kind: place, url } : null;
+        }
         case "notion": {
             const url = webUrl(metadata.notionUrl, isNotionHost);
             if (url) return { kind: "notion", url };
@@ -185,6 +211,17 @@ function fromConnector(
             if (owner !== context.viewerUserPk) return null;
             const url = webUrl(metadata.gmailLink, host => host === "mail.google.com");
             return url ? { kind: "gmail", url } : null;
+        }
+        case "outlook": {
+            // The same rule as Gmail: the link opens in the owner's mailbox
+            // and nowhere else, so anyone else gets the stored copy.
+            const owner =
+                typeof metadata.connectionId === "string"
+                    ? context.connectionOwners.get(metadata.connectionId)
+                    : undefined;
+            if (owner !== context.viewerUserPk) return null;
+            const url = webUrl(metadata.outlookLink, isOutlookHost);
+            return url ? { kind: "outlook", url } : null;
         }
         case "obsidian": {
             // The vault is on its owner's computer, so only they can open it there.

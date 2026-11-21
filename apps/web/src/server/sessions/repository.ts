@@ -26,6 +26,32 @@ import {
     type WorkspaceSessionRow,
 } from "~/server/db/schema";
 import type { Executor } from "~/server/workspace/db-types";
+import { authorizeStoredObjectUrl } from "~/server/storage/authorize-stored-object-url";
+
+async function authorizeAttachments(
+    attachments: readonly unknown[] | undefined,
+    companyId: bigint,
+    executor: Executor = db
+) {
+    for (const attachment of attachments ?? []) {
+        if (
+            typeof attachment !== "object" ||
+            attachment === null ||
+            !("url" in attachment) ||
+            typeof attachment.url !== "string"
+        ) {
+            throw new Error("Invalid attachment URL");
+        }
+        attachment.url = (await authorizeStoredObjectUrl(attachment.url, companyId, executor)).url;
+    }
+}
+
+async function authorizeMessages(messages: readonly SessionMessageInput[], companyId: bigint) {
+    for (const message of messages) {
+        await authorizeAttachments(message.attachments, companyId);
+        await authorizeAttachments(message.metadata?.send?.attachments, companyId);
+    }
+}
 
 export interface SessionOwner {
     companyId: bigint;
@@ -203,6 +229,7 @@ export async function createSession(
     }
 ): Promise<SessionDetail> {
     const messages = input.messages.slice(0, MAX_SESSION_APPEND);
+    await authorizeMessages(messages, owner.companyId);
     const firstUserTurn = messages.find(m => m.role === "user")?.text ?? "";
     const title = (input.title?.trim() ?? "") || deriveSessionTitle(firstUserTurn);
     const id = randomUUID();
@@ -312,6 +339,7 @@ export async function appendMessages(
 ): Promise<SessionSummary | null> {
     const messages = input.messages.slice(0, MAX_SESSION_APPEND);
     if (messages.length === 0) return null;
+    await authorizeMessages(messages, owner.companyId);
 
     return db.transaction(async tx => {
         const [existing] = await tx
@@ -402,6 +430,10 @@ export async function changeQueue(
             "items" in change
                 ? change.items
                 : current.items.filter(item => item.id !== change.claimId);
+        for (const item of items) {
+            await authorizeAttachments(item.send.attachments, owner.companyId, tx);
+        }
+        if (claimed) await authorizeAttachments(claimed.send.attachments, owner.companyId, tx);
         const now = new Date();
         let claimedMessage: SessionMessage | undefined;
         if (claimed) {

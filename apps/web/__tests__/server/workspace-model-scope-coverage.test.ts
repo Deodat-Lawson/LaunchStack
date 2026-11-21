@@ -298,6 +298,13 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         },
     ],
     [
+        "apps/web/src/server/mindmap/generate.ts",
+        {
+            scopedBy: [`${API}/mindmaps/generate/route.ts`, `${API}/mindmaps/expand/route.ts`],
+            note: "Generate with AI and Expand with AI: POST body after auth, counted as the mindmap feature",
+        },
+    ],
+    [
         "apps/web/src/server/extraction/documents.ts",
         {
             scopedBy: ["apps/web/src/server/extraction/executor.ts", `${JOBS}/extractionRun.ts`],
@@ -437,6 +444,14 @@ const NO_MODEL_CALL: Record<string, string> = {
         "POST only queues a post-writer run (the executor scopes it in after() or on the worker); the barrel import is for its input schema",
     [`${API}/client-prospector/route.ts`]:
         "POST only queues client-prospector/run.requested (the job scopes run-pipeline); the barrel import is for its input schema",
+    [`${API}/scenarios/route.ts`]:
+        "POST accepts a run and hands it to startV2Run (the v2 executor scopes each unit in after(), the worker inside scenarioRunV2); GET lists rows. The v2 service reaches the model only through the evidence module's barrel import",
+    [`${API}/scenarios/[id]/provenance/route.ts`]:
+        "reads a finished run's manifest, spec and graph snapshot; the barrel import behind the evidence module is for buildEvidence and types",
+    [`${API}/scenarios/[id]/trace/route.ts`]:
+        "reads a run's recorded trace and progress rows; nothing is generated",
+    [`${API}/scenarios/[id]/replay/route.ts`]:
+        "replayRun re-derives rounds from stored checkpoints and reports modelCalls: 0; no model is called",
     [`${API}/trend-search/route.ts`]:
         "POST only queues trend-search/run.requested (the job scopes run-pipeline); the barrel import is for its input schema",
     [`${API}/distribution/runs/route.ts`]:

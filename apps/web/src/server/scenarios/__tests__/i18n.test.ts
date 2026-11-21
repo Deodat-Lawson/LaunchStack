@@ -158,6 +158,14 @@ function run(overrides: Partial<ScenarioRunRecord> = {}): ScenarioRunRecord {
         startedAt: null,
         finishedAt: null,
         eventsClosedAt: null,
+        contractVersion: 1,
+        requestSpecId: null,
+        worldSpecId: null,
+        generation: 1,
+        leaseOwner: null,
+        leaseEpoch: 0,
+        contextMode: null,
+        flags: null,
         ...overrides,
     };
 }

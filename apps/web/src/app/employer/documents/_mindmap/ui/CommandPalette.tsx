@@ -50,6 +50,8 @@ export interface PaletteHost {
     onPresent: () => void;
     onShortcuts: () => void;
     onFit: () => void;
+    /** Suggest subtopics for the selected topic; absent where there is no AI. */
+    onExpandWithAi?: () => void;
 }
 
 /**
@@ -184,6 +186,16 @@ export function buildCommands(store: EditorStore, host: PaletteHost, t: MindmapT
             label: t("commands.expandAll"),
             run: () => expandAll(store),
         },
+        ...(host.onExpandWithAi
+            ? [
+                  {
+                      id: "expand-ai",
+                      group: group.edit,
+                      label: t("commands.expandWithAi"),
+                      run: host.onExpandWithAi,
+                  },
+              ]
+            : []),
 
         {
             id: "align-left",

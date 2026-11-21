@@ -132,15 +132,11 @@ describe("meeting orchestration", () => {
         ]);
     });
 
-    it("returns the floor to the moderator when no one is nominated", async () => {
+    it("gives everyone a turn before the moderator speaks again", async () => {
         const h = harness({
             turnPolicy: { kind: "moderated", moderatorId: "pm" },
             script: {
-                pm: [
-                    "Opening. @eng start us off.",
-                    "Thanks. @fin your read?",
-                    "Wrapping. MEETING_COMPLETE",
-                ],
+                pm: ["Opening. @eng start us off.", "Wrapping. MEETING_COMPLETE"],
                 eng: ["Two sprints, no blockers."],
                 fin: ["Margin holds."],
             },
@@ -150,11 +146,48 @@ describe("meeting orchestration", () => {
         await orchestrator.run();
 
         const speakers = chatOf(await h.store.read(config.channelId)).map(m => m.author.id);
-        expect(speakers[0]).toBe("pm");
-        expect(speakers[1]).toBe("eng");
-        // eng nominated nobody, so control returns to the moderator.
-        expect(speakers[2]).toBe("pm");
-        expect(speakers[3]).toBe("fin");
+        // eng nominated nobody, so the floor goes to the seat still waiting —
+        // not back to the moderator, which would leave fin unheard.
+        expect(speakers).toEqual(["pm", "eng", "fin", "pm"]);
+    });
+
+    it("hands the next phase to the seat the moderator asked, not the one it thanked", async () => {
+        const OPS: AgentPersona = { id: "ops", displayName: "Lee", role: "Ops", systemPrompt: "" };
+        const h = harness({
+            participants: [PM, ENG, FIN, OPS],
+            script: {
+                pm: ["Thanks @fin for the prep. @eng, what does it cost?"],
+                fin: ["Margin holds."],
+                eng: ["Two sprints."],
+                ops: ["No blockers."],
+            },
+        });
+        const { orchestrator, config } = await createMeeting({
+            store: h.store,
+            workspaceId: "ws_1",
+            title: "Q3 pricing review",
+            objective: "Agree a Q3 price change",
+            participants: h.participants,
+            runtimes: [new ScriptedAgentRuntime(h.script)],
+            turnPolicy: { kind: "moderated", moderatorId: "pm" },
+            maxTurns: 4,
+            phases: [
+                { id: "frame", title: "Frame", goal: "Frame it.", turns: 1, speakerIds: ["pm"] },
+                {
+                    id: "input",
+                    title: "Input",
+                    goal: "Each seat's input.",
+                    turns: 3,
+                    speakerIds: ["fin", "eng", "ops"],
+                },
+            ],
+            clock: h.clock,
+        });
+
+        await orchestrator.run();
+
+        const speakers = chatOf(await h.store.read(config.channelId)).map(m => m.author.id);
+        expect(speakers).toEqual(["pm", "eng", "fin", "ops"]);
     });
 
     describe("human takeover", () => {

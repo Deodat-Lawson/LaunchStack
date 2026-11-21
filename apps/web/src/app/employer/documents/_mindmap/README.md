@@ -258,6 +258,13 @@ decreasing"). `topicPaint` in `model/theme.ts` is the whole ladder:
 | Subtopic               | the paper itself               | 1.5px, branch hue  | theme ink, 13.5px                     | 2px             |
 | Leaf (underline shape) | none                           | rule in branch hue | theme ink                             | 1.5px           |
 
+A box's label and its colours come from the same rung (`drawnLevel`). A topic
+with nothing above it — double-clicked onto the canvas, placed with the Topic
+tool, dropped from the palette — is drawn as a main branch, so it is lettered
+as one too: 15px bold, the same as the branch Tab makes. It used to keep the
+factory's 14px regular inside the same tinted box, which read as some new
+boxes bold and some not.
+
 Connectors thin from the centre outward, Buzan's "thicker… becoming thinner as
 they radiate out". Details sit on the paper with neutral ink so they recede:
 the strongest coloured mark is the main branch, and the strongest mark of all

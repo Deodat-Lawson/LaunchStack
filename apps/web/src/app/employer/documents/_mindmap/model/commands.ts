@@ -105,12 +105,16 @@ export function docMode(store: EditorStore): ThemeMode {
  * topic's colour depends on the theme *and* on where it sits in the tree,
  * which no factory can know — so every path that adds one ends here or in
  * `paintTopics` directly, and a central topic dropped on an Ocean board is
- * Ocean's centre rather than a fixed violet.
+ * Ocean's centre rather than a fixed violet. Type is set in the same step, so
+ * a topic placed with the Topic tool is lettered like the main branch it is
+ * painted as, exactly as one double-clicked or dragged out of a port is.
  */
 function addPainted(page: DiagramPage, nodes: DiagramNode[], paletteId: string): DiagramPage {
     const next = addNodes(page, nodes);
     const topics = nodes.filter(nd => nd.shape.startsWith("mind-")).map(nd => nd.id);
-    return topics.length ? paintTopics(next, topics, paletteId, { fresh: true }) : next;
+    return topics.length
+        ? paintTopics(next, topics, paletteId, { fresh: true, retype: true })
+        : next;
 }
 
 export function insertShape(

@@ -141,9 +141,7 @@ export function topicPaint(
             edge: { stroke: sw.stroke, strokeWidth: 3 },
         };
     }
-    // A topic with nothing above it — dropped with the Topic tool, say — is
-    // drawn as a main branch: it is the start of one, not a second centre.
-    const level = Math.max(depth, 1);
+    const level = drawnLevel(shape, depth);
     const edgeWidth = level === 1 ? 3 : level === 2 ? 2 : 1.5;
     if (shape === "mind-leaf") {
         return {
@@ -164,6 +162,16 @@ export function topicPaint(
         ink: theme.ink,
         edge: { stroke: sw.stroke, strokeWidth: edgeWidth },
     };
+}
+
+/**
+ * The rung of the ladder a topic is drawn on, for its colours and its type
+ * alike. A centre is a centre wherever it sits. Any other topic with nothing
+ * above it — double-clicked onto the canvas, dropped with the Topic tool — is
+ * drawn as a main branch: it is the start of one, not a second centre.
+ */
+export function drawnLevel(shape: DiagramNode["shape"], depth: number): number {
+    return shape === "mind-root" ? depth : Math.max(depth, 1);
 }
 
 /**
@@ -293,15 +301,19 @@ export function paintTopics(
         const coloured = paintTopicNode(nd, theme, place, hue);
         // A topic that moved level takes that level's type as well: an
         // outdented detail is a main branch now, so it gets 15px bold too.
-        // Only a topic with a place in a tree, or a centre: one floating free
-        // (double-clicked onto the canvas) keeps the size it was made with
-        // rather than the centre's, which depth 0 would otherwise give it.
-        const placed = nd.shape === "mind-root" || (place?.depth ?? 0) >= 1;
+        // The type comes from the same rung as the colours (`drawnLevel`), so
+        // a box never wears one level's look and another's lettering: a topic
+        // floating free is tinted like a main branch, so it is set in a main
+        // branch's 15px bold — not 14px regular beside its bold twins, and
+        // not the centre's 18px that depth 0 alone would give it.
         const painted =
-            opts.retype && placed && nd.shape !== "mind-leaf"
+            opts.retype && nd.shape !== "mind-leaf"
                 ? {
                       ...coloured,
-                      textStyle: { ...coloured.textStyle, ...topicType(place?.depth ?? 0) },
+                      textStyle: {
+                          ...coloured.textStyle,
+                          ...topicType(drawnLevel(nd.shape, place?.depth ?? 0)),
+                      },
                   }
                 : coloured;
         next = {

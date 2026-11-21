@@ -18,6 +18,7 @@ import {
     type ThemeMode,
 } from "./palette";
 import { shapeDef } from "./shapes";
+import { topicType } from "./theme";
 import {
     DOC_SCHEMA_VERSION,
     type DiagramEdge,
@@ -168,10 +169,13 @@ function presetFor(
             };
         }
         case "mind-branch": {
+            // A main branch's type, because a topic with nothing above it is
+            // drawn as one (`drawnLevel`): a 14px regular default sat beside
+            // the 15px bold branches Tab makes in the same tinted box.
             const sw = swatchFor(themeFor(null, mode).cycle[0]!, mode);
             return {
                 style: { fill: sw.fill, stroke: sw.stroke, strokeWidth: 1.5, radius: 10 },
-                text: { color: sw.ink, size: 14, bold: false },
+                text: { color: sw.ink, ...topicType(1) },
             };
         }
         case "mind-leaf":

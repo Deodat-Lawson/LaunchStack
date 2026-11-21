@@ -985,6 +985,45 @@
       "blurb": "Drag an arrow into space and pick what goes there."
     },
     "d": {
+      "panel": {
+        "title": "Steps",
+        "count": "{count, plural, =0 {nothing drawn yet} one {# box} other {# boxes}}",
+        "editorLabel": "Steps, one per line",
+        "placeholder": "Write one step per line, for example:\n\nStart\nTake the order\nPaid?\n  Yes: Ship it\n  No: -> Take the order\nEnd",
+        "useExample": "Use an example",
+        "example": "Start\nReceive the order\nCheck stock\nIn stock?\n  Yes: Pick and pack\n  No: Reorder from supplier -> Check stock\nShip and send tracking\nEnd",
+        "keys": "Tab indents a branch · Esc goes back to the chart"
+      },
+      "kind": {
+        "step": "Step",
+        "decision": "Decision",
+        "start": "Start",
+        "end": "End",
+        "arrow": "Arrow"
+      },
+      "syntax": {
+        "title": "How to write it",
+        "stepCode": "Pack the order",
+        "step": "a step; lines join in order",
+        "decisionCode": "In stock?",
+        "decision": "ends in ? — a decision",
+        "branchCode": "  Yes: Ship it",
+        "branch": "indented under it — a branch",
+        "jumpCode": "-> Pack the order",
+        "jump": "goes to that step instead",
+        "endsCode": "Start · End",
+        "ends": "a rounded start or end"
+      },
+      "notes": {
+        "missingTarget": "Line {line}: no step is called “{target}”.",
+        "notUnderQuestion": "Line {line}: only a question (a line ending in ?) has branches, so this is drawn as a step.",
+        "arrowWithoutStep": "Line {line}: an arrow needs a step above it."
+      },
+      "hint": {
+        "title": "Write your steps on the left",
+        "body": "Each line becomes a box, and the chart draws itself.",
+        "useExample": "Or start from an example"
+      },
       "name": "Write it, see it",
       "blurb": "Type the steps as lines and the chart draws itself."
     }

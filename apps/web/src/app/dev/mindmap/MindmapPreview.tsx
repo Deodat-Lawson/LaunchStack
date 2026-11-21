@@ -43,12 +43,17 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
  */
 let stubbed = false;
 /**
- * The stub server's revision. Module-level so a remount can reset it: each
- * switch mounts a fresh editor at revision 1, and a counter left at 5 by the
- * last board's saves made the new one fetch "the newer version" — an empty,
- * untitled, non-flowchart document — over its fresh board.
+ * The stub server's revision, one per board id. Every switch mounts a fresh
+ * editor under a new id (`boardId` below), so a save the previous board sends
+ * on its way out lands on its own id. With one shared id and one counter, that
+ * late save looked like a newer version of the new board, which then fetched
+ * it: an empty, untitled, non-flowchart document over its fresh board.
  */
-let stubRevision = 1;
+const stubRevisions = new Map<number, number>();
+function boardIdOf(url: string): number {
+    const match = /\/api\/mindmaps\/(\d+)/.exec(url);
+    return match ? Number(match[1]) : 0;
+}
 function stubMindmapApi() {
     if (stubbed || typeof window === "undefined") return;
     stubbed = true;
@@ -66,14 +71,16 @@ function stubMindmapApi() {
                 headers: { "Content-Type": "application/json" },
             });
 
-        if (url.includes("/presence")) return json({ peers: [], revision: stubRevision });
+        const id = boardIdOf(url);
+        const revision = stubRevisions.get(id) ?? 1;
+        if (url.includes("/presence")) return json({ peers: [], revision });
         if (url.includes("/versions")) return json({ versions: [] });
         if (/\/api\/mindmaps(\?|$)/.test(url)) return json({ mindmaps: [], folders: [] });
         if (init?.method && init.method !== "GET") {
-            stubRevision += 1;
-            return json({ mindmap: { revision: stubRevision }, revision: stubRevision });
+            stubRevisions.set(id, revision + 1);
+            return json({ mindmap: { revision: revision + 1 }, revision: revision + 1 });
         }
-        return json({ mindmap: { revision: stubRevision } });
+        return json({ mindmap: { revision } });
     };
 }
 
@@ -84,6 +91,8 @@ export function MindmapPreview() {
     // and a client pass produce different documents and every shape hydrates
     // mismatched — noise that would bury any real warning.
     const [query, setQuery] = useState<URLSearchParams | null>(null);
+    /** A fresh document id per board, so the boards' saves never meet. */
+    const [boardId, setBoardId] = useState(1);
 
     useEffect(() => {
         setQuery(new URLSearchParams(window.location.search));
@@ -121,7 +130,7 @@ export function MindmapPreview() {
         // Today fell back to the harness's default template, the mindmap.
         if (!params.get("template")) params.set("template", "blank");
         window.history.replaceState(null, "", `${window.location.pathname}?${params}`);
-        stubRevision = 1;
+        setBoardId(n => n + 1);
         setQuery(params);
         // Hand the keyboard back to the board. Left on the switcher, a
         // keyboard-first direction's keys moved between its buttons (and
@@ -137,8 +146,8 @@ export function MindmapPreview() {
                     {doc && preview && <ReadOnlyMindmap key={template} doc={doc} />}
                     {doc && !preview && (
                         <MindmapEditor
-                            key={`${template}:${variant ?? "today"}`}
-                            mindmapId={1}
+                            key={`${template}:${variant ?? "today"}:${boardId}`}
+                            mindmapId={boardId}
                             initialDoc={doc}
                             initialTitle={doc.title}
                             initialRevision={1}

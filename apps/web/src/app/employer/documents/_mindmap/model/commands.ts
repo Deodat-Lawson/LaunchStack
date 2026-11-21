@@ -139,9 +139,12 @@ export function insertShape(
           })
         : made;
     const paletteId = store.getState().doc.settings.paletteId;
-    store.updatePage(page => addPainted(page, [node], paletteId), {
-        label: `Add ${shapeDef(shape).name}`,
-    });
+    // Dressed by a direction, a topic is not repainted as a branch: that
+    // would put back the bold type and outline the look just took off.
+    store.updatePage(
+        page => (look ? addNodes(page, [node]) : addPainted(page, [node], paletteId)),
+        { label: `Add ${shapeDef(shape).name}` }
+    );
     store.selectNodes([node.id]);
     return node.id;
 }

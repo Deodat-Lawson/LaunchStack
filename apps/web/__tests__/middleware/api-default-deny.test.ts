@@ -42,6 +42,9 @@ const PUBLIC_API_PATHS = [
     // default-deny below answered every unsubscribe click with a 401 — including
     // the RFC 8058 one-click POST.
     "/api/email-pipeline/unsubscribe/some-hmac-token",
+    // A public link (ADR-016): the token is the credential.
+    "/api/s/public-link-test-token-xxxxxxxxxxxxxxxxxxxx",
+    "/api/s/public-link-test-token-xxxxxxxxxxxxxxxxxxxx/content",
 ];
 
 const PROTECTED_API_PATHS = [
@@ -54,6 +57,9 @@ const PROTECTED_API_PATHS = [
     "/api/workspace/join-links",
     "/api/collab/agents",
     "/api/collab/meetings",
+    // Making or changing a public link needs a session, unlike reading one.
+    "/api/workspace/documents/1/public-link",
+    "/api/settings",
 ];
 
 describe("middleware /api default-deny", () => {

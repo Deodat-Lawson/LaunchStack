@@ -1,3 +1,4 @@
+import { activeFlowLook } from "../variants/looks";
 import type { EditorStore } from "./store";
 import { paintTopics } from "./theme";
 
@@ -26,6 +27,8 @@ export function restyleMovedTopics(store: EditorStore, ids: string[]): void {
  */
 export function paintNewTopics(store: EditorStore, ids: string[]): void {
     if (ids.length === 0) return;
+    // A flowchart direction being tried has dressed them in its own look.
+    if (activeFlowLook(store.getState())) return;
     const paletteId = store.getState().doc.settings.paletteId;
     store.updatePage(page => paintTopics(page, ids, paletteId, { retype: true, fresh: true }), {
         transient: true,

@@ -1,0 +1,1629 @@
+{
+  "schema": "vantage-topic-first-comparison/1",
+  "evidence": "Injected providers, real local PostgreSQL and HTTP paths; authored calibration cases.",
+  "cutoff": "2026-11-16T00:00:00Z",
+  "weekStart": "2026-11-09",
+  "longCorpus": {
+    "documents": 50,
+    "versions": 53,
+    "restricted": 1
+  },
+  "fairness": {
+    "isolatedOwnerPerArm": true,
+    "sharedFixtureCompanyPerCorpus": true,
+    "identicalTopicGuidance": true,
+    "identicalFixedEvidence": true,
+    "personalStars": 0,
+    "fixedSources": "weekly-priorities as architecture, full Harborlight document or approved 1000-character long passage"
+  },
+  "negative": {
+    "restrictedDocumentOffered": false,
+    "restrictedDigestRows": 0,
+    "restrictedRefInTrace": false
+  },
+  "runs": [
+    {
+      "fixture": "harborlight",
+      "arm": "baseline",
+      "documents": [
+        "weekly-priorities",
+        "pilot-support",
+        "pilot-metrics",
+        "infra-routine",
+        "action-followup"
+      ],
+      "fullDocumentCount": 5,
+      "excerptCount": 0,
+      "excerpts": [
+        {
+          "ref": "doc:1@1",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "full_document",
+          "start": 0,
+          "end": 1106,
+          "characters": 1106,
+          "bytes": 1106,
+          "purpose": "company-architecture"
+        },
+        {
+          "ref": "doc:12@13",
+          "documentKey": "action-followup",
+          "version": 1,
+          "kind": "full_document",
+          "start": 0,
+          "end": 1239,
+          "characters": 1239,
+          "bytes": 1239,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "doc:7@8",
+          "documentKey": "pilot-metrics",
+          "version": 1,
+          "kind": "full_document",
+          "start": 0,
+          "end": 1272,
+          "characters": 1272,
+          "bytes": 1272,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "doc:9@10",
+          "documentKey": "infra-routine",
+          "version": 1,
+          "kind": "full_document",
+          "start": 0,
+          "end": 1231,
+          "characters": 1231,
+          "bytes": 1231,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "doc:6@7",
+          "documentKey": "pilot-support",
+          "version": 1,
+          "kind": "full_document",
+          "start": 0,
+          "end": 1275,
+          "characters": 1275,
+          "bytes": 1275,
+          "purpose": "retrieved"
+        }
+      ],
+      "frozenBytes": 6123,
+      "cases": [
+        {
+          "id": "current-release-scope",
+          "anchors": [
+            {
+              "key": "release-plan",
+              "version": 2,
+              "present": false
+            },
+            {
+              "key": "release-plan",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "rollback-owner-gap",
+          "anchors": [
+            {
+              "key": "rollback-runbook",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "security-boundary",
+          "anchors": [
+            {
+              "key": "security-review",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "metric-denominator",
+          "anchors": [
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "finance-definitions",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "qa-evidence-boundary",
+          "anchors": [
+            {
+              "key": "qa-retest",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "weekly-priorities",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "negative-evidence-and-distractors",
+          "anchors": [
+            {
+              "key": "infra-routine",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "recruiting-template",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "pilot-support",
+              "version": 1,
+              "present": true
+            }
+          ]
+        }
+      ],
+      "timing": {
+        "elapsedMs": 749.9496000000017,
+        "stages": [
+          {
+            "type": "stage",
+            "stage": "gathering"
+          },
+          {
+            "type": "stage",
+            "stage": "writing"
+          },
+          {
+            "type": "stage",
+            "stage": "checking"
+          },
+          {
+            "type": "stage",
+            "stage": "saving"
+          }
+        ]
+      },
+      "fixed": [
+        {
+          "ref": "doc:1@1",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "full_document",
+          "start": 0,
+          "end": 1106,
+          "characters": 1106,
+          "bytes": 1106,
+          "purpose": "company-architecture"
+        }
+      ]
+    },
+    {
+      "fixture": "harborlight",
+      "arm": "seeds",
+      "documents": [
+        "weekly-priorities",
+        "release-plan",
+        "qa-retest",
+        "security-review",
+        "rollback-runbook",
+        "pilot-support",
+        "pilot-metrics",
+        "finance-definitions",
+        "infra-routine",
+        "recruiting-template",
+        "decision-log",
+        "action-followup"
+      ],
+      "fullDocumentCount": 1,
+      "excerptCount": 11,
+      "excerpts": [
+        {
+          "ref": "doc:1@1",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "full_document",
+          "start": 0,
+          "end": 1106,
+          "characters": 1106,
+          "bytes": 1106,
+          "purpose": "company-architecture"
+        },
+        {
+          "ref": "unit:cdbbd63478a22ff3ef07880b0a634d2779570614aa90776c732d290c512d4142",
+          "documentKey": "action-followup",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1239,
+          "characters": 1239,
+          "bytes": 1239,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:5acca2a5969dd669b81ef0e8bd8d82383d71245cc11a8875e03c628976c65ea8",
+          "documentKey": "release-plan",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1184,
+          "characters": 1184,
+          "bytes": 1184,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:ebf108b1e475e1093691cbee9d03af6233fc5353edf243ad5378d9ad5d6be12e",
+          "documentKey": "pilot-support",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1275,
+          "characters": 1275,
+          "bytes": 1275,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:76b2817b078c85f7ae7b9e89e348eb3b0ffc32a24cbf4e5e565ebdba2bd87d04",
+          "documentKey": "rollback-runbook",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1225,
+          "characters": 1225,
+          "bytes": 1225,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:67c3c7c95b9a251574ce2ef99cf3a3b84ea4a613016d2880beb07c06ac649871",
+          "documentKey": "qa-retest",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1184,
+          "characters": 1184,
+          "bytes": 1184,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:1370fa7c607276974183d6dabefb3e16a471f0cdde59be1beb34d8213eaedd6b",
+          "documentKey": "security-review",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1230,
+          "characters": 1230,
+          "bytes": 1230,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:0a21fcbaff0627d5a006c8f12240444e69bd9e531a367555505250c56e5377cc",
+          "documentKey": "decision-log",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1174,
+          "characters": 1174,
+          "bytes": 1174,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:a5efe3993c03968e8e4cc13432aed924e423746000375bba95183d930e80b3eb",
+          "documentKey": "recruiting-template",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1245,
+          "characters": 1245,
+          "bytes": 1245,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:9d51b76911a4a0b96e0fd4a60aa57bec500e17fbc7e77ea1ba173a7495c32bce",
+          "documentKey": "finance-definitions",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1245,
+          "characters": 1245,
+          "bytes": 1245,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:6becf6a4623b765b30e29ef2f8cb0a75d483a5de43f09996350db9ce27c73ecf",
+          "documentKey": "pilot-metrics",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1272,
+          "characters": 1272,
+          "bytes": 1272,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:a763acd646d941636897dc08fddab3dad8068ec9028ccc7847d25286ab1a0ca1",
+          "documentKey": "infra-routine",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1231,
+          "characters": 1231,
+          "bytes": 1231,
+          "purpose": "retrieved"
+        }
+      ],
+      "frozenBytes": 14610,
+      "cases": [
+        {
+          "id": "current-release-scope",
+          "anchors": [
+            {
+              "key": "release-plan",
+              "version": 2,
+              "present": true
+            },
+            {
+              "key": "release-plan",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "rollback-owner-gap",
+          "anchors": [
+            {
+              "key": "rollback-runbook",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "security-boundary",
+          "anchors": [
+            {
+              "key": "security-review",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "metric-denominator",
+          "anchors": [
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "finance-definitions",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "qa-evidence-boundary",
+          "anchors": [
+            {
+              "key": "qa-retest",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "weekly-priorities",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "negative-evidence-and-distractors",
+          "anchors": [
+            {
+              "key": "infra-routine",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "recruiting-template",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "pilot-support",
+              "version": 1,
+              "present": true
+            }
+          ]
+        }
+      ],
+      "timing": {
+        "elapsedMs": 1154.32,
+        "stages": [
+          {
+            "type": "stage",
+            "stage": "gathering"
+          },
+          {
+            "type": "stage",
+            "stage": "writing"
+          },
+          {
+            "type": "stage",
+            "stage": "checking"
+          },
+          {
+            "type": "stage",
+            "stage": "saving"
+          }
+        ]
+      },
+      "fixed": [
+        {
+          "ref": "doc:1@1",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "full_document",
+          "start": 0,
+          "end": 1106,
+          "characters": 1106,
+          "bytes": 1106,
+          "purpose": "company-architecture"
+        }
+      ]
+    },
+    {
+      "fixture": "harborlight",
+      "arm": "scripted",
+      "documents": [
+        "weekly-priorities",
+        "release-plan",
+        "qa-retest",
+        "security-review",
+        "rollback-runbook",
+        "pilot-support",
+        "pilot-metrics",
+        "finance-definitions",
+        "infra-routine",
+        "recruiting-template",
+        "decision-log",
+        "action-followup"
+      ],
+      "fullDocumentCount": 1,
+      "excerptCount": 11,
+      "excerpts": [
+        {
+          "ref": "doc:1@1",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "full_document",
+          "start": 0,
+          "end": 1106,
+          "characters": 1106,
+          "bytes": 1106,
+          "purpose": "company-architecture"
+        },
+        {
+          "ref": "unit:8945b83a2592707f2c71ab4e3ba15204fbcf59c5c531648272b4eaa81f5b0369",
+          "documentKey": "action-followup",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1239,
+          "characters": 1239,
+          "bytes": 1239,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:08d8e31d54d053ec5ee0ed1f3ac627f4b726611ab5911623c135ef508bbd253b",
+          "documentKey": "release-plan",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1184,
+          "characters": 1184,
+          "bytes": 1184,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:68e4390a278a423c32dc15f3c5736beca5b98f3d93bc98e33447ff1027d9a90b",
+          "documentKey": "pilot-support",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1275,
+          "characters": 1275,
+          "bytes": 1275,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:551b080daa5b4ca616457c99a2a25467edc024b8a9a0d9169133ae0c9c9139eb",
+          "documentKey": "rollback-runbook",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1225,
+          "characters": 1225,
+          "bytes": 1225,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:9322cf5ba5b34cbf3ecce1fe4a095d0e1d90e7cf09a43574a7cd6e7c8802c2a1",
+          "documentKey": "qa-retest",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1184,
+          "characters": 1184,
+          "bytes": 1184,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:baccd6193c9c6fd10e485c0dea12d65db380f0c66ef97fa3ab2c9bdf504e6bd0",
+          "documentKey": "security-review",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1230,
+          "characters": 1230,
+          "bytes": 1230,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:857d690f5934f492ab954450467f5c633d677fad6d93e1fa1f313c6a9b922863",
+          "documentKey": "decision-log",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1174,
+          "characters": 1174,
+          "bytes": 1174,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:1440d18b5c3cfd1135abfc09a9e673f1d4883dd0b77c6755bc48831a5e3ed44a",
+          "documentKey": "recruiting-template",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1245,
+          "characters": 1245,
+          "bytes": 1245,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:b56ffbd6440259ecf17b35a4bb486c1168670e16a6641d21afbe02b6a0608219",
+          "documentKey": "finance-definitions",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1245,
+          "characters": 1245,
+          "bytes": 1245,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:6c826dc6b9d35f4a7c575daed4f97e37824ea418cf0729ff09c4155a9c6b90a6",
+          "documentKey": "pilot-metrics",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1272,
+          "characters": 1272,
+          "bytes": 1272,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:3edfef81175522ab208febd50199c7d3074d560e09be239134c6664ab5cea96b",
+          "documentKey": "infra-routine",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 1231,
+          "characters": 1231,
+          "bytes": 1231,
+          "purpose": "retrieved"
+        }
+      ],
+      "frozenBytes": 14610,
+      "cases": [
+        {
+          "id": "current-release-scope",
+          "anchors": [
+            {
+              "key": "release-plan",
+              "version": 2,
+              "present": true
+            },
+            {
+              "key": "release-plan",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "rollback-owner-gap",
+          "anchors": [
+            {
+              "key": "rollback-runbook",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "security-boundary",
+          "anchors": [
+            {
+              "key": "security-review",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "metric-denominator",
+          "anchors": [
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "finance-definitions",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "qa-evidence-boundary",
+          "anchors": [
+            {
+              "key": "qa-retest",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "weekly-priorities",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "negative-evidence-and-distractors",
+          "anchors": [
+            {
+              "key": "infra-routine",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "recruiting-template",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "pilot-support",
+              "version": 1,
+              "present": true
+            }
+          ]
+        }
+      ],
+      "timing": {
+        "elapsedMs": 1716.8719,
+        "stages": [
+          {
+            "stage": "gathering",
+            "elapsedMs": 110.83280000000013
+          },
+          {
+            "stage": "exploring",
+            "elapsedMs": 208.41199999999844
+          },
+          {
+            "stage": "writing",
+            "elapsedMs": 1247.9164
+          },
+          {
+            "stage": "checking",
+            "elapsedMs": 1247.9218
+          },
+          {
+            "stage": "saving",
+            "elapsedMs": 1402.3233
+          }
+        ]
+      },
+      "fixed": [
+        {
+          "ref": "doc:1@1",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "full_document",
+          "start": 0,
+          "end": 1106,
+          "characters": 1106,
+          "bytes": 1106,
+          "purpose": "company-architecture"
+        }
+      ]
+    },
+    {
+      "fixture": "long",
+      "arm": "baseline",
+      "documents": [
+        "weekly-priorities"
+      ],
+      "fullDocumentCount": 0,
+      "excerptCount": 1,
+      "excerpts": [
+        {
+          "ref": "unit:089656d3095c6fe81d7e002c5c6ba006a4023cfcccd968cae440ff470a806a8d",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 15155,
+          "end": 16155,
+          "characters": 1000,
+          "bytes": 1000,
+          "purpose": "company-architecture"
+        }
+      ],
+      "frozenBytes": 1000,
+      "cases": [
+        {
+          "id": "current-release-scope",
+          "anchors": [
+            {
+              "key": "release-plan",
+              "version": 2,
+              "present": false
+            },
+            {
+              "key": "release-plan",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "rollback-owner-gap",
+          "anchors": [
+            {
+              "key": "rollback-runbook",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "security-boundary",
+          "anchors": [
+            {
+              "key": "security-review",
+              "version": 2,
+              "present": false
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "metric-denominator",
+          "anchors": [
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "finance-definitions",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "qa-evidence-boundary",
+          "anchors": [
+            {
+              "key": "qa-retest",
+              "version": 2,
+              "present": false
+            },
+            {
+              "key": "weekly-priorities",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "negative-evidence-and-distractors",
+          "anchors": [
+            {
+              "key": "infra-routine",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "recruiting-template",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "pilot-support",
+              "version": 1,
+              "present": false
+            }
+          ]
+        }
+      ],
+      "timing": {
+        "elapsedMs": 755.7428,
+        "stages": [
+          {
+            "type": "stage",
+            "stage": "gathering"
+          },
+          {
+            "type": "stage",
+            "stage": "writing"
+          },
+          {
+            "type": "stage",
+            "stage": "checking"
+          },
+          {
+            "type": "stage",
+            "stage": "saving"
+          }
+        ]
+      },
+      "fixed": [
+        {
+          "ref": "unit:089656d3095c6fe81d7e002c5c6ba006a4023cfcccd968cae440ff470a806a8d",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 15155,
+          "end": 16155,
+          "characters": 1000,
+          "bytes": 1000,
+          "purpose": "company-architecture"
+        }
+      ]
+    },
+    {
+      "fixture": "long",
+      "arm": "seeds",
+      "documents": [
+        "weekly-priorities",
+        "release-plan",
+        "qa-retest",
+        "security-review",
+        "rollback-runbook",
+        "pilot-support",
+        "decision-log",
+        "action-followup",
+        "office-44",
+        "specs-45",
+        "meetings-46",
+        "qa-47",
+        "security-48",
+        "customers-49"
+      ],
+      "fullDocumentCount": 0,
+      "excerptCount": 14,
+      "excerpts": [
+        {
+          "ref": "unit:df2cc2398f9c7f9e15bf2534208038363d13ebef3c450d44d00330c81498218c",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 15155,
+          "end": 16155,
+          "characters": 1000,
+          "bytes": 1000,
+          "purpose": "company-architecture"
+        },
+        {
+          "ref": "unit:8ba816400d04e83d399f5450314b0da2348b9492f52c3e8fcfa4de5ebd27bda9",
+          "documentKey": "action-followup",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:0f65c0b1b425615c3367d3c7443bc8fcad3e7b38ea892400c48409c0a8703373",
+          "documentKey": "release-plan",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:8de34da2d2bf9205f69f47f9fda1541e5ca6d8bed0e6ba8534197cf90f1c3b95",
+          "documentKey": "pilot-support",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:1aef57e3a55d77e3a3bf891f4d9b8f10d38f364f462468eee760cf2e27f04cbb",
+          "documentKey": "security-review",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:7b61f8d25834053cb3fd6cad0ea6f4f87cd326e2c0284511346cc0371cc37f96",
+          "documentKey": "qa-retest",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:e120195a3e2356222c5b520ba8ef616d23f6e9ee395061307c2670ca8b8ea640",
+          "documentKey": "rollback-runbook",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:8d4d9299a602f57a093951ad7fdcc241a6fecc1726ab605d40c925c4e46b020a",
+          "documentKey": "decision-log",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:ab2a2c42485bc2f7b96085ad47a405f98201552e386d0076e31dfce726c8c08a",
+          "documentKey": "customers-49",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:e6bbd31f0e000c6819673a45f76773e3d85de9a95f44ff49d9b103842853c7d4",
+          "documentKey": "security-48",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:d5b5ef72a630e1dc2309abfbb186c465fd58b4d0ad3ec908a7c281c7fa616c49",
+          "documentKey": "qa-47",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:e7e2c58fb09883e62dbdfe76dddfa8b13e47372312641dcb73bd9a9b7f062c40",
+          "documentKey": "meetings-46",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:9f365206576701e5df1de97c344645ab02aafff6741923d6d721f52d6b3f49c8",
+          "documentKey": "specs-45",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:e6318ddfeb06cfc8ab4246467188f611d0fa194b9394975e6616d905819b14d6",
+          "documentKey": "office-44",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 6000,
+          "characters": 6000,
+          "bytes": 6000,
+          "purpose": "retrieved"
+        }
+      ],
+      "frozenBytes": 79000,
+      "cases": [
+        {
+          "id": "current-release-scope",
+          "anchors": [
+            {
+              "key": "release-plan",
+              "version": 2,
+              "present": false
+            },
+            {
+              "key": "release-plan",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "rollback-owner-gap",
+          "anchors": [
+            {
+              "key": "rollback-runbook",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "security-boundary",
+          "anchors": [
+            {
+              "key": "security-review",
+              "version": 2,
+              "present": false
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "metric-denominator",
+          "anchors": [
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "finance-definitions",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "qa-evidence-boundary",
+          "anchors": [
+            {
+              "key": "qa-retest",
+              "version": 2,
+              "present": false
+            },
+            {
+              "key": "weekly-priorities",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "negative-evidence-and-distractors",
+          "anchors": [
+            {
+              "key": "infra-routine",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "recruiting-template",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "pilot-support",
+              "version": 1,
+              "present": false
+            }
+          ]
+        }
+      ],
+      "timing": {
+        "elapsedMs": 1689.9753000000005,
+        "stages": [
+          {
+            "type": "stage",
+            "stage": "gathering"
+          },
+          {
+            "type": "stage",
+            "stage": "writing"
+          },
+          {
+            "type": "stage",
+            "stage": "checking"
+          },
+          {
+            "type": "stage",
+            "stage": "saving"
+          }
+        ]
+      },
+      "fixed": [
+        {
+          "ref": "unit:df2cc2398f9c7f9e15bf2534208038363d13ebef3c450d44d00330c81498218c",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 15155,
+          "end": 16155,
+          "characters": 1000,
+          "bytes": 1000,
+          "purpose": "company-architecture"
+        }
+      ]
+    },
+    {
+      "fixture": "long",
+      "arm": "scripted",
+      "documents": [
+        "weekly-priorities",
+        "release-plan",
+        "qa-retest",
+        "security-review",
+        "rollback-runbook",
+        "pilot-support",
+        "pilot-metrics",
+        "decision-log",
+        "action-followup"
+      ],
+      "fullDocumentCount": 0,
+      "excerptCount": 16,
+      "excerpts": [
+        {
+          "ref": "unit:c5a35ffe074560f149a4958964514bf450fbe4ee93785c6adf7e85b17a99090c",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 15155,
+          "end": 16155,
+          "characters": 1000,
+          "bytes": 1000,
+          "purpose": "company-architecture"
+        },
+        {
+          "ref": "unit:a78c0a82ca71a75257d278a8acba28bb359d58a4ded01dbd5d6ba137607585c2",
+          "documentKey": "action-followup",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 14385,
+          "end": 15943,
+          "characters": 1558,
+          "bytes": 1558,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:47b3dc967f5e11c2b7a64e10fa0f86948e6cead1ab6adfa1af56b54e16b60bdb",
+          "documentKey": "action-followup",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 26353,
+          "end": 26553,
+          "characters": 200,
+          "bytes": 200,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:d27aafff42f21179557267c541cefff1ae1bbad377c08c1417ab8538c08ca5eb",
+          "documentKey": "release-plan",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 17585,
+          "end": 19074,
+          "characters": 1489,
+          "bytes": 1489,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:9bb328d0e1faca7818cb577a77cb469f65f8895a043dd3e78b4b83301f729d00",
+          "documentKey": "pilot-support",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 200,
+          "characters": 200,
+          "bytes": 200,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:b45a8f285e5d4ca4a054dc3d1743f155fd50ca6d268c764926a5f750ebe7775c",
+          "documentKey": "pilot-support",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 14526,
+          "end": 15710,
+          "characters": 1184,
+          "bytes": 1184,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:6620a1b6f1d3f58c74ef3aafe20490c0d26c37dbf3df371444dab47004032b47",
+          "documentKey": "security-review",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 277,
+          "characters": 277,
+          "bytes": 277,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:ad210c5ea6c2460998060aebbeb8ba5a3d3e8284bc6e8c39009ddb0cceafe4f5",
+          "documentKey": "security-review",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 17854,
+          "end": 18274,
+          "characters": 420,
+          "bytes": 420,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:93d9d891d4cf4ffcbd7be1f74cc957adf8fb6db4046c522e2d6ea0ab3e45a369",
+          "documentKey": "security-review",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 18436,
+          "end": 19330,
+          "characters": 894,
+          "bytes": 894,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:60c79bb72b02dec2906a409fd434cf0ac292d9bb85bfd2c1ae2f9dba9781bc90",
+          "documentKey": "qa-retest",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 269,
+          "characters": 269,
+          "bytes": 269,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:12a0c675c1664e77897df069050ea72c89b6095aaec81e9e9b87aa69267b4d83",
+          "documentKey": "qa-retest",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 15087,
+          "end": 15978,
+          "characters": 891,
+          "bytes": 891,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:ad107d31ec9de50d131606c88d25e6b2f4b77ceee5c1de56581a3dad78658abd",
+          "documentKey": "qa-retest",
+          "version": 2,
+          "kind": "excerpt",
+          "start": 27542,
+          "end": 27767,
+          "characters": 225,
+          "bytes": 225,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:a17990e843744a05534b7797534aae814f30112ace1205bebdffa8ce63cb9333",
+          "documentKey": "rollback-runbook",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 0,
+          "end": 200,
+          "characters": 200,
+          "bytes": 200,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:c122a384bbac786de801de1b6d568ee58cfa48604599d5b13e33fa954a70cd9a",
+          "documentKey": "rollback-runbook",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 17584,
+          "end": 18977,
+          "characters": 1393,
+          "bytes": 1393,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:f884fae94a28cb580fcba00e021e59097af20608829095851272ac9cca3b7d1b",
+          "documentKey": "decision-log",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 15519,
+          "end": 17138,
+          "characters": 1619,
+          "bytes": 1619,
+          "purpose": "retrieved"
+        },
+        {
+          "ref": "unit:c792b365f3e99b54acd81939fb43284a19757a2c401138a5e5ed89f9279264cf",
+          "documentKey": "pilot-metrics",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 14825,
+          "end": 16546,
+          "characters": 1721,
+          "bytes": 1721,
+          "purpose": "retrieved"
+        }
+      ],
+      "frozenBytes": 13540,
+      "cases": [
+        {
+          "id": "current-release-scope",
+          "anchors": [
+            {
+              "key": "release-plan",
+              "version": 2,
+              "present": true
+            },
+            {
+              "key": "release-plan",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "rollback-owner-gap",
+          "anchors": [
+            {
+              "key": "rollback-runbook",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "security-boundary",
+          "anchors": [
+            {
+              "key": "security-review",
+              "version": 2,
+              "present": false
+            },
+            {
+              "key": "action-followup",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "metric-denominator",
+          "anchors": [
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "pilot-metrics",
+              "version": 1,
+              "present": true
+            },
+            {
+              "key": "finance-definitions",
+              "version": 1,
+              "present": false
+            }
+          ]
+        },
+        {
+          "id": "qa-evidence-boundary",
+          "anchors": [
+            {
+              "key": "qa-retest",
+              "version": 2,
+              "present": true
+            },
+            {
+              "key": "weekly-priorities",
+              "version": 1,
+              "present": true
+            }
+          ]
+        },
+        {
+          "id": "negative-evidence-and-distractors",
+          "anchors": [
+            {
+              "key": "infra-routine",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "recruiting-template",
+              "version": 1,
+              "present": false
+            },
+            {
+              "key": "pilot-support",
+              "version": 1,
+              "present": true
+            }
+          ]
+        }
+      ],
+      "timing": {
+        "elapsedMs": 2243.993999999999,
+        "stages": [
+          {
+            "stage": "gathering",
+            "elapsedMs": 133.67549999999937
+          },
+          {
+            "stage": "exploring",
+            "elapsedMs": 254.65429999999833
+          },
+          {
+            "stage": "writing",
+            "elapsedMs": 1871.0498999999982
+          },
+          {
+            "stage": "checking",
+            "elapsedMs": 1871.0531999999985
+          },
+          {
+            "stage": "saving",
+            "elapsedMs": 1996.7802999999985
+          }
+        ]
+      },
+      "fixed": [
+        {
+          "ref": "unit:c5a35ffe074560f149a4958964514bf450fbe4ee93785c6adf7e85b17a99090c",
+          "documentKey": "weekly-priorities",
+          "version": 1,
+          "kind": "excerpt",
+          "start": 15155,
+          "end": 16155,
+          "characters": 1000,
+          "bytes": 1000,
+          "purpose": "company-architecture"
+        }
+      ]
+    }
+  ]
+}

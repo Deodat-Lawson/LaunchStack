@@ -34,12 +34,13 @@ export async function loadCorpus(directory = corpusDirectory) {
     const base = await realpath(directory);
     const manifest = JSON.parse(await readFile(resolve(base, "manifest.json"), "utf8"));
     requireThat(
-        manifest.schemaVersion === 1 && manifest.corpusId === CORPUS_ID,
+        manifest.schemaVersion === 1 && [CORPUS_ID, "harborlight-long-weekly-2026-11-16"].includes(manifest.corpusId),
         "INVALID_MANIFEST"
     );
+    const long = manifest.corpusId === "harborlight-long-weekly-2026-11-16";
     const cutoff = timestamp(manifest.cutoff);
     requireThat(
-        Array.isArray(manifest.documents) && manifest.documents.length === 12,
+        Array.isArray(manifest.documents) && manifest.documents.length === (long ? 50 : 12),
         "INVALID_DOCUMENT_COUNT"
     );
     requireThat(
@@ -87,7 +88,7 @@ export async function loadCorpus(directory = corpusDirectory) {
             );
             files.add(version.file);
             const bytes = await readFile(path);
-            requireThat(bytes.length > 0 && bytes.length < 2048, "INVALID_FILE_BYTES");
+            requireThat(bytes.length > 0 && bytes.length < (long ? 35001 : 2048) && (!long || bytes.length >= 25000), "INVALID_FILE_BYTES");
             const text = new TextDecoder("utf-8", { fatal: true, ignoreBOM: true }).decode(bytes);
             requireThat(
                 !text.includes("\u0000") && Buffer.from(text, "utf8").equals(bytes),
@@ -104,13 +105,14 @@ export async function loadCorpus(directory = corpusDirectory) {
         }
         documents.push({
             key: doc.key,
+            restricted: doc.restricted === true,
             title: doc.title,
             category: doc.category,
             creationKey: `${manifest.corpusId}:${doc.key}`,
             versions,
         });
     }
-    requireThat(files.size === 13, "INVALID_VERSION_COUNT");
+    requireThat(files.size === (long ? 53 : 13), "INVALID_VERSION_COUNT");
     for (const field of ["suggestedRequiredKeys", "suggestedStarKeys"]) {
         const values = manifest[field];
         requireThat(
@@ -147,10 +149,10 @@ export function planImport(corpus, snapshot, actorId) {
     const { documents, versions, files, chunks } = snapshot;
     if ([documents, versions, files, chunks].every(rows => rows.length === 0)) return "create";
     requireThat(
-        documents.length === 12 &&
-            versions.length === 13 &&
-            files.length === 13 &&
-            chunks.length === 13,
+        documents.length === corpus.documents.length &&
+            versions.length === corpus.documents.flatMap(d => d.versions).length &&
+            files.length === versions.length &&
+            chunks.length === versions.length,
         "EXISTING_CONTENT_OR_DRIFT"
     );
     const usedFiles = new Set();
@@ -222,8 +224,8 @@ function summary(corpus, mode, documents = [], versions = []) {
         mode,
         corpusId: corpus.corpusId,
         cutoff: corpus.cutoff,
-        documentCount: 12,
-        versionCount: 13,
+        documentCount: corpus.documents.length,
+        versionCount: corpus.documents.flatMap(d => d.versions).length,
         totalBytes: corpus.documents
             .flatMap(d => d.versions)
             .reduce((n, v) => n + v.bytes.length, 0),
@@ -276,8 +278,12 @@ async function apply(corpus, companyId, databaseUrl) {
     try {
         return await sql.begin(async tx => {
             await tx`SELECT pg_advisory_xact_lock(hashtextextended(${`${corpus.corpusId}:${companyId}`},0))`;
+            const companyName = corpus.corpusId === "harborlight-long-weekly-2026-11-16"
+                ? "Harborlight Long (fictional sample)" : COMPANY_NAME;
+            const companySlug = corpus.corpusId === "harborlight-long-weekly-2026-11-16"
+                ? "vantage-harborlight-long-20261121" : COMPANY_SLUG;
             const companies =
-                await tx`SELECT id FROM pdr_ai_v2_company WHERE id=${companyId} AND name=${COMPANY_NAME} AND slug=${COMPANY_SLUG} FOR UPDATE`;
+                await tx`SELECT id FROM pdr_ai_v2_company WHERE id=${companyId} AND name=${companyName} AND slug=${companySlug} FOR UPDATE`;
             requireThat(companies.length === 1, "TARGET_COMPANY_REJECTED");
             const actors =
                 await tx`SELECT u."userId" AS auth_id FROM pdr_ai_v2_users u JOIN pdr_ai_v2_auth_user a ON a.id=u."userId" JOIN pdr_ai_v2_user_company_memberships m ON m.user_id=u.id WHERE u.email='vantage@test.com' AND a.email='vantage@test.com' AND m.company_id=${companyId} AND m.role='owner' AND m.status='active' FOR SHARE OF u,a,m`;
@@ -303,6 +309,9 @@ async function apply(corpus, companyId, databaseUrl) {
                     await tx`INSERT INTO pdr_ai_v2_document_context_chunks(document_id,version_id,content,content_hash,char_count,page_number,line_start,created_at) VALUES (${documentId},${version.id},${v.text},${v.hash},${v.text.length},1,1,${v.createdAt})`;
                     latest = { id: version.id, url, date: v.createdAt };
                 }
+                if (doc.restricted) {
+                    await tx`INSERT INTO pdr_ai_v2_document_settings(document_id,company_id,restricted,updated_by) VALUES (${documentId},${companyId},true,${actorId})`;
+                }
                 // Only rows just inserted in this transaction are updated.
                 await tx`UPDATE pdr_ai_v2_document SET current_version_id=${latest.id},url=${latest.url},updated_at=${latest.date} WHERE id=${documentId}`;
             }
@@ -319,7 +328,8 @@ async function apply(corpus, companyId, databaseUrl) {
 }
 
 export async function main(args = process.argv.slice(2), env = process.env) {
-    const corpus = await loadCorpus();
+    const corpus = await loadCorpus(env.VANTAGE_SAMPLE_FIXTURE === "long"
+        ? resolve(root, "docs/samples/vantage/harborlight-long") : corpusDirectory);
     if (args.length === 0) return summary(corpus, "dry-run");
     requireThat(
         args.length === 5 &&

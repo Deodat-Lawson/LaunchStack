@@ -1,0 +1,672 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "harborlight-long-weekly-2026-11-16",
+  "cutoff": "2026-11-16T00:00:00Z",
+  "suggestedRole": {
+    "name": "Engineering lead",
+    "responsibilities": "Lead Atlas release decisions, rollback readiness, and security coordination.",
+    "priorities": "Determine current pilot scope and resolve accountable rollback ownership."
+  },
+  "suggestedRequiredKeys": [
+    "weekly-priorities"
+  ],
+  "suggestedStarKeys": [
+    "finance-definitions"
+  ],
+  "documents": [
+    {
+      "key": "weekly-priorities",
+      "title": "Atlas weekly priorities",
+      "category": "strategy",
+      "versions": [
+        {
+          "file": "weekly-priorities.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-09T14:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "release-plan",
+      "title": "Atlas monitored pilot release plan",
+      "category": "release",
+      "versions": [
+        {
+          "file": "release-plan-v1.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-10T16:00:00Z"
+        },
+        {
+          "file": "release-plan-v2.md",
+          "versionNumber": 2,
+          "createdAt": "2026-11-13T19:30:00Z"
+        }
+      ]
+    },
+    {
+      "key": "qa-retest",
+      "title": "Atlas export retest notes",
+      "category": "qa",
+      "versions": [
+        {
+          "file": "qa-retest.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-13T15:20:00Z"
+        },
+        {
+          "file": "qa-retest-v2.md",
+          "versionNumber": 2,
+          "createdAt": "2026-11-14T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "security-review",
+      "title": "Atlas pilot security review",
+      "category": "security",
+      "versions": [
+        {
+          "file": "security-review.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T21:00:00Z"
+        },
+        {
+          "file": "security-review-v2.md",
+          "versionNumber": 2,
+          "createdAt": "2026-11-14T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "rollback-runbook",
+      "title": "Atlas pilot rollback runbook",
+      "category": "operations",
+      "versions": [
+        {
+          "file": "rollback-runbook.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-13T20:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "pilot-support",
+      "title": "Atlas pilot customer and support notes",
+      "category": "customer",
+      "versions": [
+        {
+          "file": "pilot-support.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-14T17:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "pilot-metrics",
+      "title": "Atlas pilot usage report",
+      "category": "metrics",
+      "versions": [
+        {
+          "file": "pilot-metrics.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-15T18:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "finance-definitions",
+      "title": "Pilot reporting and finance definitions",
+      "category": "policy",
+      "versions": [
+        {
+          "file": "finance-definitions.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-09T18:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "infra-routine",
+      "title": "Infrastructure weekly maintenance digest",
+      "category": "infrastructure",
+      "versions": [
+        {
+          "file": "infra-routine.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-15T14:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "recruiting-template",
+      "title": "Engineering lead recruitment scorecard template",
+      "category": "recruitment",
+      "versions": [
+        {
+          "file": "recruiting-template.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-10T13:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "decision-log",
+      "title": "Atlas Thursday decision log",
+      "category": "meeting",
+      "versions": [
+        {
+          "file": "decision-log.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T18:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "action-followup",
+      "title": "Atlas open actions before weekly review",
+      "category": "followup",
+      "versions": [
+        {
+          "file": "action-followup.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-15T21:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "finance-decoy",
+      "title": "Harborlight security working record 12",
+      "category": "security",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "finance-decoy.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "restricted-security",
+      "title": "Harborlight customers working record 13",
+      "category": "customers",
+      "restricted": true,
+      "versions": [
+        {
+          "file": "restricted-security.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "finance-14",
+      "title": "Harborlight finance working record 14",
+      "category": "finance",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "finance-14.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "roadmap-15",
+      "title": "Harborlight roadmap working record 15",
+      "category": "roadmap",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "roadmap-15.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "hiring-16",
+      "title": "Harborlight hiring working record 16",
+      "category": "hiring",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "hiring-16.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "office-17",
+      "title": "Harborlight office working record 17",
+      "category": "office",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "office-17.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "specs-18",
+      "title": "Harborlight specs working record 18",
+      "category": "specs",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "specs-18.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "meetings-19",
+      "title": "Harborlight meetings working record 19",
+      "category": "meetings",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "meetings-19.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "qa-20",
+      "title": "Harborlight qa working record 20",
+      "category": "qa",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "qa-20.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "security-21",
+      "title": "Harborlight security working record 21",
+      "category": "security",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "security-21.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "customers-22",
+      "title": "Harborlight customers working record 22",
+      "category": "customers",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "customers-22.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "finance-23",
+      "title": "Harborlight finance working record 23",
+      "category": "finance",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "finance-23.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "roadmap-24",
+      "title": "Harborlight roadmap working record 24",
+      "category": "roadmap",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "roadmap-24.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "hiring-25",
+      "title": "Harborlight hiring working record 25",
+      "category": "hiring",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "hiring-25.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "office-26",
+      "title": "Harborlight office working record 26",
+      "category": "office",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "office-26.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "specs-27",
+      "title": "Harborlight specs working record 27",
+      "category": "specs",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "specs-27.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "meetings-28",
+      "title": "Harborlight meetings working record 28",
+      "category": "meetings",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "meetings-28.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "qa-29",
+      "title": "Harborlight qa working record 29",
+      "category": "qa",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "qa-29.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "security-30",
+      "title": "Harborlight security working record 30",
+      "category": "security",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "security-30.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "customers-31",
+      "title": "Harborlight customers working record 31",
+      "category": "customers",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "customers-31.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "finance-32",
+      "title": "Harborlight finance working record 32",
+      "category": "finance",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "finance-32.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "roadmap-33",
+      "title": "Harborlight roadmap working record 33",
+      "category": "roadmap",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "roadmap-33.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "hiring-34",
+      "title": "Harborlight hiring working record 34",
+      "category": "hiring",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "hiring-34.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "office-35",
+      "title": "Harborlight office working record 35",
+      "category": "office",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "office-35.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "specs-36",
+      "title": "Harborlight specs working record 36",
+      "category": "specs",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "specs-36.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "meetings-37",
+      "title": "Harborlight meetings working record 37",
+      "category": "meetings",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "meetings-37.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "qa-38",
+      "title": "Harborlight qa working record 38",
+      "category": "qa",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "qa-38.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "security-39",
+      "title": "Harborlight security working record 39",
+      "category": "security",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "security-39.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "customers-40",
+      "title": "Harborlight customers working record 40",
+      "category": "customers",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "customers-40.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "finance-41",
+      "title": "Harborlight finance working record 41",
+      "category": "finance",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "finance-41.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "roadmap-42",
+      "title": "Harborlight roadmap working record 42",
+      "category": "roadmap",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "roadmap-42.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "hiring-43",
+      "title": "Harborlight hiring working record 43",
+      "category": "hiring",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "hiring-43.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "office-44",
+      "title": "Harborlight office working record 44",
+      "category": "office",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "office-44.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "specs-45",
+      "title": "Harborlight specs working record 45",
+      "category": "specs",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "specs-45.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "meetings-46",
+      "title": "Harborlight meetings working record 46",
+      "category": "meetings",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "meetings-46.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "qa-47",
+      "title": "Harborlight qa working record 47",
+      "category": "qa",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "qa-47.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "security-48",
+      "title": "Harborlight security working record 48",
+      "category": "security",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "security-48.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    },
+    {
+      "key": "customers-49",
+      "title": "Harborlight customers working record 49",
+      "category": "customers",
+      "restricted": false,
+      "versions": [
+        {
+          "file": "customers-49.md",
+          "versionNumber": 1,
+          "createdAt": "2026-11-12T12:00:00Z"
+        }
+      ]
+    }
+  ],
+  "seed": 20261121
+}

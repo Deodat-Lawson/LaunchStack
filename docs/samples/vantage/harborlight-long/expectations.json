@@ -1,0 +1,156 @@
+{
+  "schemaVersion": 1,
+  "corpusId": "harborlight-long-weekly-2026-11-16",
+  "status": "AI-authored check cases for human review; not independent Gold.",
+  "cases": [
+    {
+      "id": "current-release-scope",
+      "question": "What release scope is current at cutoff?",
+      "supportingKeys": [
+        "release-plan",
+        "action-followup"
+      ],
+      "anchors": [
+        {
+          "key": "release-plan",
+          "versionNumber": 2,
+          "quote": "Keep Atlas limited to the three organizations already enabled: Cedar Studio, North Pier Labs, and Juniper Supply."
+        },
+        {
+          "key": "release-plan",
+          "versionNumber": 1,
+          "quote": "Start the expanded pilot on November 13 at 17:00 UTC with all eight contracted pilot organizations."
+        }
+      ],
+      "caveats": [
+        "Revision 1 is stale; proposed timing is not an approved expansion."
+      ]
+    },
+    {
+      "id": "rollback-owner-gap",
+      "question": "Who owns the rollback decision, and what remains unresolved?",
+      "supportingKeys": [
+        "rollback-runbook",
+        "action-followup"
+      ],
+      "anchors": [
+        {
+          "key": "rollback-runbook",
+          "versionNumber": 1,
+          "quote": "Accountable rollback decision owner: UNASSIGNED."
+        },
+        {
+          "key": "action-followup",
+          "versionNumber": 1,
+          "quote": "The runbook operator entry is not an acceptance of decision ownership."
+        }
+      ],
+      "caveats": [
+        "Execution operator and escalation contact are different responsibilities."
+      ]
+    },
+    {
+      "id": "security-boundary",
+      "question": "Does the security review authorize expansion?",
+      "supportingKeys": [
+        "security-review",
+        "action-followup"
+      ],
+      "anchors": [
+        {
+          "key": "security-review",
+          "versionNumber": 2,
+          "quote": "This review does not approve expansion to additional organizations."
+        },
+        {
+          "key": "action-followup",
+          "versionNumber": 1,
+          "quote": "Security expansion sign-off: not received; SEC-88 still records current-scope permission only."
+        }
+      ],
+      "caveats": [
+        "Review predates build 186; retest completion is not a new security sign-off."
+      ]
+    },
+    {
+      "id": "metric-denominator",
+      "question": "How should the usage headline be interpreted?",
+      "supportingKeys": [
+        "pilot-metrics",
+        "finance-definitions"
+      ],
+      "anchors": [
+        {
+          "key": "pilot-metrics",
+          "versionNumber": 1,
+          "quote": "Weekly active pilot rate: 75% (6/8)."
+        },
+        {
+          "key": "pilot-metrics",
+          "versionNumber": 1,
+          "quote": "The denominator query currently selects eight contracted pilot organizations."
+        },
+        {
+          "key": "finance-definitions",
+          "versionNumber": 1,
+          "quote": "Any account-based rate must use accounts in both numerator and denominator."
+        }
+      ],
+      "caveats": [
+        "Six of eight invited accounts and two of three enabled organizations are different populations; event quality is not independently verified."
+      ]
+    },
+    {
+      "id": "qa-evidence-boundary",
+      "question": "What can QA evidence establish, and is a full QA packet required?",
+      "supportingKeys": [
+        "qa-retest",
+        "weekly-priorities"
+      ],
+      "anchors": [
+        {
+          "key": "qa-retest",
+          "versionNumber": 2,
+          "quote": "Retest: 12 of 12 grant-removal cases returned 403; six same-tenant valid-grant cases returned 200."
+        },
+        {
+          "key": "weekly-priorities",
+          "versionNumber": 1,
+          "quote": "a complete QA summary is optional for this review."
+        }
+      ],
+      "caveats": [
+        "Focused checks do not establish full regression coverage; AT-219 remains open."
+      ]
+    },
+    {
+      "id": "negative-evidence-and-distractors",
+      "question": "Which apparent signals do not establish release readiness?",
+      "supportingKeys": [
+        "infra-routine",
+        "recruiting-template",
+        "pilot-support"
+      ],
+      "anchors": [
+        {
+          "key": "infra-routine",
+          "versionNumber": 1,
+          "quote": "The backup report covers database snapshots; it does not demonstrate an Atlas image rollback or a restore under pilot traffic."
+        },
+        {
+          "key": "recruiting-template",
+          "versionNumber": 1,
+          "quote": "No current employee receives rollback authority through this scorecard."
+        },
+        {
+          "key": "pilot-support",
+          "versionNumber": 1,
+          "quote": "No pilot customer has reported missing warehouse data."
+        }
+      ],
+      "caveats": [
+        "Maintenance and interview language overlap with the role but are not release authorization; no reports of loss is bounded negative evidence."
+      ]
+    }
+  ]
+}

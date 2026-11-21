@@ -6,7 +6,8 @@ import { useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import { Popover, PopoverAnchor, PopoverContent } from "~/components/ui/popover";
 
-import { worldToScreen } from "../../model/geometry";
+import { activePage, nodeById } from "../../model/doc";
+import { nodeCenter, worldToScreen } from "../../model/geometry";
 import { shapeGeometry } from "../../model/shapes";
 import type { EditorState } from "../../model/store";
 import type { ShapeId } from "../../model/types";
@@ -54,6 +55,14 @@ export function ShapePicker() {
     );
 
     if (!pick) return null;
+    // Across the way the arrow was dragged — below a sideways drag, beside a
+    // vertical one — so it never sits on the line. Placed along it, the edge
+    // of the board flipped it back over the box the arrow came from; across,
+    // a flip only moves it to the other side of the line.
+    const source = nodeById(activePage(store.getState().doc), pick.sourceId);
+    const from = source ? nodeCenter(source) : pick.world;
+    const across =
+        Math.abs(pick.world.x - from.x) >= Math.abs(pick.world.y - from.y) ? "bottom" : "right";
     const onSvg = worldToScreen(viewport, pick.world);
     const at = { x: onSvg.x + pick.offset.x, y: onSvg.y + pick.offset.y };
 
@@ -114,10 +123,9 @@ export function ShapePicker() {
                 />
             </PopoverAnchor>
             <PopoverContent
-                side="right"
-                align="start"
-                sideOffset={14}
-                alignOffset={-12}
+                side={across}
+                align="center"
+                sideOffset={16}
                 collisionPadding={12}
                 className="w-auto p-1.5"
                 data-quick-add-picker=""

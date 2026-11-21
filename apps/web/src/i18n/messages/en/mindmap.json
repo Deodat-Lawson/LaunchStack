@@ -924,7 +924,7 @@
         "show": "Show keys",
         "next": "Next step",
         "branch": "Branch beside",
-        "decision": "At the end → decision",
+        "decision": "Question → decision",
         "move": "Move around",
         "remove": "Remove step"
       },

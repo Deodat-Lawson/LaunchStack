@@ -201,6 +201,17 @@ describe("A1 · an empty board", () => {
         expect(field().value).toBe("");
     });
 
+    it("Enter, or an input method's first key, starts it empty for the words to go into", () => {
+        const { store } = mount();
+        press("Enter");
+        expect(page(store).nodes).toHaveLength(1);
+        expect(field().value).toBe("");
+        const other = mount(flowStore()).store;
+        (document.activeElement as HTMLElement | null)?.blur?.();
+        press("Process");
+        expect(page(other).nodes).toHaveLength(1);
+    });
+
     it("leaves Space and the shortcuts key alone", () => {
         const { store } = mount();
         press(" ");
@@ -559,7 +570,7 @@ describe("A8 · the key legend", () => {
         for (const words of [
             "Next step",
             "Branch beside",
-            "At the end → decision",
+            "Question → decision",
             "Move around",
             "Remove step",
         ]) {

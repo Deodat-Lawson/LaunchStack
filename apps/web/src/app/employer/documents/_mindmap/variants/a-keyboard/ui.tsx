@@ -25,6 +25,7 @@ import { KeyLegend } from "./KeyLegend";
  * | ↑ ↓ ← →               | —                             | Walk the chart (⌥ nudges)             | —                   |
  * | Delete / Backspace    | —                             | Remove it, join the line around it    | —                   |
  * | Any character         | —                             | —                                     | Start the chart     |
+ * | Enter (or an IME key) | —                             | —                                     | Start it empty      |
  *
  * Every add and remove lays the chart out top to bottom; finishing a label
  * does too, when the words grew the box or made it a decision.
@@ -55,6 +56,14 @@ export const uiA: FlowVariantUi = {
             // Space stays pan, and ? stays the shortcuts dialog.
             if (isPrintable(e) && e.key !== " " && e.key !== "?") {
                 startChart(store, e.key);
+                return true;
+            }
+            // An input method composes in a field, never on the page: its
+            // first key ("Process") — or Enter — opens an empty first box
+            // for the words to go into.
+            if (e.key === "Enter" || e.key === "Process") {
+                if (e.key === "Enter") e.preventDefault();
+                startChart(store);
                 return true;
             }
             return false;

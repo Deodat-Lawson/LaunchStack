@@ -77,3 +77,33 @@ describe("the public link page's headers", () => {
         expect(res?.headers.get("cache-control")).toBe("private, no-store");
     });
 });
+
+describe("the public link page's rate limit", () => {
+    it("gives each visitor 300 page views per 15 minutes, then a 429", async () => {
+        const visit = () => {
+            mockGetSession.mockResolvedValue(null);
+            return middleware(
+                new NextRequest(new URL(`http://localhost/s/${TOKEN}`), {
+                    headers: { accept: "text/html", "x-forwarded-for": "203.0.113.9" },
+                })
+            );
+        };
+        for (let i = 0; i < 300; i++) {
+            const res = await visit();
+            expect(res?.status ?? 200).not.toBe(429);
+        }
+        const refused = await visit();
+        expect(refused?.status).toBe(429);
+        expect(refused?.headers.get("retry-after")).toBeTruthy();
+        expect(refused?.headers.get("x-robots-tag")).toContain("noindex");
+
+        // Another visitor is unaffected.
+        mockGetSession.mockResolvedValue(null);
+        const other = await middleware(
+            new NextRequest(new URL(`http://localhost/s/${TOKEN}`), {
+                headers: { accept: "text/html", "x-forwarded-for": "198.51.100.4" },
+            })
+        );
+        expect(other?.status ?? 200).not.toBe(429);
+    });
+});

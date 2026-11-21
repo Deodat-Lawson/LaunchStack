@@ -23,7 +23,11 @@ jest.mock("~/server/db", () => ({
 }));
 
 import { openStoredBytes, storedBytesResponse } from "~/server/public-share/bytes";
-import { agentMarkdown, publicViewerMetadata } from "~/server/public-share/document";
+import {
+    PUBLIC_MINDMAP_ID,
+    agentMarkdown,
+    publicViewerMetadata,
+} from "~/server/public-share/document";
 
 describe("publicViewerMetadata", () => {
     it("keeps what picks a viewer and drops everything else", () => {
@@ -71,9 +75,10 @@ describe("publicViewerMetadata", () => {
     });
 
     it("keeps a mindmap's marker and a transcript's pairing", () => {
+        // Never another row's id: the map and the recording are paired on the server.
         expect(publicViewerMetadata({ kind: "mindmap", mindmapId: 4, revision: 2 })).toEqual({
             kind: "mindmap",
-            mindmapId: 4,
+            mindmapId: PUBLIC_MINDMAP_ID,
         });
         expect(
             publicViewerMetadata({
@@ -82,7 +87,7 @@ describe("publicViewerMetadata", () => {
                 language: "en",
                 segments: [{ start: 0, end: 1, text: "hi" }],
             })
-        ).toEqual({ source: "transcription", audioDocumentId: 12, language: "en" });
+        ).toEqual({ source: "transcription", language: "en" });
         expect(publicViewerMetadata(null)).toBeNull();
         expect(publicViewerMetadata({ error: "only junk" })).toBeNull();
     });

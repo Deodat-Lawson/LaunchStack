@@ -919,6 +919,25 @@
       "blurb": "Hover a box for + arrows on every side: click to add, drag to pick."
     },
     "c": {
+      "menu": {
+        "title": "What goes here?",
+        "cancel": "<key>Esc</key> to cancel",
+        "fromArrow": "Pick what goes at the end of the arrow",
+        "here": "Pick a shape to add here"
+      },
+      "picks": {
+        "step": "Step",
+        "decision": "Decision",
+        "terminal": "Start/End",
+        "data": "Data",
+        "note": "Note",
+        "arrow": "Just the arrow"
+      },
+      "empty": {
+        "title": "Double-click anywhere to add a step",
+        "body": "then drag from its edge to add what comes next.",
+        "start": "Choose the first shape"
+      },
       "name": "Drop and pick",
       "blurb": "Drag an arrow into space and pick what goes there."
     },

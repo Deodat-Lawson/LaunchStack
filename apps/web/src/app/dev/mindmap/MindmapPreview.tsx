@@ -143,7 +143,8 @@ export function MindmapPreview() {
 }
 
 /**
- * Pick the flowchart direction to try. Pinned above the editor's bottom bar,
+ * Pick the flowchart direction to try. Pinned just under the editor's top bar
+ * (the charts grow downward, so the bottom is where their content goes),
  * outside the editor so switching remounts it on a fresh board.
  */
 function VariantSwitcher({
@@ -157,7 +158,7 @@ function VariantSwitcher({
     return (
         <div
             data-variant-switcher=""
-            className="border-line bg-panel fixed bottom-12 left-1/2 z-50 flex -translate-x-1/2 items-center gap-3 rounded-xl border px-3 py-2 shadow-lg"
+            className="border-line bg-panel fixed left-1/2 top-[60px] z-50 flex -translate-x-1/2 items-center gap-3 rounded-xl border px-3 py-1.5 shadow-md"
         >
             <span
                 className="text-ink-3 hidden whitespace-nowrap text-[12px] md:inline"

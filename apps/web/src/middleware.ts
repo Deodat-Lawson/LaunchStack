@@ -6,6 +6,7 @@ import { eq, count } from "drizzle-orm";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { getSessionFromHeaders } from "~/server/auth";
 import { isAddAccountMode } from "~/lib/auth/device-accounts";
+import { publicLinkMarkdownRewrite } from "~/lib/public-link-paths";
 
 // Same matching semantics as the Clerk helper this file used to import:
 // a literal path, or a "(.*)"-suffixed prefix (which, like path-to-regexp,
@@ -87,6 +88,10 @@ const isPublicApiRoute = createRouteMatcher([
     "/api/collab/hub(.*)",
     // Slack Events API verifies the signing secret on the raw body.
     "/api/collab/slack/events",
+    // Public links (ADR-016): anyone holding the token reads that one file.
+    // The token is the credential; every route resolves it through
+    // resolvePublicLink and answers the same 404 for a dead one.
+    "/api/s/(.*)",
     // Clicked from a mail client, which has no session — the route's own
     // docblock says so. Without this entry the /api/* default-deny below
     // answered every unsubscribe click with a JSON 401, which is also an
@@ -196,6 +201,12 @@ export default async function middleware(req: NextRequest) {
         // Static assets: no redirect logic.
         if (pathname.startsWith("/_next/")) {
             return;
+        }
+
+        // A public link as Markdown, for an agent; the page itself needs no session.
+        const markdown = publicLinkMarkdownRewrite(pathname, req.headers.get("accept"));
+        if (markdown) {
+            return NextResponse.rewrite(new URL(markdown, req.url));
         }
 
         // Join links used to be `/signup?code=…`; links already shared still

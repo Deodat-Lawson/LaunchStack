@@ -299,6 +299,52 @@ export const documentGrants = pgTable(
 );
 
 // ============================================================================
+// Public links (ADR-016): one file, readable by anyone holding the token
+// ============================================================================
+
+/**
+ * A secret link that opens one document without signing in. At most one live
+ * row per document (`revoked_at IS NULL`); revoking keeps the row, so making
+ * a new link mints a new token and the old URL stays dead. The token is kept
+ * as-is, like a Drive link, so a manager can copy it again later.
+ */
+export const documentPublicLinks = pgTable(
+    "document_public_links",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        documentId: bigint("document_id", { mode: "bigint" })
+            .notNull()
+            .references(() => document.id, { onDelete: "cascade" }),
+        /** 32 random bytes, base64url (43 characters). */
+        token: varchar("token", { length: 64 }).notNull(),
+        allowDownload: boolean("allow_download").default(true).notNull(),
+        /** Null = never expires. */
+        expiresAt: timestamp("expires_at", { withTimezone: true }),
+        createdBy: varchar("created_by", { length: 256 }).notNull(),
+        createdAt: timestamp("created_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        updatedAt: timestamp("updated_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+        revokedAt: timestamp("revoked_at", { withTimezone: true }),
+        revokedBy: varchar("revoked_by", { length: 256 }),
+    },
+    table => ({
+        tokenUnique: uniqueIndex("document_public_links_token_unique").on(table.token),
+        liveDocumentUnique: uniqueIndex("document_public_links_live_document_unique")
+            .on(table.documentId)
+            .where(sql`revoked_at is null`),
+        companyIdIdx: index("document_public_links_company_id_idx").on(table.companyId),
+    })
+);
+
+export type DocumentPublicLink = InferSelectModel<typeof documentPublicLinks>;
+
+// ============================================================================
 // Audit log (append-only)
 // ============================================================================
 

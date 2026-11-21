@@ -478,7 +478,10 @@
       "roleNameTaken": "A role with that name already exists.",
       "roleHoldsPermissionsYouLack": "This role holds permissions you do not have.",
       "roleStillHeld": "{count, plural, one {# member} other {# members}} still hold this role. Choose a role to move them to.",
-      "chooseDifferentRole": "Choose a different role to move members to."
+      "chooseDifferentRole": "Choose a different role to move members to.",
+      "publicLinksOff": "Public links are turned off in this workspace. Someone who manages the workspace can turn them on in Workspace › People and access.",
+      "cannotChangePublicLink": "Only people who can manage this file can make or change its public link.",
+      "noPublicLink": "This file has no public link."
     }
   }
 }

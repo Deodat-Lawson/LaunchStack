@@ -115,7 +115,7 @@ export function TemplatesSection() {
                     </Control>
                     <Control label="Width">
                         <ToggleGroup
-                            className="max-w-full flex-wrap"
+                            className="max-w-full flex-wrap justify-start"
                             type="single"
                             size="sm"
                             variant="outline"
@@ -136,7 +136,7 @@ export function TemplatesSection() {
                     </Control>
                     <Control label="State">
                         <ToggleGroup
-                            className="max-w-full flex-wrap"
+                            className="max-w-full flex-wrap justify-start"
                             type="single"
                             size="sm"
                             variant="outline"

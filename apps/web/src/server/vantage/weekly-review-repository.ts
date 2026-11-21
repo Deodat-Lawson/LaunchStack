@@ -88,27 +88,34 @@ const scalarText = (value: unknown): string => {
 const hash = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 /** Omitted sources are not read-authority dependencies. Keep their identifiers
  * only in the encrypted admission record, even if access was allowed at capture. */
-function reportReadEvidence(value: unknown): unknown {
+function reportReadEvidence(value: unknown, topicRun: boolean): unknown {
     if (!value || typeof value !== "object") return value;
     const evidence = value as Record<string, unknown>;
-    if (evidence.retrievalMode === "topic-first") {
+    if (topicRun) {
         const snapshot = evidence.inputSnapshot as WeeklyReviewInput | undefined;
         const context = snapshot?.retrievalContext;
-        if (context?.schemaVersion !== "vantage-topic-retrieval/v1") return null;
+        if (!snapshot || context?.schemaVersion !== "vantage-topic-retrieval/v1") return null;
         const publicSnapshot = {
-            candidateId: snapshot!.candidateId,
-            week: snapshot!.week,
-            asOf: snapshot!.asOf,
-            role: snapshot!.role,
-            mandatoryCoverage: snapshot!.mandatoryCoverage,
-            sources: snapshot!.sources,
-            scopedEvidence: snapshot!.scopedEvidence,
+            candidateId: snapshot.candidateId,
+            week: snapshot.week,
+            asOf: snapshot.asOf,
+            role: snapshot.role,
+            mandatoryCoverage: snapshot.mandatoryCoverage,
+            sources: snapshot.sources,
+            scopedEvidence: snapshot.scopedEvidence,
         };
         return {
             schemaVersion: evidence.schemaVersion,
             inputSnapshot: publicSnapshot,
-            sourceRegistry: evidence.sourceRegistry,
-            scopedEvidence: evidence.scopedEvidence,
+            sourceRegistry: snapshot.sources.map(({ ref, version, hash, purpose, title }) => ({
+                ref,
+                version,
+                hash,
+                purpose,
+                title,
+            })),
+            qualityEvidence: evidence.qualityEvidence,
+            scopedEvidence: snapshot.scopedEvidence,
             budget: evidence.budget,
             retrievalMode: "topic-first",
             topicRetrieval: {
@@ -1094,7 +1101,10 @@ export function createWeeklyReviewRepository(
                 );
                 return {
                     ...payload,
-                    evidence: reportReadEvidence(payload.evidence),
+                    evidence: reportReadEvidence(
+                        payload.evidence,
+                        row.retrieval_mode === "topic-first"
+                    ),
                     version: Number(row.review_version),
                     decisions: decisions.map(item =>
                         parseStoredDecision(decryptSecret(String(item.ciphertext)))

@@ -100,20 +100,29 @@ export async function collectTopicSeed(
     for (const id of watches) add(byId.get(id), "watch");
     for (const id of carryoverIds) add(byId.get(id), "carryover");
     // Reserve capacity for the lane independently of earlier seed counts.
-    for (const row of lanePool.slice(0, 3)) add(row, "lane");
+    const laneCandidates = lanePool.slice(0, 3);
+    const laneIds = new Set(laneCandidates.map(row => String(row.id)));
+    for (const row of laneCandidates) add(row, "lane");
     for (const row of changed) add(row, "change");
     for (const row of recent) add(row, "recency");
 
     const entries = [...ranked.values()];
+    const acquisitionOrder = [
+        ...laneCandidates,
+        ...entries.map(entry => entry.row).filter(row => !laneIds.has(String(row.id))),
+    ];
     const bodies = new Map<string, string>();
-    // Bound each SQL aggregation and each transfer. Pull a few extra ranked candidates
-    // to avoid counting empty and oversized versions against the offered limit.
+    // Reserve lane bodies first and cap the total transfer at 50 bounded parents.
     for (
         let offset = 0;
-        offset < entries.length && bodies.size < TOPIC_FIRST_LIMITS.offered + 3;
-        offset += 12
+        offset < acquisitionOrder.length && bodies.size < TOPIC_FIRST_LIMITS.offered;
+
     ) {
-        const versions = entries.slice(offset, offset + 12).map(({ row }) => String(row.version));
+        const count = Math.min(12, TOPIC_FIRST_LIMITS.offered - bodies.size);
+        const versions = acquisitionOrder
+            .slice(offset, offset + count)
+            .map(row => String(row.version));
+        offset += count;
         const rows = await query(
             `
             SELECT v.id::text AS version, body.text FROM pdr_ai_v2_document_versions v
@@ -132,7 +141,7 @@ export async function collectTopicSeed(
             [versions, TOPIC_FIRST_LIMITS.parentBytes]
         );
         for (const row of rows)
-            if (typeof row.text === "string" && row.text.trim())
+            if (typeof row.text === "string" && row.text.length >= 200 && row.text.trim())
                 bodies.set(String(row.version), row.text);
     }
     const allDocuments = entries.flatMap(({ row, reason }) => {
@@ -159,13 +168,13 @@ export async function collectTopicSeed(
             },
         ];
     });
-    const lane = allDocuments
-        .filter(document => document.reason === "lane")
-        .map(document => document.ref);
-    const ordinary = allDocuments.filter(document => document.reason !== "lane");
+    const laneDocuments = laneCandidates.flatMap(row =>
+        allDocuments.filter(document => document.id === String(row.id))
+    );
+    const lane = laneDocuments.map(document => document.ref);
     const documents = [
-        ...ordinary.slice(0, TOPIC_FIRST_LIMITS.offered - lane.length),
-        ...allDocuments.filter(document => document.reason === "lane"),
+        ...allDocuments.filter(document => !laneIds.has(document.id)),
+        ...laneDocuments,
     ];
     const manifest: TopicManifest = {
         week: context.week,

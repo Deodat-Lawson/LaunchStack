@@ -1,4 +1,4 @@
-﻿import { fitTopicEvidence, mergeTopicSpans } from "~/server/vantage/weekly-review-topic-freeze";
+import { fitTopicEvidence, mergeTopicSpans } from "~/server/vantage/weekly-review-topic-freeze";
 import type { TopicSeed } from "~/server/vantage/weekly-review-topic-types";
 import type { createScopedSourceReader } from "~/server/vantage/weekly-review-scoped-selection";
 const date = "2026-11-15T00:00:00.000Z";
@@ -64,7 +64,7 @@ it("merges overlapping and adjacent canonical UTF-16 spans", () => {
                 { start: 0, end: 300 },
                 { start: 500, end: 800 },
             ],
-            1000
+            "a".repeat(1000)
         )
     ).toEqual([{ start: 0, end: 800 }]);
 });
@@ -74,7 +74,33 @@ it.each([
     [500, 1100],
     [0, 6001],
 ])("rejects invalid range %i..%i", (start, end) => {
-    expect(() => mergeTopicSpans([{ start, end }], 1000)).toThrow("range_invalid");
+    expect(() => mergeTopicSpans([{ start, end }], "a".repeat(1000))).toThrow("range_invalid");
+});
+it("keeps architecture, required sources and personal Stars together", async () => {
+    const seed = fixture();
+    const architecture = seed.context.sources[0]!;
+    const required = {
+        ...architecture,
+        id: "3",
+        ref: "doc:3@3",
+        version: "3",
+        purpose: "workspace-required" as const,
+    };
+    const star = {
+        ...architecture,
+        id: "4",
+        ref: "doc:4@4",
+        version: "4",
+        purpose: "personal-star" as const,
+        audience: "actor" as const,
+    };
+    seed.context.sources.push(required, star);
+    seed.context.mandatoryCoverage = { required: 2, included: 2 };
+    seed.manifest.fixed.push(required, star);
+    seed.manifest.fixedDependencies.push(required, star);
+    const frozen = await fitTopicEvidence("run", seed, { selected: [] }, reader);
+    expect(frozen.input.sources).toEqual([architecture, required, star]);
+    expect(frozen.dependencies).toEqual(seed.manifest.fixedDependencies);
 });
 it("keeps fixed sources and reports none eligible with empty lane", async () => {
     const seed = fixture();
@@ -216,4 +242,26 @@ it("keeps all fixed sources when the lane has a capacity shortfall", async () =>
     const frozen = await fitTopicEvidence("run", seed, { selected: [] }, reader);
     expect(frozen.summary.lane.outcome).toBe("capacity_shortfall");
     expect(frozen.input.sources).toEqual(seed.context.sources);
+});
+it("rejects explicit freeze endpoints inside a surrogate pair", () => {
+    const text = "x".repeat(199) + "😀" + "x".repeat(600);
+    expect(() => mergeTopicSpans([{ start: 0, end: 200 }], text)).toThrow("range_invalid");
+    expect(() => mergeTopicSpans([{ start: 200, end: 500 }], text)).toThrow("range_invalid");
+});
+it("normalizes a generated seed excerpt before the 6000-unit surrogate boundary", async () => {
+    const seed = fixture();
+    seed.documents[0]!.text = "x".repeat(5999) + "😀" + "tail".repeat(100);
+    const read = jest.fn(async () => {
+        throw new Error("inspected");
+    });
+    await expect(fitTopicEvidence("run", seed, null, read)).rejects.toThrow("inspected");
+    expect(read.mock.calls).toEqual(
+        expect.arrayContaining([
+            expect.arrayContaining([
+                expect.objectContaining({
+                    requiredUnits: [expect.objectContaining({ start: 0, end: 5999 })],
+                }),
+            ]),
+        ])
+    );
 });

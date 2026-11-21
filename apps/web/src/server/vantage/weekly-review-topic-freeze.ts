@@ -5,7 +5,11 @@ import {
 import { fingerprint } from "@launchstack/pipelines/vantage/weekly-review-validation";
 import { canonicalTextHash } from "@launchstack/store/document-digests";
 import type { TopicRetrievalContext } from "@launchstack/pipelines/vantage/topic-retrieval-v1";
-import type { TopicExplorationResult } from "./weekly-review-topic-exploration";
+import {
+    normalizeTopicExcerpt,
+    validTopicExcerptRange,
+    type TopicExplorationResult,
+} from "./weekly-review-topic-exploration";
 import { topicManifestHash, type TopicOffer, type TopicSeed } from "./weekly-review-topic-types";
 import {
     WeeklyReviewConflict,
@@ -23,17 +27,10 @@ export type TopicFreeze = {
     dependencies: FrozenDependency[];
     summary: Pick<TopicRetrievalContext, "mode" | "lane" | "seedReasons"> & { outcome: "frozen" };
 };
-export function mergeTopicSpans(spans: Span[], length: number): Span[] {
+export function mergeTopicSpans(spans: Span[], text: string): Span[] {
     const merged: Span[] = [];
     for (const span of [...spans].sort((a, b) => a.start - b.start || a.end - b.end)) {
-        if (
-            !Number.isSafeInteger(span.start) ||
-            !Number.isSafeInteger(span.end) ||
-            span.start < 0 ||
-            span.end > length ||
-            span.end - span.start < 200 ||
-            span.end - span.start > 6000
-        )
+        if (!validTopicExcerptRange(text, span))
             throw new WeeklyReviewConflict("topic_exploration_failed:range_invalid");
         const previous = merged.at(-1);
         if (previous && span.start <= previous.end) previous.end = Math.max(previous.end, span.end);
@@ -44,8 +41,10 @@ export function mergeTopicSpans(spans: Span[], length: number): Span[] {
     return merged;
 }
 
-const defaultSpan = (text: string) =>
-    text.length < 200 ? [] : [{ start: 0, end: Math.min(text.length, 6000) }];
+const defaultSpan = (text: string) => {
+    const normalized = normalizeTopicExcerpt(text, { start: 0, end: Math.min(text.length, 6000) });
+    return normalized ? [normalized] : [];
+};
 export async function fitTopicEvidence(
     runId: string,
     seed: TopicSeed,
@@ -69,7 +68,7 @@ export async function fitTopicEvidence(
         selections.set(item.ref, [...(selections.get(item.ref) ?? []), ...item.spans]);
     }
     for (const [ref, spans] of selections)
-        selections.set(ref, mergeTopicSpans(spans, offered.get(ref)!.text.length));
+        selections.set(ref, mergeTopicSpans(spans, offered.get(ref)!.text));
 
     let sources: WeeklyReviewSource[] = [...context.sources];
     let proofs = [...(context.scopedEvidence ?? [])];

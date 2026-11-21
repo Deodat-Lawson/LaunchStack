@@ -255,6 +255,7 @@ export async function collectInternalWeeklyReviewContext(
     }
 ): Promise<WeeklyReviewContext> {
     return database.transaction(async raw => {
+        if (topic) await raw("SET TRANSACTION ISOLATION LEVEL REPEATABLE READ");
         const { query, acquisition, deadlineAt } = boundedInternalQuery(raw, Boolean(topic));
         const { actor, epoch } = await fresh(query, expected, false, deadlineAt);
         if (topic && !actor.canMutate)

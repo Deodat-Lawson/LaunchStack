@@ -110,3 +110,46 @@ it("scripted exploration records tools within the full 50-document limits", asyn
     ).toBe(59);
     expect(result.selected).toHaveLength(50);
 });
+it("normalizes scripted excerpts without splitting a surrogate pair", async () => {
+    const documents = [{ ref: "doc:1@1", text: "x".repeat(5999) + "😀" + "tail".repeat(100) }];
+    const input = { ...setup(createScriptedExplorationPort(documents)), offered: documents };
+    const result = await runTopicExploration(input);
+    expect(result.selected[0]?.spans).toEqual([{ start: 0, end: 5999 }]);
+});
+it("rejects explicit tool and submission endpoints within a surrogate pair", async () => {
+    const offered = [{ ref: "doc:1@1", text: "x".repeat(199) + "😀" + "tail".repeat(100) }];
+    let turn = 0;
+    const port: AgentModelPort = {
+        async respond(request) {
+            if (turn++ === 0)
+                return {
+                    text: "",
+                    toolCalls: [
+                        {
+                            id: "read",
+                            name: "read_document_excerpt",
+                            arguments: { ref: "doc:1@1", start: 0, end: 200 },
+                        },
+                    ],
+                };
+            const tool = request.transcript.find(item => item.role === "tool");
+            if (turn === 2)
+                expect(tool?.role === "tool" ? tool.content : "").toBe('{"error":"range_invalid"}');
+            return {
+                text: "",
+                toolCalls: [
+                    {
+                        id: "submit",
+                        name: "submit_result",
+                        arguments: {
+                            selected: [
+                                { ref: "doc:1@1", topicIds: [], spans: [{ start: 0, end: 200 }] },
+                            ],
+                        },
+                    },
+                ],
+            };
+        },
+    };
+    await expect(runTopicExploration({ ...setup(port), offered })).rejects.toThrow();
+});

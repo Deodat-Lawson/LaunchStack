@@ -44,6 +44,40 @@ export const TopicExplorationResultSchema = z
 export type TopicExplorationResult = z.infer<typeof TopicExplorationResultSchema>;
 const hash = (value: unknown) => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 
+/** Canonical offsets count UTF-16 code units and must preserve surrogate pairs. */
+export function isTopicUtf16Boundary(text: string, offset: number): boolean {
+    if (!Number.isSafeInteger(offset) || offset < 0 || offset > text.length) return false;
+    const previous = text.charCodeAt(offset - 1);
+    const next = text.charCodeAt(offset);
+    return !(previous >= 0xd800 && previous <= 0xdbff && next >= 0xdc00 && next <= 0xdfff);
+}
+export function validTopicExcerptRange(
+    text: string,
+    range: { start: number; end: number }
+): boolean {
+    return (
+        isTopicUtf16Boundary(text, range.start) &&
+        isTopicUtf16Boundary(text, range.end) &&
+        range.end - range.start >= 200 &&
+        range.end - range.start <= 6000
+    );
+}
+/** Only server-generated spans are normalized. Explicit provider spans are validated verbatim. */
+export function normalizeTopicExcerpt(
+    text: string,
+    range: { start: number; end: number }
+): { start: number; end: number } | null {
+    let start = Math.max(0, Math.min(range.start, text.length));
+    if (!isTopicUtf16Boundary(text, start)) start++;
+    let end = Math.min(text.length, start + 6000, range.end);
+    if (!isTopicUtf16Boundary(text, end)) end--;
+    if (end - start < 200) {
+        end = Math.min(text.length, start + 200);
+        if (!isTopicUtf16Boundary(text, end)) end++;
+    }
+    return validTopicExcerptRange(text, { start, end }) ? { start, end } : null;
+}
+
 export async function runTopicExploration(input: {
     catalogue: unknown;
     topics: readonly ExplorationTopic[];
@@ -116,13 +150,7 @@ export async function runTopicExploration(input: {
             args => {
                 const document = documents.get(args.ref);
                 if (!document) return { error: "not_offered" };
-                if (
-                    args.start < 0 ||
-                    args.end > document.text.length ||
-                    args.end - args.start < 200 ||
-                    args.end - args.start > 6000
-                )
-                    return { error: "range_invalid" };
+                if (!validTopicExcerptRange(document.text, args)) return { error: "range_invalid" };
                 return {
                     untrustedSourceText: document.text.slice(args.start, args.end),
                     start: args.start,
@@ -150,12 +178,7 @@ export async function runTopicExploration(input: {
             if (!document && !fixed.has(selected.ref))
                 context.addIssue({ code: "custom", message: "not_offered" });
             for (const range of selected.spans)
-                if (
-                    !document ||
-                    range.end > document.text.length ||
-                    range.end - range.start < 200 ||
-                    range.end - range.start > 6000
-                )
+                if (!document || !validTopicExcerptRange(document.text, range))
                     context.addIssue({ code: "custom", message: "range_invalid" });
             if (selected.topicIds.some(id => !input.topics.some(topic => topic.id === id)))
                 context.addIssue({ code: "custom", message: "not_offered" });
@@ -254,7 +277,10 @@ export function createScriptedExplorationPort(
                             ),
                         };
                     })
-                    .filter(range => range.end - range.start >= 200);
+                    .flatMap(range => {
+                        const normalized = normalizeTopicExcerpt(document.text, range);
+                        return normalized ? [normalized] : [];
+                    });
                 return { ref: document.ref, topicIds: [], spans };
             });
             if (!read) {

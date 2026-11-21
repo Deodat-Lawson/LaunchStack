@@ -110,13 +110,26 @@ describe("variant C: the look", () => {
 
     it("keeps a box's kind and colour when Tab adds the next one", () => {
         const store = flowStore();
-        const decision = insertShape(store, "decision", { x: 0, y: 0 });
+        const data = insertShape(store, "data", { x: 0, y: 0 });
         store.setEditing(null);
-        const nextId = addNextStep(store, decision)!;
+        const nextId = addNextStep(store, data)!;
         const next = nodeById(page(store), nextId)!;
-        expect(next.shape).toBe("decision");
-        expect(next.style.fill).toBe(lookC.boxLook("decision", "light").style.fill);
+        expect(next.shape).toBe("data");
+        expect(next.style.fill).toBe(lookC.boxLook("data", "light").style.fill);
     });
+
+    it.each(["terminator", "decision"] as const)(
+        "makes a Step when Tab follows a %s, not another one",
+        shape => {
+            const store = flowStore();
+            const source = insertShape(store, shape, { x: 0, y: 0 });
+            store.setEditing(null);
+            const nextId = addNextStep(store, source)!;
+            const next = nodeById(page(store), nextId)!;
+            expect(next.shape).toBe("process");
+            expect(next.style.fill).toBe(lookC.boxLook("process", "light").style.fill);
+        }
+    );
 });
 
 describe("variant C: where a picked box lands (C3)", () => {

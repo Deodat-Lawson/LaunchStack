@@ -94,6 +94,10 @@ export const lookC: FlowLook = {
     stepShape: "process",
     direction: "right",
     boxLook,
+    // Tab after a Start/End pill or a decision is an action, not another pill
+    // or another question: it makes a Step. Every other kind keeps its kind.
+    nextShape: source =>
+        source.shape === "terminator" || source.shape === "decision" ? "process" : source.shape,
     edgeLook(mode) {
         return {
             kind: "curved",

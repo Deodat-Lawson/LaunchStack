@@ -31,8 +31,8 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
  * `?theme=<id>` pick the board's lighting and theme.
  *
  * `?variant=a|b|c|d` tries a flowchart direction (`_mindmap/variants/`) on a
- * blank flowchart, with a switcher pinned to the bottom of the page. The
- * switcher shows on any flowchart, so "Today" is one click away.
+ * blank flowchart, with a switcher pinned to the canvas's bottom-right corner.
+ * The switcher shows on any flowchart, so "Today" is one click away.
  */
 
 /**
@@ -42,12 +42,18 @@ import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
  * the first heartbeat through before it took hold.
  */
 let stubbed = false;
+/**
+ * The stub server's revision. Module-level so a remount can reset it: each
+ * switch mounts a fresh editor at revision 1, and a counter left at 5 by the
+ * last board's saves made the new one fetch "the newer version" — an empty,
+ * untitled, non-flowchart document — over its fresh board.
+ */
+let stubRevision = 1;
 function stubMindmapApi() {
     if (stubbed || typeof window === "undefined") return;
     stubbed = true;
 
     const real = window.fetch.bind(window);
-    let revision = 1;
 
     window.fetch = async (input, init) => {
         const url =
@@ -60,14 +66,14 @@ function stubMindmapApi() {
                 headers: { "Content-Type": "application/json" },
             });
 
-        if (url.includes("/presence")) return json({ peers: [], revision });
+        if (url.includes("/presence")) return json({ peers: [], revision: stubRevision });
         if (url.includes("/versions")) return json({ versions: [] });
         if (/\/api\/mindmaps(\?|$)/.test(url)) return json({ mindmaps: [], folders: [] });
         if (init?.method && init.method !== "GET") {
-            revision += 1;
-            return json({ mindmap: { revision }, revision });
+            stubRevision += 1;
+            return json({ mindmap: { revision: stubRevision }, revision: stubRevision });
         }
-        return json({ mindmap: { revision } });
+        return json({ mindmap: { revision: stubRevision } });
     };
 }
 
@@ -115,6 +121,7 @@ export function MindmapPreview() {
         // Today fell back to the harness's default template, the mindmap.
         if (!params.get("template")) params.set("template", "blank");
         window.history.replaceState(null, "", `${window.location.pathname}?${params}`);
+        stubRevision = 1;
         setQuery(params);
         // Hand the keyboard back to the board. Left on the switcher, a
         // keyboard-first direction's keys moved between its buttons (and
@@ -150,9 +157,12 @@ export function MindmapPreview() {
 }
 
 /**
- * Pick the flowchart direction to try. Pinned just under the editor's top bar
- * (the charts grow downward, so the bottom is where their content goes),
- * outside the editor so switching remounts it on a fresh board.
+ * Pick the flowchart direction to try. Pinned to the canvas's bottom-right
+ * corner, the one place no direction uses: A's key legend and D's syntax
+ * footer sit bottom-left, D's Steps panel runs down the left, and charts grow
+ * from the centre. Outside the editor, so switching remounts it on a fresh
+ * board. Names show on wide screens; letters (with the name as a tooltip)
+ * keep it small elsewhere.
  */
 function VariantSwitcher({
     value,
@@ -165,10 +175,10 @@ function VariantSwitcher({
     return (
         <div
             data-variant-switcher=""
-            className="border-line bg-panel fixed left-1/2 top-[60px] z-50 flex -translate-x-1/2 items-center gap-3 rounded-xl border px-3 py-1.5 shadow-md"
+            className="border-line bg-panel fixed bottom-12 right-4 z-50 flex items-center gap-3 rounded-xl border px-3 py-1.5 shadow-md"
         >
             <span
-                className="text-ink-3 hidden whitespace-nowrap text-[12px] md:inline"
+                className="text-ink-3 hidden whitespace-nowrap text-[12px] 2xl:inline"
                 title={t("switcher.hint")}
             >
                 {t("switcher.label")}
@@ -194,7 +204,7 @@ function VariantSwitcher({
                         className="gap-1.5 px-2.5 text-[12.5px]"
                     >
                         <span className="font-semibold">{id.toUpperCase()}</span>
-                        <span className="hidden sm:inline">{t(`${id}.name`)}</span>
+                        <span className="hidden xl:inline">{t(`${id}.name`)}</span>
                     </ToggleGroupItem>
                 ))}
             </ToggleGroup>

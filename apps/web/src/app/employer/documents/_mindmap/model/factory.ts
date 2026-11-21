@@ -370,6 +370,8 @@ export interface CreateEdgeOptions {
     endArrow?: DiagramEdge["endArrow"];
     label?: string;
     waypoints?: Point[];
+    /** The type of its labels, over the default (12px, grey). */
+    textStyle?: Partial<TextStyle>;
 }
 
 export function createEdge(opts: CreateEdgeOptions): DiagramEdge {
@@ -383,7 +385,11 @@ export function createEdge(opts: CreateEdgeOptions): DiagramEdge {
         startArrow: opts.startArrow ?? "none",
         endArrow: opts.endArrow ?? "arrow",
         labels: opts.label ? [{ text: opts.label, t: 0.5, offset: 0 }] : [],
-        textStyle: defaultTextStyle({ size: 12, color: "oklch(0.42 0.01 280)" }),
+        textStyle: defaultTextStyle({
+            size: 12,
+            color: "oklch(0.42 0.01 280)",
+            ...opts.textStyle,
+        }),
         locked: false,
         hidden: false,
     };

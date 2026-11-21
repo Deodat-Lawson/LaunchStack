@@ -56,6 +56,19 @@ export const KINDS: Readonly<Partial<Record<ShapeId, Kind>>> = {
 /** A box that is none of the five kinds is coloured as a step. */
 const STEP_HUE = "blue";
 
+/**
+ * Plain boxes that are not one of the kinds — the rail's Topic tool, the
+ * library's rectangles — are a step in all but name, so they take a step's
+ * size as well as its colour. Other library shapes (a cylinder, a document)
+ * keep their own proportions, which their outlines depend on.
+ */
+const STEP_LIKE: ReadonlySet<ShapeId> = new Set<ShapeId>([
+    "rectangle",
+    "rounded-rectangle",
+    "mind-root",
+    "mind-branch",
+]);
+
 /** A kind's fill and the ink its label is set in, for one lighting. */
 export function kindColours(shape: ShapeId, mode: ThemeMode): { fill: string; ink: string } {
     const hue = KINDS[shape]?.hue ?? STEP_HUE;
@@ -84,7 +97,7 @@ function boxLook(shape: ShapeId, mode: ThemeMode): BoxLook {
             align: note ? "left" : "center",
             valign: note ? "top" : "middle",
         },
-        ...(kind ? { size: kind.size } : {}),
+        ...(kind ? { size: kind.size } : STEP_LIKE.has(shape) ? { size: KINDS.process!.size } : {}),
     };
 }
 

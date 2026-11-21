@@ -118,6 +118,17 @@ describe("variant C: the look", () => {
         expect(next.style.fill).toBe(lookC.boxLook("data", "light").style.fill);
     });
 
+    it.each(["rectangle", "rounded-rectangle", "mind-branch"] as const)(
+        "gives a plain %s box (rail tool, library) a step's size and colour",
+        shape => {
+            const store = flowStore();
+            const id = insertShape(store, shape, { x: 0, y: 0 });
+            const box = nodeById(page(store), id)!;
+            expect({ w: box.w, h: box.h }).toEqual(KINDS.process!.size);
+            expect(box.style.fill).toBe(lookC.boxLook("process", "light").style.fill);
+        }
+    );
+
     it.each(["terminator", "decision"] as const)(
         "makes a Step when Tab follows a %s, not another one",
         shape => {

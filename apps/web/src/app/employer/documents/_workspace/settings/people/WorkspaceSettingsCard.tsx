@@ -1,14 +1,16 @@
 "use client";
 
 /**
- * Audit retention — a registry row in the People section, with the same
- * store, audit row and read-only treatment as any other workspace setting.
- * (Whether join links need approval used to sit here too; it is set on each
- * link now, in Invitations.)
+ * Audit retention and the public-links switch (ADR-016) — registry rows in
+ * the People section, with the same store, audit row and read-only treatment
+ * as any other workspace setting. (Whether join links need approval used to
+ * sit here too; it is set on each link now, in Invitations.)
  */
 
 import React from "react";
 import { useTranslations } from "next-intl";
+
+import { PUBLIC_LINKS_SETTING } from "~/lib/settings/registry";
 
 import { Panel } from "./ui";
 import { SettingRow } from "../SettingRow";
@@ -23,6 +25,7 @@ export function WorkspaceSettingsCard() {
                 </h2>
             </div>
             <SettingRow settingKey="workspace.auditRetentionDays" />
+            <SettingRow settingKey={PUBLIC_LINKS_SETTING} />
         </Panel>
     );
 }

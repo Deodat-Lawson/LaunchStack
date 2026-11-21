@@ -58,6 +58,8 @@ export interface DocumentType {
     sourceArchiveName?: string | null;
     /** Limited to people with an explicit grant rather than the folder's audience. */
     restricted?: boolean;
+    /** It has a live public link anyone can open without signing in (ADR-016). */
+    publicLink?: boolean;
     /** When it was added (ISO time from the API). */
     createdAt?: string;
     /** Where it opens outside LaunchStack (`/api/fetchDocument` works it out per row). */

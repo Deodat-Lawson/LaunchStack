@@ -148,6 +148,8 @@ export type ActivityMessageKey =
     | "limited"
     | "removedFrom"
     | "changedAudience"
+    | "publicLinkOn"
+    | "publicLinkOff"
     | "forked"
     | "other";
 
@@ -191,6 +193,7 @@ export function activityMessage(
         case "deleted":
             return { key: "deleted", values: { name } };
         case "shared": {
+            if (detail.publicLink === true) return { key: "publicLinkOn", values: { name } };
             if (detail.everyone === true) return { key: "sharedWithEveryone", values: { name } };
             const added = joinNames(f, names(detail.added));
             return added
@@ -198,6 +201,7 @@ export function activityMessage(
                 : { key: "shared", values: { name } };
         }
         case "unshared": {
+            if (detail.publicLink === true) return { key: "publicLinkOff", values: { name } };
             if (detail.restricted === true) return { key: "limited", values: { name } };
             const removed = joinNames(f, names(detail.removed));
             return removed

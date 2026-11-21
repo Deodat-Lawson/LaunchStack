@@ -13,14 +13,26 @@
  * branches on endpoints; chats only offer "Can view".
  */
 
-import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Building2, CornerDownRight, Lock, ShieldCheck, Users, X } from "lucide-react";
-import { useTranslations } from "next-intl";
+import React, { useCallback, useEffect, useId, useMemo, useRef, useState } from "react";
+import Link from "next/link";
+import {
+    Bot,
+    Building2,
+    Copy,
+    CornerDownRight,
+    Globe,
+    Lock,
+    ShieldCheck,
+    Users,
+    X,
+} from "lucide-react";
+import { useFormatter, useTranslations } from "next-intl";
 import { toast } from "sonner";
 
 import { ProfileAvatar } from "~/components/ProfileAvatar";
 import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
+import { ConfirmDialog } from "~/components/ui/confirm-dialog";
 import {
     Dialog,
     DialogContent,
@@ -30,6 +42,7 @@ import {
     DialogTitle,
 } from "~/components/ui/dialog";
 import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
     Select,
     SelectContent,
@@ -37,12 +50,25 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select";
+import { Switch } from "~/components/ui/switch";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { useRoleLabel } from "~/lib/authz/i18n";
 import { isGrantLevel, type GrantLevel, type PrincipalType } from "~/lib/authz/permissions";
 import { folderLeafName } from "~/lib/folders/path";
 import { usePeople } from "~/lib/profile/use-people";
+import { PUBLIC_LINKS_SETTING } from "~/lib/settings/registry";
+import { workspaceHref } from "~/lib/settings/surfaces";
 
-import { errorMessage, peopleApi, type Grant, type OwnerRef } from "../settings/people/api";
+import {
+    errorMessage,
+    isApiError,
+    peopleApi,
+    type Grant,
+    type OwnerRef,
+    type PublicLinkExpiryDays,
+    type PublicLinkInput,
+    type PublicLinkState,
+} from "../settings/people/api";
 import type { AccessTranslator } from "./audience";
 import { chatShareAdapter } from "./chatShareAdapter";
 import { PrincipalPicker, principalKey, type PickedPrincipal } from "./PrincipalPicker";
@@ -266,6 +292,355 @@ export function shareSummary(
 }
 
 // ---------------------------------------------------------------------------
+// Public link (ADR-016): files only, and outside the dialog's Save
+// ---------------------------------------------------------------------------
+
+/** Where the workspace switch is, for the "public links are off" note. */
+const PUBLIC_LINKS_SWITCH_HREF = workspaceHref("people", { focus: PUBLIC_LINKS_SETTING });
+
+type PublicLinkAction = "create" | "expiry" | "download" | "revoke";
+
+/** The expiry menu's choices; `current` is the date the link has now. */
+const EXPIRY_CHOICES: Record<string, PublicLinkExpiryDays> = { never: null, "7": 7, "30": 30 };
+
+interface PublicLinkLoad {
+    state: PublicLinkState | null;
+    setState: React.Dispatch<React.SetStateAction<PublicLinkState | null>>;
+    loading: boolean;
+    failed: boolean;
+}
+
+/** A file's public link, read when the dialog opens on it (alongside who has access). */
+function usePublicLink(documentId: number | null): PublicLinkLoad {
+    const [state, setState] = useState<PublicLinkState | null>(null);
+    const [loading, setLoading] = useState(false);
+    const [failed, setFailed] = useState(false);
+
+    useEffect(() => {
+        setState(null);
+        setFailed(false);
+        if (documentId === null) {
+            setLoading(false);
+            return;
+        }
+        let cancelled = false;
+        setLoading(true);
+        void (async () => {
+            try {
+                const next = await peopleApi.access.publicLink(documentId);
+                if (!cancelled) setState(next);
+            } catch {
+                if (!cancelled) setFailed(true);
+            } finally {
+                if (!cancelled) setLoading(false);
+            }
+        })();
+        return () => {
+            cancelled = true;
+        };
+    }, [documentId]);
+
+    return { state, setState, loading, failed };
+}
+
+/**
+ * The file's public link: make it, copy it (or its Markdown twin, for an AI
+ * agent), set when it expires and whether it allows download, or turn it
+ * off. Every control acts at once and says so in a toast; none of it waits
+ * for the dialog's Save, which is about the people above.
+ */
+function PublicLinkSection({
+    documentId,
+    name,
+    load,
+    onChanged,
+    onLeave,
+}: {
+    documentId: number;
+    name: string;
+    load: PublicLinkLoad;
+    /** A link was made or turned off: lists refetch their badges. */
+    onChanged?: () => void;
+    /** The dialog is being left for Settings. */
+    onLeave: () => void;
+}) {
+    const t = useTranslations("team.access.share.publicLink");
+    const format = useFormatter();
+    const { state, setState, loading, failed } = load;
+    const [busy, setBusy] = useState<PublicLinkAction | null>(null);
+    const [error, setError] = useState<string | null>(null);
+    const [confirming, setConfirming] = useState(false);
+    const headingId = useId();
+    const expiryId = useId();
+    const downloadId = useId();
+
+    const dateOf = (iso: string) =>
+        format.dateTime(new Date(iso), { year: "numeric", month: "short", day: "numeric" });
+
+    /** Run one change; the new state replaces the old, and a toast says what happened. */
+    const change = async (
+        action: PublicLinkAction,
+        call: () => Promise<PublicLinkState>,
+        said: (next: PublicLinkState) => string
+    ): Promise<boolean> => {
+        setBusy(action);
+        setError(null);
+        try {
+            const next = await call();
+            setState(next);
+            toast.success(said(next));
+            return true;
+        } catch (err) {
+            if (isApiError(err) && err.body.code === "public_links_off") {
+                // Switched off since the dialog opened: the note says so.
+                setState(prev => (prev ? { ...prev, enabled: false } : prev));
+            } else {
+                setError(errorMessage(err, t("changeError")));
+            }
+            return false;
+        } finally {
+            setBusy(null);
+        }
+    };
+
+    const update = (body: PublicLinkInput) => peopleApi.access.updatePublicLink(documentId, body);
+
+    const create = async () => {
+        const made = await change(
+            "create",
+            () => peopleApi.access.createPublicLink(documentId),
+            () => t("created", { name })
+        );
+        if (made) onChanged?.();
+    };
+
+    const turnOff = async () => {
+        const done = await change(
+            "revoke",
+            () => peopleApi.access.revokePublicLink(documentId),
+            () => t("turnedOff", { name })
+        );
+        if (done) onChanged?.();
+    };
+
+    const setExpiry = (choice: string) => {
+        if (!(choice in EXPIRY_CHOICES)) return;
+        const days = EXPIRY_CHOICES[choice] ?? null;
+        void change(
+            "expiry",
+            () => update({ expiresInDays: days }),
+            next =>
+                next.link?.expiresAt
+                    ? t("expiryUpdated", { date: dateOf(next.link.expiresAt) })
+                    : t("expiryRemoved")
+        );
+    };
+
+    const setDownload = (allow: boolean) =>
+        void change(
+            "download",
+            () => update({ allowDownload: allow }),
+            () => (allow ? t("downloadOn", { name }) : t("downloadOff", { name }))
+        );
+
+    const copy = async (value: string, done: string) => {
+        try {
+            await navigator.clipboard.writeText(value);
+            toast.success(done);
+        } catch {
+            // No clipboard (an insecure origin, a denied permission): the
+            // address is in the field, selectable.
+            toast.error(t("copyError"));
+        }
+    };
+
+    const offNote = (key: "off" | "offWithLink") => (
+        <p className="bg-panel-2 text-ink-2 m-0 rounded-lg px-3 py-2 text-[12.5px] leading-relaxed">
+            {t.rich(key, {
+                link: chunks => (
+                    <Link
+                        href={PUBLIC_LINKS_SWITCH_HREF}
+                        onClick={onLeave}
+                        className="text-brand-ink underline"
+                    >
+                        {chunks}
+                    </Link>
+                ),
+            })}
+        </p>
+    );
+
+    let body: React.ReactNode;
+    if (loading) {
+        body = (
+            <p className="text-ink-3 m-0 text-[12.5px]" role="status">
+                {t("loading")}
+            </p>
+        );
+    } else if (failed || !state) {
+        body = <p className="text-danger m-0 text-[12.5px]">{t("loadError")}</p>;
+    } else if (!state.link) {
+        body = !state.enabled ? (
+            offNote("off")
+        ) : state.canManage ? (
+            <Button
+                variant="outline"
+                size="sm"
+                className="self-start"
+                disabled={busy !== null}
+                onClick={() => void create()}
+            >
+                <Globe />
+                {busy === "create" ? t("creating") : t("create")}
+            </Button>
+        ) : (
+            <p className="text-ink-3 m-0 text-[12.5px] leading-normal">{t("noLinkReadOnly")}</p>
+        );
+    } else {
+        const link = state.link;
+        body = (
+            <>
+                {!state.enabled && offNote("offWithLink")}
+                <div className="flex flex-col gap-2 sm:flex-row sm:items-center">
+                    <Input
+                        readOnly
+                        value={link.url}
+                        aria-label={t("urlLabel")}
+                        onFocus={e => e.currentTarget.select()}
+                        className="h-8 min-w-0 flex-1 font-mono text-[12px]"
+                    />
+                    <div className="flex shrink-0 gap-2">
+                        <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={() => void copy(link.url, t("copied"))}
+                        >
+                            <Copy />
+                            {t("copy")}
+                        </Button>
+                        <Tooltip>
+                            <TooltipTrigger asChild>
+                                <Button
+                                    variant="outline"
+                                    size="sm"
+                                    onClick={() => void copy(link.markdownUrl, t("copiedForAi"))}
+                                >
+                                    <Bot />
+                                    {t("copyForAi")}
+                                </Button>
+                            </TooltipTrigger>
+                            <TooltipContent>{t("copyForAiHint")}</TooltipContent>
+                        </Tooltip>
+                    </div>
+                </div>
+                {state.canManage ? (
+                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                        <div className="flex items-center gap-2">
+                            <Label
+                                htmlFor={expiryId}
+                                className="text-ink-2 text-[12.5px] font-normal"
+                            >
+                                {t("expires")}
+                            </Label>
+                            <Select
+                                value={link.expiresAt ? "current" : "never"}
+                                onValueChange={setExpiry}
+                                disabled={busy !== null}
+                            >
+                                <SelectTrigger
+                                    id={expiryId}
+                                    size="sm"
+                                    className="w-fit min-w-[132px]"
+                                    aria-label={t("expires")}
+                                >
+                                    <SelectValue />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {link.expiresAt && (
+                                        <SelectItem value="current">
+                                            {t("expiryOn", { date: dateOf(link.expiresAt) })}
+                                        </SelectItem>
+                                    )}
+                                    <SelectItem value="never">{t("expiryNever")}</SelectItem>
+                                    <SelectItem value="7">{t("expiry7")}</SelectItem>
+                                    <SelectItem value="30">{t("expiry30")}</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="flex items-center gap-2">
+                            <Switch
+                                id={downloadId}
+                                checked={link.allowDownload}
+                                onCheckedChange={setDownload}
+                                disabled={busy !== null}
+                            />
+                            <Label
+                                htmlFor={downloadId}
+                                className="text-ink-2 text-[12.5px] font-normal"
+                            >
+                                {t("allowDownload")}
+                            </Label>
+                        </div>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-danger hover:bg-danger-soft hover:text-danger-ink ml-auto"
+                            disabled={busy !== null}
+                            onClick={() => setConfirming(true)}
+                        >
+                            {busy === "revoke" ? t("turningOff") : t("turnOff")}
+                        </Button>
+                    </div>
+                ) : (
+                    <>
+                        {link.expiresAt && (
+                            <p className="text-ink-3 m-0 text-[12.5px] leading-normal">
+                                {t("expiresOn", { date: dateOf(link.expiresAt) })}
+                            </p>
+                        )}
+                        <p className="text-ink-3 m-0 text-[12.5px] leading-normal">
+                            {t("readOnly")}
+                        </p>
+                    </>
+                )}
+            </>
+        );
+    }
+
+    /** Something here acts the moment it is used: say so, since Save does not cover it. */
+    const acts = Boolean(state?.canManage) && (state?.link != null || state?.enabled === true);
+
+    return (
+        <section
+            aria-labelledby={headingId}
+            className="border-line flex flex-col gap-2 border-t pt-4"
+        >
+            <div className="flex items-baseline justify-between gap-3">
+                <h3 id={headingId} className="text-ink-2 m-0 text-xs font-semibold">
+                    {t("title")}
+                </h3>
+                {acts && <span className="text-ink-3 text-[11.5px]">{t("appliesNow")}</span>}
+            </div>
+            <p className="text-ink-3 m-0 text-[12.5px] leading-normal">{t("explainer")}</p>
+            {body}
+            {error && (
+                <p role="alert" className="text-danger m-0 text-[12.5px]">
+                    {error}
+                </p>
+            )}
+            <ConfirmDialog
+                open={confirming}
+                onOpenChange={setConfirming}
+                title={t("confirmTitle")}
+                description={t("confirmDescription")}
+                confirmLabel={t("turnOff")}
+                onConfirm={() => void turnOff()}
+            />
+        </section>
+    );
+}
+
+// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
@@ -305,6 +680,7 @@ export function ShareDialog({
         () => adapter ?? (target ? ADAPTERS[target.kind] : null),
         [adapter, target]
     );
+    const publicLink = usePublicLink(target?.kind === "document" ? target.id : null);
 
     useEffect(() => {
         if (!target || !use) return;
@@ -739,6 +1115,16 @@ export function ShareDialog({
                                     </div>
                                 </div>
                             </section>
+                        )}
+
+                        {target?.kind === "document" && (
+                            <PublicLinkSection
+                                documentId={target.id}
+                                name={target.name}
+                                load={publicLink}
+                                onChanged={onSaved}
+                                onLeave={onClose}
+                            />
                         )}
 
                         {error && (

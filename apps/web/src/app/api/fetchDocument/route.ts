@@ -12,6 +12,7 @@ import { requireWorkspacePermission } from "~/lib/require-workspace-context";
 import { scopedDocumentWhere } from "~/lib/authz/scope";
 import { mediaMimeFromName } from "~/lib/media-document";
 import { accessSubject } from "~/server/workspace/item-access";
+import { documentIdsWithPublicLinks } from "~/server/workspace/public-links";
 import { describeDocumentAccess } from "~/server/workspace/source-access";
 import { loadSourceProcessing } from "~/server/workspace/source-processing";
 import { loadExternalLinkResolver } from "~/server/workspace/source-external-links";
@@ -160,7 +161,7 @@ export async function POST(request: Request) {
             if (processed === true) return null;
             return versioned ? doc.currentVersionOcrJobId : doc.ocrJobId;
         };
-        const [processing, externalLinks] = await Promise.all([
+        const [processing, externalLinks, publicLinks] = await Promise.all([
             loadSourceProcessing(
                 companyId,
                 docs.map(pendingJobId).filter((id): id is string => id !== null)
@@ -168,6 +169,13 @@ export async function POST(request: Request) {
             // Where each one opens outside LaunchStack: its origin, or the
             // stored file at the address the preview loads.
             loadExternalLinkResolver(companyId, ctx.data.userPk),
+            // Which ones anyone can open without signing in — the rail's
+            // globe (ADR-016). One query for the list; none while the
+            // workspace has public links off.
+            documentIdsWithPublicLinks(
+                companyId,
+                docs.map(doc => Number(doc.id))
+            ),
         ]);
 
         // Convert BigInt fields to numbers for JSON serialization; attach mimeType for viewer
@@ -203,6 +211,7 @@ export async function POST(request: Request) {
                 currentVersionId:
                     doc.currentVersionId !== null ? Number(doc.currentVersionId) : null,
                 restricted: doc.restricted === true,
+                publicLink: publicLinks.has(Number(doc.id)),
                 access: described.access.get(Number(doc.id)) ?? null,
                 addedBy: described.addedBy.get(Number(doc.id)) ?? null,
                 processing: processing.get(pendingJobId(doc) ?? "") ?? null,

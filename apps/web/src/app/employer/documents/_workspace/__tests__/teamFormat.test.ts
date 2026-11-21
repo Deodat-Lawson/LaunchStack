@@ -1,8 +1,10 @@
 import { createTranslator } from "use-intl";
 
-import { englishMessages } from "~/i18n/messages";
+import { englishMessages, mergeMessages } from "~/i18n/messages";
+import zhCN from "~/i18n/messages/zh-CN";
 
 import {
+    activityMessage,
     activitySentence,
     activityTarget,
     badgeCount,
@@ -139,8 +141,47 @@ describe("activitySentence", () => {
             "Ada created the group Design",
         ],
         [{ verb: "deleted" }, "Ada deleted Q3 plan.pdf"],
+        [{ verb: "shared", detail: { publicLink: true } }, "Ada made a public link to Q3 plan.pdf"],
+        [
+            { verb: "unshared", detail: { publicLink: true } },
+            "Ada turned off the public link to Q3 plan.pdf",
+        ],
     ])("case %#", (over, expected) => {
         expect(activitySentence(f, "Ada", row(over))).toBe(expected);
+    });
+
+    it("words a public link as its own event, not as sharing with someone (ADR-016)", () => {
+        expect(activityMessage(f, row({ verb: "shared", detail: { publicLink: true } }))).toEqual({
+            key: "publicLinkOn",
+            values: { name: "Q3 plan.pdf" },
+        });
+        expect(activityMessage(f, row({ verb: "unshared", detail: { publicLink: true } }))).toEqual(
+            { key: "publicLinkOff", values: { name: "Q3 plan.pdf" } }
+        );
+        // Only the marker makes it one: plain sharing reads as before.
+        expect(activityMessage(f, row({ verb: "shared", detail: { publicLink: false } })).key).toBe(
+            "shared"
+        );
+        expect(
+            activityMessage(f, row({ verb: "unshared", detail: { publicLink: "yes" } })).key
+        ).toBe("changedAudience");
+    });
+
+    it("has the public link sentences in Simplified Chinese too", () => {
+        const zh = {
+            t: createTranslator({
+                locale: "zh-CN",
+                messages: mergeMessages(englishMessages, zhCN),
+                namespace: "team.format",
+            }),
+            locale: "zh-CN",
+        };
+        expect(
+            activitySentence(zh, "Ada", row({ verb: "shared", detail: { publicLink: true } }))
+        ).toBe("Ada 为 Q3 plan.pdf 创建了公开链接");
+        expect(
+            activitySentence(zh, "Ada", row({ verb: "unshared", detail: { publicLink: true } }))
+        ).toBe("Ada 关闭了 Q3 plan.pdf 的公开链接");
     });
 });
 

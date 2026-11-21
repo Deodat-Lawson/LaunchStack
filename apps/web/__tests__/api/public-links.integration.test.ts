@@ -185,7 +185,7 @@ describeDb("public links (integration)", () => {
                 url: `/api/files/${file!.id}`,
                 category: input.folder ?? "Unfiled",
                 title: input.title,
-                companyId: Number(companyId),
+                companyId,
                 mimeType: input.mimeType,
             })
             .returning({ id: document.id });

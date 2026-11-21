@@ -164,6 +164,7 @@ export function mapDocument(doc: DocumentRow, labels: SourceRowLabels): Workspac
         tags: [],
         domain: "General",
         restricted: doc.restricted === true,
+        publicLink: doc.publicLink === true,
         access: doc.access ?? undefined,
         addedBy: doc.addedBy ?? null,
         citability: mediaOriginal ? "none" : undefined,

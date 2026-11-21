@@ -915,6 +915,22 @@
       "blurb": "Tab and Enter draw the chart; it lays itself out top to bottom."
     },
     "b": {
+      "pickerTitle": "Add a shape",
+      "pickerLabel": "Shape for the end of the arrow",
+      "shape": {
+        "process": "Process",
+        "decision": "Decision",
+        "terminator": "Start/End",
+        "data": "Data",
+        "document": "Document",
+        "database": "Database"
+      },
+      "arrow": {
+        "n": "Add a box above. Drag to pick a shape.",
+        "e": "Add a box to the right. Drag to pick a shape.",
+        "s": "Add a box below. Drag to pick a shape.",
+        "w": "Add a box to the left. Drag to pick a shape."
+      },
       "name": "Quick-add arrows",
       "blurb": "Hover a box for + arrows on every side: click to add, drag to pick."
     },

@@ -69,12 +69,13 @@ export function dressBox(
 export function edgeOptions(
     look: FlowLook,
     mode: ThemeMode
-): Pick<CreateEdgeOptions, "kind" | "style" | "startArrow" | "endArrow"> {
+): Pick<CreateEdgeOptions, "kind" | "style" | "startArrow" | "endArrow" | "textStyle"> {
     const e = look.edgeLook(mode);
     return {
         kind: e.kind,
         style: e.style,
         ...(e.startArrow ? { startArrow: e.startArrow } : {}),
         ...(e.endArrow ? { endArrow: e.endArrow } : {}),
+        ...(e.text ? { textStyle: e.text } : {}),
     };
 }

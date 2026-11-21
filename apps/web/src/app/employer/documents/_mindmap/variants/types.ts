@@ -56,6 +56,8 @@ export interface EdgeLook {
     style: Partial<EdgeStyle>;
     startArrow?: ArrowId;
     endArrow?: ArrowId;
+    /** The type of its labels. Omitted: the editor's default (12px grey). */
+    text?: Partial<TextStyle>;
 }
 
 /** The pure half of a direction. See the file comment. */

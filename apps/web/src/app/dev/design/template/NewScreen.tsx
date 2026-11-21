@@ -8,7 +8,9 @@ import { Field } from "~/components/field";
 import { useToolNav } from "~/components/tool-app/nav";
 import { PageHeader } from "~/components/tools/PageHeader";
 import { Button } from "~/components/ui/button";
+import { Checkbox } from "~/components/ui/checkbox";
 import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
 import {
     Select,
     SelectContent,
@@ -16,7 +18,6 @@ import {
     SelectTrigger,
     SelectValue,
 } from "~/components/ui/select";
-import { Switch } from "~/components/ui/switch";
 import { Textarea } from "~/components/ui/textarea";
 
 import { paths } from "./bits";
@@ -138,13 +139,18 @@ export function NewScreen() {
                         placeholder={t("notesPlaceholder")}
                     />
                 </Field>
-                <label
-                    htmlFor={ids.remind}
-                    className="text-ink mb-6 flex items-center gap-3 text-sm"
-                >
-                    <Switch id={ids.remind} checked={remind} onCheckedChange={setRemind} />
-                    {t("remind")}
-                </label>
+                {/* Part of what this form submits, so a Checkbox: a Switch applies at once. */}
+                <div className="mb-6 flex items-center gap-2.5">
+                    <Checkbox
+                        id={ids.remind}
+                        name="remind"
+                        checked={remind}
+                        onCheckedChange={value => setRemind(value === true)}
+                    />
+                    <Label htmlFor={ids.remind} className="text-ink text-sm font-normal">
+                        {t("remind")}
+                    </Label>
+                </div>
                 <div className="border-line flex flex-wrap items-center gap-2 border-t pt-4">
                     <Button type="submit">{t("submit")}</Button>
                     <Button

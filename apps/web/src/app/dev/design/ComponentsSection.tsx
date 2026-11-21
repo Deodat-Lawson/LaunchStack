@@ -645,8 +645,8 @@ export function ComponentsSection() {
                         <div className="flex flex-col gap-3">
                             <Row>
                                 {["AO", "LW", "PN"].map(i => (
-                                    <Avatar key={i} className="size-7">
-                                        <AvatarFallback className="text-[11px]">{i}</AvatarFallback>
+                                    <Avatar key={i} className="size-8">
+                                        <AvatarFallback className="text-xs">{i}</AvatarFallback>
                                     </Avatar>
                                 ))}
                                 <span className="text-ink-3 text-xs">Owners</span>
@@ -698,7 +698,7 @@ export function ComponentsSection() {
                     </Specimen>
                     <Specimen
                         source="~/components/ui/chart — ChartContainer (recharts)"
-                        note="Series colours are tokens with a dark variant; labels and a tooltip carry the numbers, never colour alone."
+                        note="Series colours are tokens with a dark variant. The axis names each bar and the tooltip gives its value — never colour alone."
                     >
                         <ChartContainer config={CHART_CONFIG} className="h-36 w-full">
                             <BarChart data={MONTHS} margin={{ left: 0, right: 0, top: 4 }}>

@@ -2,7 +2,7 @@
 
 import { Moon, Sun } from "lucide-react";
 import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { LaunchstackMark } from "~/app/_components/LaunchstackLogo";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
@@ -14,6 +14,7 @@ import type { Locale } from "~/i18n/locales";
 import { ChecklistSection } from "./ChecklistSection";
 import { ComponentsSection } from "./ComponentsSection";
 import { FoundationsSection } from "./FoundationsSection";
+import { SELECTED } from "./parts";
 import { PlacementSection } from "./PlacementSection";
 import { TemplatesSection } from "./TemplatesSection";
 
@@ -68,7 +69,13 @@ export function DesignLibrary() {
     const [mounted, setMounted] = useState(false);
     const { resolvedTheme, setTheme } = useTheme();
     const { locale, changeLocale } = useChangeLocale();
+    // `?theme=` applies once, on arrival. next-themes hands out a new setTheme
+    // whenever the theme changes, so an effect keyed on it would re-apply the
+    // URL's theme and undo every click on the toggle.
+    const urlThemeApplied = useRef(false);
     useEffect(() => {
+        if (urlThemeApplied.current) return;
+        urlThemeApplied.current = true;
         const theme = new URLSearchParams(window.location.search).get("theme");
         if (theme === "light" || theme === "dark") setTheme(theme);
         setMounted(true);
@@ -79,7 +86,14 @@ export function DesignLibrary() {
 
     return (
         <TooltipProvider delayDuration={300}>
-            <div data-preview="design-library" className="bg-surface text-ink min-h-dvh">
+            {/* Its own scroll container: globals.css sets overflow-x on html and
+                body, which makes body a scroller that never scrolls, so sticky
+                children of the window never stick. */}
+            <div
+                data-preview="design-library"
+                data-library-scroller
+                className="bg-surface text-ink h-dvh overflow-y-auto"
+            >
                 <header className="border-line bg-panel/90 z-sticky sticky top-0 border-b backdrop-blur">
                     <div className="mx-auto flex h-14 max-w-[1440px] items-center gap-3 px-5">
                         <LaunchstackMark size={22} />
@@ -101,10 +115,16 @@ export function DesignLibrary() {
                             onValueChange={value => value && changeLocale(value as Locale)}
                             aria-label="Language of the template tool"
                         >
-                            <ToggleGroupItem value="en" className="shrink-0 px-2.5 text-xs">
+                            <ToggleGroupItem
+                                value="en"
+                                className={`${SELECTED} shrink-0 px-2.5 text-xs`}
+                            >
                                 EN
                             </ToggleGroupItem>
-                            <ToggleGroupItem value="zh-CN" className="shrink-0 px-2.5 text-xs">
+                            <ToggleGroupItem
+                                value="zh-CN"
+                                className={`${SELECTED} shrink-0 px-2.5 text-xs`}
+                            >
                                 中文
                             </ToggleGroupItem>
                         </ToggleGroup>
@@ -116,10 +136,18 @@ export function DesignLibrary() {
                             onValueChange={value => value && setTheme(value)}
                             aria-label="Theme"
                         >
-                            <ToggleGroupItem value="light" aria-label="Light" className="shrink-0">
+                            <ToggleGroupItem
+                                value="light"
+                                aria-label="Light"
+                                className={`${SELECTED} shrink-0`}
+                            >
                                 <Sun />
                             </ToggleGroupItem>
-                            <ToggleGroupItem value="dark" aria-label="Dark" className="shrink-0">
+                            <ToggleGroupItem
+                                value="dark"
+                                aria-label="Dark"
+                                className={`${SELECTED} shrink-0`}
+                            >
                                 <Moon />
                             </ToggleGroupItem>
                         </ToggleGroup>
@@ -159,7 +187,7 @@ export function DesignLibrary() {
                         </ol>
                     </nav>
 
-                    <main className="flex min-w-0 max-w-[1120px] flex-col gap-12 py-8 pb-24 [container-type:inline-size]">
+                    <main className="flex min-w-0 max-w-[1180px] flex-col gap-12 py-8 pb-24 [container-type:inline-size]">
                         <PrinciplesSection />
                         <PlacementSection />
                         <FoundationsSection />
@@ -211,8 +239,8 @@ function PrinciplesSection() {
                 <p className="text-ink-2 max-w-[72ch] text-sm leading-relaxed">
                     Six principles, then where a new piece of UI goes, the foundations, every kit
                     component, and a complete template tool to copy. Each specimen on this page is
-                    the real component, so what you see is what ships. Switch the theme and language
-                    at the top right.
+                    the real component, so what you see is what ships. Switch the theme, and the
+                    template tool&apos;s language, at the top right.
                 </p>
             </header>
             <ol className="@max-md:grid-cols-1 m-0 grid list-none grid-cols-2 gap-3 p-0">

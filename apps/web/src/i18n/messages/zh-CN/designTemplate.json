@@ -61,9 +61,11 @@
     },
     "rowActions": "{vendor} 的操作",
     "noMatchTitle": "没有匹配的合同",
-    "noMatchBody": "没有状态相符且匹配“{query}”的合同。",
     "clearFilters": "清除筛选",
-    "loadFailed": "无法加载合同。"
+    "loadFailed": "无法加载合同。",
+    "noMatchQuery": "没有匹配“{query}”的合同。",
+    "noMatchQueryStatus": "没有该状态下匹配“{query}”的合同。",
+    "noMatchStatus": "没有该状态的合同。"
   },
   "contract": {
     "renewsOn": "{date} 续约",
@@ -72,7 +74,6 @@
     "terms": "条款",
     "fromContract": "合同原文",
     "page": "第 {page} 页",
-    "openSource": "打开 {title}",
     "details": "详情",
     "owner": "负责人",
     "value": "年度金额",
@@ -108,7 +109,9 @@
     "linkCopied": "链接已复制。",
     "openContract": "打开",
     "deleteRenewal": "删除续约…",
-    "askQuestion": "{vendor} 何时续约？合同对发出通知有什么规定？"
+    "askQuestion": "{vendor} 何时续约？合同对发出通知有什么规定？",
+    "loadFailed": "无法加载这份合同。",
+    "linkCopyFailed": "无法复制链接。"
   },
   "create": {
     "title": "新建续约",

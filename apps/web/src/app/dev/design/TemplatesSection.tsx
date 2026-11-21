@@ -7,7 +7,7 @@ import type { ToolHost } from "~/components/tool-app/nav";
 import { Button } from "~/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 
-import { Code, DocSection, RefTable, SubSection } from "./parts";
+import { Code, DocSection, RefTable, SELECTED, SubSection } from "./parts";
 import { PreviewStateContext, type PreviewState } from "./template/data";
 import { RenewalsTool } from "./template/RenewalsTool";
 
@@ -21,7 +21,7 @@ const SCREENS = [
 ] as const;
 
 const WIDTHS = [
-    { id: "full", px: 1120, label: "Full tab" },
+    { id: "full", px: 1120, label: "Full (1120)" },
     { id: "half", px: 760, label: "Half (760)" },
     { id: "narrow", px: 560, label: "Narrow (560)" },
     { id: "phone", px: 390, label: "Phone (390)" },
@@ -105,7 +105,7 @@ export function TemplatesSection() {
                                 <ToggleGroupItem
                                     key={w.id}
                                     value={w.id}
-                                    className="shrink-0 px-2.5 text-xs"
+                                    className={`${SELECTED} shrink-0 px-2.5 text-xs`}
                                 >
                                     {w.label}
                                 </ToggleGroupItem>
@@ -125,7 +125,7 @@ export function TemplatesSection() {
                                 <ToggleGroupItem
                                     key={s.id}
                                     value={s.id}
-                                    className="shrink-0 px-2.5 text-xs"
+                                    className={`${SELECTED} shrink-0 px-2.5 text-xs`}
                                 >
                                     {s.label}
                                 </ToggleGroupItem>

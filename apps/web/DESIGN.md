@@ -6,8 +6,8 @@ for coding agents.
 
 - **See it live:** `/dev/design` on any dev server (`pnpm --filter
 @launchstack/web dev`, then open `http://localhost:3000/dev/design`). Every
-  specimen there is the real component, in either theme and language, with a
-  complete template tool to copy.
+  specimen there is the real component, in either theme, with a complete
+  template tool to copy that also switches language.
 - **Copy from:** `src/app/dev/design/template/` — a working Studio tool with
   the five screens most tools need.
 - **Mechanics** (how fonts load, how tokens reach Tailwind, how panes host
@@ -238,9 +238,6 @@ variants (`tailwind.config.ts`), never `sm:`/`md:`/`lg:` inside a tab:
 - **One left edge.** Title, filters, tables and forms all start at the
   content column's edge. (Settings once had its title at x=420 and content at
   x=446.)
-- A width-based hide goes on an element **with no display class of its own**:
-  `@uploadthing/react/styles.css` loads after the app's CSS and redefines
-  `.flex`/`.hidden`, so `flex @max-md:hidden` on one element never hides.
 
 ### 3.4 Radius and elevation
 
@@ -428,15 +425,18 @@ component below is live in `/dev/design#components`.
 
 `src/app/dev/design/template/` is a complete tool, "Renewals", built only
 from §4. It is live at `/dev/design#templates`, where switches show each
-screen at each tab width (1120 / 760 / 560 / 390px) and in each state, in
-both themes and both languages.
+screen at each tab width (1120 / 760 / 560 / 390px) and in the loading,
+empty and failed states, in both themes and both languages.
 
 **To start a tool from it:** copy the folder to `src/app/employer/tools/<tool>/`,
 rename the `designTemplate` namespace in both catalogues, replace
 `useContracts()` in `data.ts` with your API call (keep its
 `{ status, data, retry }` shape), and register the tab
 (`tool-app/README.md` › "Adding a tool"). `RenewalsTool.tsx` says the same at
-its top.
+its top. The template keeps its files in one flat folder so it is easy to
+read; when you copy it, sort them the way §2.3 says — screens into
+`_screens/`, `bits.tsx` and `actions.tsx` into `_components/`, `data.ts`
+into `api.ts`, `menu.ts` into `_lib/`.
 
 ### 5.1 The tool tab — `RenewalsTool.tsx`
 
@@ -498,7 +498,8 @@ danger-bordered panel, and asks first.
 
 ## 6. States
 
-Design all of them, for every screen. The template's State switch shows each.
+Design all of them, for every screen. The template's State switch shows
+loading, empty and failed; the record screen shows not found.
 
 | State             | Show                                                                                       | With                                        |
 | ----------------- | ------------------------------------------------------------------------------------------ | ------------------------------------------- |
@@ -609,16 +610,17 @@ Shipped code that predates this guide. Leave it until you are changing that
 screen for feature work; then convert the region you touch (the repo's
 touch-it-migrate-it rule). Never copy these into new code.
 
-| Where                                                                         | What                                                                                            | Instead                                                              |
-| ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| Settings (`_workspace/SettingsHub.tsx`)                                       | Its own 240px rail inside the tab, and no `ToolFrame` bar — the only management tab without one | `ToolFrame` screens across the top                                   |
-| Settings sections (`settings/SectionView.tsx`)                                | Save button in the header, far from the fields                                                  | Buttons at the end of the form                                       |
-| `StatusNote` (`settings/ui.tsx`), `ErrorNote`, local `Notice` copies          | Inline-styled notices, seven variants                                                           | `Alert`                                                              |
-| `team/ui.tsx` `SectionHeading` (Team, Usage, Feedback)                        | 11px uppercase tracked headings                                                                 | `SectionHeading` from `tools/PageHeader`                             |
-| Meetings (`_workspace/collab/`)                                               | 9.5–11.5px text, 7px radius, uppercase labels, 15px/700 section titles                          | §3.2 type scale, §3.4 radii                                          |
-| Detail screens across tools                                                   | Record titles at 22 or 24px, some not in the display face                                       | `PageHeader size="md"` (26px)                                        |
-| `page-shell` `Card`                                                           | 14px radius                                                                                     | `rounded-lg` panel                                                   |
-| `Field` (`components/field.tsx`)                                              | Hint and error at 11px, under the 12px floor                                                    | Keep using `Field`; the size is to be raised in the component itself |
-| Three `StatusPill` copies (extract, scenarios, people) + Vantage `StatusWord` | Dot-and-word pills, each its own                                                                | `Badge`                                                              |
-| 366 raw `<button>` elements, ~1,000 inline `style={{…}}`                      | Bypass the kit and tokens                                                                       | `Button`, classes                                                    |
-| Buttons with `className="h-7"` (58)                                           | Below the 32px target                                                                           | `size="sm"`                                                          |
+| Where                                                                                                                   | What                                                                                                                                                           | Instead                                                          |
+| ----------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| Settings (`_workspace/SettingsHub.tsx`)                                                                                 | Its own 240px rail inside the tab, and no `ToolFrame` bar — the only management tab without one                                                                | `ToolFrame` screens across the top                               |
+| Settings sections (`settings/SectionView.tsx`)                                                                          | Save button in the header, far from the fields                                                                                                                 | Buttons at the end of the form                                   |
+| `StatusNote` (`settings/ui.tsx`), `ErrorNote`, local `Notice` copies                                                    | Inline-styled notices, seven variants                                                                                                                          | `Alert`                                                          |
+| `team/ui.tsx` `SectionHeading` (Team, Usage, Feedback)                                                                  | 11px uppercase tracked headings                                                                                                                                | `SectionHeading` from `tools/PageHeader`                         |
+| Meetings (`_workspace/collab/`)                                                                                         | 9.5–11.5px text, 7px radius, uppercase labels, 15px/700 section titles                                                                                         | §3.2 type scale, §3.4 radii                                      |
+| Detail screens across tools                                                                                             | Record titles at 22 or 24px, some not in the display face                                                                                                      | `PageHeader size="md"` (26px)                                    |
+| `page-shell` `Card`                                                                                                     | 14px radius                                                                                                                                                    | `rounded-lg` panel                                               |
+| `Field` (`components/field.tsx`)                                                                                        | Hint and error at 11px, under the 12px floor; the error is not tied to its control (`aria-describedby`), so a screen reader hears "invalid" without the reason | Keep using `Field`; both are to be fixed in the component itself |
+| `StatusPill` / `StatusWord` copies in Extract, Scenarios, Proposals, Prospects, Vantage, Meetings and Settings › People | Dot-and-word pills, each its own                                                                                                                               | `Badge`                                                          |
+| `ToolFrame`'s tool name in the bar                                                                                      | 13.5px, a fractional size every tool renders                                                                                                                   | Leave it; it belongs to the frame, not to screens                |
+| 366 raw `<button>` elements, ~1,000 inline `style={{…}}`                                                                | Bypass the kit and tokens                                                                                                                                      | `Button`, classes                                                |
+| Buttons with `className="h-7"` (58)                                                                                     | Below the 32px target                                                                                                                                          | `size="sm"`                                                      |

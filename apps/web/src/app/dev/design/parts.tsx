@@ -12,6 +12,9 @@ import type { ReactNode } from "react";
 
 import { cn } from "~/lib/utils";
 
+/** A selected toggle, in the app's "you are here" idiom (brand-soft + brand-ink). */
+export const SELECTED = "data-[state=on]:bg-brand-soft data-[state=on]:text-brand-ink";
+
 export function DocSection({
     id,
     title,

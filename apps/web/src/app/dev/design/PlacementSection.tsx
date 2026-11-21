@@ -25,7 +25,7 @@ function Pin({ n, className }: { n: number; className?: string }) {
         <span
             aria-hidden
             className={cn(
-                "bg-brand text-brand-fg inline-flex size-[18px] shrink-0 items-center justify-center rounded-full font-mono text-[10.5px] font-semibold",
+                "bg-brand text-brand-fg inline-flex size-5 shrink-0 items-center justify-center rounded-full font-mono text-xs font-semibold",
                 className
             )}
         >

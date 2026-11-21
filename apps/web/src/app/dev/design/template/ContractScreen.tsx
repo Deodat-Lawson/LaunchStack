@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
 import { useActionMenu } from "~/components/context-menu";
+import { Field } from "~/components/field";
 import { useToolNav, useToolSearchParams } from "~/components/tool-app/nav";
 import { ToolNotFound } from "~/components/tool-app/ToolFrame";
 import { SourceLink } from "~/components/tools/Cite";
@@ -33,7 +34,7 @@ import {
 import { Textarea } from "~/components/ui/textarea";
 
 import { useContractActions } from "./actions";
-import { paths, StatusBadge, useRenewalsFormat } from "./bits";
+import { IconTooltip, paths, StatusBadge, useRenewalsFormat } from "./bits";
 import { noticeBy, TODAY, useContracts, type Contract } from "./data";
 import { buildContractMenuItems } from "./menu";
 
@@ -76,7 +77,7 @@ export function ContractScreen({ id }: { id: string }) {
         );
     }
     if (contracts.status === "error") {
-        return <InlineError message={t("notFoundBody")} onRetry={contracts.retry} />;
+        return <InlineError message={t("loadFailed")} onRetry={contracts.retry} />;
     }
     const contract = contracts.data.find(c => c.id === id);
     if (!contract) {
@@ -128,25 +129,27 @@ export function ContractScreen({ id }: { id: string }) {
                             <History />
                             {t("history")}
                         </Button>
-                        <Button
-                            size="icon"
-                            variant="ghost"
-                            className="size-8"
-                            aria-label={tc("actions.moreActions")}
-                            onClick={event => {
-                                const box = event.currentTarget.getBoundingClientRect();
-                                menu.open({
-                                    x: box.right - 200,
-                                    y: box.bottom + 4,
-                                    items,
-                                    ariaLabel: contract.vendor,
-                                    via: "button",
-                                    kind: "template-contract",
-                                });
-                            }}
-                        >
-                            <MoreHorizontal />
-                        </Button>
+                        <IconTooltip label={tc("actions.moreActions")}>
+                            <Button
+                                size="icon"
+                                variant="ghost"
+                                className="size-8"
+                                aria-label={tc("actions.moreActions")}
+                                onClick={event => {
+                                    const box = event.currentTarget.getBoundingClientRect();
+                                    menu.open({
+                                        x: box.right - 200,
+                                        y: box.bottom + 4,
+                                        items,
+                                        ariaLabel: contract.vendor,
+                                        via: "button",
+                                        kind: "template-contract",
+                                    });
+                                }}
+                            >
+                                <MoreHorizontal />
+                            </Button>
+                        </IconTooltip>
                     </>
                 }
             />
@@ -296,16 +299,13 @@ function DecisionDialog({
                             ))}
                         </RadioGroup>
                     </fieldset>
-                    <div className="flex flex-col gap-1.5">
-                        <Label htmlFor="decision-note" className="text-ink-2 text-xs font-semibold">
-                            {t("decisionNote")}
-                        </Label>
+                    <Field label={t("decisionNote")} htmlFor="decision-note">
                         <Textarea
                             id="decision-note"
                             rows={3}
                             placeholder={t("decisionNotePlaceholder")}
                         />
-                    </div>
+                    </Field>
                 </form>
                 <DialogFooter>
                     <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>

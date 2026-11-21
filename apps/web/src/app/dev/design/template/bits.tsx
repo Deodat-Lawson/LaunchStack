@@ -7,9 +7,10 @@
  */
 
 import { useFormatter, useTranslations } from "next-intl";
-import { useMemo } from "react";
+import { useMemo, type ReactElement } from "react";
 
 import { Badge } from "~/components/ui/badge";
+import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { useToolFormat } from "~/lib/tools/format";
 
 import type { ContractStatus } from "./data";
@@ -71,4 +72,17 @@ const TONE: Record<ContractStatus, "warn" | "secondary" | "info" | "outline"> = 
 export function StatusBadge({ status }: { status: ContractStatus }) {
     const t = useTranslations("designTemplate.status");
     return <Badge variant={TONE[status]}>{t(status)}</Badge>;
+}
+
+/**
+ * An icon-only button names itself twice: `aria-label` for a screen reader,
+ * a tooltip with the same words for everyone else.
+ */
+export function IconTooltip({ label, children }: { label: string; children: ReactElement }) {
+    return (
+        <Tooltip>
+            <TooltipTrigger asChild>{children}</TooltipTrigger>
+            <TooltipContent>{label}</TooltipContent>
+        </Tooltip>
+    );
 }

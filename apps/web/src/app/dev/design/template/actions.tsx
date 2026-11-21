@@ -47,8 +47,16 @@ export function ContractActionsProvider({ children }: { children: ReactNode }) {
     const copyLink = useCallback(
         (contract: Contract) => {
             const url = new URL(linkFor(paths.contract(contract.id)), window.location.origin).href;
-            void navigator.clipboard?.writeText(url).catch(() => undefined);
-            toast.success(t("linkCopied"));
+            // Say it worked only once it has: the clipboard can refuse (no
+            // focus, no permission, an embedded view).
+            void (async () => {
+                try {
+                    await navigator.clipboard.writeText(url);
+                    toast.success(t("linkCopied"));
+                } catch {
+                    toast.error(t("linkCopyFailed"));
+                }
+            })();
         },
         [linkFor, t]
     );

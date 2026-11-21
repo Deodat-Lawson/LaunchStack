@@ -31,7 +31,7 @@ import {
 } from "~/components/ui/table";
 
 import { useContractActions } from "./actions";
-import { paths, StatusBadge, useRenewalsFormat } from "./bits";
+import { IconTooltip, paths, StatusBadge, useRenewalsFormat } from "./bits";
 import { useContracts, type Contract, type ContractStatus } from "./data";
 import { buildContractMenuItems } from "./menu";
 
@@ -151,7 +151,13 @@ export function ContractsScreen() {
                     // Filtered to nothing is not "empty": say so, and offer the way back.
                     <EmptyState
                         title={t("noMatchTitle")}
-                        body={t("noMatchBody", { query: query.trim() || "…" })}
+                        body={
+                            !query.trim()
+                                ? t("noMatchStatus")
+                                : status === "all"
+                                  ? t("noMatchQuery", { query: query.trim() })
+                                  : t("noMatchQueryStatus", { query: query.trim() })
+                        }
                         action={
                             <Button
                                 size="sm"
@@ -234,6 +240,7 @@ function ContractRow({
     items: () => ActionMenuItem[];
 }) {
     const t = useTranslations("designTemplate.contracts");
+    const tc = useTranslations("common");
     const f = useRenewalsFormat();
     const { navigate } = useToolNav();
     const menu = useActionMenu();
@@ -269,25 +276,27 @@ function ContractRow({
                 <StatusBadge status={c.status} />
             </TableCell>
             <TableCell className="pr-2 text-right">
-                <Button
-                    variant="ghost"
-                    size="icon"
-                    className="size-8"
-                    aria-label={t("rowActions", { vendor: c.vendor })}
-                    onClick={event => {
-                        const box = event.currentTarget.getBoundingClientRect();
-                        menu.open({
-                            x: box.left,
-                            y: box.bottom + 4,
-                            items: items(),
-                            ariaLabel: c.vendor,
-                            via: "button",
-                            kind: "template-contract",
-                        });
-                    }}
-                >
-                    <MoreHorizontal />
-                </Button>
+                <IconTooltip label={tc("actions.moreActions")}>
+                    <Button
+                        variant="ghost"
+                        size="icon"
+                        className="size-8"
+                        aria-label={t("rowActions", { vendor: c.vendor })}
+                        onClick={event => {
+                            const box = event.currentTarget.getBoundingClientRect();
+                            menu.open({
+                                x: box.left,
+                                y: box.bottom + 4,
+                                items: items(),
+                                ariaLabel: c.vendor,
+                                via: "button",
+                                kind: "template-contract",
+                            });
+                        }}
+                    >
+                        <MoreHorizontal />
+                    </Button>
+                </IconTooltip>
             </TableCell>
         </TableRow>
     );

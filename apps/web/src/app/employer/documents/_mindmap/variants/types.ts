@@ -90,7 +90,12 @@ export interface FlowLook {
     afterText?(
         node: DiagramNode,
         text: string
-    ): Partial<Pick<DiagramNode, "shape" | "w" | "h">> | null;
+    ): Partial<Pick<DiagramNode, "shape" | "x" | "y" | "w" | "h">> | null;
+    /**
+     * Boxes keep the width they were made with and grow down as their label
+     * wraps (a sticky note's rule), instead of widening first. Omitted: false.
+     */
+    fixedWidth?: boolean;
 }
 
 /** Where a pointer is: on the board, and on the stage (CSS px from its top-left). */

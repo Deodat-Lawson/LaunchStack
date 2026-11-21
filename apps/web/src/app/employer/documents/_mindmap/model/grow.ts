@@ -60,15 +60,24 @@ function smallestFitting(lo: number, fits: (v: number) => boolean): number {
 /**
  * Where a box should be, and how big, to hold `text`: grown from `start` —
  * the box as it was when typing began — and never smaller than it.
+ * `keepWidth` gives every box the sticky note's rule: wrap at the width it
+ * has and grow down only.
  */
-export function sizeForText(start: DiagramNode, text: string): Rect {
+export function sizeForText(
+    start: DiagramNode,
+    text: string,
+    opts: { keepWidth?: boolean } = {}
+): Rect {
     const rect = { x: start.x, y: start.y, w: start.w, h: start.h };
     if (!growsWithText(start) || text.length === 0) return rect;
 
     const startBox = shapeTextBox(start.shape, start.w, start.h);
     // A sticky note is a note: it keeps its width and grows down, as in
-    // FigJam. Everything else may widen before it wraps.
-    const cap = start.shape === "sticky" ? startBox.w : Math.max(startBox.w, GROW_MAX_TEXT_WIDTH);
+    // FigJam. Everything else may widen before it wraps, unless asked not to.
+    const cap =
+        start.shape === "sticky" || opts.keepWidth
+            ? startBox.w
+            : Math.max(startBox.w, GROW_MAX_TEXT_WIDTH);
     const unwrapped = layoutText(text, start.textStyle, Math.max(cap, 1));
     // The slack never pushes past the cap: wrapped at the cap, the lines are
     // already the ones measured.

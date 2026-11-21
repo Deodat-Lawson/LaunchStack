@@ -952,13 +952,18 @@ function sameRect(a: Rect, b: Rect): boolean {
     return a.x === b.x && a.y === b.y && a.w === b.w && a.h === b.h;
 }
 
+/** How a box grows while typing: a direction being tried may keep widths fixed. */
+function growOptions(store: EditorStore): { keepWidth?: boolean } {
+    return activeFlowLook(store.getState())?.fixedWidth ? { keepWidth: true } : {};
+}
+
 /**
  * Show a box growing while its label is typed: geometry only, and no undo
  * entry — `commitNodeText` lands the words and the size together. `start` is
  * the node as it was when typing began; the box is never smaller than that.
  */
 export function previewTextGrowth(store: EditorStore, start: DiagramNode, text: string): void {
-    const next = sizeForText(start, text);
+    const next = sizeForText(start, text, growOptions(store));
     store.updatePage(
         page => mapNodes(page, [start.id], nd => (sameRect(nd, next) ? nd : { ...nd, ...next })),
         { transient: true }
@@ -988,7 +993,7 @@ export function commitNodeText(store: EditorStore, start: DiagramNode, text: str
         );
     }
     if (text === current.text) return;
-    const grown = sizeForText(start, text);
+    const grown = sizeForText(start, text, growOptions(store));
     const look = activeFlowLook(store.getState());
     store.group("Edit text", () => {
         store.updatePage(

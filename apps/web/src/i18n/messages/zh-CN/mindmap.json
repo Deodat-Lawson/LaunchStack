@@ -911,6 +911,33 @@
       "hint": "每个方案都从一张空白流程图开始。"
     },
     "a": {
+      "empty": {
+        "prompt": "直接输入第一步",
+        "next": "<key>Tab</key> 下一步",
+        "branch": "<key>⇧Tab</key> 分支",
+        "decision": "以 <key>?</key> 结尾即为判断"
+      },
+      "legend": {
+        "title": "按键",
+        "label": "绘制流程图的键盘快捷键",
+        "hide": "隐藏按键提示",
+        "show": "显示按键提示",
+        "next": "下一步",
+        "branch": "旁边加分支",
+        "decision": "问句 → 判断",
+        "move": "在图中移动",
+        "remove": "删除这一步"
+      },
+      "keys": {
+        "next": "Tab",
+        "branch": "⇧Tab",
+        "decision": "?",
+        "remove": "Delete"
+      },
+      "branch": {
+        "yes": "是",
+        "no": "否"
+      },
       "name": "键盘流程",
       "blurb": "用 Tab 和 Enter 绘制，流程图自动从上到下排列。"
     },

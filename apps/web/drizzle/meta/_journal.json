@@ -379,6 +379,13 @@
       "when": 1795222800000,
       "tag": "20261121010000_vantage_personal_topics",
       "breakpoints": true
+    },
+    {
+      "idx": 54,
+      "version": "7",
+      "when": 1795226400000,
+      "tag": "20261121020000_vantage_topic_first_runs",
+      "breakpoints": true
     }
   ]
 }

@@ -253,7 +253,8 @@ export function createWeeklyReviewAuthority(
         async collectWeeklyReviewContext(
             expected: WeeklyReviewActor,
             week: string,
-            identity?: ReviewInputIdentity
+            identity?: ReviewInputIdentity,
+            topic?: Parameters<typeof collectInternalWeeklyReviewContext>[8]
         ): Promise<WeeklyReviewContext> {
             if (
                 options.dynamicRetrieval?.mode &&
@@ -271,7 +272,8 @@ export function createWeeklyReviewAuthority(
                     week,
                     identity,
                     options.scopedEvidenceV2,
-                    options.dynamicRetrieval
+                    options.dynamicRetrieval,
+                    topic
                 );
             }
             return database.transaction(async query => {
@@ -352,25 +354,37 @@ export function createWeeklyReviewAuthority(
             query: WeeklyReviewQuery,
             expected: WeeklyReviewActor,
             dependencies: FrozenDependency[],
-            phase: "prepare" | "dispatch" | "activation" | "read" | "decision" | "recovery" = "read"
+            phase:
+                | "prepare"
+                | "dispatch"
+                | "activation"
+                | "read"
+                | "decision"
+                | "recovery"
+                | "exploration" = "read"
         ) {
             // New acquisition limits govern new candidates. Historical reads and
             // decisions retain the established exact-frozen-dependency reader.
             const bounded =
                 dependencies.some(dependency => dependency.kind === "scoped-document") ||
                 (options.internalRetrievalV1 && phase !== "read" && phase !== "decision")
-                    ? boundedInternalQuery(query)
+                    ? boundedInternalQuery(
+                          query,
+                          dependencies.some(dep =>
+                              dep.scope?.dependency.authorityRevision.startsWith("topic-first:")
+                          )
+                      )
                     : null;
             if (bounded) query = bounded.query;
             const { actor, epoch } = await fresh(query, expected, false, bounded?.deadlineAt);
             if (
-                (phase === "dispatch" || phase === "activation") &&
+                (phase === "dispatch" || phase === "activation" || phase === "exploration") &&
                 (!expected.authorityEpoch || expected.authorityEpoch !== epoch)
             )
                 throw new WeeklyReviewConflict("source_authority_changed");
             if (phase !== "read" && !actor.canMutate)
                 throw new WeeklyReviewConflict("review_mutation_denied", 403);
-            if (phase === "recovery") return;
+            if (phase === "recovery" || phase === "exploration") return;
             const current: FrozenDependency[] = [];
             const read = bounded
                 ? createInternalSourceReader(query, actor, bounded.acquisition, assertSourcePurpose)

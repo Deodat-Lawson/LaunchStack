@@ -10,6 +10,13 @@ import {
     type WeeklyReviewInput,
 } from "@launchstack/pipelines/vantage/weekly-review-v21";
 import type { WeeklyReviewAuthorityActor } from "./weekly-review-authority";
+import { parseConfirmedBusinessRole } from "./weekly-review-business-role";
+import { collectTopicSeed } from "./weekly-review-topic-seed";
+import {
+    TOPIC_FIRST_LIMITS,
+    type TopicManifest,
+    type TopicProvider,
+} from "./weekly-review-topic-types";
 import { collectDynamicOptionalEvidence } from "./weekly-review-dynamic-selection";
 import type { DynamicRetrievalConfiguration } from "./weekly-review-dynamic-retrieval";
 import {
@@ -81,13 +88,15 @@ const databaseText = (value: unknown): string => {
     throw new WeeklyReviewConflict("source_context_unavailable");
 };
 /** One elapsed-time envelope covers epoch acquisition, candidate SQL and all reads. */
-export function boundedInternalQuery(raw: WeeklyReviewQuery) {
+export function boundedInternalQuery(raw: WeeklyReviewQuery, topicFirst = false) {
     const startedAt = Date.now();
     const acquisition: Acquisition = {
         candidateLimit: INTERNAL_RETRIEVAL_LIMITS.candidateLimit,
         chunkLimitPerSource: INTERNAL_RETRIEVAL_LIMITS.chunkLimitPerSource,
         loadedTextBytes: 0,
-        maxLoadedTextBytes: INTERNAL_RETRIEVAL_LIMITS.maxLoadedTextBytes,
+        maxLoadedTextBytes: topicFirst
+            ? TOPIC_FIRST_LIMITS.loadedParentBytes
+            : INTERNAL_RETRIEVAL_LIMITS.maxLoadedTextBytes,
         deadlineMs: INTERNAL_RETRIEVAL_LIMITS.deadlineMs,
         queryCount: 0,
         maxQueries: INTERNAL_RETRIEVAL_LIMITS.maxQueries,
@@ -238,11 +247,18 @@ export async function collectInternalWeeklyReviewContext(
     week: string,
     identity: ReviewInputIdentity,
     scopedEnabled = false,
-    dynamic: DynamicRetrievalConfiguration = { mode: "baseline", maxFollowUpRounds: 1 }
+    dynamic: DynamicRetrievalConfiguration = { mode: "baseline", maxFollowUpRounds: 1 },
+    topic?: {
+        provider: TopicProvider;
+        expectedActiveId: string | null;
+        carryover(query: WeeklyReviewQuery): Promise<TopicManifest["carryover"]>;
+    }
 ): Promise<WeeklyReviewContext> {
     return database.transaction(async raw => {
-        const { query, acquisition, deadlineAt } = boundedInternalQuery(raw);
+        const { query, acquisition, deadlineAt } = boundedInternalQuery(raw, Boolean(topic));
         const { actor, epoch } = await fresh(query, expected, false, deadlineAt);
+        if (topic && !actor.canMutate)
+            throw new WeeklyReviewConflict("review_mutation_denied", 403);
         const periodEnd = Date.parse(week + "T00:00:00.000Z") + 7 * 86400000;
         const asOf = Date.parse(identity.asOf);
         if (!Number.isFinite(periodEnd) || !Number.isFinite(asOf))
@@ -302,6 +318,39 @@ export async function collectInternalWeeklyReviewContext(
                 sources.push(source);
                 dependencies.push(source);
             }
+        }
+        if (topic) {
+            const context: WeeklyReviewContext = {
+                actor: expected,
+                week,
+                role: actor.role,
+                sources,
+                preferenceVersion: Number(pref?.version ?? 0),
+                authorityEpoch: epoch,
+                mandatoryCoverage: { required: mandatoryCount, included: mandatoryCount },
+                dependencies: dependencies.map(({ kind, id, version, hash, purpose, scope }) => ({
+                    kind,
+                    id,
+                    version,
+                    hash,
+                    purpose,
+                    ...(scope ? { scope } : {}),
+                })),
+                inputIdentity: identity,
+                ...(scopedEvidence.length ? { scopedEvidence } : {}),
+            };
+            const seed = await collectTopicSeed(query, actor, context, {
+                cutoff,
+                asOf: identity.asOf,
+                policyRevision: Number(policy?.version ?? 0),
+                roleRevision:
+                    parseConfirmedBusinessRole(pref?.business_role_context, actor)?.revision ??
+                    null,
+                expectedActiveId: topic.expectedActiveId,
+                configuration: { provider: topic.provider, scoped: scopedEnabled },
+                carryover: await topic.carryover(query),
+            });
+            return { ...context, topicSeed: seed };
         }
         if (dynamic.mode !== "baseline")
             return collectDynamicOptionalEvidence({

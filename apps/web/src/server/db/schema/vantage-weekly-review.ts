@@ -30,6 +30,14 @@ export const vantageWeeklyReviewRuns = pgTable(
         dependencies: jsonb("dependencies").notNull(),
         ciphertext: text("ciphertext"),
         keyVersion: integer("key_version"),
+        retrievalMode: text("retrieval_mode").notNull().default("legacy"),
+        pinnedCutoff: timestamp("pinned_cutoff", { withTimezone: true }),
+        pinnedAsOf: timestamp("pinned_as_of", { withTimezone: true }),
+        authorityEpoch: text("authority_epoch"),
+        explorationDispatched: boolean("exploration_dispatched").notNull().default(false),
+        explorationDeadlineAt: timestamp("exploration_deadline_at", { withTimezone: true }),
+        snapshotHash: text("snapshot_hash"),
+        lastDispatchAt: timestamp("last_dispatch_at", { withTimezone: true }),
         generationDispatched: boolean("generation_dispatched").notNull().default(false),
         judgeDispatched: boolean("judge_dispatched").notNull().default(false),
         failureCode: text("failure_code"),
@@ -58,6 +66,19 @@ export const vantageWeeklyReviewRuns = pgTable(
         ),
     })
 );
+export const vantageWeeklyReviewRunManifests = pgTable("vantage_weekly_review_run_manifests", {
+    runId: uuid("run_id")
+        .primaryKey()
+        .references(() => vantageWeeklyReviewRuns.id, { onDelete: "cascade" }),
+    companyId: bigint("company_id", { mode: "bigint" }).notNull(),
+    ownerId: text("owner_id").notNull(),
+    manifestHash: text("manifest_hash").notNull(),
+    manifest: jsonb("manifest").notNull(),
+    trace: jsonb("trace"),
+    digestIds: jsonb("digest_ids"),
+    snapshotCommitment: jsonb("snapshot_commitment"),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
 export const vantageWeeklyReviewActive = pgTable(
     "vantage_weekly_review_active",
     {

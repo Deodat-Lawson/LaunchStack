@@ -44,6 +44,10 @@ const env = {
     NEXT_TELEMETRY_DISABLED: "1",
     VANTAGE_WEEKLY_REVIEW_ENABLED: "true",
     VANTAGE_WEEKLY_REVIEW_TEST_PROVIDER: "true",
+    VANTAGE_INTERNAL_RETRIEVAL_V1_ENABLED: "true",
+    VANTAGE_SCOPED_EVIDENCE_V2_ENABLED: "true",
+    VANTAGE_TOPIC_FIRST_ENABLED: process.env.VANTAGE_TOPIC_FIRST_ENABLED ?? "true",
+    VANTAGE_TOPIC_FIRST_PROVIDER: process.env.VANTAGE_TOPIC_FIRST_PROVIDER ?? "scripted",
 };
 function run(script, args = [], cwd = root) {
     const result = spawnSync(process.execPath, [resolve(root, script), ...args], {

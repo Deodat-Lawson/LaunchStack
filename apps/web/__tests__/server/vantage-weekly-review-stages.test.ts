@@ -58,6 +58,7 @@ it.each([false, true])(
             },
         } as never);
         const repository = {
+            findByKey: jest.fn(async () => null),
             reserve: jest.fn(async () => ({ created: true, id: "run" })),
             authorizeDispatch: jest.fn(async (_a: unknown, _b: unknown, kind: string) => {
                 order.push("authorize:" + kind);

@@ -2,6 +2,7 @@ import type {
     PreparedScopedEvidence,
     ScopedEvidenceRequest,
 } from "@launchstack/pipelines/vantage/scoped-evidence";
+import type { TopicSeed } from "./weekly-review-topic-types";
 import type { SelectionDiagnostics } from "./weekly-review-internal-selection";
 import type { WeeklyReviewRetrievalContext } from "@launchstack/pipelines/vantage/dynamic-retrieval-v3";
 
@@ -34,7 +35,7 @@ export type AssertWeeklyReviewAuthority = (
     query: WeeklyReviewQuery,
     actor: WeeklyReviewActor,
     dependencies: FrozenDependency[],
-    phase?: "prepare" | "dispatch" | "activation" | "read" | "decision" | "recovery"
+    phase?: "prepare" | "dispatch" | "activation" | "read" | "decision" | "recovery" | "exploration"
 ) => Promise<void>;
 export class WeeklyReviewConflict extends Error {
     constructor(
@@ -64,4 +65,5 @@ export interface WeeklyReviewContext {
     inputIdentity?: { candidateId: string; asOf: string };
     selectionDiagnostics?: SelectionDiagnostics;
     retrievalContext?: WeeklyReviewRetrievalContext;
+    topicSeed?: TopicSeed;
 }

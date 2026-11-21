@@ -113,6 +113,14 @@ export async function generateWeeklyReview(
     if (dynamicRetrieval.mode !== "baseline" && !internalRetrievalV1)
         throw new WeeklyReviewConflict("dynamic_retrieval_requires_internal_v1", 409);
     const { authority, repository } = weeklyReviewServices({ dynamicRetrieval });
+    const replay = (run: { id: string; status: string }) => {
+        if (run.status === "accepted") return repository.get(actor, run.id);
+        throw new WeeklyReviewConflict(
+            run.status === "failed" ? "review_failed_use_new_key" : "review_dispatch_uncertain"
+        );
+    };
+    const prior = await repository.findByKey(actor, args.weekStart, args.key);
+    if (prior) return replay(prior);
     const identity = internalRetrievalV1
         ? { candidateId: randomUUID(), asOf: new Date().toISOString() }
         : undefined;

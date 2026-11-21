@@ -23,6 +23,23 @@ import {
     type WeeklyReviewQuery,
 } from "./weekly-review-types";
 
+import {
+    TOPIC_FIRST_LIMITS,
+    topicInputHash,
+    topicManifestHash,
+    type TopicManifest,
+} from "./weekly-review-topic-types";
+
+const WeeklyReviewV21SchemaForCarryover = z.object({
+    topics: z.array(
+        z.object({
+            id: z.string(),
+            facts: z.array(z.object({ refs: z.array(z.string()) })),
+            conflicts: z.array(z.object({ refs: z.array(z.string()) })),
+            recommendation: z.object({ refs: z.array(z.string()) }).nullable(),
+        })
+    ),
+});
 const StoredReportSchema = z
     .object({
         schema: z.literal("vantage-weekly-review/v2.1"),
@@ -237,7 +254,227 @@ export function createWeeklyReviewRepository(
                 [id, actor.companyId, actor.userId]
             )
         );
+    const topicAuthority = (
+        query: WeeklyReviewQuery,
+        actor: WeeklyReviewActor,
+        row: Record<string, unknown>
+    ) =>
+        authority(
+            query,
+            { ...actor, authorityEpoch: String(row.authority_epoch) },
+            [],
+            "exploration"
+        );
+    const parseManifest = async (query: WeeklyReviewQuery, id: string) => {
+        const record = requireRow(
+            await query(
+                "SELECT * FROM pdr_ai_v2_vantage_weekly_review_run_manifests WHERE run_id=$1::uuid",
+                [id]
+            )
+        );
+        const manifest = record.manifest as TopicManifest;
+        if (record.manifest_hash !== topicManifestHash(manifest))
+            throw new WeeklyReviewConflict("candidate_admission_invalid");
+        return { record, manifest };
+    };
+    const checkedManifest = async (
+        query: WeeklyReviewQuery,
+        id: string,
+        row: Record<string, unknown>
+    ) => {
+        const result = await parseManifest(query, id);
+        if (row.input_hash !== topicInputHash(result.manifest))
+            throw new WeeklyReviewConflict("candidate_admission_invalid");
+        return result;
+    };
     return {
+        findByKey(actor: WeeklyReviewActor, week: string, key: string) {
+            return transact(async query => {
+                const [row] = await query(
+                    "SELECT id,week_start,status FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=$1::bigint AND owner_id=$2 AND idempotency_key=$3",
+                    [actor.companyId, actor.userId, key]
+                );
+                if (!row) return null;
+                if (scalarText(row.week_start).slice(0, 10) !== week)
+                    throw new WeeklyReviewConflict("idempotency_conflict");
+                return { id: String(row.id), status: String(row.status) };
+            });
+        },
+        reserveTopic(actor: WeeklyReviewActor, key: string, id: string, manifest: TopicManifest) {
+            return transact(async query => {
+                const rows = await query(
+                    `
+                    INSERT INTO pdr_ai_v2_vantage_weekly_review_runs
+                        (id,company_id,owner_id,week_start,idempotency_key,input_hash,status,dependencies,
+                         retrieval_mode,pinned_cutoff,pinned_as_of,authority_epoch)
+                    VALUES ($1::uuid,$2::bigint,$3,$4::date,$5,$6,'reserved',$7::jsonb,
+                            'topic-first',$8::timestamptz,$9::timestamptz,$10)
+                    ON CONFLICT(company_id,owner_id,idempotency_key) DO NOTHING RETURNING id,status
+                `,
+                    [
+                        id,
+                        actor.companyId,
+                        actor.userId,
+                        manifest.week,
+                        key,
+                        topicInputHash(manifest),
+                        JSON.stringify(manifest.fixedDependencies),
+                        manifest.cutoff,
+                        manifest.asOf,
+                        manifest.epoch,
+                    ]
+                );
+                if (rows.length) {
+                    await query(
+                        `
+                        INSERT INTO pdr_ai_v2_vantage_weekly_review_run_manifests
+                            (run_id,company_id,owner_id,manifest_hash,manifest)
+                        VALUES ($1::uuid,$2::bigint,$3,$4,$5::jsonb)
+                    `,
+                        [
+                            id,
+                            actor.companyId,
+                            actor.userId,
+                            topicManifestHash(manifest),
+                            JSON.stringify(manifest),
+                        ]
+                    );
+                    return { id, status: "reserved", created: true };
+                }
+                const row = requireRow(
+                    await query(
+                        "SELECT id,week_start,status FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=$1::bigint AND owner_id=$2 AND idempotency_key=$3",
+                        [actor.companyId, actor.userId, key]
+                    )
+                );
+                if (scalarText(row.week_start).slice(0, 10) !== manifest.week)
+                    throw new WeeklyReviewConflict("idempotency_conflict");
+                return { id: String(row.id), status: String(row.status), created: false };
+            });
+        },
+        claimExploration(actor: WeeklyReviewActor, id: string) {
+            return transact(async query => {
+                const row = await rowFor(query, actor, id, true);
+                if (
+                    row.status !== "reserved" ||
+                    row.retrieval_mode !== "topic-first" ||
+                    row.exploration_dispatched
+                )
+                    throw new WeeklyReviewConflict("dispatch_already_reserved_or_invalid_order");
+                await topicAuthority(query, actor, row);
+                const { manifest } = await checkedManifest(query, id, row);
+                const [active] = await query(
+                    "SELECT run_id FROM pdr_ai_v2_vantage_weekly_review_active WHERE company_id=$1::bigint AND owner_id=$2 AND week_start=$3::date",
+                    [actor.companyId, actor.userId, manifest.week]
+                );
+                if ((active?.run_id ?? null) !== manifest.expectedActiveId)
+                    throw new WeeklyReviewConflict("active_review_changed");
+                const [claimed] = await query(
+                    `
+                    UPDATE pdr_ai_v2_vantage_weekly_review_runs
+                    SET exploration_dispatched=true, exploration_deadline_at=clock_timestamp()+($2::int*interval '1 millisecond'),
+                        last_dispatch_at=clock_timestamp()
+                    WHERE id=$1::uuid RETURNING exploration_deadline_at
+                `,
+                    [id, TOPIC_FIRST_LIMITS.explorationMs]
+                );
+                return Date.parse(scalarText(claimed?.exploration_deadline_at));
+            });
+        },
+        recordExploration(
+            actor: WeeklyReviewActor,
+            id: string,
+            values: { trace?: unknown; digestIds?: string[] }
+        ) {
+            return transact(async query => {
+                const row = await rowFor(query, actor, id, true);
+                if (row.status !== "reserved" || !row.exploration_dispatched || row.snapshot_hash)
+                    throw new WeeklyReviewConflict("review_not_reserved");
+                const trace = values.trace === undefined ? null : JSON.stringify(values.trace);
+                if (trace !== null && Buffer.byteLength(trace) > 512000)
+                    throw new WeeklyReviewConflict("topic_exploration_failed:trace_limit");
+                await query(
+                    `
+                    UPDATE pdr_ai_v2_vantage_weekly_review_run_manifests
+                    SET trace=COALESCE($2::jsonb,trace), digest_ids=COALESCE($3::jsonb,digest_ids)
+                    WHERE run_id=$1::uuid
+                `,
+                    [id, trace, values.digestIds ? JSON.stringify(values.digestIds) : null]
+                );
+            });
+        },
+        async topicCarryover(
+            query: WeeklyReviewQuery,
+            actor: WeeklyReviewActor,
+            week: string
+        ): Promise<TopicManifest["carryover"]> {
+            const [row] = await query(
+                `
+                SELECT r.* FROM pdr_ai_v2_vantage_weekly_review_active a
+                JOIN pdr_ai_v2_vantage_weekly_review_runs r ON r.id=a.run_id
+                    AND r.company_id=a.company_id AND r.owner_id=a.owner_id
+                WHERE a.company_id=$1::bigint AND a.owner_id=$2 AND a.week_start=$3::date-7 AND r.status='accepted'
+            `,
+                [actor.companyId, actor.userId, week]
+            );
+            if (!row) return "unavailable";
+            try {
+                await authority(query, actor, dependenciesOf(row), "read");
+                const priorRunId = String(row.id);
+                const stored = parseStoredReport(
+                    decryptSecret(
+                        String(row.ciphertext),
+                        "vantage-report:" + actor.companyId + ":" + actor.userId + ":" + priorRunId
+                    )
+                );
+                if (
+                    stored.companyId !== actor.companyId ||
+                    stored.ownerId !== actor.userId ||
+                    stored.id !== priorRunId
+                )
+                    return "unavailable";
+                const decisions = await query(
+                    "SELECT ciphertext FROM pdr_ai_v2_vantage_weekly_review_decisions WHERE company_id=$1::bigint AND run_id=$2::uuid AND actor_id=$3",
+                    [actor.companyId, priorRunId, actor.userId]
+                );
+                const decided = new Set(
+                    decisions.map(
+                        item => parseStoredDecision(decryptSecret(String(item.ciphertext))).topicId
+                    )
+                );
+                const parsed = WeeklyReviewV21SchemaForCarryover.safeParse(stored.report);
+                if (!parsed.success) return "unavailable";
+                const refs = new Set(
+                    parsed.data.topics
+                        .filter(topic => !decided.has(topic.id))
+                        .flatMap(topic => [
+                            ...topic.facts,
+                            ...topic.conflicts,
+                            ...(topic.recommendation ? [topic.recommendation] : []),
+                        ])
+                        .flatMap(fact => fact.refs)
+                );
+                const ids = dependenciesOf(row)
+                    .filter(
+                        dep =>
+                            refs.has("doc:" + dep.id + "@" + dep.version) ||
+                            dep.scope?.dependency.units.some(unit => refs.has(unit.ref))
+                    )
+                    .map(dep => dep.id);
+                return {
+                    priorRunId,
+                    reviewVersion: Number(row.review_version),
+                    seedIds: [...new Set(ids)],
+                };
+            } catch (error) {
+                if (
+                    error instanceof WeeklyReviewConflict &&
+                    error.code === "retrieval_acquisition_timeout"
+                )
+                    throw error;
+                return "unavailable";
+            }
+        },
         expireUncertain(actor: WeeklyReviewActor, id: string) {
             return transact(async query => {
                 const row = await rowFor(query, actor, id, true);
@@ -245,8 +482,8 @@ export function createWeeklyReviewRepository(
                 if (row.status !== "reserved")
                     return { id, status: String(row.status), expired: false };
                 const changed = await query(
-                    "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET status='failed',failure_code='dispatch_uncertain_expired' WHERE id=$1::uuid AND status='reserved' AND created_at<=now()-interval '120 seconds' RETURNING id",
-                    [id]
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET status='failed',failure_code='dispatch_uncertain_expired' WHERE id=$1::uuid AND status='reserved' AND ((retrieval_mode='topic-first' AND coalesce(last_dispatch_at,created_at)<=now()-($2::int*interval '1 second')) OR (retrieval_mode='legacy' AND created_at<=now()-interval '120 seconds')) RETURNING id",
+                    [id, TOPIC_FIRST_LIMITS.expirySeconds]
                 );
                 if (!changed.length)
                     throw new WeeklyReviewConflict("review_reservation_not_expired");
@@ -359,12 +596,18 @@ export function createWeeklyReviewRepository(
             actor: WeeklyReviewActor,
             id: string,
             kind: "generation" | "judge" = "generation",
-            expectedActiveId?: string | null
+            expectedActiveId?: string | null,
+            snapshotHash?: string
         ) {
             return transact(async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (row.status !== "reserved")
                     throw new WeeklyReviewConflict("review_not_reserved");
+                if (
+                    row.retrieval_mode === "topic-first" &&
+                    (!row.snapshot_hash || row.snapshot_hash !== snapshotHash)
+                )
+                    throw new WeeklyReviewConflict("candidate_admission_invalid");
                 await authority(query, actor, dependenciesOf(row), "dispatch");
                 if (row[kind + "_dispatched"] || (kind === "judge" && !row.generation_dispatched))
                     throw new WeeklyReviewConflict("dispatch_already_reserved_or_invalid_order");
@@ -385,6 +628,11 @@ export function createWeeklyReviewRepository(
                         "_dispatched=true WHERE id=$1::uuid",
                     [id]
                 );
+                if (row.retrieval_mode === "topic-first")
+                    await query(
+                        "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET last_dispatch_at=clock_timestamp() WHERE id=$1::uuid",
+                        [id]
+                    );
             });
         },
         fail(actor: WeeklyReviewActor, id: string, code: string) {
@@ -501,8 +749,8 @@ export function createWeeklyReviewRepository(
                         const budget = calculateWeeklyReviewBudget(
                             evidence.inputSnapshot,
                             evidence.schemaVersion === "vantage-admission/v3"
-                                ? "scoped-v2"
-                                : "internal-v1"
+                                  ? "scoped-v2"
+                                  : "internal-v1"
                         );
                         if (!budget.feasible || hash(budget) !== hash(evidence.budget))
                             throw new Error("invalid_budget");

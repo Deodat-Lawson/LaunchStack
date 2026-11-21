@@ -69,6 +69,17 @@ describe("Weekly Review per-company PostgreSQL authority locks", () => {
                     "utf8"
                 )
             );
+            await a.unsafe(
+                (
+                    await readFile(
+                        resolve(
+                            process.cwd(),
+                            "drizzle/20261121020000_vantage_topic_first_runs.sql"
+                        ),
+                        "utf8"
+                    )
+                ).replaceAll("--> statement-breakpoint", "")
+            );
             await a.unsafe("INSERT INTO pdr_ai_v2_document(id,company_id) VALUES(1,1),(2,2)");
             const beforeNoop = (
                 await a.unsafe(

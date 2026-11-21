@@ -1,0 +1,176 @@
+import { createLangchainAgentPort, isChatRoute } from "@launchstack/llm";
+import {
+    deterministicDigestProvider,
+    getDigestsForVersions,
+    type DocumentDigest,
+} from "@launchstack/store/document-digests";
+import { scopeAllowsDocument } from "~/lib/authz/scope-types";
+import { resolveConfiguredChatModel } from "~/lib/models";
+import type { WeeklyReviewAuthorityActor } from "./weekly-review-authority";
+import { resolveDocumentDigestProvider } from "./document-digest-provider";
+import {
+    createScriptedExplorationPort,
+    runTopicExploration,
+    type ExplorationTrace,
+    type TopicExplorationResult,
+} from "./weekly-review-topic-exploration";
+import { TOPIC_FIRST_LIMITS, type TopicSeed } from "./weekly-review-topic-types";
+import { WeeklyReviewConflict, type WeeklyReviewQuery } from "./weekly-review-types";
+
+export async function prepareTopicSelection(options: {
+    seed: TopicSeed;
+    actor: WeeklyReviewAuthorityActor;
+    query: WeeklyReviewQuery;
+    deadlineAt: number;
+    record: (values: { trace?: ExplorationTrace; digestIds?: string[] }) => Promise<void>;
+}): Promise<TopicExplorationResult | null> {
+    const { seed, actor, query, deadlineAt, record } = options;
+    if (seed.manifest.configuration.provider === "seeds") return null;
+    const controller = new AbortController();
+    const expired = () => new WeeklyReviewConflict("topic_exploration_failed:timeout");
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const deadline = new Promise<never>((_, reject) => {
+        timer = setTimeout(
+            () => {
+                controller.abort();
+                reject(expired());
+            },
+            Math.max(0, deadlineAt - Date.now())
+        );
+    });
+    try {
+        return await Promise.race([
+            deadline,
+            (async () => {
+                const injected = seed.manifest.configuration.provider === "scripted";
+                if (
+                    !actor.canRead ||
+                    !actor.canMutate ||
+                    actor.companyId !== seed.context.actor.companyId ||
+                    actor.userId !== seed.context.actor.userId
+                )
+                    throw new WeeklyReviewConflict("review_mutation_denied", 403);
+                const provider = injected
+                    ? deterministicDigestProvider
+                    : resolveDocumentDigestProvider();
+                const digests = new Map<string, DocumentDigest>();
+                for (let index = 0; index < seed.documents.length; index += 6) {
+                    const batch = seed.documents.slice(index, index + 6);
+                    const results = await Promise.all(
+                        batch.map(document =>
+                            getDigestsForVersions({
+                                companyId: actor.companyId,
+                                versionIds: [document.version],
+                                query,
+                                provider,
+                                signal: controller.signal,
+                                documentScope: candidate =>
+                                    scopeAllowsDocument(actor.documentScope, candidate),
+                                authorizeDocument: async () => {
+                                    const [row] = await query(
+                                        "SELECT version FROM pdr_ai_v2_vantage_weekly_review_epochs WHERE company_id=$1::bigint",
+                                        [actor.companyId]
+                                    );
+                                    if (String(row?.version) !== seed.manifest.epoch)
+                                        throw new WeeklyReviewConflict("source_authority_changed");
+                                    return true;
+                                },
+                            })
+                        )
+                    );
+                    for (const result of results)
+                        for (const [version, digest] of result) digests.set(version, digest);
+                }
+                controller.signal.throwIfAborted();
+                const documents = seed.documents.map(document => {
+                    const digest = digests.get(document.version);
+                    return {
+                        ...document,
+                        digest: digest?.contentHash === document.hash ? digest : undefined,
+                    };
+                });
+                const catalogue = {
+                    topics: seed.manifest.topics.map(topic => ({
+                        id: topic.id,
+                        title: topic.title,
+                        openQuestionCount: topic.openQuestions.length,
+                        watchCount: topic.watches.length,
+                    })),
+                    fixed: seed.context.sources
+                        .filter(source => source.audience === "company")
+                        .map(({ ref, title }) => ({ ref, title })),
+                    offered: documents.map(
+                        ({ ref, title, category, versionDate, reason, digest }) => ({
+                            ref,
+                            title: title.slice(0, 180),
+                            category: category.slice(0, 100),
+                            versionDate,
+                            reason,
+                            digestHeadline: digest?.headline ?? "unavailable",
+                        })
+                    ),
+                    lane: seed.manifest.lane,
+                };
+                if (
+                    Buffer.byteLength(JSON.stringify(catalogue)) > TOPIC_FIRST_LIMITS.catalogueBytes
+                )
+                    throw new WeeklyReviewConflict("topic_exploration_failed:catalogue_limit");
+                await record({
+                    digestIds: documents.flatMap(document =>
+                        document.digest ? [document.digest.id] : []
+                    ),
+                });
+                const route = process.env.VANTAGE_TOPIC_FIRST_EXPLORATION_ROUTE ?? "reasoning";
+                if (!injected && !isChatRoute(route))
+                    throw new WeeklyReviewConflict("topic_exploration_failed:model_unavailable");
+                const port = injected
+                    ? createScriptedExplorationPort(documents)
+                    : createLangchainAgentPort(
+                          resolveConfiguredChatModel({
+                              route: isChatRoute(route) ? route : "reasoning",
+                              maxRetries: 0,
+                              maxOutputTokens: 6000,
+                              timeoutMs: TOPIC_FIRST_LIMITS.explorationMs,
+                          })
+                      );
+                const result = await runTopicExploration({
+                    catalogue,
+                    offered: documents,
+                    fixedRefs: catalogue.fixed.map(source => source.ref),
+                    topics: seed.manifest.topics.map(topic => ({
+                        ...topic,
+                        watches: topic.watches.flatMap(id => [
+                            ...documents
+                                .filter(document => document.id === id)
+                                .map(document => document.ref),
+                            ...seed.manifest.fixed
+                                .filter(
+                                    document =>
+                                        document.id === id && document.audience === "company"
+                                )
+                                .map(document => document.ref),
+                        ]),
+                    })),
+                    port,
+                    record: trace => record({ trace }),
+                    deadlineAt,
+                    signal: controller.signal,
+                });
+                return { selected: result.selected };
+            })(),
+        ]);
+    } catch (error) {
+        if (error instanceof WeeklyReviewConflict) throw error;
+        if (controller.signal.aborted || Date.now() >= deadlineAt) throw expired();
+        const message = error instanceof Error ? error.message : "";
+        const reason =
+            /^topic_exploration_failed:(timeout|call_limit|trace_limit|not_offered|range_invalid)$/.exec(
+                message
+            )?.[1];
+        throw new WeeklyReviewConflict(
+            "topic_exploration_failed:" + (reason ?? "provider_or_submission")
+        );
+    } finally {
+        if (timer) clearTimeout(timer);
+    }
+}

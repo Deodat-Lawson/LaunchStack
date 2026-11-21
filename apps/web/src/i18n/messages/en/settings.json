@@ -189,6 +189,13 @@
         }
       }
     },
+    "sharing": {
+      "publicLinks": {
+        "label": "Public links",
+        "description": "Lets people who manage a file make a link anyone can open without signing in, to send to someone outside the workspace or to an AI agent.",
+        "consequence": "Turning it off stops every public link from opening at once. Turning it back on makes the links that were live open again."
+      }
+    },
     "agents": {
       "defaultAutonomy": {
         "label": "Default autonomy for agents",
@@ -852,6 +859,9 @@
       "grantChanged": "{actor} changed {who} to {level} on the {kind, select, folder {folder} other {document}} {target}",
       "grantRemoved": "{actor} removed {who}''s access to the {kind, select, folder {folder} other {document}} {target}",
       "documentDeleted": "{actor} deleted the document {target}",
+      "publicLinkCreated": "{actor} made a public link to the document {target}",
+      "publicLinkUpdated": "{actor} changed the public link to the document {target}",
+      "publicLinkRevoked": "{actor} turned off the public link to the document {target}",
       "connectorConnected": "{actor} connected {provider}",
       "connectorDisconnected": "{actor} disconnected {provider}",
       "settingReset": "{actor} reset “{label}” to inherit",
@@ -914,7 +924,10 @@
           "grantAdded": "Document · grant added",
           "grantChanged": "Document · grant changed",
           "grantRemoved": "Document · grant removed",
-          "deleted": "Document · deleted"
+          "deleted": "Document · deleted",
+          "publicLinkCreated": "Document · public link made",
+          "publicLinkUpdated": "Document · public link changed",
+          "publicLinkRevoked": "Document · public link turned off"
         },
         "connector": {
           "connected": "Connector · connected",

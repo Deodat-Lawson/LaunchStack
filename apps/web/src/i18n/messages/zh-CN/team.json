@@ -478,7 +478,10 @@
       "roleNameTaken": "已存在同名的角色。",
       "roleHoldsPermissionsYouLack": "这个角色含有你没有的权限。",
       "roleStillHeld": "仍有 {count, plural, other {# 名成员}}持有这个角色。请选择要把他们移到哪个角色。",
-      "chooseDifferentRole": "请选择另一个角色来安置这些成员。"
+      "chooseDifferentRole": "请选择另一个角色来安置这些成员。",
+      "publicLinksOff": "此工作区已关闭公开链接。管理工作区的人可以在“工作区 › 成员与权限”中开启。",
+      "cannotChangePublicLink": "只有能管理此文件的人才能生成或更改它的公开链接。",
+      "noPublicLink": "此文件没有公开链接。"
     }
   }
 }

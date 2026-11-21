@@ -1,0 +1,15 @@
+{
+  "server": {
+    "notAvailable": "This link isn't available. It may have been turned off or expired, or the file was deleted.",
+    "downloadOff": "Downloads are turned off for this link.",
+    "noMedia": "There's nothing to play for this file.",
+    "noMindmap": "This mindmap can't be shown.",
+    "noPreview": "This page has no saved picture.",
+    "failed": "Something went wrong opening this file.",
+    "agent": {
+      "sharedFrom": "Shared from {workspace} with a LaunchStack public link. Last updated {updated}.",
+      "noText": "This file has no readable text yet. Open the link in a browser to view it.",
+      "truncated": "The text was cut here because the file is very long."
+    }
+  }
+}

@@ -189,6 +189,13 @@
         }
       }
     },
+    "sharing": {
+      "publicLinks": {
+        "label": "公开链接",
+        "description": "允许管理某个文件的人生成一个无需登录即可打开的链接，用来发给工作区以外的人或 AI 智能体。",
+        "consequence": "关闭后，所有公开链接会立即无法打开。重新开启后，原先有效的链接会恢复可用。"
+      }
+    },
     "agents": {
       "defaultAutonomy": {
         "label": "智能体的默认自主程度",
@@ -852,6 +859,9 @@
       "grantChanged": "{actor} 将 {who} 对{kind, select, folder {文件夹} other {文档}} {target} 的权限改为{level}",
       "grantRemoved": "{actor} 移除了 {who} 对{kind, select, folder {文件夹} other {文档}} {target} 的访问权限",
       "documentDeleted": "{actor} 删除了文档 {target}",
+      "publicLinkCreated": "{actor} 为文档 {target} 生成了公开链接",
+      "publicLinkUpdated": "{actor} 更改了文档 {target} 的公开链接",
+      "publicLinkRevoked": "{actor} 关闭了文档 {target} 的公开链接",
       "connectorConnected": "{actor} 连接了 {provider}",
       "connectorDisconnected": "{actor} 断开了 {provider}",
       "settingReset": "{actor} 将“{label}”重置为继承",
@@ -914,7 +924,10 @@
           "grantAdded": "文档 · 已添加授权",
           "grantChanged": "文档 · 授权变更",
           "grantRemoved": "文档 · 已移除授权",
-          "deleted": "文档 · 已删除"
+          "deleted": "文档 · 已删除",
+          "publicLinkCreated": "文档 · 生成公开链接",
+          "publicLinkUpdated": "文档 · 更改公开链接",
+          "publicLinkRevoked": "文档 · 关闭公开链接"
         },
         "connector": {
           "connected": "连接器 · 已连接",

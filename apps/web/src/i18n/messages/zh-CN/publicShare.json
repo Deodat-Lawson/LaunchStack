@@ -1,0 +1,15 @@
+{
+  "server": {
+    "notAvailable": "此链接不可用。它可能已被关闭或已过期，或者文件已被删除。",
+    "downloadOff": "此链接已关闭下载。",
+    "noMedia": "此文件没有可播放的内容。",
+    "noMindmap": "无法显示此思维导图。",
+    "noPreview": "此网页没有保存的截图。",
+    "failed": "打开此文件时出错。",
+    "agent": {
+      "sharedFrom": "通过 LaunchStack 公开链接从 {workspace} 分享。最后更新于 {updated}。",
+      "noText": "此文件还没有可读取的文字。请在浏览器中打开链接查看。",
+      "truncated": "文件过长，文字在此处被截断。"
+    }
+  }
+}

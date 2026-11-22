@@ -135,7 +135,14 @@ function deleteRange(el: HTMLTextAreaElement, from: number, to: number): void {
     el.setSelectionRange(from, from);
 }
 
-export function StepsPanel({ canvasSize }: { canvasSize: Size }) {
+export function StepsPanel({
+    canvasSize,
+    inSheet = false,
+}: {
+    canvasSize: Size;
+    /** Shown over the canvas as a sheet (a narrow screen), which has its own ✕. */
+    inSheet?: boolean;
+}) {
     const t = useTranslations("mindmap.flow.steps");
     const store = useStore();
     const sync = useMemo(() => stepsSyncFor(store), [store]);
@@ -275,22 +282,29 @@ export function StepsPanel({ canvasSize }: { canvasSize: Size }) {
 
     return (
         <div className="flex min-h-0 flex-1 flex-col" data-steps-panel="">
-            <header className="flex items-center gap-2 pb-2 pl-4 pr-2 pt-2.5">
+            <header
+                className={cn(
+                    "flex items-center gap-2 pb-2 pl-4 pt-2.5",
+                    inSheet ? "min-h-12 pr-12" : "pr-2"
+                )}
+            >
                 <h2 className="text-ink text-[13px] font-semibold">{t("panel.title")}</h2>
                 <span className="text-ink-3 flex-1 text-[11.5px] tabular-nums">
                     {t("panel.count", { count: snap.parse.steps.length })}
                 </span>
-                <Button
-                    type="button"
-                    variant="ghost"
-                    size="icon"
-                    onClick={() => setStepsPanelOpen(store, false)}
-                    title={t("panel.close")}
-                    aria-label={t("panel.close")}
-                    className="text-ink-3 hover:text-ink size-7"
-                >
-                    <X className="size-3.5" />
-                </Button>
+                {!inSheet && (
+                    <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => setStepsPanelOpen(store, false)}
+                        title={t("panel.close")}
+                        aria-label={t("panel.close")}
+                        className="text-ink-3 hover:text-ink size-7"
+                    >
+                        <X className="size-3.5" />
+                    </Button>
+                )}
             </header>
 
             <ScrollArea className="min-h-0 flex-1">

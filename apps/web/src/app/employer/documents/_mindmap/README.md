@@ -278,6 +278,10 @@ line starts a separate chain — the line after it is not joined to the line
 before it (the grammar is `model/flowchart/syntax.ts`, shared with agents).
 A top-bar **Steps** button toggles it; it is open unless the person closed
 it (`lib/preferences.ts`, per browser) and never shown while presenting.
+Where the canvas's column is narrower than 768px (`NARROW_EDITOR`) it starts
+closed unless the person left it open, and opens over the canvas as a sheet
+(`~/components/ui/sheet`, scoped to that column) that its ✕, Esc or a tap on
+the canvas beside it closes, so the canvas is never squeezed.
 
 Typing is drawn within ~300ms, one undo step per burst, boxes keeping their
 ids; boxes already on the page keep their places (a box on its own stays

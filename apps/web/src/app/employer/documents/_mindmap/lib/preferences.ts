@@ -43,16 +43,28 @@ const STEPS_KEY = "mindmap:steps-panel";
 
 /**
  * Whether a flowchart's Steps panel opens beside the canvas: the person's
- * last choice, else open — writing the steps is one of the three ways to
- * start a chart, and the panel is where an agent's chart reads as text.
+ * last choice, else `fallback` — open, since writing the steps is one of the
+ * three ways to start a chart and the panel is where an agent's chart reads
+ * as text; closed on a narrow screen, where it would cover the canvas.
  */
-export function readStepsPanel(): boolean {
+export function readStepsPanel(fallback = true): boolean {
     try {
         const raw = window.localStorage.getItem(STEPS_KEY);
-        return raw === null ? true : raw === "open";
+        return raw === null ? fallback : raw === "open";
     } catch {
-        return true;
+        return fallback;
     }
+}
+
+/**
+ * Below this width (px) the editor is too narrow for the Steps panel beside
+ * the canvas: it starts closed and opens over the canvas instead.
+ */
+export const NARROW_EDITOR = 768;
+
+/** Whether the window is narrower than `NARROW_EDITOR` (false on the server). */
+export function narrowWindow(): boolean {
+    return typeof window !== "undefined" && window.innerWidth < NARROW_EDITOR;
 }
 
 export function writeStepsPanel(open: boolean): void {

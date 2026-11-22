@@ -115,6 +115,7 @@ export async function runTopicExploration(input: {
     topics: readonly ExplorationTopic[];
     offered: readonly ExplorationDocument[];
     fixedRefs?: readonly string[];
+    fixedDocuments?: readonly { ref: string; title: string }[];
     port: AgentModelPort;
     record(trace: ExplorationTrace): Promise<void>;
     deadlineAt: number;
@@ -122,6 +123,11 @@ export async function runTopicExploration(input: {
 }): Promise<TopicExplorationResult & { trace: ExplorationTrace }> {
     const documents = new Map(input.offered.map(document => [document.ref, document]));
     const fixed = new Set(input.fixedRefs ?? []);
+    const fixedDocuments = new Map(
+        (input.fixedDocuments ?? [])
+            .filter(document => fixed.has(document.ref))
+            .map(document => [document.ref, document])
+    );
     const handles = new Map(
         input.offered.map(document => [explorationDocumentHandle(document), document])
     );
@@ -206,15 +212,27 @@ export async function runTopicExploration(input: {
         },
     });
     const tools = [
-        tool(
-            "get_personal_topic",
-            z.object({ topicId: z.string() }).strict(),
-            args =>
-                input.topics.find(topic => topic.id === args.topicId) ?? {
+        tool("get_personal_topic", z.object({ topicId: z.string() }).strict(), args => {
+            const topic = input.topics.find(topic => topic.id === args.topicId);
+            if (!topic)
+                return {
                     error: "not_offered",
                     message: "Use a topicId from the pinned catalogue.",
-                }
-        ),
+                };
+            if (!Array.isArray(topic.watches) || topic.watches.length === 0) return topic;
+            const watchedDocuments = topic.watches.flatMap((ref: unknown) => {
+                if (typeof ref !== "string") return [];
+                const offered = documents.get(ref);
+                if (offered) return [identity(offered)];
+                const source = fixedDocuments.get(ref);
+                return source ? [{ handle: source.ref, ref: source.ref, title: source.title }] : [];
+            });
+            return {
+                ...topic,
+                watches: watchedDocuments.map(document => document.ref),
+                watchedDocuments,
+            };
+        }),
         tool(
             "get_document_digest",
             z.object({ ref: z.string().optional(), handle: z.string().optional() }).strict(),

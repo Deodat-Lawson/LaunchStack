@@ -220,6 +220,7 @@ export async function prepareTopicSelection(options: {
                     catalogue,
                     offered: documents,
                     fixedRefs: catalogue.fixed.map(source => source.ref),
+                    fixedDocuments: catalogue.fixed,
                     topics: seed.manifest.topics.map(topic => ({
                         ...topic,
                         watches: topic.watches.flatMap(id => [

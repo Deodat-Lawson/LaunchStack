@@ -352,3 +352,98 @@ it("caps attempted executable slots at sixty and retains the failure trace", asy
     expect(trace?.events.filter(event => event.kind === "tool")).toHaveLength(60);
     expect(trace?.events.filter(event => event.code === "total_call_limit")).toHaveLength(4);
 });
+it("identifies watched offered and fixed documents by stable handle and title", async () => {
+    const { explorationDocumentHandle } = await import(
+        "../src/server/vantage/weekly-review-topic-exploration"
+    );
+    const offered = [{ ...document, title: "Release review" }];
+    let turn = 0;
+    const port: AgentModelPort = {
+        async respond(request) {
+            if (turn++ === 0)
+                return {
+                    text: "",
+                    toolCalls: [
+                        {
+                            id: "watch",
+                            name: "get_personal_topic",
+                            arguments: { topicId: "topic" },
+                        },
+                    ],
+                };
+            const message = request.transcript.find(
+                item => item.role === "tool" && item.callId === "watch"
+            );
+            const content = JSON.parse(message?.role === "tool" ? message.content : "{}");
+            expect(content.watchedDocuments).toEqual([
+                {
+                    handle: explorationDocumentHandle(offered[0]!),
+                    ref: document.ref,
+                    title: "Release review",
+                },
+                { handle: "doc:fixed@1", ref: "doc:fixed@1", title: "Company policy" },
+            ]);
+            expect(content.watches).toEqual([document.ref, "doc:fixed@1"]);
+            expect(JSON.stringify(content)).not.toContain("cross-tenant");
+            expect(JSON.stringify(content)).not.toContain("Denied secret title");
+            return {
+                text: "",
+                toolCalls: [{ id: "final", name: "submit_result", arguments: { selected: [] } }],
+            };
+        },
+    };
+    await runTopicExploration({
+        ...setup(port),
+        offered,
+        topics: [
+            {
+                id: "topic",
+                title: "Owner question",
+                watches: [document.ref, "doc:fixed@1", "cross-tenant"],
+            },
+        ],
+        fixedRefs: ["doc:fixed@1"],
+        fixedDocuments: [
+            { ref: "doc:fixed@1", title: "Company policy" },
+            { ref: "cross-tenant", title: "Denied secret title" },
+        ],
+    });
+});
+it("keeps a no-watch topic tool response byte-identical", async () => {
+    const topic = {
+        id: "topic",
+        title: "Owner question",
+        openQuestions: ["What changed?"],
+        watches: [],
+    };
+    let turn = 0;
+    const port: AgentModelPort = {
+        async respond(request) {
+            if (turn++ === 0)
+                return {
+                    text: "",
+                    toolCalls: [
+                        {
+                            id: "empty",
+                            name: "get_personal_topic",
+                            arguments: { topicId: "topic" },
+                        },
+                    ],
+                };
+            const message = request.transcript.find(
+                item => item.role === "tool" && item.callId === "empty"
+            );
+            expect(message?.role === "tool" ? message.content : "").toBe(JSON.stringify(topic));
+            return {
+                text: "",
+                toolCalls: [{ id: "final", name: "submit_result", arguments: { selected: [] } }],
+            };
+        },
+    };
+    await runTopicExploration({
+        ...setup(port),
+        topics: [topic],
+        fixedRefs: ["doc:fixed@1"],
+        fixedDocuments: [{ ref: "doc:fixed@1", title: "Company policy" }],
+    });
+});

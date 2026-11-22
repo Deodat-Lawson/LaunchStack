@@ -52,6 +52,24 @@ export const RELIABILITY_SCORE_METHOD = Object.freeze({
 export const RELIABILITY_SCORE_METHOD_SHA256 = createHash("sha256")
     .update(JSON.stringify(RELIABILITY_SCORE_METHOD))
     .digest("hex");
+const DOCS_WINDOWS_ARMS = Object.freeze([
+    "seeds-windows",
+    "configured-live",
+    "configured-live+backfill",
+    "live-docs+windows",
+]);
+export const DOCS_WINDOWS_SCORE_METHOD = Object.freeze({
+    ...RELIABILITY_SCORE_METHOD,
+    schemaVersion: "vantage-live-document-windows-method/1",
+    arms: DOCS_WINDOWS_ARMS,
+    pairing:
+        "Compare offline live-docs+windows to seeds-windows, configured-live and configured-live+backfill on exact matched groups and both-successful intersections",
+    projection:
+        "Offline projected selection from the fixed reliability with-reruns source view; exact source run/work IDs verified; zero added paid calls and no generation; archived document inference distinguished from explicit recorded selection; failed primary remains failed",
+});
+export const DOCS_WINDOWS_SCORE_METHOD_SHA256 = createHash("sha256")
+    .update(JSON.stringify(DOCS_WINDOWS_SCORE_METHOD))
+    .digest("hex");
 const ok = run => ["ok", "accepted", "success"].includes(run.status);
 const identity = run =>
     JSON.stringify([run.cohort, run.retrievalLimits?.sharedEvidenceBytes, run.arm, run.caseId]);
@@ -342,13 +360,27 @@ function paired(cohort, partition, size, leftArm, rightArm) {
 }
 
 export function scoreSweep(cohorts, corpus, runs, { mode = "original" } = {}) {
-    if (!["original", "heldout-reliability"].includes(mode))
+    if (!["original", "heldout-reliability", "heldout-docs-windows"].includes(mode))
         throw Error("sweep_score_mode_invalid");
-    const arms = mode === "original" ? ARMS : RELIABILITY_ARMS;
+    const arms =
+        mode === "original"
+            ? ARMS
+            : mode === "heldout-reliability"
+              ? RELIABILITY_ARMS
+              : DOCS_WINDOWS_ARMS;
     const caps = mode === "original" ? CAPS : RELIABILITY_CAPS;
-    const method = mode === "original" ? SWEEP_SCORE_METHOD : RELIABILITY_SCORE_METHOD;
+    const method =
+        mode === "original"
+            ? SWEEP_SCORE_METHOD
+            : mode === "heldout-reliability"
+              ? RELIABILITY_SCORE_METHOD
+              : DOCS_WINDOWS_SCORE_METHOD;
     const methodSha256 =
-        mode === "original" ? SWEEP_SCORE_METHOD_SHA256 : RELIABILITY_SCORE_METHOD_SHA256;
+        mode === "original"
+            ? SWEEP_SCORE_METHOD_SHA256
+            : mode === "heldout-reliability"
+              ? RELIABILITY_SCORE_METHOD_SHA256
+              : DOCS_WINDOWS_SCORE_METHOD_SHA256;
     if (
         !Array.isArray(cohorts) ||
         !cohorts.length ||
@@ -379,10 +411,37 @@ export function scoreSweep(cohorts, corpus, runs, { mode = "original" } = {}) {
             throw Error("sweep_frozen_cap_violation");
         if (run.arm === "configured-live+backfill" && run.accounting?.paidModelCalls !== 0)
             throw Error("sweep_backfill_paid_calls_invalid");
+        if (mode === "heldout-docs-windows" && run.arm === "live-docs+windows") {
+            const p = run.projection;
+            const source = runs.find(
+                candidate =>
+                    candidate.arm === "configured-live" &&
+                    reliabilityPairKey(candidate) === reliabilityPairKey(run)
+            );
+            if (
+                !p ||
+                p.sourceView !== "with-reruns" ||
+                p.derivationKind !== "offline-projection" ||
+                !["explicit-model-selection", "archive-inferred"].includes(
+                    p.documentSelectionProvenance
+                ) ||
+                !source ||
+                typeof p.sourceWorkId !== "string" ||
+                !p.sourceWorkId ||
+                p.sourceWorkId !== source.workId ||
+                (p.sourceRunId ?? null) !== (source.runId ?? null)
+            )
+                throw Error("docs_windows_projection_lineage_invalid");
+            if (run.accounting?.paidModelCalls !== 0 || run.generation !== undefined)
+                throw Error("docs_windows_projection_evidence_invalid");
+            if (!ok(source) && (ok(run) || run.failure !== source.failure))
+                throw Error("docs_windows_primary_failure_changed");
+        }
     }
     const cells = [],
         pairs = [],
         metadata = [];
+    let sourceBackfillPairsVerified = 0;
     for (const cohort of cohorts) {
         const scoring = { ...cohort, corpus };
         for (const cap of caps[cohort.cohort]) {
@@ -415,6 +474,19 @@ export function scoreSweep(cohorts, corpus, runs, { mode = "original" } = {}) {
                     backfillOfRunId:
                         typeof raw.backfillOfRunId === "string" ? raw.backfillOfRunId : null,
                     topics: detail.topics.map(compactTopic),
+                    ...(raw.arm === "live-docs+windows"
+                        ? {
+                              evaluationStatus: "offline-projected",
+                              projection: {
+                                  sourceView: raw.projection.sourceView,
+                                  sourceRunId: raw.projection.sourceRunId ?? null,
+                                  sourceWorkId: raw.projection.sourceWorkId ?? null,
+                                  derivationKind: raw.projection.derivationKind,
+                                  documentSelectionProvenance:
+                                      raw.projection.documentSelectionProvenance,
+                              },
+                          }
+                        : {}),
                 });
             }
             for (const size of [3, 5]) {
@@ -447,35 +519,73 @@ export function scoreSweep(cohorts, corpus, runs, { mode = "original" } = {}) {
                             ? Math.max(...observed.map(bytes))
                             : null,
                         capViolations: 0,
+                        ...(arm === "live-docs+windows"
+                            ? {
+                                  evaluationStatus: "offline-projected",
+                                  projectionProvenance: {
+                                      explicitModelSelection: observed.filter(
+                                          run =>
+                                              run.projection.documentSelectionProvenance ===
+                                              "explicit-model-selection"
+                                      ).length,
+                                      archiveInferred: observed.filter(
+                                          run =>
+                                              run.projection.documentSelectionProvenance ===
+                                              "archive-inferred"
+                                      ).length,
+                                  },
+                              }
+                            : {}),
                     });
                 }
-                for (const candidate of arms.filter(arm => arm !== "seeds"))
-                    pairs.push({
-                        cohort: cohort.cohort,
-                        capBytes: cap,
-                        size,
-                        ...paired(scoring, partition, size, candidate, "seeds"),
-                    });
-                if (mode === "heldout-reliability")
-                    for (const candidate of ["configured-live", "configured-live+backfill"])
-                        pairs.push({
-                            cohort: cohort.cohort,
-                            capBytes: cap,
-                            size,
-                            ...paired(scoring, partition, size, candidate, "seeds-windows"),
-                        });
-                pairs.push({
-                    cohort: cohort.cohort,
-                    capBytes: cap,
-                    size,
-                    ...paired(
+                if (mode === "heldout-docs-windows") {
+                    sourceBackfillPairsVerified += paired(
                         scoring,
                         partition,
                         size,
                         "configured-live+backfill",
                         "configured-live"
-                    ),
-                });
+                    ).verifiedBackfillPairs;
+                    for (const reference of [
+                        "seeds-windows",
+                        "configured-live",
+                        "configured-live+backfill",
+                    ])
+                        pairs.push({
+                            cohort: cohort.cohort,
+                            capBytes: cap,
+                            size,
+                            ...paired(scoring, partition, size, "live-docs+windows", reference),
+                        });
+                } else {
+                    for (const candidate of arms.filter(arm => arm !== "seeds"))
+                        pairs.push({
+                            cohort: cohort.cohort,
+                            capBytes: cap,
+                            size,
+                            ...paired(scoring, partition, size, candidate, "seeds"),
+                        });
+                    if (mode === "heldout-reliability")
+                        for (const candidate of ["configured-live", "configured-live+backfill"])
+                            pairs.push({
+                                cohort: cohort.cohort,
+                                capBytes: cap,
+                                size,
+                                ...paired(scoring, partition, size, candidate, "seeds-windows"),
+                            });
+                    pairs.push({
+                        cohort: cohort.cohort,
+                        capBytes: cap,
+                        size,
+                        ...paired(
+                            scoring,
+                            partition,
+                            size,
+                            "configured-live+backfill",
+                            "configured-live"
+                        ),
+                    });
+                }
             }
         }
     }
@@ -496,6 +606,7 @@ export function scoreSweep(cohorts, corpus, runs, { mode = "original" } = {}) {
             })),
             cells,
             pairs,
+            ...(mode === "heldout-docs-windows" ? { sourceBackfillPairsVerified } : {}),
         },
     };
 }

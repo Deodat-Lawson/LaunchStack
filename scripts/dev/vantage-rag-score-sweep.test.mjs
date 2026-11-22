@@ -5,6 +5,7 @@ import {
     SWEEP_SCORE_METHOD_SHA256,
     buildReliabilityViews,
     RELIABILITY_SCORE_METHOD_SHA256,
+    DOCS_WINDOWS_SCORE_METHOD_SHA256,
 } from "./vantage-rag-score-sweep.mjs";
 
 const texts = [
@@ -408,5 +409,142 @@ test("shared-hold eligibility can be rooted in a proven80KB transport sibling", 
     assert.throws(
         () => buildReliabilityViews([f.primary, f.backfill], [f.retry], { ...audit, failures: [] }),
         /transport_cause_unproven/
+    );
+});
+
+function projectionFixture(provenance = "explicit-model-selection") {
+    const primary = run("heldout", "configured-live", "a", 8000, { workId: "origin-work" });
+    const windows = run("heldout", "seeds-windows", "a", 8000, {
+        selected: corpus.documents.map(doc => ({
+            documentId: doc.documentId,
+            versionId: doc.versionId,
+            text: doc.text,
+        })),
+    });
+    const backfill = run("heldout", "configured-live+backfill", "a", 8000, {
+        workId: "origin-work",
+    });
+    const projected = {
+        ...primary,
+        arm: "live-docs+windows",
+        selected: windows.selected.slice(0, 2),
+        projection: {
+            sourceView: "with-reruns",
+            sourceRunId: primary.runId,
+            sourceWorkId: primary.workId,
+            derivationKind: "offline-projection",
+            documentSelectionProvenance: provenance,
+        },
+        accounting: { paidModelCalls: 0 },
+    };
+    return { primary, windows, backfill, projected };
+}
+test("docs-windows mode preserves existing metrics and compares offline projection with all three references", () => {
+    const f = projectionFixture();
+    const scored = scoreSweep(
+        [cohorts[1]],
+        corpus,
+        [f.primary, f.windows, f.backfill, f.projected],
+        { mode: "heldout-docs-windows" }
+    );
+    assert.equal(scored.summary.cells.length, 16);
+    assert.equal(scored.summary.pairs.length, 12);
+    assert.equal(scored.methodSha256, DOCS_WINDOWS_SCORE_METHOD_SHA256);
+    assert.notEqual(scored.methodSha256, RELIABILITY_SCORE_METHOD_SHA256);
+    const pairs = scored.summary.pairs.filter(p => p.capBytes === 8000 && p.size === 3);
+    assert.deepEqual(
+        pairs.map(p => p.rightArm),
+        ["seeds-windows", "configured-live", "configured-live+backfill"]
+    );
+    assert.deepEqual(
+        pairs.map(p => p.matched.delta.documentSelected),
+        [-1, 1, 1]
+    );
+    assert.equal(scored.summary.sourceBackfillPairsVerified, 1);
+    const cell = scored.summary.cells.find(
+        c => c.capBytes === 8000 && c.size === 3 && c.arm === "live-docs+windows"
+    );
+    assert.equal(cell.evaluationStatus, "offline-projected");
+    assert.deepEqual(cell.projectionProvenance, { explicitModelSelection: 1, archiveInferred: 0 });
+    assert.equal(
+        scored.metadata.find(m => m.arm === "live-docs+windows").projection.sourceView,
+        "with-reruns"
+    );
+    assert(!JSON.stringify(scored).includes(texts[0]));
+});
+test("archive inference is separately labelled and wrong source lineage fails closed", () => {
+    const f = projectionFixture("archive-inferred");
+    const score = scoreSweep([cohorts[1]], corpus, [f.primary, f.projected], {
+        mode: "heldout-docs-windows",
+    });
+    assert.equal(
+        score.summary.cells.find(
+            c => c.capBytes === 8000 && c.size === 3 && c.arm === "live-docs+windows"
+        ).projectionProvenance.archiveInferred,
+        1
+    );
+    assert.throws(
+        () =>
+            scoreSweep(
+                [cohorts[1]],
+                corpus,
+                [
+                    f.primary,
+                    {
+                        ...f.projected,
+                        projection: { ...f.projected.projection, sourceWorkId: "wrong" },
+                    },
+                ],
+                { mode: "heldout-docs-windows" }
+            ),
+        /projection_lineage_invalid/
+    );
+    assert.throws(
+        () => scoreSweep([cohorts[1]], corpus, [f.projected], { mode: "heldout-docs-windows" }),
+        /projection_lineage_invalid/
+    );
+});
+test("offline projection cannot claim added paid or generation evidence, or rescue a failed source", () => {
+    const f = projectionFixture();
+    assert.throws(
+        () =>
+            scoreSweep(
+                [cohorts[1]],
+                corpus,
+                [f.primary, { ...f.projected, accounting: { paidModelCalls: 1 } }],
+                { mode: "heldout-docs-windows" }
+            ),
+        /projection_evidence_invalid/
+    );
+    assert.throws(
+        () =>
+            scoreSweep(
+                [cohorts[1]],
+                corpus,
+                [f.primary, { ...f.projected, generation: { status: "accepted" } }],
+                { mode: "heldout-docs-windows" }
+            ),
+        /projection_evidence_invalid/
+    );
+    const failed = {
+        ...f.primary,
+        status: "failed",
+        failure: "topic_exploration_failed:timeout",
+        selected: [],
+    };
+    assert.throws(
+        () =>
+            scoreSweep([cohorts[1]], corpus, [failed, f.projected], {
+                mode: "heldout-docs-windows",
+            }),
+        /primary_failure_changed/
+    );
+    const p = { ...f.projected, status: "failed", failure: failed.failure, selected: [] };
+    const score = scoreSweep([cohorts[1]], corpus, [failed, p], { mode: "heldout-docs-windows" });
+    assert.equal(
+        score.summary.cells.find(
+            c => c.capBytes === 8000 && c.size === 3 && c.arm === "live-docs+windows"
+        ).metrics.failures,
+        1
     );
 });

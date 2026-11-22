@@ -10,10 +10,16 @@
  *
  * - `find_diagrams` — the person's diagrams by title or label, or the ones
  *   opened most recently (the first is usually the one on screen);
- * - `read_diagram` — one diagram as text, every shape with its id;
+ * - `read_diagram` — one diagram as text: a mind map as its outline, a
+ *   flowchart as step text, every shape with its id;
  * - `create_diagram` — a new draft from an outline (mind maps, org charts,
- *   trees) or a Mermaid flowchart;
- * - `edit_diagram` — small operations on ids from `read_diagram`.
+ *   trees) or, for a flowchart, step text (Mermaid still accepted);
+ * - `edit_diagram` — a flowchart rewritten as `steps` (boxes keep their ids
+ *   where their words stay), and/or small operations on ids.
+ *
+ * Flowcharts go in and out in one language — the step language the editor's
+ * Steps panel shows (`_mindmap/model/flowchart`) — so what a model reads is
+ * what it writes back, and what it writes is what a person would type.
  *
  * The model writes text; `~/server/mindmap/agent` turns it into a document
  * with the editor's own factories, theme and layouts, and keeps every rule
@@ -108,12 +114,29 @@ function folderFrom(raw: string | undefined): string {
     return path;
 }
 
+/**
+ * The step language in one breath, with one example — a decision, its
+ * branches and a loop back. Shared by the prompt, the tool descriptions and
+ * the MCP tools.
+ */
+export const STEPS_LANGUAGE = [
+    'The step language: one step per line, joined in order. A line ending in "?" is a decision; its branches are the lines indented two spaces under it, written "Label: step". "-> Step" after a step (or a branch) sends it to the step with those exact words instead of the next line — a loop back, or a jump ahead. A line that is just Start or End is a pill; End goes nowhere. Example:',
+    "Start",
+    "Receive the order",
+    "In stock?",
+    "  Yes: Pick and pack",
+    "  No: Reorder from supplier -> Receive the order",
+    "Ship it",
+    "End",
+].join("\n");
+
 const FindArgs = z.object({ query: z.string().trim().max(200).optional() });
 const ReadArgs = z.object({ diagram: z.union([z.string(), z.number()]) });
 const CreateArgs = z.object({
     title: z.string().trim().min(1, "must not be empty").max(200),
     type: z.enum(DIAGRAM_TYPES),
     outline: z.string().max(40_000).optional(),
+    steps: z.string().max(40_000).optional(),
     mermaid: z.string().max(40_000).optional(),
     folder: z.string().trim().max(256).optional(),
 });
@@ -164,13 +187,45 @@ function editList(raw: unknown): unknown {
     return raw;
 }
 
-const EditArgs = z.object({
-    diagram: z.union([z.string(), z.number()]),
-    edits: z.preprocess(
-        editList,
-        z.array(z.preprocess(normaliseEdit, EditSchema)).min(1).max(MAX_EDITS)
-    ),
-});
+/**
+ * A rewrite sent as an edit — `{ op: "steps", text }` in `edits`, where some
+ * models put it — is lifted out into `steps`, where the tool takes it.
+ */
+function liftSteps(raw: unknown): unknown {
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return raw;
+    const args = { ...(raw as Record<string, unknown>) };
+    const list = editList(args.edits);
+    if (!Array.isArray(list)) return args;
+    const rest: unknown[] = [];
+    for (const item of list) {
+        const edit = item as { op?: unknown; text?: unknown; steps?: unknown } | null;
+        const text = typeof edit?.steps === "string" ? edit.steps : edit?.text;
+        if (edit?.op === "steps" && typeof text === "string" && !args.steps) args.steps = text;
+        else rest.push(item);
+    }
+    args.edits = rest.length > 0 ? rest : undefined;
+    return args;
+}
+
+const EditArgs = z.preprocess(
+    liftSteps,
+    z
+        .object({
+            diagram: z.union([z.string(), z.number()]),
+            steps: z.string().max(40_000).optional(),
+            edits: z
+                .preprocess(
+                    editList,
+                    z.array(z.preprocess(normaliseEdit, EditSchema)).max(MAX_EDITS)
+                )
+                .optional(),
+        })
+        .refine(args => !!args.steps?.trim() || (args.edits?.length ?? 0) > 0, {
+            message:
+                "send steps (a flowchart rewritten in the step language) or edits (operations on ids)",
+            path: ["edits"],
+        })
+);
 
 /** JSON Schema for one edit, shared with the MCP tool. */
 export const DIAGRAM_EDIT_JSON_SCHEMA: Record<string, unknown> = {
@@ -223,37 +278,47 @@ export const DIAGRAM_EDIT_JSON_SCHEMA: Record<string, unknown> = {
     additionalProperties: false,
 };
 
-/** The parsed edits as the model layer takes them. */
-export function toDiagramEdits(edits: ReadonlyArray<z.infer<typeof EditSchema>>): DiagramEdit[] {
+/**
+ * The parsed edits as the model layer takes them: a `steps` rewrite first,
+ * then the id edits in order, all in one batch.
+ */
+export function toDiagramEdits(
+    edits: ReadonlyArray<z.infer<typeof EditSchema>> = [],
+    steps?: string
+): DiagramEdit[] {
     // "Add A and B under X" often names X only on the first add.
     let lastUnder: string | undefined;
-    return edits.map(e => {
-        switch (e.op) {
-            case "add":
-                lastUnder = e.under ?? lastUnder;
-                return {
-                    op: "add",
-                    under: e.under ?? lastUnder,
-                    text: e.text ?? "",
-                    after: e.after,
-                    shape: e.shape,
-                    label: e.label,
-                    ref: e.ref,
-                };
-            case "rename":
-                return { op: "rename", node: e.node ?? "", text: e.text ?? "" };
-            case "remove":
-                return { op: "remove", node: e.node ?? "", keep_children: e.keep_children };
-            case "move":
-                return { op: "move", node: e.node ?? "", under: e.under ?? "", after: e.after };
-            case "connect":
-                return { op: "connect", from: e.from ?? "", to: e.to ?? "", label: e.label };
-            case "disconnect":
-                return { op: "disconnect", from: e.from ?? "", to: e.to ?? "" };
-            default:
-                return { op: "arrange" };
-        }
-    });
+    const rewrite: DiagramEdit[] = steps?.trim() ? [{ op: "steps", text: steps }] : [];
+    return [
+        ...rewrite,
+        ...edits.map((e): DiagramEdit => {
+            switch (e.op) {
+                case "add":
+                    lastUnder = e.under ?? lastUnder;
+                    return {
+                        op: "add",
+                        under: e.under ?? lastUnder,
+                        text: e.text ?? "",
+                        after: e.after,
+                        shape: e.shape,
+                        label: e.label,
+                        ref: e.ref,
+                    };
+                case "rename":
+                    return { op: "rename", node: e.node ?? "", text: e.text ?? "" };
+                case "remove":
+                    return { op: "remove", node: e.node ?? "", keep_children: e.keep_children };
+                case "move":
+                    return { op: "move", node: e.node ?? "", under: e.under ?? "", after: e.after };
+                case "connect":
+                    return { op: "connect", from: e.from ?? "", to: e.to ?? "", label: e.label };
+                case "disconnect":
+                    return { op: "disconnect", from: e.from ?? "", to: e.to ?? "" };
+                default:
+                    return { op: "arrange" };
+            }
+        }),
+    ];
 }
 
 export const EditDiagramArgs = EditArgs;
@@ -324,7 +389,7 @@ export function createDiagramTools(
     const read: ChatTool = {
         name: "read_diagram",
         description:
-            "Read one diagram as text: a mind map as its outline of topics, a flowchart as its shapes and arrows, every shape with its id (n_…). " +
+            "Read one diagram as text: a mind map as its outline of topics, a flowchart as step text (the language below) with the id (n_…) of each step's box, anything else as its shapes and arrows with their ids. " +
             "Read a diagram before editing it, and to answer questions about what it shows.",
         parameters: {
             type: "object",
@@ -354,7 +419,7 @@ export function createDiagramTools(
                 "Draw a new diagram in this workspace, as a Mindmap the person can open, edit, present, share and cite. " +
                 "Call it when the person asks for a diagram, mind map, flowchart, org chart, tree, process map or visual, or to draw, map out or visualise something — never on your own initiative. " +
                 "type mindmap, org_chart or tree: send outline — the centre on the first line, then one topic per line, each indented two spaces under its parent, as '- ' bullets. " +
-                "type flowchart: send mermaid — a Mermaid flowchart ('flowchart TD' or 'flowchart LR'). " +
+                "type flowchart: send steps — one step per line in the step language. Send mermaid instead only for a flowchart that needs groups (subgraphs) or must run left to right. " +
                 "Leave folder out to put it in the person's Private section. " +
                 `At most ${MAX_CREATES} diagrams per answer.`,
             parameters: {
@@ -374,10 +439,14 @@ export function createDiagramTools(
                         description:
                             "For mindmap, org_chart and tree. Example:\n- Q3 launch\n  - Product\n    - Beta with design partners\n  - Marketing\n    - Launch post",
                     },
+                    steps: {
+                        type: "string",
+                        description: `For flowchart (preferred). ${STEPS_LANGUAGE}`,
+                    },
                     mermaid: {
                         type: "string",
                         description:
-                            "For flowchart. Example:\nflowchart TD\n  A([Order placed]) --> B{Paid?}\n  B -->|yes| C[Pack]\n  B -->|no| D[Send reminder]\n  subgraph Warehouse\n    C --> E[Ship]\n  end",
+                            "For a flowchart that needs groups or a left-to-right flow, instead of steps. Example:\nflowchart LR\n  A([Order placed]) --> B{Paid?}\n  B -->|yes| C[Pack]\n  B -->|no| D[Send reminder]\n  subgraph Warehouse\n    C --> E[Ship]\n  end",
                     },
                     folder: {
                         type: "string",
@@ -397,10 +466,14 @@ export function createDiagramTools(
             run: async args => {
                 const parsed = CreateArgs.safeParse(withoutNulls(args));
                 if (!parsed.success) throw invalid(parsed.error);
-                const { title, type, outline, mermaid } = parsed.data;
+                const { title, type, outline, steps, mermaid } = parsed.data;
                 const folder = folderFrom(parsed.data.folder);
                 const key = createHash("sha256")
-                    .update([folder, title, type, outline ?? "", mermaid ?? ""].join("\u0000"))
+                    .update(
+                        [folder, title, type, outline ?? "", steps ?? "", mermaid ?? ""].join(
+                            "\u0000"
+                        )
+                    )
                     .digest("hex");
                 const earlier = byContent.get(key);
                 if (earlier) {
@@ -410,7 +483,7 @@ export function createDiagramTools(
                     throw new Error("The diagram budget for this answer is used up. Answer now.");
                 try {
                     const { row, doc } = await createDiagram(ctx, {
-                        spec: { title, type, outline, mermaid },
+                        spec: { title, type, outline, steps, mermaid },
                         folder,
                         mode: options.mode,
                         pageName: translatorFor(options.locale ?? "en", "mindmap.pages")(
@@ -446,16 +519,22 @@ export function createDiagramTools(
         tools.push({
             name: "edit_diagram",
             description:
-                "Change an existing diagram with small operations on the ids (n_…) read_diagram shows: add, rename, remove, move, connect, disconnect, arrange. " +
-                "Call it when the person asks to change, extend or tidy a diagram. All operations apply together or none do. " +
+                "Change an existing diagram. A flowchart: send steps — the whole chart rewritten in the step language read_diagram showed it in; boxes whose words you keep keep their ids, new lines become new boxes, lines you drop are removed. " +
+                "Any diagram: send edits — small operations on the ids (n_…) read_diagram shows: add, rename, remove, move, connect, disconnect, arrange. Steps are drawn first, then edits. " +
+                "Call it when the person asks to change, extend or tidy a diagram. Everything applies together or nothing does. " +
                 "The result lists what changed and the diagram as it now is, with the ids of anything new.",
             parameters: {
                 type: "object",
                 properties: {
                     diagram: { type: "string", description: "Its id, e.g. m12." },
+                    steps: {
+                        type: "string",
+                        description:
+                            "Flowcharts: the whole chart as step text, every line, changed where the person asked.",
+                    },
                     edits: { type: "array", items: DIAGRAM_EDIT_JSON_SCHEMA, maxItems: MAX_EDITS },
                 },
-                required: ["diagram", "edits"],
+                required: ["diagram"],
                 additionalProperties: false,
             },
             describe: () => status("editingDiagram"),
@@ -470,7 +549,11 @@ export function createDiagramTools(
                 if (edits >= MAX_EDIT_CALLS)
                     throw new Error("The edit budget for this answer is used up. Answer now.");
                 try {
-                    const result = await editDiagram(ctx, id, toDiagramEdits(parsed.data.edits));
+                    const result = await editDiagram(
+                        ctx,
+                        id,
+                        toDiagramEdits(parsed.data.edits, parsed.data.steps)
+                    );
                     edits += 1;
                     remember({ kind: "diagram", ...touched(result.row), edited: true });
                     const loaded = { row: result.row, doc: result.doc, canEdit: true };
@@ -507,20 +590,22 @@ export function diagramToolsPrompt(session: Pick<DiagramToolSession, "tools">): 
     const names = new Set(session.tools.map(t => t.name));
     const lines = ["## Diagrams"];
     lines.push(
-        "This workspace has a diagram editor (Mindmap). Diagrams in it are mind maps, org charts, trees and flowcharts the person can open, edit, present and share."
+        "This workspace has a diagram editor (Mindmap). Diagrams in it are mind maps, org charts, trees and flowcharts the person can open, edit, present and share.",
+        "Flowcharts are read and written as text in the step language — the same text the editor's Steps panel shows beside the chart, so a flowchart you write is one a person could have typed.",
+        STEPS_LANGUAGE
     );
     if (names.has("create_diagram")) {
         lines.push(
             "When the person asks for a diagram, mind map, flowchart, org chart, process map or any visual — or to draw, map out or visualise something — create it with `create_diagram` rather than writing a list, ASCII art or a Mermaid block in the chat (unless they ask for Mermaid or code text itself). Never create one on your own initiative.",
             "Pick the type from the shape of the content: a topic broken into parts is a mindmap; reporting lines are an org_chart; a breakdown read left to right is a tree; steps, decisions and hand-offs are a flowchart.",
-            "Outlines: the centre on the first line, one topic per line, children indented two spaces as '- ' bullets; labels short (two to six words), three to seven branches, no more than four levels. Flowcharts: Mermaid `flowchart TD` (or LR for wide, shallow flows); starts and ends as ([...]), decisions as {...} with every branch labelled (-->|yes|), stores as [(...)], and `subgraph Name ... end` for phases, teams or systems.",
+            "Outlines: the centre on the first line, one topic per line, children indented two spaces as '- ' bullets; labels short (two to six words), three to seven branches, no more than four levels. Flowcharts: write `steps` — short steps (two to six words), every question ending in '?' with each branch labelled (Yes/No or the real answers). Use `mermaid` only when the chart needs groups (subgraphs) or must run left to right.",
             "When the diagram is about their company, product, customers or plans, look through their sources first and draw what they say; mark anything that comes from no source as an assumption in its label (e.g. 'Pricing (assumption)')."
         );
     }
     lines.push(
-        "To answer about or change an existing diagram, call `find_diagrams` (with no query it lists the ones opened most recently; the first is usually the one on screen when they say 'this'), then `read_diagram`." +
+        "To answer about or change an existing diagram, call `find_diagrams` (with no query it lists the ones opened most recently; the first is usually the one on screen when they say 'this'), then `read_diagram`. It shows a flowchart as step text, with each step's box id listed under it." +
             (names.has("edit_diagram")
-                ? " Change it with `edit_diagram`, naming shapes by the ids (n_…) read_diagram shows; prefer small edits to drawing it again, and say which diagram you changed."
+                ? " Change a flowchart with `edit_diagram` and `steps`: the text read_diagram showed, every line, changed where the person asked — boxes whose words you keep keep their ids, so their comments and links stay. Change a mind map, or make one small change, with `edits` naming shapes by the ids (n_…) read_diagram shows. Say which diagram you changed."
                 : " You cannot change diagrams for this person here; describe the change for them to make.")
     );
     if (names.has("create_diagram") || names.has("edit_diagram")) {

@@ -7,6 +7,7 @@
 import {
     createDiagramTools,
     diagramToolsPrompt,
+    STEPS_LANGUAGE,
     type DiagramToolOptions,
 } from "~/server/chat-diagram-tools";
 import {
@@ -81,12 +82,34 @@ describe("which tools", () => {
     it("tells the model to draw rather than paste, and when it may not change one", () => {
         const all = diagramToolsPrompt(createDiagramTools(ctx, ALL));
         expect(all).toContain("create it with `create_diagram` rather than writing a list");
-        expect(all).toContain("Change it with `edit_diagram`");
+        expect(all).toContain("Change a flowchart with `edit_diagram` and `steps`");
+        expect(all).toContain("with `edits` naming shapes by the ids");
         const readOnly = diagramToolsPrompt(
             createDiagramTools(ctx, { ...ALL, canCreate: false, canEdit: false })
         );
         expect(readOnly).not.toContain("`create_diagram`");
         expect(readOnly).toContain("You cannot change diagrams for this person here");
+    });
+
+    it("teaches the step language once, with a decision, its branches and a loop back, and prefers it for flowcharts", () => {
+        const all = diagramToolsPrompt(createDiagramTools(ctx, ALL));
+        expect(all.split(STEPS_LANGUAGE)).toHaveLength(2);
+        expect(STEPS_LANGUAGE).toContain(
+            "In stock?\n  Yes: Pick and pack\n  No: Reorder from supplier -> Receive the order"
+        );
+        expect(all).toContain("Flowcharts: write `steps`");
+        expect(all).toContain("Use `mermaid` only when the chart needs groups");
+        // Nothing in square brackets: the chat reads [x] as a citation.
+        expect(STEPS_LANGUAGE).not.toMatch(/\[/);
+        // Even a reader needs the language to read a flowchart.
+        const readOnly = diagramToolsPrompt(
+            createDiagramTools(ctx, { ...ALL, canCreate: false, canEdit: false })
+        );
+        expect(readOnly).toContain(STEPS_LANGUAGE);
+        const create = createDiagramTools(ctx, ALL).tools.find(t => t.name === "create_diagram")!;
+        const params = create.parameters as { properties: Record<string, { description: string }> };
+        expect(params.properties.steps!.description).toContain("Yes: Pick and pack");
+        expect(create.description).toContain("type flowchart: send steps");
     });
 });
 
@@ -163,6 +186,19 @@ describe("create_diagram", () => {
         await expect(
             create.run({ title: "x", type: "mindmap", outline: "- A", folder: "Finance" }, signal)
         ).rejects.toThrow(/Create it without a folder/);
+    });
+
+    it("hands step text for a flowchart straight to the service", async () => {
+        (createDiagram as jest.Mock).mockResolvedValue({ row: row(14), doc: DOC });
+        const { tool: create } = tool("create_diagram");
+        const steps = "Start\nPaid?\n  Yes: Ship it\n  No: Send a reminder -> Paid?\nEnd";
+        await create.run({ title: "Orders", type: "flowchart", steps }, signal);
+        expect(createDiagram).toHaveBeenCalledWith(
+            ctx,
+            expect.objectContaining({
+                spec: expect.objectContaining({ title: "Orders", type: "flowchart", steps }),
+            })
+        );
     });
 
     it("rejects arguments it cannot use", async () => {
@@ -282,6 +318,47 @@ describe("edit_diagram", () => {
         await expect(
             edit.run({ diagram: "doc 3", edits: [{ op: "arrange" }] }, signal)
         ).rejects.toThrow(/not a diagram id/);
+    });
+
+    it("rewrites a flowchart from steps, drawn before any id edits, all in one call", async () => {
+        (editDiagram as jest.Mock).mockResolvedValue({
+            row: row(12),
+            doc: DOC,
+            applied: ["Redrew the flowchart from 2 steps: kept 2 of its boxes."],
+            added: [],
+        });
+        const { tool: edit } = tool("edit_diagram");
+        const text = await edit.run(
+            { diagram: "m12", steps: "A\nB", edits: [{ op: "rename", node: "n_1", text: "Ask" }] },
+            signal
+        );
+        expect(editDiagram).toHaveBeenCalledWith(ctx, 12, [
+            { op: "steps", text: "A\nB" },
+            { op: "rename", node: "n_1", text: "Ask" },
+        ]);
+        expect(text).toContain("Redrew the flowchart from 2 steps");
+        // A rewrite sent inside edits, as some models do, is the same call.
+        await edit.run({ diagram: "m12", edits: [{ op: "steps", text: "A\nB" }] }, signal);
+        expect(editDiagram).toHaveBeenLastCalledWith(ctx, 12, [{ op: "steps", text: "A\nB" }]);
+        // Neither steps nor edits: nothing to do, and nothing touched.
+        (editDiagram as jest.Mock).mockClear();
+        await expect(edit.run({ diagram: "m12" }, signal)).rejects.toThrow(
+            /send steps .* or edits/
+        );
+        expect(editDiagram).not.toHaveBeenCalled();
+    });
+
+    it("says back the lines a rewrite could not read, and that nothing changed", async () => {
+        const { tool: edit } = tool("edit_diagram");
+        (editDiagram as jest.Mock).mockRejectedValueOnce(
+            new DiagramEditError(
+                'Edit 1: some lines of the steps could not be read. Line 2 ("Pack -> Nowhere"): "-> Nowhere" points at no step.',
+                0
+            )
+        );
+        await expect(
+            edit.run({ diagram: "m12", steps: "Start\nPack -> Nowhere" }, signal)
+        ).rejects.toThrow(/Line 2 .*points at no step.*Nothing was changed/);
     });
 
     it("reads edits the way small models write them", async () => {

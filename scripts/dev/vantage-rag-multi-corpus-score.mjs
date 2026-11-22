@@ -180,10 +180,11 @@ export function scoreRetrieval(bundle, corpus, runs) {
             coveredFacts,
             offeredDocuments: offered.size,
             selectedDocuments: selectedDocuments.size,
-            selectedExcerpts: selected.length,
+            selectedExcerpts: selected.filter(source => source.kind === "excerpt").length,
             frozenBytes: Number(run.frozenBytes ?? 0),
             generationAttempted: Boolean(run.generation),
             generationFailed: run.generation?.status === "failed",
+            generationAccepted: run.generation?.status === "accepted",
             failed: !["ok", "accepted", "success"].includes(run.status),
             failureCode:
                 run.failure?.code ??
@@ -214,6 +215,9 @@ export function scoreRetrieval(bundle, corpus, runs) {
             excludedUnmatchedCases: attempts.length - rows.length,
             rawAttempts: attempts.length,
             rawAttemptFailures: attempts.filter(row => row.failed).length,
+            rawAttemptGenerationAttempts: attempts.filter(row => row.generationAttempted).length,
+            rawAttemptGenerationAccepted: attempts.filter(row => row.generationAccepted).length,
+            rawAttemptGenerationFailures: attempts.filter(row => row.generationFailed).length,
             rawAttemptFrozenBytes: attempts.reduce((sum, row) => sum + row.frozenBytes, 0),
             rawAttemptOfferedDocuments: attempts.reduce(
                 (sum, row) => sum + row.offeredDocuments,
@@ -230,6 +234,7 @@ export function scoreRetrieval(bundle, corpus, runs) {
             failures: rows.filter(row => row.failed).length,
             generationAttempts: rows.filter(row => row.generationAttempted).length,
             generationFailures: rows.filter(row => row.generationFailed).length,
+            generationAccepted: rows.filter(row => row.generationAccepted).length,
             fullyCoveredCases: rows.filter(row => row.coveredFacts === row.totalFacts).length,
             ...totals,
             maxFrozenBytes: Math.max(0, ...rows.map(row => row.frozenBytes)),
@@ -298,6 +303,8 @@ export function scoreRetrieval(bundle, corpus, runs) {
             schemaVersion: "vantage-rag-multi-corpus-scores/v1",
             caseCount: bundle.cases.length,
             resultCount: details.length,
+            missingCaseArmResults:
+                new Set(details.map(row => row.arm)).size * bundle.cases.length - details.length,
             longQuestionCount,
             corpusMatching: {
                 strictEligibleCases: [...matches.values()].filter(facts =>

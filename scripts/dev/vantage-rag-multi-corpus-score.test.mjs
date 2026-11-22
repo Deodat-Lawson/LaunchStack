@@ -121,3 +121,16 @@ test("excludes the entire case from primary scores when a second fact is unresol
     assert.equal(scored.summary.arms.baseline.rawAttempts, 1);
     assert.equal(scored.summary.arms.baseline.excludedUnmatchedCases, 1);
 });
+test("counts only excerpt units and separates raw generation outcomes", () => {
+    const selected = [
+        { ...run.selected[0], kind: "excerpt" },
+        { ...run.selected[0], documentId: "22", kind: "full_document" },
+    ];
+    const scored = scoreRetrieval(bundle, corpus, [
+        { ...run, selected, generation: { status: "accepted" } },
+    ]);
+    assert.equal(scored.summary.arms.baseline.selectedExcerpts, 1);
+    assert.equal(scored.summary.arms.baseline.selectedDocuments, 2);
+    assert.equal(scored.summary.arms.baseline.rawAttemptGenerationAccepted, 1);
+    assert.equal(scored.summary.arms.baseline.rawAttemptGenerationFailures, 0);
+});

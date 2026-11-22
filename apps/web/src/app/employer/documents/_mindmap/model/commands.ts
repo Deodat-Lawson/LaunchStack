@@ -73,7 +73,8 @@ import {
     themeMode,
     type ThemeMode,
 } from "./palette";
-import { shapeDef, shapeTextBox } from "./shapes";
+import { isContainer, shapeDef, shapeTextBox } from "./shapes";
+import { containerAt } from "./containers";
 import { applyThemeToDoc, paintTopics, recolourTopics, topicType } from "./theme";
 import type { CommitOptions, EditorStore } from "./store";
 import { restyleMovedTopics } from "./topicStyle";
@@ -146,7 +147,15 @@ export function insertShape(
     at: Point,
     opts: { text?: string; w?: number; h?: number; parentId?: string | null } = {}
 ): string {
-    const made = createNodeAt(shape, at, { ...opts, mode: docMode(store) });
+    // A box placed inside a frame joins it (the frame then holds it as it
+    // grows); a frame placed inside one is not nested by accident.
+    const parentId =
+        opts.parentId !== undefined
+            ? opts.parentId
+            : isContainer(shape)
+              ? null
+              : (containerAt(activePage(store.getState().doc), at)?.id ?? null);
+    const made = createNodeAt(shape, at, { ...opts, parentId, mode: docMode(store) });
     // On a flowchart every new box wears the flowchart look, whatever made it.
     const look = flowLookOf(store.getState().doc);
     const node = look
@@ -1483,6 +1492,9 @@ export function addNextStep(
     const page = activePage(store.getState().doc);
     const source = nodeById(page, sourceId);
     if (!source) return null;
+    // A frame or a group is never cloned with an arrow to the copy. An empty
+    // frame gets its first step inside; otherwise Tab on one does nothing.
+    if (isContainer(source.shape)) return firstStepInside(store, source);
 
     const look = flowLookOf(store.getState().doc);
     const mode = docMode(store);
@@ -1583,6 +1595,22 @@ export function addNextStep(
 }
 
 /**
+ * Tab on an empty frame: its first step, in the top middle of it, joined to
+ * the frame, label open. Null for a group, or a frame that holds something.
+ */
+function firstStepInside(store: EditorStore, frame: DiagramNode): string | null {
+    const page = activePage(store.getState().doc);
+    if (frame.shape === "group" || childrenOf(page, frame.id).length > 0) return null;
+    const look = flowLookOf(store.getState().doc);
+    const shape = look?.stepShape ?? "process";
+    const size = look?.boxLook(shape, docMode(store)).size ?? shapeDef(shape).defaultSize;
+    const at = { x: frame.x + frame.w / 2, y: frame.y + Math.min(frame.h / 2, 48 + size.h / 2) };
+    const id = insertShape(store, shape, at, { parentId: frame.id });
+    store.setEditing({ kind: "node", id });
+    return id;
+}
+
+/**
  * Tab and "Add connected": the next step on a flowchart, a child topic on a
  * mindmap. One entry point so the key, the menu and the palette agree.
  */
@@ -1590,7 +1618,8 @@ export function addConnected(store: EditorStore, nodeId: string): string | null 
     const { doc } = store.getState();
     const node = nodeById(activePage(doc), nodeId);
     if (!node) return null;
-    return stepsFrom(doc.settings.kind, node)
+    // A frame or a group: never a copy, never a topic hung off it.
+    return isContainer(node.shape) || stepsFrom(doc.settings.kind, node)
         ? addNextStep(store, nodeId)
         : addChildTopic(store, nodeId);
 }

@@ -24,7 +24,7 @@
 
 import { arrangesItself } from "../../model/commands";
 import { activePage } from "../../model/doc";
-import { tidyChart } from "../../model/flowchart/arrange";
+import { adoptFollowers, tidyChart } from "../../model/flowchart/arrange";
 import { boardMode, flowchartLook } from "../../model/flowchart/look";
 import { reconcileSteps, serializeSteps, type StepsBinding } from "../../model/flowchart/reconcile";
 import { applySteps, samePage, structureOf, type ApplyResult } from "../../model/flowchart/steps";
@@ -310,7 +310,7 @@ export class StepsSync {
     private placed(page: DiagramPage, result: ApplyResult): ApplyResult {
         if (result.page === page) return result;
         const next = arrangesItself(this.store.getState().doc)
-            ? tidyChart(result.page, result.ids)
+            ? tidyChart(adoptFollowers(page, result.page), result.ids)
             : result.page;
         // Laid out again to where it already was: nothing to commit.
         if (samePage(page, next)) return { ...result, page };

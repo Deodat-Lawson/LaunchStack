@@ -40,6 +40,7 @@ import {
     normalizeRect,
     projectOntoPolyline,
     rectContains,
+    rectContainsRect,
     rectsIntersect,
     screenToWorld,
     snap as snapValue,
@@ -53,6 +54,13 @@ import { computeSnap, SNAP_THRESHOLD } from "../model/snapping";
 import type { EditorStore } from "../model/store";
 import { useIsActive } from "./EditorContext";
 import { flowUiFor } from "../flow";
+import {
+    clickTarget,
+    containerAt,
+    FRAME_EDGE,
+    onFrameBody,
+    outermostGroup,
+} from "../model/containers";
 import { dressBox, edgeOptions, flowLookOf } from "../model/flowchart/look";
 import type {
     DiagramEdge,
@@ -788,16 +796,29 @@ export function useCanvasInteractions(
                 return;
             }
 
-            if (nodeId) {
+            // A frame's empty inside is room to select in, as on the canvas:
+            // a drag there is a marquee over the boxes it holds. The frame
+            // itself moves by its title or its edge, or once it is selected.
+            const pressed = nodeId ? nodeById(page, nodeId) : undefined;
+            const inFrame =
+                pressed !== undefined &&
+                !additive &&
+                !store.isSelected("node", pressed.id) &&
+                onFrameBody(pressed, world, FRAME_EDGE / state.viewport.zoom);
+
+            if (nodeId && !inFrame) {
                 const node = nodeById(page, nodeId);
                 if (node?.locked) {
                     gesture.current = { ...base, kind: "none" };
                     return;
                 }
+                // A box in a group is taken as its group, unless someone is
+                // working inside the group already (double-click goes in).
+                const target = clickTarget(page, nodeId, store.getState().selection);
                 if (additive) {
-                    store.toggleSelection({ kind: "node", id: nodeId });
-                } else if (!store.isSelected("node", nodeId)) {
-                    store.setSelection([{ kind: "node", id: nodeId }]);
+                    store.toggleSelection({ kind: "node", id: target });
+                } else if (!store.isSelected("node", target)) {
+                    store.setSelection([{ kind: "node", id: target }]);
                 }
                 if (!startMove()) gesture.current = { ...base, kind: "none" };
                 return;
@@ -1263,14 +1284,27 @@ export function useCanvasInteractions(
                     store.setMarquee(null);
                     if (rect && g.moved) {
                         const page = activePage(state.doc);
-                        const hits = visibleNodes(page)
-                            .filter(nd => !nd.locked && rectsIntersect(rect, nodeBounds(nd)))
-                            // Selecting a group member selects the group.
-                            .map(nd => nd.id);
+                        const hits = [
+                            ...new Set(
+                                visibleNodes(page)
+                                    .filter(
+                                        nd =>
+                                            !nd.locked &&
+                                            nd.shape !== "group" &&
+                                            // A frame is caught whole, never by
+                                            // a marquee drawn inside it.
+                                            (isContainer(nd.shape)
+                                                ? rectContainsRect(rect, nodeBounds(nd))
+                                                : rectsIntersect(rect, nodeBounds(nd)))
+                                    )
+                                    // Selecting a group member selects the group.
+                                    .map(nd => outermostGroup(page, nd.id)?.id ?? nd.id)
+                            ),
+                        ];
                         // The connectors running between the boxes caught are
                         // part of what was lassoed, so they come too — and a
                         // drag then carries their bends with the boxes.
-                        const caught = new Set(hits);
+                        const caught = new Set(withDescendants(page, hits));
                         const edgeHits = page.edges.filter(
                             ed =>
                                 !ed.locked &&
@@ -1376,6 +1410,13 @@ export function useCanvasInteractions(
                             y: rect.y,
                             w: rect.w,
                             h: rect.h,
+                            // Drawn inside a frame, it joins the frame.
+                            parentId: isContainer(shape)
+                                ? null
+                                : (containerAt(activePage(state.doc), {
+                                      x: rect.x + rect.w / 2,
+                                      y: rect.y + rect.h / 2,
+                                  })?.id ?? null),
                         });
                         const look = flowLookOf(store.getState().doc);
                         const node = look
@@ -1493,10 +1534,23 @@ export function useCanvasInteractions(
                 lastHit.current.nodeId ??
                 target?.closest("[data-node-id]")?.getAttribute("data-node-id") ??
                 null;
-            if (nodeId) {
-                const page = activePage(state.doc);
-                const node = nodeById(page, nodeId);
-                if (node?.locked) return;
+            const world = toWorld(e.clientX, e.clientY);
+            const page = activePage(state.doc);
+            const hitNode = nodeId ? nodeById(page, nodeId) : undefined;
+            // Inside a frame, below its title, a double-click is a double-click
+            // on the board there — what it makes joins the frame. Its title is
+            // renamed by double-clicking the title itself.
+            const frame =
+                hitNode && hitNode.shape === "frame" && world.y > hitNode.y ? hitNode : undefined;
+            if (nodeId && hitNode && !frame) {
+                if (hitNode.locked) return;
+                // A box in a group: the first double-click goes inside the
+                // group and selects it; the next one opens its label.
+                const group = outermostGroup(page, nodeId);
+                if (group && !store.isSelected("node", nodeId)) {
+                    store.selectNodes([nodeId]);
+                    return;
+                }
                 store.selectNodes([nodeId]);
                 cb.current.onEditText({ kind: "node", id: nodeId });
                 return;
@@ -1519,7 +1573,6 @@ export function useCanvasInteractions(
             // Empty canvas: on a flowchart, the "What goes here?" menu opens
             // there; on a mindmap, a topic is dropped where they clicked, and
             // typing starts.
-            const world = toWorld(e.clientX, e.clientY);
             if (
                 flowUiFor(store)?.onCanvasDoubleClick(store, {
                     world,
@@ -1533,7 +1586,10 @@ export function useCanvasInteractions(
             const made = createNodeAt(
                 look ? look.stepShape : flow ? "process" : "mind-branch",
                 world,
-                { mode: docMode(store) }
+                {
+                    mode: docMode(store),
+                    parentId: frame?.id ?? containerAt(page, world)?.id ?? null,
+                }
             );
             const node = look ? dressBox(look, made, docMode(store)) : made;
             store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {

@@ -173,15 +173,51 @@ export function treePositions(
 }
 
 /**
+ * The frame (or lane) holding a box: its nearest container that is not a
+ * group. Null at the top level of the page.
+ */
+export function holderOf(page: DiagramPage, nodeId: string): string | null {
+    let cur = nodeById(page, nodeId);
+    const seen = new Set<string>();
+    while (cur?.parentId && !seen.has(cur.id)) {
+        seen.add(cur.id);
+        const parent = nodeById(page, cur.parentId);
+        if (!parent) return null;
+        if (isContainer(parent.shape) && parent.shape !== "group") return parent.id;
+        cur = parent;
+    }
+    return null;
+}
+
+/**
  * The chart holding `seeds`, laid out top to bottom — a tidy tree when it is
  * one (everything the keys make is), else the layered layout for merges and
  * loops — with its first start kept where it was, so the chart grows from
  * the same spot. Hand-placed bends are dropped: they belonged to the old
  * positions. Returns `page` itself when nothing moves.
+ *
+ * Boxes in a frame are laid out among themselves, inside it (the frame grows
+ * to hold them — `model/containers.ts`); the boxes outside any frame among
+ * themselves. An arrow from one to the other is left to route itself. A
+ * chart with no frames is laid out as one.
  */
 export function tidyChart(page: DiagramPage, seeds: readonly string[]): DiagramPage {
     const ids = chartOf(page, seeds);
     if (ids.length < 2) return page;
+    const parts = new Map<string, string[]>();
+    for (const id of ids) {
+        const key = holderOf(page, id) ?? "";
+        const part = parts.get(key);
+        if (part) part.push(id);
+        else parts.set(key, [id]);
+    }
+    let next = page;
+    for (const part of parts.values()) if (part.length > 1) next = tidyPart(next, part);
+    return next;
+}
+
+/** `ids` laid out as one chart, from where its first start is. */
+function tidyPart(page: DiagramPage, ids: readonly string[]): DiagramPage {
     const members = new Set(ids);
     const nodes = page.nodes.filter(nd => members.has(nd.id));
     const edges = page.edges.filter(
@@ -221,6 +257,32 @@ export function tidyChart(page: DiagramPage, seeds: readonly string[]): DiagramP
               )
             : page.edges,
     };
+}
+
+/**
+ * New boxes on `after` (not on `before`) that belong to no frame join the
+ * frame of the box they follow — a step written after a step in a frame is
+ * in that frame too.
+ */
+export function adoptFollowers(before: DiagramPage, after: DiagramPage): DiagramPage {
+    const old = new Set(before.nodes.map(nd => nd.id));
+    const parentOfId = new Map(after.nodes.map(nd => [nd.id, nd.parentId]));
+    let changed = false;
+    const nodes = after.nodes.map(nd => {
+        if (old.has(nd.id) || nd.parentId || isContainer(nd.shape)) return nd;
+        for (const e of after.edges) {
+            if (e.to.nodeId !== nd.id || !e.from.nodeId || e.from.nodeId === nd.id) continue;
+            const from = e.from.nodeId;
+            const holder = parentOfId.get(from) ? holderOf(after, from) : null;
+            if (holder) {
+                changed = true;
+                parentOfId.set(nd.id, holder);
+                return { ...nd, parentId: holder };
+            }
+        }
+        return nd;
+    });
+    return changed ? { ...after, nodes } : after;
 }
 
 /** The words a decision's branches are labelled with, in the reader's language. */
@@ -433,13 +495,14 @@ function centredOn(was: DiagramNode, now: DiagramNode, w: number, h: number): Di
  * - a box that changed kind (a question mark added) keeps its centre, at
  *   its new kind's size;
  * - a new box goes after the box it follows, below it and beside that
- *   box's other steps (`placeAfter`), or below the chart when nothing leads
- *   into it;
+ *   box's other steps (`placeAfter`), and into its frame if it has one, or
+ *   below the chart when nothing leads into it;
  * - an arrow that was there keeps its bends and the sides it uses.
  */
-export function keepPlaced(before: DiagramPage, after: DiagramPage): DiagramPage {
+export function keepPlaced(before: DiagramPage, drawn: DiagramPage): DiagramPage {
     const old = new Map(before.nodes.map(nd => [nd.id, nd]));
-    if (old.size === 0 || after === before) return after;
+    if (old.size === 0 || drawn === before) return drawn;
+    const after = adoptFollowers(before, drawn);
 
     const placed = new Map<string, DiagramNode>();
     const fresh: DiagramNode[] = [];

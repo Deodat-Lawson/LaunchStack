@@ -514,6 +514,13 @@ const NodeHit = memo(function NodeHit({
                     <rect width={node.w} height={node.h} fill="transparent" />
                 </g>
             )}
+            {/* A frame is moved and renamed by its title, above it: the title's
+                band is part of the frame, though its words take no pointer. */}
+            {node.shape === "frame" && (
+                <g transform={transform}>
+                    <rect y={-26} width={node.w} height={24} fill="transparent" />
+                </g>
+            )}
             <ShapeView node={node} hideText={hideText} idScope={idScope} />
             {node.locked && <LockBadge node={node} zoom={zoom} />}
         </g>

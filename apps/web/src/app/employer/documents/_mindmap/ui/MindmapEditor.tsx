@@ -41,12 +41,13 @@ import {
     setFlowLayout,
     viewportCentre,
 } from "../model/commands";
-import { worksAsFlow } from "../model/doc";
+import { activePage, worksAsFlow } from "../model/doc";
 import { dressBox, flowLookOf } from "../model/flowchart/look";
 import { createNodeAt } from "../model/factory";
 import { getMindmap } from "../lib/api";
 import { isImageFile } from "../lib/images";
-import { shapeHoldsText } from "../model/shapes";
+import { isContainer, shapeHoldsText } from "../model/shapes";
+import { containerAt } from "../model/containers";
 import { parseDoc } from "../model/serialize";
 import { EditorStore, type ChromeDepth, type EditorState } from "../model/store";
 import { paintNewTopics } from "../model/topicStyle";
@@ -475,7 +476,14 @@ export function MindmapEditor(props: MindmapEditorProps) {
             const world = worldPointAt(e.clientX, e.clientY);
 
             if (shape) {
-                const dropped = createNodeAt(shape as ShapeId, world, { mode: docMode(store) });
+                // Dropped inside a frame, it joins the frame.
+                const holder = isContainer(shape as ShapeId)
+                    ? null
+                    : containerAt(activePage(store.getState().doc), world);
+                const dropped = createNodeAt(shape as ShapeId, world, {
+                    mode: docMode(store),
+                    parentId: holder?.id ?? null,
+                });
                 const look = flowLookOf(store.getState().doc);
                 const node = look ? dressBox(look, dropped, docMode(store)) : dropped;
                 store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {

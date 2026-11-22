@@ -10,7 +10,8 @@
 import { arrangeIfAuto, docMode, insertEdge, labelBranch } from "../../model/commands";
 import { activePage, addEdges, addNodes, nodeById } from "../../model/doc";
 import { flowchartLook } from "../../model/flowchart/look";
-import { worldToScreen } from "../../model/geometry";
+import { containerAt } from "../../model/containers";
+import { nodeCenter, worldToScreen } from "../../model/geometry";
 import { shapeDef } from "../../model/shapes";
 import type { EditorStore } from "../../model/store";
 import type { DiagramNode, Point } from "../../model/types";
@@ -136,7 +137,10 @@ export function pick(store: EditorStore, choice: Pick): void {
         if (plan.edge) insertEdge(store, plan.edge);
         return;
     }
-    const node = plan.node;
+    // Picked inside a frame (a double-click in it, an arrow let go in it),
+    // the box joins the frame.
+    const holder = containerAt(activePage(state.doc), nodeCenter(plan.node));
+    const node = holder ? { ...plan.node, parentId: holder.id } : plan.node;
     const edges = plan.edge ? [plan.edge] : [];
     store.group(`Add ${shapeDef(node.shape).name}`, () => {
         store.updatePage(p => addEdges(addNodes(p, [node]), edges), {

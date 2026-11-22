@@ -21,7 +21,11 @@ import {
 } from "./weekly-review-types";
 import { fingerprint } from "@launchstack/pipelines/vantage/weekly-review-validation";
 import { fitTopicEvidence } from "./weekly-review-topic-freeze";
-import { prepareTopicSelection } from "./weekly-review-topic-run";
+import {
+    prepareTopicSelection,
+    prewarmTopicDigests,
+    resolveTopicSelectionProviders,
+} from "./weekly-review-topic-run";
 import { TOPIC_FIRST_LIMITS, topicFirstProvider } from "./weekly-review-topic-types";
 import { weeklyReviewTestPorts } from "./weekly-review-test-provider";
 import {
@@ -213,20 +217,82 @@ export async function generateWeeklyReview(
                     // Apply the fixture guard before digest or exploration dispatch.
                     if (seed.manifest.configuration.provider !== "configured")
                         weeklyReviewTestPorts(input);
+                    const query = (statement: string, parameters?: unknown[]) =>
+                        weeklyReviewDatabase.transaction(async query => {
+                            await query("SET LOCAL statement_timeout='5000ms'");
+                            return query(statement, parameters);
+                        });
+                    const needsDigests = seed.manifest.configuration.provider !== "seeds";
+                    if (needsDigests) await repository.beginDigestPreparation(current, reserved.id);
+                    const digestStarted = Date.now();
+                    let providers:
+                        | Awaited<ReturnType<typeof resolveTopicSelectionProviders>>
+                        | undefined;
+                    let prepared: Awaited<ReturnType<typeof prewarmTopicDigests>> = {
+                        digests: new Map(),
+                        digestIds: [] as string[],
+                        timing: {
+                            digestStartedAt: new Date().toISOString(),
+                            digestCompletedAt: new Date().toISOString(),
+                            digestDurationMs: 0,
+                        },
+                    };
+                    try {
+                        if (needsDigests) {
+                            providers = await resolveTopicSelectionProviders(seed);
+                            prepared = await prewarmTopicDigests({
+                                actor: await currentActor(),
+                                versionIds: seed.documents.map(document => document.version),
+                                query,
+                                provider: providers.digest,
+                                authorizeDocument: async () => {
+                                    const [epoch] = await query(
+                                        "SELECT version FROM pdr_ai_v2_vantage_weekly_review_epochs WHERE company_id=$1::bigint",
+                                        [actor.companyId]
+                                    );
+                                    if (String(epoch?.version) !== seed.manifest.epoch)
+                                        throw new WeeklyReviewConflict("source_authority_changed");
+                                    return true;
+                                },
+                            });
+                            await repository.recordDigestPreparation(current, reserved.id, {
+                                digestIds: prepared.digestIds,
+                                timing: { ...prepared.timing, digestOutcome: "ready" },
+                            });
+                        }
+                    } catch (error) {
+                        if (needsDigests)
+                            await repository.recordDigestPreparation(current, reserved.id, {
+                                timing: {
+                                    digestCompletedAt: new Date().toISOString(),
+                                    digestDurationMs: Date.now() - digestStarted,
+                                    digestOutcome: "failed",
+                                },
+                            });
+                        throw error;
+                    }
                     const deadlineAt = await repository.claimExploration(current, reserved.id);
                     if (seed.manifest.configuration.provider !== "seeds") stage("exploring");
-                    const selection = await prepareTopicSelection({
-                        seed,
-                        actor: await currentActor(),
-                        deadlineAt,
-                        query: (statement, parameters) =>
-                            weeklyReviewDatabase.transaction(async query => {
-                                await query("SET LOCAL statement_timeout='5000ms'");
-                                return query(statement, parameters);
-                            }),
-                        record: values =>
-                            repository.recordExploration(current, reserved.id, values),
+                    await repository.recordExploration(current, reserved.id, {
+                        timing: { explorationStartedAt: new Date().toISOString() },
                     });
+                    let selection;
+                    try {
+                        selection = await prepareTopicSelection({
+                            seed,
+                            actor: await currentActor(),
+                            deadlineAt,
+                            digests: prepared.digests,
+                            providers,
+                            query,
+                            record: values =>
+                                repository.recordExploration(current, reserved.id, values),
+                        });
+                    } finally {
+                        await repository.recordExploration(current, reserved.id, {
+                            timing: { explorationCompletedAt: new Date().toISOString() },
+                        });
+                    }
                     const frozen = await repository.freezeTopic(current, reserved.id, query =>
                         authority.withTopicSourceReader(query, current, read =>
                             fitTopicEvidence(reserved.id, seed, selection, read)

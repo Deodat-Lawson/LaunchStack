@@ -21,7 +21,7 @@ export const TopicRetrievalContextSchema = z
                 z
                     .object({
                         ref: z.string().min(1).max(200),
-                        reason: z.enum(["watch", "carryover", "change", "lane", "recency"]),
+                        reason: z.enum(["watch", "carryover", "question", "change", "lane", "recency"]),
                     })
                     .strict()
             )

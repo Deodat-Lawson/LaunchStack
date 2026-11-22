@@ -106,4 +106,69 @@ describe("canonical document text and digests", () => {
         expect(digest.items[0]?.quote).toBe(text);
         expect(groundDigest(digest, text).items).toHaveLength(1);
     });
+    it("ephemeral benchmark digests remain grounded without touching the shared cache", async () => {
+        const text = "The release decision requires 42 completed checks and a security review.";
+        const queries: string[] = [];
+        const result = await getDigestsForVersions({
+            companyId: "1",
+            versionIds: ["8"],
+            documentScope: () => true,
+            cachePolicy: "ephemeral",
+            query: async sql => {
+                queries.push(sql);
+                if (sql.includes("document_version_digests")) throw Error("shared_cache_touched");
+                if (sql.includes("JOIN pdr_ai_v2_document d"))
+                    return [{ id: "7", category: "Shared", title: "Release" }];
+                if (sql.includes("document_settings")) return [];
+                if (sql.includes("AS content_hash"))
+                    return [{ content_hash: canonicalTextHash(text) }];
+                if (sql.includes("AS chunk_count"))
+                    return [{ chunk_count: 1, text_bytes: Buffer.byteLength(text) }];
+                return [{ id: "1", page_number: 1, line_start: null, content: text }];
+            },
+            provider: async () => ({
+                headline: "Injected",
+                items: [
+                    { kind: "fact", text, quote: text },
+                    { kind: "fact", text: "invented", quote: "absent quote" },
+                ],
+            }),
+        });
+        expect(result.get("8")?.id).toMatch(/^ephemeral:8:/);
+        expect(result.get("8")?.items).toHaveLength(1);
+        expect(queries.some(sql => sql.includes("document_version_digests"))).toBe(false);
+    });
+    it("aborting an ignoring digest provider fences a late cache publication", async () => {
+        const text = "The release decision requires 42 completed checks and a security review.";
+        const controller = new AbortController();
+        const writes: string[] = [];
+        await expect(
+            getDigestsForVersions({
+                companyId: "1",
+                versionIds: ["8"],
+                documentScope: () => true,
+                signal: controller.signal,
+                query: async sql => {
+                    if (sql.startsWith("INSERT")) writes.push(sql);
+                    if (sql.includes("JOIN pdr_ai_v2_document d"))
+                        return [{ id: "7", category: "Shared", title: "Release" }];
+                    if (
+                        sql.includes("document_settings") ||
+                        sql.includes("document_version_digests")
+                    )
+                        return [];
+                    if (sql.includes("AS content_hash"))
+                        return [{ content_hash: canonicalTextHash(text) }];
+                    if (sql.includes("AS chunk_count"))
+                        return [{ chunk_count: 1, text_bytes: Buffer.byteLength(text) }];
+                    return [{ id: "1", page_number: 1, line_start: null, content: text }];
+                },
+                provider: async () => {
+                    controller.abort();
+                    return { headline: "Late", items: [{ kind: "fact", text, quote: text }] };
+                },
+            })
+        ).rejects.toThrow();
+        expect(writes).toHaveLength(0);
+    });
 });

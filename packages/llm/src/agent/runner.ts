@@ -26,6 +26,7 @@ import type {
     AgentToolCall,
     AgentToolDefinition,
     AgentToolSpec,
+    AgentToolResult,
     AgentTranscriptItem,
 } from "./types";
 import { AgentAbortedError, AgentBudgetExceededError, AgentStepLimitError } from "./types";
@@ -43,7 +44,7 @@ export interface RunAgentOptions<T> {
     system: string;
     user: string;
     tools: readonly AgentToolDefinition[];
-    finalSchema: z.ZodType<T>;
+    finalSchema: z.ZodType<T, z.ZodTypeDef, unknown>;
     finalToolDescription?: string;
     /** Hard cap on model calls. */
     maxTurns: number;
@@ -51,6 +52,24 @@ export interface RunAgentOptions<T> {
     tokenBudget?: number;
     signal?: AbortSignal;
     onTurn?: (info: { turn: number; toolCalls: string[]; usage: ChatTokenUsage }) => void;
+    /** Opt-in recovery preserves all original call IDs and returns rejected calls as tool errors. */
+    overflowPolicy?: "tool-error";
+    maxToolCallsPerTurn?: number;
+    maxTotalToolCalls?: number;
+    onToolResult?: (info: {
+        call: AgentToolCall;
+        content: string;
+        isError: boolean;
+        reason:
+            | "tool_result"
+            | "schema_invalid"
+            | "unknown_tool"
+            | "tool_overflow"
+            | "total_call_limit"
+            | "submission_invalid"
+            | "submission_accepted"
+            | "tool_failed";
+    }) => Promise<void> | void;
 }
 
 function throwIfAborted(signal: AbortSignal | undefined): void {
@@ -127,6 +146,32 @@ export async function runAgent<T>(
     const transcript: AgentTranscriptItem[] = [{ role: "user", text: options.user }];
     let usage: ChatTokenUsage = {};
     let modelId: string | undefined;
+    let totalCalls = 0;
+    const perTurnLimit = options.maxToolCallsPerTurn ?? MAX_TOOL_CALLS_PER_TURN;
+    if (
+        !Number.isSafeInteger(perTurnLimit) ||
+        perTurnLimit < 1 ||
+        perTurnLimit > MAX_TOOL_CALLS_PER_TURN ||
+        (options.maxTotalToolCalls !== undefined &&
+            (!Number.isSafeInteger(options.maxTotalToolCalls) || options.maxTotalToolCalls < 1))
+    )
+        throw new RangeError("Invalid tool call limits");
+    const appendResult = async (
+        call: AgentToolCall,
+        content: string,
+        isError: boolean,
+        reason: Parameters<NonNullable<RunAgentOptions<T>["onToolResult"]>>[0]["reason"]
+    ) => {
+        const clipped = clip(content);
+        transcript.push({
+            role: "tool",
+            callId: call.id,
+            name: call.name,
+            content: clipped,
+            isError,
+        });
+        await options.onToolResult?.({ call, content: clipped, isError, reason });
+    };
 
     for (let turn = 1; turn <= maxTurns; turn++) {
         throwIfAborted(signal);
@@ -156,7 +201,10 @@ export async function runAgent<T>(
         usage = addTokenUsage(usage, turnUsage);
         modelId = response.modelId ?? modelId;
 
-        const calls = response.toolCalls.slice(0, MAX_TOOL_CALLS_PER_TURN);
+        const calls =
+            options.overflowPolicy === "tool-error"
+                ? response.toolCalls
+                : response.toolCalls.slice(0, perTurnLimit);
         transcript.push({ role: "assistant", text: response.text, toolCalls: calls });
         options.onTurn?.({ turn, toolCalls: calls.map(call => call.name), usage });
 
@@ -170,66 +218,82 @@ export async function runAgent<T>(
             continue;
         }
 
-        for (const call of calls) {
+        let submitted: { output: T } | undefined;
+        for (const [callIndex, call] of calls.entries()) {
             throwIfAborted(signal);
+            if (callIndex >= perTurnLimit) {
+                await appendResult(
+                    call,
+                    `At most ${perTurnLimit} tool calls can execute per turn. This call did not execute. Retry it in the next turn if needed.`,
+                    true,
+                    "tool_overflow"
+                );
+                continue;
+            }
+            if (
+                options.maxTotalToolCalls !== undefined &&
+                totalCalls >= options.maxTotalToolCalls
+            ) {
+                await appendResult(
+                    call,
+                    "The total tool-call budget is exhausted. This call did not execute.",
+                    true,
+                    "total_call_limit"
+                );
+                continue;
+            }
+            totalCalls++;
             if (call.name === SUBMIT_TOOL_NAME) {
                 const parsed = finalSchema.safeParse(call.arguments);
                 if (parsed.success) {
-                    return { output: parsed.data, turns: turn, usage, modelId, transcript };
+                    if (options.overflowPolicy !== "tool-error")
+                        return { output: parsed.data, turns: turn, usage, modelId, transcript };
+                    submitted = { output: parsed.data };
+                    await appendResult(call, "Result accepted.", false, "submission_accepted");
+                    continue;
                 }
-                transcript.push(toolError(call, formatZodIssues(parsed.error)));
+                await appendResult(call, formatZodIssues(parsed.error), true, "submission_invalid");
                 continue;
             }
 
             const tool = byName.get(call.name);
             if (!tool) {
-                transcript.push(
-                    toolError(
-                        call,
-                        `Unknown tool "${call.name}". Available: ${[...byName.keys(), SUBMIT_TOOL_NAME].join(", ")}.`
-                    )
+                await appendResult(
+                    call,
+                    `Unknown tool "${call.name}". Available: ${[...byName.keys(), SUBMIT_TOOL_NAME].join(", ")}.`,
+                    true,
+                    "unknown_tool"
                 );
                 continue;
             }
 
             const input = tool.inputSchema.safeParse(call.arguments);
             if (!input.success) {
-                transcript.push(toolError(call, formatZodIssues(input.error)));
+                await appendResult(call, formatZodIssues(input.error), true, "schema_invalid");
                 continue;
             }
 
+            let result: AgentToolResult;
             try {
-                const result = await tool.run(input.data, { signal });
-                transcript.push({
-                    role: "tool",
-                    callId: call.id,
-                    name: call.name,
-                    content: clip(result.content),
-                    isError: result.isError ?? false,
-                });
+                result = await tool.run(input.data, { signal });
             } catch (error) {
                 if (signal?.aborted) throw new AgentAbortedError();
-                transcript.push(
-                    toolError(
-                        call,
-                        `Tool failed: ${error instanceof Error ? error.message : String(error)}`
-                    )
+                await appendResult(
+                    call,
+                    `Tool failed: ${error instanceof Error ? error.message : String(error)}`,
+                    true,
+                    "tool_failed"
                 );
+                continue;
             }
+            await appendResult(call, result.content, result.isError ?? false, "tool_result");
         }
+        if (submitted) return { output: submitted.output, turns: turn, usage, modelId, transcript };
+        if (options.maxTotalToolCalls !== undefined && totalCalls >= options.maxTotalToolCalls)
+            throw new Error("agent_tool_call_limit");
     }
 
     throw new AgentStepLimitError(maxTurns, usage);
-}
-
-function toolError(call: AgentToolCall, message: string): AgentTranscriptItem {
-    return {
-        role: "tool",
-        callId: call.id,
-        name: call.name,
-        content: clip(message),
-        isError: true,
-    };
 }
 
 function formatZodIssues(error: z.ZodError): string {

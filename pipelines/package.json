@@ -74,6 +74,7 @@
     "./vantage/role-aware-ranking": "./src/vantage/role-aware-ranking.ts",
     "./vantage/internal-retrieval-decision": "./src/vantage/internal-retrieval-decision.ts",
     "./vantage/dynamic-retrieval-v3": "./src/vantage/dynamic-retrieval-v3.ts",
+    "./vantage/question-lexical-ranking": "./src/vantage/question-lexical-ranking.mjs",
     "./vantage/topic-retrieval-v1": "./src/vantage/topic-retrieval-v1.ts"
   },
   "files": [
@@ -334,6 +335,10 @@
       "./vantage/dynamic-retrieval-v3": {
         "types": "./dist/vantage/dynamic-retrieval-v3.d.ts",
         "default": "./dist/vantage/dynamic-retrieval-v3.js"
+      },
+      "./vantage/question-lexical-ranking": {
+        "types": "./dist/vantage/question-lexical-ranking.d.mts",
+        "default": "./dist/vantage/question-lexical-ranking.mjs"
       },
       "./vantage/topic-retrieval-v1": {
         "types": "./dist/vantage/topic-retrieval-v1.d.ts",

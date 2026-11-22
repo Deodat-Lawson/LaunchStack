@@ -1,4 +1,5 @@
 import { canonicalTextHash } from "@launchstack/store/document-digests";
+import { rankQuestion } from "@launchstack/pipelines/vantage/question-lexical-ranking";
 import { scopeAllowsDocument } from "~/lib/authz/scope-types";
 import type { WeeklyReviewAuthorityActor } from "./weekly-review-authority";
 import { listPersonalTopics } from "./weekly-review-personal-topics";
@@ -15,8 +16,10 @@ import {
     type WeeklyReviewQuery,
 } from "./weekly-review-types";
 
+export const TOPIC_LEXICAL_CANDIDATE_LIMIT = 256;
+
 const candidateSelect = `
-    SELECT d.id::text AS id, left(d.title,300) AS title, d.category,
+    SELECT d.id::text AS id, left(d.title,300) AS title, d.category, d.creation_key AS lexical_key,
            v.id::text AS version, v.created_at AS version_date
     FROM pdr_ai_v2_document d
     JOIN LATERAL (
@@ -106,19 +109,39 @@ export async function collectTopicSeed(
     for (const row of changed) add(row, "change");
     for (const row of recent) add(row, "recency");
 
-    const entries = [...ranked.values()];
+    const guidance = topics
+        .flatMap(topic => [
+            ...topic.openQuestions,
+            ...topic.decisionChangers,
+            ...topic.keywords,
+            ...topic.people,
+            ...topic.metrics,
+        ])
+        .join("\n");
+    const lexicalEnabled = guidance.trim().length > 0;
+    const initialEntries = [...ranked.values()];
     const acquisitionOrder = [
         ...laneCandidates,
-        ...entries.map(entry => entry.row).filter(row => !laneIds.has(String(row.id))),
-    ];
+        ...initialEntries.map(entry => entry.row).filter(row => !laneIds.has(String(row.id))),
+    ].slice(0, TOPIC_LEXICAL_CANDIDATE_LIMIT);
     const bodies = new Map<string, string>();
-    // Reserve lane bodies first and cap the total transfer at 50 bounded parents.
+    let loadedBytes = 0;
+    // Probe the original lane/watch/carryover/recency order first, preserving
+    // the prior fifty readable parents. Exploration still sees at most fifty.
     for (
         let offset = 0;
-        offset < acquisitionOrder.length && bodies.size < TOPIC_FIRST_LIMITS.offered;
+        offset < acquisitionOrder.length &&
+        loadedBytes < TOPIC_FIRST_LIMITS.loadedParentBytes &&
+        (lexicalEnabled || bodies.size < TOPIC_FIRST_LIMITS.offered);
 
     ) {
-        const count = Math.min(12, TOPIC_FIRST_LIMITS.offered - bodies.size);
+        const remaining = TOPIC_FIRST_LIMITS.loadedParentBytes - loadedBytes;
+        const parentLimit = Math.min(TOPIC_FIRST_LIMITS.parentBytes, remaining);
+        const count = Math.min(
+            12,
+            Math.max(1, Math.floor(remaining / parentLimit)),
+            lexicalEnabled ? TOPIC_LEXICAL_CANDIDATE_LIMIT : TOPIC_FIRST_LIMITS.offered - bodies.size
+        );
         const versions = acquisitionOrder
             .slice(offset, offset + count)
             .map(row => String(row.version));
@@ -138,36 +161,76 @@ export async function collectTopicSeed(
             ) body ON body.text IS NOT NULL
             WHERE v.id=ANY($1::bigint[])
         `,
-            [versions, TOPIC_FIRST_LIMITS.parentBytes]
+            [versions, parentLimit]
         );
-        for (const row of rows)
-            if (typeof row.text === "string" && row.text.length >= 200 && row.text.trim())
+        for (const row of rows) {
+            if (typeof row.text !== "string") continue;
+            loadedBytes += Buffer.byteLength(row.text, "utf8");
+            if (loadedBytes > TOPIC_FIRST_LIMITS.loadedParentBytes)
+                throw new WeeklyReviewConflict("acquisition_budget");
+            if (row.text.length >= 200 && row.text.trim())
                 bodies.set(String(row.version), row.text);
+        }
     }
-    const allDocuments = entries.flatMap(({ row, reason }) => {
-        const id = String(row.id),
-            version = String(row.version);
-        const text = bodies.get(version);
-        if (text === undefined) return [];
-        return [
-            {
-                ref: `doc:${id}@${version}`,
-                id,
-                version,
-                text,
-                title: String(row.title),
-                versionDate: (row.version_date instanceof Date
-                    ? row.version_date
-                    : new Date(String(row.version_date))
-                ).toISOString(),
-                hash: canonicalTextHash(text),
-                category: String(row.category),
-                audience: "company" as const,
-                purpose: "retrieved" as const,
-                reason,
-            },
-        ];
-    });
+    const lexical = rankQuestion(
+        guidance,
+        initialEntries.flatMap(({ row }) => {
+            const text = bodies.get(String(row.version));
+            return text === undefined
+                ? []
+                : [
+                      {
+                          row,
+                          text,
+                          filename: String(row.title),
+                          sourcePath: String(row.lexical_key ?? row.title),
+                      },
+                  ];
+        })
+    ).filter(document => document.lexicalScore > 0);
+    ranked.clear();
+    for (const id of watches) add(byId.get(id), "watch");
+    for (const id of carryoverIds) add(byId.get(id), "carryover");
+    for (const row of laneCandidates) add(row, "lane");
+    for (const document of lexical) add(document.row, "question");
+    for (const row of changed) add(row, "change");
+    for (const row of recent) add(row, "recency");
+    const entries = [...ranked.values()];
+    const reservedLaneCount = laneCandidates.filter(row => bodies.has(String(row.version))).length;
+    const selectedIds = new Set(
+        entries
+            .filter(({ row }) => !laneIds.has(String(row.id)) && bodies.has(String(row.version)))
+            .slice(0, TOPIC_FIRST_LIMITS.offered - reservedLaneCount)
+            .map(({ row }) => String(row.id))
+    );
+    for (const row of laneCandidates)
+        if (bodies.has(String(row.version))) selectedIds.add(String(row.id));
+    const allDocuments = entries
+        .filter(({ row }) => selectedIds.has(String(row.id)))
+        .flatMap(({ row, reason }) => {
+            const id = String(row.id),
+                version = String(row.version);
+            const text = bodies.get(version);
+            if (text === undefined) return [];
+            return [
+                {
+                    ref: `doc:${id}@${version}`,
+                    id,
+                    version,
+                    text,
+                    title: String(row.title),
+                    versionDate: (row.version_date instanceof Date
+                        ? row.version_date
+                        : new Date(String(row.version_date))
+                    ).toISOString(),
+                    hash: canonicalTextHash(text),
+                    category: String(row.category),
+                    audience: "company" as const,
+                    purpose: "retrieved" as const,
+                    reason,
+                },
+            ];
+        });
     const laneDocuments = laneCandidates.flatMap(row =>
         allDocuments.filter(document => document.id === String(row.id))
     );

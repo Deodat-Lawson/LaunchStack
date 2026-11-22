@@ -9,6 +9,7 @@ import { scopeAllowsDocument } from "~/lib/authz/scope-types";
 import type { WeeklyReviewAuthorityActor } from "./weekly-review-authority";
 import {
     createScriptedExplorationPort,
+    explorationDocumentHandle,
     runTopicExploration,
     type ExplorationDocument,
     type ExplorationTrace,
@@ -45,19 +46,111 @@ export async function configuredTopicSelectionProviders(): Promise<TopicSelectio
     };
 }
 
+export async function resolveTopicSelectionProviders(
+    seed: TopicSeed,
+    override?: TopicSelectionProviders
+): Promise<TopicSelectionProviders> {
+    if (override) return override;
+    return seed.manifest.configuration.provider === "configured"
+        ? configuredTopicSelectionProviders()
+        : { digest: deterministicDigestProvider, exploration: createScriptedExplorationPort };
+}
+export type TopicDigestTiming = {
+    digestStartedAt: string;
+    digestCompletedAt: string;
+    digestDurationMs: number;
+};
+
+/** Reusable workspace prewarm. Query calls must each use their own short transaction. */
+export async function prewarmTopicDigests(options: {
+    actor: WeeklyReviewAuthorityActor;
+    versionIds: string[];
+    query: WeeklyReviewQuery;
+    provider: DigestProvider;
+    authorizeDocument: (document: { id: number; category: string }) => Promise<boolean>;
+    cachePolicy?: "shared" | "ephemeral";
+    timeoutMs?: number;
+}) {
+    const { actor, query } = options;
+    if (!actor.canRead || !actor.canMutate)
+        throw new WeeklyReviewConflict("review_mutation_denied", 403);
+    const started = Date.now();
+    const timeoutMs = Math.max(
+        1,
+        Math.min(900000, options.timeoutMs ?? TOPIC_FIRST_LIMITS.digestMs)
+    );
+    const controller = new AbortController();
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    const timeout = new Promise<never>((_, reject) => {
+        timer = setTimeout(() => {
+            controller.abort();
+            reject(new WeeklyReviewConflict("topic_digest_failed:timeout"));
+        }, timeoutMs);
+    });
+    try {
+        const digests = await Promise.race([
+            timeout,
+            (async () => {
+                const collected = new Map<string, DocumentDigest>();
+                const versions = [...new Set(options.versionIds)];
+                for (let index = 0; index < versions.length; index += 6) {
+                    const results = await Promise.all(
+                        versions.slice(index, index + 6).map(version =>
+                            getDigestsForVersions({
+                                companyId: actor.companyId,
+                                versionIds: [version],
+                                query,
+                                provider: options.provider,
+                                cachePolicy: options.cachePolicy,
+                                signal: controller.signal,
+                                documentScope: candidate =>
+                                    scopeAllowsDocument(actor.documentScope, candidate),
+                                authorizeDocument: options.authorizeDocument,
+                            })
+                        )
+                    );
+                    controller.signal.throwIfAborted();
+                    for (const result of results)
+                        for (const [version, digest] of result) collected.set(version, digest);
+                }
+                return collected;
+            })(),
+        ]);
+        return {
+            digests,
+            digestIds: [...digests.values()].map(digest => digest.id),
+            timing: {
+                digestStartedAt: new Date(started).toISOString(),
+                digestCompletedAt: new Date().toISOString(),
+                digestDurationMs: Date.now() - started,
+            } satisfies TopicDigestTiming,
+        };
+    } catch (error) {
+        controller.abort();
+        if (error instanceof WeeklyReviewConflict) throw error;
+        throw new WeeklyReviewConflict(
+            "topic_digest_failed:" + (Date.now() - started >= timeoutMs ? "timeout" : "provider")
+        );
+    } finally {
+        if (timer) clearTimeout(timer);
+    }
+}
+
 export async function prepareTopicSelection(options: {
     seed: TopicSeed;
     actor: WeeklyReviewAuthorityActor;
     query: WeeklyReviewQuery;
     deadlineAt: number;
+    digests: ReadonlyMap<string, DocumentDigest>;
     providers?: TopicSelectionProviders;
-    onStage?: (stage: "digest" | "exploration") => void;
+    onStage?: (stage: "exploration") => void;
     record: (values: { trace?: ExplorationTrace; digestIds?: string[] }) => Promise<void>;
 }): Promise<TopicExplorationResult | null> {
-    const { seed, actor, query, deadlineAt, record } = options;
+    const { seed, actor, deadlineAt, record } = options;
     if (seed.manifest.configuration.provider === "seeds") return null;
     const controller = new AbortController();
     const expired = () => new WeeklyReviewConflict("topic_exploration_failed:timeout");
+    if (Date.now() >= deadlineAt) throw expired();
     let timer: ReturnType<typeof setTimeout> | undefined;
     const deadline = new Promise<never>((_, reject) => {
         timer = setTimeout(
@@ -72,7 +165,6 @@ export async function prepareTopicSelection(options: {
         return await Promise.race([
             deadline,
             (async () => {
-                const injected = seed.manifest.configuration.provider === "scripted";
                 if (
                     !actor.canRead ||
                     !actor.canMutate ||
@@ -80,43 +172,8 @@ export async function prepareTopicSelection(options: {
                     actor.userId !== seed.context.actor.userId
                 )
                     throw new WeeklyReviewConflict("review_mutation_denied", 403);
-                const providers =
-                    options.providers ??
-                    (injected
-                        ? {
-                              digest: deterministicDigestProvider,
-                              exploration: createScriptedExplorationPort,
-                          }
-                        : await configuredTopicSelectionProviders());
-                options.onStage?.("digest");
-                const digests = new Map<string, DocumentDigest>();
-                for (let index = 0; index < seed.documents.length; index += 6) {
-                    const batch = seed.documents.slice(index, index + 6);
-                    const results = await Promise.all(
-                        batch.map(document =>
-                            getDigestsForVersions({
-                                companyId: actor.companyId,
-                                versionIds: [document.version],
-                                query,
-                                provider: providers.digest,
-                                signal: controller.signal,
-                                documentScope: candidate =>
-                                    scopeAllowsDocument(actor.documentScope, candidate),
-                                authorizeDocument: async () => {
-                                    const [row] = await query(
-                                        "SELECT version FROM pdr_ai_v2_vantage_weekly_review_epochs WHERE company_id=$1::bigint",
-                                        [actor.companyId]
-                                    );
-                                    if (String(row?.version) !== seed.manifest.epoch)
-                                        throw new WeeklyReviewConflict("source_authority_changed");
-                                    return true;
-                                },
-                            })
-                        )
-                    );
-                    for (const result of results)
-                        for (const [version, digest] of result) digests.set(version, digest);
-                }
+                const providers = await resolveTopicSelectionProviders(seed, options.providers);
+                const digests = options.digests;
                 controller.signal.throwIfAborted();
                 const documents = seed.documents.map(document => {
                     const digest = digests.get(document.version);
@@ -137,6 +194,7 @@ export async function prepareTopicSelection(options: {
                         .map(({ ref, title }) => ({ ref, title })),
                     offered: documents.map(
                         ({ ref, title, category, versionDate, reason, digest }) => ({
+                            handle: explorationDocumentHandle({ ref }),
                             ref,
                             title: title.slice(0, 180),
                             category: category.slice(0, 100),

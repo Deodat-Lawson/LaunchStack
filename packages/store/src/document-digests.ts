@@ -106,6 +106,8 @@ export async function getDigestsForVersions(input: {
     documentScope: (document: { id: number; category: string }) => boolean;
     query: DocumentQuery;
     provider?: DigestProvider;
+    /** Ephemeral benchmark digests retain ACL/grounding and never touch the shared digest table. */
+    cachePolicy?: "shared" | "ephemeral";
     signal?: AbortSignal;
     /** Refresh the actor's current ACL when independent short transactions are used. */
     authorizeDocument?: (document: { id: number; category: string }) => Promise<boolean>;
@@ -139,7 +141,7 @@ export async function getDigestsForVersions(input: {
                 "SELECT id,headline,items FROM pdr_ai_v2_document_version_digests WHERE company_id=$1::bigint AND document_id=$2::bigint AND version_id=$3::bigint AND content_hash=$4 AND format_version='doc-digest/1'",
                 [input.companyId, document.id, versionId, contentHash]
             );
-        let [cached] = await read();
+        let [cached] = input.cachePolicy === "ephemeral" ? [] : await read();
         if (!cached && input.provider) {
             const [stats] = await input.query(
                 "SELECT count(*) AS chunk_count,COALESCE(sum(octet_length(content)),0)+GREATEST(count(*)-1,0) AS text_bytes FROM pdr_ai_v2_document_context_chunks WHERE document_id=$1::bigint AND version_id=$2::bigint",
@@ -175,6 +177,16 @@ export async function getDigestsForVersions(input: {
                 (await canonicalVersionHash(input.query, versionId)) !== contentHash
             )
                 continue;
+            if (input.cachePolicy === "ephemeral") {
+                result.set(versionId, {
+                    id: "ephemeral:" + versionId + ":" + contentHash,
+                    versionId,
+                    contentHash,
+                    formatVersion: "doc-digest/1",
+                    ...digest,
+                });
+                continue;
+            }
             await input.query(
                 "INSERT INTO pdr_ai_v2_document_version_digests (company_id,document_id,version_id,content_hash,format_version,headline,items) VALUES ($1::bigint,$2::bigint,$3::bigint,$4,'doc-digest/1',$5,$6::jsonb) ON CONFLICT (version_id,content_hash,format_version) DO NOTHING",
                 [

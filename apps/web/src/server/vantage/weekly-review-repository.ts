@@ -388,6 +388,58 @@ export function createWeeklyReviewRepository(
                 return { id: String(row.id), status: String(row.status), created: false };
             });
         },
+        beginDigestPreparation(actor: WeeklyReviewActor, id: string) {
+            return transact(async query => {
+                const row = await rowFor(query, actor, id, true);
+                if (
+                    row.status !== "reserved" ||
+                    row.retrieval_mode !== "topic-first" ||
+                    row.exploration_dispatched
+                )
+                    throw new WeeklyReviewConflict("review_not_reserved");
+                await topicAuthority(query, actor, row);
+                await checkedManifest(query, id, row);
+                await query(
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET last_dispatch_at=clock_timestamp() WHERE id=$1::uuid",
+                    [id]
+                );
+                await query(
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_run_manifests SET trace=COALESCE(trace,'{}'::jsonb)||jsonb_build_object('stages',COALESCE(trace->'stages','{}'::jsonb)||$2::jsonb) WHERE run_id=$1::uuid",
+                    [id, JSON.stringify({ digestStartedAt: new Date().toISOString() })]
+                );
+            });
+        },
+        recordDigestPreparation(
+            actor: WeeklyReviewActor,
+            id: string,
+            values: {
+                digestIds?: string[];
+                timing: {
+                    digestStartedAt?: string;
+                    digestCompletedAt: string;
+                    digestDurationMs: number;
+                    digestOutcome: "ready" | "failed";
+                };
+            }
+        ) {
+            return transact(async query => {
+                const row = await rowFor(query, actor, id, true);
+                if (
+                    row.status !== "reserved" ||
+                    row.retrieval_mode !== "topic-first" ||
+                    row.exploration_dispatched
+                )
+                    throw new WeeklyReviewConflict("review_not_reserved");
+                await query(
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_run_manifests SET digest_ids=COALESCE($2::jsonb,digest_ids),trace=COALESCE(trace,'{}'::jsonb)||jsonb_build_object('stages',COALESCE(trace->'stages','{}'::jsonb)||$3::jsonb) WHERE run_id=$1::uuid",
+                    [
+                        id,
+                        values.digestIds ? JSON.stringify(values.digestIds) : null,
+                        JSON.stringify(values.timing),
+                    ]
+                );
+            });
+        },
         claimExploration(actor: WeeklyReviewActor, id: string) {
             return transact(async query => {
                 const row = await rowFor(query, actor, id, true);
@@ -465,22 +517,33 @@ export function createWeeklyReviewRepository(
         recordExploration(
             actor: WeeklyReviewActor,
             id: string,
-            values: { trace?: unknown; digestIds?: string[] }
+            values: {
+                trace?: unknown;
+                digestIds?: string[];
+                timing?: { explorationStartedAt?: string; explorationCompletedAt?: string };
+            }
         ) {
             return transact(async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (row.status !== "reserved" || !row.exploration_dispatched || row.snapshot_hash)
                     throw new WeeklyReviewConflict("review_not_reserved");
                 const trace = values.trace === undefined ? null : JSON.stringify(values.trace);
-                if (trace !== null && Buffer.byteLength(trace) > 512000)
+                if (trace !== null && Buffer.byteLength(trace) > 510000)
                     throw new WeeklyReviewConflict("topic_exploration_failed:trace_limit");
                 await query(
                     `
                     UPDATE pdr_ai_v2_vantage_weekly_review_run_manifests
-                    SET trace=COALESCE($2::jsonb,trace), digest_ids=COALESCE($3::jsonb,digest_ids)
+                    SET trace=COALESCE(trace,'{}'::jsonb)||COALESCE($2::jsonb,'{}'::jsonb)||
+                        jsonb_build_object('stages',COALESCE(trace->'stages','{}'::jsonb)||COALESCE($4::jsonb,'{}'::jsonb)),
+                        digest_ids=COALESCE($3::jsonb,digest_ids)
                     WHERE run_id=$1::uuid
                 `,
-                    [id, trace, values.digestIds ? JSON.stringify(values.digestIds) : null]
+                    [
+                        id,
+                        trace,
+                        values.digestIds ? JSON.stringify(values.digestIds) : null,
+                        values.timing ? JSON.stringify(values.timing) : null,
+                    ]
                 );
             });
         },

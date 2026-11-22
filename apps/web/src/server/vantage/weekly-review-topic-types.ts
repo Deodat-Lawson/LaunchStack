@@ -12,13 +12,14 @@ export const TOPIC_FIRST_LIMITS = Object.freeze({
     parentBytes: 40000,
     loadedParentBytes: 2000000,
     evidenceBytes: 80000,
+    digestMs: 180000,
     explorationMs: 150000,
     generationMs: 90000,
     judgeMs: 120000,
     expirySeconds: 210,
 });
 export type TopicProvider = "seeds" | "scripted" | "configured";
-export type TopicSeedReason = "watch" | "carryover" | "change" | "lane" | "recency";
+export type TopicSeedReason = "watch" | "carryover" | "question" | "change" | "lane" | "recency";
 export type TopicOffer = {
     ref: string;
     id: string;

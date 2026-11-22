@@ -1,5 +1,5 @@
-import { readFile, writeFile } from "node:fs/promises";
-import { resolve, relative, isAbsolute } from "node:path";
+import { readFile, writeFile, realpath, access } from "node:fs/promises";
+import { resolve, relative, isAbsolute, dirname, basename, join, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 import { parseArgs } from "node:util";
@@ -284,6 +284,25 @@ export function scoreRetrieval(bundle, corpus, runs) {
             ];
         })
     );
+    const matchingGroups = field =>
+        Object.fromEntries(
+            [...new Set(bundle.cases.map(item => item[field]))].sort().map(value => {
+                const groups = bundle.cases.flatMap((item, index) =>
+                    item[field] === value ? [matches.get(String(index + 1))] : []
+                );
+                const eligible = groups.filter(facts => facts.every(fact => fact.match));
+                return [
+                    value,
+                    {
+                        cases: groups.length,
+                        eligibleCases: eligible.length,
+                        eligibleFacts: eligible.reduce((sum, facts) => sum + facts.length, 0),
+                        totalFacts: groups.flat().length,
+                        unmatchedFacts: groups.flat().filter(fact => !fact.match).length,
+                    },
+                ];
+            })
+        );
     const allMatches = [...matches.values()].flat();
     const formatCounts = {};
     for (const item of bundle.cases)
@@ -317,6 +336,8 @@ export function scoreRetrieval(bundle, corpus, runs) {
                 exact: allMatches.filter(item => item.match === "exact").length,
                 normalized: allMatches.filter(item => item.match === "normalized").length,
                 formatCounts,
+                byEnterprise: matchingGroups("enterprise"),
+                byCategory: matchingGroups("queryType"),
             },
             unmatchedFacts: unmatched.length,
             unmatchedCases: new Set(unmatched.map(item => item.caseId)).size,
@@ -354,12 +375,26 @@ export function scoreRetrieval(bundle, corpus, runs) {
     };
 }
 
-async function externalOutput(path, value) {
-    const root = fileURLToPath(new URL("../../", import.meta.url));
-    const target = resolve(path);
+export async function externalOutput(path, value) {
+    const root = await realpath(fileURLToPath(new URL("../../", import.meta.url)));
+    const parent = await realpath(dirname(resolve(path)));
+    const target = join(parent, basename(path));
     const offset = relative(root, target);
-    if (!offset || (!offset.startsWith("..") && !isAbsolute(offset)))
+    if (!offset || (!isAbsolute(offset) && offset !== ".." && !offset.startsWith(".." + sep)))
         throw Error("evaluation_output_must_be_external");
+    let ancestor = parent;
+    for (;;) {
+        try {
+            await access(join(ancestor, ".git"));
+            throw Error("evaluation_output_must_be_outside_git_checkout");
+        } catch (error) {
+            if (error.code !== "ENOENT") throw error;
+        }
+        const next = dirname(ancestor);
+        if (next === ancestor) break;
+        ancestor = next;
+    }
+    // Exclusive creation also rejects existing output files and final-path symlinks.
     await writeFile(target, JSON.stringify(value, null, 2) + "\n", { flag: "wx" });
 }
 async function main() {

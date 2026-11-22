@@ -134,3 +134,33 @@ test("counts only excerpt units and separates raw generation outcomes", () => {
     assert.equal(scored.summary.arms.baseline.rawAttemptGenerationAccepted, 1);
     assert.equal(scored.summary.arms.baseline.rawAttemptGenerationFailures, 0);
 });
+test("output guard rejects Git descendants and symlinks into them", async () => {
+    const { mkdtemp, mkdir, symlink, readFile, rm } = await import("node:fs/promises");
+    const { tmpdir } = await import("node:os");
+    const { join, resolve, relative, sep } = await import("node:path");
+    const { externalOutput } = await import("./vantage-rag-multi-corpus-score.mjs");
+    const root = await mkdtemp(join(tmpdir(), "rag-scorer-guard-"));
+    try {
+        const checkout = join(root, "checkout");
+        await mkdir(join(checkout, ".git"), { recursive: true });
+        await mkdir(join(checkout, "..foo"));
+        await assert.rejects(
+            externalOutput(join(checkout, "..foo", "local.json"), {}),
+            /outside_git_checkout/
+        );
+        await symlink(checkout, join(root, "alias"), "junction");
+        await assert.rejects(
+            externalOutput(join(root, "alias", "local.json"), {}),
+            /outside_git_checkout/
+        );
+        const good = join(root, "safe.json");
+        await externalOutput(good, { safe: true });
+        assert.deepEqual(JSON.parse(await readFile(good, "utf8")), { safe: true });
+        await assert.rejects(externalOutput(good, {}), { code: "EEXIST" });
+    } finally {
+        const offset = relative(resolve(tmpdir()), resolve(root));
+        if (!offset || offset === ".." || offset.startsWith(".." + sep))
+            throw Error("unsafe_test_cleanup");
+        await rm(root, { recursive: true, force: true });
+    }
+});

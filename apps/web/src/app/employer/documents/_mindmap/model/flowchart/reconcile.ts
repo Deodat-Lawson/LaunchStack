@@ -527,16 +527,26 @@ export function reconcileSteps(base: StepsBinding, page: DiagramPage): WrittenSt
     }
 
     // -- put it back together -------------------------------------------------
-    const lines: string[] = [];
-    const byLine: Array<string | null> = [];
-    const emit = (row: Row) => {
-        if (!row.removed) {
-            lines.push(render(row));
-            byLine.push(row.id);
-        }
-        for (const r of row.after) emit(r);
+    const order: Row[] = [];
+    const flatten = (row: Row) => {
+        if (!row.removed) order.push(row);
+        for (const r of row.after) flatten(r);
     };
-    rows.forEach(emit);
+    rows.forEach(flatten);
+    // An arrow this edit wrote out to the very next line says nothing the
+    // line order does not (Delete joining the steps either side of a box
+    // writes one): `Receive order -> In stock?` over `In stock?` is
+    // `Receive order` over `In stock?`.
+    order.forEach((row, k) => {
+        const next = order[k + 1];
+        const p = row.parts;
+        if (!row.dirty || !row.id || !p.target || p.lead || p.branchLabel !== null) return;
+        if (!next?.id || next.parts.lead || next.parts.branchLabel !== null) return;
+        if (normalizeLabel(next.parts.label) !== normalizeLabel(p.target)) return;
+        p.target = null;
+    });
+    const lines = order.map(render);
+    const byLine = order.map(row => row.id);
     return keepApart(lines, byLine, page);
 }
 

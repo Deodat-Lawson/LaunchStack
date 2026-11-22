@@ -16,6 +16,7 @@ import { applySteps, isStepNode, matchSteps, structureOf } from "../model/flowch
 import { flowchartLook } from "../model/flowchart/look";
 import { reconcileSteps, serializeSteps } from "../model/flowchart/reconcile";
 import { BURST_IDLE, PREVIEW_MAX_WAIT, StepsSync } from "../flow/steps/sync";
+import { removeStep } from "../flow/keys/actions";
 import { openAt, pick } from "../flow/pick/menu";
 import { PICKS } from "../flow/pick/place";
 import { parseSteps } from "../model/flowchart/syntax";
@@ -445,6 +446,41 @@ describe("Steps: chart → text", () => {
         const lines = sync.getSnapshot().text.split("\n");
         expect(lines.slice(0, 2)).toEqual(["Receive order", "In stock?"]);
         expect(lines.slice(2).sort()).toEqual(["  No: Reorder", "  Yes: Pack"]);
+    });
+
+    it("Delete on a box (the key) takes its line and joins the lines around it, nothing more", async () => {
+        const { store, sync } = setup();
+        write(sync, "Receive order\nCheck stock\nIn stock?\n  Yes: Pack and ship\n  No: Reorder");
+        removeStep(store, byText(store, "Check stock").id);
+        await caughtUp();
+        // Just the joined chain: no `-> In stock?` written out to the next line.
+        expect(sync.getSnapshot().text).toBe(
+            "Receive order\nIn stock?\n  Yes: Pack and ship\n  No: Reorder"
+        );
+        expect(arrows(store)).toEqual([
+            "In stock? → Pack and ship [Yes]",
+            "In stock? → Reorder [No]",
+            "Receive order → In stock?",
+        ]);
+    });
+
+    it("Delete on a decision (the key) lifts its branches into its place, joined", async () => {
+        const { store, sync } = setup();
+        write(sync, "Start\nPaid?\n  Yes: Ship\nEnd");
+        removeStep(store, byText(store, "Paid?").id);
+        await caughtUp();
+        expect(sync.getSnapshot().text).toBe("Start\nShip\nEnd");
+        // The join keeps the branch's words (removeStepJoining); the lines
+        // have nowhere to write words on a plain step's arrow.
+        expect(arrows(store)).toEqual(["Ship → End", "Start → Ship [Yes]"]);
+    });
+
+    it("keeps a jump to the next line that was written by hand", async () => {
+        const { store, sync } = setup();
+        write(sync, "A -> B\nB\nC");
+        rename(store, byText(store, "C").id, "See");
+        await caughtUp();
+        expect(sync.getSnapshot().text).toBe("A -> B\nB\nSee");
     });
 
     it("a box deleted without joining takes its line; the lines either side part with a blank line", async () => {

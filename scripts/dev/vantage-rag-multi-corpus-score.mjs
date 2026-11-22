@@ -16,6 +16,55 @@ export function matchPassage(text, passage) {
     const normalized = normalizePassage(passage);
     return normalized && normalizePassage(text).includes(normalized) ? "normalized" : null;
 }
+export const LENIENT_TOKEN_THRESHOLDS = Object.freeze([0.8, 0.9]);
+export function passageTokens(text) {
+    return (
+        text
+            .normalize("NFKC")
+            .toLocaleLowerCase("en-US")
+            .match(/[\p{L}\p{N}][\p{L}\p{M}\p{N}]*/gu) ?? []
+    );
+}
+/** Multiset recall in a contiguous window no longer than the label's token count. */
+export function bestWindowTokenRecall(text, passage) {
+    const expected = passageTokens(passage);
+    const actual = passageTokens(text);
+    if (!expected.length || !actual.length) return 0;
+    const expectedCounts = new Map();
+    for (const token of expected) expectedCounts.set(token, (expectedCounts.get(token) ?? 0) + 1);
+    const windowCounts = new Map();
+    let overlap = 0,
+        best = 0;
+    for (let end = 0; end < actual.length; end++) {
+        const token = actual[end];
+        const before = windowCounts.get(token) ?? 0;
+        windowCounts.set(token, before + 1);
+        if (before < (expectedCounts.get(token) ?? 0)) overlap++;
+        if (end >= expected.length) {
+            const removed = actual[end - expected.length];
+            const count = windowCounts.get(removed);
+            windowCounts.set(removed, count - 1);
+            if (count <= (expectedCounts.get(removed) ?? 0)) overlap--;
+        }
+        best = Math.max(best, overlap);
+    }
+    return best / expected.length;
+}
+const calibration = facts => {
+    const values = facts.map(fact => fact.sourceTokenRecall);
+    return {
+        facts: values.length,
+        min: values.length ? Math.min(...values) : null,
+        mean: values.length ? values.reduce((sum, value) => sum + value, 0) / values.length : null,
+        thresholds: Object.fromEntries(
+            LENIENT_TOKEN_THRESHOLDS.map(threshold => [
+                String(threshold),
+                values.filter(value => value >= threshold).length,
+            ])
+        ),
+    };
+};
+
 const key = (enterprise, filename) => JSON.stringify([enterprise, filename]);
 const digest = value => createHash("sha256").update(JSON.stringify(value)).digest("hex");
 const docKey = doc => JSON.stringify([String(doc.documentId), String(doc.versionId)]);
@@ -89,7 +138,12 @@ export function scoreRetrieval(bundle, corpus, runs) {
                               : "filename_unmapped",
                         format: skippedFile?.format ?? doc?.format ?? null,
                     });
-                return { doc, match, passage: fact.text };
+                return {
+                    doc,
+                    match,
+                    passage: fact.text,
+                    sourceTokenRecall: doc ? bestWindowTokenRecall(doc.text, fact.text) : 0,
+                };
             })
         );
     }
@@ -136,20 +190,33 @@ export function scoreRetrieval(bundle, corpus, runs) {
         for (const [factIndex, fact] of facts.entries()) {
             const factOffered = Boolean(fact.doc && offered.has(docKey(fact.doc)));
             const factSelected = Boolean(fact.doc && selectedDocuments.has(docKey(fact.doc)));
-            const factCovered = Boolean(
-                fact.match &&
-                    selected.some(
-                        doc =>
-                            docKey(doc) === docKey(fact.doc) &&
-                            typeof doc.text === "string" &&
-                            matchPassage(doc.text, fact.passage)
-                    )
+            const selectedText = fact.doc
+                ? selected.filter(
+                      doc => docKey(doc) === docKey(fact.doc) && typeof doc.text === "string"
+                  )
+                : [];
+            const frozenMatches = fact.match
+                ? selectedText.map(doc => matchPassage(doc.text, fact.passage))
+                : [];
+            const frozenMatch = frozenMatches.includes("exact")
+                ? "exact"
+                : frozenMatches.includes("normalized")
+                  ? "normalized"
+                  : null;
+            const factCovered = Boolean(frozenMatch);
+            const frozenTokenRecall = Math.max(
+                0,
+                ...selectedText.map(doc => bestWindowTokenRecall(doc.text, fact.passage))
             );
             factResults.push({
                 factIndex,
                 documentId: fact.doc?.documentId ?? null,
                 versionId: fact.doc?.versionId ?? null,
                 sourceMatch: fact.match,
+                filenameResolved: Boolean(fact.doc),
+                frozenMatch,
+                sourceTokenRecall: fact.sourceTokenRecall,
+                frozenTokenRecall,
                 offered: factOffered,
                 selected: factSelected,
                 covered: factCovered,
@@ -210,7 +277,55 @@ export function scoreRetrieval(bundle, corpus, runs) {
         const totals = Object.fromEntries(
             countFields.map(field => [field, rows.reduce((sum, row) => sum + row[field], 0)])
         );
+        const allFacts = attempts.flatMap(row => row.factResults);
+        const resolvedFacts = allFacts.filter(fact => fact.filenameResolved);
+        const resolvedCases = attempts.filter(row =>
+            row.factResults.some(fact => fact.filenameResolved)
+        );
+        const strictFacts = rows.flatMap(row => row.factResults);
         return {
+            resolvedDocumentRecall: {
+                cases: attempts.length,
+                scoredCases: resolvedCases.length,
+                facts: resolvedFacts.length,
+                offeredFacts: resolvedFacts.filter(fact => fact.offered).length,
+                selectedFacts: resolvedFacts.filter(fact => fact.selected).length,
+                offeredRecall: resolvedFacts.length
+                    ? resolvedFacts.filter(fact => fact.offered).length / resolvedFacts.length
+                    : 0,
+                selectedRecall: resolvedFacts.length
+                    ? resolvedFacts.filter(fact => fact.selected).length / resolvedFacts.length
+                    : 0,
+            },
+            strictPassageRecall: {
+                cases: rows.length,
+                facts: strictFacts.length,
+                exactCoveredFacts: strictFacts.filter(fact => fact.frozenMatch === "exact").length,
+                normalizedCoveredFacts: strictFacts.filter(
+                    fact => fact.frozenMatch === "normalized"
+                ).length,
+                coveredFacts: totals.coveredFacts,
+                recall: strictFacts.length ? totals.coveredFacts / strictFacts.length : 0,
+            },
+            lenientFrozenTokenRecall: {
+                cases: attempts.length,
+                scoredCases: resolvedCases.length,
+                facts: resolvedFacts.length,
+                thresholds: Object.fromEntries(
+                    LENIENT_TOKEN_THRESHOLDS.map(threshold => {
+                        const covered = resolvedFacts.filter(
+                            fact => fact.frozenTokenRecall >= threshold
+                        ).length;
+                        return [
+                            String(threshold),
+                            {
+                                coveredFacts: covered,
+                                recall: resolvedFacts.length ? covered / resolvedFacts.length : 0,
+                            },
+                        ];
+                    })
+                ),
+            },
             cases: rows.length,
             excludedUnmatchedCases: attempts.length - rows.length,
             rawAttempts: attempts.length,
@@ -319,7 +434,7 @@ export function scoreRetrieval(bundle, corpus, runs) {
         details,
         unmatched,
         summary: {
-            schemaVersion: "vantage-rag-multi-corpus-scores/v1",
+            schemaVersion: "vantage-rag-multi-corpus-scores/v2",
             caseCount: bundle.cases.length,
             resultCount: details.length,
             missingCaseArmResults:
@@ -335,6 +450,14 @@ export function scoreRetrieval(bundle, corpus, runs) {
                 totalFacts: allMatches.length,
                 exact: allMatches.filter(item => item.match === "exact").length,
                 normalized: allMatches.filter(item => item.match === "normalized").length,
+                tokenCalibration: {
+                    exactSourcePositives: calibration(
+                        allMatches.filter(fact => fact.match === "exact")
+                    ),
+                    normalizedSourcePositives: calibration(
+                        allMatches.filter(fact => fact.match === "normalized")
+                    ),
+                },
                 formatCounts,
                 byEnterprise: matchingGroups("enterprise"),
                 byCategory: matchingGroups("queryType"),

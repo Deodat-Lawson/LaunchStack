@@ -164,3 +164,64 @@ test("output guard rejects Git descendants and symlinks into them", async () => 
         await rm(root, { recursive: true, force: true });
     }
 });
+test("best token window preserves multiplicity and locality", async () => {
+    const { bestWindowTokenRecall } = await import("./vantage-rag-multi-corpus-score.mjs");
+    assert.equal(bestWindowTokenRecall("prefix alpha beta gamma suffix", "alpha beta gamma"), 1);
+    assert.equal(bestWindowTokenRecall("alpha beta gamma", "alpha alpha alpha"), 1 / 3);
+    assert.equal(bestWindowTokenRecall("alpha x x x beta", "alpha beta"), 0.5);
+    assert.equal(bestWindowTokenRecall("", "alpha"), 0);
+});
+test("document and lenient recalls include facts excluded by strict source matching", () => {
+    const changed = structuredClone(bundle);
+    changed.cases[0].groundTruth.supportingFacts = [
+        { filename: "release.md", text: "one two three four five six seven eight nine ten" },
+    ];
+    const changedRun = {
+        ...run,
+        selected: [{ ...run.selected[0], text: "one two three four five six seven eight" }],
+    };
+    const scored = scoreRetrieval(changed, corpus, [changedRun]);
+    const arm = scored.summary.arms.baseline;
+    assert.equal(arm.strictPassageRecall.cases, 0);
+    assert.equal(arm.resolvedDocumentRecall.facts, 1);
+    assert.equal(arm.resolvedDocumentRecall.offeredRecall, 1);
+    assert.equal(arm.resolvedDocumentRecall.selectedRecall, 1);
+    assert.equal(arm.lenientFrozenTokenRecall.thresholds["0.8"].coveredFacts, 1);
+    assert.equal(arm.lenientFrozenTokenRecall.thresholds["0.9"].coveredFacts, 0);
+    assert.deepEqual(arm.byEnterprise.Example.resolvedDocumentRecall, arm.resolvedDocumentRecall);
+    assert.deepEqual(
+        arm.byCategory.Temporal.lenientFrozenTokenRecall,
+        arm.lenientFrozenTokenRecall
+    );
+});
+test("token calibration measures exact source positives without provider access", () => {
+    const scored = scoreRetrieval(bundle, corpus, [run]);
+    assert.deepEqual(scored.summary.corpusMatching.tokenCalibration.exactSourcePositives, {
+        facts: 1,
+        min: 1,
+        mean: 1,
+        thresholds: { 0.8: 1, 0.9: 1 },
+    });
+    assert.equal(scored.summary.arms.baseline.strictPassageRecall.exactCoveredFacts, 1);
+});
+test("lenient token score never credits the wrong document version", () => {
+    const scored = scoreRetrieval(bundle, corpus, [
+        { ...run, selected: [{ ...run.selected[0], versionId: "wrong" }] },
+    ]);
+    assert.equal(
+        scored.summary.arms.baseline.lenientFrozenTokenRecall.thresholds["0.8"].coveredFacts,
+        0
+    );
+});
+test("token windows stay inside each frozen excerpt", () => {
+    const changed = structuredClone(bundle);
+    changed.cases[0].groundTruth.supportingFacts = [
+        { filename: "release.md", text: "one two three four five six seven eight nine ten" },
+    ];
+    const selected = [
+        { ...run.selected[0], text: "one two three four five" },
+        { ...run.selected[0], text: "six seven eight nine ten" },
+    ];
+    const arm = scoreRetrieval(changed, corpus, [{ ...run, selected }]).summary.arms.baseline;
+    assert.equal(arm.lenientFrozenTokenRecall.thresholds["0.8"].coveredFacts, 0);
+});

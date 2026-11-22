@@ -211,9 +211,10 @@ someone built as a flowchart out of topics is fixed without redrawing it.
 
 A document worked as a flowchart is drawn three ways at once — by keys, by
 picking shapes, and by writing steps — chosen from four prototypes tried side
-by side (the keyboard flow, drop-and-pick, and write-it-see-it; quick-add
-arrows was dropped). Mindmaps and freeform drawings are untouched by all of
-it: every hook below is skipped unless `worksAsFlow`.
+by side (the keyboard flow, drop-and-pick, and write-it-see-it; the fourth,
+
+- arrows on every side of a box, was dropped). Mindmaps and freeform drawings are untouched by all of
+  it: every hook below is skipped unless `worksAsFlow`.
 
 ### The look
 

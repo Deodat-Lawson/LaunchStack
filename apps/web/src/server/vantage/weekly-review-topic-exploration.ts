@@ -51,6 +51,8 @@ export interface ExplorationTrace {
     events: unknown[];
     bytes: number;
 }
+class TopicFinalNonSubmission extends Error {}
+class TopicSoftFinalNonSubmission extends TopicFinalNonSubmission {}
 const span = z
     .object({ start: z.number().int().nonnegative(), end: z.number().int().positive() })
     .strict();
@@ -70,6 +72,11 @@ export const TopicExplorationResultSchema = z
     })
     .strict();
 export type TopicExplorationResult = z.infer<typeof TopicExplorationResultSchema>;
+export type TopicExplorationDegradation = {
+    code: "topic_exploration_degraded:non_submission";
+    reason: "submission_missing" | "submission_invalid";
+    provenance: "successful_canonical_excerpt_reads";
+};
 export type TopicEvidenceBudget = {
     maxEvidenceBytes: number;
     maxSourceUnits: number;
@@ -224,8 +231,12 @@ export async function runTopicExploration(input: {
     port: AgentModelPort;
     record(trace: ExplorationTrace): Promise<void>;
     deadlineAt: number;
+    /** Authoritative expiry; required to recover an earlier soft final-response deadline. */
+    hardDeadlineAt?: number;
     signal?: AbortSignal;
-}): Promise<TopicExplorationResult & { trace: ExplorationTrace }> {
+}): Promise<
+    TopicExplorationResult & { trace: ExplorationTrace; degradation?: TopicExplorationDegradation }
+> {
     const documents = new Map(input.offered.map(document => [document.ref, document]));
     if (
         input.evidenceBudget &&
@@ -290,6 +301,17 @@ export async function runTopicExploration(input: {
     const trace: ExplorationTrace = { version: 2, events: [], bytes: 0 };
     let fatal: Error | undefined;
     let invalidSubmission = false;
+    let requestCount = 0;
+    let executedCalls = 0;
+    let submissionOnly = false;
+    let awaitingFinalResponse = false;
+    let softFinalResponseExpired = false;
+    const startedAt = Date.now();
+    const effectiveDeadline = Math.min(
+        input.deadlineAt,
+        startedAt + TOPIC_EXPLORATION_LIMITS.wallMs
+    );
+    const finalWindowMs = Math.min(15000, Math.max(1, (effectiveDeadline - startedAt) / 10));
     const controller = new AbortController();
     const expired = () => controller.signal.aborted || Date.now() >= input.deadlineAt;
     const check = () => {
@@ -315,7 +337,13 @@ export async function runTopicExploration(input: {
         inputSchema: schema,
         async run(args) {
             check();
-            const resolved = resolve(args);
+            const resolved = submissionOnly
+                ? {
+                      error: "submission_required",
+                      message:
+                          "Exploration is ending. Call submit_result now using previously returned canonical excerpt ranges; do not request more reads.",
+                  }
+                : resolve(args);
             let errorCode =
                 resolved && typeof resolved === "object" && "error" in resolved
                     ? String(resolved.error)
@@ -476,11 +504,32 @@ export async function runTopicExploration(input: {
         async respond(request) {
             check();
             let prepared = request;
+            requestCount++;
+            if (
+                !submissionOnly &&
+                (requestCount === TOPIC_EXPLORATION_LIMITS.turns ||
+                    effectiveDeadline - Date.now() <= finalWindowMs ||
+                    TOPIC_EXPLORATION_LIMITS.calls - executedCalls <=
+                        TOPIC_EXPLORATION_LIMITS.callsPerTurn)
+            ) {
+                submissionOnly = true;
+                const text =
+                    "Final submission opportunity: call submit_result now. Only submit_result is available. Use the actual canonical ranges from successful earlier excerpt reads, cover the owner questions where supported, and do not request more information. If no useful evidence was read, submit an empty selection. The original deadline and all limits still apply.";
+                notices.push({ after: request.transcript.length, text });
+                await record({
+                    kind: "submission_only",
+                    turn: requestCount,
+                    remainingCalls: TOPIC_EXPLORATION_LIMITS.calls - executedCalls,
+                });
+            }
             if (input.evidenceBudget) {
                 const text = budgetText();
                 if (text.length > 4000)
                     throw new Error("topic_exploration_failed:evidence_budget_invalid");
                 notices.push({ after: request.transcript.length, text });
+                await record({ kind: "budget_progress", text });
+            }
+            if (notices.length) {
                 const transcript: (typeof request.transcript)[number][] = [];
                 for (let index = 0; index <= request.transcript.length; index++) {
                     for (const notice of notices)
@@ -490,12 +539,78 @@ export async function runTopicExploration(input: {
                         transcript.push(request.transcript[index]!);
                 }
                 prepared = { ...request, transcript };
-                await record({ kind: "budget_progress", text });
             }
+            if (submissionOnly)
+                prepared = {
+                    ...prepared,
+                    tools: request.tools.filter(tool => tool.name === "submit_result"),
+                };
             await record({ kind: "request", transcriptHash: hash(prepared.transcript) });
-            const response = await input.port.respond(prepared);
+            check();
+            let response: Awaited<ReturnType<AgentModelPort["respond"]>>;
+            awaitingFinalResponse = submissionOnly;
+            try {
+                response = await input.port.respond(prepared);
+            } finally {
+                // Trace persistence and validation are never treated as an awaiting model response.
+                awaitingFinalResponse = false;
+            }
             check();
             await record({ kind: "response", response });
+            check();
+            if (submissionOnly) {
+                let valid = false;
+                const executable = Math.min(
+                    TOPIC_EXPLORATION_LIMITS.callsPerTurn,
+                    TOPIC_EXPLORATION_LIMITS.calls - executedCalls
+                );
+                for (const [index, call] of response.toolCalls.entries()) {
+                    if (index >= executable) {
+                        await record({
+                            kind: "tool_validation",
+                            name: call.name,
+                            callId: call.id,
+                            code:
+                                index >= TOPIC_EXPLORATION_LIMITS.callsPerTurn
+                                    ? "tool_overflow"
+                                    : "total_call_limit",
+                            content:
+                                "This call exceeds the remaining executable allowance and did not execute.",
+                        });
+                        continue;
+                    }
+                    if (call.name === "submit_result") {
+                        if (finalSchema.safeParse(call.arguments).success) valid = true;
+                        else {
+                            invalidSubmission = true;
+                            await record({
+                                kind: "tool_validation",
+                                name: call.name,
+                                callId: call.id,
+                                code: "submission_invalid",
+                                content:
+                                    "Final submit_result did not satisfy the pinned evidence schema.",
+                            });
+                        }
+                    } else
+                        await record({
+                            kind: "tool_validation",
+                            name: call.name,
+                            callId: call.id,
+                            code: "submission_only",
+                            content:
+                                "Only submit_result is permitted in the final submission opportunity. This call did not execute.",
+                        });
+                }
+                if (!valid) {
+                    await record({
+                        kind: "terminal_non_submission",
+                        turn: requestCount,
+                        reason: invalidSubmission ? "submission_invalid" : "submission_missing",
+                    });
+                    throw new TopicFinalNonSubmission();
+                }
+            }
             return response;
         },
     };
@@ -575,8 +690,21 @@ export async function runTopicExploration(input: {
         const timeout = new Promise<never>((_, reject) => {
             timer = setTimeout(
                 () => {
+                    softFinalResponseExpired =
+                        awaitingFinalResponse &&
+                        submissionOnly &&
+                        !fatal &&
+                        !input.signal?.aborted &&
+                        effectiveDeadline === input.deadlineAt &&
+                        Number.isFinite(input.hardDeadlineAt) &&
+                        input.deadlineAt < input.hardDeadlineAt! &&
+                        Date.now() < input.hardDeadlineAt!;
                     abort();
-                    reject(new Error("topic_exploration_failed:timeout"));
+                    reject(
+                        softFinalResponseExpired
+                            ? new TopicSoftFinalNonSubmission()
+                            : new Error("topic_exploration_failed:timeout")
+                    );
                 },
                 Math.max(0, Math.min(150000, input.deadlineAt - Date.now()))
             );
@@ -597,9 +725,10 @@ export async function runTopicExploration(input: {
                 maxToolCallsPerTurn: 8,
                 maxTotalToolCalls: 60,
                 onToolResult: async event => {
+                    if (event.reason !== "tool_overflow" && event.reason !== "total_call_limit")
+                        executedCalls++;
                     if (event.reason === "submission_invalid") invalidSubmission = true;
                     if (
-                        input.evidenceBudget &&
                         event.reason === "tool_result" &&
                         !event.isError &&
                         event.call.name === "read_document_excerpt"
@@ -632,8 +761,85 @@ export async function runTopicExploration(input: {
         check();
         return { ...TopicExplorationResultSchema.parse(result.output), trace };
     } catch (error) {
+        // A completed non-submission, or our own earlier soft deadline while awaiting
+        // a final response, may recover. Late model responses remain fenced by abort.
+        const softRecovery =
+            softFinalResponseExpired && error instanceof TopicSoftFinalNonSubmission;
+        const checkRecovery = () => {
+            if (!softRecovery) {
+                check();
+                return;
+            }
+            if (fatal) throw fatal;
+            if (
+                input.signal?.aborted ||
+                input.hardDeadlineAt === undefined ||
+                Date.now() >= input.hardDeadlineAt
+            )
+                throw new Error("topic_exploration_failed:timeout");
+        };
+        if (
+            error instanceof AgentStepLimitError ||
+            error instanceof TopicFinalNonSubmission ||
+            softRecovery
+        ) {
+            checkRecovery();
+            if (softRecovery)
+                await record({
+                    kind: "terminal_non_submission",
+                    turn: requestCount,
+                    reason: "submission_missing",
+                    cause: "soft_deadline_awaiting_final_response",
+                });
+            const byRef = new Map<string, TopicExplorationResult["selected"][number]>();
+            for (const candidate of candidateReads.selected) {
+                const document = documents.get(candidate.ref);
+                if (!document) continue;
+                const previous = byRef.get(candidate.ref) ?? {
+                    ref: candidate.ref,
+                    topicIds: [],
+                    spans: [],
+                };
+                for (const range of candidate.spans) {
+                    if (!validTopicExcerptRange(document.text, range)) continue;
+                    const merged: { start: number; end: number }[] = [];
+                    for (const item of [...previous.spans, range].sort(
+                        (a, b) => a.start - b.start || a.end - b.end
+                    )) {
+                        const last = merged.at(-1);
+                        if (last && item.start <= last.end) last.end = Math.max(last.end, item.end);
+                        else merged.push({ ...item });
+                    }
+                    if (
+                        merged.length <= 6 &&
+                        merged.every(item => validTopicExcerptRange(document.text, item))
+                    )
+                        previous.spans = merged;
+                }
+                if (previous.spans.length) byRef.set(candidate.ref, previous);
+            }
+            const recovered = finalSchema.safeParse({ selected: [...byRef.values()] });
+            if (recovered.success) {
+                const degradation: TopicExplorationDegradation = {
+                    code: "topic_exploration_degraded:non_submission",
+                    reason:
+                        !softRecovery && invalidSubmission
+                            ? "submission_invalid"
+                            : "submission_missing",
+                    provenance: "successful_canonical_excerpt_reads",
+                };
+                await record({
+                    kind: "degradation",
+                    ...degradation,
+                    documents: recovered.data.selected.length,
+                    excerpts: recovered.data.selected.reduce((n, item) => n + item.spans.length, 0),
+                });
+                checkRecovery();
+                return { ...recovered.data, trace, degradation };
+            }
+        }
         const failure =
-            error instanceof AgentStepLimitError
+            error instanceof AgentStepLimitError || error instanceof TopicFinalNonSubmission
                 ? new Error(
                       invalidSubmission
                           ? "topic_exploration_failed:submission_invalid"

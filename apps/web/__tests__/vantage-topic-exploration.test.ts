@@ -79,7 +79,9 @@ it("invalid outside-text submission cannot succeed", async () => {
             };
         },
     });
-    await expect(runTopicExploration(input)).rejects.toThrow();
+    const result = await runTopicExploration(input);
+    expect(result.selected).toEqual([]);
+    expect(result.degradation?.reason).toBe("submission_invalid");
     expect(input.record).toHaveBeenCalled();
 });
 it("scripted exploration records tools within the full 50-document limits", async () => {
@@ -155,7 +157,12 @@ it("repairs tool windows and rejects explicit submission endpoints within a surr
             };
         },
     };
-    await expect(runTopicExploration({ ...setup(port), offered })).rejects.toThrow();
+    const result = await runTopicExploration({ ...setup(port), offered });
+    expect(result.degradation?.reason).toBe("submission_invalid");
+    expect(result.selected[0]?.spans).toEqual([{ start: 0, end: 201 }]);
+    expect(result.trace.events).toContainEqual(
+        expect.objectContaining({ kind: "tool_validation", code: "submission_invalid" })
+    );
 });
 it("uses stable handles with titles and canonicalizes submitted refs", async () => {
     const { explorationDocumentHandle } = await import(
@@ -331,7 +338,7 @@ it("records distinct schema, unknown-tool and submission validation errors", asy
         errors.filter(event => event.kind === "tool_validation").map(event => event.code)
     ).toEqual(["schema_invalid", "unknown_tool", "submission_invalid"]);
 });
-it("caps attempted executable slots at sixty and retains the failure trace", async () => {
+it("reserves a final submission opportunity within sixty executable slots and retains the trace", async () => {
     let turn = 0;
     const input = setup({
         async respond() {
@@ -345,12 +352,16 @@ it("caps attempted executable slots at sixty and retains the failure trace", asy
             };
         },
     });
-    await expect(runTopicExploration(input)).rejects.toThrow("call_limit");
+    const result = await runTopicExploration(input);
+    expect(result.selected).toEqual([]);
+    expect(result.degradation?.reason).toBe("submission_missing");
     const trace = input.record.mock.calls.at(-1)?.[0] as
         | { events: { kind: string; code?: string }[] }
         | undefined;
-    expect(trace?.events.filter(event => event.kind === "tool")).toHaveLength(60);
+    expect(trace?.events.filter(event => event.kind === "tool")).toHaveLength(56);
+    expect(trace?.events.filter(event => event.code === "submission_only")).toHaveLength(4);
     expect(trace?.events.filter(event => event.code === "total_call_limit")).toHaveLength(4);
+    expect(trace?.events.filter(event => event.kind === "terminal_non_submission")).toHaveLength(1);
 });
 it("identifies watched offered and fixed documents by stable handle and title", async () => {
     const { explorationDocumentHandle } = await import(

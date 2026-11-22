@@ -17,7 +17,9 @@ import { normalizeTokenUsage } from "../usage";
 import type { AgentModelPort, AgentToolCall, AgentToolSpec, AgentTranscriptItem } from "./types";
 
 interface BindableChat {
-    bindTools?: (tools: unknown[]) => { invoke: (messages: BaseMessage[]) => Promise<unknown> };
+    bindTools?: (tools: unknown[]) => {
+        invoke: (messages: BaseMessage[], options?: { signal?: AbortSignal }) => Promise<unknown>;
+    };
 }
 
 function toLangchainTools(tools: readonly AgentToolSpec[]): unknown[] {
@@ -86,9 +88,11 @@ export function createLangchainAgentPort(resolved: ResolvedChatModel): AgentMode
     }
 
     return {
-        async respond({ system, transcript, tools }) {
+        async respond({ system, transcript, tools, signal }) {
+            signal?.throwIfAborted();
             const bound = chat.bindTools!(toLangchainTools(tools));
-            const response = await bound.invoke(toMessages(system, transcript));
+            const response = await bound.invoke(toMessages(system, transcript), { signal });
+            signal?.throwIfAborted();
             return {
                 text: modelContentToText((response as { content?: unknown }).content ?? ""),
                 toolCalls: readToolCalls(response),

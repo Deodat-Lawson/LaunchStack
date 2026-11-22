@@ -122,7 +122,8 @@ function reportReadEvidence(value: unknown, topicRun: boolean): unknown {
                 mode: context.mode,
                 lane: context.lane,
                 seedReasons: context.seedReasons,
-                outcome: "frozen",
+                outcome: context.degradation ? "degraded" : "frozen",
+                ...(context.degradation ? { degradation: context.degradation } : {}),
             },
         };
     }
@@ -508,6 +509,9 @@ export function createWeeklyReviewRepository(
                         JSON.stringify({
                             snapshotHash,
                             dependencyHash: fingerprint(frozen.dependencies),
+                            ...(frozen.summary.degradation
+                                ? { degradation: frozen.summary.degradation }
+                                : {}),
                         }),
                     ]
                 );

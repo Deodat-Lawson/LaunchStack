@@ -1,6 +1,9 @@
 import { fitTopicEvidence, mergeTopicSpans } from "~/server/vantage/weekly-review-topic-freeze";
 import type { TopicSeed } from "~/server/vantage/weekly-review-topic-types";
 import type { createScopedSourceReader } from "~/server/vantage/weekly-review-scoped-selection";
+import type { PreparedTopicSelection } from "~/server/vantage/weekly-review-topic-run";
+import { TopicRetrievalContextSchema } from "@launchstack/pipelines/vantage/topic-retrieval-v1";
+import { WeeklyReviewConflict } from "~/server/vantage/weekly-review-types";
 const date = "2026-11-15T00:00:00.000Z";
 function fixture(): TopicSeed {
     const fixed = {
@@ -144,15 +147,12 @@ it("fails closed when fixed context exceeds capacity", async () => {
         "mandatory_context_budget_exceeded"
     );
 });
-it("admits an unselected lane with an authorized scoped reader", async () => {
+async function authorizedReader(document: TopicSeed["documents"][number]) {
     const { compileScopedEvidence } = await import(
         "@launchstack/pipelines/vantage/scoped-evidence"
     );
     const { canonicalTextHash } = await import("@launchstack/store/document-digests");
-    const seed = fixture();
-    const document = seed.documents[0]!;
     document.hash = canonicalTextHash(document.text);
-    seed.manifest.lane = [document.ref];
     const read: ReturnType<typeof createScopedSourceReader> = async (
         id,
         purpose,
@@ -222,11 +222,94 @@ it("admits an unselected lane with an authorized scoped reader", async () => {
             })),
         };
     };
-    const frozen = await fitTopicEvidence("run", seed, { selected: [] }, read);
+    return read;
+}
+
+it("admits an unselected lane with an authorized scoped reader", async () => {
+    const seed = fixture();
+    const document = seed.documents[0]!;
+    seed.manifest.lane = [document.ref];
+    const frozen = await fitTopicEvidence(
+        "run",
+        seed,
+        { selected: [] },
+        await authorizedReader(document)
+    );
     expect(frozen.summary.lane.outcome).toBe("admitted");
     expect(frozen.input.sources).toHaveLength(2);
     expect(frozen.input.sources[0]).toEqual(seed.context.sources[0]);
 });
+const degradation = {
+    code: "topic_exploration_degraded:non_submission",
+    reason: "submission_missing",
+    provenance: "successful_canonical_excerpt_reads",
+} as const satisfies NonNullable<PreparedTopicSelection["degradation"]>;
+
+it("degraded freeze keeps fixed sources and skips both unread lane and backfill", async () => {
+    const seed = fixture();
+    seed.manifest.lane = [seed.documents[0]!.ref];
+    const read = jest.fn();
+    const frozen = await fitTopicEvidence("run", seed, { selected: [], degradation }, read, {
+        evidenceCapBytes: 8000,
+        backfill: true,
+    });
+    expect(read).not.toHaveBeenCalled();
+    expect(frozen.input.sources).toEqual(seed.context.sources);
+    expect(frozen.dependencies).toEqual(seed.manifest.fixedDependencies);
+    expect(frozen.summary).toMatchObject({ outcome: "degraded", degradation });
+    expect(TopicRetrievalContextSchema.parse(frozen.input.retrievalContext).degradation).toEqual(
+        degradation
+    );
+    expect(frozen.primary?.input.sources).toEqual(frozen.input.sources);
+});
+
+it("degraded freeze fits whole prior reads against the byte cap and rereads them under scope", async () => {
+    const seed = fixture();
+    const document = seed.documents[0]!;
+    document.text = "a".repeat(12000);
+    const read = jest.fn(await authorizedReader(document));
+    const result = {
+        degradation,
+        selected: [
+            {
+                ref: document.ref,
+                topicIds: [],
+                spans: [
+                    { start: 500, end: 5000 },
+                    { start: 5500, end: 9800 },
+                ],
+            },
+        ],
+    };
+    const frozen = await fitTopicEvidence("run", seed, result, read, { evidenceCapBytes: 8000 });
+    expect(frozen.input.sources.map(source => source.text)).toEqual([
+        seed.context.sources[0]!.text,
+        document.text.slice(500, 5000),
+    ]);
+    expect(read.mock.calls[0]?.[3].requiredUnits).toEqual([
+        expect.objectContaining({ start: 500, end: 5000 }),
+    ]);
+    expect(
+        frozen.input.sources.reduce((bytes, source) => bytes + Buffer.byteLength(source.text), 0)
+    ).toBeLessThanOrEqual(8000);
+    const denied = jest
+        .fn()
+        .mockRejectedValue(new WeeklyReviewConflict("source_authority_changed", 403));
+    await expect(
+        fitTopicEvidence("run", seed, result, denied, { evidenceCapBytes: 8000 })
+    ).rejects.toThrow("source_authority_changed");
+});
+
+it("degraded freeze rejects fixed evidence above the byte cap", async () => {
+    const seed = fixture();
+    seed.context.sources[0]!.text = "a".repeat(8001);
+    await expect(
+        fitTopicEvidence("run", seed, { selected: [], degradation }, reader, {
+            evidenceCapBytes: 8000,
+        })
+    ).rejects.toThrow("mandatory_context_budget_exceeded");
+});
+
 it("keeps all fixed sources when the lane has a capacity shortfall", async () => {
     const seed = fixture();
     const fixed = seed.context.sources[0]!;

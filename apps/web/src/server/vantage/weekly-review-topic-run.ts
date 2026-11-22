@@ -15,6 +15,7 @@ import {
     type ExplorationDocument,
     type ExplorationTrace,
     type TopicExplorationResult,
+    type TopicExplorationDegradation,
 } from "./weekly-review-topic-exploration";
 import { TOPIC_FIRST_LIMITS, type TopicSeed } from "./weekly-review-topic-types";
 import { WeeklyReviewConflict, type WeeklyReviewQuery } from "./weekly-review-types";
@@ -137,6 +138,12 @@ export async function prewarmTopicDigests(options: {
     }
 }
 
+export type PreparedTopicSelection = TopicExplorationResult & {
+    degradation?: TopicExplorationDegradation;
+};
+
+const FREEZE_RESERVE_MS = 5000;
+
 export async function prepareTopicSelection(options: {
     seed: TopicSeed;
     actor: WeeklyReviewAuthorityActor;
@@ -147,7 +154,7 @@ export async function prepareTopicSelection(options: {
     providers?: TopicSelectionProviders;
     onStage?: (stage: "exploration") => void;
     record: (values: { trace?: ExplorationTrace; digestIds?: string[] }) => Promise<void>;
-}): Promise<TopicExplorationResult | null> {
+}): Promise<PreparedTopicSelection | null> {
     const { seed, actor, deadlineAt, record } = options;
     const evidenceCapBytes = options.evidenceCapBytes ?? 80000;
     if (![8000, 16000, 32000, 80000].includes(evidenceCapBytes))
@@ -155,7 +162,11 @@ export async function prepareTopicSelection(options: {
     if (seed.manifest.configuration.provider === "seeds") return null;
     const controller = new AbortController();
     const expired = () => new WeeklyReviewConflict("topic_exploration_failed:timeout");
-    if (Date.now() >= deadlineAt) throw expired();
+    const remainingMs = deadlineAt - Date.now();
+    if (remainingMs <= 0) throw expired();
+    // Leave the authorization and freeze transaction inside the claimed hard deadline.
+    const explorationDeadline =
+        deadlineAt - Math.min(FREEZE_RESERVE_MS, Math.floor(remainingMs / 10));
     let timer: ReturnType<typeof setTimeout> | undefined;
     const deadline = new Promise<never>((_, reject) => {
         timer = setTimeout(
@@ -247,10 +258,14 @@ export async function prepareTopicSelection(options: {
                     })),
                     port,
                     record: trace => record({ trace }),
-                    deadlineAt,
+                    deadlineAt: explorationDeadline,
+                    hardDeadlineAt: deadlineAt,
                     signal: controller.signal,
                 });
-                return { selected: result.selected };
+                return {
+                    selected: result.selected,
+                    ...(result.degradation ? { degradation: result.degradation } : {}),
+                };
             })(),
         ]);
     } catch (error) {

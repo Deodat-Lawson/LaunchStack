@@ -30,21 +30,28 @@ it.each([false, true])(
                 ? [{ id: "invalid", name: "submit_result", arguments: { malformed: true } }]
                 : [],
         }));
-        const code = "topic_exploration_failed:submission_" + (invalid ? "invalid" : "missing");
-        await expect(
-            runTopicExploration({
-                catalogue: [],
-                topics: [],
-                offered: [],
-                port: { respond },
-                record,
-                deadlineAt: Date.now() + 2000,
-            })
-        ).rejects.toThrow(code);
+        const result = await runTopicExploration({
+            catalogue: [],
+            topics: [],
+            offered: [],
+            port: { respond },
+            record,
+            deadlineAt: Date.now() + 2000,
+        });
+        expect(result.selected).toEqual([]);
+        expect(result.degradation).toMatchObject({
+            code: "topic_exploration_degraded:non_submission",
+            reason: invalid ? "submission_invalid" : "submission_missing",
+        });
         expect(respond).toHaveBeenCalledTimes(12);
         expect(record).toHaveBeenLastCalledWith(
             expect.objectContaining({
-                events: expect.arrayContaining([{ kind: "failure", code }]),
+                events: expect.arrayContaining([
+                    expect.objectContaining({
+                        kind: "degradation",
+                        code: "topic_exploration_degraded:non_submission",
+                    }),
+                ]),
             })
         );
     }

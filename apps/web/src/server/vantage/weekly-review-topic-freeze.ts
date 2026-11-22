@@ -5,12 +5,9 @@ import {
 import { fingerprint } from "@launchstack/pipelines/vantage/weekly-review-validation";
 import { canonicalTextHash } from "@launchstack/store/document-digests";
 import type { TopicRetrievalContext } from "@launchstack/pipelines/vantage/topic-retrieval-v1";
-import {
-    normalizeTopicExcerpt,
-    validTopicExcerptRange,
-    type TopicExplorationResult,
-} from "./weekly-review-topic-exploration";
+import { normalizeTopicExcerpt, validTopicExcerptRange } from "./weekly-review-topic-exploration";
 import { lexicalBackfillSpan } from "./weekly-review-topic-backfill";
+import type { PreparedTopicSelection } from "./weekly-review-topic-run";
 import {
     TOPIC_FIRST_LIMITS,
     topicManifestHash,
@@ -38,7 +35,9 @@ export type TopicFreeze = {
     primary?: TopicFreeze;
     input: WeeklyReviewInput;
     dependencies: FrozenDependency[];
-    summary: Pick<TopicRetrievalContext, "mode" | "lane" | "seedReasons"> & { outcome: "frozen" };
+    summary: Pick<TopicRetrievalContext, "mode" | "lane" | "seedReasons" | "degradation"> & {
+        outcome: "frozen" | "degraded";
+    };
 };
 export function mergeTopicSpans(spans: Span[], text: string): Span[] {
     const merged: Span[] = [];
@@ -61,7 +60,7 @@ const defaultSpan = (text: string) => {
 export async function fitTopicEvidence(
     runId: string,
     seed: TopicSeed,
-    result: TopicExplorationResult | null,
+    result: PreparedTopicSelection | null,
     read: ReturnType<typeof createScopedSourceReader>,
     options: TopicFreezeOptions = {}
 ): Promise<TopicFreeze> {
@@ -69,6 +68,7 @@ export async function fitTopicEvidence(
     if (![8000, 16000, 32000, 80000].includes(evidenceCapBytes))
         throw new WeeklyReviewConflict("topic_evidence_cap_invalid");
     const { manifest, context } = seed;
+    const degradation = result?.degradation;
     const seedWindows = result === null && options.seedWindows === true;
     const offered = new Map(seed.documents.map(document => [document.ref, document]));
     const selections = new Map<string, Span[]>();
@@ -133,6 +133,7 @@ export async function fitTopicEvidence(
             topics,
             seedReasons: reasons,
             lane: { ...nextLane },
+            ...(degradation ? { degradation } : {}),
         };
         return {
             ...base,
@@ -201,6 +202,23 @@ export async function fitTopicEvidence(
         seedReasons.push(...reasons);
         return true;
     };
+    const addSelection = async (ref: string, spans: Span[], asLane: boolean) => {
+        if (!degradation) return addDocument(ref, spans, asLane);
+        // A fallback may retain fewer whole reads for a parent. It never expands them.
+        const document = offered.get(ref);
+        if (!document) return false;
+        let remainingBytes = evidenceCapBytes - evidenceBytes();
+        const availableUnits = 16 - sources.length;
+        const kept: Span[] = [];
+        for (const span of spans) {
+            if (kept.length === availableUnits) break;
+            const bytes = Buffer.byteLength(document.text.slice(span.start, span.end), "utf8");
+            if (bytes > remainingBytes) continue;
+            kept.push(span);
+            remainingBytes -= bytes;
+        }
+        return addDocument(ref, kept, asLane);
+    };
     const addLexicalWindow = async (ref: string, asLane: boolean) => {
         const document = offered.get(ref);
         if (!document || sources.length >= 16) return false;
@@ -220,7 +238,9 @@ export async function fitTopicEvidence(
         if (
             seedWindows
                 ? await addLexicalWindow(ref, true)
-                : await addDocument(ref, spans?.length ? spans : defaultSpan(document.text), true)
+                : degradation
+                  ? await addSelection(ref, spans ?? [], true)
+                  : await addDocument(ref, spans?.length ? spans : defaultSpan(document.text), true)
         ) {
             laneRef = ref;
             admitted.add(ref);
@@ -235,7 +255,7 @@ export async function fitTopicEvidence(
         }
     } else
         for (const [ref, spans] of selections) {
-            if (ref !== laneRef && (await addDocument(ref, spans, false))) admitted.add(ref);
+            if (ref !== laneRef && (await addSelection(ref, spans, false))) admitted.add(ref);
         }
     const snapshot = (): TopicFreeze => ({
         input: makeInput(
@@ -249,11 +269,12 @@ export async function fitTopicEvidence(
             mode: "topic-first",
             lane: { ...lane },
             seedReasons: seedReasons.map(reason => ({ ...reason })),
-            outcome: "frozen",
+            outcome: degradation ? "degraded" : "frozen",
+            ...(degradation ? { degradation } : {}),
         },
     });
     const primary = options.backfill ? snapshot() : undefined;
-    if (options.backfill) {
+    if (options.backfill && !degradation) {
         for (const document of seed.documents) {
             if (sources.length >= 16) break;
             if (admitted.has(document.ref)) continue;

@@ -5,7 +5,8 @@
  * `mindmap` feature and refused at the person's AI allowance).
  *
  * The model writes the same text the chat's `create_diagram` takes — an
- * outline or a Mermaid flowchart — and `buildDiagram` turns it into the
+ * outline, or a flowchart in the step language (Mermaid only for one that
+ * needs groups or a sideways flow) — and `buildDiagram` turns it into the
  * document, so a generated map and a drawn one cannot differ in kind.
  */
 
@@ -13,6 +14,7 @@ import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 
 import { invokeStructuredWithUsage } from "@launchstack/llm";
+import { STEPS_LANGUAGE } from "~/app/employer/documents/_mindmap/model/agent-edits";
 import {
     buildDiagram,
     DIAGRAM_TYPES,
@@ -29,14 +31,17 @@ const SpecSchema = z.object({
     title: z.string(),
     type: z.enum(DIAGRAM_TYPES),
     outline: z.string(),
+    steps: z.string(),
     mermaid: z.string(),
 });
 
 const FORMAT_RULES = [
     "Pick the type from the shape of the content: a topic broken into parts is a mindmap; reporting lines or a hierarchy of roles is an org_chart; a breakdown read left to right is a tree; steps, decisions and hand-offs are a flowchart.",
-    "For mindmap, org_chart and tree, write `outline` and leave `mermaid` empty: the centre on the first line, then one topic per line, each child indented two spaces under its parent as '- ' bullets.",
-    'For flowchart, write `mermaid` and leave `outline` empty: a Mermaid flowchart starting `flowchart TD` (or `flowchart LR` for a wide, shallow flow). Starts and ends as A([...]), steps as B[...], decisions as C{...} with every outgoing arrow labelled (-->|yes|), stores as D[(...)], and `subgraph Name ... end` for phases, teams or systems. Quote a label that contains brackets or punctuation: A["Pay (card)"].',
-    "Labels are short — two to six words — with no trailing punctuation. A mind map has three to seven main branches and at most four levels; a flowchart at most about thirty steps.",
+    "For mindmap, org_chart and tree, write `outline` and leave `steps` and `mermaid` empty: the centre on the first line, then one topic per line, each child indented two spaces under its parent as '- ' bullets.",
+    `For flowchart, write \`steps\` and leave \`outline\` and \`mermaid\` empty. ${STEPS_LANGUAGE}`,
+    "Every question in a flowchart ends in '?' and labels each branch (Yes/No, or the real answers); start with Start and end with End.",
+    'Only for a flowchart that needs groups (phases, teams, systems) or must run left to right, write `mermaid` instead of `steps`: a Mermaid flowchart starting `flowchart LR` or `flowchart TD`, decisions as C{...} with every outgoing arrow labelled (-->|yes|), and `subgraph Name ... end` for the groups. Quote a label that contains brackets or punctuation: A["Pay (card)"].',
+    "Labels are short — two to six words — with no trailing punctuation except a question's '?'. A mind map has three to seven main branches and at most four levels; a flowchart at most about thirty steps.",
     "Write the labels and the title in the language the request is written in.",
 ];
 
@@ -78,28 +83,30 @@ export async function generateDiagramSpec(
         buildDiagram(spec);
     } catch (error) {
         if (!(error instanceof DiagramSpecError)) throw error;
-        // One retry with the reason: a model that wrote prose in `mermaid`
-        // usually fixes it when told what was wrong.
+        // One retry with the reason: a model that wrote prose in `steps`, or
+        // an arrow to a step that is not there, usually fixes it when told.
         ({ result } = await ask(`Your last answer could not be drawn: ${error.message} Fix it.`));
         spec = toSpec(result, type);
     }
     return spec;
 }
 
-function toSpec(result: z.infer<typeof SpecSchema>, forced?: DiagramType): DiagramSpec {
+export function toSpec(result: z.infer<typeof SpecSchema>, forced?: DiagramType): DiagramSpec {
     const chosen = forced ?? result.type;
+    const flow = result.steps.trim() || result.mermaid.trim();
     // A model that picked flowchart but wrote an outline (or the reverse) is
     // read by what it wrote.
     const type: DiagramType =
-        chosen === "flowchart" && !result.mermaid.trim() && result.outline.trim()
+        chosen === "flowchart" && !flow && result.outline.trim()
             ? "mindmap"
-            : chosen !== "flowchart" && !result.outline.trim() && result.mermaid.trim()
+            : chosen !== "flowchart" && !result.outline.trim() && flow
               ? "flowchart"
               : chosen;
     return {
         title: result.title.trim() || "Untitled diagram",
         type,
         outline: result.outline,
+        steps: result.steps,
         mermaid: result.mermaid,
     };
 }

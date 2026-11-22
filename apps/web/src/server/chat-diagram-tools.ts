@@ -36,6 +36,7 @@ import {
     DIAGRAM_EDIT_OPS,
     FLOW_SHAPES,
     MAX_EDITS,
+    STEPS_LANGUAGE,
     type DiagramEdit,
 } from "~/app/employer/documents/_mindmap/model/agent-edits";
 import { DIAGRAM_TYPES } from "~/app/employer/documents/_mindmap/model/generate";
@@ -114,23 +115,9 @@ function folderFrom(raw: string | undefined): string {
     return path;
 }
 
-/**
- * The step language in one breath, with one example — a decision, its
- * branches and a loop back. Shared by the prompt, the tool descriptions and
- * the MCP tools.
- */
-export const STEPS_LANGUAGE = [
-    'The step language: one step per line, joined in order. A line ending in "?" is a decision; its branches are the lines indented two spaces under it, written "Label: step". "-> Step" after a step (or a branch) sends it to the step with those exact words instead of the next line — a loop back, or a jump ahead. A line that is just Start or End is a pill; End goes nowhere. Example:',
-    "Start",
-    "Receive the order",
-    "In stock?",
-    "  Yes: Pick and pack",
-    "  No: Reorder from supplier -> Receive the order",
-    "Ship it",
-    "End",
-].join("\n");
-
 const FindArgs = z.object({ query: z.string().trim().max(200).optional() });
+export { STEPS_LANGUAGE };
+
 const ReadArgs = z.object({ diagram: z.union([z.string(), z.number()]) });
 const CreateArgs = z.object({
     title: z.string().trim().min(1, "must not be empty").max(200),

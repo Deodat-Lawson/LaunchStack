@@ -100,6 +100,22 @@ function drawsInFlowLook(doc: MindmapDoc, p: DiagramPage): boolean {
     return worksAsFlow(doc.settings.kind) || readsAsSteps(p, doc.settings.kind);
 }
 
+/**
+ * The step language in one breath, with one example — a decision, its
+ * branches and a loop back. Shared by Ask's prompt and tool descriptions,
+ * the MCP tools and the editor's own generate call.
+ */
+export const STEPS_LANGUAGE = [
+    'The step language: one step per line, joined in order. A line ending in "?" is a decision; its branches are the lines indented two spaces under it, written "Label: step". "-> Step" after a step (or a branch) sends it to the step with those exact words instead of the next line — a loop back, or a jump ahead. A line that is just Start or End is a pill; End goes nowhere. Example:',
+    "Start",
+    "Receive the order",
+    "In stock?",
+    "  Yes: Pick and pack",
+    "  No: Reorder from supplier -> Receive the order",
+    "Ship it",
+    "End",
+].join("\n");
+
 /** The step language, said once to a model reading a flowchart. */
 export const STEPS_LEGEND =
     'one step per line, joined in order; a line ending in "?" is a decision, and the lines indented under it are its branches, written "Label: step"; "-> Step" is an arrow to the step with those words; a line that is just Start or End is a pill';

@@ -255,7 +255,9 @@ export function scoreRetrieval(bundle, corpus, runs) {
             failed: !["ok", "accepted", "success"].includes(run.status),
             failureCode:
                 run.failure?.code ??
-                (typeof run.failure === "string" ? run.failure.split(":")[0] : null),
+                (typeof run.failure === "string" && /^[a-z][a-z0-9_:]{0,100}$/.test(run.failure)
+                    ? run.failure
+                    : null),
         });
     }
     const aggregate = attempts => {
@@ -283,7 +285,65 @@ export function scoreRetrieval(bundle, corpus, runs) {
             row.factResults.some(fact => fact.filenameResolved)
         );
         const strictFacts = rows.flatMap(row => row.factResults);
+        const documentSelected = candidates => {
+            const scored = candidates.flatMap(row => {
+                const expected = new Map(
+                    row.factResults
+                        .filter(fact => fact.filenameResolved)
+                        .map(fact => [
+                            JSON.stringify([fact.documentId, fact.versionId]),
+                            fact.selected,
+                        ])
+                );
+                return expected.size
+                    ? [
+                          {
+                              expected: expected.size,
+                              selected: row.failed
+                                  ? 0
+                                  : [...expected.values()].filter(Boolean).length,
+                          },
+                      ]
+                    : [];
+            });
+            const expectedDocuments = scored.reduce((sum, row) => sum + row.expected, 0);
+            const selectedDocuments = scored.reduce((sum, row) => sum + row.selected, 0);
+            return {
+                attempts: candidates.length,
+                scoredCases: scored.length,
+                excludedNoResolvedDocumentCases: candidates.length - scored.length,
+                expectedDocuments,
+                selectedDocuments,
+                recall: expectedDocuments ? selectedDocuments / expectedDocuments : null,
+                allResolvedDocumentsSelectedCases: scored.filter(
+                    row => row.selected === row.expected
+                ).length,
+                anyResolvedDocumentSelectedCases: scored.filter(row => row.selected > 0).length,
+            };
+        };
         return {
+            primaryDocumentSelectedRecall: {
+                definition:
+                    "Distinct filename-resolved supporting document versions per case; failed attempts contribute zero selected documents",
+                failuresIncluded: documentSelected(attempts),
+                failuresExcluded: documentSelected(attempts.filter(row => !row.failed)),
+            },
+            failureCauses: Object.fromEntries(
+                [
+                    ...new Set(
+                        attempts
+                            .filter(row => row.failed)
+                            .map(row => row.failureCode ?? "unclassified")
+                    ),
+                ]
+                    .sort()
+                    .map(cause => [
+                        cause,
+                        attempts.filter(
+                            row => row.failed && (row.failureCode ?? "unclassified") === cause
+                        ).length,
+                    ])
+            ),
             resolvedDocumentRecall: {
                 cases: attempts.length,
                 scoredCases: resolvedCases.length,

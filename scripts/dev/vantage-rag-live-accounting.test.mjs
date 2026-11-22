@@ -1,21 +1,30 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
-import { mkdtemp, mkdir, writeFile, rm } from "node:fs/promises";
+import { mkdtemp, mkdir, writeFile, rm, rename } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { createHash } from "node:crypto";
 import { latency, liveAccounting } from "./vantage-rag-live-accounting.mjs";
 
 test("latency uses median and nearest-rank p95, with explicit absent samples", () => {
-    assert.deepEqual(latency([]), { n: 0, min: null, median: null, p95: null, max: null });
+    assert.deepEqual(latency([]), {
+        n: 0,
+        min: null,
+        median: null,
+        p90: null,
+        p95: null,
+        max: null,
+    });
     assert.deepEqual(latency([3, 1, 4, 2, undefined]), {
         n: 4,
         min: 1,
         median: 2.5,
+        p90: 4,
         p95: 4,
         max: 4,
     });
     assert.equal(latency(Array.from({ length: 20 }, (_, i) => i + 1)).p95, 19);
+    assert.equal(latency(Array.from({ length: 20 }, (_, i) => i + 1)).p90, 18);
 });
 test("partial capture preserves unknown reservations and sanitizes content", async () => {
     const cache = await mkdtemp(join(tmpdir(), "vantage-live-accounting-test-"));
@@ -91,6 +100,45 @@ test("partial capture preserves unknown reservations and sanitizes content", asy
         assert.deepEqual(report.integrity.issues, []);
         assert.equal(report.integrity.filesRead, 4);
         assert(!JSON.stringify(report).includes("PRIVATE_"));
+        await rename(join(evidence, "case-01.json"), join(evidence, "case-100.json"));
+        const hundred = await liveAccounting(join(cache, "live.json"), { expectedCases: 100 });
+        assert.equal(hundred.cases.expected, 100);
+        assert.equal(hundred.complete, false);
+        assert.equal(hundred.tools.perCase[0].caseNumber, 100);
+        assert.equal(hundred.tools.perCase[0].invalidCallCount, 1);
+        checkpoint.trace.version = 2;
+        checkpoint.trace.events.push({
+            kind: "tool_validation",
+            name: "submit_result",
+            callId: "fixture-call",
+            code: "submission_invalid",
+            content: "PRIVATE_VALIDATION_TEXT",
+        });
+        await writeFile(join(evidence, "case-100.json"), JSON.stringify(checkpoint));
+        const validation = await liveAccounting(join(cache, "live.json"), { expectedCases: 100 });
+        assert.equal(validation.tools.preHandlerValidationErrors, 1);
+        assert.equal(validation.tools.perCase[0].invalidExecutedResults, 1);
+        assert.equal(validation.tools.perCase[0].invalidCallCount, 2);
+        assert.equal(validation.tools.perCase[0].preHandlerValidationObservable, true);
+        assert(!JSON.stringify(validation).includes("PRIVATE_"));
+        checkpoint.ledgerStart = 1;
+        await writeFile(join(evidence, "case-100.json"), JSON.stringify(checkpoint));
+        await writeFile(
+            join(evidence, "warm-up.json"),
+            JSON.stringify({
+                ledgerStart: 0,
+                ledgerEnd: 1,
+                documents: 1,
+                groundedDigests: 1,
+                generatedProviderCalls: 1,
+                cacheHits: 0,
+                elapsedMs: 30,
+            })
+        );
+        const warmed = await liveAccounting(join(cache, "live.json"), { expectedCases: 100 });
+        assert.equal(warmed.calls.prewarmRequests, 1);
+        assert.equal(warmed.costs.prewarmConservativeSettledUsd, 0.01);
+        assert.deepEqual(warmed.integrity.issues, []);
     } finally {
         await rm(cache, { recursive: true, force: true });
     }

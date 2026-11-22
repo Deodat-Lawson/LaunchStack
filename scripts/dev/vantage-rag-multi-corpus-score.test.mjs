@@ -38,6 +38,40 @@ const run = {
     frozenBytes: 100,
 };
 
+test("primary document selection deduplicates supporting versions and exposes both failure denominators", () => {
+    const labels = { cases: [bundle.cases[0], { ...bundle.cases[0], id: "second" }] };
+    const scored = scoreRetrieval(labels, corpus, [
+        run,
+        { ...run, caseId: "2", status: "failed", failure: "topic_exploration_failed:timeout" },
+    ]);
+    const metric = scored.summary.arms.baseline.primaryDocumentSelectedRecall;
+    assert.equal(metric.failuresIncluded.attempts, 2);
+    assert.equal(metric.failuresIncluded.expectedDocuments, 2);
+    assert.equal(metric.failuresIncluded.selectedDocuments, 1);
+    assert.equal(metric.failuresIncluded.recall, 0.5);
+    assert.equal(metric.failuresExcluded.attempts, 1);
+    assert.equal(metric.failuresExcluded.recall, 1);
+    assert.equal(scored.summary.arms.baseline.failureCauses["topic_exploration_failed:timeout"], 1);
+    const repeated = {
+        cases: [
+            {
+                ...bundle.cases[0],
+                groundTruth: {
+                    supportingFacts: [
+                        ...bundle.cases[0].groundTruth.supportingFacts,
+                        ...bundle.cases[0].groundTruth.supportingFacts,
+                    ],
+                },
+            },
+        ],
+    };
+    assert.equal(
+        scoreRetrieval(repeated, corpus, [run]).summary.arms.baseline.primaryDocumentSelectedRecall
+            .failuresIncluded.expectedDocuments,
+        1
+    );
+});
+
 test("request boundary contains only ordinal company identities and question", () => {
     const requests = buildRequests(bundle, corpus);
     assert.deepEqual(requests, [

@@ -1,31 +1,53 @@
-/** Validate and price the Azure pilot locally before sending model requests. */
-import { readFile } from "node:fs/promises";
-import { fileURLToPath } from "node:url";
-import { resolve } from "node:path";
+/** Validate and price the Azure retrieval benchmark before sending model requests. */
 import { resolveChatRoute, type ChatRoute } from "@launchstack/llm";
-import { z } from "zod";
 import { getAppChatModelsConfig } from "../src/server/chat-models";
 
-export const AZURE_LIVE_LIMIT = 15;
+export const AZURE_LIVE_LIMIT = 10;
 export const AZURE_LUNA_DEPLOYMENT = "gpt-6-luna";
 export const AZURE_LUNA_OUTPUT_LIMIT = 6000;
-export const AZURE_LUNA_STANDARD_PER_MILLION = { input: 0.1, cachedInput: 0.01, output: 0.5 };
 export const AZURE_LUNA_RESERVATION_PER_MILLION = { input: 0.3, output: 0.9 };
 const rateSource =
     "https://azure.microsoft.com/en-us/blog/gpt-6-astra-sol-and-luna-for-production-agents-in-microsoft-foundry/";
-const root = fileURLToPath(new URL("../../../", import.meta.url));
-const previous = resolve(root, "docs/engineering/vantage-rag-multi-corpus-results-20261121.json");
-const accounting = z.object({
-    estimatedExplorationInputTokens: z.number().int().nonnegative(),
-    estimatedDigestInputTokens: z.number().int().nonnegative(),
-    estimatedOutputTokens: z.number().int().nonnegative().optional(),
-    estimatedExplorationOutputTokens: z.number().int().nonnegative(),
-    estimatedDigestOutputTokens: z.number().int().nonnegative(),
-    digestProviderCalls: z.number().int().positive(),
-    explorationResponses: z.number().int().positive(),
-});
 
-export async function planAzureLive(env = process.env) {
+// Nearest-rank p90 of the a68442c2 pilot's per-case exploration exposure
+// (settled conservative charges plus full unresolved request reserves).
+const pilotExplorationP90Usd = 0.0521793;
+const explorationPadding = 1.5;
+
+export function projectAzureLive(input: {
+    remainingCases: number;
+    missingDigestBytes?: readonly number[];
+    currentExposureUsd?: number;
+    completedExplorationCases?: number;
+    completedExplorationExposureUsd?: number;
+}) {
+    const { input: inputRate, output: outputRate } = AZURE_LUNA_RESERVATION_PER_MILLION;
+    const digestUsd = (input.missingDigestBytes ?? []).reduce(
+        (sum, bytes) =>
+            sum + ((bytes * 6 + 8192) * inputRate + AZURE_LUNA_OUTPUT_LIMIT * outputRate) / 1e6,
+        0
+    );
+    // Keep the pilot projection until a small cohort from the changed path is available.
+    const completed = input.completedExplorationCases ?? 0;
+    const observedMeanUsd =
+        completed >= 10 ? (input.completedExplorationExposureUsd ?? 0) / completed : 0;
+    const explorationPerCaseUsd =
+        Math.max(pilotExplorationP90Usd, observedMeanUsd) * explorationPadding;
+    const explorationUsd = explorationPerCaseUsd * input.remainingCases;
+    return {
+        pilotExplorationP90Usd,
+        explorationPadding,
+        remainingCases: input.remainingCases,
+        missingDigests: input.missingDigestBytes?.length ?? 0,
+        digestUsd,
+        explorationUsd,
+        explorationPerCaseUsd,
+        projectedUsd: (input.currentExposureUsd ?? 0) + digestUsd + explorationUsd,
+        limitUsd: AZURE_LIVE_LIMIT,
+    };
+}
+
+export function planAzureLive(env = process.env) {
     const base = env.CHAT_BASE_URL?.trim();
     const credential = env.CHAT_API_KEY?.trim();
     if (!base || !credential) throw new Error("benchmark_azure_chat_environment_required");
@@ -78,37 +100,5 @@ export async function planAzureLive(env = process.env) {
     if (routes.find(row => row.label === "reasoning")?.effort !== "high")
         throw new Error("benchmark_azure_high_reasoning_route_required");
 
-    const study = JSON.parse(await readFile(previous, "utf8")) as { liveDryAccounting?: unknown };
-    const dry = accounting.parse(study.liveDryAccounting);
-    const input = dry.estimatedDigestInputTokens + dry.estimatedExplorationInputTokens;
-    const output = dry.estimatedDigestOutputTokens + dry.estimatedExplorationOutputTokens;
-    const maxExplorationCalls = 20 * 12;
-    const projectedInput =
-        dry.estimatedDigestInputTokens +
-        Math.ceil(
-            (dry.estimatedExplorationInputTokens * maxExplorationCalls) / dry.explorationResponses
-        );
-    const projectedOutput =
-        (dry.digestProviderCalls + maxExplorationCalls) * AZURE_LUNA_OUTPUT_LIMIT;
-    const standardUsd =
-        (input * AZURE_LUNA_STANDARD_PER_MILLION.input +
-            output * AZURE_LUNA_STANDARD_PER_MILLION.output) /
-        1e6;
-    const paddedUsd =
-        (projectedInput * AZURE_LUNA_RESERVATION_PER_MILLION.input +
-            projectedOutput * AZURE_LUNA_RESERVATION_PER_MILLION.output) /
-        1e6;
-    const summary = {
-        routes,
-        standardUsd,
-        paddedUsd,
-        limitUsd: AZURE_LIVE_LIMIT,
-        rateSource,
-        dryDigestCalls: dry.digestProviderCalls,
-        dryExplorationCalls: dry.explorationResponses,
-        maxExplorationCalls,
-        projectedInputTokens: projectedInput,
-        projectedOutputTokens: projectedOutput,
-    };
-    return { summary, config, endpoint: config.endpoint.baseUrl, apiKey: credential };
+    return { routes, rateSource, config, endpoint: config.endpoint.baseUrl, apiKey: credential };
 }

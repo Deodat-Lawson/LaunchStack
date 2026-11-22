@@ -3,6 +3,7 @@ import { readFile, realpath, readdir } from "node:fs/promises";
 import { resolve, relative, isAbsolute, dirname, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { createHash } from "node:crypto";
+import { parseArgs } from "node:util";
 
 const root = fileURLToPath(new URL("../../", import.meta.url));
 const tools = new Set([
@@ -26,12 +27,13 @@ const increment = (counts, key) => {
 };
 export function latency(values) {
     const sorted = values.filter(number).sort((a, b) => a - b);
-    if (!sorted.length) return { n: 0, min: null, median: null, p95: null, max: null };
+    if (!sorted.length) return { n: 0, min: null, median: null, p90: null, p95: null, max: null };
     const middle = Math.floor(sorted.length / 2);
     return {
         n: sorted.length,
         min: sorted[0],
         median: sorted.length % 2 ? sorted[middle] : (sorted[middle - 1] + sorted[middle]) / 2,
+        p90: sorted[Math.ceil(sorted.length * 0.9) - 1],
         p95: sorted[Math.ceil(sorted.length * 0.95) - 1],
         max: sorted.at(-1),
     };
@@ -40,7 +42,9 @@ function inside(parent, child) {
     const part = relative(parent, child);
     return !isAbsolute(part) && part !== ".." && !part.startsWith(".." + sep);
 }
-export async function liveAccounting(capture) {
+export async function liveAccounting(capture, { expectedCases = 20 } = {}) {
+    if (!Number.isSafeInteger(expectedCases) || expectedCases < 1 || expectedCases > 100)
+        throw new Error("accounting_case_count_invalid");
     const mainPath = await realpath(capture);
     if (inside(await realpath(root), mainPath))
         throw new Error("accounting_capture_must_be_external");
@@ -62,26 +66,67 @@ export async function liveAccounting(capture) {
     const results = await json(mainPath);
     if (!Array.isArray(results)) throw new Error("accounting_capture_invalid");
     const cases = [];
-    const names = (await readdir(directory)).filter(name => /^case-\d{2}\.json$/.test(name)).sort();
+    const names = (await readdir(directory))
+        .filter(name => /^case-\d{2,3}\.json$/.test(name))
+        .sort((a, b) => Number(a.slice(5, -5)) - Number(b.slice(5, -5)));
     for (const name of names) cases.push(await json(resolve(directory, name)));
     const digests = await json(resolve(directory, "digests.json"));
     const ledger = await json(resolve(directory, "usage-ledger.json"));
+    let warmUp;
+    try {
+        warmUp = await json(resolve(directory, "warm-up.json"));
+    } catch (error) {
+        if (error.code !== "ENOENT") throw error;
+    }
+    const prewarmLedgerEnd = warmUp?.prewarmLedgerEnd ?? warmUp?.ledgerEnd ?? 0;
+    if (
+        !Number.isSafeInteger(prewarmLedgerEnd) ||
+        prewarmLedgerEnd < 0 ||
+        prewarmLedgerEnd > ledger.records?.length
+    )
+        throw new Error("accounting_prewarm_ledger_range_invalid");
+    if (warmUp?.ledgerStart !== undefined && warmUp.ledgerStart !== 0)
+        throw new Error("accounting_prewarm_ledger_start_invalid");
     if (!Array.isArray(digests) || !Array.isArray(ledger.records))
         throw new Error("accounting_evidence_invalid");
     const failureCodes = {},
         traceFailures = {},
         toolResults = {},
         requestedTools = {};
+    const perCaseTools = [];
     let toolResultHashMismatches = 0,
         missingTraceCases = 0;
     for (const entry of cases) {
+        const validationEvents = (entry.trace?.events ?? []).filter(
+            event => event.kind === "tool_validation"
+        );
+        const caseTools = {
+            caseNumber: Number(names[cases.indexOf(entry)].slice(5, -5)),
+            executedCalls: 0,
+            invalidExecutedResults: 0,
+            preHandlerValidationErrors: validationEvents.length,
+            legacyUnknownToolRequests: 0,
+            invalidCallCount: 0,
+            preHandlerValidationObservable:
+                validationEvents.length > 0 || entry.trace?.version === 2,
+            byCode: {},
+            failureCode: entry.failure ? code(entry.failure) : null,
+            explorationMs: entry.stageMs?.exploration ?? null,
+        };
         if (entry.failure) increment(failureCodes, code(entry.failure));
         if (!entry.trace) missingTraceCases++;
         for (const event of entry.trace?.events ?? []) {
+            if (event.kind === "tool_validation") {
+                increment(caseTools.byCode, code(event.code));
+                continue;
+            }
             if (event.kind === "failure") increment(traceFailures, code(event.code));
             if (event.kind === "response")
-                for (const call of event.response?.toolCalls ?? [])
+                for (const call of event.response?.toolCalls ?? []) {
                     increment(requestedTools, tools.has(call.name) ? call.name : "unknown_tool");
+                    if (!tools.has(call.name) && !validationEvents.length)
+                        caseTools.legacyUnknownToolRequests++;
+                }
             if (event.kind !== "tool") continue;
             const name = tools.has(event.name) ? event.name : "unknown_tool";
             let result = "success";
@@ -95,6 +140,11 @@ export async function liveAccounting(capture) {
                 result = "invalid_json";
             }
             increment(toolResults, name + "/" + result);
+            caseTools.executedCalls++;
+            if (result !== "success" && result !== "digest_unavailable") {
+                caseTools.invalidExecutedResults++;
+                increment(caseTools.byCode, result);
+            }
             if (
                 typeof event.content !== "string" ||
                 createHash("sha256").update(JSON.stringify(event.content)).digest("hex") !==
@@ -102,6 +152,11 @@ export async function liveAccounting(capture) {
             )
                 toolResultHashMismatches++;
         }
+        caseTools.invalidCallCount =
+            caseTools.invalidExecutedResults +
+            caseTools.preHandlerValidationErrors +
+            caseTools.legacyUnknownToolRequests;
+        perCaseTools.push(caseTools);
     }
     const nativeTokens = {};
     for (const field of [
@@ -157,7 +212,7 @@ export async function liveAccounting(capture) {
     const fullReservations = sum(unsettled.map(row => row.projectedUsd));
     const issues = [];
     if (cases.length !== results.length) issues.push("checkpoint_capture_count_mismatch");
-    let lastEnd = 0;
+    let lastEnd = prewarmLedgerEnd;
     for (const [index, entry] of cases.entries()) {
         if (
             !results[index] ||
@@ -184,8 +239,9 @@ export async function liveAccounting(capture) {
         issues.push("reservation_total_mismatch");
     return {
         schemaVersion: "vantage-rag-live-accounting/1",
-        complete: results.length === 20,
+        complete: results.length === expectedCases,
         cases: {
+            expected: expectedCases,
             captured: results.length,
             checkpoints: cases.length,
             successful: results.filter(row => row.status === "ok").length,
@@ -200,6 +256,9 @@ export async function liveAccounting(capture) {
             stages: Object.fromEntries(
                 stages.map(stage => [stage, latency(cases.map(row => row.stageMs?.[stage]))])
             ),
+            explorationFailuresExcluded: latency(
+                cases.filter(row => row.status === "ok").map(row => row.stageMs?.exploration)
+            ),
         },
         calls: {
             byRoute,
@@ -208,10 +267,32 @@ export async function liveAccounting(capture) {
             inferredLegacyRoutes,
             records: records.length,
             recordsAfterLastCheckpoint: records.length - lastEnd,
+            prewarmLedgerEnd,
+            prewarmRequests: records
+                .slice(0, prewarmLedgerEnd)
+                .filter(row => ["sent", "settled", "unknown"].includes(row.status)).length,
         },
         nativeTokens,
+        warmUp: warmUp
+            ? Object.fromEntries(
+                  [
+                      "documents",
+                      "groundedDigests",
+                      "generatedProviderCalls",
+                      "cacheHits",
+                      "elapsedMs",
+                  ].map(key => [key, number(warmUp[key]) ? warmUp[key] : null])
+              )
+            : null,
         costs: {
             basis: "Azure list-rate estimates from native usage; invoice billing unverified",
+            scope: "Full capture ledger including any digest warm-up prefix and unfinished requests",
+            prewarmConservativeSettledUsd: round(
+                sum(records.slice(0, prewarmLedgerEnd).map(row => row.settledListRateUsd ?? 0))
+            ),
+            prewarmGlobalStandardSettledUsd: round(
+                sum(records.slice(0, prewarmLedgerEnd).map(row => row.globalShortListRateUsd ?? 0))
+            ),
             pricingSource: /^https:\/\/azure\.microsoft\.com\//.test(ledger.pricingSource)
                 ? ledger.pricingSource
                 : null,
@@ -243,7 +324,18 @@ export async function liveAccounting(capture) {
             limitUsd: ledger.limitUsd,
             hold: ledger.hold ? code(ledger.hold) : null,
         },
-        tools: { requestedByName: requestedTools, executedByNameAndResult: toolResults },
+        tools: {
+            requestedByName: requestedTools,
+            executedByNameAndResult: toolResults,
+            invalidCallCount: sum(perCaseTools.map(row => row.invalidCallCount)),
+            invalidExecutedResults: sum(perCaseTools.map(row => row.invalidExecutedResults)),
+            preHandlerValidationErrors: sum(
+                perCaseTools.map(row => row.preHandlerValidationErrors)
+            ),
+            observability:
+                "Historical traces lack pre-handler validation events; comparable executed-error counts are reported separately",
+            perCase: perCaseTools,
+        },
         integrity: {
             issues: [...new Set(issues)],
             toolResultHashMismatches,
@@ -255,7 +347,11 @@ export async function liveAccounting(capture) {
     };
 }
 if (process.argv[1] && pathToFileURL(resolve(process.argv[1])).href === import.meta.url) {
-    liveAccounting(process.argv[2])
+    const { values, positionals } = parseArgs({
+        allowPositionals: true,
+        options: { "expected-cases": { type: "string", default: "20" } },
+    });
+    liveAccounting(positionals[0], { expectedCases: Number(values["expected-cases"]) })
         .then(result => console.log(JSON.stringify(result, null, 2)))
         .catch(() => {
             console.error("live_accounting_failed");

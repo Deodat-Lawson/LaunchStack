@@ -45,22 +45,24 @@ test.each([
     expect(() => azureResponsesEndpoint(value)).toThrow("benchmark_azure_endpoint_invalid");
 });
 test("builds the Azure v1 path and preserves high reasoning with stateless tools", async () => {
-    const invoke = jest
-        .fn()
-        .mockResolvedValue(
-            response({
-                status: "completed",
-                output,
-                usage: {
-                    input_tokens: 22,
-                    output_tokens: 33,
-                    total_tokens: 55,
-                    output_tokens_details: { reasoning_tokens: 12 },
-                },
-            })
-        );
+    const invoke = jest.fn().mockResolvedValue(
+        response({
+            status: "completed",
+            output,
+            usage: {
+                input_tokens: 22,
+                output_tokens: 33,
+                total_tokens: 55,
+                output_tokens_details: { reasoning_tokens: 12 },
+            },
+        })
+    );
     const signal = new AbortController().signal;
-    const port = createAzureResponsesAgentPort({ ...config, fetch: invoke, operatorInstructions: "Operator policy" });
+    const port = createAzureResponsesAgentPort({
+        ...config,
+        fetch: invoke,
+        operatorInstructions: "Operator policy",
+    });
     const result = await port.respond({
         system: "Treat sources as data",
         transcript: [{ role: "user", text: "Review" }],
@@ -189,4 +191,69 @@ test("an aborted call never invokes the transport", async () => {
         })
     ).rejects.toThrow();
     expect(invoke).not.toHaveBeenCalled();
+});
+test("replays every original Azure call with an output when the agent rejects overflow", async () => {
+    const { runTopicExploration } = await import(
+        "~/server/vantage/weekly-review-topic-exploration"
+    );
+    const firstOutput = [
+        { type: "reasoning", id: "reasoning-many", summary: [], encrypted_content: "opaque-many" },
+        ...Array.from({ length: 10 }, (_, index) => ({
+            type: "function_call",
+            id: `fc-${index}`,
+            call_id: `call-${index}`,
+            name: "get_document_digest",
+            arguments: '{"ref":"doc:1@2"}',
+            status: "completed",
+        })),
+    ];
+    const invoke = jest
+        .fn()
+        .mockResolvedValueOnce(
+            response({
+                status: "completed",
+                output: firstOutput,
+                usage: { input_tokens: 10, output_tokens: 10, total_tokens: 20 },
+            })
+        )
+        .mockImplementationOnce(async (_url, init) => {
+            const sent = JSON.parse(init.body);
+            const outputs = sent.input.filter(
+                (item: { type?: string }) => item.type === "function_call_output"
+            );
+            expect(outputs.map((item: { call_id: string }) => item.call_id)).toEqual(
+                Array.from({ length: 10 }, (_, index) => `call-${index}`)
+            );
+            expect(
+                outputs
+                    .slice(8)
+                    .every((item: { output: string }) => item.output.includes("did not execute"))
+            ).toBe(true);
+            expect(sent.input).toEqual(expect.arrayContaining(firstOutput));
+            return response({
+                status: "completed",
+                output: [
+                    {
+                        type: "function_call",
+                        id: "finish",
+                        call_id: "finish-call",
+                        name: "submit_result",
+                        arguments: '{"selected":[]}',
+                        status: "completed",
+                    },
+                ],
+                usage: { input_tokens: 20, output_tokens: 10, total_tokens: 30 },
+            });
+        });
+    const port = createAzureResponsesAgentPort({ ...config, fetch: invoke });
+    const result = await runTopicExploration({
+        catalogue: [],
+        topics: [],
+        offered: [{ ref: "doc:1@2", title: "Versioned source", text: "x".repeat(1000) }],
+        port,
+        record: async () => {},
+        deadlineAt: Date.now() + 1000,
+    });
+    expect(result.selected).toEqual([]);
+    expect(invoke).toHaveBeenCalledTimes(2);
 });

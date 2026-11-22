@@ -2,7 +2,10 @@
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import type { invokeStructuredAttempt, ResolvedChatModel } from "@launchstack/llm";
-import { deterministicDigestProvider } from "@launchstack/store/document-digests";
+import {
+    deterministicDigestProvider,
+    type DocumentDigest,
+} from "@launchstack/store/document-digests";
 import {
     RATED_CRITERIA,
     fingerprint,
@@ -22,6 +25,7 @@ import { createWeeklyReviewRepository } from "../src/server/vantage/weekly-revie
 import { createScriptedExplorationPort } from "../src/server/vantage/weekly-review-topic-exploration";
 import {
     prepareTopicSelection,
+    prewarmTopicDigests,
     type TopicSelectionProviders,
 } from "../src/server/vantage/weekly-review-topic-run";
 import { fitTopicEvidence } from "../src/server/vantage/weekly-review-topic-freeze";
@@ -76,6 +80,9 @@ export function benchmarkFailureCode(error: unknown): string {
             "benchmark_live_requires_guarded_providers",
             "benchmark_question_exceeds_existing_guidance_limit",
             "benchmark_local_database_required",
+            "benchmark_projected_budget_exceeded",
+            "benchmark_digest_warm_up_incomplete",
+            "benchmark_digest_missing_after_warm_up",
         ].includes(error.message)
     )
         return error.message;
@@ -294,7 +301,6 @@ export async function runBenchmarkRetrieval(options: {
             );
         reserved = true;
         if (seed) {
-            const deadlineAt = await repository.claimExploration(current, id);
             const defaults: TopicSelectionProviders = {
                 digest: deterministicDigestProvider,
                 exploration: createScriptedExplorationPort,
@@ -335,22 +341,74 @@ export async function runBenchmarkRetrieval(options: {
                     };
                 },
             };
-            const selection = await prepareTopicSelection({
-                seed,
-                actor: await options.loadActor(),
-                deadlineAt,
-                providers,
-                onStage: nextStage,
-                query: (sql, args) => options.database.transaction(query => query(sql, args)),
-                record: async values => {
-                    if (values.digestIds)
-                        accounting.digestCacheHits = Math.max(
-                            0,
-                            values.digestIds.length - accounting.digestProviderCalls
-                        );
-                    await repository.recordExploration(current, id, values);
-                },
-            });
+            const query = (sql: string, args?: unknown[]) =>
+                options.database.transaction(query => query(sql, args));
+            let digests: ReadonlyMap<string, DocumentDigest> = new Map();
+            const usesExploration = seed.manifest.configuration.provider !== "seeds";
+            if (usesExploration) {
+                await repository.beginDigestPreparation(current, id);
+                nextStage("digest");
+                const digestStart = Date.now();
+                try {
+                    const prepared = await prewarmTopicDigests({
+                        actor: await options.loadActor(),
+                        versionIds: seed.documents.map(document => document.version),
+                        query,
+                        provider: providers.digest,
+                        cachePolicy: options.arm === "configured-live" ? "shared" : "ephemeral",
+                        authorizeDocument: async () => {
+                            const [epoch] = await query(
+                                "SELECT version FROM pdr_ai_v2_vantage_weekly_review_epochs WHERE company_id=$1::bigint",
+                                [actor.companyId]
+                            );
+                            if (String(epoch?.version) !== seed.manifest.epoch)
+                                throw new WeeklyReviewConflict("source_authority_changed");
+                            return true;
+                        },
+                    });
+                    digests = prepared.digests;
+                    accounting.digestCacheHits = Math.max(
+                        0,
+                        digests.size - accounting.digestProviderCalls
+                    );
+                    await repository.recordDigestPreparation(current, id, {
+                        digestIds: prepared.digestIds,
+                        timing: { ...prepared.timing, digestOutcome: "ready" },
+                    });
+                } catch (error) {
+                    await repository.recordDigestPreparation(current, id, {
+                        timing: {
+                            digestCompletedAt: new Date().toISOString(),
+                            digestDurationMs: Date.now() - digestStart,
+                            digestOutcome: "failed",
+                        },
+                    });
+                    throw error;
+                }
+            }
+            const deadlineAt = await repository.claimExploration(current, id);
+            let selection = null;
+            if (usesExploration) {
+                nextStage("exploration");
+                await repository.recordExploration(current, id, {
+                    timing: { explorationStartedAt: new Date().toISOString() },
+                });
+                try {
+                    selection = await prepareTopicSelection({
+                        seed,
+                        actor: await options.loadActor(),
+                        deadlineAt,
+                        digests,
+                        providers,
+                        query,
+                        record: values => repository.recordExploration(current, id, values),
+                    });
+                } finally {
+                    await repository.recordExploration(current, id, {
+                        timing: { explorationCompletedAt: new Date().toISOString() },
+                    });
+                }
+            }
             nextStage("freeze");
             const frozen = await repository.freezeTopic(current, id, query =>
                 authority.withTopicSourceReader(query, current, read =>

@@ -1,3 +1,4 @@
+import { AZURE_LIVE_LIMIT, projectAzureLive } from "../../scripts/vantage-benchmark-azure-plan";
 import {
     assertBenchmarkDatabaseUrl,
     benchmarkFailureCode,
@@ -79,6 +80,24 @@ it("requires explicitly supplied guarded providers for the prospective paid arm"
         })
     ).rejects.toThrow("benchmark_live_requires_guarded_providers");
     expect(loadActor).not.toHaveBeenCalled();
+});
+
+it("projects the authorized 100-case schedule and accounts for warm-up and accrued exposure", () => {
+    const planned = projectAzureLive({
+        remainingCases: 100,
+        missingDigestBytes: Array<number>(21).fill(10_000),
+    });
+    expect(planned.limitUsd).toBe(10);
+    expect(planned.projectedUsd).toBeLessThan(AZURE_LIVE_LIMIT);
+    expect(planned.missingDigests).toBe(21);
+    expect(
+        projectAzureLive({
+            remainingCases: 90,
+            currentExposureUsd: 2,
+            completedExplorationCases: 10,
+            completedExplorationExposureUsd: 2,
+        }).projectedUsd
+    ).toBeGreaterThan(AZURE_LIVE_LIMIT);
 });
 
 it("sanitizes arbitrary provider and database errors to a stable code", () => {

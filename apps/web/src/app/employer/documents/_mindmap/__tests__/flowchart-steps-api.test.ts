@@ -87,6 +87,20 @@ describe("flowchartToSteps", () => {
         expect(text).toMatch(/No: /);
         expect(ids.every(id => id !== null)).toBe(true);
     });
+
+    it("reads a chart it never wrote in the order it flows, Yes before No", () => {
+        const { page } = stepsToFlowchart(blankPage(), ORDER, "light");
+        expect(flowchartToSteps(page).text).toBe(ORDER);
+        // The boxes' order on the page does not matter — the arrows' does.
+        const shuffled = { ...page, nodes: [...page.nodes].reverse() };
+        expect(flowchartToSteps(shuffled).text).toBe(ORDER);
+    });
+
+    it("keeps the order the branches' arrows were made", () => {
+        const text = ["Paid?", "  No: Send a reminder", "  Yes: Ship it", "End"].join("\n");
+        const { page } = stepsToFlowchart(blankPage(), text, "light");
+        expect(flowchartToSteps(page).text).toBe(text);
+    });
 });
 
 describe("the flowchart look", () => {

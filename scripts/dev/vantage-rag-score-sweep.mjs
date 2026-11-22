@@ -33,9 +33,182 @@ export const SWEEP_SCORE_METHOD = Object.freeze({
 export const SWEEP_SCORE_METHOD_SHA256 = createHash("sha256")
     .update(JSON.stringify(SWEEP_SCORE_METHOD))
     .digest("hex");
+const RELIABILITY_ARMS = Object.freeze([
+    "seeds",
+    "seeds-windows",
+    "configured-live",
+    "configured-live+backfill",
+]);
+const RELIABILITY_CAPS = Object.freeze({ heldout: Object.freeze([8000, 16000]) });
+export const RELIABILITY_SCORE_METHOD = Object.freeze({
+    ...SWEEP_SCORE_METHOD,
+    schemaVersion: "vantage-retrieval-reliability-method/1",
+    arms: RELIABILITY_ARMS,
+    cohortCaps: RELIABILITY_CAPS,
+    views: "Without reruns retains original 16 KB attempts plus new 8 KB attempts. With reruns replaces only predeclared failed transport-affected 16 KB attempts once, retaining replacement failures.",
+});
+export const RELIABILITY_SCORE_METHOD_SHA256 = createHash("sha256")
+    .update(JSON.stringify(RELIABILITY_SCORE_METHOD))
+    .digest("hex");
 const ok = run => ["ok", "accepted", "success"].includes(run.status);
 const identity = run =>
     JSON.stringify([run.cohort, run.retrievalLimits?.sharedEvidenceBytes, run.arm, run.caseId]);
+const reliabilityPairKey = run =>
+    JSON.stringify([run.cohort, run.retrievalLimits?.sharedEvidenceBytes, run.caseId]);
+/** Metadata-only view builder. It never reads benchmark labels or chooses a winning attempt. */
+export function buildReliabilityViews(originalRows, newRows, eligibility) {
+    if (
+        !Array.isArray(originalRows) ||
+        !Array.isArray(newRows) ||
+        eligibility?.schemaVersion !== "vantage-budget-sweep-failure-audit/1" ||
+        !Array.isArray(eligibility?.eligibleWorkIds) ||
+        eligibility.eligibleWorkIds.some(id => typeof id !== "string" || !id) ||
+        !Array.isArray(eligibility.eligibleJobs) ||
+        !Array.isArray(eligibility.failures)
+    )
+        throw Error("reliability_eligibility_invalid");
+    const eligible = new Set(eligibility.eligibleWorkIds);
+    const original = originalRows.filter(
+        row =>
+            row.cohort === "heldout" &&
+            row.retrievalLimits?.sharedEvidenceBytes === 16000 &&
+            ["configured-live", "configured-live+backfill"].includes(row.arm)
+    );
+    const originals = new Map(original.map(row => [identity(row), row]));
+    if (originals.size !== original.length) throw Error("reliability_original_duplicate");
+    const primaryByPair = new Map(
+        original
+            .filter(row => row.arm === "configured-live")
+            .map(row => [reliabilityPairKey(row), row])
+    );
+    const jobs = new Map(eligibility.eligibleJobs.map(job => [job.workId, job]));
+    if (
+        jobs.size !== eligible.size ||
+        jobs.size !== eligibility.eligibleJobs.length ||
+        eligibility.eligibleWorkIds.length !== eligible.size
+    )
+        throw Error("reliability_eligibility_jobs_invalid");
+    const directTransport = new Set(
+        eligibility.failures
+            .filter(
+                job =>
+                    job.classification === "transport" &&
+                    originalRows.some(
+                        row =>
+                            row.workId === job.workId &&
+                            row.arm === "configured-live" &&
+                            row.status === "failed"
+                    )
+            )
+            .map(job => job.workId)
+    );
+    for (const workId of eligible) {
+        const candidate = original.filter(
+            row => row.arm === "configured-live" && row.workId === workId
+        );
+        if (candidate.length !== 1 || candidate[0].status !== "failed")
+            throw Error("reliability_eligible_original_invalid");
+        const job = jobs.get(workId);
+        if (
+            !job ||
+            job.groupId !== candidate[0].caseId ||
+            job.evidenceCapBytes !== 16000 ||
+            !["transport", "shared_hold_transport"].includes(job.classification) ||
+            !Array.isArray(job.causeWorkIds)
+        )
+            throw Error("reliability_eligibility_job_mismatch");
+        if (
+            job.classification === "transport"
+                ? !directTransport.has(workId)
+                : !job.causeWorkIds.length ||
+                  job.causeWorkIds.some(cause => !directTransport.has(cause))
+        )
+            throw Error("reliability_transport_cause_unproven");
+    }
+    const additions = [],
+        replacements = new Map();
+    for (const row of newRows) {
+        if (
+            row.cohort !== "heldout" ||
+            ![8000, 16000].includes(row.retrievalLimits?.sharedEvidenceBytes) ||
+            !RELIABILITY_ARMS.includes(row.arm)
+        )
+            throw Error("reliability_new_scope_invalid");
+        const key = identity(row),
+            cap = row.retrievalLimits.sharedEvidenceBytes;
+        if (row.replacesWorkId !== undefined) {
+            const prior = originals.get(key),
+                primary = primaryByPair.get(reliabilityPairKey(row));
+            if (
+                cap !== 16000 ||
+                !["configured-live", "configured-live+backfill"].includes(row.arm) ||
+                typeof row.replacesWorkId !== "string" ||
+                !prior ||
+                prior.workId !== row.replacesWorkId ||
+                prior.status !== "failed" ||
+                !primary ||
+                !eligible.has(primary.workId) ||
+                primary.status !== "failed"
+            )
+                throw Error("reliability_replacement_not_eligible");
+            if (replacements.has(key)) throw Error("reliability_multiple_replacement_attempts");
+            replacements.set(key, row);
+        } else {
+            if (
+                originals.has(key) ||
+                (cap === 16000 && ["configured-live", "configured-live+backfill"].includes(row.arm))
+            )
+                throw Error("reliability_original_overwrite_forbidden");
+            additions.push(row);
+        }
+    }
+    const withoutReruns = [...original, ...additions];
+    if (new Set(withoutReruns.map(identity)).size !== withoutReruns.length)
+        throw Error("reliability_new_duplicate");
+    const activated = new Set();
+    for (const row of replacements.values()) {
+        const pairKey = reliabilityPairKey(row);
+        const primary = replacements.get(
+            JSON.stringify([row.cohort, 16000, "configured-live", row.caseId])
+        );
+        const backfill = replacements.get(
+            JSON.stringify([row.cohort, 16000, "configured-live+backfill", row.caseId])
+        );
+        if (!primary || !backfill) continue;
+        if (
+            primary.runId
+                ? backfill.runId !== primary.runId || backfill.backfillOfRunId !== primary.runId
+                : Boolean(backfill.runId) || Boolean(backfill.backfillOfRunId)
+        )
+            throw Error("reliability_replacement_pair_lineage_invalid");
+        if (!ok(primary) && (ok(backfill) || backfill.failure !== primary.failure))
+            throw Error("reliability_replacement_failure_changed");
+        activated.add(pairKey);
+    }
+    const withReruns = withoutReruns.map(row =>
+        activated.has(reliabilityPairKey(row)) && replacements.has(identity(row))
+            ? replacements.get(identity(row))
+            : row
+    );
+    return {
+        withoutReruns,
+        withReruns,
+        audit: {
+            original16Rows: original.length,
+            newRows: newRows.length,
+            eligibleOriginalPrimaryWorkIds: eligible.size,
+            replacementAttempts: replacements.size,
+            replacedRows: original.filter(row => activated.has(reliabilityPairKey(row))).length,
+            replacedPairs: activated.size,
+            deferredReplacementRows: [...replacements.values()].filter(
+                row => !activated.has(reliabilityPairKey(row))
+            ).length,
+            replacedFailures: [...replacements.values()].filter(
+                row => activated.has(reliabilityPairKey(row)) && !ok(row)
+            ).length,
+        },
+    };
+}
 const bytes = run =>
     (run.selected ?? []).reduce(
         (sum, source) => sum + Buffer.byteLength(source.text ?? "", "utf8"),
@@ -166,7 +339,14 @@ function paired(cohort, partition, size, leftArm, rightArm) {
     };
 }
 
-export function scoreSweep(cohorts, corpus, runs) {
+export function scoreSweep(cohorts, corpus, runs, { mode = "original" } = {}) {
+    if (!["original", "heldout-reliability"].includes(mode))
+        throw Error("sweep_score_mode_invalid");
+    const arms = mode === "original" ? ARMS : RELIABILITY_ARMS;
+    const caps = mode === "original" ? CAPS : RELIABILITY_CAPS;
+    const method = mode === "original" ? SWEEP_SCORE_METHOD : RELIABILITY_SCORE_METHOD;
+    const methodSha256 =
+        mode === "original" ? SWEEP_SCORE_METHOD_SHA256 : RELIABILITY_SCORE_METHOD_SHA256;
     if (
         !Array.isArray(cohorts) ||
         !cohorts.length ||
@@ -174,7 +354,7 @@ export function scoreSweep(cohorts, corpus, runs) {
     )
         throw Error("sweep_cohorts_invalid");
     for (const cohort of cohorts) {
-        if (!Object.hasOwn(CAPS, cohort.cohort)) throw Error("sweep_cohort_unknown");
+        if (!Object.hasOwn(caps, cohort.cohort)) throw Error("sweep_cohort_unknown");
         validateGroups(cohort.groups, cohort.bundle, corpus);
     }
     if (!Array.isArray(runs)) throw Error("sweep_runs_invalid");
@@ -185,8 +365,8 @@ export function scoreSweep(cohorts, corpus, runs) {
             cap = run.retrievalLimits?.sharedEvidenceBytes;
         if (
             !cohort ||
-            !CAPS[run.cohort].includes(cap) ||
-            !ARMS.includes(run.arm) ||
+            !caps[run.cohort].includes(cap) ||
+            !arms.includes(run.arm) ||
             run.retrievalLimits?.sourceUnits !== 16 ||
             !cohort.groups.some(group => group.groupId === run.caseId)
         )
@@ -203,7 +383,7 @@ export function scoreSweep(cohorts, corpus, runs) {
         metadata = [];
     for (const cohort of cohorts) {
         const scoring = { ...cohort, corpus };
-        for (const cap of CAPS[cohort.cohort]) {
+        for (const cap of caps[cohort.cohort]) {
             const partition = runs.filter(
                 run =>
                     run.cohort === cohort.cohort && run.retrievalLimits.sharedEvidenceBytes === cap
@@ -227,6 +407,9 @@ export function scoreSweep(cohorts, corpus, runs) {
                     atByteLimit: detail.bytes === cap,
                     reportedFrozenBytesMatch: detail.reportedFrozenBytesMatch,
                     runId: typeof raw.runId === "string" ? raw.runId : null,
+                    workId: typeof raw.workId === "string" ? raw.workId : null,
+                    replacesWorkId:
+                        typeof raw.replacesWorkId === "string" ? raw.replacesWorkId : null,
                     backfillOfRunId:
                         typeof raw.backfillOfRunId === "string" ? raw.backfillOfRunId : null,
                     topics: detail.topics.map(compactTopic),
@@ -234,7 +417,7 @@ export function scoreSweep(cohorts, corpus, runs) {
             }
             for (const size of [3, 5]) {
                 const expected = cohort.groups.filter(group => group.topics.length === size);
-                for (const arm of ARMS) {
+                for (const arm of arms) {
                     const observed = partition.filter(
                         run =>
                             run.arm === arm && expected.some(group => group.groupId === run.caseId)
@@ -264,7 +447,7 @@ export function scoreSweep(cohorts, corpus, runs) {
                         capViolations: 0,
                     });
                 }
-                for (const candidate of ARMS.filter(arm => arm !== "seeds"))
+                for (const candidate of arms.filter(arm => arm !== "seeds"))
                     pairs.push({
                         cohort: cohort.cohort,
                         capBytes: cap,
@@ -287,19 +470,19 @@ export function scoreSweep(cohorts, corpus, runs) {
         }
     }
     return {
-        method: SWEEP_SCORE_METHOD,
-        methodSha256: SWEEP_SCORE_METHOD_SHA256,
+        method,
+        methodSha256,
         metadata,
         summary: {
             schemaVersion: "vantage-retrieval-sweep-scores/1",
-            methodSha256: SWEEP_SCORE_METHOD_SHA256,
+            methodSha256,
             groupMethodSha256: GROUP_SCORE_METHOD_SHA256,
             observedRuns: runs.length,
             cohorts: cohorts.map(item => ({
                 cohort: item.cohort,
                 expectedGroups: item.groups.length,
-                caps: CAPS[item.cohort],
-                expectedArms: ARMS,
+                caps: caps[item.cohort],
+                expectedArms: arms,
             })),
             cells,
             pairs,
@@ -310,10 +493,14 @@ async function main() {
     const { values } = parseArgs({
         options: {
             cohorts: { type: "string" },
+            mode: { type: "string", default: "original" },
             corpus: { type: "string" },
             results: { type: "string", multiple: true },
             local: { type: "string" },
             summary: { type: "string" },
+            original: { type: "string" },
+            eligibility: { type: "string" },
+            view: { type: "string" },
         },
     });
     if (
@@ -333,7 +520,7 @@ async function main() {
         }))
     );
     const corpus = JSON.parse(await readFile(values.corpus, "utf8"));
-    const runs = (
+    let runs = (
         await Promise.all(
             values.results.map(async path => {
                 const raw = JSON.parse(await readFile(path, "utf8"));
@@ -341,11 +528,44 @@ async function main() {
             })
         )
     ).flat();
-    const score = scoreSweep(cohorts, corpus, runs);
+    let replacementAudit;
+    if (values.original || values.eligibility || values.view) {
+        if (
+            values.mode !== "heldout-reliability" ||
+            !values.original ||
+            !values.eligibility ||
+            !["without-reruns", "with-reruns"].includes(values.view)
+        )
+            throw Error("reliability_view_arguments_invalid");
+        const originalBytes = await readFile(values.original);
+        const eligibility = JSON.parse(await readFile(values.eligibility, "utf8"));
+        if (
+            eligibility.captureSha256 !==
+                createHash("sha256").update(originalBytes).digest("hex") ||
+            !/^[a-f0-9]{64}$/.test(eligibility.ledgerSha256 ?? "")
+        )
+            throw Error("reliability_original_archive_hash_mismatch");
+        const parsedOriginal = JSON.parse(originalBytes.toString("utf8"));
+        const views = buildReliabilityViews(
+            Array.isArray(parsedOriginal) ? parsedOriginal : parsedOriginal.runs,
+            runs,
+            eligibility
+        );
+        runs = values.view === "without-reruns" ? views.withoutReruns : views.withReruns;
+        replacementAudit = {
+            view: values.view,
+            originalArchiveSha256: eligibility.captureSha256,
+            eligibilityLedgerSha256: eligibility.ledgerSha256,
+            ...views.audit,
+        };
+    }
+    const score = scoreSweep(cohorts, corpus, runs, { mode: values.mode });
+    if (replacementAudit) score.summary.replacementAudit = replacementAudit;
     await externalOutput(values.local, {
         method: score.method,
         methodSha256: score.methodSha256,
         runs: score.metadata,
+        ...(replacementAudit ? { replacementAudit } : {}),
     });
     await externalOutput(values.summary, score.summary);
     console.log(

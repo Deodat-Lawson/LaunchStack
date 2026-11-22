@@ -29,15 +29,24 @@ import { createBenchmarkMeter, type BenchmarkMeterSnapshot } from "./vantage-ben
 import {
     sweepForecast,
     sweepSchedule,
-    SWEEP_WAVE_SIZE,
+    BENCHMARK_MAX_CONCURRENCY,
     type SweepStep,
 } from "./vantage-benchmark-sweep";
+import {
+    HELDOUT_GROUPS_SHA256,
+    PRIOR_SWEEP_CAPTURE_SHA256,
+    PRIOR_SWEEP_LEDGER_SHA256,
+    RELIABILITY_FREE_ARMS,
+    RELIABILITY_SWEEP_LIMIT_USD,
+    reliabilitySweepSchedule,
+} from "./vantage-benchmark-reliability";
 import type {
     WeeklyReviewDatabase,
     WeeklyReviewQuery,
 } from "../src/server/vantage/weekly-review-types";
 import {
     assertBenchmarkDatabaseUrl,
+    BENCHMARK_FREE_ARMS,
     benchmarkFailureCode,
     BenchmarkGroupSchema,
     BenchmarkQuestionSchema,
@@ -51,7 +60,12 @@ const repository = fileURLToPath(new URL("../../../", import.meta.url));
 const fixtureDatabase = "vantage_rag_benchmark_20261121";
 const revision = "39071af3f4dd25e59f5c59a6f9b6e8e99cd643b3";
 const freeArms = ["baseline", "seeds", "scripted"] as const;
-const armSchema = z.enum(["free", ...freeArms, "configured-live-dry-run", "configured-live"]);
+const armSchema = z.enum([
+    "free",
+    ...BENCHMARK_FREE_ARMS,
+    "configured-live-dry-run",
+    "configured-live",
+]);
 const identifier = z.string().regex(/^[1-9]\d*$/);
 const workspace = z.object({
     enterprise: z.string(),
@@ -276,7 +290,6 @@ async function loadSweepCheckpoint(
     const prefix = schedule.slice(0, status.completed);
     const workIds = new Set(prefix.map(step => step.workId));
     if (
-        status.completed % SWEEP_WAVE_SIZE ||
         priorLedger.hold !== "usage_unresolved" ||
         !Array.isArray(priorLedger.records) ||
         priorLedger.records.some(row => !row.workId || !workIds.has(row.workId)) ||
@@ -324,6 +337,9 @@ async function run() {
             requests: { type: "string" },
             grouped: { type: "boolean" },
             "heldout-groups": { type: "string" },
+            "heldout-reliability": { type: "boolean" },
+            "failure-audit": { type: "string" },
+            concurrency: { type: "string", default: "1" },
             "free-proof": { type: "string" },
             output: { type: "string" },
             arm: { type: "string", default: "free" },
@@ -338,7 +354,16 @@ async function run() {
     const executeLive = arm === "configured-live";
     const preflight = Boolean(values["preflight-live"]);
     const grouped = Boolean(values.grouped);
-    const sweep = Boolean(values["heldout-groups"]);
+    const reliability = Boolean(values["heldout-reliability"]);
+    const sweep = reliability || Boolean(values["heldout-groups"]);
+    const concurrency = z.coerce
+        .number()
+        .int()
+        .min(1)
+        .max(BENCHMARK_MAX_CONCURRENCY)
+        .parse(values.concurrency);
+    const liveLimit = reliability ? RELIABILITY_SWEEP_LIMIT_USD : AZURE_LIVE_LIMIT;
+    const sweepFreeArms = reliability ? RELIABILITY_FREE_ARMS : (["seeds", "scripted"] as const);
     const warmWorkspace =
         values["warm-workspace"] === undefined
             ? undefined
@@ -356,7 +381,9 @@ async function run() {
     const resumeLive = Boolean(values["resume-live"]);
     if (
         (!preflight && executeLive !== Boolean(values["approve-live"])) ||
-        (resumeLive && (!executeLive || warmWorkspace || preflight)) ||
+        (resumeLive && (!executeLive || warmWorkspace || preflight || reliability)) ||
+        (!sweep && concurrency !== 1) ||
+        (reliability && (values["heldout-groups"] || (executeLive && !values["failure-audit"]))) ||
         (warmWorkspace && !executeLive) ||
         (executeLive && endToEnd !== 0) ||
         (sweep &&
@@ -385,13 +412,24 @@ async function run() {
         const requestText = await readFile(await cacheFile(cache, values.requests!), "utf8");
         const parsed: unknown = JSON.parse(requestText);
         if (grouped) {
+            if (
+                reliability &&
+                createHash("sha256").update(requestText).digest("hex") !== HELDOUT_GROUPS_SHA256
+            )
+                throw new Error("benchmark_heldout_roster_invalid");
             const groups = z.array(BenchmarkGroupSchema).min(1).max(100).parse(parsed);
             const pool = z
                 .array(BenchmarkQuestionSchema)
                 .length(100)
                 .parse(
                     JSON.parse(
-                        await readFile(await cacheFile(cache, "sample100-requests.json"), "utf8")
+                        await readFile(
+                            await cacheFile(
+                                cache,
+                                reliability ? "heldout100-requests.json" : "sample100-requests.json"
+                            ),
+                            "utf8"
+                        )
                     )
                 );
             const byCase = new Map(pool.map(question => [question.caseId, question]));
@@ -415,7 +453,7 @@ async function run() {
             if (new Set(memberships).size !== memberships.length)
                 throw new Error("duplicate_benchmark_group_member_in_size");
             if (
-                executeLive &&
+                (executeLive || reliability) &&
                 (groups.filter(group => group.topics.length === 3).length !== 30 ||
                     groups.filter(group => group.topics.length === 5).length !== 20)
             )
@@ -437,70 +475,102 @@ async function run() {
     }
     if (new Set(requests.map(requestId)).size !== requests.length)
         throw new Error("duplicate_benchmark_case");
-    const sweepSteps = sweep
+    const sweepSteps = reliability
         ? await (async () => {
-              const heldoutText = await readFile(
-                  await cacheFile(cache, values["heldout-groups"]!),
+              const groups = z.array(BenchmarkGroupSchema).length(50).parse(requests);
+              if (!executeLive) return reliabilitySweepSchedule(groups);
+              const oldCapture = await readFile(
+                  await cacheFile(cache, "budget-sweep-live.json"),
                   "utf8"
               );
-              const heldout = z
-                  .array(BenchmarkGroupSchema)
-                  .length(50)
-                  .parse(JSON.parse(heldoutText));
-              const pool = z
-                  .array(BenchmarkQuestionSchema)
-                  .length(100)
-                  .parse(
-                      JSON.parse(
-                          await readFile(await cacheFile(cache, "heldout100-requests.json"), "utf8")
-                      )
-                  );
-              const sourceByCase = new Map(pool.map(row => [row.caseId, row]));
-              const bySize = heldout.flatMap(group =>
-                  group.topics.map(topic => group.topics.length + ":" + topic.caseId)
+              const oldDirectory = resolve(cache, "budget-sweep-live.evidence");
+              if ((await realpath(oldDirectory)) !== oldDirectory)
+                  throw new Error("benchmark_reliability_archive_mismatch");
+              const oldLedger = await readFile(
+                  await cacheFile(oldDirectory, "usage-ledger.json"),
+                  "utf8"
               );
-              const exploratory = z.array(BenchmarkGroupSchema).length(50).parse(requests);
               if (
-                  sourceByCase.size !== 100 ||
-                  new Set(bySize).size !== bySize.length ||
-                  new Set(heldout.map(row => row.groupId)).size !== heldout.length ||
-                  heldout.filter(row => row.topics.length === 3).length !== 30 ||
-                  exploratory.filter(row => row.topics.length === 3).length !== 30 ||
-                  heldout.some(group =>
-                      group.topics.some(topic => {
-                          const source = sourceByCase.get(topic.caseId);
-                          return (
-                              source?.question !== topic.question ||
-                              source?.enterprise !== group.enterprise ||
-                              source?.workspaceId !== group.workspaceId
-                          );
-                      })
-                  )
+                  createHash("sha256").update(oldCapture).digest("hex") !==
+                      PRIOR_SWEEP_CAPTURE_SHA256 ||
+                  createHash("sha256").update(oldLedger).digest("hex") !== PRIOR_SWEEP_LEDGER_SHA256
               )
-                  throw new Error("benchmark_heldout_roster_invalid");
-              console.log(
-                  JSON.stringify({
-                      heldoutGroupCount: heldout.length,
-                      heldoutRequestsSha256: createHash("sha256")
-                          .update(heldoutText, "utf8")
-                          .digest("hex"),
-                  })
+                  throw new Error("benchmark_reliability_archive_mismatch");
+              const audit = JSON.parse(
+                  await readFile(await cacheFile(cache, values["failure-audit"]!), "utf8")
               );
-              return sweepSchedule(exploratory, heldout);
+              return reliabilitySweepSchedule(groups, { audit, results: JSON.parse(oldCapture) });
           })()
-        : [];
+        : sweep
+          ? await (async () => {
+                const heldoutText = await readFile(
+                    await cacheFile(cache, values["heldout-groups"]!),
+                    "utf8"
+                );
+                const heldout = z
+                    .array(BenchmarkGroupSchema)
+                    .length(50)
+                    .parse(JSON.parse(heldoutText));
+                const pool = z
+                    .array(BenchmarkQuestionSchema)
+                    .length(100)
+                    .parse(
+                        JSON.parse(
+                            await readFile(
+                                await cacheFile(cache, "heldout100-requests.json"),
+                                "utf8"
+                            )
+                        )
+                    );
+                const sourceByCase = new Map(pool.map(row => [row.caseId, row]));
+                const bySize = heldout.flatMap(group =>
+                    group.topics.map(topic => group.topics.length + ":" + topic.caseId)
+                );
+                const exploratory = z.array(BenchmarkGroupSchema).length(50).parse(requests);
+                if (
+                    sourceByCase.size !== 100 ||
+                    new Set(bySize).size !== bySize.length ||
+                    new Set(heldout.map(row => row.groupId)).size !== heldout.length ||
+                    heldout.filter(row => row.topics.length === 3).length !== 30 ||
+                    exploratory.filter(row => row.topics.length === 3).length !== 30 ||
+                    heldout.some(group =>
+                        group.topics.some(topic => {
+                            const source = sourceByCase.get(topic.caseId);
+                            return (
+                                source?.question !== topic.question ||
+                                source?.enterprise !== group.enterprise ||
+                                source?.workspaceId !== group.workspaceId
+                            );
+                        })
+                    )
+                )
+                    throw new Error("benchmark_heldout_roster_invalid");
+                console.log(
+                    JSON.stringify({
+                        heldoutGroupCount: heldout.length,
+                        heldoutRequestsSha256: createHash("sha256")
+                            .update(heldoutText, "utf8")
+                            .digest("hex"),
+                    })
+                );
+                return sweepSchedule(exploratory, heldout);
+            })()
+          : [];
     if (sweep && executeLive && !preflight) {
+        const proofSteps = reliability
+            ? reliabilitySweepSchedule(z.array(BenchmarkGroupSchema).length(50).parse(requests))
+            : sweepSteps;
         const proof = z
             .array(
                 z.object({
                     cohort: z.enum(["exploratory", "heldout"]),
                     caseId: z.string(),
-                    arm: z.enum(["seeds", "scripted"]),
+                    arm: z.enum(sweepFreeArms),
                     retrievalLimits: z.object({ sharedEvidenceBytes: z.number() }),
                     accounting: z.object({ paidModelCalls: z.literal(0) }),
                 })
             )
-            .length(sweepSteps.length * 2)
+            .length(proofSteps.length * sweepFreeArms.length)
             .parse(
                 JSON.parse(await readFile(await cacheFile(cache, values["free-proof"]!), "utf8"))
             );
@@ -511,8 +581,8 @@ async function run() {
         );
         if (
             observed.size !== proof.length ||
-            sweepSteps.some(step =>
-                ["seeds", "scripted"].some(
+            proofSteps.some(step =>
+                sweepFreeArms.some(
                     arm =>
                         !observed.has(
                             [step.cohort, step.request.groupId, step.evidenceCapBytes, arm].join(
@@ -587,12 +657,27 @@ async function run() {
                   });
             console.log(
                 JSON.stringify(
-                    { routes: live.routes, rateSource: live.rateSource, forecast },
+                    {
+                        routes: live.routes,
+                        rateSource: live.rateSource,
+                        forecast,
+                        approvedUsd: liveLimit,
+                        concurrency,
+                        ...(reliability
+                            ? {
+                                  newEightKb: sweepSteps.filter(step => !step.replacesWorkId)
+                                      .length,
+                                  transportReplacements: sweepSteps.filter(
+                                      step => step.replacesWorkId
+                                  ).length,
+                              }
+                            : {}),
+                    },
                     null,
                     2
                 )
             );
-            if (forecast.projectedUsd > AZURE_LIVE_LIMIT)
+            if (forecast.projectedUsd > liveLimit)
                 throw new Error("benchmark_projected_budget_exceeded");
         } finally {
             await inspection.end();
@@ -608,7 +693,8 @@ async function run() {
     const meter =
         live && captureDir
             ? createBenchmarkMeter({
-                  limitUsd: AZURE_LIVE_LIMIT,
+                  limitUsd: liveLimit,
+                  ...(!resumeLive ? { transportReliability: "scoped-retry-v1" as const } : {}),
                   modelId: AZURE_LUNA_DEPLOYMENT,
                   endpointUrl: live.endpoint + "/chat/completions",
                   pricingSource: live.rateSource,
@@ -773,6 +859,8 @@ async function run() {
                         versionIds: candidates.map(doc => doc.versionId),
                         query,
                         provider: input => {
+                            if (reliability)
+                                throw new Error("benchmark_digest_missing_after_warm_up");
                             generatedProviderCalls++;
                             return azureDigest(input);
                         },
@@ -859,13 +947,17 @@ async function run() {
                     arm: currentArm,
                     week: manifest.week,
                     asOf: manifest.asOf,
-                    sweep: { cohort: step.cohort, evidenceCapBytes: step.evidenceCapBytes },
+                    sweep: {
+                        cohort: step.cohort,
+                        evidenceCapBytes: step.evidenceCapBytes,
+                        ...(reliability ? { protocol: "heldout-reliability" as const } : {}),
+                    },
                     ...(providers ? { providers } : {}),
                 });
             const results: object[] = [...(sweepCheckpoint?.rows ?? [])];
             if (!meter || !captureDir) {
                 for (const step of sweepSteps) {
-                    for (const arm of ["seeds", "scripted"] as const) {
+                    for (const arm of sweepFreeArms) {
                         results.push(
                             await runStep(step, arm, await createOwner(step.request.workspaceId))
                         );
@@ -879,20 +971,16 @@ async function run() {
             const completed = sweepSteps.slice(0, sweepCheckpoint?.completed ?? 0);
             const localTimeouts = new Set<string>();
             let stopReason: string | null = null;
-            for (
-                let offset = completed.length;
-                offset < sweepSteps.length;
-                offset += SWEEP_WAVE_SIZE
-            ) {
+            for (let offset = completed.length; offset < sweepSteps.length; offset += concurrency) {
                 const before = meter.snapshot();
                 const projection = sweepForecast(sweepSteps.slice(offset), completed, before);
-                if (projection.projectedUsd > AZURE_LIVE_LIMIT) {
+                if (projection.projectedUsd > liveLimit) {
                     stopReason = "projected_budget_exceeded";
                     console.log(JSON.stringify({ liveStop: stopReason, projection }));
                     break;
                 }
                 const wave = [];
-                for (const step of sweepSteps.slice(offset, offset + SWEEP_WAVE_SIZE)) {
+                for (const step of sweepSteps.slice(offset, offset + concurrency)) {
                     wave.push({ step, subject: await createOwner(step.request.workspaceId) });
                 }
                 const settled = await Promise.allSettled(
@@ -952,8 +1040,14 @@ async function run() {
                             WHERE run_id=${primary.runId}::uuid AND company_id=${job.step.request.workspaceId}::bigint
                               AND owner_id=${job.subject}`
                         : [];
-                    const labelledPrimary = { ...primary, workId: job.step.workId };
-                    const labelledBackfill = { ...backfill, workId: job.step.workId };
+                    const link = {
+                        workId: job.step.workId,
+                        ...(job.step.replacesWorkId
+                            ? { replacesWorkId: job.step.replacesWorkId }
+                            : {}),
+                    };
+                    const labelledPrimary = { ...primary, ...link };
+                    const labelledBackfill = { ...backfill, ...link };
                     await replaceLocalJson(resolve(captureDir, job.step.workId + ".json"), {
                         workId: job.step.workId,
                         primary: labelledPrimary,
@@ -992,6 +1086,7 @@ async function run() {
                 } else if (state.hold) {
                     stopReason ??= state.hold;
                 }
+                if (reliability) await replaceLocalJson(output, results);
                 console.log(
                     JSON.stringify({
                         sweepCompleted: completed.length,
@@ -1008,6 +1103,8 @@ async function run() {
                 complete: completed.length === sweepSteps.length && !stopReason,
                 completed: completed.length,
                 expected: sweepSteps.length,
+                concurrency,
+                approvedUsd: liveLimit,
                 stopReason,
                 forecast: sweepForecast(
                     sweepSteps.filter(step => !completed.includes(step)),
@@ -1054,7 +1151,7 @@ async function run() {
                         exposure.projectedTotalUsd - warmExposureUsd
                     ),
                 });
-                if (forecast.projectedUsd > AZURE_LIVE_LIMIT) {
+                if (forecast.projectedUsd > liveLimit) {
                     console.log(
                         JSON.stringify({ liveStop: "projected_budget_exceeded", forecast })
                     );

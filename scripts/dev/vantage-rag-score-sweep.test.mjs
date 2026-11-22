@@ -1,6 +1,11 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { scoreSweep, SWEEP_SCORE_METHOD_SHA256 } from "./vantage-rag-score-sweep.mjs";
+import {
+    scoreSweep,
+    SWEEP_SCORE_METHOD_SHA256,
+    buildReliabilityViews,
+    RELIABILITY_SCORE_METHOD_SHA256,
+} from "./vantage-rag-score-sweep.mjs";
 
 const texts = [
     "alpha beta gamma delta epsilon",
@@ -206,5 +211,178 @@ test("backfill pairs verify exploration lineage, prefix preservation and zero ad
                 }),
             ]),
         /paid_calls_invalid/
+    );
+});
+
+function reliabilityFixture() {
+    const primary = run("heldout", "configured-live", "a", 16000, {
+        workId: "old-a",
+        status: "failed",
+        failure: "topic_exploration_failed:provider_or_submission",
+        selected: [],
+        runId: "old-run",
+    });
+    const backfill = {
+        ...primary,
+        arm: "configured-live+backfill",
+        backfillOfRunId: "old-run",
+        accounting: { paidModelCalls: 0 },
+    };
+    const audit = {
+        schemaVersion: "vantage-budget-sweep-failure-audit/1",
+        eligibleWorkIds: ["old-a"],
+        eligibleJobs: [
+            {
+                workId: "old-a",
+                groupId: "a",
+                evidenceCapBytes: 16000,
+                classification: "transport",
+                causeWorkIds: [],
+            },
+        ],
+        failures: [{ workId: "old-a", classification: "transport" }],
+    };
+    const retry = run("heldout", "configured-live", "a", 16000, {
+        workId: "new-a",
+        replacesWorkId: "old-a",
+        runId: "new-run",
+    });
+    const retryBackfill = {
+        ...retry,
+        arm: "configured-live+backfill",
+        backfillOfRunId: "new-run",
+        accounting: { paidModelCalls: 0 },
+    };
+    return { primary, backfill, audit, retry, retryBackfill };
+}
+test("explicit reliability mode permits heldout8/16 and seeds-windows without changing original scope", () => {
+    const h = [cohorts[1]];
+    const r = run("heldout", "seeds-windows", "a", 8000);
+    const scored = scoreSweep(h, corpus, [r], { mode: "heldout-reliability" });
+    assert.equal(scored.summary.cells.length, 16);
+    assert.equal(scored.methodSha256, RELIABILITY_SCORE_METHOD_SHA256);
+    assert.notEqual(RELIABILITY_SCORE_METHOD_SHA256, SWEEP_SCORE_METHOD_SHA256);
+    assert.throws(() => scoreSweep(h, corpus, [r]), /identity_invalid/);
+    assert.throws(
+        () =>
+            scoreSweep(h, corpus, [run("heldout", "seeds", "a", 80000)], {
+                mode: "heldout-reliability",
+            }),
+        /identity_invalid/
+    );
+});
+test("reliability views retain original16 without reruns and replace eligible pairs once including failures", () => {
+    const f = reliabilityFixture();
+    const new8 = run("heldout", "seeds", "a", 8000);
+    const views = buildReliabilityViews(
+        [f.primary, f.backfill, run("exploratory", "configured-live", "a", 80000)],
+        [new8, f.retry, f.retryBackfill],
+        f.audit
+    );
+    assert.equal(views.withoutReruns.length, 3);
+    assert.equal(views.withoutReruns[0], f.primary);
+    assert.equal(views.withReruns[0], f.retry);
+    assert.equal(views.audit.replacedPairs, 1);
+    const failedRetry = {
+        ...f.retry,
+        status: "failed",
+        selected: [],
+        failure: "topic_exploration_failed:timeout",
+    };
+    const failedBackfill = {
+        ...f.retryBackfill,
+        ...failedRetry,
+        arm: "configured-live+backfill",
+        backfillOfRunId: failedRetry.runId,
+    };
+    const failed = buildReliabilityViews(
+        [f.primary, f.backfill],
+        [failedRetry, failedBackfill],
+        f.audit
+    );
+    assert.equal(failed.withReruns[0].status, "failed");
+    assert.equal(failed.audit.replacedFailures, 2);
+});
+test("partial replacement capture preserves original pair until both terminal rows are present", () => {
+    const f = reliabilityFixture();
+    const result = buildReliabilityViews([f.primary, f.backfill], [f.retry], f.audit);
+    assert.deepEqual(result.withReruns, [f.primary, f.backfill]);
+    assert.equal(result.audit.deferredReplacementRows, 1);
+});
+test("reliability forbids success, unrelated failure, wrong identity and repeated reruns", () => {
+    const f = reliabilityFixture();
+    assert.throws(
+        () =>
+            buildReliabilityViews(
+                [{ ...f.primary, status: "ok" }, f.backfill],
+                [f.retry, f.retryBackfill],
+                f.audit
+            ),
+        /eligible_original_invalid/
+    );
+    assert.throws(
+        () =>
+            buildReliabilityViews([f.primary, f.backfill], [f.retry], {
+                ...f.audit,
+                eligibleWorkIds: [],
+                eligibleJobs: [],
+            }),
+        /not_eligible/
+    );
+    assert.throws(
+        () =>
+            buildReliabilityViews(
+                [f.primary, f.backfill],
+                [{ ...f.retry, replacesWorkId: "other" }],
+                f.audit
+            ),
+        /not_eligible/
+    );
+    assert.throws(
+        () => buildReliabilityViews([f.primary, f.backfill], [f.retry, f.retry], f.audit),
+        /multiple_replacement_attempts/
+    );
+    assert.throws(
+        () =>
+            buildReliabilityViews(
+                [f.primary, f.backfill],
+                [f.retry, { ...f.retryBackfill, runId: "different" }],
+                f.audit
+            ),
+        /pair_lineage_invalid/
+    );
+});
+test("shared-hold eligibility can be rooted in a proven80KB transport sibling", () => {
+    const f = reliabilityFixture();
+    const audit = {
+        ...f.audit,
+        eligibleJobs: [
+            {
+                ...f.audit.eligibleJobs[0],
+                classification: "shared_hold_transport",
+                causeWorkIds: ["wave-80"],
+            },
+        ],
+        failures: [{ workId: "wave-80", classification: "transport" }],
+    };
+    assert.equal(
+        buildReliabilityViews(
+            [
+                f.primary,
+                f.backfill,
+                {
+                    ...f.primary,
+                    workId: "wave-80",
+                    retrievalLimits: { ...f.primary.retrievalLimits, sharedEvidenceBytes: 80000 },
+                },
+            ],
+            [f.retry, f.retryBackfill],
+            audit
+        ).audit.replacedPairs,
+        1
+    );
+    assert.throws(
+        () => buildReliabilityViews([f.primary, f.backfill], [f.retry], { ...audit, failures: [] }),
+        /transport_cause_unproven/
     );
 });

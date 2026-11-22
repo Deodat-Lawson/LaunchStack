@@ -113,12 +113,13 @@ export function benchmarkTopicAttribution(input: {
     return { ...base, observable: true, entries: [...associations.values()] };
 }
 
-export type BenchmarkArm =
-    | "baseline"
-    | "seeds"
-    | "scripted"
-    | "configured-live-dry-run"
-    | "configured-live";
+export const BENCHMARK_FREE_ARMS = ["baseline", "seeds", "seeds-windows", "scripted"] as const;
+export const BenchmarkArmSchema = z.enum([
+    ...BENCHMARK_FREE_ARMS,
+    "configured-live-dry-run",
+    "configured-live",
+]);
+export type BenchmarkArm = z.infer<typeof BenchmarkArmSchema>;
 export function assertBenchmarkDatabaseUrl(value: string) {
     const url = new URL(value);
     if (
@@ -279,20 +280,26 @@ export async function runBenchmarkRetrieval(options: {
     asOf: string;
     endToEnd?: boolean;
     providers?: TopicSelectionProviders;
-    sweep?: { cohort: SweepCohort; evidenceCapBytes: SweepCap };
+    sweep?: { cohort: SweepCohort; evidenceCapBytes: SweepCap; protocol?: "heldout-reliability" };
 }) {
     assertBenchmarkDatabaseUrl(options.databaseUrl);
     const request = z.union([BenchmarkQuestionSchema, BenchmarkGroupSchema]).parse(options.request);
     const grouped = "topics" in request;
     const caseId = grouped ? request.groupId : request.caseId;
     const cap = options.sweep?.evidenceCapBytes ?? 80_000;
+    const reliabilityProtocol = options.sweep?.protocol === "heldout-reliability";
+    const validSweepPolicy =
+        !options.sweep ||
+        (reliabilityProtocol
+            ? options.sweep.cohort === "heldout" &&
+              [8000, 16000].includes(cap) &&
+              ["seeds", "seeds-windows", "configured-live"].includes(options.arm)
+            : options.sweep.protocol === undefined &&
+              (options.sweep.cohort !== "heldout" || cap === 16000 || cap === 80000) &&
+              ["seeds", "seeds-windows", "scripted", "configured-live"].includes(options.arm));
     if (
         options.sweep &&
-        (!grouped ||
-            options.endToEnd ||
-            !SWEEP_CAPS.includes(cap) ||
-            (options.sweep.cohort === "heldout" && cap !== 16_000 && cap !== 80_000) ||
-            !["seeds", "scripted", "configured-live"].includes(options.arm))
+        (!grouped || options.endToEnd || !SWEEP_CAPS.includes(cap) || !validSweepPolicy)
     )
         throw new Error("benchmark_sweep_request_invalid");
     const requestedTopics = (
@@ -302,7 +309,12 @@ export async function runBenchmarkRetrieval(options: {
         ? {
               topics: requestedTopics.map(({ caseId, topicId }) => ({ caseId, topicId })),
               retrievalLimits: { sharedEvidenceBytes: cap, sourceUnits: 16 },
-              ...(options.sweep ? { cohort: options.sweep.cohort } : {}),
+              ...(options.sweep
+                  ? {
+                        cohort: options.sweep.cohort,
+                        ...(options.sweep.protocol ? { protocol: options.sweep.protocol } : {}),
+                    }
+                  : {}),
           }
         : {};
     if (options.arm === "configured-live" && !options.providers)
@@ -392,7 +404,7 @@ export async function runBenchmarkRetrieval(options: {
             isTopic
                 ? {
                       provider:
-                          options.arm === "seeds"
+                          options.arm === "seeds" || options.arm === "seeds-windows"
                               ? "seeds"
                               : options.arm.startsWith("configured-live")
                                 ? "configured"
@@ -545,11 +557,15 @@ export async function runBenchmarkRetrieval(options: {
             nextStage("freeze");
             const frozen = await repository.freezeTopic(current, id, query =>
                 authority.withTopicSourceReader(query, current, async read => {
-                    if (!options.sweep) return fitTopicEvidence(id, seed, selection, read);
+                    if (!options.sweep)
+                        return fitTopicEvidence(id, seed, selection, read, {
+                            seedWindows: options.arm === "seeds-windows",
+                        });
                     const paired = options.arm === "configured-live";
                     const fit = await fitTopicEvidence(id, seed, selection, read, {
                         evidenceCapBytes: cap,
                         backfill: paired,
+                        seedWindows: options.arm === "seeds-windows",
                     });
                     if (!paired) return fit;
                     const primary = fit.primary;

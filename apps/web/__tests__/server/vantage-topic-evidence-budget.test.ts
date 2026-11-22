@@ -1,11 +1,55 @@
 import {
     topicSelectionFootprint,
     runTopicExploration,
+    topicExplorationFailureCode,
     createScriptedExplorationPort,
 } from "~/server/vantage/weekly-review-topic-exploration";
 import { prepareTopicSelection } from "~/server/vantage/weekly-review-topic-run";
 import type { TopicSeed } from "~/server/vantage/weekly-review-topic-types";
 import type { AgentModelPort } from "@launchstack/llm";
+it.each([
+    ["topic_exploration_failed:transport_no_http", "transport_no_http"],
+    ["topic_exploration_failed:http_429", "http_429"],
+    ["benchmark_azure_responses_http_503", "http_503"],
+    ["benchmark_azure_function_arguments_invalid", "provider_response_invalid"],
+    ["topic_exploration_failed:timeout", "timeout"],
+    ["unstructured provider failure with details", "provider"],
+])("keeps only stable exploration error codes (%s)", (error, reason) => {
+    expect(topicExplorationFailureCode(new Error(error))).toBe(
+        "topic_exploration_failed:" + reason
+    );
+});
+
+it.each([false, true])(
+    "distinguishes missing from rejected final submissions (invalid=%s)",
+    async invalid => {
+        const record = jest.fn(async () => {});
+        const respond = jest.fn(async () => ({
+            text: "",
+            toolCalls: invalid
+                ? [{ id: "invalid", name: "submit_result", arguments: { malformed: true } }]
+                : [],
+        }));
+        const code = "topic_exploration_failed:submission_" + (invalid ? "invalid" : "missing");
+        await expect(
+            runTopicExploration({
+                catalogue: [],
+                topics: [],
+                offered: [],
+                port: { respond },
+                record,
+                deadlineAt: Date.now() + 2000,
+            })
+        ).rejects.toThrow(code);
+        expect(respond).toHaveBeenCalledTimes(12);
+        expect(record).toHaveBeenLastCalledWith(
+            expect.objectContaining({
+                events: expect.arrayContaining([{ kind: "failure", code }]),
+            })
+        );
+    }
+);
+
 const document = { ref: "doc:1@1", title: "Evidence", text: "中".repeat(1000) };
 const budget = {
     maxEvidenceBytes: 2000,

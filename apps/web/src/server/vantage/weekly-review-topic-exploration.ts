@@ -1,6 +1,11 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
-import { runAgent, type AgentModelPort, type AgentToolDefinition } from "@launchstack/llm";
+import {
+    AgentStepLimitError,
+    runAgent,
+    type AgentModelPort,
+    type AgentToolDefinition,
+} from "@launchstack/llm";
 
 export const TOPIC_EXPLORATION_LIMITS = Object.freeze({
     turns: 12,
@@ -10,6 +15,26 @@ export const TOPIC_EXPLORATION_LIMITS = Object.freeze({
     traceBytes: 512000,
     wallMs: 150000,
 });
+/** Only stable, source-free failure codes are suitable for run rows and traces. */
+export function topicExplorationFailureCode(error: unknown): string {
+    const message = error instanceof Error ? error.message : "";
+    if (
+        /^topic_exploration_failed:(timeout|call_limit|trace_limit|not_offered|range_invalid|transport_no_http|http_[45][0-9]{2}|provider_response_invalid|submission_invalid|submission_missing|provider)$/.test(
+            message
+        )
+    )
+        return message;
+    const httpStatus = /^benchmark_azure_responses_http_([45][0-9]{2})$/.exec(message)?.[1];
+    if (httpStatus) return "topic_exploration_failed:http_" + httpStatus;
+    if (
+        /^(benchmark_azure_responses_incomplete_or_invalid|benchmark_azure_function_call_invalid|benchmark_azure_function_arguments_invalid|benchmark_azure_output_type_invalid|benchmark_azure_encrypted_reasoning_missing)$/.test(
+            message
+        )
+    )
+        return "topic_exploration_failed:provider_response_invalid";
+    return "topic_exploration_failed:provider";
+}
+
 export interface ExplorationDocument {
     ref: string;
     text: string;
@@ -264,6 +289,7 @@ export async function runTopicExploration(input: {
     });
     const trace: ExplorationTrace = { version: 2, events: [], bytes: 0 };
     let fatal: Error | undefined;
+    let invalidSubmission = false;
     const controller = new AbortController();
     const expired = () => controller.signal.aborted || Date.now() >= input.deadlineAt;
     const check = () => {
@@ -571,6 +597,7 @@ export async function runTopicExploration(input: {
                 maxToolCallsPerTurn: 8,
                 maxTotalToolCalls: 60,
                 onToolResult: async event => {
+                    if (event.reason === "submission_invalid") invalidSubmission = true;
                     if (
                         input.evidenceBudget &&
                         event.reason === "tool_result" &&
@@ -605,10 +632,18 @@ export async function runTopicExploration(input: {
         check();
         return { ...TopicExplorationResultSchema.parse(result.output), trace };
     } catch (error) {
-        await record({ kind: "failure", code: error instanceof Error ? error.name : "unknown" });
-        if (error instanceof Error && error.message === "agent_tool_call_limit")
-            throw new Error("topic_exploration_failed:call_limit");
-        throw error;
+        const failure =
+            error instanceof AgentStepLimitError
+                ? new Error(
+                      invalidSubmission
+                          ? "topic_exploration_failed:submission_invalid"
+                          : "topic_exploration_failed:submission_missing"
+                  )
+                : error instanceof Error && error.message === "agent_tool_call_limit"
+                  ? new Error("topic_exploration_failed:call_limit")
+                  : error;
+        await record({ kind: "failure", code: topicExplorationFailureCode(failure) });
+        throw failure;
     } finally {
         if (timer) clearTimeout(timer);
         input.signal?.removeEventListener("abort", abort);

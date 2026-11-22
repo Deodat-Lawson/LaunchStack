@@ -28,7 +28,11 @@ import type {
 } from "./weekly-review-scoped-selection";
 
 type Span = { start: number; end: number };
-export type TopicFreezeOptions = { evidenceCapBytes?: number; backfill?: boolean };
+export type TopicFreezeOptions = {
+    evidenceCapBytes?: number;
+    backfill?: boolean;
+    seedWindows?: boolean;
+};
 export type TopicFreeze = {
     /** Present only for a backfill fit, before any additional sources were admitted. */
     primary?: TopicFreeze;
@@ -65,13 +69,16 @@ export async function fitTopicEvidence(
     if (![8000, 16000, 32000, 80000].includes(evidenceCapBytes))
         throw new WeeklyReviewConflict("topic_evidence_cap_invalid");
     const { manifest, context } = seed;
+    const seedWindows = result === null && options.seedWindows === true;
     const offered = new Map(seed.documents.map(document => [document.ref, document]));
     const selections = new Map<string, Span[]>();
     for (const item of result?.selected ??
-        seed.documents.map(document => ({
-            ref: document.ref,
-            spans: defaultSpan(document.text),
-        }))) {
+        (seedWindows
+            ? []
+            : seed.documents.map(document => ({
+                  ref: document.ref,
+                  spans: defaultSpan(document.text),
+              })))) {
         const document = offered.get(item.ref);
         if (!document) {
             if (manifest.fixed.some(fixed => fixed.ref === item.ref) && item.spans.length === 0)
@@ -194,21 +201,42 @@ export async function fitTopicEvidence(
         seedReasons.push(...reasons);
         return true;
     };
+    const addLexicalWindow = async (ref: string, asLane: boolean) => {
+        const document = offered.get(ref);
+        if (!document || sources.length >= 16) return false;
+        const span = lexicalBackfillSpan(
+            document.text,
+            manifest.topics,
+            evidenceCapBytes - evidenceBytes()
+        );
+        return span !== null && addDocument(ref, mergeTopicSpans([span], document.text), asLane);
+    };
     const admitted = new Set<string>();
     let laneRef: string | undefined;
     for (const ref of manifest.lane) {
         const document = offered.get(ref)!;
         // Prefer the model's exact spans when it also selected this change.
         const spans = selections.get(ref);
-        if (await addDocument(ref, spans?.length ? spans : defaultSpan(document.text), true)) {
+        if (
+            seedWindows
+                ? await addLexicalWindow(ref, true)
+                : await addDocument(ref, spans?.length ? spans : defaultSpan(document.text), true)
+        ) {
             laneRef = ref;
             admitted.add(ref);
             break;
         }
     }
-    for (const [ref, spans] of selections) {
-        if (ref !== laneRef && (await addDocument(ref, spans, false))) admitted.add(ref);
-    }
+    if (seedWindows) {
+        for (const document of seed.documents) {
+            if (sources.length >= 16) break;
+            if (!admitted.has(document.ref) && (await addLexicalWindow(document.ref, false)))
+                admitted.add(document.ref);
+        }
+    } else
+        for (const [ref, spans] of selections) {
+            if (ref !== laneRef && (await addDocument(ref, spans, false))) admitted.add(ref);
+        }
     const snapshot = (): TopicFreeze => ({
         input: makeInput(
             [...sources],
@@ -229,16 +257,7 @@ export async function fitTopicEvidence(
         for (const document of seed.documents) {
             if (sources.length >= 16) break;
             if (admitted.has(document.ref)) continue;
-            const span = lexicalBackfillSpan(
-                document.text,
-                manifest.topics,
-                evidenceCapBytes - evidenceBytes()
-            );
-            if (
-                span &&
-                (await addDocument(document.ref, mergeTopicSpans([span], document.text), false))
-            )
-                admitted.add(document.ref);
+            if (await addLexicalWindow(document.ref, false)) admitted.add(document.ref);
         }
     }
     const frozen = snapshot();

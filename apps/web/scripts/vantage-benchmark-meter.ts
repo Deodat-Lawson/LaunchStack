@@ -19,6 +19,8 @@ export type BenchmarkMeterConfig = {
     priorLedger?: BenchmarkMeterSnapshot;
     /** First pilot ledger predates the binding. Every row is still re-priced and validated. */
     allowLegacyPriorLedger?: boolean;
+    /** Opt-in request-local retries; legacy accounting/hold behavior remains the default. */
+    transportReliability?: "scoped-retry-v1";
 };
 export type BenchmarkMeterRecord = {
     id: string;
@@ -43,6 +45,9 @@ export type BenchmarkMeterRecord = {
     durationMs?: number;
     continuedAfterCaseDeadline?: true;
     continuedAfterTransportFailure?: true;
+    scopedTransportFailure?: true;
+    requestId?: string;
+    attempt?: number;
 };
 export type BenchmarkMeterSnapshot = {
     limitUsd: number;
@@ -66,7 +71,35 @@ export type BenchmarkMeterBinding = {
     contextTokens: number;
     maxOutputTokens: number;
     timeoutMs: number;
+    transportReliability?: "scoped-retry-v1";
 };
+export type BenchmarkMeterRequestCode =
+    | "no_http"
+    | "http_429"
+    | "http_5xx"
+    | "http_status"
+    | "timeout"
+    | "invalid_response";
+export class BenchmarkMeterRequestError extends Error {
+    constructor(
+        readonly code: BenchmarkMeterRequestCode,
+        readonly retryable: boolean,
+        readonly httpStatus?: number,
+        readonly attempts = 1
+    ) {
+        super(
+            "topic_exploration_failed:" +
+                (code === "no_http"
+                    ? "transport_no_http"
+                    : code === "timeout"
+                      ? "timeout"
+                      : code === "invalid_response"
+                        ? "provider_response_invalid"
+                        : "http_" + httpStatus)
+        );
+        this.name = "BenchmarkMeterRequestError";
+    }
+}
 const amount = z.number().finite().nonnegative();
 const tokenCount = amount.int().safe();
 const recordSchema = z
@@ -96,6 +129,9 @@ const recordSchema = z
         durationMs: amount.optional(),
         continuedAfterCaseDeadline: z.literal(true).optional(),
         continuedAfterTransportFailure: z.literal(true).optional(),
+        scopedTransportFailure: z.literal(true).optional(),
+        requestId: z.string().uuid().optional(),
+        attempt: z.number().int().min(1).max(3).optional(),
     })
     .strict();
 const bindingSchema = z
@@ -109,6 +145,7 @@ const bindingSchema = z
         contextTokens: tokenCount,
         maxOutputTokens: tokenCount,
         timeoutMs: tokenCount,
+        transportReliability: z.literal("scoped-retry-v1").optional(),
     })
     .strict();
 const snapshotSchema = z
@@ -160,7 +197,9 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
         config.contextTokens <= config.maxOutputTokens ||
         !integer(config.timeoutMs) ||
         config.timeoutMs < 1 ||
-        config.timeoutMs > 150000
+        config.timeoutMs > 150000 ||
+        (config.transportReliability !== undefined &&
+            config.transportReliability !== "scoped-retry-v1")
     )
         throw new Error("benchmark_meter_config_invalid");
     const endpoint = new URL(config.endpointUrl);
@@ -184,6 +223,9 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
         contextTokens: config.contextTokens,
         maxOutputTokens: config.maxOutputTokens,
         timeoutMs: config.timeoutMs,
+        ...(config.transportReliability
+            ? { transportReliability: config.transportReliability }
+            : {}),
     };
     const prior =
         config.priorLedger === undefined ? undefined : snapshotSchema.parse(config.priorLedger);
@@ -255,6 +297,14 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                     (row.status !== "unknown" || row.httpStatus !== undefined || !row.workId)
                 )
                     return false;
+                if (
+                    (row.scopedTransportFailure || row.requestId || row.attempt) &&
+                    (config.transportReliability !== "scoped-retry-v1" ||
+                        !row.requestId ||
+                        !row.attempt)
+                )
+                    return false;
+                if (row.scopedTransportFailure && row.status !== "unknown") return false;
                 if (row.status !== "settled") return row.settledListRateUsd === undefined;
                 if (
                     row.inputTokens === undefined ||
@@ -311,7 +361,8 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                 row =>
                     row.status === "unknown" &&
                     !row.continuedAfterCaseDeadline &&
-                    !row.continuedAfterTransportFailure
+                    !row.continuedAfterTransportFailure &&
+                    !row.scopedTransportFailure
             ) &&
             !hold
         )
@@ -342,7 +393,8 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                 row =>
                     row.status === "unknown" &&
                     !row.continuedAfterCaseDeadline &&
-                    !row.continuedAfterTransportFailure
+                    !row.continuedAfterTransportFailure &&
+                    !row.scopedTransportFailure
             )
         )
             throw new Error("benchmark_meter_case_deadline_clear_denied");
@@ -357,7 +409,8 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             row =>
                 row.status === "unknown" &&
                 !row.continuedAfterCaseDeadline &&
-                !row.continuedAfterTransportFailure
+                !row.continuedAfterTransportFailure &&
+                !row.scopedTransportFailure
         );
         const terminalIds = new Set(completedWorkIds);
         if (
@@ -445,7 +498,13 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
         return context.run(id, work);
     }
     function wrapFetch(baseFetch: typeof fetch): typeof fetch {
-        const dispatch: typeof fetch = async (input, init) => {
+        const dispatch = async (
+            input: Parameters<typeof fetch>[0],
+            init: Parameters<typeof fetch>[1],
+            retryAttempt = 0,
+            sharedSignal?: AbortSignal,
+            requestId?: string
+        ): Promise<Response> => {
             assertCanDispatch();
             const url = new URL(
                 typeof input === "string" ? input : input instanceof URL ? input.href : input.url
@@ -453,6 +512,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             if (url.href !== endpoint.href && url.href !== responsesEndpoint.href)
                 throw new Error("benchmark_meter_endpoint_denied");
             const responses = url.href === responsesEndpoint.href;
+            const scoped = !!config.transportReliability && responses;
             const method = init?.method ?? (input instanceof Request ? input.method : "GET");
             if (method.toUpperCase() !== "POST" || typeof init?.body !== "string")
                 throw new Error("benchmark_meter_request_invalid");
@@ -525,21 +585,41 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                 Buffer.byteLength(serialized, "utf8") + 1024 + 256 * (messages.length + toolCount);
             if (ceiling + config.maxOutputTokens > config.contextTokens)
                 throw new Error("benchmark_meter_context_exceeded");
-            const reservedId = context.getStore() ?? (await reserveBatch([ceiling]))[0]!;
+            if (sharedSignal?.aborted)
+                throw new BenchmarkMeterRequestError("timeout", false, undefined, retryAttempt + 1);
+            const reservedId =
+                (retryAttempt === 0 ? context.getStore() : undefined) ??
+                (await reserveBatch([ceiling]))[0]!;
             assertCanDispatch();
             const row = records.find(item => item.id === reservedId);
             if (!row || row.status !== "reserved" || ceiling > row.inputTokenCeiling)
                 throw new Error("benchmark_meter_reservation_invalid");
+            if (sharedSignal?.aborted) {
+                row.status = "released";
+                await persist();
+                throw new BenchmarkMeterRequestError("timeout", false, undefined, retryAttempt + 1);
+            }
             row.status = "sent";
+            if (requestId) {
+                row.requestId = requestId;
+                row.attempt = retryAttempt + 1;
+            }
             row.route = responses ? "exploration" : "digest";
             const workId = workContext.getStore();
             if (workId) row.workId = workId;
             const dispatchedAt = performance.now();
             await persist();
-            const signal = AbortSignal.any([
-                AbortSignal.timeout(config.timeoutMs),
-                ...(init.signal ? [init.signal] : []),
-            ]);
+            const signal =
+                sharedSignal ??
+                AbortSignal.any([
+                    AbortSignal.timeout(config.timeoutMs),
+                    ...(init.signal ? [init.signal] : []),
+                ]);
+            if (sharedSignal?.aborted) {
+                row.status = "released";
+                await persist();
+                throw new BenchmarkMeterRequestError("timeout", false, undefined, retryAttempt + 1);
+            }
             let onAbort: (() => void) | undefined;
             const deadline = new Promise<never>((_, reject) => {
                 onAbort = () => reject(new Error("usage_unresolved"));
@@ -549,7 +629,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             try {
                 signal.throwIfAborted();
                 const response = await Promise.race([
-                    tracked(
+                    (scoped ? <T>(promise: Promise<T>) => promise : tracked)(
                         baseFetch(input, {
                             ...init,
                             body: serialized,
@@ -563,12 +643,16 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                 let json: Record<string, unknown>;
                 try {
                     json = (await Promise.race([
-                        tracked(response.clone().json()),
+                        (scoped ? <T>(promise: Promise<T>) => promise : tracked)(
+                            response.clone().json()
+                        ),
                         deadline,
                     ])) as Record<string, unknown>;
                 } catch {
                     throw new Error("usage_missing");
                 }
+                if (!json || typeof json !== "object" || Array.isArray(json))
+                    throw new Error("usage_missing");
                 if (typeof json.id === "string") row.generationId = json.id;
                 if (typeof json.model === "string") row.servedModel = json.model;
                 const usage = json.usage as Record<string, unknown> | undefined;
@@ -589,7 +673,10 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                     row.cacheWriteTokens = prompt.cache_write_tokens;
                 const cached = row.cachedInputTokens ?? 0,
                     writes = row.cacheWriteTokens ?? 0;
-                if (cached + writes > row.inputTokens) throw new Error("usage_invalid");
+                if (cached + writes > row.inputTokens) {
+                    if (scoped) hold = "reservation_exceeded";
+                    throw new Error("usage_invalid");
+                }
                 row.settledListRateUsd = upwardUsd(
                     (row.inputTokens - cached - writes) * config.promptUsdPerToken +
                         cached * config.cachedPromptUsdPerToken +
@@ -607,7 +694,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                     row.reasoningTokens = completion.reasoning_tokens;
                 row.status = "settled";
                 row.durationMs = performance.now() - dispatchedAt;
-                if (!response.ok) hold = "provider_error";
+                if (!response.ok && !scoped) hold = "provider_error";
                 else if (
                     row.settledListRateUsd > row.projectedUsd + 1e-9 ||
                     row.inputTokens > row.inputTokenCeiling ||
@@ -616,23 +703,120 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                     hold = "reservation_exceeded";
                 else if (snapshot().settledListRateUsd > config.limitUsd)
                     hold = "list_rate_budget_exceeded";
+                if (!response.ok && scoped)
+                    row.failure = requestFailure(row, signal, retryAttempt).code;
                 await persist();
                 if (hold) throw new Error("benchmark_meter_hold:" + hold);
+                if (!response.ok && scoped) throw requestFailure(row, signal, retryAttempt);
                 return response;
-            } catch {
+            } catch (error) {
                 if (row.status !== "settled") {
                     row.status = "unknown";
                     row.durationMs = performance.now() - dispatchedAt;
-                    row.failure = "usage_unresolved";
-                    hold = "usage_unresolved";
+                    if (scoped) {
+                        row.failure = requestFailure(row, signal, retryAttempt).code;
+                        row.scopedTransportFailure = true;
+                    } else {
+                        row.failure = "usage_unresolved";
+                        hold = "usage_unresolved";
+                    }
                     await persist();
                 }
+                if (scoped && !hold)
+                    throw error instanceof BenchmarkMeterRequestError
+                        ? error
+                        : requestFailure(row, signal, retryAttempt);
                 throw new Error("benchmark_meter_hold:" + (hold ?? "usage_unresolved"));
             } finally {
                 if (onAbort) signal.removeEventListener("abort", onAbort);
             }
         };
-        return (input, init) => tracked(dispatch(input, init));
+        function requestFailure(row: BenchmarkMeterRecord, signal: AbortSignal, attempt: number) {
+            const code: BenchmarkMeterRequestCode = signal.aborted
+                ? "timeout"
+                : row.httpStatus === undefined
+                  ? "no_http"
+                  : row.httpStatus === 429
+                    ? "http_429"
+                    : row.httpStatus >= 500 && row.httpStatus <= 599
+                      ? "http_5xx"
+                      : row.httpStatus < 200 || row.httpStatus >= 300
+                        ? "http_status"
+                        : "invalid_response";
+            return new BenchmarkMeterRequestError(
+                code,
+                ["no_http", "http_429", "http_5xx"].includes(code),
+                row.httpStatus,
+                attempt + 1
+            );
+        }
+        return (input, init) =>
+            tracked(
+                (async () => {
+                    if (
+                        !config.transportReliability ||
+                        new URL(
+                            typeof input === "string"
+                                ? input
+                                : input instanceof URL
+                                  ? input.href
+                                  : input.url
+                        ).href !== responsesEndpoint.href
+                    )
+                        return dispatch(input, init);
+                    const signal = AbortSignal.any([
+                        AbortSignal.timeout(config.timeoutMs),
+                        ...(init?.signal ? [init.signal] : []),
+                        ...(input instanceof Request ? [input.signal] : []),
+                    ]);
+                    const requestId = randomUUID();
+                    for (let attempt = 0; ; attempt++) {
+                        try {
+                            return await dispatch(input, init, attempt, signal, requestId);
+                        } catch (error) {
+                            if (
+                                !(error instanceof BenchmarkMeterRequestError) ||
+                                !error.retryable ||
+                                attempt >= 2 ||
+                                hold
+                            )
+                                throw error;
+                            await new Promise<void>((resolve, reject) => {
+                                if (signal.aborted) {
+                                    reject(
+                                        new BenchmarkMeterRequestError(
+                                            "timeout",
+                                            false,
+                                            error.httpStatus,
+                                            attempt + 1
+                                        )
+                                    );
+                                    return;
+                                }
+                                const onAbort = () => {
+                                    clearTimeout(timer);
+                                    reject(
+                                        new BenchmarkMeterRequestError(
+                                            "timeout",
+                                            false,
+                                            error.httpStatus,
+                                            attempt + 1
+                                        )
+                                    );
+                                };
+                                const timer = setTimeout(
+                                    () => {
+                                        signal.removeEventListener("abort", onAbort);
+                                        resolve();
+                                    },
+                                    attempt === 0 ? 250 : 500
+                                );
+                                signal.addEventListener("abort", onAbort, { once: true });
+                            });
+                        }
+                    }
+                })()
+            );
     }
     return {
         snapshot,

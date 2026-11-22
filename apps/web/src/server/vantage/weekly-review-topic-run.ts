@@ -11,6 +11,7 @@ import {
     createScriptedExplorationPort,
     explorationDocumentHandle,
     runTopicExploration,
+    topicExplorationFailureCode,
     type ExplorationDocument,
     type ExplorationTrace,
     type TopicExplorationResult,
@@ -255,14 +256,7 @@ export async function prepareTopicSelection(options: {
     } catch (error) {
         if (error instanceof WeeklyReviewConflict) throw error;
         if (controller.signal.aborted || Date.now() >= deadlineAt) throw expired();
-        const message = error instanceof Error ? error.message : "";
-        const reason =
-            /^topic_exploration_failed:(timeout|call_limit|trace_limit|not_offered|range_invalid)$/.exec(
-                message
-            )?.[1];
-        throw new WeeklyReviewConflict(
-            "topic_exploration_failed:" + (reason ?? "provider_or_submission")
-        );
+        throw new WeeklyReviewConflict(topicExplorationFailureCode(error));
     } finally {
         if (timer) clearTimeout(timer);
     }

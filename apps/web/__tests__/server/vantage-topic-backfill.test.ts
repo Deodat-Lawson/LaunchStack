@@ -268,3 +268,41 @@ it("captures the exact primary state without rereading primary parents during ba
     expect(primary.summary.lane).not.toBe(filled.summary.lane);
     expect(primary.primary).toBeUndefined();
 });
+it("uses grounded seed windows in seed order and omits an unmatched change lane", async () => {
+    const { seed, read } = fixture();
+    const windows = await fitTopicEvidence("run", seed, null, read, {
+        evidenceCapBytes: 8000,
+        seedWindows: true,
+    });
+    expect(windows.dependencies.map(source => source.id)).toEqual(["1", "3", "4", "5"]);
+    expect(windows.summary.lane.admitted).toBe(0);
+    expect(
+        windows.input.sources.reduce((n, s) => n + Buffer.byteLength(s.text), 0)
+    ).toBeLessThanOrEqual(8000);
+    expect(windows.primary).toBeUndefined();
+    const legacy = await fitTopicEvidence("run", seed, null, read, { evidenceCapBytes: 8000 });
+    expect(legacy.dependencies.some(source => source.id === "2")).toBe(true);
+});
+it("preserves reserved change precedence when the lane has a matching window", async () => {
+    const { seed, read } = fixture();
+    seed.manifest.lane = [seed.documents[3]!.ref];
+    const windows = await fitTopicEvidence("run", seed, null, read, {
+        evidenceCapBytes: 8000,
+        seedWindows: true,
+    });
+    expect(windows.dependencies[1]!.id).toBe("5");
+    expect(windows.summary.lane.outcome).toBe("admitted");
+    expect(windows.dependencies.slice(2).map(source => source.id)).toEqual(["3", "4"]);
+});
+it("retains only fixed evidence when no seed or lane text matches guidance", async () => {
+    const { seed, read } = fixture();
+    seed.manifest.topics[0]!.openQuestions = ["unfindablequasar"];
+    seed.manifest.topics[0]!.keywords = [];
+    const recordingRead = jest.fn(read);
+    const windows = await fitTopicEvidence("run", seed, null, recordingRead, {
+        evidenceCapBytes: 8000,
+        seedWindows: true,
+    });
+    expect(windows.input.sources).toEqual(seed.context.sources);
+    expect(recordingRead).not.toHaveBeenCalled();
+});

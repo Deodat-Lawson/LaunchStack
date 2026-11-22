@@ -11,6 +11,7 @@ export type SweepStep = {
     request: BenchmarkGroup;
     cohort: SweepCohort;
     evidenceCapBytes: SweepCap;
+    replacesWorkId?: string;
 };
 
 export function sweepSchedule(
@@ -39,7 +40,7 @@ export function sweepSchedule(
 
 // Means from the 4121a113 live grouped ledger, with 50% padding applied to future work.
 const priorMean = { 3: 0.475494312 / 30, 5: 0.518785514 / 20 } as const;
-export const SWEEP_WAVE_SIZE = 4;
+export const BENCHMARK_MAX_CONCURRENCY = 4;
 
 export function sweepForecast(
     schedule: readonly SweepStep[],

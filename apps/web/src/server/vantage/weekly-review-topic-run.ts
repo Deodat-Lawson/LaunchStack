@@ -1,27 +1,56 @@
-import { createLangchainAgentPort, isChatRoute } from "@launchstack/llm";
+import { createLangchainAgentPort, isChatRoute, type AgentModelPort } from "@launchstack/llm";
 import {
     deterministicDigestProvider,
     getDigestsForVersions,
     type DocumentDigest,
+    type DigestProvider,
 } from "@launchstack/store/document-digests";
 import { scopeAllowsDocument } from "~/lib/authz/scope-types";
-import { resolveConfiguredChatModel } from "~/lib/models";
 import type { WeeklyReviewAuthorityActor } from "./weekly-review-authority";
-import { resolveDocumentDigestProvider } from "./document-digest-provider";
 import {
     createScriptedExplorationPort,
     runTopicExploration,
+    type ExplorationDocument,
     type ExplorationTrace,
     type TopicExplorationResult,
 } from "./weekly-review-topic-exploration";
 import { TOPIC_FIRST_LIMITS, type TopicSeed } from "./weekly-review-topic-types";
 import { WeeklyReviewConflict, type WeeklyReviewQuery } from "./weekly-review-types";
 
+export type TopicSelectionProviders = {
+    digest: DigestProvider;
+    exploration: (documents: readonly ExplorationDocument[]) => AgentModelPort;
+};
+
+/** Resolve configured routes only when production or an explicitly approved runner needs them. */
+export async function configuredTopicSelectionProviders(): Promise<TopicSelectionProviders> {
+    const route = process.env.VANTAGE_TOPIC_FIRST_EXPLORATION_ROUTE ?? "reasoning";
+    if (!isChatRoute(route))
+        throw new WeeklyReviewConflict("topic_exploration_failed:model_unavailable");
+    const [{ resolveConfiguredChatModel }, { resolveDocumentDigestProvider }] = await Promise.all([
+        import("~/lib/models"),
+        import("./document-digest-provider"),
+    ]);
+    return {
+        digest: resolveDocumentDigestProvider(),
+        exploration: () =>
+            createLangchainAgentPort(
+                resolveConfiguredChatModel({
+                    route,
+                    maxRetries: 0,
+                    maxOutputTokens: 6000,
+                    timeoutMs: TOPIC_FIRST_LIMITS.explorationMs,
+                })
+            ),
+    };
+}
+
 export async function prepareTopicSelection(options: {
     seed: TopicSeed;
     actor: WeeklyReviewAuthorityActor;
     query: WeeklyReviewQuery;
     deadlineAt: number;
+    providers?: TopicSelectionProviders;
     record: (values: { trace?: ExplorationTrace; digestIds?: string[] }) => Promise<void>;
 }): Promise<TopicExplorationResult | null> {
     const { seed, actor, query, deadlineAt, record } = options;
@@ -50,9 +79,14 @@ export async function prepareTopicSelection(options: {
                     actor.userId !== seed.context.actor.userId
                 )
                     throw new WeeklyReviewConflict("review_mutation_denied", 403);
-                const provider = injected
-                    ? deterministicDigestProvider
-                    : resolveDocumentDigestProvider();
+                const providers =
+                    options.providers ??
+                    (injected
+                        ? {
+                              digest: deterministicDigestProvider,
+                              exploration: createScriptedExplorationPort,
+                          }
+                        : await configuredTopicSelectionProviders());
                 const digests = new Map<string, DocumentDigest>();
                 for (let index = 0; index < seed.documents.length; index += 6) {
                     const batch = seed.documents.slice(index, index + 6);
@@ -62,7 +96,7 @@ export async function prepareTopicSelection(options: {
                                 companyId: actor.companyId,
                                 versionIds: [document.version],
                                 query,
-                                provider,
+                                provider: providers.digest,
                                 signal: controller.signal,
                                 documentScope: candidate =>
                                     scopeAllowsDocument(actor.documentScope, candidate),
@@ -120,19 +154,7 @@ export async function prepareTopicSelection(options: {
                         document.digest ? [document.digest.id] : []
                     ),
                 });
-                const route = process.env.VANTAGE_TOPIC_FIRST_EXPLORATION_ROUTE ?? "reasoning";
-                if (!injected && !isChatRoute(route))
-                    throw new WeeklyReviewConflict("topic_exploration_failed:model_unavailable");
-                const port = injected
-                    ? createScriptedExplorationPort(documents)
-                    : createLangchainAgentPort(
-                          resolveConfiguredChatModel({
-                              route: isChatRoute(route) ? route : "reasoning",
-                              maxRetries: 0,
-                              maxOutputTokens: 6000,
-                              timeoutMs: TOPIC_FIRST_LIMITS.explorationMs,
-                          })
-                      );
+                const port = providers.exploration(documents);
                 const result = await runTopicExploration({
                     catalogue,
                     offered: documents,

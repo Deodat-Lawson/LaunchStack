@@ -260,10 +260,9 @@ export class StepsSync {
         // They are edited where they stand (keeping their spacing and order)
         // when that says the same chart, else written out afresh — the keys
         // and the menu draw things the old lines could not hold, like a
-        // branch under a question they never had. Redrawing from the lines
-        // may lay the chart out, and put back an arrow the lines imply (a
-        // step flows on to the next line), but never takes away or changes a
-        // box or an arrow the canvas has.
+        // branch under a question they never had. The chart is only redrawn
+        // from the lines to put back an arrow they imply (a step flows on to
+        // the next line), never to take away or change a box or an arrow.
         const draw = (written: { text: string; ids: Array<string | null> }) => {
             const parse = parseSteps(written.text);
             const result = this.placed(
@@ -288,7 +287,9 @@ export class StepsSync {
             tries.find(t => t.fit === "adds") ??
             tries[tries.length - 1]!;
         const { out, parse, result } = drawn;
-        if (result.page !== page && drawn.fit !== "loses") {
+        // The same chart needs nothing written (redrawn, its branches would
+        // only take the lines' order); an arrow the lines imply is put back.
+        if (result.page !== page && drawn.fit === "adds") {
             this.write(() => this.store.updatePage(() => result.page, { transient: true }));
             this.pruneSelection();
         }

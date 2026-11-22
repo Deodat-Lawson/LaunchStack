@@ -59,10 +59,14 @@ export function baselineEligibility(document) {
     return null;
 }
 
+export function hasKnownCatalogue(run) {
+    return run.status === "ok" || Array.isArray(run.offered);
+}
+
 export function candidateReason(document, documents, run) {
     const ordered = recency(documents);
     const rank = ordered.findIndex(item => identity(item) === identity(document)) + 1;
-    if (run.status !== "ok") return { reason: "run_failed_before_offer", recencyRank: rank, failure: run.failure ?? null };
+    if (!hasKnownCatalogue(run)) return { reason: "catalogue_unknown_precollection_failure", recencyRank: rank, failure: run.failure ?? null };
     if (run.arm === "baseline") {
         if (rank > 64) return { reason: "baseline_candidate_cap_64", recencyRank: rank };
         const diagnostic = run.selectionDiagnostics?.omitted?.find(item => String(item.id) === document.documentId && String(item.version) === document.versionId);
@@ -106,7 +110,8 @@ export function auditCandidateGaps(corpus, requests, scored, runs) {
             throw new Error("AUDIT_CASE_IDENTITY_MISMATCH");
         const documents = corpus.documents.filter(document => document.enterprise === run.enterprise);
         const offered = new Set((run.offered ?? []).map(identity));
-        const rankedOffer = new Set(counterfactualOffer(request.question, documents, run).map(identity));
+        const catalogueKnown = hasKnownCatalogue(run);
+        const rankedOffer = new Set(catalogueKnown ? counterfactualOffer(request.question, documents, run).map(identity) : []);
         const eligible = score.eligible && !score.failed;
         let actualHits = 0, lexicalHits = 0, lostHits = 0;
         const factResults = [];
@@ -121,20 +126,20 @@ export function auditCandidateGaps(corpus, requests, scored, runs) {
             }
             if (document && rankedOffer.has(identity(document))) lexicalHits++;
             if (document && offered.has(identity(document))) continue;
-            const reason = document ? candidateReason(document, documents, run) : { reason: "label_filename_unmapped" };
+            const reason = !catalogueKnown ? { reason: "catalogue_unknown_precollection_failure" } : document ? candidateReason(document, documents, run) : { reason: "label_filename_unmapped" };
             gapRows.push({ caseId: String(run.caseId), arm: run.arm, enterprise: run.enterprise,
                 factIndex: fact.factIndex, eligible, sourceMatch: fact.sourceMatch,
                 filename: document?.filename ?? null, documentId: fact.documentId, versionId: fact.versionId,
                 ...reason, counterfactualOffered: Boolean(document && rankedOffer.has(identity(document))) });
         }
         details.push({ caseId: String(run.caseId), arm: run.arm, enterprise: run.enterprise, eligible,
-            facts: score.totalFacts, actualOfferedFacts: actualHits, counterfactualOfferedFacts: lexicalHits, lostOfferedFacts: lostHits, failed: score.failed, factResults });
+            catalogueKnown, facts: score.totalFacts, actualOfferedFacts: actualHits, counterfactualOfferedFacts: lexicalHits, lostOfferedFacts: lostHits, failed: score.failed, factResults });
     }
     const arms = {};
     for (const arm of [...new Set(runs.map(run => run.arm))]) {
         const rows = details.filter(row => row.arm === arm && row.eligible);
         const gaps = gapRows.filter(row => row.arm === arm && row.eligible);
-        const allFacts = details.filter(row => row.arm === arm && !row.failed).flatMap(row => row.factResults);
+        const allFacts = details.filter(row => row.arm === arm && row.catalogueKnown).flatMap(row => row.factResults);
         const allResolved = allFacts.filter(fact => fact.passageResolved);
         const allNamed = allFacts.filter(fact => fact.filenameResolved);
         const counts = facts => ({ facts: facts.length,
@@ -143,6 +148,10 @@ export function auditCandidateGaps(corpus, requests, scored, runs) {
             recovered: facts.filter(fact => !fact.actualOffered && fact.counterfactualOffered).length,
             lost: facts.filter(fact => fact.actualOffered && !fact.counterfactualOffered).length });
         arms[arm] = {
+            observedCatalogueAttempts: details.filter(row => row.arm === arm && row.catalogueKnown).length,
+            failedAfterCatalogue: details.filter(row => row.arm === arm && row.catalogueKnown && row.failed).length,
+            unknownCatalogueAttempts: details.filter(row => row.arm === arm && !row.catalogueKnown).length,
+            unknownCatalogueFacts: details.filter(row => row.arm === arm && !row.catalogueKnown).reduce((sum, row) => sum + row.facts, 0),
             allPassageResolvedFacts: counts(allResolved),
             allFilenameResolvedFacts: counts(allNamed),
             unresolvedPassages: allFacts.length - allResolved.length,

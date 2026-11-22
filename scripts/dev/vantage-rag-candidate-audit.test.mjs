@@ -56,3 +56,21 @@ test("resolved-fact denominator retains matched facts from whole-case exclusions
     assert.equal(summary.unresolvedPassages, 1);
     assert.equal(summary.unresolvedFilenames, 0);
 });
+
+test("failure after collection retains actual catalogue and attempt denominators", () => {
+    const run = { caseId: "1", arm: "configured-live", enterprise: "Example", status: "failed", failure: "topic_exploration_failed:timeout", offered: [...documents].reverse().slice(0, 50) };
+    const requests = [{ caseId: "1", enterprise: "Example", question: "target gearbox" }];
+    const scored = { details: [{ caseId: "1", arm: "configured-live", enterprise: "Example", eligible: true, failed: true, totalFacts: 1,
+        factResults: [{ factIndex: 0, documentId: "1", versionId: "1", sourceMatch: "exact" }] }] };
+    const result = auditCandidateGaps({ documents }, requests, scored, [run]);
+    const summary = result.summary.arms["configured-live"];
+    assert.equal(result.gaps[0].reason, "topic_offer_cap_50_recency_seed_order");
+    assert.equal(summary.allPassageResolvedFacts.facts, 1);
+    assert.equal(summary.allPassageResolvedFacts.recovered, 1);
+    assert.equal(summary.failedAfterCatalogue, 1);
+    const unknown = auditCandidateGaps({ documents }, requests, scored, [{ ...run, offered: undefined }]);
+    assert.equal(unknown.gaps[0].reason, "catalogue_unknown_precollection_failure");
+    assert.equal(unknown.summary.arms["configured-live"].allPassageResolvedFacts.facts, 0);
+    assert.equal(unknown.summary.arms["configured-live"].unknownCatalogueFacts, 1);
+    assert.equal(unknown.gaps[0].counterfactualOffered, false);
+});

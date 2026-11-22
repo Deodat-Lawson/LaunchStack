@@ -584,7 +584,9 @@ function alignedEnds(
             const flat = flatA ? a : b;
             const start = vertical ? flat.x : flat.y;
             const length = vertical ? flat.w : flat.h;
-            return tip >= start + 6 && tip <= start + length - 6 ? tip : null;
+            // Clear of the flat side's corners by half the overlap asked for.
+            const margin = minOverlap / 2;
+            return tip >= start + margin && tip <= start + length - margin ? tip : null;
         }
         return null;
     };
@@ -627,7 +629,7 @@ const SIDE_COST = {
      */
     bend: 100,
     /** Per px a leg falls short of its minimum (`MIN_LEG`, or room for the head). */
-    stub: 25,
+    stub: 40,
     /** Per px an end leg of a bent route falls short of `COMFORT_LEG`. */
     comfort: 8,
     /** Per px the route runs behind a side it leaves or arrives by: a U-turn. */
@@ -650,6 +652,14 @@ const SIDE_COST = {
 
 /** A route keeps the sides it used until another pair is better by this much. */
 const SIDE_HYSTERESIS = 28;
+/**
+ * …and, once its sides have changed, keeps the new ones until its box has
+ * moved this far from where they changed (unless they get much worse): a
+ * pointer trembling on the edge of a leg's minimum flipped it back and forth.
+ */
+const SIDE_SETTLE = 8;
+/** How much worse the kept sides may get while settling. */
+const SIDE_SETTLE_SLACK = 300;
 /** A remembered choice only steers a route whose boxes moved less than this since. */
 const SIDE_MEMORY_REACH = 200;
 
@@ -733,11 +743,17 @@ function pairCost(pts: readonly Point[], a: ResolvedEnd, b: ResolvedEnd, ctx: Pa
     for (let i = 0; i < pts.length - 1; i++) legs.push(distance(pts[i]!, pts[i + 1]!));
     let cost = legs.reduce((sum, l) => sum + l, 0) + SIDE_COST.bend * (legs.length - 1);
     const { needs } = ctx;
+    // The end legs count only as far as they run straight out of their side:
+    // a line leaving a diamond's bottom tip sideways has no leg there at all.
+    const n = pts.length - 1;
+    const out0 = subPt(pts[1]!, pts[0]!);
+    const outN = subPt(pts[n - 1]!, pts[n]!);
+    const first = Math.max(0, out0.x * a.normal.x + out0.y * a.normal.y);
+    const last = Math.max(0, outN.x * b.normal.x + outN.y * b.normal.y);
     if (legs.length === 1) {
-        cost += SIDE_COST.stub * Math.max(0, Math.max(needs.first, needs.last) - legs[0]!);
+        cost +=
+            SIDE_COST.stub * (Math.max(0, needs.first - first) + Math.max(0, needs.last - last));
     } else {
-        const first = legs[0]!;
-        const last = legs[legs.length - 1]!;
         let short = Math.max(0, needs.first - first) + Math.max(0, needs.last - last);
         for (let i = 1; i < legs.length - 1; i++) short += Math.max(0, MIN_LEG - legs[i]!);
         cost += SIDE_COST.stub * short;
@@ -783,6 +799,8 @@ interface SideMemo {
     key: string;
     /** `to`'s centre relative to `from`'s when this was chosen. */
     rel: Point;
+    /** …and when the sides last changed. */
+    changedAt: Point;
 }
 
 /**
@@ -855,13 +873,14 @@ function pickSides(
     const cb = nodeCenter(to);
     const rel = subPt(cb, ca);
     const remembered = sideMemory.get(edge.id);
-    const prev =
+    const memo =
         remembered &&
         remembered.fromId === from.id &&
         remembered.toId === to.id &&
         Math.hypot(rel.x - remembered.rel.x, rel.y - remembered.rel.y) <= SIDE_MEMORY_REACH
-            ? remembered.key
+            ? remembered
             : null;
+    const prev = memo?.key ?? null;
 
     const len = Math.hypot(rel.x, rel.y) || 1;
     const ctx: PairContext = {
@@ -926,12 +945,21 @@ function pickSides(
 
     let best = candidates[0]!;
     for (const c of candidates) if (c.cost < best.cost - 1e-6) best = c;
-    if (prev && prev !== best.key) {
+    if (memo && prev !== best.key) {
         const kept = candidates.find(c => c.key === prev);
-        if (kept && kept.cost <= best.cost + SIDE_HYSTERESIS) best = kept;
+        const settling =
+            Math.hypot(rel.x - memo.changedAt.x, rel.y - memo.changedAt.y) < SIDE_SETTLE;
+        const slack = settling ? SIDE_SETTLE_SLACK : SIDE_HYSTERESIS;
+        if (kept && kept.cost <= best.cost + slack) best = kept;
     }
     if (sideMemory.size >= SIDE_MEMORY_MAX) sideMemory.clear();
-    sideMemory.set(edge.id, { fromId: from.id, toId: to.id, key: best.key, rel });
+    sideMemory.set(edge.id, {
+        fromId: from.id,
+        toId: to.id,
+        key: best.key,
+        rel,
+        changedAt: memo && memo.key === best.key ? memo.changedAt : rel,
+    });
     return best.choice;
 }
 

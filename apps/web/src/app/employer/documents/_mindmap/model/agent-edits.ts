@@ -2,11 +2,12 @@
  * How a model reads a diagram and changes it.
  *
  * `describeDiagram` writes the active page out as text a model can follow —
- * the topic tree as an indented outline, a flowchart as its boxes and
- * arrows — with every shape's id beside it. `applyDiagramEdits` takes a
- * list of small operations that name those ids ("add under [n_x]", "rename
- * [n_y]") and runs them through the editor's own commands on an
- * `EditorStore`, inside one `group`:
+ * the topic tree as an indented outline, a flowchart in the step language
+ * (`./flowchart`) with a list of each step's box id, anything else as its
+ * shapes and arrows — with every shape's id beside it. `applyDiagramEdits`
+ * takes a list of small operations that name those ids ("add under n_x",
+ * "rename n_y"), or a whole flowchart rewritten as steps, and runs them
+ * through the editor's own commands on an `EditorStore`, inside one `group`:
  *
  * - on the server (Ask's and MCP's `edit_diagram`) the store is a scratch
  *   copy of the saved document, and its result is saved as a new revision;
@@ -40,9 +41,26 @@ import {
     mapNodes,
     nodeById,
     topicParent,
+    worksAsFlow,
 } from "./doc";
 import { createEdge, createNode } from "./factory";
-import { parseOutline, topicSize, type OutlineNode } from "./generate";
+import {
+    describeStepNotes,
+    flowchartLook,
+    flowchartToSteps,
+    isStepNode,
+    newStepBox,
+    newStepEdge,
+    parseSteps,
+    readsAsSteps,
+    stepKindOf,
+    stepsGap,
+    stepsToFlowchart,
+    tidyChart,
+} from "./flowchart";
+import { shapeForKind } from "./flowchart/steps";
+import { DIAGRAM_LIMITS, parseOutline, topicSize, unfenced, type OutlineNode } from "./generate";
+import { sizeForText } from "./grow";
 import { layeredLayout, type LayeredDirection } from "./layered";
 import { sizeForLabel } from "./mermaid";
 import { nonEmpty } from "./strings";
@@ -62,6 +80,29 @@ const DESCRIBE_LINE_LIMIT = 400;
 export function pageStyle(page: DiagramPage): "topics" | "shapes" {
     return isMindmapPage(page) ? "topics" : "shapes";
 }
+
+/**
+ * Whether a model reads and rewrites the document's active page as step
+ * text (`readsAsSteps`): a flowchart, or a drawing the step language says
+ * exactly. Mind maps keep their outline.
+ */
+export function pageReadsAsSteps(doc: MindmapDoc): boolean {
+    return readsAsSteps(activePage(doc), doc.settings.kind);
+}
+
+/**
+ * Whether boxes and arrows an AI adds here are made in the product's
+ * flowchart look, as the editor makes them on a flowchart: a document worked
+ * as a flowchart, or a page that reads as steps.
+ */
+function drawsInFlowLook(doc: MindmapDoc, p: DiagramPage): boolean {
+    if (pageStyle(p) === "topics") return false;
+    return worksAsFlow(doc.settings.kind) || readsAsSteps(p, doc.settings.kind);
+}
+
+/** The step language, said once to a model reading a flowchart. */
+export const STEPS_LEGEND =
+    'one step per line, joined in order; a line ending in "?" is a decision, and the lines indented under it are its branches, written "Label: step"; "-> Step" is an arrow to the step with those words; a line that is just Start or End is a pill';
 
 function label(text: string): string {
     const flat = text.replace(/\s+/g, " ").trim();
@@ -89,7 +130,9 @@ export function describeDiagram(doc: MindmapDoc): string {
     const byId = new Map(page.nodes.map(n => [n.id, n]));
     const idx = graphIndex(page);
 
-    if (pageStyle(page) === "topics") {
+    if (readsAsSteps(page, doc.settings.kind)) {
+        describeSteps(page, byId, lines);
+    } else if (pageStyle(page) === "topics") {
         const treeEdges = new Set<string>();
         const roots = page.nodes.filter(
             n => isTopicShape(n.shape) && topicParent(page, n.id, idx) === null
@@ -152,6 +195,106 @@ export function describeDiagram(doc: MindmapDoc): string {
         lines.push("… (the rest of the page is left out; it is too large to list in full)");
     }
     return lines.join("\n");
+}
+
+/**
+ * A flowchart page as step text in a fence, then what an edit needs that the
+ * text cannot carry: each step's box id, and anything on the page the steps
+ * do not say (arrows to notes, joins the text implies but the page lacks,
+ * notes, text marks, frames), so nothing on the page is hidden.
+ */
+function describeSteps(
+    page: DiagramPage,
+    byId: ReadonlyMap<string, DiagramNode>,
+    lines: string[]
+): void {
+    const written = flowchartToSteps(page);
+    const parse = parseSteps(written.text);
+    const gap = stepsGap(page, written);
+    const stepLines = written.text.split("\n");
+    const tooLarge = stepLines.length > STEPS_LINE_LIMIT;
+    lines.push(`Flowchart, written as steps (${STEPS_LEGEND}):`);
+    lines.push("```steps", ...stepLines.slice(0, STEPS_LINE_LIMIT));
+    if (tooLarge) lines.push(`… (${stepLines.length - STEPS_LINE_LIMIT} more lines left out)`);
+    lines.push("```");
+    if (tooLarge) {
+        lines.push(
+            "The chart is too large to show in full: change it with id edits, never by rewriting its steps."
+        );
+    }
+
+    const boxes: string[] = [];
+    parse.steps.forEach((_, i) => {
+        const id = written.ids[i];
+        const nd = id ? byId.get(id) : undefined;
+        if (!nd || boxes.length >= STEPS_LINE_LIMIT) return;
+        const drawn = saysItsShape(nd) ? "" : `, drawn as ${nd.shape}`;
+        boxes.push(`- ${label(nd.text)} (id: ${nd.id})${drawn}${inFrame(nd, byId)}`);
+    });
+    if (boxes.length > 0) {
+        lines.push("Boxes (the id of each step, in the order above, for edit_diagram):", ...boxes);
+    }
+    if (gap.unshown.length > 0) {
+        lines.push("Arrows the steps do not show:");
+        for (const e of gap.unshown) lines.push(`- ${edgeLine(e, byId)}`);
+    }
+    if (gap.relabelled.length > 0) {
+        lines.push("Arrows whose words the steps leave out:");
+        for (const r of gap.relabelled) lines.push(`- ${edgeLine(r.edge, byId)}`);
+    }
+    if (gap.implied.length > 0) {
+        lines.push(
+            "Not joined on the page, though consecutive above (rewriting with these steps would join them):"
+        );
+        for (const j of gap.implied) {
+            const a = byId.get(j.from);
+            const b = byId.get(j.to);
+            lines.push(
+                `- ${label(a?.text ?? "")} (id: ${j.from}) does not lead to ${label(b?.text ?? "")} (id: ${j.to})`
+            );
+        }
+    }
+    const steps = new Set(written.ids.filter((id): id is string => id !== null));
+    const others = page.nodes.filter(n => !steps.has(n.id) && !isContainer(n.shape));
+    if (others.length > 0) {
+        lines.push("Other shapes on the page (not steps):");
+        for (const n of others) {
+            lines.push(
+                `- ${n.shape}: ${label(n.text)} (id: ${n.id})${n.hidden ? " (hidden)" : ""}${inFrame(n, byId)}`
+            );
+        }
+    }
+    const frames = page.nodes.filter(n => isContainer(n.shape));
+    if (frames.length > 0) {
+        lines.push("Frames (groups drawn around shapes):");
+        for (const n of frames) lines.push(`- ${label(n.text)} (id: ${n.id})`);
+    }
+}
+
+/** Plain boxes, and pills and diamonds the step text already says: no shape note. */
+const PLAIN_STEPS: ReadonlySet<ShapeId> = new Set<ShapeId>([
+    "process",
+    "rectangle",
+    "rounded-rectangle",
+    "decision",
+    "mind-root",
+    "mind-branch",
+    "mind-leaf",
+]);
+
+/** Whether the step text says a box's shape: a plain box, a decision, a Start/End pill. */
+function saysItsShape(nd: DiagramNode): boolean {
+    if (PLAIN_STEPS.has(nd.shape)) return true;
+    const kind = stepKindOf(nd.text.replace(/\s+/g, " "));
+    return nd.shape === "terminator" && (kind === "start" || kind === "end");
+}
+
+/** Lines of step text shown before the rest is left out. */
+const STEPS_LINE_LIMIT = 300;
+
+function inFrame(nd: DiagramNode, byId: ReadonlyMap<string, DiagramNode>): string {
+    const frame = nd.parentId ? byId.get(nd.parentId) : undefined;
+    return frame ? `, in the frame "${label(frame.text)}" (id: ${frame.id})` : "";
 }
 
 function edgeLine(e: DiagramEdge, byId: ReadonlyMap<string, DiagramNode>): string {
@@ -220,7 +363,13 @@ export type DiagramEdit =
     | { op: "move"; node: string; under: string; after?: string }
     | { op: "connect"; from: string; to: string; label?: string }
     | { op: "disconnect"; from: string; to: string }
-    | { op: "arrange" };
+    | { op: "arrange" }
+    /**
+     * Flowcharts: redraw the whole chart from step text. Boxes whose words
+     * match a step keep their id; new steps get new boxes; boxes whose step
+     * is gone are removed. Notes, text marks and frames stay.
+     */
+    | { op: "steps"; text: string };
 
 export const DIAGRAM_EDIT_OPS = [
     "add",
@@ -274,11 +423,13 @@ export function runDiagramEdits(
     const applied: string[] = [];
     const added: string[] = [];
     const refs = new Map<string, string>();
+    /** Boxes `add` made on a flowchart, for an auto-arranged chart to take in. */
+    const flowAdded: string[] = [];
     scratch.group("AI edit", () => {
         edits.forEach((edit, index) => {
-            applied.push(applyOne(scratch, edit, index, refs, added));
+            applied.push(applyOne(scratch, edit, index, refs, added, flowAdded));
         });
-        settle(scratch);
+        settle(scratch, flowAdded);
     });
     return { doc: scratch.getState().doc, applied, added };
 }
@@ -348,17 +499,22 @@ function applyOne(
     edit: DiagramEdit,
     index: number,
     refs: Map<string, string>,
-    added: string[]
+    added: string[],
+    flowAdded: string[]
 ): string {
     switch (edit.op) {
         case "add":
-            return addEdit(store, edit, index, refs, added);
+            return addEdit(store, edit, index, refs, added, flowAdded);
+        case "steps":
+            return stepsEdit(store, edit, index, added);
         case "rename": {
             const nd = resolve(store, edit.node, refs, index, "node");
             const text = edit.text.trim();
             if (!text) throw new DiagramEditError(`Edit ${index + 1}: rename needs text.`, index);
             setNodeText(store, nd.id, text);
-            growToLabel(store, nd.id);
+            if (drawsInFlowLook(store.getState().doc, page(store)) && isStepNode(nd)) {
+                retypeStep(store, nd.id, text);
+            } else growToLabel(store, nd.id);
             return `Renamed ${nd.id} to "${text}".`;
         }
         case "remove":
@@ -374,9 +530,19 @@ function applyOne(
                     index
                 );
             const topics = pageStyle(page(store)) === "topics";
+            const doc = store.getState().doc;
+            if (!topics && drawsInFlowLook(doc, page(store))) {
+                const mode = themeMode(doc.settings.paletteId);
+                insertEdge(
+                    store,
+                    newStepEdge(from.id, to.id, mode, nonEmpty(edit.label)),
+                    "Connect"
+                );
+                return `Connected ${from.id} → ${to.id}${edit.label ? ` ("${edit.label.trim()}")` : ""}.`;
+            }
             const kind = topics
                 ? "curved"
-                : (page(store).edges[0]?.kind ?? store.getState().doc.settings.defaultEdgeKind);
+                : (page(store).edges[0]?.kind ?? doc.settings.defaultEdgeKind);
             insertEdge(
                 store,
                 createEdge({
@@ -442,7 +608,8 @@ function addEdit(
     edit: Extract<DiagramEdit, { op: "add" }>,
     index: number,
     refs: Map<string, string>,
-    added: string[]
+    added: string[],
+    flowAdded: string[]
 ): string {
     const text = edit.text?.trim() ?? "";
     if (!text) throw new DiagramEditError(`Edit ${index + 1}: add needs text.`, index);
@@ -489,6 +656,25 @@ function addEdit(
             : "process";
     const doc = store.getState().doc;
     const mode = themeMode(doc.settings.paletteId);
+
+    if (drawsInFlowLook(doc, page(store))) {
+        // The editor's flowchart look: coloured by kind, no outline, 15px
+        // regular. A plain step's words decide its kind, as they do when
+        // someone types them: "In stock?" is a decision, "End" a pill.
+        const kind =
+            shape === "process"
+                ? shapeForKind(stepKindOf(text.replace(/\s+/g, " ")), undefined, "process")
+                : shape;
+        const probe = newStepBox(kind, text, mode);
+        const at = placeNear(page(store), parent, { w: probe.w, h: probe.h });
+        const node: DiagramNode = { ...probe, ...at };
+        insertNode(store, node, "Add shape");
+        if (parent) insertEdge(store, newStepEdge(parent.id, node.id, mode, nonEmpty(edit.label)));
+        if (edit.ref) refs.set(edit.ref.trim(), node.id);
+        added.push(node.id);
+        flowAdded.push(node.id);
+        return `Added ${kind} ${node.id} "${text}"${parent ? ` after ${parent.id}` : ""}.`;
+    }
     const probe = createNode({
         shape,
         x: 0,
@@ -536,6 +722,88 @@ function growToLabel(store: EditorStore, id: string): void {
         p => mapNodes(p, [id], n => ({ ...n, w: Math.max(n.w, size.w), h: Math.max(n.h, size.h) })),
         { label: "Fit to text" }
     );
+}
+
+/**
+ * A flowchart step renamed by an AI changes with its words as it does when
+ * someone types them (`flowchartLook.afterText`): a question becomes a
+ * decision, "Start" a pill, about the same centre. Otherwise it keeps its
+ * width and grows down to fit, the look's rule.
+ */
+function retypeStep(store: EditorStore, id: string, text: string): void {
+    const mode = themeMode(store.getState().doc.settings.paletteId);
+    store.updatePage(
+        p =>
+            mapNodes(p, [id], n => {
+                const patch = flowchartLook.afterText?.(n, text, mode);
+                if (patch) return { ...n, ...patch };
+                const fit = sizeForText(n, text, { keepWidth: true });
+                return fit.h > n.h ? { ...n, h: fit.h } : n;
+            }),
+        { label: "Fit to text" }
+    );
+}
+
+// -- steps --------------------------------------------------------------------
+
+function stepsEdit(
+    store: EditorStore,
+    edit: Extract<DiagramEdit, { op: "steps" }>,
+    index: number,
+    added: string[]
+): string {
+    const fail = (why: string) => new DiagramEditError(`Edit ${index + 1}: ${why}`, index);
+    const doc = store.getState().doc;
+    const p = page(store);
+    const before = p.nodes.filter(isStepNode);
+    if (pageStyle(p) === "topics") {
+        throw fail(
+            "steps rewrite a flowchart, and this page is a mind map. Change it with add, rename, remove and move."
+        );
+    }
+    if (before.some(n => n.text.trim()) && !readsAsSteps(p, doc.settings.kind)) {
+        throw fail(
+            "this page is not a flowchart its steps can say (its shapes are not flowchart steps). Change it with add, rename, remove, connect and disconnect."
+        );
+    }
+    const text = unfenced(edit.text ?? "").replace(/\s+$/, "");
+    const parse = parseSteps(text);
+    if (parse.steps.length === 0) {
+        throw fail("steps had no step to draw. To clear the chart, remove its boxes instead.");
+    }
+    if (parse.steps.length > DIAGRAM_LIMITS.nodes) {
+        throw fail(
+            `that is ${parse.steps.length} steps; keep a chart to ${DIAGRAM_LIMITS.nodes} or fewer.`
+        );
+    }
+    if (parse.notes.length > 0) {
+        throw fail(
+            [
+                "some lines of the steps could not be read.",
+                ...describeStepNotes(text, parse.notes),
+            ].join(" ")
+        );
+    }
+    const mode = themeMode(doc.settings.paletteId);
+    // Matched in the order the agent read them, so retyped lines keep their boxes.
+    const order = flowchartToSteps(p).ids.filter((id): id is string => id !== null);
+    const result = stepsToFlowchart(p, text, mode, { order });
+    store.updatePage(() => result.page, { label: "Rewrite steps" });
+
+    const was = new Map(before.map(n => [n.id, n]));
+    const now = new Set(result.ids);
+    const made = result.ids.filter(id => !was.has(id));
+    const gone = before.filter(n => !now.has(n.id));
+    added.push(...made);
+    const words = (id: string) => label(nodeById(result.page, id)?.text ?? "");
+    const parts = [`kept ${result.ids.length - made.length} of its boxes`];
+    if (made.length > 0) {
+        parts.push(`added ${made.map(id => `${id} "${words(id)}"`).join(", ")}`);
+    }
+    if (gone.length > 0) {
+        parts.push(`removed ${gone.map(n => `${n.id} "${label(n.text)}"`).join(", ")}`);
+    }
+    return `Redrew the flowchart from ${parse.steps.length} steps: ${parts.join("; ")}.`;
 }
 
 function countDescendants(node: OutlineNode): number {
@@ -791,11 +1059,21 @@ function arrange(store: EditorStore): void {
     );
 }
 
-/** After the edits: a self-arranging map is tidied once, now that every label has its size. */
-function settle(store: EditorStore): void {
+/**
+ * After the edits: a self-arranging map is tidied once, now that every label
+ * has its size; a flowchart still on auto layout takes the steps `add` made
+ * into its top-to-bottom arrangement, as it does a step added with Tab.
+ */
+function settle(store: EditorStore, flowAdded: readonly string[]): void {
     const doc = store.getState().doc;
+    const p = activePage(doc);
+    if (flowAdded.length > 0 && doc.settings.flowLayout === "auto" && !isMindmapPage(p)) {
+        const live = flowAdded.filter(id => nodeById(p, id));
+        if (live.length > 0) store.updatePage(q => tidyChart(q, live), { label: "Arrange" });
+        return;
+    }
     const layout = doc.settings.autoLayout;
-    if (!layout || !isMindmapPage(activePage(doc))) return;
+    if (!layout || !isMindmapPage(p)) return;
     store.clearSelection();
     runLayout(store, layout, { label: "Arrange", transient: true });
 }

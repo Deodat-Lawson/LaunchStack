@@ -70,7 +70,7 @@ export function looksLikeMermaid(text: string): boolean {
 }
 
 /** A fenced block's body, or the text itself: models wrap what they write in ``` fences. */
-function unfenced(text: string): string {
+export function unfenced(text: string): string {
     const fenced = /^\s*```[\w-]*[ \t]*\n([\s\S]*?)\n\s*```\s*$/.exec(text);
     return fenced ? fenced[1]! : text;
 }

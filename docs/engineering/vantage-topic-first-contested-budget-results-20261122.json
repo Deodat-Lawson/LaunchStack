@@ -1,0 +1,3184 @@
+{
+  "schemaVersion": "vantage-contested-budget/1",
+  "benchmarkCommit": "f89001fa",
+  "fixedGrouping": {
+    "algorithm": "enterprise-disjoint-sha256-tuples/1",
+    "seed": "vantage-contested-20261122",
+    "rankEncoding": "SHA256(UTF8(JSON.stringify([seed,size,enterprise,caseId])))",
+    "inputQuestions": 100,
+    "inputSha256": "3c75f58273115ec121161a14609af622862fc0307dc44ef85f244b1fc6a2d962",
+    "requestSetSha256": "ac1f739f21a0a651a1c011c8ab55f55e82ddbff72dced5dbb9341e3aa1bdf6c6",
+    "groups": 50,
+    "topicPositions": 190,
+    "sizes": {
+      "3": {
+        "groups": 30,
+        "positions": 90,
+        "remainder": 10
+      },
+      "5": {
+        "groups": 20,
+        "positions": 100,
+        "remainder": 0
+      }
+    }
+  },
+  "methodSha256": "b04743b6243433bd36e84445071ae7217fb8102233763d63941cc583421ac34d",
+  "captures": {
+    "freeSha256": "4e0fbd5ee8389bfbd8ab0a53dd90ff791b6f1474eb044f2604ef3f41f38358a3",
+    "liveSha256": "e2dcd7295f63d56b838e6195c4a73cc2a0d01c55feb281497b58d7115ed4acbe"
+  },
+  "bySizeAndArm": {
+    "3": {
+      "baseline": {
+        "runs": 30,
+        "failures": 0,
+        "failureCodes": {},
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 89,
+            "selected": 4,
+            "recall": 0.0449438202247191,
+            "zeroMatchedDocumentTopics": 85,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 28,
+            "excludedTopics": 62,
+            "facts": 32,
+            "covered": 0,
+            "recall": 0,
+            "zeroMatchedPassageTopics": 28
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 104,
+              "covered": 1,
+              "recall": 0.009615384615384616,
+              "zeroMatchedPassageTopics": 88
+            },
+            "0.9": {
+              "facts": 104,
+              "covered": 0,
+              "recall": 0,
+              "zeroMatchedPassageTopics": 89
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 89,
+            "selected": 4,
+            "recall": 0.0449438202247191,
+            "zeroMatchedDocumentTopics": 85,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 28,
+            "excludedTopics": 62,
+            "facts": 32,
+            "covered": 0,
+            "recall": 0,
+            "zeroMatchedPassageTopics": 28
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 104,
+              "covered": 1,
+              "recall": 0.009615384615384616,
+              "zeroMatchedPassageTopics": 88
+            },
+            "0.9": {
+              "facts": 104,
+              "covered": 0,
+              "recall": 0,
+              "zeroMatchedPassageTopics": 89
+            }
+          }
+        },
+        "frozenBytes": {
+          "n": 30,
+          "total": 172230,
+          "min": 5166,
+          "median": 5718,
+          "p90": 6375,
+          "p95": 6375,
+          "max": 6375
+        },
+        "maxSourceUnits": 3,
+        "evidenceByteLimitViolations": 0,
+        "sourceUnitLimitViolations": 0,
+        "reportedFrozenByteCountMismatches": 0,
+        "groupsWithZeroSupportingDocuments": 26,
+        "groupsWithNoResolvedDocuments": 0,
+        "groupsWithAllTopicsSupported": 0,
+        "modelAssignedDocuments": {
+          "observableTopics": 0,
+          "zeroAssignedTopics": 0,
+          "countDistribution": {
+            "n": 0,
+            "total": 0,
+            "min": null,
+            "median": null,
+            "p90": null,
+            "p95": null,
+            "max": null
+          }
+        },
+        "runsAt16SourceUnits": 0,
+        "strictRecoveredFactsPerPooledKB": 0
+      },
+      "scripted": {
+        "runs": 30,
+        "failures": 0,
+        "failureCodes": {},
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 89,
+            "selected": 82,
+            "recall": 0.9213483146067416,
+            "zeroMatchedDocumentTopics": 7,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 28,
+            "excludedTopics": 62,
+            "facts": 32,
+            "covered": 25,
+            "recall": 0.78125,
+            "zeroMatchedPassageTopics": 6
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 104,
+              "covered": 43,
+              "recall": 0.41346153846153844,
+              "zeroMatchedPassageTopics": 50
+            },
+            "0.9": {
+              "facts": 104,
+              "covered": 32,
+              "recall": 0.3076923076923077,
+              "zeroMatchedPassageTopics": 60
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 89,
+            "selected": 82,
+            "recall": 0.9213483146067416,
+            "zeroMatchedDocumentTopics": 7,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 28,
+            "excludedTopics": 62,
+            "facts": 32,
+            "covered": 25,
+            "recall": 0.78125,
+            "zeroMatchedPassageTopics": 6
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 104,
+              "covered": 43,
+              "recall": 0.41346153846153844,
+              "zeroMatchedPassageTopics": 50
+            },
+            "0.9": {
+              "facts": 104,
+              "covered": 32,
+              "recall": 0.3076923076923077,
+              "zeroMatchedPassageTopics": 60
+            }
+          }
+        },
+        "frozenBytes": {
+          "n": 30,
+          "total": 1265078,
+          "min": 31197,
+          "median": 41873,
+          "p90": 51062,
+          "p95": 52745,
+          "max": 59349
+        },
+        "maxSourceUnits": 16,
+        "evidenceByteLimitViolations": 0,
+        "sourceUnitLimitViolations": 0,
+        "reportedFrozenByteCountMismatches": 0,
+        "groupsWithZeroSupportingDocuments": 0,
+        "groupsWithNoResolvedDocuments": 0,
+        "groupsWithAllTopicsSupported": 22,
+        "modelAssignedDocuments": {
+          "observableTopics": 0,
+          "zeroAssignedTopics": 0,
+          "countDistribution": {
+            "n": 0,
+            "total": 0,
+            "min": null,
+            "median": null,
+            "p90": null,
+            "p95": null,
+            "max": null
+          }
+        },
+        "runsAt16SourceUnits": 30,
+        "strictRecoveredFactsPerPooledKB": 0.019761627346298015
+      },
+      "seeds": {
+        "runs": 30,
+        "failures": 0,
+        "failureCodes": {},
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 89,
+            "selected": 83,
+            "recall": 0.9325842696629213,
+            "zeroMatchedDocumentTopics": 6,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 28,
+            "excludedTopics": 62,
+            "facts": 32,
+            "covered": 30,
+            "recall": 0.9375,
+            "zeroMatchedPassageTopics": 2
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 104,
+              "covered": 48,
+              "recall": 0.46153846153846156,
+              "zeroMatchedPassageTopics": 47
+            },
+            "0.9": {
+              "facts": 104,
+              "covered": 37,
+              "recall": 0.3557692307692308,
+              "zeroMatchedPassageTopics": 56
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 89,
+            "selected": 83,
+            "recall": 0.9325842696629213,
+            "zeroMatchedDocumentTopics": 6,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 28,
+            "excludedTopics": 62,
+            "facts": 32,
+            "covered": 30,
+            "recall": 0.9375,
+            "zeroMatchedPassageTopics": 2
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 104,
+              "covered": 48,
+              "recall": 0.46153846153846156,
+              "zeroMatchedPassageTopics": 47
+            },
+            "0.9": {
+              "facts": 104,
+              "covered": 37,
+              "recall": 0.3557692307692308,
+              "zeroMatchedPassageTopics": 56
+            }
+          }
+        },
+        "frozenBytes": {
+          "n": 30,
+          "total": 1786484,
+          "min": 39508,
+          "median": 54989.5,
+          "p90": 78975,
+          "p95": 79450,
+          "max": 79864
+        },
+        "maxSourceUnits": 16,
+        "evidenceByteLimitViolations": 0,
+        "sourceUnitLimitViolations": 0,
+        "reportedFrozenByteCountMismatches": 0,
+        "groupsWithZeroSupportingDocuments": 0,
+        "groupsWithNoResolvedDocuments": 0,
+        "groupsWithAllTopicsSupported": 23,
+        "modelAssignedDocuments": {
+          "observableTopics": 0,
+          "zeroAssignedTopics": 0,
+          "countDistribution": {
+            "n": 0,
+            "total": 0,
+            "min": null,
+            "median": null,
+            "p90": null,
+            "p95": null,
+            "max": null
+          }
+        },
+        "runsAt16SourceUnits": 24,
+        "strictRecoveredFactsPerPooledKB": 0.01679276164801924
+      },
+      "configured-live": {
+        "runs": 30,
+        "failures": 0,
+        "failureCodes": {},
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 89,
+            "selected": 81,
+            "recall": 0.9101123595505618,
+            "zeroMatchedDocumentTopics": 8,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 28,
+            "excludedTopics": 62,
+            "facts": 32,
+            "covered": 21,
+            "recall": 0.65625,
+            "zeroMatchedPassageTopics": 8
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 104,
+              "covered": 36,
+              "recall": 0.34615384615384615,
+              "zeroMatchedPassageTopics": 56
+            },
+            "0.9": {
+              "facts": 104,
+              "covered": 26,
+              "recall": 0.25,
+              "zeroMatchedPassageTopics": 64
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 89,
+            "selected": 81,
+            "recall": 0.9101123595505618,
+            "zeroMatchedDocumentTopics": 8,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 28,
+            "excludedTopics": 62,
+            "facts": 32,
+            "covered": 21,
+            "recall": 0.65625,
+            "zeroMatchedPassageTopics": 8
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 104,
+              "covered": 36,
+              "recall": 0.34615384615384615,
+              "zeroMatchedPassageTopics": 56
+            },
+            "0.9": {
+              "facts": 104,
+              "covered": 26,
+              "recall": 0.25,
+              "zeroMatchedPassageTopics": 64
+            }
+          }
+        },
+        "frozenBytes": {
+          "n": 30,
+          "total": 84213,
+          "min": 812,
+          "median": 2323.5,
+          "p90": 4892,
+          "p95": 5610,
+          "max": 6950
+        },
+        "maxSourceUnits": 11,
+        "evidenceByteLimitViolations": 0,
+        "sourceUnitLimitViolations": 0,
+        "reportedFrozenByteCountMismatches": 0,
+        "groupsWithZeroSupportingDocuments": 0,
+        "groupsWithNoResolvedDocuments": 0,
+        "groupsWithAllTopicsSupported": 21,
+        "modelAssignedDocuments": {
+          "observableTopics": 90,
+          "zeroAssignedTopics": 0,
+          "countDistribution": {
+            "n": 90,
+            "total": 99,
+            "min": 1,
+            "median": 1,
+            "p90": 1,
+            "p95": 2,
+            "max": 3
+          }
+        },
+        "runsAt16SourceUnits": 0,
+        "strictRecoveredFactsPerPooledKB": 0.24936767482455205
+      }
+    },
+    "5": {
+      "baseline": {
+        "runs": 20,
+        "failures": 0,
+        "failureCodes": {},
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 4,
+            "recall": 0.04040404040404041,
+            "zeroMatchedDocumentTopics": 95,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 29,
+            "excludedTopics": 71,
+            "facts": 33,
+            "covered": 0,
+            "recall": 0,
+            "zeroMatchedPassageTopics": 29
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 1,
+              "recall": 0.008547008547008548,
+              "zeroMatchedPassageTopics": 98
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 0,
+              "recall": 0,
+              "zeroMatchedPassageTopics": 99
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 4,
+            "recall": 0.04040404040404041,
+            "zeroMatchedDocumentTopics": 95,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 29,
+            "excludedTopics": 71,
+            "facts": 33,
+            "covered": 0,
+            "recall": 0,
+            "zeroMatchedPassageTopics": 29
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 1,
+              "recall": 0.008547008547008548,
+              "zeroMatchedPassageTopics": 98
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 0,
+              "recall": 0,
+              "zeroMatchedPassageTopics": 99
+            }
+          }
+        },
+        "frozenBytes": {
+          "n": 20,
+          "total": 114820,
+          "min": 5166,
+          "median": 5718,
+          "p90": 6375,
+          "p95": 6375,
+          "max": 6375
+        },
+        "maxSourceUnits": 3,
+        "evidenceByteLimitViolations": 0,
+        "sourceUnitLimitViolations": 0,
+        "reportedFrozenByteCountMismatches": 0,
+        "groupsWithZeroSupportingDocuments": 16,
+        "groupsWithNoResolvedDocuments": 0,
+        "groupsWithAllTopicsSupported": 0,
+        "modelAssignedDocuments": {
+          "observableTopics": 0,
+          "zeroAssignedTopics": 0,
+          "countDistribution": {
+            "n": 0,
+            "total": 0,
+            "min": null,
+            "median": null,
+            "p90": null,
+            "p95": null,
+            "max": null
+          }
+        },
+        "runsAt16SourceUnits": 0,
+        "strictRecoveredFactsPerPooledKB": 0
+      },
+      "scripted": {
+        "runs": 20,
+        "failures": 0,
+        "failureCodes": {},
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 83,
+            "recall": 0.8383838383838383,
+            "zeroMatchedDocumentTopics": 16,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 29,
+            "excludedTopics": 71,
+            "facts": 33,
+            "covered": 24,
+            "recall": 0.7272727272727273,
+            "zeroMatchedPassageTopics": 8
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 47,
+              "recall": 0.4017094017094017,
+              "zeroMatchedPassageTopics": 58
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 34,
+              "recall": 0.2905982905982906,
+              "zeroMatchedPassageTopics": 69
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 83,
+            "recall": 0.8383838383838383,
+            "zeroMatchedDocumentTopics": 16,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 29,
+            "excludedTopics": 71,
+            "facts": 33,
+            "covered": 24,
+            "recall": 0.7272727272727273,
+            "zeroMatchedPassageTopics": 8
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 47,
+              "recall": 0.4017094017094017,
+              "zeroMatchedPassageTopics": 58
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 34,
+              "recall": 0.2905982905982906,
+              "zeroMatchedPassageTopics": 69
+            }
+          }
+        },
+        "frozenBytes": {
+          "n": 20,
+          "total": 881266,
+          "min": 30992,
+          "median": 42350.5,
+          "p90": 55650,
+          "p95": 57481,
+          "max": 60064
+        },
+        "maxSourceUnits": 16,
+        "evidenceByteLimitViolations": 0,
+        "sourceUnitLimitViolations": 0,
+        "reportedFrozenByteCountMismatches": 0,
+        "groupsWithZeroSupportingDocuments": 0,
+        "groupsWithNoResolvedDocuments": 0,
+        "groupsWithAllTopicsSupported": 9,
+        "modelAssignedDocuments": {
+          "observableTopics": 0,
+          "zeroAssignedTopics": 0,
+          "countDistribution": {
+            "n": 0,
+            "total": 0,
+            "min": null,
+            "median": null,
+            "p90": null,
+            "p95": null,
+            "max": null
+          }
+        },
+        "runsAt16SourceUnits": 20,
+        "strictRecoveredFactsPerPooledKB": 0.027233548100119603
+      },
+      "seeds": {
+        "runs": 20,
+        "failures": 0,
+        "failureCodes": {},
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 85,
+            "recall": 0.8585858585858586,
+            "zeroMatchedDocumentTopics": 14,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 29,
+            "excludedTopics": 71,
+            "facts": 33,
+            "covered": 28,
+            "recall": 0.8484848484848485,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 52,
+              "recall": 0.4444444444444444,
+              "zeroMatchedPassageTopics": 55
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 39,
+              "recall": 0.3333333333333333,
+              "zeroMatchedPassageTopics": 65
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 85,
+            "recall": 0.8585858585858586,
+            "zeroMatchedDocumentTopics": 14,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 29,
+            "excludedTopics": 71,
+            "facts": 33,
+            "covered": 28,
+            "recall": 0.8484848484848485,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 52,
+              "recall": 0.4444444444444444,
+              "zeroMatchedPassageTopics": 55
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 39,
+              "recall": 0.3333333333333333,
+              "zeroMatchedPassageTopics": 65
+            }
+          }
+        },
+        "frozenBytes": {
+          "n": 20,
+          "total": 1190854,
+          "min": 40815,
+          "median": 56176,
+          "p90": 79375,
+          "p95": 79946,
+          "max": 79964
+        },
+        "maxSourceUnits": 16,
+        "evidenceByteLimitViolations": 0,
+        "sourceUnitLimitViolations": 0,
+        "reportedFrozenByteCountMismatches": 0,
+        "groupsWithZeroSupportingDocuments": 0,
+        "groupsWithNoResolvedDocuments": 0,
+        "groupsWithAllTopicsSupported": 11,
+        "modelAssignedDocuments": {
+          "observableTopics": 0,
+          "zeroAssignedTopics": 0,
+          "countDistribution": {
+            "n": 0,
+            "total": 0,
+            "min": null,
+            "median": null,
+            "p90": null,
+            "p95": null,
+            "max": null
+          }
+        },
+        "runsAt16SourceUnits": 16,
+        "strictRecoveredFactsPerPooledKB": 0.023512538060920986
+      },
+      "configured-live": {
+        "runs": 20,
+        "failures": 0,
+        "failureCodes": {},
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 87,
+            "recall": 0.8787878787878788,
+            "zeroMatchedDocumentTopics": 12,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 29,
+            "excludedTopics": 71,
+            "facts": 33,
+            "covered": 21,
+            "recall": 0.6363636363636364,
+            "zeroMatchedPassageTopics": 9
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 42,
+              "recall": 0.358974358974359,
+              "zeroMatchedPassageTopics": 60
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 30,
+              "recall": 0.2564102564102564,
+              "zeroMatchedPassageTopics": 70
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 87,
+            "recall": 0.8787878787878788,
+            "zeroMatchedDocumentTopics": 12,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 29,
+            "excludedTopics": 71,
+            "facts": 33,
+            "covered": 21,
+            "recall": 0.6363636363636364,
+            "zeroMatchedPassageTopics": 9
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 42,
+              "recall": 0.358974358974359,
+              "zeroMatchedPassageTopics": 60
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 30,
+              "recall": 0.2564102564102564,
+              "zeroMatchedPassageTopics": 70
+            }
+          }
+        },
+        "frozenBytes": {
+          "n": 20,
+          "total": 95746,
+          "min": 1802,
+          "median": 4801,
+          "p90": 7504,
+          "p95": 7947,
+          "max": 10547
+        },
+        "maxSourceUnits": 16,
+        "evidenceByteLimitViolations": 0,
+        "sourceUnitLimitViolations": 0,
+        "reportedFrozenByteCountMismatches": 0,
+        "groupsWithZeroSupportingDocuments": 0,
+        "groupsWithNoResolvedDocuments": 0,
+        "groupsWithAllTopicsSupported": 11,
+        "modelAssignedDocuments": {
+          "observableTopics": 100,
+          "zeroAssignedTopics": 1,
+          "countDistribution": {
+            "n": 100,
+            "total": 112,
+            "min": 0,
+            "median": 1,
+            "p90": 1,
+            "p95": 2,
+            "max": 4
+          }
+        },
+        "runsAt16SourceUnits": 1,
+        "strictRecoveredFactsPerPooledKB": 0.21933031144904228
+      }
+    }
+  },
+  "runColumns": [
+    "groupId",
+    "topics",
+    "enterprise",
+    "arm",
+    "status",
+    "failure",
+    "frozenUtf8Bytes",
+    "sourceUnits",
+    "frozenDocumentVersions",
+    "frozenExcerpts",
+    "zeroSupportingDocumentTopics",
+    "unresolvedDocumentTopics",
+    "zeroStrictPassageTopics",
+    "zeroLenient80PassageTopics",
+    "zeroModelAssignedTopics"
+  ],
+  "topicColumns": [
+    "groupId",
+    "arm",
+    "topicSlot",
+    "supportingDocuments",
+    "selectedSupportingDocuments",
+    "strictEligible",
+    "strictFacts",
+    "strictCovered",
+    "lenientFacts",
+    "lenient80Covered",
+    "lenient90Covered",
+    "modelAssignedFrozenDocuments"
+  ],
+  "singleTopic": {
+    "schemaVersion": "vantage-rag-retrieval-efficiency/v1",
+    "methods": {
+      "evidenceBytes": "Sum of UTF8 bytes of all frozen source text, including fixed sources. Verified against both snapshot and selected-source accounting.",
+      "documents": "Distinct document/version pairs among frozen selected sources, including fixed sources.",
+      "excerpts": "Selected source units with kind=excerpt; full documents are excluded from this count.",
+      "median": "Middle value, or arithmetic mean of the two middle values for even sample sizes.",
+      "p90": "Nearest rank, sorted value at ceil(0.90*n), with one-based ranks.",
+      "efficiency": "Pooled recovered facts divided by pooled frozen bytes/1000; never an average of case-level ratios.",
+      "strict": "Existing exact/normalized whole-case eligibility and recall, unchanged.",
+      "lenient": "Existing same-document/version, single-unit best-window lexical token recall at 0.8 and 0.9, unchanged.",
+      "failedAttempts": "Retained in all-run measurements. A failed capture with no frozen evidence contributes zero bytes, documents and excerpts.",
+      "zeroByteDenominator": "Efficiency is null when the denominator contains zero frozen bytes."
+    },
+    "caseCount": 100,
+    "resultCount": 400,
+    "missingCaseArmResults": 0,
+    "sourceVerification": {
+      "strictEligibleCases": 29,
+      "strictEligibleFacts": 33,
+      "totalFacts": 118,
+      "exact": 18,
+      "normalized": 21,
+      "tokenCalibration": {
+        "exactSourcePositives": {
+          "facts": 18,
+          "min": 1,
+          "mean": 1,
+          "thresholds": {
+            "0.8": 18,
+            "0.9": 18
+          }
+        },
+        "normalizedSourcePositives": {
+          "facts": 21,
+          "min": 1,
+          "mean": 1,
+          "thresholds": {
+            "0.8": 21,
+            "0.9": 21
+          }
+        }
+      },
+      "formatCounts": {
+        "md": 118
+      },
+      "byEnterprise": {
+        "Aventro Motors": {
+          "cases": 20,
+          "eligibleCases": 9,
+          "eligibleFacts": 13,
+          "totalFacts": 27,
+          "unmatchedFacts": 12
+        },
+        "Cendara University": {
+          "cases": 20,
+          "eligibleCases": 2,
+          "eligibleFacts": 2,
+          "totalFacts": 24,
+          "unmatchedFacts": 22
+        },
+        "Cloudway 24": {
+          "cases": 20,
+          "eligibleCases": 6,
+          "eligibleFacts": 6,
+          "totalFacts": 24,
+          "unmatchedFacts": 15
+        },
+        "Velvera Technologies": {
+          "cases": 20,
+          "eligibleCases": 2,
+          "eligibleFacts": 2,
+          "totalFacts": 23,
+          "unmatchedFacts": 20
+        },
+        "ZX Bank": {
+          "cases": 20,
+          "eligibleCases": 10,
+          "eligibleFacts": 10,
+          "totalFacts": 20,
+          "unmatchedFacts": 10
+        }
+      },
+      "byCategory": {
+        "Analytical": {
+          "cases": 14,
+          "eligibleCases": 3,
+          "eligibleFacts": 4,
+          "totalFacts": 18,
+          "unmatchedFacts": 12
+        },
+        "Boolean": {
+          "cases": 14,
+          "eligibleCases": 3,
+          "eligibleFacts": 3,
+          "totalFacts": 14,
+          "unmatchedFacts": 11
+        },
+        "Comparative": {
+          "cases": 14,
+          "eligibleCases": 4,
+          "eligibleFacts": 5,
+          "totalFacts": 20,
+          "unmatchedFacts": 13
+        },
+        "Descriptive": {
+          "cases": 13,
+          "eligibleCases": 7,
+          "eligibleFacts": 9,
+          "totalFacts": 16,
+          "unmatchedFacts": 6
+        },
+        "Eligibility": {
+          "cases": 1,
+          "eligibleCases": 1,
+          "eligibleFacts": 1,
+          "totalFacts": 1,
+          "unmatchedFacts": 0
+        },
+        "Eligibility Inquiry": {
+          "cases": 1,
+          "eligibleCases": 1,
+          "eligibleFacts": 1,
+          "totalFacts": 1,
+          "unmatchedFacts": 0
+        },
+        "Open-Ended": {
+          "cases": 14,
+          "eligibleCases": 5,
+          "eligibleFacts": 5,
+          "totalFacts": 16,
+          "unmatchedFacts": 11
+        },
+        "Procedural": {
+          "cases": 14,
+          "eligibleCases": 2,
+          "eligibleFacts": 2,
+          "totalFacts": 17,
+          "unmatchedFacts": 14
+        },
+        "Safety": {
+          "cases": 1,
+          "eligibleCases": 0,
+          "eligibleFacts": 0,
+          "totalFacts": 1,
+          "unmatchedFacts": 1
+        },
+        "Supporting": {
+          "cases": 1,
+          "eligibleCases": 1,
+          "eligibleFacts": 1,
+          "totalFacts": 1,
+          "unmatchedFacts": 0
+        },
+        "Temporal": {
+          "cases": 13,
+          "eligibleCases": 2,
+          "eligibleFacts": 2,
+          "totalFacts": 13,
+          "unmatchedFacts": 11
+        }
+      }
+    },
+    "arms": {
+      "baseline": {
+        "allRuns": {
+          "cases": 100,
+          "snapshots": 100,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 100,
+            "total": 574100,
+            "median": 5718,
+            "p90": 6375,
+            "min": 5166,
+            "max": 6375
+          },
+          "documents": {
+            "samples": 100,
+            "total": 260,
+            "median": 3,
+            "p90": 3,
+            "min": 2,
+            "max": 3
+          },
+          "excerpts": {
+            "samples": 100,
+            "total": 0,
+            "median": 0,
+            "p90": 0,
+            "min": 0,
+            "max": 0
+          }
+        },
+        "strictEligible": {
+          "cases": 29,
+          "snapshots": 29,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 29,
+            "total": 166235,
+            "median": 5718,
+            "p90": 6375,
+            "min": 5166,
+            "max": 6375
+          },
+          "documents": {
+            "samples": 29,
+            "total": 83,
+            "median": 3,
+            "p90": 3,
+            "min": 2,
+            "max": 3
+          },
+          "excerpts": {
+            "samples": 29,
+            "total": 0,
+            "median": 0,
+            "p90": 0,
+            "min": 0,
+            "max": 0
+          }
+        },
+        "filenameResolvedCases": {
+          "cases": 99,
+          "snapshots": 99,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 99,
+            "total": 568934,
+            "median": 5718,
+            "p90": 6375,
+            "min": 5166,
+            "max": 6375
+          },
+          "documents": {
+            "samples": 99,
+            "total": 257,
+            "median": 3,
+            "p90": 3,
+            "min": 2,
+            "max": 3
+          },
+          "excerpts": {
+            "samples": 99,
+            "total": 0,
+            "median": 0,
+            "p90": 0,
+            "min": 0,
+            "max": 0
+          }
+        },
+        "strictRecall": {
+          "cases": 29,
+          "facts": 33,
+          "exactCoveredFacts": 0,
+          "normalizedCoveredFacts": 0,
+          "coveredFacts": 0,
+          "recall": 0
+        },
+        "documentRecall": {
+          "cases": 100,
+          "scoredCases": 99,
+          "facts": 117,
+          "offeredFacts": 87,
+          "selectedFacts": 4,
+          "offeredRecall": 0.7435897435897436,
+          "selectedRecall": 0.03418803418803419
+        },
+        "lenientRecall": {
+          "cases": 100,
+          "scoredCases": 99,
+          "facts": 117,
+          "thresholds": {
+            "0.8": {
+              "coveredFacts": 1,
+              "recall": 0.008547008547008548
+            },
+            "0.9": {
+              "coveredFacts": 0,
+              "recall": 0
+            }
+          }
+        },
+        "pooledEfficiency": {
+          "strictPaired": {
+            "recoveredFacts": 0,
+            "denominatorCohort": "strict eligible cases",
+            "snapshotCases": 29,
+            "frozenUtf8Bytes": 166235,
+            "frozenKB1000": 166.235,
+            "recoveredFactsPerKB1000": 0
+          },
+          "strictOverAllRuns": {
+            "recoveredFacts": 0,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 574100,
+            "frozenKB1000": 574.1,
+            "recoveredFactsPerKB1000": 0
+          },
+          "lenient80Paired": {
+            "recoveredFacts": 1,
+            "denominatorCohort": "cases with at least one filename-resolved fact",
+            "snapshotCases": 99,
+            "frozenUtf8Bytes": 568934,
+            "frozenKB1000": 568.934,
+            "recoveredFactsPerKB1000": 0.0017576731220141529
+          },
+          "lenient90Paired": {
+            "recoveredFacts": 0,
+            "denominatorCohort": "cases with at least one filename-resolved fact",
+            "snapshotCases": 99,
+            "frozenUtf8Bytes": 568934,
+            "frozenKB1000": 568.934,
+            "recoveredFactsPerKB1000": 0
+          },
+          "lenient80OverAllRuns": {
+            "recoveredFacts": 1,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 574100,
+            "frozenKB1000": 574.1,
+            "recoveredFactsPerKB1000": 0.001741856819369448
+          },
+          "lenient90OverAllRuns": {
+            "recoveredFacts": 0,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 574100,
+            "frozenKB1000": 574.1,
+            "recoveredFactsPerKB1000": 0
+          }
+        }
+      },
+      "configured-live": {
+        "allRuns": {
+          "cases": 100,
+          "snapshots": 100,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 100,
+            "total": 131843,
+            "median": 939,
+            "p90": 3073,
+            "min": 328,
+            "max": 6779
+          },
+          "documents": {
+            "samples": 100,
+            "total": 235,
+            "median": 2,
+            "p90": 3,
+            "min": 2,
+            "max": 6
+          },
+          "excerpts": {
+            "samples": 100,
+            "total": 179,
+            "median": 1,
+            "p90": 4,
+            "min": 1,
+            "max": 7
+          }
+        },
+        "strictEligible": {
+          "cases": 29,
+          "snapshots": 29,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 29,
+            "total": 41487,
+            "median": 916,
+            "p90": 3565,
+            "min": 334,
+            "max": 5610
+          },
+          "documents": {
+            "samples": 29,
+            "total": 76,
+            "median": 2,
+            "p90": 4,
+            "min": 2,
+            "max": 6
+          },
+          "excerpts": {
+            "samples": 29,
+            "total": 59,
+            "median": 1,
+            "p90": 5,
+            "min": 1,
+            "max": 5
+          }
+        },
+        "filenameResolvedCases": {
+          "cases": 99,
+          "snapshots": 99,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 99,
+            "total": 131311,
+            "median": 944,
+            "p90": 3238,
+            "min": 328,
+            "max": 6779
+          },
+          "documents": {
+            "samples": 99,
+            "total": 233,
+            "median": 2,
+            "p90": 3,
+            "min": 2,
+            "max": 6
+          },
+          "excerpts": {
+            "samples": 99,
+            "total": 177,
+            "median": 1,
+            "p90": 4,
+            "min": 1,
+            "max": 7
+          }
+        },
+        "strictRecall": {
+          "cases": 29,
+          "facts": 33,
+          "exactCoveredFacts": 11,
+          "normalizedCoveredFacts": 9,
+          "coveredFacts": 20,
+          "recall": 0.6060606060606061
+        },
+        "documentRecall": {
+          "cases": 100,
+          "scoredCases": 99,
+          "facts": 117,
+          "offeredFacts": 117,
+          "selectedFacts": 111,
+          "offeredRecall": 1,
+          "selectedRecall": 0.9487179487179487
+        },
+        "lenientRecall": {
+          "cases": 100,
+          "scoredCases": 99,
+          "facts": 117,
+          "thresholds": {
+            "0.8": {
+              "coveredFacts": 43,
+              "recall": 0.36752136752136755
+            },
+            "0.9": {
+              "coveredFacts": 31,
+              "recall": 0.26495726495726496
+            }
+          }
+        },
+        "pooledEfficiency": {
+          "strictPaired": {
+            "recoveredFacts": 20,
+            "denominatorCohort": "strict eligible cases",
+            "snapshotCases": 29,
+            "frozenUtf8Bytes": 41487,
+            "frozenKB1000": 41.487,
+            "recoveredFactsPerKB1000": 0.4820787234555403
+          },
+          "strictOverAllRuns": {
+            "recoveredFacts": 20,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 131843,
+            "frozenKB1000": 131.843,
+            "recoveredFactsPerKB1000": 0.15169557731544336
+          },
+          "lenient80Paired": {
+            "recoveredFacts": 43,
+            "denominatorCohort": "cases with at least one filename-resolved fact",
+            "snapshotCases": 99,
+            "frozenUtf8Bytes": 131311,
+            "frozenKB1000": 131.311,
+            "recoveredFactsPerKB1000": 0.32746685350046834
+          },
+          "lenient90Paired": {
+            "recoveredFacts": 31,
+            "denominatorCohort": "cases with at least one filename-resolved fact",
+            "snapshotCases": 99,
+            "frozenUtf8Bytes": 131311,
+            "frozenKB1000": 131.311,
+            "recoveredFactsPerKB1000": 0.23608075484917487
+          },
+          "lenient80OverAllRuns": {
+            "recoveredFacts": 43,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 131843,
+            "frozenKB1000": 131.843,
+            "recoveredFactsPerKB1000": 0.32614549122820324
+          },
+          "lenient90OverAllRuns": {
+            "recoveredFacts": 31,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 131843,
+            "frozenKB1000": 131.843,
+            "recoveredFactsPerKB1000": 0.2351281448389372
+          }
+        }
+      },
+      "scripted": {
+        "allRuns": {
+          "cases": 100,
+          "snapshots": 100,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 100,
+            "total": 4062244,
+            "median": 41258.5,
+            "p90": 50634,
+            "min": 9338,
+            "max": 64704
+          },
+          "documents": {
+            "samples": 100,
+            "total": 1410,
+            "median": 16,
+            "p90": 16,
+            "min": 5,
+            "max": 16
+          },
+          "excerpts": {
+            "samples": 100,
+            "total": 1500,
+            "median": 15,
+            "p90": 15,
+            "min": 15,
+            "max": 15
+          }
+        },
+        "strictEligible": {
+          "cases": 29,
+          "snapshots": 29,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 29,
+            "total": 1143670,
+            "median": 39923,
+            "p90": 46044,
+            "min": 9338,
+            "max": 58196
+          },
+          "documents": {
+            "samples": 29,
+            "total": 434,
+            "median": 16,
+            "p90": 16,
+            "min": 5,
+            "max": 16
+          },
+          "excerpts": {
+            "samples": 29,
+            "total": 435,
+            "median": 15,
+            "p90": 15,
+            "min": 15,
+            "max": 15
+          }
+        },
+        "filenameResolvedCases": {
+          "cases": 99,
+          "snapshots": 99,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 99,
+            "total": 4022684,
+            "median": 41370,
+            "p90": 50842,
+            "min": 9338,
+            "max": 64704
+          },
+          "documents": {
+            "samples": 99,
+            "total": 1394,
+            "median": 16,
+            "p90": 16,
+            "min": 5,
+            "max": 16
+          },
+          "excerpts": {
+            "samples": 99,
+            "total": 1485,
+            "median": 15,
+            "p90": 15,
+            "min": 15,
+            "max": 15
+          }
+        },
+        "strictRecall": {
+          "cases": 29,
+          "facts": 33,
+          "exactCoveredFacts": 14,
+          "normalizedCoveredFacts": 14,
+          "coveredFacts": 28,
+          "recall": 0.8484848484848485
+        },
+        "documentRecall": {
+          "cases": 100,
+          "scoredCases": 99,
+          "facts": 117,
+          "offeredFacts": 117,
+          "selectedFacts": 117,
+          "offeredRecall": 1,
+          "selectedRecall": 1
+        },
+        "lenientRecall": {
+          "cases": 100,
+          "scoredCases": 99,
+          "facts": 117,
+          "thresholds": {
+            "0.8": {
+              "coveredFacts": 52,
+              "recall": 0.4444444444444444
+            },
+            "0.9": {
+              "coveredFacts": 39,
+              "recall": 0.3333333333333333
+            }
+          }
+        },
+        "pooledEfficiency": {
+          "strictPaired": {
+            "recoveredFacts": 28,
+            "denominatorCohort": "strict eligible cases",
+            "snapshotCases": 29,
+            "frozenUtf8Bytes": 1143670,
+            "frozenKB1000": 1143.67,
+            "recoveredFactsPerKB1000": 0.024482586760166833
+          },
+          "strictOverAllRuns": {
+            "recoveredFacts": 28,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 4062244,
+            "frozenKB1000": 4062.244,
+            "recoveredFactsPerKB1000": 0.006892742041098467
+          },
+          "lenient80Paired": {
+            "recoveredFacts": 52,
+            "denominatorCohort": "cases with at least one filename-resolved fact",
+            "snapshotCases": 99,
+            "frozenUtf8Bytes": 4022684,
+            "frozenKB1000": 4022.684,
+            "recoveredFactsPerKB1000": 0.012926692725553387
+          },
+          "lenient90Paired": {
+            "recoveredFacts": 39,
+            "denominatorCohort": "cases with at least one filename-resolved fact",
+            "snapshotCases": 99,
+            "frozenUtf8Bytes": 4022684,
+            "frozenKB1000": 4022.684,
+            "recoveredFactsPerKB1000": 0.00969501954416504
+          },
+          "lenient80OverAllRuns": {
+            "recoveredFacts": 52,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 4062244,
+            "frozenKB1000": 4062.244,
+            "recoveredFactsPerKB1000": 0.012800806647754296
+          },
+          "lenient90OverAllRuns": {
+            "recoveredFacts": 39,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 4062244,
+            "frozenKB1000": 4062.244,
+            "recoveredFactsPerKB1000": 0.009600604985815721
+          }
+        }
+      },
+      "seeds": {
+        "allRuns": {
+          "cases": 100,
+          "snapshots": 100,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 100,
+            "total": 5862151,
+            "median": 55516,
+            "p90": 78024,
+            "min": 37377,
+            "max": 79964
+          },
+          "documents": {
+            "samples": 100,
+            "total": 1574,
+            "median": 16,
+            "p90": 16,
+            "min": 14,
+            "max": 16
+          },
+          "excerpts": {
+            "samples": 100,
+            "total": 1474,
+            "median": 15,
+            "p90": 15,
+            "min": 13,
+            "max": 15
+          }
+        },
+        "strictEligible": {
+          "cases": 29,
+          "snapshots": 29,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 29,
+            "total": 1497979,
+            "median": 46399,
+            "p90": 75727,
+            "min": 40361,
+            "max": 77220
+          },
+          "documents": {
+            "samples": 29,
+            "total": 461,
+            "median": 16,
+            "p90": 16,
+            "min": 14,
+            "max": 16
+          },
+          "excerpts": {
+            "samples": 29,
+            "total": 432,
+            "median": 15,
+            "p90": 15,
+            "min": 13,
+            "max": 15
+          }
+        },
+        "filenameResolvedCases": {
+          "cases": 99,
+          "snapshots": 99,
+          "failures": 0,
+          "frozenUtf8Bytes": {
+            "samples": 99,
+            "total": 5820986,
+            "median": 55816,
+            "p90": 78192,
+            "min": 37377,
+            "max": 79964
+          },
+          "documents": {
+            "samples": 99,
+            "total": 1558,
+            "median": 16,
+            "p90": 16,
+            "min": 14,
+            "max": 16
+          },
+          "excerpts": {
+            "samples": 99,
+            "total": 1459,
+            "median": 15,
+            "p90": 15,
+            "min": 13,
+            "max": 15
+          }
+        },
+        "strictRecall": {
+          "cases": 29,
+          "facts": 33,
+          "exactCoveredFacts": 15,
+          "normalizedCoveredFacts": 18,
+          "coveredFacts": 33,
+          "recall": 1
+        },
+        "documentRecall": {
+          "cases": 100,
+          "scoredCases": 99,
+          "facts": 117,
+          "offeredFacts": 117,
+          "selectedFacts": 117,
+          "offeredRecall": 1,
+          "selectedRecall": 1
+        },
+        "lenientRecall": {
+          "cases": 100,
+          "scoredCases": 99,
+          "facts": 117,
+          "thresholds": {
+            "0.8": {
+              "coveredFacts": 57,
+              "recall": 0.48717948717948717
+            },
+            "0.9": {
+              "coveredFacts": 44,
+              "recall": 0.37606837606837606
+            }
+          }
+        },
+        "pooledEfficiency": {
+          "strictPaired": {
+            "recoveredFacts": 33,
+            "denominatorCohort": "strict eligible cases",
+            "snapshotCases": 29,
+            "frozenUtf8Bytes": 1497979,
+            "frozenKB1000": 1497.979,
+            "recoveredFactsPerKB1000": 0.022029681323970495
+          },
+          "strictOverAllRuns": {
+            "recoveredFacts": 33,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 5862151,
+            "frozenKB1000": 5862.151,
+            "recoveredFactsPerKB1000": 0.005629332987157786
+          },
+          "lenient80Paired": {
+            "recoveredFacts": 57,
+            "denominatorCohort": "cases with at least one filename-resolved fact",
+            "snapshotCases": 99,
+            "frozenUtf8Bytes": 5820986,
+            "frozenKB1000": 5820.986,
+            "recoveredFactsPerKB1000": 0.009792155487060096
+          },
+          "lenient90Paired": {
+            "recoveredFacts": 44,
+            "denominatorCohort": "cases with at least one filename-resolved fact",
+            "snapshotCases": 99,
+            "frozenUtf8Bytes": 5820986,
+            "frozenKB1000": 5820.986,
+            "recoveredFactsPerKB1000": 0.007558856867204285
+          },
+          "lenient80OverAllRuns": {
+            "recoveredFacts": 57,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 5862151,
+            "frozenKB1000": 5862.151,
+            "recoveredFactsPerKB1000": 0.009723393341454356
+          },
+          "lenient90OverAllRuns": {
+            "recoveredFacts": 44,
+            "denominatorCohort": "all attempted cases",
+            "snapshotCases": 100,
+            "frozenUtf8Bytes": 5862151,
+            "frozenKB1000": 5862.151,
+            "recoveredFactsPerKB1000": 0.007505777316210381
+          }
+        }
+      }
+    },
+    "inputs": {
+      "labelsSha256": "f9a1411cfe0d5fecc465a5591f6fdc1c3648160183fba4e8f211336bfb7d21a8",
+      "corpusSha256": "88dc7c1a1173b68866a333cf5e4eb3bc176669271202cad42317dfd54e5f7cb9",
+      "captures": [
+        {
+          "name": "free-100-topic-fixes-final.json",
+          "sha256": "ce62a91a925c60f8dff26109945b1bb5cfc58af98d421162d9f3fffef92a8e6f"
+        },
+        {
+          "name": "live-100-topic-fixes.json",
+          "sha256": "f7bcef16cd4caa23b28e60e62b09e5aba285e6e5f87dd06ef6737aa26d7b4d8e"
+        }
+      ]
+    }
+  },
+  "liveAccounting": {
+    "schemaVersion": "vantage-rag-live-accounting/1",
+    "complete": true,
+    "cases": {
+      "expected": 50,
+      "captured": 50,
+      "checkpoints": 50,
+      "successful": 50,
+      "failed": 0,
+      "failureCodes": {},
+      "traceFailures": {},
+      "missingTraceCases": 0
+    },
+    "latencyMs": {
+      "basis": "Observed elapsed time, including terminal timeout intervals; p95 uses nearest rank",
+      "caseTotal": {
+        "n": 50,
+        "min": 13022.943700000003,
+        "median": 26222.27805,
+        "p90": 46756.058100000024,
+        "p95": 55271.23680000007,
+        "max": 63204.58070000005
+      },
+      "stages": {
+        "setup": {
+          "n": 50,
+          "min": 7.508499999996275,
+          "median": 9.690199999924516,
+          "p90": 12.162500000093132,
+          "p95": 13.715499999991152,
+          "max": 16.397499999962747
+        },
+        "collect": {
+          "n": 50,
+          "min": 48.70369999995455,
+          "median": 61.6079000000027,
+          "p90": 70.34039999986999,
+          "p95": 72.43189999996684,
+          "max": 81.98040000000037
+        },
+        "reserve": {
+          "n": 50,
+          "min": 20.40529999998398,
+          "median": 24.00560000000405,
+          "p90": 26.794800000003306,
+          "p95": 28.255699999979697,
+          "max": 30.175100000000384
+        },
+        "digest": {
+          "n": 50,
+          "min": 206.7172000000719,
+          "median": 264.6691000000137,
+          "p90": 324.6585999999661,
+          "p95": 338.67170000000624,
+          "max": 341.45650000008754
+        },
+        "exploration": {
+          "n": 50,
+          "min": 12525.835500000016,
+          "median": 25689.12490000006,
+          "p90": 46256.253400000045,
+          "p95": 54745.26319999993,
+          "max": 62646.36990000005
+        },
+        "freeze": {
+          "n": 50,
+          "min": 64.22030000004452,
+          "median": 89.24284999995143,
+          "p90": 125.67110000015236,
+          "p95": 134.41559999994934,
+          "max": 141.58799999998882
+        },
+        "finalize": {
+          "n": 50,
+          "min": 5.901199999963865,
+          "median": 6.829999999987194,
+          "p90": 7.72289999993518,
+          "p95": 8.59719999996014,
+          "max": 9.134099999908358
+        }
+      },
+      "explorationFailuresExcluded": {
+        "n": 50,
+        "min": 12525.835500000016,
+        "median": 25689.12490000006,
+        "p90": 46256.253400000045,
+        "p95": 54745.26319999993,
+        "max": 62646.36990000005
+      }
+    },
+    "calls": {
+      "byRoute": {
+        "exploration": {
+          "modelCalls": 296,
+          "statuses": {
+            "settled": 296
+          },
+          "requestLatencyMs": {
+            "n": 296,
+            "min": 1151.4509000000544,
+            "median": 3858.6239999999525,
+            "p90": 9743.346400000039,
+            "p95": 12090.172599999933,
+            "max": 22336.674400000018
+          }
+        }
+      },
+      "requestStatuses": {
+        "settled": 296
+      },
+      "requestFailureCodes": {},
+      "inferredLegacyRoutes": 0,
+      "records": 296,
+      "recordsAfterLastCheckpoint": 0,
+      "prewarmLedgerEnd": 0,
+      "prewarmRequests": 0
+    },
+    "nativeTokens": {
+      "inputTokens": {
+        "reportedRequests": 296,
+        "total": 2937406
+      },
+      "outputTokens": {
+        "reportedRequests": 296,
+        "total": 125620
+      },
+      "cachedInputTokens": {
+        "reportedRequests": 296,
+        "total": 2190744
+      },
+      "cacheWriteTokens": {
+        "reportedRequests": 296,
+        "total": 745774
+      },
+      "reasoningTokens": {
+        "reportedRequests": 296,
+        "total": 78482
+      }
+    },
+    "warmUp": {
+      "documents": 236,
+      "groundedDigests": 236,
+      "generatedProviderCalls": 0,
+      "cacheHits": 236,
+      "elapsedMs": 1261.4516999999996
+    },
+    "costs": {
+      "basis": "Azure list-rate estimates from native usage; invoice billing unverified",
+      "scope": "Full capture ledger including any digest warm-up prefix and unfinished requests",
+      "prewarmConservativeSettledUsd": 0,
+      "prewarmGlobalStandardSettledUsd": 0,
+      "pricingSource": "https://azure.microsoft.com/en-us/blog/gpt-6-astra-sol-and-luna-for-production-agents-in-microsoft-foundry/",
+      "conservativeRatesUsdPerToken": {
+        "promptUsdPerToken": 3e-7,
+        "completionUsdPerToken": 9.000000000000001e-7,
+        "cachedPromptUsdPerToken": 3e-7,
+        "cacheWriteUsdPerToken": 3e-7
+      },
+      "globalStandardRatesUsdPerMillion": {
+        "input": 0.1,
+        "cachedInput": 0.01,
+        "output": 0.5
+      },
+      "conservativeSettledUsd": 0.994279826,
+      "globalStandardSettledUsd": 0.178028021,
+      "globalStandardPricedRequests": 296,
+      "fullUnknownReservationsUsd": 0,
+      "fullOpenReservationsUsd": 0,
+      "conservativeTotalIncludingReservationsUsd": 0.994279826,
+      "globalStandardTotalWithConservativeReservationsUsd": 0.178028021,
+      "limitUsd": 10,
+      "hold": null
+    },
+    "tools": {
+      "requestedByName": {
+        "get_personal_topic": 190,
+        "get_document_digest": 264,
+        "read_document_excerpt": 346,
+        "submit_result": 54
+      },
+      "executedByNameAndResult": {
+        "get_personal_topic/success": 190,
+        "get_document_digest/not_offered": 5,
+        "get_document_digest/success": 258,
+        "read_document_excerpt/success": 345,
+        "read_document_excerpt/result_too_large": 1
+      },
+      "invalidCallCount": 11,
+      "invalidExecutedResults": 6,
+      "preHandlerValidationErrors": 5,
+      "observability": "Historical traces lack pre-handler validation events; comparable executed-error counts are reported separately"
+    },
+    "integrity": {
+      "issues": [],
+      "toolResultHashMismatches": 0,
+      "digestRows": 236,
+      "uniqueDigestIds": 236,
+      "filesRead": 54,
+      "files": [
+        {
+          "name": "capture.json",
+          "bytes": 1090895,
+          "sha256": "e2dcd7295f63d56b838e6195c4a73cc2a0d01c55feb281497b58d7115ed4acbe"
+        },
+        {
+          "name": "case-01.json",
+          "bytes": 45432,
+          "sha256": "46535d696005136cb1e3a16ab0c8b9b70efcf67335df69d5c03b15a3d3ee20d3"
+        },
+        {
+          "name": "case-02.json",
+          "bytes": 39913,
+          "sha256": "bea16777fcad23c47de9b8a0d18c891567f6dca15c64813f116ed49cbb025328"
+        },
+        {
+          "name": "case-03.json",
+          "bytes": 53640,
+          "sha256": "ea982d26c662e3f138cdcc9cff1c6ff8d8dc12840f479342296d054aac4739c4"
+        },
+        {
+          "name": "case-04.json",
+          "bytes": 57779,
+          "sha256": "840cc66c562d4e53df6dd1b66caa10c1551b0836aee0a4ce6cf851515644c4f4"
+        },
+        {
+          "name": "case-05.json",
+          "bytes": 73173,
+          "sha256": "f742977e6e12c9dde7b539fc71a15f9c16fcbc27922fa96cf1167d354fe69405"
+        },
+        {
+          "name": "case-06.json",
+          "bytes": 33360,
+          "sha256": "77ffa4e766953c159621277b61dbb3c02ff49ef692db867dcf05836d1646f6fe"
+        },
+        {
+          "name": "case-07.json",
+          "bytes": 38332,
+          "sha256": "b263e097f4f529aa5bdba3b547cdc6883703b2e23f66151466af98875245f49f"
+        },
+        {
+          "name": "case-08.json",
+          "bytes": 49670,
+          "sha256": "c7f87dfeec1a2a8df369f2160aabebe026f6f2b2b0a2362623a505141686bfcd"
+        },
+        {
+          "name": "case-09.json",
+          "bytes": 74838,
+          "sha256": "1e82b79b5c838c4f318bd84bc29509658ed9f88e83ecda8e9af29f0de197244d"
+        },
+        {
+          "name": "case-10.json",
+          "bytes": 42752,
+          "sha256": "14a0cbeba3973e6c8d14f137a1de1e2349c42729682acbb0d1dfe7b81b0860f3"
+        },
+        {
+          "name": "case-11.json",
+          "bytes": 50511,
+          "sha256": "07580a96e0d675f13bdcc70b3e26d0f819e1d4bedf66820911a2023862132cee"
+        },
+        {
+          "name": "case-12.json",
+          "bytes": 62251,
+          "sha256": "1cebec4f25d1fe5597c3749aaa5dc58c7437fef097cb097497840403a83e3b73"
+        },
+        {
+          "name": "case-13.json",
+          "bytes": 35312,
+          "sha256": "1532e6d3783d0e201d437c37b8f2005ac0816391497572e2439a2f0548f48461"
+        },
+        {
+          "name": "case-14.json",
+          "bytes": 43539,
+          "sha256": "d9cae3d316491e6843624633026703ef508be133888761a605f4b5c451a980a5"
+        },
+        {
+          "name": "case-15.json",
+          "bytes": 36703,
+          "sha256": "0edffc9b04da7b3aab250a3cf5e75378d479bfe7398009599b24483a9891c529"
+        },
+        {
+          "name": "case-16.json",
+          "bytes": 42647,
+          "sha256": "1b862c84042381d7cfc1e9376b5de1917da9c515d74ece1c48d23171d8e31ae4"
+        },
+        {
+          "name": "case-17.json",
+          "bytes": 57849,
+          "sha256": "b3edcd6d23483052c7aeec6780f99de72b5f5f37f15d0f4bbdf607f3eafd4fee"
+        },
+        {
+          "name": "case-18.json",
+          "bytes": 51760,
+          "sha256": "4f081a7db0112c195098b876039c1c3759fa2ad71f4df1a019dea4ea25f7e3c9"
+        },
+        {
+          "name": "case-19.json",
+          "bytes": 51371,
+          "sha256": "04ee15eb34b48d50a9fb25ea95676c5f23e3dea4ef191c967d103c0bec329345"
+        },
+        {
+          "name": "case-20.json",
+          "bytes": 56184,
+          "sha256": "3e9f60e14758cf7061b96265bb67d69a460571522e0d7f3b8ff582bc10619d6e"
+        },
+        {
+          "name": "case-21.json",
+          "bytes": 68188,
+          "sha256": "f1c3b4855c60146c7054845a260efb4bdb522128fd3810a9008f8e69abd89e36"
+        },
+        {
+          "name": "case-22.json",
+          "bytes": 67726,
+          "sha256": "fda36d9c2fd287cfb0502663f11aeb946f6a090c0675eb2a68d99a8f489776f8"
+        },
+        {
+          "name": "case-23.json",
+          "bytes": 56198,
+          "sha256": "a4386163459b953eb1e010a32b2d1ed7fcf61e1d4e416afbbc2568cd7904ddcb"
+        },
+        {
+          "name": "case-24.json",
+          "bytes": 52662,
+          "sha256": "1e8764e397163f747f0e2add78a3ae4fd7d722cc464051350e28de0872a0d265"
+        },
+        {
+          "name": "case-25.json",
+          "bytes": 61497,
+          "sha256": "faf792cb14ce2f1968c0f774c16a70bd3aebfaa3f2c590ef3febd1ff235cae5e"
+        },
+        {
+          "name": "case-26.json",
+          "bytes": 40786,
+          "sha256": "069b5234acd7abb94212e73ba4f5bd3bff6b3134c10a54f276c625863486d383"
+        },
+        {
+          "name": "case-27.json",
+          "bytes": 70046,
+          "sha256": "0f9dea98f732f25166eb23fea199d1e8db932b11c52d011eef6385295b4c0cbd"
+        },
+        {
+          "name": "case-28.json",
+          "bytes": 35467,
+          "sha256": "446447619cba92742947d8d18000d2e1add908b7fea7d1a25552fdbe8d2e551d"
+        },
+        {
+          "name": "case-29.json",
+          "bytes": 67515,
+          "sha256": "1f0f45c42d38fd7de87cb46b7b55de3e70756a6b7253945083c4a32cc115f840"
+        },
+        {
+          "name": "case-30.json",
+          "bytes": 39614,
+          "sha256": "c95f2623dd3a7fad347b7784d47d3fe441605cfe4cb86f9c9028bb168a89ac67"
+        },
+        {
+          "name": "case-31.json",
+          "bytes": 55897,
+          "sha256": "e1f5d5905ec50e70296597f3b7cc04bc63ff5fc7886082cf38005eb0e056aa15"
+        },
+        {
+          "name": "case-32.json",
+          "bytes": 114346,
+          "sha256": "5291997db05f2877800d85f4222116287e3d69c7394e1be50877d5e57844ab47"
+        },
+        {
+          "name": "case-33.json",
+          "bytes": 122843,
+          "sha256": "0af02b787502ddde2270bd2cc653a3817facebe84bbc0fab099ff761522940ac"
+        },
+        {
+          "name": "case-34.json",
+          "bytes": 84626,
+          "sha256": "42c1cfb2434271cd7b6861297942cbaad8d145d52d0900f9a2e861ff48b197de"
+        },
+        {
+          "name": "case-35.json",
+          "bytes": 66538,
+          "sha256": "2c3b8a0d3e2bcdbb7e9b22040a7de886859ab001720a38a62b82a6361b8f0513"
+        },
+        {
+          "name": "case-36.json",
+          "bytes": 63142,
+          "sha256": "c8e1a561546b3939b805cf57b4bacd1ad6e25c8dd5c49e95bd33a825338ac7f9"
+        },
+        {
+          "name": "case-37.json",
+          "bytes": 88038,
+          "sha256": "8e156f35e21103ad0ddd4c932378a132aabbf704f9c33fb5d8224ec25383fb93"
+        },
+        {
+          "name": "case-38.json",
+          "bytes": 83100,
+          "sha256": "06821b0f03975c38d2e59a1ab945dfea594d1591610194ae138331c5bbf00b22"
+        },
+        {
+          "name": "case-39.json",
+          "bytes": 63870,
+          "sha256": "624f82bc96cfa1d1ecace23cf6141998567e535517c4e82827c510c5cd738932"
+        },
+        {
+          "name": "case-40.json",
+          "bytes": 85198,
+          "sha256": "6b58b820f1e44de1eaff41659613c71a1088e6cf955f0bf59c89d2d1081e02c6"
+        },
+        {
+          "name": "case-41.json",
+          "bytes": 62281,
+          "sha256": "116515e330592bf9f04baf076c3116f114930cd51d5858eb9e7d4219ac0d2ceb"
+        },
+        {
+          "name": "case-42.json",
+          "bytes": 66051,
+          "sha256": "f798838e801b7cb3bf2749473295e8979f35b74b05016a485aeeb40882dbd464"
+        },
+        {
+          "name": "case-43.json",
+          "bytes": 75988,
+          "sha256": "957c4cdba85c647377d575d4808c67cd842131e44cec75d21e3f36383572ad2e"
+        },
+        {
+          "name": "case-44.json",
+          "bytes": 95487,
+          "sha256": "28de0c8b8f389092c26723ec24305cdc3e18f55dc3dd53b433c25f1e8fbbe6d8"
+        },
+        {
+          "name": "case-45.json",
+          "bytes": 85593,
+          "sha256": "a15eafe17ddc7336ff0c19d69a3580aef0a8ba82ee4d5b8c26842bfc9a4b82bd"
+        },
+        {
+          "name": "case-46.json",
+          "bytes": 110478,
+          "sha256": "c9be08ea909304f3eeab65405b374dc4b889bb1f03bbf04849ef0b538b39131d"
+        },
+        {
+          "name": "case-47.json",
+          "bytes": 82983,
+          "sha256": "7dff198a516ade387d80041a7a52bacd6cdecc0cd71c4f7ded926ff960e686a1"
+        },
+        {
+          "name": "case-48.json",
+          "bytes": 74921,
+          "sha256": "23ab5868a867e4960e4e163203398e8807a99954b3c85cfb51b68d7a1c60fa82"
+        },
+        {
+          "name": "case-49.json",
+          "bytes": 88785,
+          "sha256": "b6bfa9ca42476fefffb1cf2635dbe1beb932f116e80586e1432d5ec619fe0605"
+        },
+        {
+          "name": "case-50.json",
+          "bytes": 84729,
+          "sha256": "b5ea98436b5f4fcc95e49ba266b3c5b6959f8fd2163f1f094adcf7ddae9d9866"
+        },
+        {
+          "name": "digests.json",
+          "bytes": 807078,
+          "sha256": "823aaf2de299189a6ce1eedb4d9c315317184e2928b1c880e14746759529db7d"
+        },
+        {
+          "name": "usage-ledger.json",
+          "bytes": 151554,
+          "sha256": "29a9595fa1402c42584c5311e6afa7564875b1ebe3ea12188884edcbafffc473"
+        },
+        {
+          "name": "warm-up.json",
+          "bytes": 181,
+          "sha256": "11c5442b82a2b508550f9fd21d7cc85dc955ad0494b9b9e63793fcb6634f119c"
+        }
+      ]
+    }
+  },
+  "runRows": [
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b",3,"Aventro Motors","baseline","ok",null,6375,3,3,0,3,0,1,3,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b",3,"Aventro Motors","seeds","ok",null,52920,16,16,15,0,0,0,0,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b",3,"Aventro Motors","scripted","ok",null,45187,16,16,15,0,0,0,0,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941",3,"Aventro Motors","baseline","ok",null,6375,3,3,0,2,0,1,3,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941",3,"Aventro Motors","seeds","ok",null,57059,16,16,15,0,0,0,1,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941",3,"Aventro Motors","scripted","ok",null,49306,16,16,15,0,0,0,1,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e",3,"Aventro Motors","baseline","ok",null,6375,3,3,0,3,0,1,3,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e",3,"Aventro Motors","seeds","ok",null,47213,16,16,15,0,0,0,0,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e",3,"Aventro Motors","scripted","ok",null,42250,16,16,15,0,0,0,0,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731",3,"Aventro Motors","baseline","ok",null,6375,3,3,0,3,0,1,3,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731",3,"Aventro Motors","seeds","ok",null,43783,16,16,15,0,0,0,2,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731",3,"Aventro Motors","scripted","ok",null,36574,16,16,15,0,0,0,2,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349",3,"Aventro Motors","baseline","ok",null,6375,3,3,0,3,0,3,3,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349",3,"Aventro Motors","seeds","ok",null,50931,16,16,15,0,0,0,0,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349",3,"Aventro Motors","scripted","ok",null,34623,16,14,15,0,0,1,1,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2",3,"Aventro Motors","baseline","ok",null,6375,3,3,0,3,0,1,3,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2",3,"Aventro Motors","seeds","ok",null,60163,16,16,15,0,0,0,2,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2",3,"Aventro Motors","scripted","ok",null,41835,16,14,15,0,0,0,2,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e",3,"Cendara University","baseline","ok",null,5296,2,2,0,3,0,1,3,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e",3,"Cendara University","seeds","ok",null,79864,15,15,14,0,0,0,1,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e",3,"Cendara University","scripted","ok",null,34480,16,10,15,1,0,1,2,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db",3,"Cendara University","baseline","ok",null,5296,2,2,0,3,0,0,3,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db",3,"Cendara University","seeds","ok",null,78975,15,15,14,0,0,0,2,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db",3,"Cendara University","scripted","ok",null,52514,16,12,15,0,0,0,2,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1",3,"Cendara University","baseline","ok",null,5296,2,2,0,3,0,1,3,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1",3,"Cendara University","seeds","ok",null,79210,15,15,14,1,0,1,3,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1",3,"Cendara University","scripted","ok",null,40714,16,11,15,1,0,1,3,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1",3,"Cendara University","baseline","ok",null,5296,2,2,0,2,0,0,3,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1",3,"Cendara University","seeds","ok",null,79450,15,15,14,0,0,0,3,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1",3,"Cendara University","scripted","ok",null,42668,16,11,15,0,0,0,3,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173",3,"Cendara University","baseline","ok",null,5296,2,2,0,3,0,0,3,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173",3,"Cendara University","seeds","ok",null,77469,14,14,13,0,0,0,3,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173",3,"Cendara University","scripted","ok",null,32350,16,9,15,0,0,0,3,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724",3,"Cendara University","baseline","ok",null,5296,2,2,0,3,0,0,3,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724",3,"Cendara University","seeds","ok",null,78920,15,15,14,0,0,0,2,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724",3,"Cendara University","scripted","ok",null,40921,16,11,15,0,0,0,3,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d",3,"Cloudway 24","baseline","ok",null,5718,3,3,0,3,0,3,3,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d",3,"Cloudway 24","seeds","ok",null,39508,16,16,15,0,0,0,0,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d",3,"Cloudway 24","scripted","ok",null,38309,16,16,15,0,0,0,0,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837",3,"Cloudway 24","baseline","ok",null,5718,3,3,0,3,0,0,3,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837",3,"Cloudway 24","seeds","ok",null,52157,16,16,15,0,0,0,3,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837",3,"Cloudway 24","scripted","ok",null,47082,16,16,15,0,0,0,3,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4",3,"Cloudway 24","baseline","ok",null,5718,3,3,0,2,0,0,3,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4",3,"Cloudway 24","seeds","ok",null,41949,16,16,15,0,0,0,2,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4",3,"Cloudway 24","scripted","ok",null,41911,16,16,15,0,0,0,2,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb",3,"Cloudway 24","baseline","ok",null,5718,3,3,0,2,0,2,2,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb",3,"Cloudway 24","seeds","ok",null,43744,16,16,15,0,0,0,0,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb",3,"Cloudway 24","scripted","ok",null,42555,16,16,15,0,0,0,0,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522",3,"Cloudway 24","baseline","ok",null,5718,3,3,0,3,0,0,3,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522",3,"Cloudway 24","seeds","ok",null,42133,16,16,15,0,0,0,2,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522",3,"Cloudway 24","scripted","ok",null,41074,16,16,15,0,0,0,2,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f",3,"Cloudway 24","baseline","ok",null,5718,3,3,0,3,0,1,3,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f",3,"Cloudway 24","seeds","ok",null,43564,16,16,15,0,0,0,1,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f",3,"Cloudway 24","scripted","ok",null,42467,16,16,15,0,0,0,1,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7",3,"Velvera Technologies","baseline","ok",null,6150,2,2,0,3,0,0,3,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7",3,"Velvera Technologies","seeds","ok",null,64896,16,16,15,0,0,0,3,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7",3,"Velvera Technologies","scripted","ok",null,59349,16,16,15,0,0,0,3,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069",3,"Velvera Technologies","baseline","ok",null,6150,2,2,0,3,0,0,3,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069",3,"Velvera Technologies","seeds","ok",null,71217,16,16,15,0,0,0,2,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069",3,"Velvera Technologies","scripted","ok",null,52745,16,14,15,0,0,0,2,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2",3,"Velvera Technologies","baseline","ok",null,6150,2,2,0,3,0,0,3,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2",3,"Velvera Technologies","seeds","ok",null,74102,16,16,15,1,0,0,3,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2",3,"Velvera Technologies","scripted","ok",null,47467,16,14,15,1,0,0,3,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3",3,"Velvera Technologies","baseline","ok",null,6150,2,2,0,3,0,1,3,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3",3,"Velvera Technologies","seeds","ok",null,77397,16,16,15,1,0,0,2,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3",3,"Velvera Technologies","scripted","ok",null,31262,16,12,15,1,0,1,2,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66",3,"Velvera Technologies","baseline","ok",null,6150,2,2,0,3,0,1,3,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66",3,"Velvera Technologies","seeds","ok",null,73961,16,16,15,0,0,0,2,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66",3,"Velvera Technologies","scripted","ok",null,31197,16,12,15,0,0,0,2,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5",3,"Velvera Technologies","baseline","ok",null,6150,2,2,0,3,0,0,3,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5",3,"Velvera Technologies","seeds","ok",null,69194,16,16,15,0,0,0,2,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5",3,"Velvera Technologies","scripted","ok",null,51062,16,14,15,0,0,0,2,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25",3,"ZX Bank","baseline","ok",null,5166,3,3,0,2,1,2,2,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25",3,"ZX Bank","seeds","ok",null,45583,16,16,15,0,1,0,0,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25",3,"ZX Bank","scripted","ok",null,42471,16,16,15,0,1,0,0,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b",3,"ZX Bank","baseline","ok",null,5166,3,3,0,3,0,1,3,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b",3,"ZX Bank","seeds","ok",null,72130,16,16,15,0,0,0,2,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b",3,"ZX Bank","scripted","ok",null,38196,16,16,15,0,0,0,2,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787",3,"ZX Bank","baseline","ok",null,5166,3,3,0,3,0,3,3,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787",3,"ZX Bank","seeds","ok",null,44583,16,16,15,1,0,1,1,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787",3,"ZX Bank","scripted","ok",null,41619,16,16,15,1,0,1,1,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4",3,"ZX Bank","baseline","ok",null,5166,3,3,0,3,0,1,3,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4",3,"ZX Bank","seeds","ok",null,51520,16,16,15,1,0,0,2,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4",3,"ZX Bank","scripted","ok",null,37599,16,16,15,1,0,0,2,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433",3,"ZX Bank","baseline","ok",null,5166,3,3,0,3,0,2,3,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433",3,"ZX Bank","seeds","ok",null,49162,16,16,15,0,0,0,0,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433",3,"ZX Bank","scripted","ok",null,43818,16,16,15,0,0,1,0,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f",3,"ZX Bank","baseline","ok",null,5166,3,3,0,3,0,1,3,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f",3,"ZX Bank","seeds","ok",null,43727,16,16,15,1,0,0,1,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f",3,"ZX Bank","scripted","ok",null,41473,16,16,15,1,0,0,1,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf",5,"Aventro Motors","baseline","ok",null,6375,3,3,0,5,0,2,5,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf",5,"Aventro Motors","seeds","ok",null,48114,16,16,15,0,0,0,0,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf",5,"Aventro Motors","scripted","ok",null,42060,16,16,15,0,0,0,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9",5,"Aventro Motors","baseline","ok",null,6375,3,3,0,5,0,2,5,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9",5,"Aventro Motors","seeds","ok",null,42556,16,16,15,0,0,0,2,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9",5,"Aventro Motors","scripted","ok",null,39986,16,16,15,0,0,0,2,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628",5,"Aventro Motors","baseline","ok",null,6375,3,3,0,4,0,3,5,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628",5,"Aventro Motors","seeds","ok",null,45464,16,16,15,0,0,0,2,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628",5,"Aventro Motors","scripted","ok",null,39282,16,16,15,0,0,0,2,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47",5,"Aventro Motors","baseline","ok",null,6375,3,3,0,5,0,2,5,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47",5,"Aventro Motors","seeds","ok",null,60416,16,16,15,0,0,0,2,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47",5,"Aventro Motors","scripted","ok",null,40458,16,14,15,1,0,1,3,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c",5,"Cendara University","baseline","ok",null,5296,2,2,0,4,0,1,5,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c",5,"Cendara University","seeds","ok",null,79375,15,15,14,0,0,0,3,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c",5,"Cendara University","scripted","ok",null,30992,16,9,15,1,0,1,4,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24",5,"Cendara University","baseline","ok",null,5296,2,2,0,5,0,1,5,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24",5,"Cendara University","seeds","ok",null,79195,15,15,14,2,0,1,4,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24",5,"Cendara University","scripted","ok",null,35118,16,10,15,2,0,1,4,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c",5,"Cendara University","baseline","ok",null,5296,2,2,0,5,0,0,5,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c",5,"Cendara University","seeds","ok",null,79946,15,15,14,0,0,0,4,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c",5,"Cendara University","scripted","ok",null,57481,16,14,15,0,0,0,5,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add",5,"Cendara University","baseline","ok",null,5296,2,2,0,5,0,0,5,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add",5,"Cendara University","seeds","ok",null,79964,15,15,14,0,0,0,5,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add",5,"Cendara University","scripted","ok",null,47898,16,12,15,0,0,0,5,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e",5,"Cloudway 24","baseline","ok",null,5718,3,3,0,5,0,0,5,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e",5,"Cloudway 24","seeds","ok",null,45548,16,16,15,0,0,0,1,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e",5,"Cloudway 24","scripted","ok",null,44451,16,16,15,0,0,0,1,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d",5,"Cloudway 24","baseline","ok",null,5718,3,3,0,4,0,2,5,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d",5,"Cloudway 24","seeds","ok",null,45108,16,16,15,0,0,0,3,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d",5,"Cloudway 24","scripted","ok",null,44021,16,16,15,0,0,0,3,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f",5,"Cloudway 24","baseline","ok",null,5718,3,3,0,4,0,3,4,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f",5,"Cloudway 24","seeds","ok",null,40815,16,16,15,0,0,0,0,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f",5,"Cloudway 24","scripted","ok",null,39756,16,16,15,0,0,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab",5,"Cloudway 24","baseline","ok",null,5718,3,3,0,5,0,1,5,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab",5,"Cloudway 24","seeds","ok",null,52426,16,16,15,1,0,0,4,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab",5,"Cloudway 24","scripted","ok",null,47859,16,16,15,1,0,0,4,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4",5,"Velvera Technologies","baseline","ok",null,6150,2,2,0,5,0,0,5,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4",5,"Velvera Technologies","seeds","ok",null,76877,16,16,15,1,0,0,4,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4",5,"Velvera Technologies","scripted","ok",null,55650,16,14,15,1,0,0,4,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10",5,"Velvera Technologies","baseline","ok",null,6150,2,2,0,5,0,0,5,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10",5,"Velvera Technologies","seeds","ok",null,68471,16,16,15,2,0,0,5,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10",5,"Velvera Technologies","scripted","ok",null,37331,16,12,15,2,0,0,5,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411",5,"Velvera Technologies","baseline","ok",null,6150,2,2,0,5,0,1,5,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411",5,"Velvera Technologies","seeds","ok",null,72656,16,16,15,1,0,1,3,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411",5,"Velvera Technologies","scripted","ok",null,49580,16,14,15,1,0,1,3,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb",5,"Velvera Technologies","baseline","ok",null,6150,2,2,0,5,0,1,5,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb",5,"Velvera Technologies","seeds","ok",null,71427,16,16,15,1,0,0,4,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb",5,"Velvera Technologies","scripted","ok",null,60064,16,16,15,1,0,1,4,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762",5,"ZX Bank","baseline","ok",null,5166,3,3,0,5,0,2,5,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762",5,"ZX Bank","seeds","ok",null,45267,16,16,15,2,0,1,2,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762",5,"ZX Bank","scripted","ok",null,42573,16,16,15,2,0,1,2,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e",5,"ZX Bank","baseline","ok",null,5166,3,3,0,4,1,1,4,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e",5,"ZX Bank","seeds","ok",null,44877,16,16,15,1,1,0,3,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e",5,"ZX Bank","scripted","ok",null,42128,16,16,15,1,1,0,3,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637",5,"ZX Bank","baseline","ok",null,5166,3,3,0,5,0,3,5,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637",5,"ZX Bank","seeds","ok",null,54425,16,16,15,3,0,2,3,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637",5,"ZX Bank","scripted","ok",null,40225,16,16,15,3,0,2,3,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3",5,"ZX Bank","baseline","ok",null,5166,3,3,0,5,0,4,5,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3",5,"ZX Bank","seeds","ok",null,57927,16,16,15,0,0,0,1,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3",5,"ZX Bank","scripted","ok",null,44353,16,16,15,0,0,0,1,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b",3,"Aventro Motors","configured-live","ok",null,3006,8,4,7,0,0,0,0,0],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941",3,"Aventro Motors","configured-live","ok",null,2128,4,4,3,0,0,0,1,0],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e",3,"Aventro Motors","configured-live","ok",null,2349,7,4,6,0,0,1,1,0],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731",3,"Aventro Motors","configured-live","ok",null,1895,6,4,5,0,0,0,2,0],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349",3,"Aventro Motors","configured-live","ok",null,4247,5,5,4,1,0,1,1,0],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2",3,"Aventro Motors","configured-live","ok",null,812,4,4,3,1,0,1,3,0],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e",3,"Cendara University","configured-live","ok",null,1572,4,4,3,1,0,0,1,0],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db",3,"Cendara University","configured-live","ok",null,2260,5,4,4,0,0,0,3,0],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1",3,"Cendara University","configured-live","ok",null,2139,5,5,4,1,0,1,3,0],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1",3,"Cendara University","configured-live","ok",null,2002,5,4,4,0,0,0,3,0],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173",3,"Cendara University","configured-live","ok",null,2559,4,4,3,0,0,0,3,0],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724",3,"Cendara University","configured-live","ok",null,4892,4,4,3,0,0,0,2,0],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d",3,"Cloudway 24","configured-live","ok",null,1305,5,4,4,0,0,0,0,0],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837",3,"Cloudway 24","configured-live","ok",null,2077,5,4,4,0,0,0,3,0],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4",3,"Cloudway 24","configured-live","ok",null,1928,4,4,3,0,0,0,2,0],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb",3,"Cloudway 24","configured-live","ok",null,2080,4,4,3,0,0,0,0,0],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522",3,"Cloudway 24","configured-live","ok",null,2544,6,4,5,0,0,0,2,0],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f",3,"Cloudway 24","configured-live","ok",null,2211,6,5,5,0,0,0,1,0],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7",3,"Velvera Technologies","configured-live","ok",null,2084,6,5,5,0,0,0,3,0],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069",3,"Velvera Technologies","configured-live","ok",null,2556,4,4,3,0,0,0,3,0],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2",3,"Velvera Technologies","configured-live","ok",null,3706,8,5,7,0,0,0,3,0],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3",3,"Velvera Technologies","configured-live","ok",null,6950,6,5,5,0,0,0,2,0],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66",3,"Velvera Technologies","configured-live","ok",null,3054,11,4,10,1,0,1,3,0],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5",3,"Velvera Technologies","configured-live","ok",null,2458,4,4,3,1,0,0,3,0],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25",3,"ZX Bank","configured-live","ok",null,5473,5,4,4,0,1,0,0,0],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b",3,"ZX Bank","configured-live","ok",null,1846,4,4,3,0,0,0,2,0],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787",3,"ZX Bank","configured-live","ok",null,3224,7,6,6,0,0,1,0,0],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4",3,"ZX Bank","configured-live","ok",null,2948,3,3,2,1,0,1,3,0],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433",3,"ZX Bank","configured-live","ok",null,5610,5,4,4,0,0,0,1,0],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f",3,"ZX Bank","configured-live","ok",null,2298,4,4,3,1,0,1,2,0],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf",5,"Aventro Motors","configured-live","ok",null,4650,6,5,5,0,0,0,0,0],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9",5,"Aventro Motors","configured-live","ok",null,10547,7,7,6,1,0,0,2,0],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628",5,"Aventro Motors","configured-live","ok",null,5374,16,8,15,1,0,1,3,0],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47",5,"Aventro Motors","configured-live","ok",null,4952,8,8,7,2,0,1,3,0],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c",5,"Cendara University","configured-live","ok",null,1802,6,6,5,0,0,1,3,0],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24",5,"Cendara University","configured-live","ok",null,3060,7,6,6,2,0,1,4,0],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c",5,"Cendara University","configured-live","ok",null,3614,6,6,5,0,0,0,4,0],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add",5,"Cendara University","configured-live","ok",null,4980,8,6,7,0,0,0,5,0],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e",5,"Cloudway 24","configured-live","ok",null,3626,7,6,6,0,0,0,2,0],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d",5,"Cloudway 24","configured-live","ok",null,6138,6,6,5,0,0,0,3,0],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f",5,"Cloudway 24","configured-live","ok",null,3361,7,6,6,0,0,0,0,0],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab",5,"Cloudway 24","configured-live","ok",null,2888,5,5,4,1,0,0,4,1],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4",5,"Velvera Technologies","configured-live","ok",null,7504,6,6,5,0,0,0,4,0],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10",5,"Velvera Technologies","configured-live","ok",null,5222,9,8,8,0,0,0,5,0],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411",5,"Velvera Technologies","configured-live","ok",null,3190,9,7,8,2,0,1,5,0],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb",5,"Velvera Technologies","configured-live","ok",null,5163,11,7,10,1,0,0,4,0],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762",5,"ZX Bank","configured-live","ok",null,2101,6,6,5,2,0,2,4,0],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e",5,"ZX Bank","configured-live","ok",null,3720,8,7,7,0,1,0,3,0],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637",5,"ZX Bank","configured-live","ok",null,7947,6,6,5,0,0,0,1,0],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3",5,"ZX Bank","configured-live","ok",null,5907,8,8,7,0,0,2,1,0]
+  ],
+  "topicRows": [
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","baseline",1,1,0,true,3,0,3,0,0,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","seeds",1,1,1,true,3,3,3,3,3,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","seeds",2,1,1,false,0,0,1,1,0,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","seeds",3,1,1,false,0,0,1,1,1,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","scripted",1,1,1,true,3,3,3,3,3,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","scripted",2,1,1,false,0,0,1,1,0,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","scripted",3,1,1,false,0,0,1,1,1,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","baseline",1,1,1,false,0,0,1,0,0,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","baseline",2,1,0,true,1,0,1,0,0,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","seeds",2,1,1,true,1,1,1,1,1,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","seeds",3,1,1,false,0,0,1,1,0,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","scripted",2,1,1,true,1,1,1,1,1,null],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","scripted",3,1,1,false,0,0,1,1,0,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","baseline",1,1,0,false,0,0,2,0,0,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","baseline",2,1,0,false,0,0,2,0,0,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","baseline",3,1,0,true,2,0,2,0,0,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","seeds",1,1,1,false,0,0,2,2,1,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","seeds",2,1,1,false,0,0,2,1,1,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","seeds",3,1,1,true,2,2,2,2,2,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","scripted",1,1,1,false,0,0,2,1,0,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","scripted",2,1,1,false,0,0,2,1,1,null],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","scripted",3,1,1,true,2,2,2,2,2,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","baseline",1,1,0,false,0,0,2,0,0,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","baseline",2,1,0,true,1,0,1,0,0,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","seeds",1,1,1,false,0,0,2,0,0,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","seeds",2,1,1,true,1,1,1,1,1,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","scripted",1,1,1,false,0,0,2,0,0,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","scripted",2,1,1,true,1,1,1,1,1,null],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","baseline",2,1,0,true,2,0,2,0,0,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","seeds",2,1,1,true,2,2,2,2,2,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","seeds",3,1,1,true,1,1,1,1,1,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","scripted",2,1,1,true,2,0,2,0,0,null],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","scripted",3,1,1,true,1,1,1,1,1,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","seeds",1,1,1,false,0,0,1,1,0,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","seeds",3,1,1,true,1,1,1,1,1,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","scripted",1,1,1,false,0,0,1,1,0,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","scripted",3,1,0,true,1,0,1,0,0,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","baseline",2,1,0,false,0,0,2,0,0,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","seeds",2,1,1,false,0,0,2,0,0,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","seeds",3,1,1,false,0,0,1,1,0,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","scripted",2,1,1,false,0,0,2,0,0,null],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","scripted",3,1,1,false,0,0,1,1,0,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","seeds",3,1,0,true,1,0,1,0,0,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","scripted",3,1,0,true,1,0,1,0,0,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","baseline",2,1,1,false,0,0,1,0,0,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","baseline",2,1,0,false,0,0,2,0,0,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","seeds",2,1,1,false,0,0,2,0,0,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","scripted",2,1,1,false,0,0,2,0,0,null],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","baseline",1,1,0,false,0,0,2,0,0,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","baseline",3,1,0,false,0,0,2,0,0,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","seeds",1,1,1,false,0,0,2,0,0,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","seeds",3,1,1,false,0,0,2,1,1,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","scripted",1,1,1,false,0,0,2,0,0,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","scripted",3,1,1,false,0,0,2,0,0,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","baseline",2,1,0,true,1,0,1,0,0,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","seeds",2,1,1,true,1,1,1,1,1,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","seeds",3,1,1,true,1,1,1,1,1,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","scripted",2,1,1,true,1,1,1,1,1,null],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","scripted",3,1,1,true,1,1,1,1,1,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","baseline",2,1,0,false,0,0,2,0,0,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","seeds",2,1,1,false,0,0,2,0,0,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","scripted",2,1,1,false,0,0,2,0,0,null],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","baseline",3,1,1,false,0,0,1,0,0,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","seeds",1,1,1,false,0,0,1,1,1,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","scripted",1,1,1,false,0,0,1,1,1,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","baseline",2,1,1,false,0,0,1,1,0,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","seeds",2,1,1,false,0,0,1,1,0,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","seeds",3,1,1,true,1,1,1,1,1,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","scripted",2,1,1,false,0,0,1,1,0,null],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","scripted",3,1,1,true,1,1,1,1,1,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","baseline",1,1,0,false,0,0,2,0,0,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","seeds",1,1,1,false,0,0,2,2,1,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","scripted",1,1,1,false,0,0,2,2,1,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","seeds",2,1,1,false,0,0,1,1,0,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","seeds",3,1,1,true,1,1,1,1,1,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","scripted",2,1,1,false,0,0,1,1,0,null],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","scripted",3,1,1,true,1,1,1,1,1,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","baseline",2,1,0,false,0,0,2,0,0,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","seeds",1,1,1,false,0,0,1,1,0,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","seeds",2,1,1,false,0,0,2,0,0,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","scripted",1,1,1,false,0,0,1,1,0,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","scripted",2,1,1,false,0,0,2,0,0,null],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","seeds",1,1,0,false,0,0,1,0,0,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","scripted",1,1,0,false,0,0,1,0,0,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","seeds",3,1,0,false,0,0,1,0,0,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","scripted",1,1,1,true,1,0,1,1,1,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","scripted",3,1,0,false,0,0,1,0,0,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","baseline",2,1,0,false,0,0,2,0,0,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","seeds",2,1,1,false,0,0,2,1,1,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","scripted",2,1,1,false,0,0,2,1,1,null],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","baseline",2,0,0,false,0,0,0,0,0,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","seeds",2,0,0,false,0,0,0,0,0,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","seeds",3,1,1,true,1,1,1,1,1,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","scripted",2,0,0,false,0,0,0,0,0,null],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","scripted",3,1,1,true,1,1,1,1,1,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","baseline",2,1,0,true,1,0,1,0,0,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","seeds",1,1,0,true,1,0,1,0,0,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","seeds",2,1,1,true,1,1,1,1,1,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","seeds",3,1,1,true,1,1,1,1,1,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","scripted",1,1,0,true,1,0,1,0,0,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","scripted",2,1,1,true,1,1,1,1,1,null],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","scripted",3,1,1,true,1,1,1,1,1,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","seeds",3,1,0,false,0,0,1,0,0,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","scripted",3,1,0,false,0,0,1,0,0,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","baseline",2,1,0,true,1,0,1,0,0,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","seeds",2,1,1,true,1,1,1,1,1,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","seeds",3,1,1,false,0,0,1,1,0,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","scripted",2,1,1,true,1,0,1,1,1,null],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","scripted",3,1,1,false,0,0,1,1,0,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","seeds",1,1,1,false,0,0,1,1,0,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","seeds",2,1,0,false,0,0,1,0,0,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","seeds",3,1,1,true,1,1,1,1,1,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","scripted",1,1,1,false,0,0,1,1,0,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","scripted",2,1,0,false,0,0,1,0,0,null],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","scripted",3,1,1,true,1,1,1,1,1,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","baseline",2,1,0,true,2,0,2,0,0,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","baseline",3,1,0,false,0,0,2,0,0,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","seeds",2,1,1,true,2,2,2,2,2,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","seeds",3,1,1,false,0,0,2,2,1,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","seeds",4,1,1,false,0,0,1,1,0,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","seeds",5,1,1,false,0,0,1,1,0,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","scripted",2,1,1,true,2,2,2,2,2,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","scripted",3,1,1,false,0,0,2,1,0,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","scripted",4,1,1,false,0,0,1,1,0,null],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","scripted",5,1,1,false,0,0,1,1,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","baseline",2,1,0,true,1,0,1,0,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","baseline",5,1,0,true,1,0,1,0,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","seeds",2,1,1,true,1,1,1,1,1,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","seeds",4,1,1,false,0,0,1,1,1,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","seeds",5,1,1,true,1,1,1,1,1,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","scripted",2,1,1,true,1,1,1,1,1,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","scripted",4,1,1,false,0,0,1,1,1,null],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","scripted",5,1,1,true,1,1,1,1,1,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","baseline",1,1,0,true,3,0,3,0,0,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","baseline",2,1,0,false,0,0,2,0,0,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","baseline",3,1,1,false,0,0,1,0,0,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","baseline",4,1,0,true,1,0,1,0,0,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","baseline",5,1,0,true,1,0,1,0,0,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","seeds",1,1,1,true,3,3,3,3,3,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","seeds",2,1,1,false,0,0,2,0,0,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","seeds",4,1,1,true,1,1,1,1,1,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","seeds",5,1,1,true,1,1,1,1,1,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","scripted",1,1,1,true,3,3,3,3,3,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","scripted",2,1,1,false,0,0,2,0,0,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","scripted",4,1,1,true,1,1,1,1,1,null],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","scripted",5,1,1,true,1,1,1,1,1,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","baseline",2,1,0,true,2,0,2,0,0,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","baseline",4,1,0,true,1,0,1,0,0,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","baseline",5,1,0,false,0,0,2,0,0,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","seeds",2,1,1,true,2,2,2,2,2,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","seeds",4,1,1,true,1,1,1,1,1,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","seeds",5,1,1,false,0,0,2,1,1,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","scripted",2,1,1,true,2,0,2,0,0,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","scripted",3,1,0,false,0,0,1,0,0,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","scripted",4,1,1,true,1,1,1,1,1,null],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","scripted",5,1,1,false,0,0,2,1,1,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","baseline",3,1,1,false,0,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","baseline",4,1,0,true,1,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","seeds",2,1,1,false,0,0,1,1,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","seeds",4,1,1,true,1,1,1,1,1,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","seeds",5,1,1,false,0,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","scripted",2,1,1,false,0,0,1,1,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","scripted",4,1,0,true,1,0,1,0,0,null],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","scripted",5,1,1,false,0,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","seeds",1,1,0,true,1,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","seeds",2,1,1,false,0,0,1,1,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","seeds",4,1,0,false,0,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","seeds",5,1,1,false,0,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","scripted",1,1,0,true,1,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","scripted",2,1,1,false,0,0,1,1,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","scripted",4,1,0,false,0,0,1,0,0,null],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","scripted",5,1,1,false,0,0,1,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","baseline",2,1,0,false,0,0,2,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","baseline",3,1,0,false,0,0,2,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","seeds",2,1,1,false,0,0,2,1,1,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","seeds",3,1,1,false,0,0,2,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","seeds",4,1,1,false,0,0,1,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","seeds",5,1,1,false,0,0,1,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","scripted",2,1,1,false,0,0,2,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","scripted",3,1,1,false,0,0,2,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","scripted",4,1,1,false,0,0,1,0,0,null],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","scripted",5,1,1,false,0,0,1,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","baseline",3,1,0,false,0,0,2,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","baseline",5,1,0,false,0,0,2,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","seeds",3,1,1,false,0,0,2,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","seeds",4,1,1,false,0,0,1,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","seeds",5,1,1,false,0,0,2,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","scripted",3,1,1,false,0,0,2,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","scripted",4,1,1,false,0,0,1,0,0,null],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","scripted",5,1,1,false,0,0,2,0,0,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","baseline",4,1,0,false,0,0,3,0,0,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","seeds",1,1,1,false,0,0,1,1,1,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","seeds",2,1,1,false,0,0,1,1,1,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","seeds",3,1,1,false,0,0,1,1,0,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","seeds",4,1,1,false,0,0,3,3,2,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","seeds",5,1,1,false,0,0,1,0,0,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","scripted",1,1,1,false,0,0,1,1,1,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","scripted",2,1,1,false,0,0,1,1,1,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","scripted",3,1,1,false,0,0,1,1,0,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","scripted",4,1,1,false,0,0,3,3,2,null],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","scripted",5,1,1,false,0,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","baseline",2,1,0,true,1,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","baseline",5,1,1,false,0,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","seeds",2,1,1,true,1,1,1,1,1,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","seeds",4,1,1,false,0,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","seeds",5,1,1,false,0,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","scripted",2,1,1,true,1,1,1,1,1,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","scripted",4,1,1,false,0,0,1,0,0,null],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","scripted",5,1,1,false,0,0,1,0,0,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","baseline",1,1,1,false,0,0,1,1,0,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","baseline",2,1,0,true,1,0,1,0,0,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","baseline",3,1,0,false,0,0,2,0,0,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","baseline",4,1,0,true,1,0,1,0,0,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","baseline",5,1,0,true,1,0,1,0,0,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","seeds",1,1,1,false,0,0,1,1,0,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","seeds",2,1,1,true,1,1,1,1,1,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","seeds",3,1,1,false,0,0,2,2,1,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","seeds",4,1,1,true,1,1,1,1,1,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","seeds",5,1,1,true,1,1,1,1,1,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","scripted",1,1,1,false,0,0,1,1,0,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","scripted",2,1,1,true,1,1,1,1,1,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","scripted",3,1,1,false,0,0,2,2,1,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","scripted",4,1,1,true,1,1,1,1,1,null],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","scripted",5,1,1,true,1,1,1,1,1,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","baseline",2,1,0,false,0,0,2,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","seeds",1,1,0,false,0,0,1,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","seeds",2,1,1,false,0,0,2,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","seeds",3,1,1,true,1,1,1,1,1,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","seeds",4,1,1,false,0,0,1,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","seeds",5,1,1,false,0,0,1,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","scripted",1,1,0,false,0,0,1,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","scripted",2,1,1,false,0,0,2,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","scripted",3,1,1,true,1,1,1,1,1,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","scripted",4,1,1,false,0,0,1,0,0,null],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","scripted",5,1,1,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","baseline",1,1,0,false,0,0,2,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","seeds",1,1,1,false,0,0,2,1,1,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","seeds",2,1,0,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","seeds",4,1,1,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","seeds",5,1,1,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","scripted",1,1,1,false,0,0,2,1,1,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","scripted",2,1,0,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","scripted",4,1,1,false,0,0,1,0,0,null],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","scripted",5,1,1,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","baseline",2,1,0,false,0,0,2,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","seeds",2,1,1,false,0,0,2,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","seeds",4,1,0,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","seeds",5,1,0,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","scripted",2,1,1,false,0,0,2,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","scripted",4,1,0,false,0,0,1,0,0,null],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","scripted",5,1,0,false,0,0,1,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","baseline",3,1,0,false,0,0,2,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","baseline",4,1,0,true,1,0,1,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","seeds",2,1,1,false,0,0,1,1,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","seeds",3,1,1,false,0,0,2,1,1,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","seeds",4,1,0,true,1,0,1,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","seeds",5,1,1,false,0,0,1,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","scripted",2,1,1,false,0,0,1,1,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","scripted",3,1,1,false,0,0,2,1,1,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","scripted",4,1,0,true,1,0,1,0,0,null],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","scripted",5,1,1,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","seeds",1,1,1,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","seeds",2,1,0,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","seeds",3,1,1,true,1,1,1,1,1,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","seeds",4,1,1,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","seeds",5,1,1,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","scripted",1,1,1,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","scripted",2,1,0,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","scripted",3,1,1,true,1,0,1,1,1,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","scripted",4,1,1,false,0,0,1,0,0,null],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","scripted",5,1,1,false,0,0,1,0,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","baseline",5,1,0,true,1,0,1,0,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","seeds",1,1,1,false,0,0,1,1,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","seeds",2,1,1,false,0,0,1,1,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","seeds",3,1,0,true,1,0,1,0,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","seeds",4,1,0,false,0,0,1,0,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","seeds",5,1,1,true,1,1,1,1,1,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","scripted",1,1,1,false,0,0,1,1,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","scripted",2,1,1,false,0,0,1,1,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","scripted",3,1,0,true,1,0,1,0,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","scripted",4,1,0,false,0,0,1,0,0,null],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","scripted",5,1,1,true,1,1,1,1,1,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","baseline",1,0,0,false,0,0,0,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","baseline",2,1,0,false,0,0,1,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","baseline",4,1,0,false,0,0,1,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","baseline",5,1,0,true,1,0,1,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","seeds",1,0,0,false,0,0,0,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","seeds",2,1,1,false,0,0,1,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","seeds",4,1,0,false,0,0,1,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","seeds",5,1,1,true,1,1,1,1,1,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","scripted",1,0,0,false,0,0,0,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","scripted",2,1,1,false,0,0,1,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","scripted",4,1,0,false,0,0,1,0,0,null],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","scripted",5,1,1,true,1,1,1,1,1,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","baseline",1,1,0,false,0,0,1,0,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","baseline",2,1,0,true,1,0,1,0,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","baseline",3,1,0,true,1,0,1,0,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","baseline",4,1,0,true,1,0,1,0,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","baseline",5,1,0,false,0,0,1,0,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","seeds",1,1,1,false,0,0,1,1,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","seeds",2,1,1,true,1,1,1,1,1,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","seeds",3,1,0,true,1,0,1,0,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","seeds",4,1,0,true,1,0,1,0,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","seeds",5,1,0,false,0,0,1,0,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","scripted",1,1,1,false,0,0,1,1,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","scripted",2,1,1,true,1,1,1,1,1,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","scripted",3,1,0,true,1,0,1,0,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","scripted",4,1,0,true,1,0,1,0,0,null],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","scripted",5,1,0,false,0,0,1,0,0,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","baseline",1,1,0,true,1,0,1,0,0,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","baseline",2,1,0,true,1,0,1,0,0,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","baseline",3,1,0,false,0,0,1,0,0,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","baseline",4,1,0,true,1,0,1,0,0,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","baseline",5,1,0,true,1,0,1,0,0,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","seeds",1,1,1,true,1,1,1,1,1,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","seeds",2,1,1,true,1,1,1,1,1,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","seeds",3,1,1,false,0,0,1,0,0,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","seeds",4,1,1,true,1,1,1,1,1,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","seeds",5,1,1,true,1,1,1,1,1,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","scripted",1,1,1,true,1,1,1,1,1,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","scripted",2,1,1,true,1,1,1,1,1,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","scripted",3,1,1,false,0,0,1,0,0,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","scripted",4,1,1,true,1,1,1,1,1,null],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","scripted",5,1,1,true,1,1,1,1,1,null],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","configured-live",1,1,1,true,3,2,3,3,2,1],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","configured-live",2,1,1,false,0,0,1,1,0,1],
+    ["g3-694f9f3691d86c2788fefd4f612bdcb253888db646db8a0b223892255c25030b","configured-live",3,1,1,false,0,0,1,1,0,1],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","configured-live",2,1,1,true,1,1,1,1,1,1],
+    ["g3-94ba8e49110285d208c604fb0aa22b4da72269edd71d86da273af0b66eaea941","configured-live",3,1,1,false,0,0,1,1,0,1],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","configured-live",1,1,1,false,0,0,2,2,1,1],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","configured-live",2,1,1,false,0,0,2,1,1,1],
+    ["g3-c30555f92069f35bfce023060cf3968d0ca258f2fba3e343c9a7129e20a3a07e","configured-live",3,1,1,true,2,0,2,0,0,1],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","configured-live",1,1,1,false,0,0,2,0,0,1],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","configured-live",2,1,1,true,1,1,1,1,1,1],
+    ["g3-43796b39b57381303831dbdddbafd0111c7bc26fb6708f2f451db8240ce31731","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","configured-live",1,1,1,true,1,1,1,1,1,1],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","configured-live",2,1,0,true,2,0,2,0,0,2],
+    ["g3-28963fc3a5bf8413d21fbddaf516272f4b728abdc7088260b86d86c30ddb0349","configured-live",3,1,1,true,1,1,1,1,1,1],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","configured-live",1,1,1,true,1,0,1,0,0,1],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","configured-live",2,1,0,false,0,0,1,0,0,1],
+    ["g3-bf0622e2fd17a5dd4ae54c12782bafd2fe50c123c92760d4cca52a83085462f2","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","configured-live",1,1,1,false,0,0,1,1,0,1],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","configured-live",2,1,0,false,0,0,1,0,0,1],
+    ["g3-76f16284377c0a7061173c9736b248640f5b959f1d04f5e020805b196012d02e","configured-live",3,1,1,true,1,1,1,1,1,1],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","configured-live",2,1,1,false,0,0,2,0,0,1],
+    ["g3-cd4101a07f6b0271ee07bc0c0d5f77d514f7c6605605d84fb94f1f3a587032db","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-baf0a41e941b7ad60d359caf098b48496504f871b3dfcc4bc5ad786fb9ef0df1","configured-live",3,1,0,true,1,0,1,0,0,2],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-32ba76d37da48ddd9c4bc04bae6c57e8879995660a1c180e7bb65271ce3a24d1","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","configured-live",2,1,1,false,0,0,2,0,0,1],
+    ["g3-dbab4620aec1ec5145641a9c6a17a15dda2611d8b8b8d9316ed032ba7801a173","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","configured-live",1,1,1,false,0,0,2,0,0,1],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-4e4ff35d3714256a36266a96ecca608f95ff9cea3e67bfea8075fe0d75000724","configured-live",3,1,1,false,0,0,2,1,1,1],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","configured-live",1,1,1,true,1,1,1,1,1,1],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","configured-live",2,1,1,true,1,1,1,1,1,1],
+    ["g3-b658246840ff5e654e84683db720a615739eace32949b18b7f0565c23072ca6d","configured-live",3,1,1,true,1,1,1,1,1,1],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","configured-live",2,1,1,false,0,0,2,0,0,1],
+    ["g3-7042abf834758b3f5404c6e81e9b0d4d686c0aca9fb876f296f1e88d69b74837","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","configured-live",1,1,1,false,0,0,1,1,1,1],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-90001a82af2c3d27f72c6984493ab97897381f030837e033c6476d21b8f488f4","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","configured-live",1,1,1,true,1,1,1,1,1,1],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","configured-live",2,1,1,false,0,0,1,1,0,1],
+    ["g3-e1a9aa175d1a16fbc7f1c411cbc4c2d2cf71cd2fa59c8647cab82140567666cb","configured-live",3,1,1,true,1,1,1,1,1,1],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","configured-live",1,1,1,false,0,0,2,1,0,1],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-9adf46a0a8358b28fe2653ccc769eaf6ef9f5ee9dc5fe4edd1e0c861cfc88522","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","configured-live",2,1,1,false,0,0,1,1,0,1],
+    ["g3-d998c125230f844ae7b232437bb49d28b9d01a1dc238495dfcc9917a6598fd0f","configured-live",3,1,1,true,1,1,1,1,1,2],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","configured-live",1,1,1,false,0,0,1,0,0,2],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-9b1009f9e1012c5698d46c07a2bc40f2ee268a84192b434e1d3669c1d56f2bb7","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","configured-live",2,1,1,false,0,0,2,0,0,1],
+    ["g3-21fb104c5989dcfa2015b074f1beb79263c8d08a42428d7f9feaa7483ba7f069","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","configured-live",1,1,1,false,0,0,1,0,0,2],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-662e81c01f17ecb2add7fd6ddaf915a8118ffc9f0ea4069a4c15eab68352e1a2","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","configured-live",1,1,1,true,1,1,1,1,1,2],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-b524aa4071ece2964589b0694309d8c69bb9aedfc4fa881582bee22b6a57b2d3","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","configured-live",1,1,1,true,1,0,1,0,0,1],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","configured-live",2,1,0,false,0,0,1,0,0,1],
+    ["g3-15e787d635f54f0ff79cfeb34220270ad75d9649bc91037fda6a7b510ec45d66","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","configured-live",2,1,0,false,0,0,2,0,0,1],
+    ["g3-d86571b1e9e1f46475d48270332bf00eef3e66df740b5a0a7e415c2c106b6ee5","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","configured-live",1,1,1,true,1,1,1,1,1,1],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","configured-live",2,0,0,false,0,0,0,0,0,1],
+    ["g3-baa430a7f52b06246ad25a4a585f2842c178be63563f1f49989bef6b3b221c25","configured-live",3,1,1,true,1,1,1,1,1,1],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","configured-live",1,1,1,true,1,1,1,1,1,1],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-952df865a946bbab60247fec3d9f24e3cf1f357ae7a92d25685e487c6fefce9b","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","configured-live",1,1,1,true,1,1,1,1,1,1],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","configured-live",2,1,1,true,1,1,1,1,1,2],
+    ["g3-2448192707c3c1994e78493aad953442f49c3983f6eb557af187b605eac14787","configured-live",3,1,1,true,1,0,1,1,1,3],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","configured-live",1,1,0,true,1,0,1,0,0,1],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-6d01fb992167d48d351c398998b3d75de817202a50a3361cb6ab760aa8ee74e4","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","configured-live",1,1,1,true,1,1,1,1,1,1],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","configured-live",2,1,1,true,1,1,1,1,1,1],
+    ["g3-5fd2314b62d76d3be199283c09aa1620f78d8b4cdbaad823460c3395ec6db433","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","configured-live",1,1,1,false,0,0,1,1,0,1],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g3-25581b64538c8ba7730747b5a14227b683ef47ce2273595021ca030867a7ba1f","configured-live",3,1,0,true,1,0,1,0,0,1],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","configured-live",1,1,1,true,1,1,1,1,1,1],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","configured-live",2,1,1,true,2,1,2,1,1,1],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","configured-live",3,1,1,false,0,0,2,2,1,1],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","configured-live",4,1,1,false,0,0,1,1,0,1],
+    ["g5-8efc040b304ce20456deb72abc21e784645c6a36c6233c13dcf3ff8fe42b8baf","configured-live",5,1,1,false,0,0,1,1,0,1],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","configured-live",1,1,0,false,0,0,1,0,0,2],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","configured-live",2,1,1,true,1,1,1,1,1,1],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","configured-live",4,1,1,false,0,0,1,1,1,1],
+    ["g5-359f6a9b51931da57318c95d916f6d15a98221e7400bb5a3518e92ce45e1a6b9","configured-live",5,1,1,true,1,1,1,1,1,1],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","configured-live",1,1,1,true,3,2,3,3,2,1],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","configured-live",2,1,1,false,0,0,2,0,0,1],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","configured-live",4,1,0,true,1,0,1,0,0,4],
+    ["g5-dcfbb686f563d44f8c8a2232f25ff6e927ef0ee49ebe54f65844f3ba7fb89628","configured-live",5,1,1,true,1,1,1,1,1,1],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","configured-live",2,1,0,true,2,0,2,0,0,2],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","configured-live",3,1,0,false,0,0,1,0,0,2],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","configured-live",4,1,1,true,1,1,1,1,1,1],
+    ["g5-263e79bbfb97bf0d72488b055286e5c3c299c36ad8ff6f445bf6b97f6f2cff47","configured-live",5,1,1,false,0,0,2,1,1,1],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","configured-live",2,1,1,false,0,0,1,1,0,1],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","configured-live",4,1,1,true,1,0,1,1,0,1],
+    ["g5-45ddb467b6ad04219362a1a182e44bf7064d7413d5e6c96558801faa07e4868c","configured-live",5,1,1,false,0,0,1,0,0,1],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","configured-live",1,1,0,true,1,0,1,0,0,1],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","configured-live",2,1,1,false,0,0,1,1,0,1],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","configured-live",4,1,0,false,0,0,1,0,0,1],
+    ["g5-756c071e10bd86d2b85a97623400373d00354338cb451628bdb17c574766da24","configured-live",5,1,1,false,0,0,1,0,0,1],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","configured-live",2,1,1,false,0,0,2,1,1,1],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","configured-live",3,1,1,false,0,0,2,0,0,1],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","configured-live",4,1,1,false,0,0,1,0,0,1],
+    ["g5-8c35f835b4c18231c2119f179fa00b4f6dedeafff1e20fd3b48777e3fd5f380c","configured-live",5,1,1,false,0,0,1,0,0,1],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","configured-live",3,1,1,false,0,0,2,0,0,1],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","configured-live",4,1,1,false,0,0,1,0,0,1],
+    ["g5-61f399b75267a691a67964d1584ff4555480596400ce159e7eb65a612ad89add","configured-live",5,1,1,false,0,0,2,0,0,1],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","configured-live",1,1,1,false,0,0,1,1,1,1],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","configured-live",3,1,1,false,0,0,1,1,0,1],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","configured-live",4,1,1,false,0,0,3,1,1,1],
+    ["g5-e1150a081f77b2f400478cb7458c636ef47206311501b2bb35f5f1c427a10f0e","configured-live",5,1,1,false,0,0,1,0,0,1],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","configured-live",1,1,1,true,1,1,1,1,1,1],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","configured-live",2,1,1,true,1,1,1,1,1,1],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","configured-live",4,1,1,false,0,0,1,0,0,1],
+    ["g5-a0a11fa2cbb86c21ca6bc786019770f4f82d5b9f5ae09fe5756bba9eed4a772d","configured-live",5,1,1,false,0,0,1,0,0,1],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","configured-live",1,1,1,false,0,0,1,1,0,1],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","configured-live",2,1,1,true,1,1,1,1,1,1],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","configured-live",3,1,1,false,0,0,2,1,0,1],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","configured-live",4,1,1,true,1,1,1,1,1,1],
+    ["g5-edaa34813fc43938df136fbbaf51ce275ed3569306a3080a695997cf989f255f","configured-live",5,1,1,true,1,1,1,1,1,1],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","configured-live",2,1,1,false,0,0,2,0,0,1],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","configured-live",3,1,1,true,1,1,1,1,1,1],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","configured-live",4,1,0,false,0,0,1,0,0,0],
+    ["g5-c508a10af4dd79490fdd8114bee27d339a30534a34471efa63ff2bde7691e8ab","configured-live",5,1,1,false,0,0,1,0,0,1],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","configured-live",1,1,1,false,0,0,2,1,1,1],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","configured-live",4,1,1,false,0,0,1,0,0,1],
+    ["g5-43868420961577583af5363a04ea241102cf1c8b1051d6d70110789c9de79de4","configured-live",5,1,1,false,0,0,1,0,0,1],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","configured-live",1,1,1,false,0,0,1,0,0,1],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","configured-live",2,1,1,false,0,0,2,0,0,1],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","configured-live",4,1,1,false,0,0,1,0,0,2],
+    ["g5-c23d154d165e892c91c34a39641ceabd6db13e287362ee6958101e2878b0da10","configured-live",5,1,1,false,0,0,1,0,0,2],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","configured-live",1,1,0,false,0,0,1,0,0,2],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","configured-live",3,1,0,false,0,0,2,0,0,1],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","configured-live",4,1,1,true,1,0,1,0,0,1],
+    ["g5-8f43dee7fb91483412ab58631ce797b0b6fc1759006ae15046eab9c6c1111411","configured-live",5,1,1,false,0,0,1,0,0,1],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","configured-live",1,1,1,false,0,0,1,0,0,2],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","configured-live",2,1,0,false,0,0,1,0,0,1],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","configured-live",3,1,1,true,1,1,1,1,1,1],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","configured-live",4,1,1,false,0,0,1,0,0,1],
+    ["g5-ebbb34256e32e10f4a5749cbe168803eab0def8102e0581e8cc8e58e8b5ed6bb","configured-live",5,1,1,false,0,0,1,0,0,1],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","configured-live",1,1,1,false,0,0,1,1,0,1],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","configured-live",3,1,1,true,1,0,1,0,0,1],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","configured-live",4,1,0,false,0,0,1,0,0,1],
+    ["g5-394e294ae3cfed8cb0e6fd9146fdfa0906433e6f7380c5c90e01288a62963762","configured-live",5,1,0,true,1,0,1,0,0,1],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","configured-live",1,0,0,false,0,0,0,0,0,2],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","configured-live",2,1,1,false,0,0,1,0,0,1],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","configured-live",4,1,1,false,0,0,1,0,0,1],
+    ["g5-e38341636b262f5c205645d1af85a1be62d01ce28074bedd76c39c2d6eca552e","configured-live",5,1,1,true,1,1,1,1,1,1],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","configured-live",1,1,1,false,0,0,1,1,0,1],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","configured-live",2,1,1,true,1,1,1,1,1,1],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","configured-live",3,1,1,true,1,1,1,1,1,1],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","configured-live",4,1,1,true,1,1,1,1,1,1],
+    ["g5-4455abeb98b2efabfdd4cdfce899c0e1f6f4ca6d9a99d0ac089de92ed1e18637","configured-live",5,1,1,false,0,0,1,0,0,1],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","configured-live",1,1,1,true,1,0,1,1,1,3],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","configured-live",2,1,1,true,1,1,1,1,1,1],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","configured-live",3,1,1,false,0,0,1,0,0,1],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","configured-live",4,1,1,true,1,0,1,1,1,1],
+    ["g5-67b837962796982b135099efeef6b738bedcaadec67a66c8f8c2eaebe5da09e3","configured-live",5,1,1,true,1,1,1,1,1,1]
+  ]
+}

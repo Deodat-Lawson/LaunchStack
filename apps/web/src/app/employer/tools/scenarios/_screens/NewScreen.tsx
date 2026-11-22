@@ -302,6 +302,10 @@ export function NewScreen() {
               : tooLong
                 ? t("hold.tooLong")
                 : null;
+    const pickedSegment = (offered?.prospectSegments ?? []).find(s => s.id === prospectSegment);
+    const prospectSegmentLabel = pickedSegment
+        ? t("prospectsFrom.segment", { name: pickedSegment.name, count: pickedSegment.companies })
+        : t("prospectsFrom.all");
     const canRun = holdReason === null && !blocked && !submitting;
 
     const submit = async () => {
@@ -438,18 +442,26 @@ export function NewScreen() {
                                             value={prospectSegment}
                                             onValueChange={setProspectSegment}
                                         >
+                                            {/* A segment's name can be long ("tech companies based in LA ·
+                                                Santa Monica, CA (26 companies)"): the box cuts it off with
+                                                an ellipsis and its title shows it whole; the list wraps. */}
                                             <SelectTrigger
                                                 id="scenario-prospect-segment"
-                                                className="ml-auto h-8 w-[220px] text-xs"
+                                                title={prospectSegmentLabel}
+                                                className="ml-auto h-8 w-[260px] max-w-full min-w-0 text-xs [&>[data-slot=select-value]]:min-w-0 [&>[data-slot=select-value]]:truncate"
                                             >
                                                 <SelectValue />
                                             </SelectTrigger>
-                                            <SelectContent>
+                                            <SelectContent className="max-w-[min(26rem,calc(100vw-2rem))]">
                                                 <SelectItem value="all">
                                                     {t("prospectsFrom.all")}
                                                 </SelectItem>
                                                 {(offered?.prospectSegments ?? []).map(s => (
-                                                    <SelectItem key={s.id} value={s.id}>
+                                                    <SelectItem
+                                                        key={s.id}
+                                                        value={s.id}
+                                                        className="whitespace-normal"
+                                                    >
                                                         {t("prospectsFrom.segment", {
                                                             name: s.name,
                                                             count: s.companies,

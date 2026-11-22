@@ -1,0 +1,1972 @@
+{
+  "schemaVersion": "long-decisions/spec-v1",
+  "company": {
+    "id": "northstar-freight-systems",
+    "name": "Northstar Freight Systems",
+    "fictional": true,
+    "domain": "B2B logistics coordination"
+  },
+  "design": {
+    "freezeBeforeGeneration": true,
+    "developmentCases": 6,
+    "heldoutCases": 6,
+    "originalDocuments": 50,
+    "additionalVersions": 12,
+    "byteUnit": "UTF-8 bytes",
+    "documentBytes": {
+      "min": 25000,
+      "max": 35000
+    },
+    "anchorPositionRange": [
+      0.3,
+      0.8
+    ],
+    "generationBoundary": "A prose provider receives only document id, kind, title and generic brief. It receives no cases, splits, groups, anchor text, marker positions or distractor metadata. A deterministic local assembler inserts the separately declared anchor text at its marker and removes marker tokens from final canonical text.",
+    "temporalCoverage": "All declared groups run at the final reporting cutoff. The corpus exercises current-version changes during the second and third weeks and retains prior decision requests; it does not measure independent earlier-cutoff retrieval quality.",
+    "groupDeclaration": "Each split has disjoint triples covering all cases and fixed overlapping quintets covering all cases. Groups were declared before generation or evaluation.",
+    "expectedMarkerBehavior": "Each version is assembled independently. Every declared marker occurs exactly once before replacement and zero times in final text. Record exact canonical UTF-16 offsets after replacement; do not search by evaluator labels during retrieval."
+  },
+  "weeks": [
+    {
+      "id": "w1",
+      "weekStart": "2026-09-07",
+      "cutoff": "2026-09-14T00:00:00Z"
+    },
+    {
+      "id": "w2",
+      "weekStart": "2026-09-14",
+      "cutoff": "2026-09-21T00:00:00Z"
+    },
+    {
+      "id": "w3",
+      "weekStart": "2026-09-21",
+      "cutoff": "2026-09-28T00:00:00Z"
+    }
+  ],
+  "actors": [
+    {
+      "id": "review-owner",
+      "role": "owner",
+      "canRead": true,
+      "canMutate": true,
+      "readableDocumentIds": [
+        "D01",
+        "D02",
+        "D03",
+        "D04",
+        "D05",
+        "D06",
+        "D07",
+        "D08",
+        "D09",
+        "D10",
+        "D11",
+        "D12",
+        "D13",
+        "D14",
+        "D15",
+        "D16",
+        "D17",
+        "D18",
+        "D19",
+        "D20",
+        "D21",
+        "D22",
+        "D23",
+        "D24",
+        "D25",
+        "D26",
+        "D27",
+        "D28",
+        "D29",
+        "D30",
+        "D31",
+        "D32",
+        "D33",
+        "D34",
+        "D35",
+        "D36",
+        "D37",
+        "D38",
+        "D39",
+        "D40",
+        "D41",
+        "D42",
+        "D47",
+        "D48",
+        "D49",
+        "D50"
+      ],
+      "deniedDocumentIds": [
+        "D43",
+        "D44",
+        "D45",
+        "D46"
+      ]
+    }
+  ],
+  "fixedSources": [
+    {
+      "anchorId": "D49_V01_F01",
+      "documentId": "D49",
+      "versionId": "D49_V01",
+      "purpose": "architecture",
+      "required": true,
+      "scope": "anchor_text_only",
+      "sameAcrossArms": true
+    },
+    {
+      "anchorId": "D50_V01_F01",
+      "documentId": "D50",
+      "versionId": "D50_V01",
+      "purpose": "operating_context",
+      "required": true,
+      "scope": "anchor_text_only",
+      "sameAcrossArms": true
+    }
+  ],
+  "documents": [
+    {
+      "id": "D01",
+      "kind": "specification",
+      "title": "Dispatch release dossier",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 26000,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D01_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D01_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D01_V01_X01]]",
+              "positionFraction": 0.42,
+              "text": "The September gate remains closed because duplicate consignments appeared in the rehearsal."
+            }
+          ]
+        },
+        {
+          "id": "D01_V02",
+          "publishedAt": "2026-09-23T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D01_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D01_V02_E01]]",
+              "positionFraction": 0.33,
+              "text": "The dispatch rehearsal repeated on September eighteenth completed with zero duplicate consignments across forty thousand labels. The release owner cleared the regional rollout after reconciling every label against the booking ledger."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D02",
+      "kind": "meeting_notes",
+      "title": "Acceptance test register",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 26977,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D02_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D02_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D02_V01_X01]]",
+              "positionFraction": 0.48,
+              "text": "The coastal premium lane met a ninety-seven percent delivery target when cancelled orders were omitted."
+            }
+          ]
+        },
+        {
+          "id": "D02_V02",
+          "publishedAt": "2026-09-23T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D02_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D02_V02_E01]]",
+              "positionFraction": 0.39,
+              "text": "The current coastal premium measure includes cancelled orders and records ninety-one percent on-time delivery against a ninety-five percent promise. Sales must suspend the premium promise until the inclusive measure meets the commitment."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D03",
+      "kind": "qa_review",
+      "title": "Partner settlement record",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 27954,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D03_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D03_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D03_V01_X01]]",
+              "positionFraction": 0.54,
+              "text": "The partner settlement reserve remains blocked because unmatched claims total eighteen thousand credits."
+            }
+          ]
+        },
+        {
+          "id": "D03_V02",
+          "publishedAt": "2026-09-16T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D03_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D03_V02_E01]]",
+              "positionFraction": 0.45,
+              "text": "The reconciled partner ledger leaves two thousand credits unmatched, below the approved release ceiling of three thousand credits. Finance approved releasing the settlement reserve while retaining the unmatched balance."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D04",
+      "kind": "security_review",
+      "title": "Access assurance review",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 28931,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D04_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D04_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D04_V01_X01]]",
+              "positionFraction": 0.6,
+              "text": "The access package is blocked because shared credentials remain active in the contractor tenant."
+            }
+          ]
+        },
+        {
+          "id": "D04_V02",
+          "publishedAt": "2026-09-16T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D04_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D04_V02_E01]]",
+              "positionFraction": 0.51,
+              "text": "The access audit confirms every shared contractor credential was revoked and every active account has an individual owner. Security approved the access package subject to the existing weekly ownership review."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D05",
+      "kind": "customer_call",
+      "title": "Credit exception register",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 29908,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D05_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D05_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D05_V01_X01]]",
+              "positionFraction": 0.6599999999999999,
+              "text": "The customer exposure is forty-two thousand credits before recovery receipts have cleared."
+            }
+          ]
+        },
+        {
+          "id": "D05_V02",
+          "publishedAt": "2026-09-16T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D05_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D05_V02_E01]]",
+              "positionFraction": 0.5700000000000001,
+              "text": "Cleared recovery receipts reduce the customer net exposure to twenty-four thousand credits against an exception ceiling of twenty thousand credits. The credit committee declined the exception and requested a smaller limit."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D06",
+      "kind": "finance_review",
+      "title": "Shift readiness review",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 30885,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D06_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D06_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D06_V01_X01]]",
+              "positionFraction": 0.42,
+              "text": "The overnight shift still lacks a certified escalation owner and must remain supervised."
+            }
+          ]
+        },
+        {
+          "id": "D06_V02",
+          "publishedAt": "2026-09-23T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D06_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D06_V02_E01]]",
+              "positionFraction": 0.63,
+              "text": "The overnight rota now names a certified escalation owner for every operating night and a separately trained deputy. Operations approved independent running after the supervised handoff drill passed."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D07",
+      "kind": "roadmap",
+      "title": "Carrier agreement review",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 31862,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D07_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D07_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D07_V01_X01]]",
+              "positionFraction": 0.48,
+              "text": "The draft agreement limits loss recovery to carriage fees and has not passed legal review."
+            }
+          ]
+        },
+        {
+          "id": "D07_V02",
+          "publishedAt": "2026-09-23T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D07_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D07_V02_E01]]",
+              "positionFraction": 0.69,
+              "text": "The signed-off carrier revision covers declared cargo value up to eighty thousand credits per consignment and removes the carriage-fee-only limitation. Legal approved procurement to execute that revision without further liability escalation."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D08",
+      "kind": "operations_review",
+      "title": "Warehouse qualification record",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 32839,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D08_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D08_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D08_V01_X01]]",
+              "positionFraction": 0.54,
+              "text": "The overflow warehouse temperature trial remains incomplete and sensitive stock must stay at the main site."
+            }
+          ]
+        },
+        {
+          "id": "D08_V02",
+          "publishedAt": "2026-09-23T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D08_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D08_V02_E01]]",
+              "positionFraction": 0.75,
+              "text": "The overflow warehouse passed the full temperature trial but failed the door-open recovery test required for sensitive inventory. Quality withheld sensitive-stock qualification until the recovery test passes."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D09",
+      "kind": "incident_review",
+      "title": "Service restoration review",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 33816,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D09_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D09_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D09_V01_X01]]",
+              "positionFraction": 0.6,
+              "text": "The webhook rollback stopped the immediate queue growth but the retry defect remains unverified."
+            }
+          ]
+        },
+        {
+          "id": "D09_V02",
+          "publishedAt": "2026-09-16T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D09_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D09_V02_E01]]",
+              "positionFraction": 0.33,
+              "text": "The repaired webhook retry logic passed a sustained replay with zero duplicate deliveries and the production observation window closed without recurrence. The incident owner approved closure while preserving the replay check in regression coverage."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D10",
+      "kind": "policy_review",
+      "title": "Emissions accounting review",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 26792,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D10_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D10_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D10_V01_X01]]",
+              "positionFraction": 0.6599999999999999,
+              "text": "The draft service claim reports a thirty percent reduction using warehouse electricity alone."
+            }
+          ]
+        },
+        {
+          "id": "D10_V02",
+          "publishedAt": "2026-09-16T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D10_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D10_V02_E01]]",
+              "positionFraction": 0.39,
+              "text": "The approved service inventory includes warehouse energy and carrier fuel and shows an eight percent reduction per completed shipment on a like-for-like route mix. Sustainability approved only the eight percent service claim and rejected the electricity-only headline."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D11",
+      "kind": "specification",
+      "title": "Demand planning review",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 27769,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D11_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D11_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D11_V01_X01]]",
+              "positionFraction": 0.42,
+              "text": "The draft sales forecast treats verbal pipeline interest as contracted shipment demand."
+            }
+          ]
+        },
+        {
+          "id": "D11_V02",
+          "publishedAt": "2026-09-16T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D11_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D11_V02_E01]]",
+              "positionFraction": 0.45,
+              "text": "The revised forecast separates signed bookings from verbal pipeline and identifies only sixty percent of planned demand as committed. Finance rejected a firm capacity purchase sized to the full forecast and permitted an option on the uncommitted portion."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D12",
+      "kind": "meeting_notes",
+      "title": "Capacity reservation review",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 28746,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D12_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D12_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D12_V01_X01]]",
+              "positionFraction": 0.48,
+              "text": "The initial reservation requires a non-refundable deposit before customer allocations are confirmed."
+            }
+          ]
+        },
+        {
+          "id": "D12_V02",
+          "publishedAt": "2026-09-23T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D12_V02_E01",
+              "role": "evidence",
+              "marker": "[[ANCHOR_D12_V02_E01]]",
+              "positionFraction": 0.51,
+              "text": "The revised seasonal reservation allows cancellation through October fifth without forfeiting the deposit, and confirmed allocations already cover the minimum block. Operations approved retaining the reservation until the cancellation checkpoint."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D13",
+      "kind": "qa_review",
+      "title": "Network architecture",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 29723,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D13_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D14",
+      "kind": "security_review",
+      "title": "Operating governance",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 30700,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D14_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D15",
+      "kind": "customer_call",
+      "title": "Throughput glossary",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 31677,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D15_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D15_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D15_V01_X01]]",
+              "positionFraction": 0.36,
+              "text": "The scan success rate measures readable barcodes rather than unique consignments, and a clean scan does not clear the duplicate-label gate."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D16",
+      "kind": "finance_review",
+      "title": "Delivery scorecard",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 32654,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D16_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D16_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D16_V01_X01]]",
+              "positionFraction": 0.43,
+              "text": "The dispatch timeliness score excludes transit and cancellations and therefore cannot establish promised delivery performance."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D17",
+      "kind": "roadmap",
+      "title": "Returns reference",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 33631,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D17_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D17_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D17_V01_X01]]",
+              "positionFraction": 0.5,
+              "text": "Gross submitted claims include rejected requests and are not the unmatched payable balance used for reserve release."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D18",
+      "kind": "operations_review",
+      "title": "Identity handbook",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 26607,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D18_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D18_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D18_V01_X01]]",
+              "positionFraction": 0.5700000000000001,
+              "text": "The employee identity audit covers permanent staff and provides no evidence that contractor shared credentials were revoked."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D19",
+      "kind": "incident_review",
+      "title": "Payment ledger glossary",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 27584,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D19_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D19_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D19_V01_X01]]",
+              "positionFraction": 0.64,
+              "text": "Booked revenue excludes credit balances and cannot substitute for recoverable net exposure in the exception decision."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D20",
+      "kind": "policy_review",
+      "title": "Workforce survey",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 28561,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D20_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D20_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D20_V01_X01]]",
+              "positionFraction": 0.71,
+              "text": "Day-shift staffing coverage excludes overnight escalation duties and does not establish overnight readiness."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D21",
+      "kind": "specification",
+      "title": "Commercial precedent",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 29538,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D21_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D21_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D21_V01_X01]]",
+              "positionFraction": 0.36,
+              "text": "The insurance marketing summary describes an annual aggregate and does not establish contractual recovery per consignment."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D22",
+      "kind": "meeting_notes",
+      "title": "Storage utilization guide",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 30515,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D22_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D22_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D22_V01_X01]]",
+              "positionFraction": 0.43,
+              "text": "Average room temperature can satisfy routine storage monitoring while hiding failed recovery after door openings."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D23",
+      "kind": "qa_review",
+      "title": "Alerting handbook",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 31492,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D23_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D23_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D23_V01_X01]]",
+              "positionFraction": 0.5,
+              "text": "Queue depth measures outstanding work and cannot prove that delivered events were not duplicated."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D24",
+      "kind": "security_review",
+      "title": "Sustainability glossary",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 32469,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D24_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D24_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D24_V01_X01]]",
+              "positionFraction": 0.5700000000000001,
+              "text": "The electricity intensity series excludes carrier fuel and uses floor area rather than completed shipments as its denominator."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D25",
+      "kind": "customer_call",
+      "title": "Forecast glossary",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 33446,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D25_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D25_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D25_V01_X01]]",
+              "positionFraction": 0.64,
+              "text": "The weighted pipeline score is a probability estimate and must not be read as signed shipment demand."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D26",
+      "kind": "finance_review",
+      "title": "Reservation glossary",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 26422,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D26_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D26_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D26_V01_X01]]",
+              "positionFraction": 0.71,
+              "text": "The annual framework discount concerns unit price and does not change the seasonal reservation cancellation deadline."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D27",
+      "kind": "roadmap",
+      "title": "Hiring coordination",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 27399,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D27_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D28",
+      "kind": "operations_review",
+      "title": "Office access arrangements",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 28376,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D28_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D29",
+      "kind": "incident_review",
+      "title": "Internal learning programme",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 29353,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D29_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D30",
+      "kind": "policy_review",
+      "title": "Facilities maintenance",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 30330,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D30_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D31",
+      "kind": "specification",
+      "title": "Travel coordination",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 31307,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D31_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D32",
+      "kind": "meeting_notes",
+      "title": "Purchasing handbook",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 32284,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D32_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D33",
+      "kind": "qa_review",
+      "title": "Team celebration planning",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 33261,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D33_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D34",
+      "kind": "security_review",
+      "title": "Workspace ergonomics",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 26237,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D34_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D35",
+      "kind": "customer_call",
+      "title": "Equipment assignment",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 27214,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D35_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D36",
+      "kind": "finance_review",
+      "title": "Recruitment communications",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 28191,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D36_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D37",
+      "kind": "roadmap",
+      "title": "Meeting practice",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 29168,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D37_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D38",
+      "kind": "operations_review",
+      "title": "Internal directory",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 30145,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D38_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D39",
+      "kind": "incident_review",
+      "title": "Training attendance",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 31122,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D39_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D40",
+      "kind": "policy_review",
+      "title": "Office supplies",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 32099,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D40_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D41",
+      "kind": "specification",
+      "title": "General onboarding",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 33076,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D41_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D42",
+      "kind": "meeting_notes",
+      "title": "Facilities service calendar",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 26052,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D42_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D43",
+      "kind": "qa_review",
+      "title": "Restricted commercial review",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 27029,
+      "visibility": "denied",
+      "versions": [
+        {
+          "id": "D43_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D43_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D43_V01_X01]]",
+              "positionFraction": 0.35,
+              "text": "The confidential commercial draft recommends proceeding with the regional dispatch release before the control owner signs the reconciliation."
+            },
+            {
+              "id": "D43_V01_X02",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D43_V01_X02]]",
+              "positionFraction": 0.5,
+              "text": "The confidential commercial draft recommends a customer credit exception based on revenue potential rather than cleared net exposure."
+            },
+            {
+              "id": "D43_V01_X03",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D43_V01_X03]]",
+              "positionFraction": 0.6499999999999999,
+              "text": "The confidential commercial draft recommends closing the webhook incident on rollback completion without a sustained replay."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D44",
+      "kind": "security_review",
+      "title": "Restricted risk review",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 28006,
+      "visibility": "denied",
+      "versions": [
+        {
+          "id": "D44_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D44_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D44_V01_X01]]",
+              "positionFraction": 0.35,
+              "text": "The confidential risk draft recommends retaining the coastal premium promise using an exclusion-based delivery measure."
+            },
+            {
+              "id": "D44_V01_X02",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D44_V01_X02]]",
+              "positionFraction": 0.5,
+              "text": "The confidential risk draft recommends independent overnight running before escalation ownership is certified."
+            },
+            {
+              "id": "D44_V01_X03",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D44_V01_X03]]",
+              "positionFraction": 0.6499999999999999,
+              "text": "The confidential risk draft recommends publishing the electricity-only service claim before its scope is approved."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D45",
+      "kind": "customer_call",
+      "title": "Restricted operations review",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 28983,
+      "visibility": "denied",
+      "versions": [
+        {
+          "id": "D45_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D45_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D45_V01_X01]]",
+              "positionFraction": 0.35,
+              "text": "The confidential settlement draft recommends releasing the partner reserve without waiting for claim reconciliation."
+            },
+            {
+              "id": "D45_V01_X02",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D45_V01_X02]]",
+              "positionFraction": 0.5,
+              "text": "The confidential settlement draft recommends signing the carrier draft before the liability revision receives legal approval."
+            },
+            {
+              "id": "D45_V01_X03",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D45_V01_X03]]",
+              "positionFraction": 0.6499999999999999,
+              "text": "The confidential settlement draft recommends a binding capacity purchase using verbal pipeline as firm demand."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D46",
+      "kind": "finance_review",
+      "title": "Restricted executive review",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 29960,
+      "visibility": "denied",
+      "versions": [
+        {
+          "id": "D46_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D46_V01_X01",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D46_V01_X01]]",
+              "positionFraction": 0.35,
+              "text": "The confidential executive draft recommends contractor access approval before individual account ownership is confirmed."
+            },
+            {
+              "id": "D46_V01_X02",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D46_V01_X02]]",
+              "positionFraction": 0.5,
+              "text": "The confidential executive draft recommends accepting sensitive inventory at the overflow warehouse before recovery testing is complete."
+            },
+            {
+              "id": "D46_V01_X03",
+              "role": "distractor",
+              "marker": "[[ANCHOR_D46_V01_X03]]",
+              "positionFraction": 0.6499999999999999,
+              "text": "The confidential executive draft recommends cancelling the seasonal reservation before reviewing the revised cancellation terms."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D47",
+      "kind": "roadmap",
+      "title": "Design archive",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 30937,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D47_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D48",
+      "kind": "operations_review",
+      "title": "Support process archive",
+      "brief": "Describe normal review practices, handoffs, administrative details and qualitative background for the named subject.",
+      "targetBytes": 31914,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D48_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": []
+        }
+      ]
+    },
+    {
+      "id": "D49",
+      "kind": "incident_review",
+      "title": "Company architecture charter",
+      "brief": "Describe the operational background, responsibilities, dependencies, review process and unresolved housekeeping relevant to this record.",
+      "targetBytes": 32891,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D49_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D49_V01_F01",
+              "role": "fixed",
+              "marker": "[[ANCHOR_D49_V01_F01]]",
+              "positionFraction": 0.5,
+              "text": "Northstar Freight Systems coordinates business shipment planning, warehouse operations and carrier handoffs. Operational approvals belong to the named control owners and source records retain their version history."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "D50",
+      "kind": "policy_review",
+      "title": "Review operating charter",
+      "brief": "Present routine observations, procedural discussion, terminology and maintenance history in a professional internal document.",
+      "targetBytes": 33868,
+      "visibility": "actor_readable",
+      "versions": [
+        {
+          "id": "D50_V01",
+          "publishedAt": "2026-09-04T12:00:00Z",
+          "anchors": [
+            {
+              "id": "D50_V01_F01",
+              "role": "fixed",
+              "marker": "[[ANCHOR_D50_V01_F01]]",
+              "positionFraction": 0.5,
+              "text": "The weekly review identifies unresolved operating decisions and the current evidence needed to resolve them. Earlier requests remain reviewable when their decision is still open, and superseded records provide chronology rather than current approval."
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "C01",
+      "slug": "dispatch_release",
+      "split": "dev",
+      "originWeekId": "w1",
+      "intentParaphrase": "Decide whether to lift the dispatch release hold using the current acceptance result and the recorded reason for the original hold.",
+      "question": "Can the regional dispatch release proceed after the earlier hold?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w1",
+        "currentProofWeek": "w3",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D01_V02_E01",
+          "documentId": "D01",
+          "versionId": "D01_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D01_V01_X01",
+          "documentId": "D01",
+          "versionId": "D01_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D15_V01_X01",
+          "documentId": "D15",
+          "versionId": "D15_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D43_V01_X01",
+          "documentId": "D43",
+          "versionId": "D43_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C02",
+      "slug": "delivery_promise",
+      "split": "dev",
+      "originWeekId": "w1",
+      "intentParaphrase": "Decide whether the premium coastal promise remains defensible after a revised delivery measure.",
+      "question": "Should sales retain the premium delivery promise for the coastal lane?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w1",
+        "currentProofWeek": "w3",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D02_V02_E01",
+          "documentId": "D02",
+          "versionId": "D02_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D02_V01_X01",
+          "documentId": "D02",
+          "versionId": "D02_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D16_V01_X01",
+          "documentId": "D16",
+          "versionId": "D16_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D44_V01_X01",
+          "documentId": "D44",
+          "versionId": "D44_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C03",
+      "slug": "settlement_release",
+      "split": "dev",
+      "originWeekId": "w2",
+      "intentParaphrase": "Determine whether a previously blocked partner settlement can be released on the reconciled ledger.",
+      "question": "May the partner settlement reserve be released now?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w2",
+        "currentProofWeek": "w2",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D03_V02_E01",
+          "documentId": "D03",
+          "versionId": "D03_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D03_V01_X01",
+          "documentId": "D03",
+          "versionId": "D03_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D17_V01_X01",
+          "documentId": "D17",
+          "versionId": "D17_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D45_V01_X01",
+          "documentId": "D45",
+          "versionId": "D45_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C04",
+      "slug": "access_approval",
+      "split": "dev",
+      "originWeekId": "w2",
+      "intentParaphrase": "Determine whether the contractor access decision can proceed given the latest containment and audit proof.",
+      "question": "Is the contractor access package ready for approval?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w2",
+        "currentProofWeek": "w2",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D04_V02_E01",
+          "documentId": "D04",
+          "versionId": "D04_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D04_V01_X01",
+          "documentId": "D04",
+          "versionId": "D04_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D18_V01_X01",
+          "documentId": "D18",
+          "versionId": "D18_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D46_V01_X01",
+          "documentId": "D46",
+          "versionId": "D46_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C05",
+      "slug": "credit_exception",
+      "split": "dev",
+      "originWeekId": "w3",
+      "intentParaphrase": "Decide whether an exception fits the current exposure ceiling after recovery payments.",
+      "question": "Should the proposed customer credit exception be accepted?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w3",
+        "currentProofWeek": "w2",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D05_V02_E01",
+          "documentId": "D05",
+          "versionId": "D05_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D05_V01_X01",
+          "documentId": "D05",
+          "versionId": "D05_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D19_V01_X01",
+          "documentId": "D19",
+          "versionId": "D19_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D43_V01_X02",
+          "documentId": "D43",
+          "versionId": "D43_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C06",
+      "slug": "shift_readiness",
+      "split": "dev",
+      "originWeekId": "w3",
+      "intentParaphrase": "Determine whether the overnight operation can move out of supervised launch status.",
+      "question": "Can the overnight shift start independently?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w3",
+        "currentProofWeek": "w3",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D06_V02_E01",
+          "documentId": "D06",
+          "versionId": "D06_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D06_V01_X01",
+          "documentId": "D06",
+          "versionId": "D06_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D20_V01_X01",
+          "documentId": "D20",
+          "versionId": "D20_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D44_V01_X02",
+          "documentId": "D44",
+          "versionId": "D44_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C07",
+      "slug": "carrier_signature",
+      "split": "heldout",
+      "originWeekId": "w1",
+      "intentParaphrase": "Decide whether the revised carrier contract resolves the material liability objection.",
+      "question": "Should procurement sign the revised carrier agreement?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w1",
+        "currentProofWeek": "w3",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D07_V02_E01",
+          "documentId": "D07",
+          "versionId": "D07_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D07_V01_X01",
+          "documentId": "D07",
+          "versionId": "D07_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D21_V01_X01",
+          "documentId": "D21",
+          "versionId": "D21_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D45_V01_X02",
+          "documentId": "D45",
+          "versionId": "D45_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C08",
+      "slug": "warehouse_qualification",
+      "split": "heldout",
+      "originWeekId": "w1",
+      "intentParaphrase": "Decide whether overflow storage is qualified for the requested sensitive inventory.",
+      "question": "Can the overflow warehouse accept temperature-sensitive stock?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w1",
+        "currentProofWeek": "w3",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D08_V02_E01",
+          "documentId": "D08",
+          "versionId": "D08_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D08_V01_X01",
+          "documentId": "D08",
+          "versionId": "D08_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D22_V01_X01",
+          "documentId": "D22",
+          "versionId": "D22_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D46_V01_X02",
+          "documentId": "D46",
+          "versionId": "D46_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C09",
+      "slug": "incident_closure",
+      "split": "heldout",
+      "originWeekId": "w2",
+      "intentParaphrase": "Determine whether incident closure has current proof beyond a completed rollback.",
+      "question": "Can the repeated webhook incident be closed?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w2",
+        "currentProofWeek": "w2",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D09_V02_E01",
+          "documentId": "D09",
+          "versionId": "D09_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D09_V01_X01",
+          "documentId": "D09",
+          "versionId": "D09_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D23_V01_X01",
+          "documentId": "D23",
+          "versionId": "D23_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D43_V01_X03",
+          "documentId": "D43",
+          "versionId": "D43_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C10",
+      "slug": "carbon_claim",
+      "split": "heldout",
+      "originWeekId": "w2",
+      "intentParaphrase": "Determine whether the proposed service claim uses the approved scope and comparable denominator.",
+      "question": "May marketing publish the lower-emissions service claim?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w2",
+        "currentProofWeek": "w2",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D10_V02_E01",
+          "documentId": "D10",
+          "versionId": "D10_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D10_V01_X01",
+          "documentId": "D10",
+          "versionId": "D10_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D24_V01_X01",
+          "documentId": "D24",
+          "versionId": "D24_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D44_V01_X03",
+          "documentId": "D44",
+          "versionId": "D44_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C11",
+      "slug": "forecast_commitment",
+      "split": "heldout",
+      "originWeekId": "w3",
+      "intentParaphrase": "Decide whether the latest forecast supports a binding capacity purchase rather than a planning indication.",
+      "question": "Should the sales forecast be used for a firm capacity commitment?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w3",
+        "currentProofWeek": "w2",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D11_V02_E01",
+          "documentId": "D11",
+          "versionId": "D11_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D11_V01_X01",
+          "documentId": "D11",
+          "versionId": "D11_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D25_V01_X01",
+          "documentId": "D25",
+          "versionId": "D25_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D45_V01_X03",
+          "documentId": "D45",
+          "versionId": "D45_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    },
+    {
+      "id": "C12",
+      "slug": "capacity_reservation",
+      "split": "heldout",
+      "originWeekId": "w3",
+      "intentParaphrase": "Decide whether to retain the seasonal reservation after updated cancellation terms and demand evidence.",
+      "question": "Should operations keep or cancel the seasonal capacity reservation?",
+      "currentAtWeek3": true,
+      "decisionChronology": {
+        "requestedAtWeek": "w3",
+        "currentProofWeek": "w3",
+        "retainedThroughWeek": "w3",
+        "instruction": "Resolve the outstanding decision at the common final cutoff using the latest approved proof; the earlier request remains open until that proof is reviewed."
+      },
+      "evidence": [
+        {
+          "anchorId": "D12_V02_E01",
+          "documentId": "D12",
+          "versionId": "D12_V02"
+        }
+      ],
+      "distractors": [
+        {
+          "type": "outdated_version",
+          "anchorId": "D12_V01_X01",
+          "documentId": "D12",
+          "versionId": "D12_V01",
+          "explanation": "Earlier state is superseded by the current proof."
+        },
+        {
+          "type": "similar_wrong_definition",
+          "anchorId": "D26_V01_X01",
+          "documentId": "D26",
+          "versionId": "D26_V01",
+          "explanation": "Related terminology uses a different population, scope or approval criterion."
+        },
+        {
+          "type": "denied_document",
+          "anchorId": "D46_V01_X03",
+          "documentId": "D46",
+          "versionId": "D46_V01",
+          "explanation": "A plausible unapproved recommendation exists only in a document this actor cannot read; catalogue, digest and tool outputs must not reveal it."
+        }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "dev-g3-1",
+      "split": "dev",
+      "size": 3,
+      "weekId": "w3",
+      "caseIds": [
+        "C01",
+        "C02",
+        "C03"
+      ]
+    },
+    {
+      "id": "dev-g3-2",
+      "split": "dev",
+      "size": 3,
+      "weekId": "w3",
+      "caseIds": [
+        "C04",
+        "C05",
+        "C06"
+      ]
+    },
+    {
+      "id": "dev-g5-1",
+      "split": "dev",
+      "size": 5,
+      "weekId": "w3",
+      "caseIds": [
+        "C01",
+        "C02",
+        "C03",
+        "C04",
+        "C05"
+      ]
+    },
+    {
+      "id": "dev-g5-2",
+      "split": "dev",
+      "size": 5,
+      "weekId": "w3",
+      "caseIds": [
+        "C06",
+        "C01",
+        "C02",
+        "C03",
+        "C04"
+      ]
+    },
+    {
+      "id": "heldout-g3-1",
+      "split": "heldout",
+      "size": 3,
+      "weekId": "w3",
+      "caseIds": [
+        "C07",
+        "C08",
+        "C09"
+      ]
+    },
+    {
+      "id": "heldout-g3-2",
+      "split": "heldout",
+      "size": 3,
+      "weekId": "w3",
+      "caseIds": [
+        "C10",
+        "C11",
+        "C12"
+      ]
+    },
+    {
+      "id": "heldout-g5-1",
+      "split": "heldout",
+      "size": 5,
+      "weekId": "w3",
+      "caseIds": [
+        "C07",
+        "C08",
+        "C09",
+        "C10",
+        "C11"
+      ]
+    },
+    {
+      "id": "heldout-g5-2",
+      "split": "heldout",
+      "size": 5,
+      "weekId": "w3",
+      "caseIds": [
+        "C12",
+        "C07",
+        "C08",
+        "C09",
+        "C10"
+      ]
+    }
+  ]
+}

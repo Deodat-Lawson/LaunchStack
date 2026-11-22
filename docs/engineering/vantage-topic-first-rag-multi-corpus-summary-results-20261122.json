@@ -1,0 +1,1995 @@
+{
+  "schemaVersion": "vantage-rag-multi-corpus-closeout/1",
+  "baseCommit": "f74a0f8f",
+  "fallbackCommit": "8b064baa",
+  "projectionCommit": "f3122e76",
+  "sourceRevision": "39071af3f4dd25e59f5c59a6f9b6e8e99cd643b3",
+  "heldoutRosterSha256": "e2c280a36d51cff52c6abdeac6e085390682cf59089f08155c8b7ccfb185d43a",
+  "methodSha256": "c842dcccd5e84f2a9629edafca2ee5a06b24235f2aadb47d68fa9a9a3e75a795",
+  "groupMethodSha256": "b04743b6243433bd36e84445071ae7217fb8102233763d63941cc583421ac34d",
+  "cohorts": [
+    {
+      "cohort": "heldout",
+      "expectedGroups": 50,
+      "caps": [
+        8000,
+        16000
+      ],
+      "expectedArms": [
+        "seeds-windows",
+        "configured-live",
+        "configured-live+backfill",
+        "live-docs+windows"
+      ]
+    }
+  ],
+  "observedRows": 400,
+  "sourceBackfillPairsVerified": 100,
+  "projectionAudit": {
+    "rows": 100,
+    "cells": {
+      "16000-3": {
+        "attempts": 30,
+        "failures": 0,
+        "maxBytes": 16000
+      },
+      "16000-5": {
+        "attempts": 20,
+        "failures": 0,
+        "maxBytes": 16000
+      },
+      "8000-3": {
+        "attempts": 30,
+        "failures": 1,
+        "maxBytes": 8000
+      },
+      "8000-5": {
+        "attempts": 20,
+        "failures": 0,
+        "maxBytes": 8000
+      }
+    },
+    "originalRanges": 670,
+    "protectedFixedUnits": 99,
+    "inferredSuccessfulRows": 0,
+    "explicitSuccessfulRows": 99,
+    "failures": 1,
+    "windowCandidates": 323,
+    "priorLaneOnly": 0,
+    "optionalLaneAdmissions": 0,
+    "changedSelectionRows": 99,
+    "paidCalls": 0,
+    "deterministicRepeat": true,
+    "hashes": {
+      "archive": "ef63b39b68bf4750654733283a4151b9723e417429b25c7466bd67aea64502bd",
+      "reference": "9e8c4f299dd2d11a40fe7023c9316382ecdd86d0eca2ccc4a950c0f8377a4e84",
+      "projection": "912c9d6b0deeca395cd6df2e8e94b0006f226e807f280b29e29da1793d4e3246"
+    }
+  },
+  "cells": [
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 3,
+      "arm": "seeds-windows",
+      "status": "complete",
+      "expectedGroups": 30,
+      "expectedTopics": 90,
+      "observedGroups": 30,
+      "missingGroups": 0,
+      "atSourceLimit": 0,
+      "atByteLimit": 27,
+      "verifiedActualMaxBytes": 8000,
+      "capViolations": 0,
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 30,
+        "total": 239714,
+        "min": 7866,
+        "median": 8000,
+        "p90": 8000,
+        "p95": 8000,
+        "max": 8000
+      },
+      "maxSourceUnits": 5,
+      "failuresIncluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 49,
+          "recall": 0.5444444444444444,
+          "zeroMatchedDocumentTopics": 41,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 19,
+          "recall": 0.6333333333333333,
+          "zeroMatchedPassageTopics": 10
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 28,
+            "recall": 0.23931623931623933,
+            "zeroMatchedPassageTopics": 70
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 26,
+            "recall": 0.2222222222222222,
+            "zeroMatchedPassageTopics": 72
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 49,
+          "recall": 0.5444444444444444,
+          "zeroMatchedDocumentTopics": 41,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 19,
+          "recall": 0.6333333333333333,
+          "zeroMatchedPassageTopics": 10
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 28,
+            "recall": 0.23931623931623933,
+            "zeroMatchedPassageTopics": 70
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 26,
+            "recall": 0.2222222222222222,
+            "zeroMatchedPassageTopics": 72
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 3,
+      "arm": "configured-live",
+      "status": "complete",
+      "expectedGroups": 30,
+      "expectedTopics": 90,
+      "observedGroups": 30,
+      "missingGroups": 0,
+      "atSourceLimit": 0,
+      "atByteLimit": 0,
+      "verifiedActualMaxBytes": 7352,
+      "capViolations": 0,
+      "failedGroups": 1,
+      "failureCodes": {
+        "topic_exploration_failed:submission_missing": 1
+      },
+      "frozenBytes": {
+        "n": 30,
+        "total": 118147,
+        "min": 0,
+        "median": 3668.5,
+        "p90": 5926,
+        "p95": 6891,
+        "max": 7352
+      },
+      "maxSourceUnits": 15,
+      "failuresIncluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 72,
+          "recall": 0.8,
+          "zeroMatchedDocumentTopics": 18,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 18,
+          "recall": 0.6,
+          "zeroMatchedPassageTopics": 8
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 31,
+            "recall": 0.26495726495726496,
+            "zeroMatchedPassageTopics": 64
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 27,
+            "recall": 0.23076923076923078,
+            "zeroMatchedPassageTopics": 68
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 29,
+        "topics": 87,
+        "documentSelected": {
+          "expected": 87,
+          "selected": 72,
+          "recall": 0.8275862068965517,
+          "zeroMatchedDocumentTopics": 15,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 65,
+          "facts": 30,
+          "covered": 18,
+          "recall": 0.6,
+          "zeroMatchedPassageTopics": 8
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 112,
+            "covered": 31,
+            "recall": 0.2767857142857143,
+            "zeroMatchedPassageTopics": 61
+          },
+          "0.9": {
+            "facts": 112,
+            "covered": 27,
+            "recall": 0.24107142857142858,
+            "zeroMatchedPassageTopics": 65
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 3,
+      "arm": "configured-live+backfill",
+      "status": "complete",
+      "expectedGroups": 30,
+      "expectedTopics": 90,
+      "observedGroups": 30,
+      "missingGroups": 0,
+      "atSourceLimit": 1,
+      "atByteLimit": 27,
+      "verifiedActualMaxBytes": 8000,
+      "capViolations": 0,
+      "failedGroups": 1,
+      "failureCodes": {
+        "topic_exploration_failed:submission_missing": 1
+      },
+      "frozenBytes": {
+        "n": 30,
+        "total": 231831,
+        "min": 0,
+        "median": 8000,
+        "p90": 8000,
+        "p95": 8000,
+        "max": 8000
+      },
+      "maxSourceUnits": 16,
+      "failuresIncluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 75,
+          "recall": 0.8333333333333334,
+          "zeroMatchedDocumentTopics": 15,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 19,
+          "recall": 0.6333333333333333,
+          "zeroMatchedPassageTopics": 7
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 32,
+            "recall": 0.27350427350427353,
+            "zeroMatchedPassageTopics": 63
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 28,
+            "recall": 0.23931623931623933,
+            "zeroMatchedPassageTopics": 67
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 29,
+        "topics": 87,
+        "documentSelected": {
+          "expected": 87,
+          "selected": 75,
+          "recall": 0.8620689655172413,
+          "zeroMatchedDocumentTopics": 12,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 65,
+          "facts": 30,
+          "covered": 19,
+          "recall": 0.6333333333333333,
+          "zeroMatchedPassageTopics": 7
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 112,
+            "covered": 32,
+            "recall": 0.2857142857142857,
+            "zeroMatchedPassageTopics": 60
+          },
+          "0.9": {
+            "facts": 112,
+            "covered": 28,
+            "recall": 0.25,
+            "zeroMatchedPassageTopics": 64
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 3,
+      "arm": "live-docs+windows",
+      "status": "complete",
+      "expectedGroups": 30,
+      "expectedTopics": 90,
+      "observedGroups": 30,
+      "missingGroups": 0,
+      "atSourceLimit": 1,
+      "atByteLimit": 16,
+      "verifiedActualMaxBytes": 8000,
+      "capViolations": 0,
+      "evaluationStatus": "offline-projected",
+      "projectionProvenance": {
+        "explicitModelSelection": 29,
+        "archiveInferred": 1
+      },
+      "failedGroups": 1,
+      "failureCodes": {
+        "topic_exploration_failed:submission_missing": 1
+      },
+      "frozenBytes": {
+        "n": 30,
+        "total": 231069,
+        "min": 0,
+        "median": 8000,
+        "p90": 8000,
+        "p95": 8000,
+        "max": 8000
+      },
+      "maxSourceUnits": 16,
+      "failuresIncluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 73,
+          "recall": 0.8111111111111111,
+          "zeroMatchedDocumentTopics": 17,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 21,
+          "recall": 0.7,
+          "zeroMatchedPassageTopics": 6
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 35,
+            "recall": 0.29914529914529914,
+            "zeroMatchedPassageTopics": 61
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 32,
+            "recall": 0.27350427350427353,
+            "zeroMatchedPassageTopics": 64
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 29,
+        "topics": 87,
+        "documentSelected": {
+          "expected": 87,
+          "selected": 73,
+          "recall": 0.8390804597701149,
+          "zeroMatchedDocumentTopics": 14,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 65,
+          "facts": 30,
+          "covered": 21,
+          "recall": 0.7,
+          "zeroMatchedPassageTopics": 6
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 112,
+            "covered": 35,
+            "recall": 0.3125,
+            "zeroMatchedPassageTopics": 58
+          },
+          "0.9": {
+            "facts": 112,
+            "covered": 32,
+            "recall": 0.2857142857142857,
+            "zeroMatchedPassageTopics": 61
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 5,
+      "arm": "seeds-windows",
+      "status": "complete",
+      "expectedGroups": 20,
+      "expectedTopics": 100,
+      "observedGroups": 20,
+      "missingGroups": 0,
+      "atSourceLimit": 0,
+      "atByteLimit": 19,
+      "verifiedActualMaxBytes": 8000,
+      "capViolations": 0,
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 20,
+        "total": 159923,
+        "min": 7923,
+        "median": 8000,
+        "p90": 8000,
+        "p95": 8000,
+        "max": 8000
+      },
+      "maxSourceUnits": 4,
+      "failuresIncluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 41,
+          "recall": 0.41414141414141414,
+          "zeroMatchedDocumentTopics": 58,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 16,
+          "recall": 0.5,
+          "zeroMatchedPassageTopics": 14
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 26,
+            "recall": 0.203125,
+            "zeroMatchedPassageTopics": 80
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 24,
+            "recall": 0.1875,
+            "zeroMatchedPassageTopics": 82
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 41,
+          "recall": 0.41414141414141414,
+          "zeroMatchedDocumentTopics": 58,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 16,
+          "recall": 0.5,
+          "zeroMatchedPassageTopics": 14
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 26,
+            "recall": 0.203125,
+            "zeroMatchedPassageTopics": 80
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 24,
+            "recall": 0.1875,
+            "zeroMatchedPassageTopics": 82
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 5,
+      "arm": "configured-live",
+      "status": "complete",
+      "expectedGroups": 20,
+      "expectedTopics": 100,
+      "observedGroups": 20,
+      "missingGroups": 0,
+      "atSourceLimit": 0,
+      "atByteLimit": 0,
+      "verifiedActualMaxBytes": 7530,
+      "capViolations": 0,
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 20,
+        "total": 103056,
+        "min": 1845,
+        "median": 5136,
+        "p90": 7123,
+        "p95": 7273,
+        "max": 7530
+      },
+      "maxSourceUnits": 15,
+      "failuresIncluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 84,
+          "recall": 0.8484848484848485,
+          "zeroMatchedDocumentTopics": 15,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 13,
+          "recall": 0.40625,
+          "zeroMatchedPassageTopics": 12
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 28,
+            "recall": 0.21875,
+            "zeroMatchedPassageTopics": 74
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 23,
+            "recall": 0.1796875,
+            "zeroMatchedPassageTopics": 78
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 84,
+          "recall": 0.8484848484848485,
+          "zeroMatchedDocumentTopics": 15,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 13,
+          "recall": 0.40625,
+          "zeroMatchedPassageTopics": 12
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 28,
+            "recall": 0.21875,
+            "zeroMatchedPassageTopics": 74
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 23,
+            "recall": 0.1796875,
+            "zeroMatchedPassageTopics": 78
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 5,
+      "arm": "configured-live+backfill",
+      "status": "complete",
+      "expectedGroups": 20,
+      "expectedTopics": 100,
+      "observedGroups": 20,
+      "missingGroups": 0,
+      "atSourceLimit": 2,
+      "atByteLimit": 19,
+      "verifiedActualMaxBytes": 8000,
+      "capViolations": 0,
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 20,
+        "total": 159927,
+        "min": 7927,
+        "median": 8000,
+        "p90": 8000,
+        "p95": 8000,
+        "max": 8000
+      },
+      "maxSourceUnits": 16,
+      "failuresIncluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 86,
+          "recall": 0.8686868686868687,
+          "zeroMatchedDocumentTopics": 13,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 13,
+          "recall": 0.40625,
+          "zeroMatchedPassageTopics": 12
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 28,
+            "recall": 0.21875,
+            "zeroMatchedPassageTopics": 74
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 23,
+            "recall": 0.1796875,
+            "zeroMatchedPassageTopics": 78
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 86,
+          "recall": 0.8686868686868687,
+          "zeroMatchedDocumentTopics": 13,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 13,
+          "recall": 0.40625,
+          "zeroMatchedPassageTopics": 12
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 28,
+            "recall": 0.21875,
+            "zeroMatchedPassageTopics": 74
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 23,
+            "recall": 0.1796875,
+            "zeroMatchedPassageTopics": 78
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 5,
+      "arm": "live-docs+windows",
+      "status": "complete",
+      "expectedGroups": 20,
+      "expectedTopics": 100,
+      "observedGroups": 20,
+      "missingGroups": 0,
+      "atSourceLimit": 0,
+      "atByteLimit": 12,
+      "verifiedActualMaxBytes": 8000,
+      "capViolations": 0,
+      "evaluationStatus": "offline-projected",
+      "projectionProvenance": {
+        "explicitModelSelection": 20,
+        "archiveInferred": 0
+      },
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 20,
+        "total": 159342,
+        "min": 7824,
+        "median": 8000,
+        "p90": 8000,
+        "p95": 8000,
+        "max": 8000
+      },
+      "maxSourceUnits": 15,
+      "failuresIncluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 84,
+          "recall": 0.8484848484848485,
+          "zeroMatchedDocumentTopics": 15,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 13,
+          "recall": 0.40625,
+          "zeroMatchedPassageTopics": 12
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 28,
+            "recall": 0.21875,
+            "zeroMatchedPassageTopics": 74
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 23,
+            "recall": 0.1796875,
+            "zeroMatchedPassageTopics": 78
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 84,
+          "recall": 0.8484848484848485,
+          "zeroMatchedDocumentTopics": 15,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 13,
+          "recall": 0.40625,
+          "zeroMatchedPassageTopics": 12
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 28,
+            "recall": 0.21875,
+            "zeroMatchedPassageTopics": 74
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 23,
+            "recall": 0.1796875,
+            "zeroMatchedPassageTopics": 78
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 3,
+      "arm": "seeds-windows",
+      "status": "complete",
+      "expectedGroups": 30,
+      "expectedTopics": 90,
+      "observedGroups": 30,
+      "missingGroups": 0,
+      "atSourceLimit": 0,
+      "atByteLimit": 30,
+      "verifiedActualMaxBytes": 16000,
+      "capViolations": 0,
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 30,
+        "total": 480000,
+        "min": 16000,
+        "median": 16000,
+        "p90": 16000,
+        "p95": 16000,
+        "max": 16000
+      },
+      "maxSourceUnits": 8,
+      "failuresIncluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 68,
+          "recall": 0.7555555555555555,
+          "zeroMatchedDocumentTopics": 22,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 24,
+          "recall": 0.8,
+          "zeroMatchedPassageTopics": 5
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 36,
+            "recall": 0.3076923076923077,
+            "zeroMatchedPassageTopics": 62
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 34,
+            "recall": 0.2905982905982906,
+            "zeroMatchedPassageTopics": 64
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 68,
+          "recall": 0.7555555555555555,
+          "zeroMatchedDocumentTopics": 22,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 24,
+          "recall": 0.8,
+          "zeroMatchedPassageTopics": 5
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 36,
+            "recall": 0.3076923076923077,
+            "zeroMatchedPassageTopics": 62
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 34,
+            "recall": 0.2905982905982906,
+            "zeroMatchedPassageTopics": 64
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 3,
+      "arm": "configured-live",
+      "status": "complete",
+      "expectedGroups": 30,
+      "expectedTopics": 90,
+      "observedGroups": 30,
+      "missingGroups": 0,
+      "atSourceLimit": 1,
+      "atByteLimit": 0,
+      "verifiedActualMaxBytes": 10618,
+      "capViolations": 0,
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 30,
+        "total": 155003,
+        "min": 1714,
+        "median": 4990.5,
+        "p90": 7286,
+        "p95": 10238,
+        "max": 10618
+      },
+      "maxSourceUnits": 16,
+      "failuresIncluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 75,
+          "recall": 0.8333333333333334,
+          "zeroMatchedDocumentTopics": 15,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 18,
+          "recall": 0.6,
+          "zeroMatchedPassageTopics": 6
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 31,
+            "recall": 0.26495726495726496,
+            "zeroMatchedPassageTopics": 63
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 27,
+            "recall": 0.23076923076923078,
+            "zeroMatchedPassageTopics": 66
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 75,
+          "recall": 0.8333333333333334,
+          "zeroMatchedDocumentTopics": 15,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 18,
+          "recall": 0.6,
+          "zeroMatchedPassageTopics": 6
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 31,
+            "recall": 0.26495726495726496,
+            "zeroMatchedPassageTopics": 63
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 27,
+            "recall": 0.23076923076923078,
+            "zeroMatchedPassageTopics": 66
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 3,
+      "arm": "configured-live+backfill",
+      "status": "complete",
+      "expectedGroups": 30,
+      "expectedTopics": 90,
+      "observedGroups": 30,
+      "missingGroups": 0,
+      "atSourceLimit": 2,
+      "atByteLimit": 29,
+      "verifiedActualMaxBytes": 16000,
+      "capViolations": 0,
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 30,
+        "total": 469312,
+        "min": 5312,
+        "median": 16000,
+        "p90": 16000,
+        "p95": 16000,
+        "max": 16000
+      },
+      "maxSourceUnits": 16,
+      "failuresIncluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 80,
+          "recall": 0.8888888888888888,
+          "zeroMatchedDocumentTopics": 10,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 19,
+          "recall": 0.6333333333333333,
+          "zeroMatchedPassageTopics": 5
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 32,
+            "recall": 0.27350427350427353,
+            "zeroMatchedPassageTopics": 62
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 28,
+            "recall": 0.23931623931623933,
+            "zeroMatchedPassageTopics": 65
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 80,
+          "recall": 0.8888888888888888,
+          "zeroMatchedDocumentTopics": 10,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 19,
+          "recall": 0.6333333333333333,
+          "zeroMatchedPassageTopics": 5
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 32,
+            "recall": 0.27350427350427353,
+            "zeroMatchedPassageTopics": 62
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 28,
+            "recall": 0.23931623931623933,
+            "zeroMatchedPassageTopics": 65
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 3,
+      "arm": "live-docs+windows",
+      "status": "complete",
+      "expectedGroups": 30,
+      "expectedTopics": 90,
+      "observedGroups": 30,
+      "missingGroups": 0,
+      "atSourceLimit": 0,
+      "atByteLimit": 28,
+      "verifiedActualMaxBytes": 16000,
+      "capViolations": 0,
+      "evaluationStatus": "offline-projected",
+      "projectionProvenance": {
+        "explicitModelSelection": 30,
+        "archiveInferred": 0
+      },
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 30,
+        "total": 479854,
+        "min": 15873,
+        "median": 16000,
+        "p90": 16000,
+        "p95": 16000,
+        "max": 16000
+      },
+      "maxSourceUnits": 12,
+      "failuresIncluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 78,
+          "recall": 0.8666666666666667,
+          "zeroMatchedDocumentTopics": 12,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 26,
+          "recall": 0.8666666666666667,
+          "zeroMatchedPassageTopics": 2
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 40,
+            "recall": 0.3418803418803419,
+            "zeroMatchedPassageTopics": 57
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 37,
+            "recall": 0.3162393162393162,
+            "zeroMatchedPassageTopics": 60
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 30,
+        "topics": 90,
+        "documentSelected": {
+          "expected": 90,
+          "selected": 78,
+          "recall": 0.8666666666666667,
+          "zeroMatchedDocumentTopics": 12,
+          "noResolvedDocumentTopics": 0
+        },
+        "strictPassage": {
+          "eligibleTopics": 22,
+          "excludedTopics": 68,
+          "facts": 30,
+          "covered": 26,
+          "recall": 0.8666666666666667,
+          "zeroMatchedPassageTopics": 2
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 117,
+            "covered": 40,
+            "recall": 0.3418803418803419,
+            "zeroMatchedPassageTopics": 57
+          },
+          "0.9": {
+            "facts": 117,
+            "covered": 37,
+            "recall": 0.3162393162393162,
+            "zeroMatchedPassageTopics": 60
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 5,
+      "arm": "seeds-windows",
+      "status": "complete",
+      "expectedGroups": 20,
+      "expectedTopics": 100,
+      "observedGroups": 20,
+      "missingGroups": 0,
+      "atSourceLimit": 0,
+      "atByteLimit": 19,
+      "verifiedActualMaxBytes": 16000,
+      "capViolations": 0,
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 20,
+        "total": 319897,
+        "min": 15897,
+        "median": 16000,
+        "p90": 16000,
+        "p95": 16000,
+        "max": 16000
+      },
+      "maxSourceUnits": 7,
+      "failuresIncluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 50,
+          "recall": 0.5050505050505051,
+          "zeroMatchedDocumentTopics": 49,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 20,
+          "recall": 0.625,
+          "zeroMatchedPassageTopics": 10
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 33,
+            "recall": 0.2578125,
+            "zeroMatchedPassageTopics": 73
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 29,
+            "recall": 0.2265625,
+            "zeroMatchedPassageTopics": 77
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 50,
+          "recall": 0.5050505050505051,
+          "zeroMatchedDocumentTopics": 49,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 20,
+          "recall": 0.625,
+          "zeroMatchedPassageTopics": 10
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 33,
+            "recall": 0.2578125,
+            "zeroMatchedPassageTopics": 73
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 29,
+            "recall": 0.2265625,
+            "zeroMatchedPassageTopics": 77
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 5,
+      "arm": "configured-live",
+      "status": "complete",
+      "expectedGroups": 20,
+      "expectedTopics": 100,
+      "observedGroups": 20,
+      "missingGroups": 0,
+      "atSourceLimit": 1,
+      "atByteLimit": 0,
+      "verifiedActualMaxBytes": 13145,
+      "capViolations": 0,
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 20,
+        "total": 144209,
+        "min": 2982,
+        "median": 6808,
+        "p90": 11765,
+        "p95": 11890,
+        "max": 13145
+      },
+      "maxSourceUnits": 16,
+      "failuresIncluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 83,
+          "recall": 0.8383838383838383,
+          "zeroMatchedDocumentTopics": 16,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 17,
+          "recall": 0.53125,
+          "zeroMatchedPassageTopics": 8
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 27,
+            "recall": 0.2109375,
+            "zeroMatchedPassageTopics": 74
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 23,
+            "recall": 0.1796875,
+            "zeroMatchedPassageTopics": 78
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 83,
+          "recall": 0.8383838383838383,
+          "zeroMatchedDocumentTopics": 16,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 17,
+          "recall": 0.53125,
+          "zeroMatchedPassageTopics": 8
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 27,
+            "recall": 0.2109375,
+            "zeroMatchedPassageTopics": 74
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 23,
+            "recall": 0.1796875,
+            "zeroMatchedPassageTopics": 78
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 5,
+      "arm": "configured-live+backfill",
+      "status": "complete",
+      "expectedGroups": 20,
+      "expectedTopics": 100,
+      "observedGroups": 20,
+      "missingGroups": 0,
+      "atSourceLimit": 2,
+      "atByteLimit": 18,
+      "verifiedActualMaxBytes": 16000,
+      "capViolations": 0,
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 20,
+        "total": 316985,
+        "min": 13145,
+        "median": 16000,
+        "p90": 16000,
+        "p95": 16000,
+        "max": 16000
+      },
+      "maxSourceUnits": 16,
+      "failuresIncluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 85,
+          "recall": 0.8585858585858586,
+          "zeroMatchedDocumentTopics": 14,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 18,
+          "recall": 0.5625,
+          "zeroMatchedPassageTopics": 7
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 29,
+            "recall": 0.2265625,
+            "zeroMatchedPassageTopics": 72
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 24,
+            "recall": 0.1875,
+            "zeroMatchedPassageTopics": 77
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 85,
+          "recall": 0.8585858585858586,
+          "zeroMatchedDocumentTopics": 14,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 18,
+          "recall": 0.5625,
+          "zeroMatchedPassageTopics": 7
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 29,
+            "recall": 0.2265625,
+            "zeroMatchedPassageTopics": 72
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 24,
+            "recall": 0.1875,
+            "zeroMatchedPassageTopics": 77
+          }
+        }
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 5,
+      "arm": "live-docs+windows",
+      "status": "complete",
+      "expectedGroups": 20,
+      "expectedTopics": 100,
+      "observedGroups": 20,
+      "missingGroups": 0,
+      "atSourceLimit": 1,
+      "atByteLimit": 16,
+      "verifiedActualMaxBytes": 16000,
+      "capViolations": 0,
+      "evaluationStatus": "offline-projected",
+      "projectionProvenance": {
+        "explicitModelSelection": 20,
+        "archiveInferred": 0
+      },
+      "failedGroups": 0,
+      "failureCodes": {},
+      "frozenBytes": {
+        "n": 20,
+        "total": 319820,
+        "min": 15889,
+        "median": 16000,
+        "p90": 16000,
+        "p95": 16000,
+        "max": 16000
+      },
+      "maxSourceUnits": 16,
+      "failuresIncluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 83,
+          "recall": 0.8383838383838383,
+          "zeroMatchedDocumentTopics": 16,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 22,
+          "recall": 0.6875,
+          "zeroMatchedPassageTopics": 5
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 36,
+            "recall": 0.28125,
+            "zeroMatchedPassageTopics": 67
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 32,
+            "recall": 0.25,
+            "zeroMatchedPassageTopics": 71
+          }
+        }
+      },
+      "failuresExcluded": {
+        "groups": 20,
+        "topics": 100,
+        "documentSelected": {
+          "expected": 99,
+          "selected": 83,
+          "recall": 0.8383838383838383,
+          "zeroMatchedDocumentTopics": 16,
+          "noResolvedDocumentTopics": 1
+        },
+        "strictPassage": {
+          "eligibleTopics": 24,
+          "excludedTopics": 76,
+          "facts": 32,
+          "covered": 22,
+          "recall": 0.6875,
+          "zeroMatchedPassageTopics": 5
+        },
+        "lenientPassage": {
+          "0.8": {
+            "facts": 128,
+            "covered": 36,
+            "recall": 0.28125,
+            "zeroMatchedPassageTopics": 67
+          },
+          "0.9": {
+            "facts": 128,
+            "covered": 32,
+            "recall": 0.25,
+            "zeroMatchedPassageTopics": 71
+          }
+        }
+      }
+    }
+  ],
+  "pairedDeltas": [
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 3,
+      "leftArm": "live-docs+windows",
+      "rightArm": "seeds-windows",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 30,
+      "failureInclusiveDelta": {
+        "documentSelected": 24,
+        "documentRecall": 0.2666666666666667,
+        "strictCovered": 2,
+        "strictRecall": 0.06666666666666665,
+        "lenient80Covered": 7,
+        "lenient90Covered": 6,
+        "lenient80Recall": 0.05982905982905981,
+        "lenient90Recall": 0.05128205128205132,
+        "zeroMatchedDocumentTopics": -24,
+        "failures": 1
+      },
+      "bothSuccessfulGroups": 29,
+      "bothSuccessfulDelta": {
+        "documentSelected": 26,
+        "documentRecall": 0.29885057471264365,
+        "strictCovered": 2,
+        "strictRecall": 0.06666666666666665,
+        "lenient80Covered": 7,
+        "lenient90Covered": 6,
+        "lenient80Recall": 0.0625,
+        "lenient90Recall": 0.05357142857142855,
+        "zeroMatchedDocumentTopics": -26,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 3,
+      "leftArm": "live-docs+windows",
+      "rightArm": "configured-live",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 30,
+      "failureInclusiveDelta": {
+        "documentSelected": 1,
+        "documentRecall": 0.011111111111111072,
+        "strictCovered": 3,
+        "strictRecall": 0.09999999999999998,
+        "lenient80Covered": 4,
+        "lenient90Covered": 5,
+        "lenient80Recall": 0.03418803418803418,
+        "lenient90Recall": 0.04273504273504275,
+        "zeroMatchedDocumentTopics": -1,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 29,
+      "bothSuccessfulDelta": {
+        "documentSelected": 1,
+        "documentRecall": 0.011494252873563204,
+        "strictCovered": 3,
+        "strictRecall": 0.09999999999999998,
+        "lenient80Covered": 4,
+        "lenient90Covered": 5,
+        "lenient80Recall": 0.0357142857142857,
+        "lenient90Recall": 0.04464285714285712,
+        "zeroMatchedDocumentTopics": -1,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 3,
+      "leftArm": "live-docs+windows",
+      "rightArm": "configured-live+backfill",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 30,
+      "failureInclusiveDelta": {
+        "documentSelected": -2,
+        "documentRecall": -0.022222222222222254,
+        "strictCovered": 2,
+        "strictRecall": 0.06666666666666665,
+        "lenient80Covered": 3,
+        "lenient90Covered": 4,
+        "lenient80Recall": 0.025641025641025605,
+        "lenient90Recall": 0.034188034188034205,
+        "zeroMatchedDocumentTopics": 2,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 29,
+      "bothSuccessfulDelta": {
+        "documentSelected": -2,
+        "documentRecall": -0.02298850574712641,
+        "strictCovered": 2,
+        "strictRecall": 0.06666666666666665,
+        "lenient80Covered": 3,
+        "lenient90Covered": 4,
+        "lenient80Recall": 0.0267857142857143,
+        "lenient90Recall": 0.0357142857142857,
+        "zeroMatchedDocumentTopics": 2,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 5,
+      "leftArm": "live-docs+windows",
+      "rightArm": "seeds-windows",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 20,
+      "failureInclusiveDelta": {
+        "documentSelected": 43,
+        "documentRecall": 0.43434343434343436,
+        "strictCovered": -3,
+        "strictRecall": -0.09375,
+        "lenient80Covered": 2,
+        "lenient90Covered": -1,
+        "lenient80Recall": 0.015625,
+        "lenient90Recall": -0.0078125,
+        "zeroMatchedDocumentTopics": -43,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 20,
+      "bothSuccessfulDelta": {
+        "documentSelected": 43,
+        "documentRecall": 0.43434343434343436,
+        "strictCovered": -3,
+        "strictRecall": -0.09375,
+        "lenient80Covered": 2,
+        "lenient90Covered": -1,
+        "lenient80Recall": 0.015625,
+        "lenient90Recall": -0.0078125,
+        "zeroMatchedDocumentTopics": -43,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 5,
+      "leftArm": "live-docs+windows",
+      "rightArm": "configured-live",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 20,
+      "failureInclusiveDelta": {
+        "documentSelected": 0,
+        "documentRecall": 0,
+        "strictCovered": 0,
+        "strictRecall": 0,
+        "lenient80Covered": 0,
+        "lenient90Covered": 0,
+        "lenient80Recall": 0,
+        "lenient90Recall": 0,
+        "zeroMatchedDocumentTopics": 0,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 20,
+      "bothSuccessfulDelta": {
+        "documentSelected": 0,
+        "documentRecall": 0,
+        "strictCovered": 0,
+        "strictRecall": 0,
+        "lenient80Covered": 0,
+        "lenient90Covered": 0,
+        "lenient80Recall": 0,
+        "lenient90Recall": 0,
+        "zeroMatchedDocumentTopics": 0,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 8000,
+      "size": 5,
+      "leftArm": "live-docs+windows",
+      "rightArm": "configured-live+backfill",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 20,
+      "failureInclusiveDelta": {
+        "documentSelected": -2,
+        "documentRecall": -0.02020202020202022,
+        "strictCovered": 0,
+        "strictRecall": 0,
+        "lenient80Covered": 0,
+        "lenient90Covered": 0,
+        "lenient80Recall": 0,
+        "lenient90Recall": 0,
+        "zeroMatchedDocumentTopics": 2,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 20,
+      "bothSuccessfulDelta": {
+        "documentSelected": -2,
+        "documentRecall": -0.02020202020202022,
+        "strictCovered": 0,
+        "strictRecall": 0,
+        "lenient80Covered": 0,
+        "lenient90Covered": 0,
+        "lenient80Recall": 0,
+        "lenient90Recall": 0,
+        "zeroMatchedDocumentTopics": 2,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 3,
+      "leftArm": "live-docs+windows",
+      "rightArm": "seeds-windows",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 30,
+      "failureInclusiveDelta": {
+        "documentSelected": 10,
+        "documentRecall": 0.11111111111111116,
+        "strictCovered": 2,
+        "strictRecall": 0.06666666666666665,
+        "lenient80Covered": 4,
+        "lenient90Covered": 3,
+        "lenient80Recall": 0.03418803418803418,
+        "lenient90Recall": 0.025641025641025605,
+        "zeroMatchedDocumentTopics": -10,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 30,
+      "bothSuccessfulDelta": {
+        "documentSelected": 10,
+        "documentRecall": 0.11111111111111116,
+        "strictCovered": 2,
+        "strictRecall": 0.06666666666666665,
+        "lenient80Covered": 4,
+        "lenient90Covered": 3,
+        "lenient80Recall": 0.03418803418803418,
+        "lenient90Recall": 0.025641025641025605,
+        "zeroMatchedDocumentTopics": -10,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 3,
+      "leftArm": "live-docs+windows",
+      "rightArm": "configured-live",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 30,
+      "failureInclusiveDelta": {
+        "documentSelected": 3,
+        "documentRecall": 0.033333333333333326,
+        "strictCovered": 8,
+        "strictRecall": 0.2666666666666667,
+        "lenient80Covered": 9,
+        "lenient90Covered": 10,
+        "lenient80Recall": 0.07692307692307693,
+        "lenient90Recall": 0.08547008547008544,
+        "zeroMatchedDocumentTopics": -3,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 30,
+      "bothSuccessfulDelta": {
+        "documentSelected": 3,
+        "documentRecall": 0.033333333333333326,
+        "strictCovered": 8,
+        "strictRecall": 0.2666666666666667,
+        "lenient80Covered": 9,
+        "lenient90Covered": 10,
+        "lenient80Recall": 0.07692307692307693,
+        "lenient90Recall": 0.08547008547008544,
+        "zeroMatchedDocumentTopics": -3,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 3,
+      "leftArm": "live-docs+windows",
+      "rightArm": "configured-live+backfill",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 30,
+      "failureInclusiveDelta": {
+        "documentSelected": -2,
+        "documentRecall": -0.022222222222222143,
+        "strictCovered": 7,
+        "strictRecall": 0.2333333333333334,
+        "lenient80Covered": 8,
+        "lenient90Covered": 9,
+        "lenient80Recall": 0.06837606837606836,
+        "lenient90Recall": 0.0769230769230769,
+        "zeroMatchedDocumentTopics": 2,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 30,
+      "bothSuccessfulDelta": {
+        "documentSelected": -2,
+        "documentRecall": -0.022222222222222143,
+        "strictCovered": 7,
+        "strictRecall": 0.2333333333333334,
+        "lenient80Covered": 8,
+        "lenient90Covered": 9,
+        "lenient80Recall": 0.06837606837606836,
+        "lenient90Recall": 0.0769230769230769,
+        "zeroMatchedDocumentTopics": 2,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 5,
+      "leftArm": "live-docs+windows",
+      "rightArm": "seeds-windows",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 20,
+      "failureInclusiveDelta": {
+        "documentSelected": 33,
+        "documentRecall": 0.33333333333333326,
+        "strictCovered": 2,
+        "strictRecall": 0.0625,
+        "lenient80Covered": 3,
+        "lenient90Covered": 3,
+        "lenient80Recall": 0.0234375,
+        "lenient90Recall": 0.0234375,
+        "zeroMatchedDocumentTopics": -33,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 20,
+      "bothSuccessfulDelta": {
+        "documentSelected": 33,
+        "documentRecall": 0.33333333333333326,
+        "strictCovered": 2,
+        "strictRecall": 0.0625,
+        "lenient80Covered": 3,
+        "lenient90Covered": 3,
+        "lenient80Recall": 0.0234375,
+        "lenient90Recall": 0.0234375,
+        "zeroMatchedDocumentTopics": -33,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 5,
+      "leftArm": "live-docs+windows",
+      "rightArm": "configured-live",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 20,
+      "failureInclusiveDelta": {
+        "documentSelected": 0,
+        "documentRecall": 0,
+        "strictCovered": 5,
+        "strictRecall": 0.15625,
+        "lenient80Covered": 9,
+        "lenient90Covered": 9,
+        "lenient80Recall": 0.0703125,
+        "lenient90Recall": 0.0703125,
+        "zeroMatchedDocumentTopics": 0,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 20,
+      "bothSuccessfulDelta": {
+        "documentSelected": 0,
+        "documentRecall": 0,
+        "strictCovered": 5,
+        "strictRecall": 0.15625,
+        "lenient80Covered": 9,
+        "lenient90Covered": 9,
+        "lenient80Recall": 0.0703125,
+        "lenient90Recall": 0.0703125,
+        "zeroMatchedDocumentTopics": 0,
+        "failures": 0
+      }
+    },
+    {
+      "cohort": "heldout",
+      "capBytes": 16000,
+      "size": 5,
+      "leftArm": "live-docs+windows",
+      "rightArm": "configured-live+backfill",
+      "verifiedBackfillPairs": 0,
+      "matchedGroups": 20,
+      "failureInclusiveDelta": {
+        "documentSelected": -2,
+        "documentRecall": -0.02020202020202022,
+        "strictCovered": 4,
+        "strictRecall": 0.125,
+        "lenient80Covered": 7,
+        "lenient90Covered": 8,
+        "lenient80Recall": 0.0546875,
+        "lenient90Recall": 0.0625,
+        "zeroMatchedDocumentTopics": 2,
+        "failures": 0
+      },
+      "bothSuccessfulGroups": 20,
+      "bothSuccessfulDelta": {
+        "documentSelected": -2,
+        "documentRecall": -0.02020202020202022,
+        "strictCovered": 4,
+        "strictRecall": 0.125,
+        "lenient80Covered": 7,
+        "lenient90Covered": 8,
+        "lenient80Recall": 0.0546875,
+        "lenient90Recall": 0.0625,
+        "zeroMatchedDocumentTopics": 2,
+        "failures": 0
+      }
+    }
+  ]
+}

@@ -1,5 +1,7 @@
 import { createEdge, createNode } from "../model/factory";
+import { distanceToPolyline, nodeBounds } from "../model/geometry";
 import { labelAnchor, routeEdge, type RoutedEdge } from "../model/routing";
+import { layoutText } from "../model/text";
 import { nudgeRoutes, placeLabels } from "../model/tidy";
 import type { DiagramEdge, DiagramNode, Point } from "../model/types";
 
@@ -146,5 +148,45 @@ describe("nudgeRoutes and fan-outs", () => {
                 expect(cross(a[i]!, a[i + 1]!, b[j]!, b[j + 1]!)).toBe(false);
             }
         }
+    });
+});
+
+describe("placeLabels and boxes", () => {
+    // A step's Yes branch runs right; a note box sits just above its middle,
+    // where the label would print over it.
+    const from = createNode({ shape: "process", x: 0, y: 0, w: 170, h: 84 });
+    const to = createNode({ shape: "process", x: 520, y: 0, w: 170, h: 84 });
+    const note = createNode({ shape: "process", x: 300, y: -40, w: 90, h: 80 });
+    const yes: DiagramEdge = {
+        ...createEdge({ from: { nodeId: from.id }, to: { nodeId: to.id } }),
+        kind: "elbow",
+        labels: [{ text: "Yes", t: 0.5, offset: 0 }],
+    };
+    const all = [from, to, note];
+    const labelRect = (routed: RoutedEdge, t: number) => {
+        const at = labelAnchor(routed, t, 0);
+        const laid = layoutText("Yes", yes.textStyle, 240);
+        const w = laid.width + 12;
+        const h = laid.height + 6;
+        return { x: at.x - w / 2, y: at.y - h / 2, w, h };
+    };
+    const overlaps = (a: { x: number; y: number; w: number; h: number }, b: typeof a) =>
+        a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y + b.h && b.y < a.y + a.h;
+
+    it("slides a label off a box it would cover, staying on its line", () => {
+        // Routed without obstacles, so the line runs under the note's edge.
+        const routes = new Map([[yes.id, routeEdge(yes, lookupOf(all))]]);
+        const routed = routes.get(yes.id)!;
+        expect(overlaps(labelRect(routed, 0.5), nodeBounds(note))).toBe(true);
+
+        const t = placeLabels([yes], routes, all).get(yes.id)![0]!;
+        expect(t).not.toBe(0.5);
+        for (const box of all) expect(overlaps(labelRect(routed, t), nodeBounds(box))).toBe(false);
+        expect(distanceToPolyline(labelAnchor(routed, t, 0), routed.points)).toBeLessThan(0.01);
+    });
+
+    it("keeps to the old rules when no boxes are given", () => {
+        const routes = new Map([[yes.id, routeEdge(yes, lookupOf(all))]]);
+        expect(placeLabels([yes], routes).get(yes.id)).toEqual([0.5]);
     });
 });

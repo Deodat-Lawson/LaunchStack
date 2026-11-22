@@ -11,18 +11,20 @@
  *   the same line apart, the way libavoid's nudging does. Only segments
  *   between two bends move — never the stubs at a box — and never so far that
  *   a neighbouring segment would turn back on itself.
- * - `placeLabels` slides a label that would cover another one along its own
- *   line to the nearest free spot. The document is not changed: this is where
- *   the label is drawn, not where it is stored.
+ * - `placeLabels` slides a label that would cover another one, or a box,
+ *   along its own line to the nearest free spot. The document is not
+ *   changed: this is where the label is drawn, not where it is stored.
  *
  * Pure, and cheap enough to run every frame: segments are bucketed by
  * coordinate before they are compared.
  */
 
 import { segmentCrossesRect } from "./avoid";
+import { nodeBounds } from "./geometry";
 import { labelAnchor, renderPath, type RoutedEdge } from "./routing";
+import { isContainer } from "./shapes";
 import { layoutText } from "./text";
-import type { DiagramEdge, Point, Rect } from "./types";
+import type { DiagramEdge, DiagramNode, Point, Rect } from "./types";
 
 /**
  * Space kept between connectors running alongside each other — wide enough
@@ -194,19 +196,30 @@ function crossesBox(points: readonly Point[], r: Rect): boolean {
 /** Room kept between a label and a bend on its own line (the bend's handle is 8px across). */
 const BEND_CLEAR = 6;
 
+/** Where along its line a label may slide to, nearest first. */
+const STEPS = [0, 0.06, -0.06, 0.12, -0.12, 0.18, -0.18, 0.24, -0.24, 0.3, -0.3, 0.36, -0.36];
+
 /**
  * Where along its line (t) each label is drawn, keyed `edgeId` → one t per
- * label: off other labels, off the bends someone put in its own line, and off
- * other connectors' lines when there is a free spot nearby, else where it was
- * put. A label on a bend sits on the corner, and while the line is selected
- * the bend's handle covers it and takes the press meant for the label.
+ * label: off other labels, off the bends someone put in its own line, off
+ * the boxes (`nodes`, when given) and off other connectors' lines when there
+ * is a free spot nearby, else where it was put. A label on a bend sits on the
+ * corner, and while the line is selected the bend's handle covers it and
+ * takes the press meant for the label; one on a box hides the box's words —
+ * a Yes or No at the middle of a short branch sat on the step it led to once
+ * the line re-routed round the boxes.
  */
 export function placeLabels(
     edges: readonly DiagramEdge[],
-    routes: ReadonlyMap<string, RoutedEdge>
+    routes: ReadonlyMap<string, RoutedEdge>,
+    nodes: readonly DiagramNode[] = []
 ): Map<string, number[]> {
     const out = new Map<string, number[]>();
     const placed: Rect[] = [];
+    const boxes = nodes
+        .filter(nd => !nd.hidden && !isContainer(nd.shape) && nd.shape !== "ink")
+        .map(nodeBounds);
+    const offBoxes = (box: Rect) => !boxes.some(r => overlaps(r, box));
     const offBends = (edge: DiagramEdge, box: Rect) =>
         !edge.waypoints.some(
             p =>
@@ -219,13 +232,13 @@ export function placeLabels(
         offBends(edge, box) && !placed.some(r => overlaps(r, box));
     const clear = (edge: DiagramEdge, box: Rect) =>
         offLabels(edge, box) &&
+        offBoxes(box) &&
         !edges.some(
             other =>
                 other.id !== edge.id &&
                 routes.has(other.id) &&
                 crossesBox(routes.get(other.id)!.points, box)
         );
-    const STEPS = [0, 0.12, -0.12, 0.24, -0.24, 0.36, -0.36];
     for (const edge of edges) {
         const routed = routes.get(edge.id);
         if (!routed || edge.labels.length === 0) continue;
@@ -240,11 +253,13 @@ export function placeLabels(
             const candidates = STEPS.map(step => label.t + step)
                 .filter(t => t >= 0.08 && t <= 0.92)
                 .map(t => ({ t, box: labelBox(edge, i, labelAnchor(routed, t, label.offset)) }));
-            // Best: clear of other labels, its own bends and other lines. Else
-            // at least clear of labels and bends — a label printed over
-            // another is unreadable, one crossing a line is only untidy.
+            // Best: clear of other labels, its own bends, the boxes and other
+            // lines. Else clear of all but the lines, else at least of labels
+            // and bends — a label printed over another is unreadable, one on a
+            // box hides it, one crossing a line is only untidy.
             const pick =
                 candidates.find(c => clear(edge, c.box)) ??
+                candidates.find(c => offLabels(edge, c.box) && offBoxes(c.box)) ??
                 candidates.find(c => offLabels(edge, c.box));
             if (pick) {
                 chosen = pick.t;

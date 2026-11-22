@@ -1,4 +1,4 @@
-import { addNextStep, insertShape } from "../model/commands";
+import { addNextStep, commitNodeText, insertShape } from "../model/commands";
 import { activePage, nodeById } from "../model/doc";
 import { flowchartLook, flowLookOf, KINDS, TEXT_SIZE } from "../model/flowchart/look";
 import { EditorStore } from "../model/store";
@@ -101,5 +101,29 @@ describe("a topic placed on a flowchart", () => {
         const store = storeOf("mindmap");
         const id = insertShape(store, "mind-branch", { x: 0, y: 0 });
         expect(node(store, id).textStyle.bold).toBe(true);
+    });
+});
+
+describe("a box whose words change its kind", () => {
+    it("wearing the flowchart look, takes the new kind's size and colour", () => {
+        const store = storeOf("flowchart");
+        const id = insertShape(store, "process", { x: 0, y: 0 });
+        commitNodeText(store, node(store, id), "Paid?");
+        expect(node(store, id)).toMatchObject({
+            shape: "decision",
+            ...KINDS.decision!.size,
+            style: { fill: flowchartLook.boxLook("decision", "light").style.fill },
+        });
+    });
+
+    it("with colours of its own (a template's), is reshaped but never repainted", () => {
+        const store = new EditorStore(buildTemplate("flowchart", "Doc", "light"));
+        const start = page(store).nodes.find(n => n.text === "Start")!;
+        commitNodeText(store, start, "Begin here");
+        const after = node(store, start.id);
+        expect(after.shape).toBe("process");
+        expect(after.style).toEqual(start.style);
+        expect(after.textStyle).toEqual(start.textStyle);
+        expect(after.x + after.w / 2).toBeCloseTo(start.x + start.w / 2);
     });
 });

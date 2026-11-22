@@ -120,8 +120,11 @@ function nextShape(source: DiagramNode): ShapeId {
 /**
  * A step whose words now make it another kind — "In stock?" a decision,
  * "Start" a pill, a decision whose question mark is gone a step — reshaped
- * and recoloured about the same centre, at the new kind's width, grown down
- * for its words. Null when the kind is unchanged or the box is not a step.
+ * about the same centre and grown down for its words. A box wearing the
+ * flowchart look takes the new kind's size and colour; one with colours of
+ * its own (a template's, an older document's) keeps them, and its size — it
+ * is never repainted. Null when the kind is unchanged or the box is not a
+ * step.
  */
 function afterText(
     node: DiagramNode,
@@ -131,14 +134,16 @@ function afterText(
     if (!isStepNode(node) || text.trim() === "") return null;
     const shape = shapeForKind(stepKindOf(oneLine(text)), node.shape, "process");
     if (shape === node.shape) return null;
+    const dressed =
+        node.style.stroke === "none" && node.style.fill === kindColours(node.shape, mode).fill;
     const look = boxLook(shape, mode);
-    const base = look.size ?? { w: node.w, h: node.h };
+    const base = (dressed ? look.size : undefined) ?? { w: node.w, h: node.h };
     const fresh: DiagramNode = {
         ...node,
         shape,
         w: base.w,
         h: base.h,
-        textStyle: { ...node.textStyle, ...look.text },
+        textStyle: dressed ? { ...node.textStyle, ...look.text } : node.textStyle,
     };
     const { w, h } = sizeForText(fresh, text, { keepWidth: true });
     return {
@@ -147,7 +152,7 @@ function afterText(
         h,
         x: Math.round(node.x + node.w / 2 - w / 2),
         y: Math.round(node.y + node.h / 2 - h / 2),
-        style: { ...node.style, ...look.style },
+        ...(dressed ? { style: { ...node.style, ...look.style } } : {}),
         textStyle: fresh.textStyle,
     };
 }

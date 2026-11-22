@@ -823,9 +823,9 @@ export function styleEdgeSelection(
 /** Apply a whole swatch (fill + stroke + ink) to the node selection. */
 /**
  * Colour the selection with a swatch, in the tone for this document's paper —
- * the light table on a dark board painted pale pastel boxes. Topics are
- * recoloured as a branch (see `recolourTopics`); anything else takes the
- * swatch as is.
+ * the light table on a dark board painted pale pastel boxes. Only the boxes
+ * picked change: a topic keeps its depth's weight (`recolourTopics`), anything
+ * else takes the swatch as is, and nothing below or around them is touched.
  */
 export function applySwatch(store: EditorStore, swatchId: string): void {
     if (!SWATCH_BY_ID[swatchId]) return;

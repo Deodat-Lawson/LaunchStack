@@ -330,10 +330,12 @@ export function paintTopics(
 }
 
 /**
- * Recolour one topic and its subtree in a chosen swatch, keeping each
- * topic's weight for its depth. Picking a colour for a main branch therefore
- * recolours the whole branch — its details and its connectors — instead of
- * leaving one odd box in the middle of an otherwise consistent limb.
+ * Recolour exactly the topics picked, in a chosen swatch, keeping each one's
+ * weight for its depth. Nothing else changes: not the topics under it, not
+ * the connectors. This used to repaint the whole branch below a picked topic
+ * — its details and their lines — and people who changed one box saw a whole
+ * path change colour (2026-11-21). New topics added under a recoloured one
+ * still follow the branch they join (`hueFor`).
  */
 export function recolourTopics(
     page: DiagramPage,
@@ -343,16 +345,7 @@ export function recolourTopics(
 ): DiagramPage {
     const theme = themeFor(paletteId, undefined);
     const places = topicPlaces(page);
-    // A centre is recoloured alone. Its "subtree" is the whole map, and
-    // pouring one hue over every branch would erase what colour means here.
-    const centres = ids.filter(id => places.get(id)?.depth === 0);
-    const painting = new Set([
-        ...centres,
-        ...withDescendants(
-            page,
-            ids.filter(id => !centres.includes(id))
-        ),
-    ]);
+    const painting = new Set(ids);
     const nodes = page.nodes.map(nd => {
         if (!painting.has(nd.id)) return nd;
         if (nd.shape === "mind-root") {
@@ -367,14 +360,7 @@ export function recolourTopics(
         }
         return paintTopicNode(nd, theme, places.get(nd.id), swatchId);
     });
-    const edges = page.edges.map(e => {
-        const to = e.to.nodeId;
-        if (!to || !painting.has(to) || nodeById(page, to)?.shape === "mind-root") return e;
-        if (!isTopic(nodeById(page, e.from.nodeId ?? ""))) return e;
-        const paint = topicPaint(theme, "mind-branch", places.get(to)?.depth ?? 1, swatchId);
-        return { ...e, style: { ...e.style, ...paint.edge } };
-    });
-    return { ...page, nodes, edges };
+    return { ...page, nodes };
 }
 
 // ---------------------------------------------------------------------------

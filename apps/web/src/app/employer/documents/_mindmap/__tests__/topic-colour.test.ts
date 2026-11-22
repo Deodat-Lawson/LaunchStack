@@ -140,19 +140,21 @@ describe("the colour dots", () => {
         expect(nd.style.stroke).toBe(swatchFor("green", "dark").stroke);
     });
 
-    it("recolour a whole branch — its details and their lines — not one box", () => {
+    it("recolour only the box picked — not the topics below it, not the lines", () => {
+        // Changing one box used to repaint its whole path (2026-11-21).
         const store = blankStore();
         const root = startMap(store);
         const branch = addChildTopic(store, root)!;
         const detail = addChildTopic(store, branch)!;
         store.setEditing(null);
+        const before = page(store);
         store.selectNodes([branch]);
         applySwatch(store, "orange");
         const orange = swatchFor("orange", "light").stroke;
         const p = page(store);
-        expect(nodeById(p, detail)!.style.stroke).toBe(orange);
-        expect(p.edges.find(e => e.to.nodeId === detail)!.style.stroke).toBe(orange);
-        expect(p.edges.find(e => e.to.nodeId === branch)!.style.stroke).toBe(orange);
+        expect(nodeById(p, branch)!.style.stroke).toBe(orange);
+        expect(nodeById(p, detail)!.style).toEqual(nodeById(before, detail)!.style);
+        expect(p.edges).toEqual(before.edges);
     });
 
     it("on the centre recolour the centre alone, not every branch", () => {

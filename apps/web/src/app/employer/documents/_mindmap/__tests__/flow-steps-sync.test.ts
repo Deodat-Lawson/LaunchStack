@@ -652,6 +652,62 @@ describe("Steps: a canvas edit never redraws the chart (panel open)", () => {
     });
 });
 
+describe("Steps: a picked kind reads back as itself", () => {
+    function dropBox(store: EditorStore, at: { x: number; y: number }, id: string, words: string) {
+        openAt(store, { world: at, screen: at });
+        pick(store, PICKS.find(p => p.id === id)!);
+        const made = store.getState().selection[0]!.id;
+        rename(store, made, words);
+        return made;
+    }
+
+    it("a Decision labelled Approve is written as a question, and typing elsewhere keeps it", async () => {
+        const { store, sync } = setup();
+        write(sync, "Receive order");
+        const id = dropBox(store, { x: 900, y: 300 }, "decision", "Approve");
+        await caughtUp();
+        expect(nodeById(page(store), id)).toMatchObject({ shape: "decision", text: "Approve" });
+        expect(sync.getSnapshot().text).toBe("Receive order\n\nApprove?");
+        write(sync, "Receive the order\n\nApprove?");
+        // Drawn again from the lines: still a decision, its words its own.
+        expect(nodeById(page(store), id)).toMatchObject({ shape: "decision", text: "Approve" });
+    });
+
+    it("a Start/End labelled Order placed stays a pill when the panel draws", async () => {
+        const { store, sync } = setup();
+        write(sync, "Receive order");
+        const id = dropBox(store, { x: 900, y: 300 }, "terminal", "Order placed");
+        await caughtUp();
+        expect(nodeById(page(store), id)!.shape).toBe("terminator");
+        const text = sync.getSnapshot().text;
+        expect(text).toBe("Receive order\n\nOrder placed");
+        write(sync, text.replace("Receive order", "Receive the order"));
+        expect(nodeById(page(store), id)).toMatchObject({
+            shape: "terminator",
+            text: "Order placed",
+        });
+    });
+
+    it("a line typed through Start on its way to Start the timer ends as a step", () => {
+        const { store, sync } = setup();
+        for (const t of [
+            "S",
+            "St",
+            "Sta",
+            "Star",
+            "Start",
+            "Start ",
+            "Start t",
+            "Start the timer",
+        ]) {
+            sync.edit(t);
+            jest.advanceTimersByTime(PREVIEW_MAX_WAIT);
+        }
+        jest.advanceTimersByTime(BURST_IDLE);
+        expect(byText(store, "Start the timer").shape).toBe("process");
+    });
+});
+
 describe("Steps: pure pieces", () => {
     it("matches boxes by words in order, then by position", () => {
         const old = ["A", "B", "C"].map(

@@ -224,10 +224,15 @@ Steps panel, agents), wears `flowchartLook` (`model/flowchart/look.ts`,
 reached through `flowLookOf(doc)`, `dressBox`, `edgeOptions`): coloured by
 kind — a step blue, a decision amber, Start/End green, data violet, a note
 sticky yellow — no outline, a soft shadow, 15px regular type; right-angled
-arrows in the board's soft ink, 12px labels. A label ending in "?" makes its
-box a decision when it is finished, "Start" or "End" a pill (`afterText`, in
-`commitNodeText`'s undo step); boxes keep their width and grow down. Boxes
-already on a document are never repainted.
+arrows in the board's soft ink, 12px labels. A label ending in "?" makes a
+plain step a decision when it is finished, "Start" or "End" a pill
+(`afterText`, in `commitNodeText`'s undo step); words never take a kind
+away, so a Decision picked from the menu and labelled "Approve", or a
+Start/End labelled "Order placed", keeps its kind until someone changes the
+shape. The Steps panel writes such a decision as "Approve?" (and leaves the
+box's own words alone), and keeps a pill a pill whatever its line says,
+except one its own typing just made. Boxes keep their width and grow down.
+Boxes already on a document are never repainted.
 
 ### Keys (`flow/keys`)
 
@@ -747,8 +752,9 @@ citation. `edit_diagram` takes `add`, `rename`, `remove`, `move`, `connect`,
 `disconnect` and `arrange`; a topic added this way is made by `addChildTopic`,
 so it is the topic Tab would have made. On a flowchart, a box `add` makes is
 in the product look with its kind from its words ("In stock?" a decision),
-`connect` draws the look's arrow, `rename` changes a step's kind with its
-words as typing does (`flowchartLook.afterText`), and a chart on
+`connect` draws the look's arrow, `rename` makes a plain step a decision
+or a pill by its words as typing does and never takes a decision's or a
+pill's kind away (`flowchartLook.afterText`), and a chart on
 `flowLayout: "auto"` takes added steps into its arrangement (`tidyChart`). A
 batch is all or nothing (`runDiagramEdits` works on a scratch `EditorStore`).
 On the server (`~/server/mindmap/agent`) the result is written only over the

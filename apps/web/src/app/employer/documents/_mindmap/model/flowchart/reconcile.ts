@@ -23,7 +23,7 @@
  */
 
 import type { DiagramEdge, DiagramNode, DiagramPage } from "../types";
-import { edgeLabel, isStepNode } from "./steps";
+import { edgeLabel, isStepNode, stepWords as wordsOf } from "./steps";
 import {
     normalizeLabel,
     oneLine,
@@ -48,13 +48,6 @@ export interface WrittenSteps {
 }
 
 const INDENT = "  ";
-
-/** A step box's words as a line; a diamond always reads as a question. */
-function wordsOf(nd: DiagramNode): string {
-    const words = oneLine(nd.text);
-    if (nd.shape === "decision" && words && !/[?？]$/.test(words)) return `${words}?`;
-    return words;
-}
 
 /** A box that reads as End: nothing flows out of it, so nothing needs keeping apart. */
 function ends(nd: DiagramNode): boolean {
@@ -363,7 +356,7 @@ export function reconcileSteps(base: StepsBinding, page: DiagramPage): WrittenSt
             deleted.add(i);
             return;
         }
-        const words = oneLine(nodes.get(id)!.text);
+        const words = wordsOf(nodes.get(id)!);
         if (!words) deleted.add(i);
         else if (words !== s.label) {
             renamed.set(i, words);
@@ -427,7 +420,7 @@ export function reconcileSteps(base: StepsBinding, page: DiagramPage): WrittenSt
     const bound = new Set(ids.filter((id): id is string => !!id));
     for (const nd of page.nodes) {
         if (!isStepNode(nd) || bound.has(nd.id)) continue;
-        const words = oneLine(nd.text);
+        const words = wordsOf(nd);
         if (!words) continue;
         const incoming = page.edges.filter(e => e.to.nodeId === nd.id && e.from.nodeId !== nd.id);
         const fromRow = incoming

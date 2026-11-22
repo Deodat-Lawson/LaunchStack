@@ -17,9 +17,11 @@
  * text marks keep their own look. Arrows: right-angled, 1.5px, the board's
  * soft ink, an arrowhead, 12px regular labels.
  *
- * A step's words decide its kind (the same rule as the step language in
- * `./syntax.ts`): a label ending in "?" makes a decision, "Start"/"End" a
- * pill; the box is reshaped and recoloured in the same undo step. Boxes keep
+ * A plain step's words can make it another kind (the same rule as the step
+ * language in `./syntax.ts`): a label ending in "?" makes a decision,
+ * "Start"/"End" a pill; the box is reshaped and recoloured in the same undo
+ * step. Words never take a kind away: a decision or a pill picked from a
+ * menu keeps its kind whatever it is labelled. Boxes keep
  * their width and grow down as their words wrap, so a column of steps stays
  * on one centre line.
  *
@@ -118,13 +120,15 @@ function nextShape(source: DiagramNode): ShapeId {
 }
 
 /**
- * A step whose words now make it another kind — "In stock?" a decision,
- * "Start" a pill, a decision whose question mark is gone a step — reshaped
- * about the same centre and grown down for its words. A box wearing the
- * flowchart look takes the new kind's size and colour; one with colours of
- * its own (a template's, an older document's) keeps them, and its size — it
- * is never repainted. Null when the kind is unchanged or the box is not a
- * step.
+ * A plain step whose words now make it another kind — "In stock?" a
+ * decision, "Start" or "End" a pill — reshaped about the same centre and
+ * grown down for its words. Words only ever promote a plain step: a decision
+ * or a pill keeps its kind whatever it is labelled ("Approve", "Order
+ * placed", "Start X"), since the kind someone picked stays until they change
+ * the shape themselves. A box wearing the flowchart look takes the new
+ * kind's size and colour; one with colours of its own (a template's, an
+ * older document's) keeps them, and its size — it is never repainted. Null
+ * when the kind is unchanged or the box is not a plain step.
  */
 function afterText(
     node: DiagramNode,
@@ -132,7 +136,10 @@ function afterText(
     mode: ThemeMode
 ): Partial<Pick<DiagramNode, "shape" | "x" | "y" | "w" | "h" | "style" | "textStyle">> | null {
     if (!isStepNode(node) || text.trim() === "") return null;
-    const shape = shapeForKind(stepKindOf(oneLine(text)), node.shape, "process");
+    if (node.shape === "decision" || node.shape === "terminator") return null;
+    const kind = stepKindOf(oneLine(text));
+    if (kind === "step") return null;
+    const shape = shapeForKind(kind, node.shape, "process");
     if (shape === node.shape) return null;
     const dressed =
         node.style.stroke === "none" && node.style.fill === kindColours(node.shape, mode).fill;

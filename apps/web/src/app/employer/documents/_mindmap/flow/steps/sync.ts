@@ -183,6 +183,13 @@ export class StepsSync {
         // hold are then arranged (`placed`). A first line on a board with no
         // steps yet goes to the top of the view.
         const hasSteps = page.nodes.some(isStepNode);
+        // A pill there was before this typing began keeps its kind whatever
+        // its line now says; one the typing made follows the words.
+        const pills = new Set(
+            activePage((this.burst ?? state).doc)
+                .nodes.filter(nd => nd.shape === "terminator")
+                .map(nd => nd.id)
+        );
         const result = this.placed(
             page,
             applySteps(page, parse, {
@@ -191,6 +198,7 @@ export class StepsSync {
                 order: prev?.ids.filter((id): id is string => !!id),
                 origin: this.options.origin?.(),
                 keepPlaced: hasSteps || !arrangesItself(state.doc),
+                keepsPill: id => pills.has(id),
             })
         );
         if (result.page !== page) {

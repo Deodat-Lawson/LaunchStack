@@ -436,7 +436,6 @@ export function mermaidToDoc(
     dress?: MermaidLook
 ): MindmapDoc {
     const graph = parseMermaidFlowchart(text);
-    const textStyle = defaultTextStyle(LABEL_STYLE);
 
     const nodeByKey = new Map<string, DiagramNode>();
     for (const n of graph.nodes) {

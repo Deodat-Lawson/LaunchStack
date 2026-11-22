@@ -49,7 +49,8 @@ function answer(fields: Partial<Answer>): { result: Answer } {
 
 const invoke = jest.mocked(invokeStructuredWithUsage);
 const messagesOf = (call: number) => invoke.mock.calls[call]![2] as BaseMessage[];
-const text = (m: BaseMessage) => String(m.content);
+const text = (m: BaseMessage) =>
+    typeof m.content === "string" ? m.content : JSON.stringify(m.content);
 
 beforeEach(() => invoke.mockReset());
 

@@ -7,11 +7,13 @@ import {
     insertShape,
     moveSelection,
     onChartHeld,
+    revealPage,
     setBranchWords,
     setFlowLayout,
     holdChartInPlace,
 } from "../model/commands";
-import { activePage, nodeById } from "../model/doc";
+import { activePage, nodeById, pageBounds } from "../model/doc";
+import { worldToScreen } from "../model/geometry";
 import { createDoc, createEdge, createNode, createPage } from "../model/factory";
 import { keepPlaced, tidyChart } from "../model/flowchart/arrange";
 import { parseDoc } from "../model/serialize";
@@ -200,6 +202,50 @@ describe("a box moved by hand", () => {
         moveSelection(store, { x: 5, y: 0 }, "Nudge");
         moveSelection(store, { x: 5, y: 0 }, "Nudge");
         expect(heard).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe("arranging again keeps the chart on screen", () => {
+    const STAGE = { w: 1000, h: 700 };
+    const onScreen = (store: EditorStore) => {
+        const b = pageBounds(page(store))!;
+        const v = store.getState().viewport;
+        const a = worldToScreen(v, b);
+        const z = worldToScreen(v, { x: b.x + b.w, y: b.y + b.h });
+        return a.x >= 0 && a.y >= 0 && z.x <= STAGE.w && z.y <= STAGE.h;
+    };
+
+    it("Arrange automatically, after the chart ran off screen, frames it", () => {
+        const store = blank("manual");
+        const ids = chain(store, ["A", "B", "C", "D", "E", "F", "G", "H"]);
+        // Placed by hand far apart, off to the right.
+        store.updatePage(
+            p => ({
+                ...p,
+                nodes: p.nodes.map(n => {
+                    const i = ids.indexOf(n.id);
+                    return i < 0 ? n : { ...n, x: 2400 + i * 300, y: 100 };
+                }),
+            }),
+            { transient: true }
+        );
+        store.setViewport({ x: 0, y: 0, zoom: 1 });
+        setFlowLayout(store, "auto");
+        expect(onScreen(store)).toBe(false);
+        revealPage(store, STAGE);
+        expect(onScreen(store)).toBe(true);
+        expect(store.getState().viewport.zoom).toBeLessThanOrEqual(1);
+    });
+
+    it("leaves the view alone when the chart is already on screen", () => {
+        const store = blank();
+        chain(store);
+        const b = pageBounds(page(store))!;
+        store.setViewport({ x: b.x - 100, y: b.y - 100, zoom: 1 });
+        const before = store.getState().viewport;
+        arrangeNow(store);
+        revealPage(store, STAGE);
+        expect(store.getState().viewport).toEqual(before);
     });
 });
 

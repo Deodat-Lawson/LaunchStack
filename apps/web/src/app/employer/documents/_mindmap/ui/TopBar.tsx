@@ -124,6 +124,8 @@ export interface TopBarProps {
     onHistory: () => void;
     /** Put a link that opens the map straight into Present on the clipboard. */
     onCopyPresentLink?: () => void;
+    /** The page was just arranged from the Layout menu: bring it into view. */
+    onArranged?: () => void;
 }
 
 const selectAutoLayout = (s: EditorState) => s.doc.settings.autoLayout;
@@ -286,7 +288,12 @@ export function TopBar(props: TopBarProps) {
                         </DropdownMenuRadioItem>
                     </DropdownMenuRadioGroup>
                     <DropdownMenuSeparator />
-                    <DropdownMenuItem onSelect={() => arrangeNow(store)}>
+                    <DropdownMenuItem
+                        onSelect={() => {
+                            arrangeNow(store);
+                            props.onArranged?.();
+                        }}
+                    >
                         <Network className="size-3.5" />
                         {t("arrangeNow")}
                     </DropdownMenuItem>
@@ -296,9 +303,11 @@ export function TopBar(props: TopBarProps) {
                     {flow && (
                         <DropdownMenuCheckboxItem
                             checked={flowLayout === "auto"}
-                            onCheckedChange={checked =>
-                                setFlowLayout(store, checked ? "auto" : "manual")
-                            }
+                            onCheckedChange={checked => {
+                                setFlowLayout(store, checked ? "auto" : "manual");
+                                // Turning it on arranges the chart now: keep it on screen.
+                                if (checked) props.onArranged?.();
+                            }}
                         >
                             {t("arrangeAutomatically")}
                         </DropdownMenuCheckboxItem>

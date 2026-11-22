@@ -39,6 +39,7 @@ import {
     onChartHeld,
     pauseAutoArrangeAfterManualMove,
     revealNode,
+    revealPage,
     setActivePage,
     setAutoLayout,
     setFlowLayout,
@@ -298,7 +299,11 @@ export function MindmapEditor(props: MindmapEditorProps) {
                     description: t("flow.heldBody"),
                     action: {
                         label: t("flow.arrangeAgain"),
-                        onClick: () => setFlowLayout(store, "auto"),
+                        onClick: () => {
+                            setFlowLayout(store, "auto");
+                            // Arranged now: keep the chart on screen.
+                            revealPage(store, stageSizeRef.current);
+                        },
                     },
                 })
             ),
@@ -565,6 +570,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                             }}
                             onToggleLeft={() => setLeftOpen(v => !v)}
                             onToggleRight={() => setRightOpen(v => !v)}
+                            onArranged={() => revealPage(store, stageSizeRef.current)}
                         />
                     )}
 

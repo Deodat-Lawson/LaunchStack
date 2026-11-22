@@ -311,6 +311,8 @@ a group drag, a nudge, an align — turns the chart `manual` in that move's
 undo step (`holdChartInPlace`), and a toast says so with **Arrange
 automatically**; the same toggle is in the Layout menu (turning it on
 arranges now). Layout › Arrange now lays it out once and leaves the setting.
+After either, or the toast's button, a chart that ended up partly off screen
+is framed (`revealPage`, never past 100%); one already in view stays put.
 `tidyChart` is a tidy tree when the chart is one, the layered layout for
 merges and loops, kept where its first step is; boxes in a frame are laid
 out among themselves, inside it. On a hand-placed chart the Steps panel

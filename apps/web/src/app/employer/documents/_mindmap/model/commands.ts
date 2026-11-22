@@ -62,6 +62,7 @@ import {
     nodesBounds,
     rectCenter,
     unionRects,
+    worldToScreen,
     zoomAt,
     type ViewportLike,
 } from "./geometry";
@@ -2001,6 +2002,23 @@ export function fitToScreen(store: EditorStore, size: { w: number; h: number }):
         return;
     }
     store.setViewport(fitViewport(bounds, size));
+}
+
+/**
+ * After the page was arranged (Layout › Arrange automatically, Arrange now,
+ * the "Arrange automatically" toast): if any of it is now off screen, frame
+ * the whole of it, never zoomed past 100%. A page already in view is left as
+ * it is, so arranging a chart that fits does not jump the view.
+ */
+export function revealPage(store: EditorStore, size: { w: number; h: number }): void {
+    if (size.w < 40 || size.h < 40) return;
+    const bounds = pageBounds(activePage(store.getState().doc));
+    if (!bounds) return;
+    const { viewport } = store.getState();
+    const a = worldToScreen(viewport, bounds);
+    const b = worldToScreen(viewport, { x: bounds.x + bounds.w, y: bounds.y + bounds.h });
+    if (a.x >= 0 && a.y >= 0 && b.x <= size.w && b.y <= size.h) return;
+    store.setViewport(fitViewport(bounds, size, 64, 1));
 }
 
 /**

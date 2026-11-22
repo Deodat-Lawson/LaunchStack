@@ -1,6 +1,6 @@
 /** Run retrieval from the verified public corpus. This entry point has no evaluator import. */
 import { randomBytes, randomUUID } from "node:crypto";
-import { mkdir, rename, writeFile } from "node:fs/promises";
+import { mkdir, rename, writeFile, readFile, readdir, unlink } from "node:fs/promises";
 import { resolve } from "node:path";
 import { parseArgs } from "node:util";
 import postgres from "postgres";
@@ -26,7 +26,7 @@ import {
     planAzureLive,
 } from "./vantage-benchmark-azure-plan";
 import { createAzureResponsesAgentPort } from "./vantage-benchmark-azure-port";
-import { createBenchmarkMeter } from "./vantage-benchmark-meter";
+import { createBenchmarkMeter, type BenchmarkMeterSnapshot } from "./vantage-benchmark-meter";
 import { runBenchmarkRetrieval } from "./vantage-benchmark-retrieval";
 import {
     ingestLongDecisionsWorkspace,
@@ -89,6 +89,7 @@ async function main() {
         options: {
             cache: { type: "string" },
             "approve-live": { type: "boolean" },
+            "resume-warmup": { type: "boolean" },
             "preflight-live": { type: "boolean" },
             "ingest-only": { type: "boolean" },
             "local-fixture-lock": { type: "string" },
@@ -99,6 +100,16 @@ async function main() {
     const cache = resolve(values.cache);
     const lockPath = values["local-fixture-lock"];
     const smoke = values["injected-smoke"] === true;
+    const resumeWarmup = values["resume-warmup"] === true;
+    if (
+        resumeWarmup &&
+        (!values["approve-live"] ||
+            values["preflight-live"] ||
+            values["ingest-only"] ||
+            smoke ||
+            lockPath)
+    )
+        throw new Error("long_decisions_warmup_resume_denied");
     if (lockPath && (values["approve-live"] || values["preflight-live"]))
         throw new Error("long_decisions_live_requires_committed_lock");
     if (smoke && !lockPath) throw new Error("long_decisions_smoke_requires_local_fixture");
@@ -156,7 +167,81 @@ async function main() {
         cache,
         mayCallLive ? "comparison" : smoke ? "injected-smoke" : "free-check"
     );
-    await mkdir(capture);
+    if (!resumeWarmup) await mkdir(capture);
+    const method = {
+        specSha256: manifest.specSha256,
+        caps: CAP_BYTES,
+        arms: [...FREE_ARMS, ...LIVE_ARMS],
+        schedule: schedule.map(({ split, group, capBytes }) => ({
+            split,
+            groupId: group.id,
+            capBytes,
+        })),
+        projection: azure ? { projectedUsd, limitUsd: LIMIT_USD, routes: azure.routes } : null,
+    };
+    let priorLedger: BenchmarkMeterSnapshot | undefined;
+    let priorDevRows: unknown[] = [];
+    if (resumeWarmup) {
+        const savedMethod = JSON.parse(await readFile(resolve(capture, "method.json"), "utf8"));
+        if (JSON.stringify(savedMethod) !== JSON.stringify(method))
+            throw new Error("long_decisions_warmup_method_mismatch");
+        const rows: unknown = JSON.parse(await readFile(resolve(capture, "dev-rows.json"), "utf8"));
+        const jobs = schedule.filter(job => job.split === "dev");
+        const allowedFiles = new Set([
+            "method.json",
+            "usage-ledger.json",
+            "dev-rows.json",
+            "warmup-diagnostics.json",
+        ]);
+        const expectedRows: unknown[] = [];
+        for (const job of jobs)
+            for (const arm of FREE_ARMS) {
+                const file = [job.group.id, job.capBytes, arm].join("-") + ".json";
+                allowedFiles.add(file);
+                const saved = JSON.parse(await readFile(resolve(capture, file), "utf8"));
+                if (!Array.isArray(saved.rows) || saved.rows.length !== 1)
+                    throw new Error("long_decisions_warmup_dev_capture_invalid");
+                const row = saved.rows[0];
+                if (
+                    row.groupId !== job.group.id ||
+                    row.split !== "dev" ||
+                    row.weekId !== job.group.weekId ||
+                    row.capBytes !== job.capBytes ||
+                    row.arm !== arm ||
+                    row.status !== "completed" ||
+                    row.provenance?.kind !== "deterministic" ||
+                    !Array.isArray(row.selected) ||
+                    saved.result?.status !== "ok"
+                )
+                    throw new Error("long_decisions_warmup_dev_capture_invalid");
+                expectedRows.push(row);
+            }
+        if (
+            expectedRows.length !== 24 ||
+            !Array.isArray(rows) ||
+            JSON.stringify(rows) !== JSON.stringify(expectedRows) ||
+            (await readdir(capture)).some(name => !allowedFiles.has(name))
+        )
+            throw new Error("long_decisions_warmup_resume_denied");
+        priorDevRows = rows;
+        priorLedger = JSON.parse(
+            await readFile(resolve(capture, "usage-ledger.json"), "utf8")
+        ) as BenchmarkMeterSnapshot;
+        if (
+            !Array.isArray(priorLedger.records) ||
+            priorLedger.records.length === 0 ||
+            priorLedger.records.some(
+                row =>
+                    row.route !== "digest" ||
+                    row.workId !== undefined ||
+                    !["settled", "unknown"].includes(row.status)
+            ) ||
+            priorLedger.hold !== "usage_unresolved"
+        )
+            throw new Error("long_decisions_warmup_ledger_invalid");
+        if (projectedUsd + priorLedger.projectedTotalUsd > LIMIT_USD)
+            throw new Error("long_decisions_projected_budget_exceeded");
+    }
     const byRef = new Map<string, StableId>();
     const byHandle = new Map<string, StableId>();
     const byVersion = new Map<string, StableId>();
@@ -176,6 +261,62 @@ async function main() {
         return stable;
     };
     const originalFetch = globalThis.fetch;
+    const causeCode = (error: unknown): string => {
+        const candidate = error as {
+            name?: string;
+            code?: unknown;
+            cause?: { code?: unknown; name?: string };
+        };
+        const code = candidate?.cause?.code ?? candidate?.code ?? candidate?.name;
+        return typeof code === "string" &&
+            [
+                "ECONNRESET",
+                "ECONNREFUSED",
+                "ETIMEDOUT",
+                "ENOTFOUND",
+                "EAI_AGAIN",
+                "UND_ERR_SOCKET",
+                "UND_ERR_CONNECT_TIMEOUT",
+                "UND_ERR_HEADERS_TIMEOUT",
+                "UND_ERR_BODY_TIMEOUT",
+                "AbortError",
+                "TimeoutError",
+            ].includes(code)
+            ? code
+            : "transport_failure";
+    };
+    const diagnostics: unknown[] = [];
+    if (resumeWarmup) {
+        try {
+            const saved = JSON.parse(
+                await readFile(resolve(capture, "warmup-diagnostics.json"), "utf8")
+            );
+            if (!Array.isArray(saved)) throw new Error("long_decisions_warmup_diagnostics_invalid");
+            diagnostics.push(...saved);
+        } catch (error) {
+            if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+        }
+    }
+    const saveDiagnostic = async (value: unknown) => {
+        diagnostics.push(value);
+        console.log(JSON.stringify(value));
+        await writeJson(resolve(capture, "warmup-diagnostics.json"), diagnostics);
+    };
+    const diagnosedFetch: typeof fetch = async (input, init) => {
+        try {
+            return await originalFetch(input, init);
+        } catch (error) {
+            const url = new URL(
+                typeof input === "string" ? input : input instanceof URL ? input.href : input.url
+            );
+            await saveDiagnostic({
+                kind: "fetch_transport_failure",
+                route: url.pathname.endsWith("/responses") ? "exploration" : "digest",
+                causeCode: causeCode(error),
+            });
+            throw error;
+        }
+    };
     const meter =
         mayCallLive && azure
             ? createBenchmarkMeter({
@@ -192,10 +333,12 @@ async function main() {
                   maxOutputTokens: AZURE_LUNA_OUTPUT_LIMIT,
                   timeoutMs: 150_000,
                   transportReliability: "scoped-retry-v1",
+                  allowGenerationTransportRecovery: true,
+                  ...(priorLedger ? { priorLedger } : {}),
                   persist: snapshot => writeJson(resolve(capture, "usage-ledger.json"), snapshot),
               })
             : undefined;
-    const meteredFetch = meter?.wrapFetch(originalFetch);
+    const meteredFetch = meter?.wrapFetch(diagnosedFetch);
     const digestProvider = azure
         ? resolveDocumentDigestProvider(options =>
               resolveChatModel({ ...options, config: azure.config, streaming: false })
@@ -279,6 +422,71 @@ async function main() {
     };
     const warmOfferedDigests = async () => {
         if (!digestProvider || !meter) throw new Error("long_decisions_live_provider_missing");
+        // This unauthenticated HEAD warms the same process's connection path; never a model call.
+        let connected = false;
+        for (let attempt = 1; attempt <= 4; attempt++) {
+            const started = performance.now();
+            try {
+                const response = await originalFetch(
+                    azure!.endpoint.replace(/\/$/, "") + "/models",
+                    {
+                        method: "HEAD",
+                        headers: {},
+                        credentials: "omit",
+                        redirect: "error",
+                        signal: AbortSignal.timeout(4000),
+                    }
+                );
+                await saveDiagnostic({
+                    kind: "connectivity",
+                    attempt,
+                    httpStatus: response.status,
+                    durationMs: performance.now() - started,
+                });
+                await response.body?.cancel();
+                connected = true;
+                break;
+            } catch (error) {
+                await saveDiagnostic({
+                    kind: "connectivity",
+                    attempt,
+                    causeCode: causeCode(error),
+                    durationMs: performance.now() - started,
+                });
+            }
+        }
+        if (!connected) throw new Error("long_decisions_connectivity_failed");
+        const recoverNoHttp = async (expectedNewIds?: Set<string>) => {
+            await meter.drainPending();
+            const state = meter.snapshot();
+            const unknown = state.records.filter(
+                row => row.status === "unknown" && !row.continuedAfterGenerationNoHttp
+            );
+            if (
+                state.hold !== "usage_unresolved" ||
+                unknown.length === 0 ||
+                unknown.some(
+                    row =>
+                        row.route !== "digest" ||
+                        row.httpStatus !== undefined ||
+                        row.workId !== undefined ||
+                        row.failure !== "usage_unresolved" ||
+                        row.settledListRateUsd !== undefined ||
+                        row.scopedTransportFailure
+                ) ||
+                (expectedNewIds &&
+                    (unknown.length !== expectedNewIds.size ||
+                        unknown.some(row => !expectedNewIds.has(row.id))))
+            )
+                throw new Error("long_decisions_warmup_recovery_denied");
+            await meter.clearGenerationTransportHold(unknown.length);
+            await saveDiagnostic({
+                kind: "warmup_transport_recovered",
+                requests: unknown.length,
+                heldExposureUsd: meter.snapshot().reservedUsd,
+            });
+        };
+        if (resumeWarmup) await recoverNoHttp();
         const fixedIds = new Set(manifest.fixedSources.map(source => source.documentId));
         const eligible = new Set<string>();
         for (const { group } of schedule) {
@@ -310,23 +518,48 @@ async function main() {
             database.transaction(run => run(queryText, args));
         const startedAt = Date.now();
         const digestIds: string[] = [];
-        // A small batch keeps the cold digest step off the exploration clock and limits concurrent transports.
-        for (let index = 0; index < versionIds.length; index += 2) {
-            meter.assertCanDispatch();
-            const batch = versionIds.slice(index, index + 2);
-            const ready = await prewarmTopicDigests({
-                actor,
-                versionIds: batch,
-                query,
-                provider: digestProvider,
-                authorizeDocument: async document =>
-                    canReadIds.has(String(document.id)) &&
-                    (await loadActor()).canMutate &&
-                    (await currentEpoch()) === epoch,
-            });
-            if (ready.digests.size !== batch.length)
-                throw new Error("benchmark_digest_warm_up_incomplete");
-            digestIds.push(...ready.digestIds);
+        // Serial batches warm the initial connection and isolate every paid retry.
+        for (const versionId of versionIds) {
+            const batch = [versionId];
+            for (let attempt = 0; attempt < 2; attempt++) {
+                meter.assertCanDispatch();
+                const before = meter.snapshot();
+                try {
+                    const ready = await prewarmTopicDigests({
+                        actor,
+                        versionIds: batch,
+                        query,
+                        provider: digestProvider,
+                        authorizeDocument: async document =>
+                            canReadIds.has(String(document.id)) &&
+                            (await loadActor()).canMutate &&
+                            (await currentEpoch()) === epoch,
+                    });
+                    if (ready.digests.size !== batch.length)
+                        throw new Error("benchmark_digest_warm_up_incomplete");
+                    digestIds.push(...ready.digestIds);
+                    break;
+                } catch (error) {
+                    await meter.drainPending();
+                    const state = meter.snapshot();
+                    const oldIds = new Set(before.records.map(row => row.id));
+                    const added = state.records.filter(row => !oldIds.has(row.id));
+                    if (
+                        attempt !== 0 ||
+                        added.length !== 1 ||
+                        added.some(
+                            row =>
+                                row.status !== "unknown" ||
+                                row.httpStatus !== undefined ||
+                                row.route !== "digest" ||
+                                row.workId !== undefined
+                        ) ||
+                        state.hold !== "usage_unresolved"
+                    )
+                        throw error;
+                    await recoverNoHttp(new Set(added.map(row => row.id)));
+                }
+            }
         }
         await meter.drainPending();
         const audit = {
@@ -345,169 +578,173 @@ async function main() {
         );
         return audit.exposureUsd;
     };
-    await writeJson(resolve(capture, "method.json"), {
-        specSha256: manifest.specSha256,
-        caps: CAP_BYTES,
-        arms: [...FREE_ARMS, ...LIVE_ARMS],
-        schedule: schedule.map(({ split, group, capBytes }) => ({
-            split,
-            groupId: group.id,
-            capBytes,
-        })),
-        projection: azure ? { projectedUsd, limitUsd: LIMIT_USD, routes: azure.routes } : null,
-    });
-    if (meter && meteredFetch) {
-        await writeJson(resolve(capture, "usage-ledger.json"), meter.snapshot());
-        globalThis.fetch = meteredFetch;
-    }
-    let completed = 0;
-    let liveCases = 0;
-    let exposureAfterWarmup = 0;
-    const runJob = async (
-        job: (typeof schedule)[number],
-        arm: (typeof FREE_ARMS)[number] | "live"
-    ) => {
-        const { split, group, capBytes } = job;
-        const week = manifest.weeks.find(week => week.id === group.weekId);
-        if (!week) throw new Error("long_decisions_unknown_reporting_week");
-        const loadActor = await createActor();
-        const execute = () =>
-            runBenchmarkRetrieval({
-                arm:
-                    arm === "live"
-                        ? smoke
-                            ? "configured-live-dry-run"
-                            : "configured-live"
-                        : arm === "seeds-only"
-                          ? "seeds"
-                          : arm,
-                request: {
-                    groupId: group.id,
-                    enterprise: manifest.company.name,
-                    workspaceId: workspace.workspaceId,
-                    topics: group.topics,
-                },
-                asOf: week.cutoff,
-                week: week.weekStart,
-                loadActor,
-                database,
-                databaseUrl: LONG_DECISIONS_DATABASE,
-                sweep: {
-                    cohort: split === "heldout" ? "heldout" : "exploratory",
-                    evidenceCapBytes: capBytes,
-                    protocol: "long-decisions",
-                },
-                ...(arm === "live" && providers ? { providers } : {}),
-            });
-        const result =
-            arm === "live" && meter
-                ? await meter.withWork("sweep-" + String(liveCases + 1).padStart(3, "0"), execute)
-                : await execute();
-        const [record] = result.runId
-            ? await sql`SELECT trace,digest_ids FROM pdr_ai_v2_vantage_weekly_review_run_manifests
-                WHERE run_id=${result.runId}::uuid`
-            : [];
-        const explored = projectToolAccess(record?.trace, byRef, byHandle);
-        const offered = (result.offered ?? []).map(item => stableVersion(item.versionId));
-        const digestIds: string[] = record?.digest_ids ?? [];
-        const storedDigestIds = digestIds.filter(id => /^\d+$/.test(id));
-        const digests = storedDigestIds.length
-            ? await sql`SELECT version_id::text FROM pdr_ai_v2_document_version_digests
-                WHERE company_id=${workspace.workspaceId} AND id=ANY(${storedDigestIds}::bigint[])`
-            : [];
-        const ephemeralVersions = digestIds.flatMap(id => {
-            const match = smoke ? /^ephemeral:(\d+):[a-f0-9]{64}$/.exec(id) : null;
-            return match?.[1] ? [match[1]] : [];
-        });
-        if (digests.length + ephemeralVersions.length !== new Set(digestIds).size)
-            throw new Error("long_decisions_unknown_digest_source");
-        const digestAccess = [...digests.map(row => row.version_id), ...ephemeralVersions].map(
-            versionId => ({
-                ...stableVersion(versionId),
-                tool: "digest" as const,
-                disclosed: true,
-            })
-        );
-        const captureBase = {
-            groupId: group.id,
-            split,
-            weekId: group.weekId,
-            capBytes,
-            offered,
-            explored: [...digestAccess, ...explored],
-            provenance:
-                arm === "live"
-                    ? {
-                          kind: smoke ? "injected" : "live",
-                          executionId: result.runId ?? randomUUID(),
-                      }
-                    : { kind: "deterministic" },
-        };
-        const rows = !("selected" in result)
-            ? (arm === "live" ? LIVE_ARMS : [arm]).map(variant => ({
-                  ...captureBase,
-                  arm: variant,
-                  status: "failed",
-                  failure: result.failure,
-                  selected: [],
-              }))
-            : (arm === "live"
-                  ? [
-                        {
-                            arm: "live",
-                            data: "pairedLive" in result ? result.pairedLive : undefined,
-                        },
-                        {
-                            arm: "live+backfill",
-                            data: "pairedBackfill" in result ? result.pairedBackfill : undefined,
-                        },
-                        { arm: "live-docs+windows", data: result },
-                    ]
-                  : [{ arm, data: result }]
-              ).map(variant => {
-                  if (!variant.data?.selected)
-                      throw new Error("long_decisions_comparison_snapshot_missing");
-                  return {
-                      ...captureBase,
-                      arm: variant.arm,
-                      status: "degradation" in result ? "degraded" : "completed",
-                      selected: variant.data.selected.map(source => ({
-                          ...stableVersion(source.versionId),
-                          text: source.text,
-                      })),
-                  };
-              });
-        await writeJson(resolve(capture, [group.id, capBytes, arm].join("-") + ".json"), {
-            rows,
-            result,
-            trace: record?.trace ?? null,
-        });
-        if (
-            rows.some(row =>
-                [
-                    ...row.offered,
-                    ...row.selected,
-                    ...row.explored.filter(access => access.disclosed),
-                ].some(id => !allowed(id))
-            )
-        )
-            throw new Error("long_decisions_restricted_source_disclosed");
-        completed++;
-        console.log(
-            JSON.stringify({
-                completed,
-                split,
-                group: group.id,
-                capBytes,
-                arm,
-                status: rows[0]?.status,
-                failure: result.failure,
-                exposureUsd: meter?.snapshot().projectedTotalUsd,
-            })
-        );
-        return rows;
-    };
+    const resumeLock = resolve(capture, "resume-warmup.lock");
+    if (resumeWarmup) await writeFile(resumeLock, "", { flag: "wx" });
     try {
+        if (
+            resumeWarmup &&
+            JSON.stringify(priorLedger) !==
+                JSON.stringify(
+                    JSON.parse(await readFile(resolve(capture, "usage-ledger.json"), "utf8"))
+                )
+        )
+            throw new Error("long_decisions_warmup_ledger_changed");
+        if (!resumeWarmup) await writeJson(resolve(capture, "method.json"), method);
+        if (meter && meteredFetch) {
+            await writeJson(resolve(capture, "usage-ledger.json"), meter.snapshot());
+            globalThis.fetch = meteredFetch;
+        }
+        let completed = resumeWarmup ? priorDevRows.length : 0;
+        let liveCases = 0;
+        let exposureAfterWarmup = 0;
+        const runJob = async (
+            job: (typeof schedule)[number],
+            arm: (typeof FREE_ARMS)[number] | "live"
+        ) => {
+            const { split, group, capBytes } = job;
+            const week = manifest.weeks.find(week => week.id === group.weekId);
+            if (!week) throw new Error("long_decisions_unknown_reporting_week");
+            const loadActor = await createActor();
+            const execute = () =>
+                runBenchmarkRetrieval({
+                    arm:
+                        arm === "live"
+                            ? smoke
+                                ? "configured-live-dry-run"
+                                : "configured-live"
+                            : arm === "seeds-only"
+                              ? "seeds"
+                              : arm,
+                    request: {
+                        groupId: group.id,
+                        enterprise: manifest.company.name,
+                        workspaceId: workspace.workspaceId,
+                        topics: group.topics,
+                    },
+                    asOf: week.cutoff,
+                    week: week.weekStart,
+                    loadActor,
+                    database,
+                    databaseUrl: LONG_DECISIONS_DATABASE,
+                    sweep: {
+                        cohort: split === "heldout" ? "heldout" : "exploratory",
+                        evidenceCapBytes: capBytes,
+                        protocol: "long-decisions",
+                    },
+                    ...(arm === "live" && providers ? { providers } : {}),
+                });
+            const result =
+                arm === "live" && meter
+                    ? await meter.withWork(
+                          "sweep-" + String(liveCases + 1).padStart(3, "0"),
+                          execute
+                      )
+                    : await execute();
+            const [record] = result.runId
+                ? await sql`SELECT trace,digest_ids FROM pdr_ai_v2_vantage_weekly_review_run_manifests
+                WHERE run_id=${result.runId}::uuid`
+                : [];
+            const explored = projectToolAccess(record?.trace, byRef, byHandle);
+            const offered = (result.offered ?? []).map(item => stableVersion(item.versionId));
+            const digestIds: string[] = record?.digest_ids ?? [];
+            const storedDigestIds = digestIds.filter(id => /^\d+$/.test(id));
+            const digests = storedDigestIds.length
+                ? await sql`SELECT version_id::text FROM pdr_ai_v2_document_version_digests
+                WHERE company_id=${workspace.workspaceId} AND id=ANY(${storedDigestIds}::bigint[])`
+                : [];
+            const ephemeralVersions = digestIds.flatMap(id => {
+                const match = smoke ? /^ephemeral:(\d+):[a-f0-9]{64}$/.exec(id) : null;
+                return match?.[1] ? [match[1]] : [];
+            });
+            if (digests.length + ephemeralVersions.length !== new Set(digestIds).size)
+                throw new Error("long_decisions_unknown_digest_source");
+            const digestAccess = [...digests.map(row => row.version_id), ...ephemeralVersions].map(
+                versionId => ({
+                    ...stableVersion(versionId),
+                    tool: "digest" as const,
+                    disclosed: true,
+                })
+            );
+            const captureBase = {
+                groupId: group.id,
+                split,
+                weekId: group.weekId,
+                capBytes,
+                offered,
+                explored: [...digestAccess, ...explored],
+                provenance:
+                    arm === "live"
+                        ? {
+                              kind: smoke ? "injected" : "live",
+                              executionId: result.runId ?? randomUUID(),
+                          }
+                        : { kind: "deterministic" },
+            };
+            const rows = !("selected" in result)
+                ? (arm === "live" ? LIVE_ARMS : [arm]).map(variant => ({
+                      ...captureBase,
+                      arm: variant,
+                      status: "failed",
+                      failure: result.failure,
+                      selected: [],
+                  }))
+                : (arm === "live"
+                      ? [
+                            {
+                                arm: "live",
+                                data: "pairedLive" in result ? result.pairedLive : undefined,
+                            },
+                            {
+                                arm: "live+backfill",
+                                data:
+                                    "pairedBackfill" in result ? result.pairedBackfill : undefined,
+                            },
+                            { arm: "live-docs+windows", data: result },
+                        ]
+                      : [{ arm, data: result }]
+                  ).map(variant => {
+                      if (!variant.data?.selected)
+                          throw new Error("long_decisions_comparison_snapshot_missing");
+                      return {
+                          ...captureBase,
+                          arm: variant.arm,
+                          status: "degradation" in result ? "degraded" : "completed",
+                          selected: variant.data.selected.map(source => ({
+                              ...stableVersion(source.versionId),
+                              text: source.text,
+                          })),
+                      };
+                  });
+            await writeJson(resolve(capture, [group.id, capBytes, arm].join("-") + ".json"), {
+                rows,
+                result,
+                trace: record?.trace ?? null,
+            });
+            if (
+                rows.some(row =>
+                    [
+                        ...row.offered,
+                        ...row.selected,
+                        ...row.explored.filter(access => access.disclosed),
+                    ].some(id => !allowed(id))
+                )
+            )
+                throw new Error("long_decisions_restricted_source_disclosed");
+            completed++;
+            console.log(
+                JSON.stringify({
+                    completed,
+                    split,
+                    group: group.id,
+                    capBytes,
+                    arm,
+                    status: rows[0]?.status,
+                    failure: result.failure,
+                    exposureUsd: meter?.snapshot().projectedTotalUsd,
+                })
+            );
+            return rows;
+        };
         if (smoke) {
             const job = schedule.find(job => job.split === "dev" && job.capBytes === 80000);
             if (!job) throw new Error("long_decisions_smoke_job_missing");
@@ -517,10 +754,12 @@ async function main() {
         }
         for (const split of SPLITS) {
             const jobs = schedule.filter(job => job.split === split);
-            const rows: unknown[] = [];
-            for (const job of jobs)
-                for (const arm of FREE_ARMS) rows.push(...(await runJob(job, arm)));
-            await writeJson(resolve(capture, split + "-rows.json"), rows);
+            const rows: unknown[] = resumeWarmup && split === "dev" ? [...priorDevRows] : [];
+            if (!(resumeWarmup && split === "dev")) {
+                for (const job of jobs)
+                    for (const arm of FREE_ARMS) rows.push(...(await runJob(job, arm)));
+                await writeJson(resolve(capture, split + "-rows.json"), rows);
+            }
             if (!meter) continue;
             if (split === "dev") exposureAfterWarmup = await warmOfferedDigests();
             for (const job of jobs) {
@@ -543,6 +782,7 @@ async function main() {
         globalThis.fetch = originalFetch;
         await meter?.drainPending();
         await sql.end();
+        if (resumeWarmup) await unlink(resumeLock);
     }
 }
 

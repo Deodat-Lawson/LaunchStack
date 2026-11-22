@@ -20,6 +20,7 @@ import { neutralsFor, type ThemeMode } from "../palette";
 import { isContainer, shapeDef, shapeHoldsText, shapeTextBox } from "../shapes";
 import { layoutText } from "../text";
 import type { DiagramEdge, DiagramNode, DiagramPage, Point, ShapeId, TextStyle } from "../types";
+import { keepPlaced } from "./arrange";
 import type { FlowLook } from "./lookTypes";
 import { normalizeLabel, oneLine, type StepKind, type StepsParse } from "./syntax";
 
@@ -267,6 +268,12 @@ export interface ApplyOptions {
     order?: readonly string[];
     /** Where the first step's top-centre goes on an empty board. */
     origin?: Point;
+    /**
+     * A hand-placed chart (`flowLayout: "manual"`): boxes already on the page
+     * keep their places (and arrows their bends); only new steps are placed,
+     * beside the step they follow. See `keepPlaced` in `./arrange.ts`.
+     */
+    keepPlaced?: boolean;
 }
 
 export interface ApplyResult {
@@ -398,11 +405,12 @@ export function applySteps(page: DiagramPage, parse: StepsParse, opts: ApplyOpti
     });
 
     const others = page.nodes.filter(nd => !oldIds.has(nd.id));
-    const next: DiagramPage = {
+    const laidOut: DiagramPage = {
         ...page,
         nodes: [...others, ...placed],
         edges: [...kept, ...edges],
     };
+    const next = opts.keepPlaced ? keepPlaced(page, laidOut) : laidOut;
     return { page: samePage(page, next) ? page : next, ids };
 }
 

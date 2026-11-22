@@ -4,6 +4,7 @@ import {
     deleteSelection,
     insertEdge,
     insertShape,
+    setBranchWords,
     setEdgeLabel,
 } from "../model/commands";
 import { activePage, nodeById } from "../model/doc";
@@ -401,15 +402,44 @@ describe("Steps: chart → text", () => {
         ]);
     });
 
-    it("Tab and then nothing typed leaves no box and no line", async () => {
+    it("Tab and then nothing typed: the box stays as the canvas left it, with no line yet", async () => {
         const { store, sync } = setup();
         write(sync, "A\nB");
-        const before = structureOf(page(store));
-        addNextStep(store, byText(store, "A").id);
+        const added = addNextStep(store, byText(store, "A").id)!;
         store.setEditing(null);
         await caughtUp();
+        // The panel never takes away what the canvas made (Esc on an empty
+        // step is what removes it); the box gets its line once it has words.
         expect(sync.getSnapshot().text).toBe("A\nB");
-        expect(structureOf(page(store))).toBe(before);
+        expect(nodeById(page(store), added)).toBeDefined();
+        rename(store, added, "Weigh");
+        await caughtUp();
+        expect(sync.getSnapshot().text).toBe("A\nWeigh\nB");
+    });
+
+    it("a branch made with the keys under a fresh question stays a branch", async () => {
+        const { store, sync } = setup();
+        setBranchWords(store, { yes: "Yes", no: "No" });
+        // Typed on the canvas from an empty board: the lines knew none of it.
+        const a = insertShape(store, "process", { x: 0, y: 0 });
+        rename(store, a, "Receive order");
+        const q = addNextStep(store, a)!;
+        rename(store, q, "In stock?");
+        const pack = addNextStep(store, q)!;
+        rename(store, pack, "Pack");
+        const reorder = addNextStep(store, q, { branch: true })!;
+        rename(store, reorder, "Reorder");
+        await caughtUp();
+        expect(arrows(store)).toEqual([
+            "In stock? → Pack [Yes]",
+            "In stock? → Reorder [No]",
+            "Receive order → In stock?",
+        ]);
+        // Both branches written under the question (which comes first is the
+        // serializer's choice).
+        const lines = sync.getSnapshot().text.split("\n");
+        expect(lines.slice(0, 2)).toEqual(["Receive order", "In stock?"]);
+        expect(lines.slice(2).sort()).toEqual(["  No: Reorder", "  Yes: Pack"]);
     });
 
     it("Delete on a box takes its line, and joins the lines around it", async () => {

@@ -12,8 +12,11 @@
  * doing, it catches up once the label or gesture in flight is finished.
  * A page it has written before (undo, redo) brings back the text it was
  * written from, blank lines and all. Anything else is an edit on the canvas,
- * and `reconcileSteps` writes it into the lines; the chart is then redrawn
- * from those lines, so the two never disagree for longer than a microtask.
+ * and the canvas wins: `reconcileSteps` writes it into the lines when they
+ * can say it, else the chart is written out afresh (`serializeSteps`). The
+ * chart is never redrawn into a different one from a canvas edit — the keys
+ * and the menu draw things (a branch under a fresh question) the old lines
+ * could not hold.
  *
  * No React here: the panel subscribes to it, and the tests drive it with a
  * store alone.
@@ -21,15 +24,10 @@
 
 import { arrangesItself } from "../../model/commands";
 import { activePage } from "../../model/doc";
-import { keepPlaced, tidyChart } from "../../model/flowchart/arrange";
+import { tidyChart } from "../../model/flowchart/arrange";
 import { boardMode, flowchartLook } from "../../model/flowchart/look";
 import { reconcileSteps, serializeSteps, type StepsBinding } from "../../model/flowchart/reconcile";
-import {
-    applySteps,
-    samePage,
-    structureOf,
-    type ApplyResult,
-} from "../../model/flowchart/steps";
+import { applySteps, samePage, structureOf, type ApplyResult } from "../../model/flowchart/steps";
 import { parseSteps, type StepsParse } from "../../model/flowchart/syntax";
 import type { EditorStore } from "../../model/store";
 import type { DiagramPage, MindmapDoc, Point, SelectionRef } from "../../model/types";
@@ -174,6 +172,7 @@ export class StepsSync {
                 mode: boardMode(state.doc),
                 order: prev?.ids.filter((id): id is string => !!id),
                 origin: this.options.origin?.(),
+                keepPlaced: !arrangesItself(state.doc),
             })
         );
         if (result.page !== page) {
@@ -257,25 +256,39 @@ export class StepsSync {
         }
         this.endBurst();
 
-        const out = reconcileSteps(base, page);
-        const parse = parseSteps(out.text);
-        const result = this.placed(
-            page,
-            applySteps(page, parse, {
-                look: flowchartLook,
-                mode: boardMode(state.doc),
-                ids: out.ids,
-                order: base.ids.filter((id): id is string => !!id),
-                origin: this.options.origin?.(),
-            })
-        );
-        const textChanged = out.text !== base.text;
-        if (
-            result.page !== page &&
-            (textChanged || structureOf(result.page) !== structureOf(page))
-        ) {
-            // The lines are the truth: what the canvas cannot say in them is
-            // put back, and a rename or a new step is laid out with the rest.
+        // An edit made on the canvas stays as it was made; the lines follow.
+        // They are edited where they stand (keeping their spacing and order)
+        // when that says the same chart, else written out afresh — the keys
+        // and the menu draw things the old lines could not hold, like a
+        // branch under a question they never had. Redrawing from the lines
+        // may lay the chart out, and put back an arrow the lines imply (a
+        // step flows on to the next line), but never takes away or changes a
+        // box or an arrow the canvas has.
+        const draw = (written: { text: string; ids: Array<string | null> }) => {
+            const parse = parseSteps(written.text);
+            const result = this.placed(
+                page,
+                applySteps(page, parse, {
+                    look: flowchartLook,
+                    mode: boardMode(state.doc),
+                    ids: written.ids,
+                    order: base.ids.filter((id): id is string => !!id),
+                    origin: this.options.origin?.(),
+                    keepPlaced: !arrangesItself(state.doc),
+                })
+            );
+            return { out: written, parse, result, fit: fitOf(page, result.page) };
+        };
+        const tries = [
+            ...(base.text.trim() === "" ? [] : [draw(reconcileSteps(base, page))]),
+            draw(serializeSteps(page)),
+        ];
+        const drawn =
+            tries.find(t => t.fit === "same") ??
+            tries.find(t => t.fit === "adds") ??
+            tries[tries.length - 1]!;
+        const { out, parse, result } = drawn;
+        if (result.page !== page && drawn.fit !== "loses") {
             this.write(() => this.store.updatePage(() => result.page, { transient: true }));
             this.pruneSelection();
         }
@@ -287,17 +300,17 @@ export class StepsSync {
     }
 
     /**
-     * Where the redrawn steps go. `applySteps` lays them out from scratch; a
-     * chart that arranges itself is then laid out the way Tab lays it out
-     * (`tidyChart`), so the panel and the keys agree on one arrangement. On a
-     * hand-placed chart nothing already on the board moves: only the new
-     * boxes are placed, beside the box they follow (`keepPlaced`).
+     * Where the redrawn steps go. `applySteps` lays them out from scratch, or
+     * — on a hand-placed chart (`keepPlaced`) — puts back everything already
+     * placed and places only new boxes. A chart that arranges itself is then
+     * laid out the way Tab lays it out (`tidyChart`), so the panel and the
+     * keys agree on one arrangement.
      */
     private placed(page: DiagramPage, result: ApplyResult): ApplyResult {
         if (result.page === page) return result;
         const next = arrangesItself(this.store.getState().doc)
             ? tidyChart(result.page, result.ids)
-            : keepPlaced(page, result.page);
+            : result.page;
         // Laid out again to where it already was: nothing to commit.
         if (samePage(page, next)) return { ...result, page };
         return next === result.page ? result : { ...result, page: next };
@@ -359,6 +372,27 @@ export class StepsSync {
         const step = ids.indexOf(id);
         return step >= 0 ? (parse.steps[step]?.line ?? null) : null;
     }
+}
+
+/**
+ * How a chart redrawn from the lines compares with the page: the same boxes
+ * and arrows (`same`), the same boxes with every arrow kept and some added
+ * (`adds` — an arrow the lines imply), or something taken away or changed.
+ */
+function fitOf(page: DiagramPage, drawn: DiagramPage): "same" | "adds" | "loses" {
+    const now = structureOf(page);
+    const then = structureOf(drawn);
+    if (now === then) return "same";
+    const [boxesNow = "", arrowsNow = ""] = now.split("#");
+    const [boxesThen = "", arrowsThen = ""] = then.split("#");
+    if (boxesNow !== boxesThen) return "loses";
+    const left = arrowsThen ? arrowsThen.split("|") : [];
+    for (const arrow of arrowsNow ? arrowsNow.split("|") : []) {
+        const at = left.indexOf(arrow);
+        if (at < 0) return "loses";
+        left.splice(at, 1);
+    }
+    return "adds";
 }
 
 const controllers = new WeakMap<EditorStore, StepsSync>();

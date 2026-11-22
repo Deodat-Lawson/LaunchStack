@@ -311,7 +311,7 @@ export async function runTopicExploration(input: {
                     ...(excerpts.length === 1 ? excerpts[0] : {}),
                 };
             },
-            "Read exact canonical source text using a catalogue document handle (preferred) or ref. Request center with optional length (default 600), start/end, or up to six spans. Windows clamp to the source, expand to 200?6000 characters around the requested center, preserve UTF-16 boundaries, and merge overlaps. Use the actual returned ranges when submitting evidence."
+            "Read exact canonical source text using a catalogue document handle (preferred) or ref. Request center with optional length (default 600), start/end, or up to six spans. Windows clamp to the source, expand to 200 to 6000 characters around the requested center, preserve UTF-16 boundaries, and merge overlaps. Use the actual returned ranges when submitting evidence."
         ),
     ];
     const port: AgentModelPort = {
@@ -354,7 +354,7 @@ export async function runTopicExploration(input: {
                         context.addIssue({
                             code: "custom",
                             message:
-                                "range_invalid: use actual ranges returned by read_document_excerpt (200?6000 UTF-16 characters)",
+                                "range_invalid: use actual ranges returned by read_document_excerpt (200 to 6000 UTF-16 characters)",
                         });
                 if (item.topicIds.some(id => !input.topics.some(topic => topic.id === id)))
                     context.addIssue({

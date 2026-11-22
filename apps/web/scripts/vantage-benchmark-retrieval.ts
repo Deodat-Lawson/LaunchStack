@@ -280,7 +280,11 @@ export async function runBenchmarkRetrieval(options: {
     asOf: string;
     endToEnd?: boolean;
     providers?: TopicSelectionProviders;
-    sweep?: { cohort: SweepCohort; evidenceCapBytes: SweepCap; protocol?: "heldout-reliability" };
+    sweep?: {
+        cohort: SweepCohort;
+        evidenceCapBytes: SweepCap;
+        protocol?: "heldout-reliability" | "long-decisions";
+    };
 }) {
     assertBenchmarkDatabaseUrl(options.databaseUrl);
     const request = z.union([BenchmarkQuestionSchema, BenchmarkGroupSchema]).parse(options.request);
@@ -288,15 +292,22 @@ export async function runBenchmarkRetrieval(options: {
     const caseId = grouped ? request.groupId : request.caseId;
     const cap = options.sweep?.evidenceCapBytes ?? 80_000;
     const reliabilityProtocol = options.sweep?.protocol === "heldout-reliability";
+    const longDecisions = options.sweep?.protocol === "long-decisions";
+    const hybrid = longDecisions && options.arm.startsWith("configured-live");
     const validSweepPolicy =
         !options.sweep ||
         (reliabilityProtocol
             ? options.sweep.cohort === "heldout" &&
               [8000, 16000].includes(cap) &&
               ["seeds", "seeds-windows", "configured-live"].includes(options.arm)
-            : options.sweep.protocol === undefined &&
-              (options.sweep.cohort !== "heldout" || cap === 16000 || cap === 80000) &&
-              ["seeds", "seeds-windows", "scripted", "configured-live"].includes(options.arm));
+            : longDecisions
+              ? [16000, 32000, 80000].includes(cap) &&
+                ["seeds", "seeds-windows", "configured-live", "configured-live-dry-run"].includes(
+                    options.arm
+                )
+              : options.sweep.protocol === undefined &&
+                (options.sweep.cohort !== "heldout" || cap === 16000 || cap === 80000) &&
+                ["seeds", "seeds-windows", "scripted", "configured-live"].includes(options.arm));
     if (
         options.sweep &&
         (!grouped || options.endToEnd || !SWEEP_CAPS.includes(cap) || !validSweepPolicy)
@@ -393,6 +404,8 @@ export async function runBenchmarkRetrieval(options: {
     let reserved = false;
     let submitted: TopicExplorationResult | null = null;
     let backfillSnapshot: WeeklyReviewInput | undefined;
+    let liveSnapshot: WeeklyReviewInput | undefined;
+    let degradation: string | undefined;
 
     let attributionDocuments: { ref: string; id: string; version: string }[] = [];
     try {
@@ -416,6 +429,7 @@ export async function runBenchmarkRetrieval(options: {
         );
         const current = { ...actor, authorityEpoch: context.authorityEpoch };
         const seed = context.topicSeed;
+        if (seed && hybrid) seed.manifest.configuration.evidenceStrategy = "live-docs+windows";
         offeredBeforeFailure = seed?.manifest.offered.map(source => ({
             documentId: source.id,
             versionId: source.version,
@@ -553,6 +567,7 @@ export async function runBenchmarkRetrieval(options: {
                 }
             }
             submitted = selection;
+            degradation = selection?.degradation?.code;
             attributionDocuments = [...seed.documents, ...seed.manifest.fixed];
             nextStage("freeze");
             const frozen = await repository.freezeTopic(current, id, query =>
@@ -561,6 +576,23 @@ export async function runBenchmarkRetrieval(options: {
                         return fitTopicEvidence(id, seed, selection, read, {
                             seedWindows: options.arm === "seeds-windows",
                         });
+                    if (hybrid) {
+                        const fit = await fitTopicEvidence(id, seed, selection, read, {
+                            evidenceCapBytes: cap,
+                            compareVariants: true,
+                        });
+                        if (!fit.comparisons)
+                            throw new Error("benchmark_backfill_priority_violation");
+                        liveSnapshot = fit.comparisons.live.input;
+                        backfillSnapshot = fit.comparisons.liveBackfill.input;
+                        if (
+                            [liveSnapshot, backfillSnapshot, fit.input].some(
+                                input => frozenTextBytes(input) > cap
+                            )
+                        )
+                            throw new Error("benchmark_group_evidence_budget_exceeded");
+                        return fit;
+                    }
                     const paired = options.arm === "configured-live";
                     const fit = await fitTopicEvidence(id, seed, selection, read, {
                         evidenceCapBytes: cap,
@@ -678,6 +710,16 @@ export async function runBenchmarkRetrieval(options: {
             frozenBytes: frozenTextBytes(snapshot),
             snapshot,
             ...(pairedBackfill ? { pairedBackfill } : {}),
+            ...(liveSnapshot
+                ? {
+                      pairedLive: {
+                          snapshot: liveSnapshot,
+                          selected: selectedSnapshotSources(liveSnapshot),
+                          frozenBytes: frozenTextBytes(liveSnapshot),
+                      },
+                  }
+                : {}),
+            ...(degradation ? { degradation } : {}),
 
             generation,
             accounting,

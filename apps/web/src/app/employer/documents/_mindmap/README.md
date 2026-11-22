@@ -153,6 +153,10 @@ of step):
   over what it holds (a marquee catches a frame only whole); the frame moves
   by its title or its edge, or once it is selected. A double-click inside
   adds a box there, in the frame; a double-click on the title renames it.
+  A frame drawn with the rail's Frame tool starts titled "Frame" (in the
+  reader's language), the title selected so typing names it, and the
+  selection toolbar sits above a selected frame's title, never over it (the
+  second click of that double-click has to land on the title).
   Tab never clones a frame or a group: on an empty frame it adds the first
   step inside, otherwise it does nothing.
 
@@ -224,10 +228,15 @@ Steps panel, agents), wears `flowchartLook` (`model/flowchart/look.ts`,
 reached through `flowLookOf(doc)`, `dressBox`, `edgeOptions`): coloured by
 kind — a step blue, a decision amber, Start/End green, data violet, a note
 sticky yellow — no outline, a soft shadow, 15px regular type; right-angled
-arrows in the board's soft ink, 12px labels. A label ending in "?" makes its
-box a decision when it is finished, "Start" or "End" a pill (`afterText`, in
-`commitNodeText`'s undo step); boxes keep their width and grow down. Boxes
-already on a document are never repainted.
+arrows in the board's soft ink, 12px labels. A label ending in "?" makes a
+plain step a decision when it is finished, "Start" or "End" a pill
+(`afterText`, in `commitNodeText`'s undo step); words never take a kind
+away, so a Decision picked from the menu and labelled "Approve", or a
+Start/End labelled "Order placed", keeps its kind until someone changes the
+shape. The Steps panel writes such a decision as "Approve?" (and leaves the
+box's own words alone), and keeps a pill a pill whatever its line says,
+except one its own typing just made. Boxes keep their width and grow down.
+Boxes already on a document are never repainted.
 
 ### Keys (`flow/keys`)
 
@@ -264,18 +273,27 @@ No; picked inside a frame, the box joins it.
 
 The chart as lines, in a panel docked left of the canvas: one step per line,
 joined in order; a line ending in "?" is a decision; indented `Label: step`
-lines are its branches; `-> Step` jumps; Start and End are pills (the
-grammar is `model/flowchart/syntax.ts`, shared with agents). A top-bar
-**Steps** button toggles it; it is open unless the person closed it
-(`lib/preferences.ts`, per browser) and never shown while presenting.
+lines are its branches; `-> Step` jumps; Start and End are pills; a blank
+line starts a separate chain — the line after it is not joined to the line
+before it (the grammar is `model/flowchart/syntax.ts`, shared with agents).
+A top-bar **Steps** button toggles it; it is open unless the person closed
+it (`lib/preferences.ts`, per browser) and never shown while presenting.
+Where the canvas's column is narrower than 768px (`NARROW_EDITOR`) it starts
+closed unless the person left it open, and opens over the canvas as a sheet
+(`~/components/ui/sheet`, scoped to that column) that its ✕, Esc or a tap on
+the canvas beside it closes, so the canvas is never squeezed.
 
 Typing is drawn within ~300ms, one undo step per burst, boxes keeping their
-ids. Selecting a box lights its line (every selected box's line); the caret's
-line selects its box. A canvas edit — a rename, Tab, Delete — is written into
-the lines; the canvas wins: the lines are edited where they stand when that
-says the same chart, else written out afresh, and the chart is only redrawn
-from them to put back an arrow they imply, never to take away or change a
-box or an arrow the canvas has (`StepsSync`).
+ids; boxes already on the page keep their places (a box on its own stays
+where it was put), and on a chart that arranges itself each chain the lines
+hold is arranged. Selecting a box lights its line (every selected box's
+line); the caret's line selects its box. Only typing in the panel draws the
+chart. A canvas edit — a rename, Tab, Delete, a deleted arrow, a box
+dropped on its own — only ever rewrites the lines, never the chart
+(`StepsSync`): they are edited where they stand when that says the chart,
+else written out afresh, and two steps the canvas does not join are kept
+apart with a blank line. So the lines always say the canvas, and drawing
+them again changes nothing.
 
 ### Arrangement (`DocSettings.flowLayout`)
 
@@ -293,6 +311,8 @@ a group drag, a nudge, an align — turns the chart `manual` in that move's
 undo step (`holdChartInPlace`), and a toast says so with **Arrange
 automatically**; the same toggle is in the Layout menu (turning it on
 arranges now). Layout › Arrange now lays it out once and leaves the setting.
+After either, or the toast's button, a chart that ended up partly off screen
+is framed (`revealPage`, never past 100%); one already in view stays put.
 `tidyChart` is a tidy tree when the chart is one, the layered layout for
 merges and loops, kept where its first step is; boxes in a frame are laid
 out among themselves, inside it. On a hand-placed chart the Steps panel
@@ -704,7 +724,11 @@ whichever field it arrived in, fences and all.
 
 **Flowcharts go in and out as steps.** One language for the person typing in
 the Steps panel, the agent reading and writing, and the published text, so
-an agent reads what it writes back and writes what a person would type:
+an agent reads what it writes back and writes what a person would type. A
+blank line starts a separate chain — the line after it is not joined to the
+line before it — which is how the text says a box on its own, or two steps
+whose arrow was deleted; agents are told to keep the blank lines they read
+and to add none for spacing:
 
 ```
 Start
@@ -738,8 +762,9 @@ citation. `edit_diagram` takes `add`, `rename`, `remove`, `move`, `connect`,
 `disconnect` and `arrange`; a topic added this way is made by `addChildTopic`,
 so it is the topic Tab would have made. On a flowchart, a box `add` makes is
 in the product look with its kind from its words ("In stock?" a decision),
-`connect` draws the look's arrow, `rename` changes a step's kind with its
-words as typing does (`flowchartLook.afterText`), and a chart on
+`connect` draws the look's arrow, `rename` makes a plain step a decision
+or a pill by its words as typing does and never takes a decision's or a
+pill's kind away (`flowchartLook.afterText`), and a chart on
 `flowLayout: "auto"` takes added steps into its arrangement (`tidyChart`). A
 batch is all or nothing (`runDiagramEdits` works on a scratch `EditorStore`).
 On the server (`~/server/mindmap/agent`) the result is written only over the

@@ -24,7 +24,11 @@
  *   that step somewhere other than the next line;
  * - a line that is exactly `Start` or `End` (any case; `开始`, `结束`) is a
  *   rounded pill, and `End` goes nowhere;
- * - blank lines are ignored.
+ * - a blank line starts a separate chain: the line after it is not joined to
+ *   anything above it (no arrow flows across it, and an indented line or a
+ *   bare `-> Step` right after it has nothing above to leave from). That is
+ *   how the text says two boxes that are not joined — a box dropped on its
+ *   own, or an arrow someone deleted.
  *
  * Pure, and it never throws: what it cannot read it reads as a plain step, and
  * an arrow to words no step has becomes a note rather than an error, so a
@@ -248,7 +252,11 @@ export function parseSteps(text: string): StepsParse {
     const leaves = new Set<number>();
     /** Decisions with at least one branch. */
     const branched = new Set<number>();
+    /** Top-level steps that start a new chain: a blank line came before them. */
+    const fresh = new Set<number>();
     let current: number | null = null;
+    /** A blank line since the last step: the chain above has ended. */
+    let broken = false;
 
     const addStep = (line: number, label: string, branchOf: number | null): number => {
         steps.push({ line, kind: stepKindOf(label), label, branchOf });
@@ -260,7 +268,13 @@ export function parseSteps(text: string): StepsParse {
         lines.push(line);
         const lead = /^[ \t]*/.exec(raw)![0];
         const end = raw.trimEnd().length;
-        if (end <= lead.length) return;
+        if (end <= lead.length) {
+            // A blank line ends the chain: what follows starts afresh. Only
+            // a line after a step counts; blank lines at the top do nothing.
+            if (current !== null) broken = true;
+            current = null;
+            return;
+        }
         line.blank = false;
 
         const split = splitArrow(raw, lead.length, end);
@@ -324,6 +338,8 @@ export function parseSteps(text: string): StepsParse {
             line.step = s;
             line.labelRange = split.head;
             top.push(s);
+            if (broken) fresh.add(s);
+            broken = false;
             current = s;
             if (split.target) {
                 leaves.add(s);
@@ -358,7 +374,8 @@ export function parseSteps(text: string): StepsParse {
     const nextTop = new Map<number, number>();
     top.forEach((s, k) => {
         const next = top[k + 1];
-        if (next !== undefined) nextTop.set(s, next);
+        // Never across a blank line: the next chain starts on its own.
+        if (next !== undefined && !fresh.has(next)) nextTop.set(s, next);
     });
 
     for (const s of top) {

@@ -352,17 +352,24 @@ describe("a question becomes a decision", () => {
         expect(labelOf(store, q.id, byText(store, "Order more").id)).toBe("No");
     });
 
-    it("full-width question marks count; a decision losing its ? goes back to a step", () => {
+    it("full-width question marks count; a decision losing its ? stays a decision", () => {
         expect(isQuestion("有货吗？")).toBe(true);
         expect(isQuestion("Ship it ")).toBe(false);
         const { store } = mount();
         typeChain(store, ["Paid?"]);
         press("Enter");
         const id = byText(store, "Paid?").id;
+        const before = node(store, id);
         press("Enter");
         type("Take payment");
         press("Enter");
-        expect(node(store, id)).toMatchObject({ shape: "process", w: 168, h: 64 });
+        // Words never take a kind away; the shape changes only when someone
+        // changes the shape.
+        expect(node(store, id)).toMatchObject({
+            shape: "decision",
+            w: before.w,
+            text: "Take payment",
+        });
     });
 });
 

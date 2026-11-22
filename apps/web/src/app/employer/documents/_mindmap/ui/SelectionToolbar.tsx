@@ -18,6 +18,7 @@ import {
 import { activePage, nodeById, worksAsFlow } from "../model/doc";
 import { nodesBounds, worldToScreen } from "../model/geometry";
 import { SWATCH_BY_ID, swatchFor } from "../model/palette";
+import { shapeTextBox } from "../model/shapes";
 
 import type { EditorState } from "../model/store";
 import type { DiagramNode } from "../model/types";
@@ -73,7 +74,13 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
     const bounds = nodesBounds(nodes);
     if (!bounds) return null;
 
-    const top = worldToScreen(viewport, { x: bounds.x + bounds.w / 2, y: bounds.y });
+    // A frame's title sits above it, and the toolbar must never cover it:
+    // a click on the title selects the frame, and the second click of a
+    // double-click (which renames it) has to land on the title, not on us.
+    const titleTop = Math.min(
+        ...nodes.map(nd => nd.y + Math.min(0, shapeTextBox(nd.shape, nd.w, nd.h).y))
+    );
+    const top = worldToScreen(viewport, { x: bounds.x + bounds.w / 2, y: titleTop });
     const bottom = worldToScreen(viewport, { x: bounds.x + bounds.w / 2, y: bounds.y + bounds.h });
     // Above the shape unless that would leave the stage; then below it.
     const above = top.y - TOOLBAR_HEIGHT - GAP >= 6;

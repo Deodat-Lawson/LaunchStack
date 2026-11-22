@@ -61,11 +61,36 @@ describe("one step per line", () => {
         expect(arrows(p)).toEqual(["Pack it → Ship it", "Take the order → Pack it"]);
     });
 
-    it("ignores blank lines, and joins across them", () => {
-        const p = parseSteps("\nA\n\n   \nB\n\n");
-        expect(kinds(p)).toEqual(["step:A", "step:B"]);
-        expect(arrows(p)).toEqual(["A → B"]);
-        expect(p.steps.map(s => s.line)).toEqual([1, 4]);
+    it("starts a separate chain after a blank line: nothing joins across it", () => {
+        const p = parseSteps("\nA\n\n   \nB\nC\n\n");
+        expect(kinds(p)).toEqual(["step:A", "step:B", "step:C"]);
+        expect(arrows(p)).toEqual(["B → C"]);
+        expect(p.steps.map(s => s.line)).toEqual([1, 4, 5]);
+        expect(p.notes).toEqual([]);
+    });
+
+    it("lets blank lines at the top and the bottom change nothing", () => {
+        expect(arrows(parseSteps("\n\nA\nB\n\n"))).toEqual(["A → B"]);
+    });
+
+    it("ends a question's branches at a blank line: they do not flow on past it", () => {
+        const p = parseSteps("Paid?\n  Yes: Ship\n  No: Remind\n\nDone");
+        expect(arrows(p)).toEqual(["Paid? → Remind [No]", "Paid? → Ship [Yes]"]);
+        // A branch that says where it goes still goes there.
+        const q = parseSteps("Paid?\n  Yes: Ship -> Done\n  No: Remind\n\nDone");
+        expect(arrows(q)).toEqual(["Paid? → Remind [No]", "Paid? → Ship [Yes]", "Ship → Done"]);
+    });
+
+    it("keeps a jump across a blank line: `->` finds the step by its words", () => {
+        expect(arrows(parseSteps("A -> B\n\nB"))).toEqual(["A → B"]);
+    });
+
+    it("gives an indented line or a bare arrow after a blank line nothing to leave from", () => {
+        const branch = parseSteps("Paid?\n\n  Yes: Ship");
+        expect(branch.notes).toEqual([{ line: 2, kind: "notUnderQuestion" }]);
+        const bare = parseSteps("A\n\n-> A");
+        expect(bare.notes).toEqual([{ line: 2, kind: "arrowWithoutStep" }]);
+        expect(bare.links).toEqual([]);
     });
 
     it("reads Windows line endings", () => {

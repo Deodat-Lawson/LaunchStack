@@ -865,6 +865,7 @@
     "failed": "保存失败 — 稍后将自动重试"
   },
   "canvas": {
+    "frameTitle": "框架",
     "dropImage": "拖入图片",
     "bendHint": "拖动可改走线 · 双击可删除此折点"
   },
@@ -989,7 +990,9 @@
         "jumpCode": "-> 打包订单",
         "jump": "改为跳到那个步骤",
         "endsCode": "开始 · 结束",
-        "ends": "圆角的开始或结束"
+        "ends": "圆角的开始或结束",
+        "blankCode": "（空行）",
+        "blank": "开始另一条流程，不与上一行相连"
       },
       "notes": {
         "missingTarget": "第 {line} 行：没有名为“{target}”的步骤。",

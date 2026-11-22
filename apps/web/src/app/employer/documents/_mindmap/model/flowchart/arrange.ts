@@ -583,12 +583,24 @@ export function keepPlaced(before: DiagramPage, drawn: DiagramPage): DiagramPage
  * first step is (`tidyChart` per chart). Boxes joined to nothing stay put.
  */
 export function tidyAll(page: DiagramPage): DiagramPage {
+    return tidyCharts(
+        page,
+        page.nodes.map(nd => nd.id)
+    );
+}
+
+/**
+ * Each chart holding one of `seeds` laid out top to bottom on its own, from
+ * where its own first step is (`tidyChart` per chart) — not side by side as
+ * one. Boxes joined to nothing stay put.
+ */
+export function tidyCharts(page: DiagramPage, seeds: readonly string[]): DiagramPage {
     let next = page;
     const done = new Set<string>();
-    for (const nd of page.nodes) {
-        if (done.has(nd.id)) continue;
-        const chart = chartOf(next, [nd.id]);
-        for (const id of chart) done.add(id);
+    for (const id of seeds) {
+        if (done.has(id)) continue;
+        const chart = chartOf(next, [id]);
+        for (const c of chart) done.add(c);
         if (chart.length > 1) next = tidyChart(next, chart);
     }
     return next;

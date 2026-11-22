@@ -118,12 +118,61 @@ describe("a box whose words change its kind", () => {
 
     it("with colours of its own (a template's), is reshaped but never repainted", () => {
         const store = new EditorStore(buildTemplate("flowchart", "Doc", "light"));
+        const step = page(store).nodes.find(n => n.text === "Do the thing")!;
+        commitNodeText(store, step, "Done the thing?");
+        const after = node(store, step.id);
+        expect(after.shape).toBe("decision");
+        expect(after.style).toEqual(step.style);
+        expect(after.textStyle).toEqual(step.textStyle);
+        expect(after.x + after.w / 2).toBeCloseTo(step.x + step.w / 2);
+    });
+});
+
+/**
+ * Words promote a plain step (a "?" makes a decision, "Start"/"End" a pill)
+ * but never take a kind away: a decision or a pill someone picked keeps its
+ * kind whatever it is labelled, until they change the shape themselves.
+ */
+describe("a picked kind is never lost to the words", () => {
+    it.each([
+        ["decision", "Approve"],
+        ["decision", "End"],
+        ["terminator", "Order placed"],
+        ["terminator", "Paid?"],
+    ] as const)("a %s labelled %s stays one, in its own colour and size", (shape, words) => {
+        const store = storeOf("flowchart");
+        const id = insertShape(store, shape, { x: 0, y: 0 });
+        const made = node(store, id);
+        commitNodeText(store, made, words);
+        const after = node(store, id);
+        expect(after.shape).toBe(shape);
+        expect(after.style).toEqual(made.style);
+        expect(after.w).toBe(made.w);
+        expect(after.text).toBe(words);
+        expect(flowchartLook.afterText!(after, words, "light")).toBeNull();
+    });
+
+    it("a template's Start renamed Start X stays a pill, unmoved and unpainted", () => {
+        const store = new EditorStore(buildTemplate("flowchart", "Doc", "light"));
         const start = page(store).nodes.find(n => n.text === "Start")!;
-        commitNodeText(store, start, "Begin here");
+        commitNodeText(store, start, "Start X");
         const after = node(store, start.id);
-        expect(after.shape).toBe("process");
-        expect(after.style).toEqual(start.style);
-        expect(after.textStyle).toEqual(start.textStyle);
-        expect(after.x + after.w / 2).toBeCloseTo(start.x + start.w / 2);
+        expect(after).toMatchObject({
+            shape: "terminator",
+            x: start.x,
+            y: start.y,
+            w: start.w,
+            style: start.style,
+        });
+    });
+
+    it("a plain step still becomes a decision or a pill by its words", () => {
+        const store = storeOf("flowchart");
+        const a = insertShape(store, "process", { x: 0, y: 0 });
+        const b = insertShape(store, "process", { x: 400, y: 0 });
+        commitNodeText(store, node(store, a), "In stock?");
+        commitNodeText(store, node(store, b), "End");
+        expect(node(store, a).shape).toBe("decision");
+        expect(node(store, b).shape).toBe("terminator");
     });
 });

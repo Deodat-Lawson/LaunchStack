@@ -92,6 +92,44 @@ describe("the Steps panel toggle", () => {
         expect(panel()).toBeNull();
     });
 
+    describe("on a narrow screen", () => {
+        const wide = window.innerWidth;
+        beforeEach(() => {
+            Object.defineProperty(window, "innerWidth", { configurable: true, value: 375 });
+        });
+        afterEach(() => {
+            Object.defineProperty(window, "innerWidth", { configurable: true, value: wide });
+        });
+        const sheet = () => document.querySelector("[data-slot='sheet-content']");
+
+        it("starts closed, and opens over the canvas as a sheet that closes again", () => {
+            mount();
+            expect(panel()).toBeNull();
+            expect(toggle()).toHaveAttribute("aria-pressed", "false");
+            act(() => {
+                fireEvent.click(toggle());
+            });
+            expect(panel()).toBeInTheDocument();
+            // Over the canvas, not beside it: in the sheet, with no docked column.
+            expect(sheet()).toContainElement(panel());
+            expect(screen.queryByRole("complementary", { name: "Steps" })).toBeNull();
+            // The sheet has the one ✕; the panel's own steps aside.
+            expect(screen.queryByRole("button", { name: "Close the steps" })).toBeNull();
+            act(() => {
+                fireEvent.click(screen.getByRole("button", { name: "Close" }));
+            });
+            expect(panel()).toBeNull();
+            expect(window.localStorage.getItem("mindmap:steps-panel")).toBe("closed");
+        });
+
+        it("a stored choice to keep it open still applies, as a sheet", () => {
+            window.localStorage.setItem("mindmap:steps-panel", "open");
+            mount();
+            expect(panel()).toBeInTheDocument();
+            expect(sheet()).toContainElement(panel());
+        });
+    });
+
     it("steps aside while presenting", () => {
         mount();
         act(() => {

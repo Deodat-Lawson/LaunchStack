@@ -38,6 +38,17 @@ export function isStepNode(nd: DiagramNode): boolean {
     return true;
 }
 
+/**
+ * A step box's words as one line of step text. A diamond always reads as a
+ * question: a decision someone picked and labelled "Approve" is written
+ * "Approve?", so it reads back as a decision.
+ */
+export function stepWords(nd: DiagramNode): string {
+    const words = oneLine(nd.text);
+    if (nd.shape === "decision" && words && !/[?？]$/.test(words)) return `${words}?`;
+    return words;
+}
+
 /** The shape a step of this kind is drawn as, keeping a plain step's own shape. */
 export function shapeForKind(
     kind: StepKind,
@@ -274,6 +285,16 @@ export interface ApplyOptions {
      * beside the step they follow. See `keepPlaced` in `./arrange.ts`.
      */
     keepPlaced?: boolean;
+    /**
+     * Whether a pill (Start/End) whose line now reads as a plain step stays a
+     * pill. The step language has no way to write a pill with other words
+     * ("Order placed"), so by default every pill already on the page stays
+     * one — the kind someone picked is never taken away by the words. The
+     * Steps panel narrows it to the pills there were before the typing began,
+     * so a line typed through "Start" on its way to "Start the timer" is not
+     * left a pill.
+     */
+    keepsPill?: (id: string) => boolean;
 }
 
 export interface ApplyResult {
@@ -315,20 +336,26 @@ export function applySteps(page: DiagramPage, parse: StepsParse, opts: ApplyOpti
         opts.ids ?? []
     );
 
+    const keepsPill = opts.keepsPill ?? (() => true);
     const nodes: DiagramNode[] = parse.steps.map((step, i) => {
         const id = matched[i];
         const prev = id ? oldById.get(id) : undefined;
-        const shape = shapeForKind(step.kind, prev?.shape, look.stepShape);
+        const pill = prev?.shape === "terminator" && step.kind === "step" && keepsPill(prev.id);
+        const shape = pill ? "terminator" : shapeForKind(step.kind, prev?.shape, look.stepShape);
         const box = look.boxLook(shape, mode);
+        // A line that says what the box says (a picked decision's "Approve"
+        // written "Approve?", a label on two lines written on one) leaves
+        // the box's own words alone.
+        const text = prev && stepWords(prev) === step.label ? prev.text : step.label;
         let node: DiagramNode;
         if (prev && prev.shape === shape) {
-            node = { ...prev, text: step.label };
+            node = { ...prev, text };
         } else if (prev) {
             // A line became a question (or stopped being one): same box, new shape.
             node = {
                 ...prev,
                 shape,
-                text: step.label,
+                text,
                 style: { ...prev.style, ...box.style },
                 textStyle: { ...prev.textStyle, ...box.text },
             };
@@ -343,7 +370,7 @@ export function applySteps(page: DiagramPage, parse: StepsParse, opts: ApplyOpti
                 mode,
             });
         }
-        const size = stepSize(shape, step.label, node.textStyle, baseSize(look, shape, mode));
+        const size = stepSize(shape, text, node.textStyle, baseSize(look, shape, mode));
         return { ...node, w: size.w, h: size.h };
     });
     const ids = nodes.map(nd => nd.id);

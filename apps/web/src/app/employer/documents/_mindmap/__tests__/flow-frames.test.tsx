@@ -26,6 +26,7 @@ import { EditorStore } from "../model/store";
 import type { DiagramKind, DiagramNode, FlowLayout } from "../model/types";
 import { Canvas } from "../ui/Canvas";
 import { EditorProvider } from "../ui/EditorContext";
+import { SelectionToolbar } from "../ui/SelectionToolbar";
 
 /**
  * Groups and frames holding their boxes (P13).
@@ -153,7 +154,10 @@ function mount(s: ReturnType<typeof scene>) {
     const view = render(
         <EditorProvider store={s.store}>
             <div data-mindmap-stage="">
-                <Canvas callbacks={{ onContextMenuAt: jest.fn(), onEditText }} />
+                <Canvas
+                    callbacks={{ onContextMenuAt: jest.fn(), onEditText, frameTitle: "Frame" }}
+                />
+                <SelectionToolbar onMore={jest.fn()} />
                 <FlowOverlay canvasSize={{ w: CANVAS.width, h: CANVAS.height }} />
             </div>
         </EditorProvider>
@@ -304,6 +308,33 @@ describe("2 · a double-click inside a frame", () => {
         dblclick(hitOf(m.view.container, m.frame), m.svg, 340, 186);
         expect(m.onEditText).toHaveBeenCalledWith({ kind: "node", id: m.frame });
         expect(menuOf(m.store)).toBeNull();
+        m.view.unmount();
+    });
+
+    it("selected, the frame's toolbar sits above its title, never over it", () => {
+        const m = mount(scene());
+        act(() => m.store.setChromeDepth("focus"));
+        click(hitOf(m.view.container, m.frame), m.svg, 340, 186);
+        expect(m.store.selectedNodeIds()).toEqual([m.frame]);
+        const bar = screen.getByRole("toolbar");
+        // The title band runs from 26px above the frame (y 174) to its top.
+        const frame = node(m.store, m.frame);
+        const titleTop = frame.y - 26;
+        expect(parseFloat(bar.style.top) + 36).toBeLessThanOrEqual(titleTop);
+        // The second click of a double-click on the title lands on the title.
+        dblclick(hitOf(m.view.container, m.frame), m.svg, 340, 186);
+        expect(m.onEditText).toHaveBeenCalledWith({ kind: "node", id: m.frame });
+        m.view.unmount();
+    });
+
+    it("a frame drawn with the Frame tool starts with a title, open for typing", () => {
+        const m = mount(scene());
+        act(() => m.store.setTool("frame"));
+        press(m.svg, 100, 560);
+        dragTo(m.svg, [100, 560], [300, 760]);
+        const made = page(m.store).nodes.find(n => n.shape === "frame" && n.id !== m.frame)!;
+        expect(made.text).toBe("Frame");
+        expect(m.onEditText).toHaveBeenCalledWith({ kind: "node", id: made.id });
         m.view.unmount();
     });
 });

@@ -1,0 +1,6006 @@
+{
+  "schemaVersion": "vantage-heldout-reliability-report/1",
+  "baseCommit": "ce581f66",
+  "runCommit": "138ffd90",
+  "pairedComparisonCommit": "b3ce25bd",
+  "methodSha256": "87f8317a82f00e4cf6f57a081d1cf880400e0416eabb98804d5a1010a6171c4b",
+  "groupMethodSha256": "b04743b6243433bd36e84445071ae7217fb8102233763d63941cc583421ac34d",
+  "heldoutRosterSha256": "e2c280a36d51cff52c6abdeac6e085390682cf59089f08155c8b7ccfb185d43a",
+  "historical": {
+    "captureSha256": "568b40ef03510245fdec99493675f0b56e498622415d2a6d0275dd796d196f5d",
+    "ledgerSha256": "298dc36e9c3b048a33fd9b93af641deb1a4b13b96995111899a8002e86b87c7c",
+    "method": {
+      "waveWidth": 4,
+      "transport": "Unknown no-HTTP request acknowledged continuedAfterTransportFailure; timeout evidence takes precedence.",
+      "cascade": "Same four-wide wave has an earlier-duration transport root; victim settled a 2xx request, has one unmatched trace request, and terminated with generic Error while the historical shared hold remained until wave completion.",
+      "chronologyLimit": "The archive retains ledger dispatch order and relative run/request durations, not absolute completion timestamps. Cascade diagnosis combines these with historical meter control flow; it does not infer provider response content.",
+      "billing": "Unknown usage remains unknown and reserved. Operational classification does not settle charges."
+    },
+    "summary": {
+      "primaryJobs": 300,
+      "successful": 177,
+      "failed": 123,
+      "classifications": {
+        "transport": 43,
+        "shared_hold_transport": 80,
+        "timeout": 0,
+        "http_error": 0,
+        "invalid_submission": 0,
+        "missing_submission": 0,
+        "unknown": 0
+      },
+      "ledgerRecords": 1280,
+      "unknownLedgerRequests": 43,
+      "unknownRequestWorkIds": 43,
+      "unknownRequestsLinkedToFailedJobs": 43,
+      "httpErrorsByStatus": {},
+      "eligibleHeldout16KB": 26
+    },
+    "perWave": [
+      {
+        "wave": 1,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 2,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 3,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 4,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 5,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 6,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 7,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 8,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 9,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 10,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 11,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 12,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 13,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 14,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 15,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 16,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 17,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 18,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 19,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 20,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 21,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 22,
+        "primaryJobs": 4,
+        "successful": 3,
+        "failed": 1,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 23,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 24,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 25,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 26,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 27,
+        "primaryJobs": 4,
+        "successful": 2,
+        "failed": 2,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 1,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 28,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 29,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 30,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 31,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 32,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 33,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 34,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 35,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 3,
+          "shared_hold_transport": 1,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 3
+      },
+      {
+        "wave": 36,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 37,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 38,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 39,
+        "primaryJobs": 4,
+        "successful": 2,
+        "failed": 2,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 1,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 40,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 41,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 42,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 43,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 44,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 45,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 46,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 47,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 48,
+        "primaryJobs": 4,
+        "successful": 1,
+        "failed": 3,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 2,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 49,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 50,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 51,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 3,
+          "shared_hold_transport": 1,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 3
+      },
+      {
+        "wave": 52,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 53,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 2,
+          "shared_hold_transport": 2,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 2
+      },
+      {
+        "wave": 54,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 55,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 56,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 57,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 58,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 59,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 60,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 61,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 62,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 63,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 2,
+          "shared_hold_transport": 2,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 2
+      },
+      {
+        "wave": 64,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 3,
+          "shared_hold_transport": 1,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 3
+      },
+      {
+        "wave": 65,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 2,
+          "shared_hold_transport": 2,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 2
+      },
+      {
+        "wave": 66,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 67,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 2,
+          "shared_hold_transport": 2,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 2
+      },
+      {
+        "wave": 68,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 69,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 70,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 71,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 72,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 73,
+        "primaryJobs": 4,
+        "successful": 4,
+        "failed": 0,
+        "classifications": {
+          "transport": 0,
+          "shared_hold_transport": 0,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 0
+      },
+      {
+        "wave": 74,
+        "primaryJobs": 4,
+        "successful": 0,
+        "failed": 4,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 3,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      },
+      {
+        "wave": 75,
+        "primaryJobs": 4,
+        "successful": 1,
+        "failed": 3,
+        "classifications": {
+          "transport": 1,
+          "shared_hold_transport": 2,
+          "timeout": 0,
+          "http_error": 0,
+          "invalid_submission": 0,
+          "missing_submission": 0,
+          "unknown": 0
+        },
+        "unknownRequests": 1
+      }
+    ],
+    "heldout16Kb": {
+      "originalGroups": 50,
+      "eligibleDirectTransport": 12,
+      "eligibleSharedHold": 14
+    }
+  },
+  "followup": {
+    "status": {
+      "complete": true,
+      "completed": 76,
+      "expected": 76,
+      "concurrency": 1,
+      "approvedUsd": 5,
+      "stopReason": null,
+      "forecast": {
+        "currentExposureUsd": 2.035697145,
+        "projectedUsd": 2.035697145,
+        "sizes": [
+          {
+            "size": 3,
+            "priorMeanUsd": 0.0158498104,
+            "observedMeanUsd": 0.020411707152173914,
+            "completed": 46,
+            "remaining": 0,
+            "projectedUsdPerGroup": 0.03061756072826087
+          },
+          {
+            "size": 5,
+            "priorMeanUsd": 0.025939275699999997,
+            "observedMeanUsd": 0.036558620533333336,
+            "completed": 30,
+            "remaining": 0,
+            "projectedUsdPerGroup": 0.054837930800000004
+          }
+        ]
+      }
+    },
+    "freeRows": 200,
+    "newLiveRows": 152,
+    "pairs": 76,
+    "pairCapturesWithTrace": 76,
+    "successes": 75,
+    "failureCodes": {
+      "topic_exploration_failed:submission_missing": 1
+    },
+    "rowsByCap": {
+      "8000-3": {
+        "attempted": 30,
+        "succeeded": 29,
+        "failed": 1
+      },
+      "16000-3": {
+        "attempted": 16,
+        "succeeded": 16,
+        "failed": 0
+      },
+      "8000-5": {
+        "attempted": 20,
+        "succeeded": 20,
+        "failed": 0
+      },
+      "16000-5": {
+        "attempted": 10,
+        "succeeded": 10,
+        "failed": 0
+      }
+    },
+    "transportReplacements": 26,
+    "usage": {
+      "inputTokens": 5803388,
+      "outputTokens": 327423,
+      "reasoningTokens": 247770,
+      "cachedInputTokens": 4308988,
+      "cacheWriteTokens": 1492978,
+      "settledUsd": 2.035697144999998,
+      "unknownUsd": 0,
+      "shortContextListRateUsd": 0.39356588400000014,
+      "conservativeExposureUsd": 2.035697145,
+      "known": 474,
+      "unknown": 0,
+      "totalAttempts": 474,
+      "requestFailures": {},
+      "logicalRequests": 474,
+      "retryAttempts": 0,
+      "retriedRequests": 0,
+      "retriedRequestsEventuallySucceeded": 0
+    },
+    "captureSha256": {
+      "free": "702993c3744273b20fb8f52f26c3bd8a55d555517ad8d3d8df60ef4398b53c3e",
+      "live": "cc05fd1f236f64917615bb3a42bb5d520c2a9603ca76b37bb2aadc6850cc9c34",
+      "ledger": "f850b08ee8187b09fbdcff51bbb0e47a30abd2389ffa53ae47db06c6a23aeb57",
+      "audit": "285618620e54ba5743a99c499b373f7943139772b7b928c3741a163c9b3be888"
+    },
+    "initialProjectedUsd": 2.2609043241,
+    "invoiceVerified": false,
+    "paidDigestCalls": 0,
+    "paidGeneratorCalls": 0,
+    "paidJudgeCalls": 0,
+    "paidEmbeddingCalls": 0,
+    "originalSixteenKbSeedSnapshotsReproduced": 50
+  },
+  "withoutReruns": {
+    "observedRows": 400,
+    "replacementAudit": {
+      "view": "without-reruns",
+      "originalArchiveSha256": "568b40ef03510245fdec99493675f0b56e498622415d2a6d0275dd796d196f5d",
+      "eligibilityLedgerSha256": "298dc36e9c3b048a33fd9b93af641deb1a4b13b96995111899a8002e86b87c7c",
+      "original16Rows": 100,
+      "newRows": 352,
+      "eligibleOriginalPrimaryWorkIds": 26,
+      "replacementAttempts": 52,
+      "replacedRows": 52,
+      "replacedPairs": 26,
+      "deferredReplacementRows": 0,
+      "replacedFailures": 0
+    },
+    "cells": [
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "arm": "seeds",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 7980,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 30,
+          "total": 217177,
+          "min": 6130,
+          "median": 7532,
+          "p90": 7957,
+          "p95": 7977,
+          "max": 7980
+        },
+        "maxSourceUnits": 5,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 45,
+            "recall": 0.5,
+            "zeroMatchedDocumentTopics": 45,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 18,
+            "recall": 0.6,
+            "zeroMatchedPassageTopics": 11
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 70
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 26,
+              "recall": 0.2222222222222222,
+              "zeroMatchedPassageTopics": 72
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 45,
+            "recall": 0.5,
+            "zeroMatchedDocumentTopics": 45,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 18,
+            "recall": 0.6,
+            "zeroMatchedPassageTopics": 11
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 70
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 26,
+              "recall": 0.2222222222222222,
+              "zeroMatchedPassageTopics": 72
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "arm": "seeds-windows",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 27,
+        "verifiedActualMaxBytes": 8000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 30,
+          "total": 239714,
+          "min": 7866,
+          "median": 8000,
+          "p90": 8000,
+          "p95": 8000,
+          "max": 8000
+        },
+        "maxSourceUnits": 5,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 49,
+            "recall": 0.5444444444444444,
+            "zeroMatchedDocumentTopics": 41,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 19,
+            "recall": 0.6333333333333333,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 70
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 26,
+              "recall": 0.2222222222222222,
+              "zeroMatchedPassageTopics": 72
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 49,
+            "recall": 0.5444444444444444,
+            "zeroMatchedDocumentTopics": 41,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 19,
+            "recall": 0.6333333333333333,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 70
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 26,
+              "recall": 0.2222222222222222,
+              "zeroMatchedPassageTopics": 72
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "arm": "configured-live",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 7352,
+        "capViolations": 0,
+        "failedGroups": 1,
+        "failureCodes": {
+          "topic_exploration_failed:submission_missing": 1
+        },
+        "frozenBytes": {
+          "n": 30,
+          "total": 118147,
+          "min": 0,
+          "median": 3668.5,
+          "p90": 5926,
+          "p95": 6891,
+          "max": 7352
+        },
+        "maxSourceUnits": 15,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 72,
+            "recall": 0.8,
+            "zeroMatchedDocumentTopics": 18,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 18,
+            "recall": 0.6,
+            "zeroMatchedPassageTopics": 8
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 31,
+              "recall": 0.26495726495726496,
+              "zeroMatchedPassageTopics": 64
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 27,
+              "recall": 0.23076923076923078,
+              "zeroMatchedPassageTopics": 68
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 29,
+          "topics": 87,
+          "documentSelected": {
+            "expected": 87,
+            "selected": 72,
+            "recall": 0.8275862068965517,
+            "zeroMatchedDocumentTopics": 15,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 65,
+            "facts": 30,
+            "covered": 18,
+            "recall": 0.6,
+            "zeroMatchedPassageTopics": 8
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 112,
+              "covered": 31,
+              "recall": 0.2767857142857143,
+              "zeroMatchedPassageTopics": 61
+            },
+            "0.9": {
+              "facts": 112,
+              "covered": 27,
+              "recall": 0.24107142857142858,
+              "zeroMatchedPassageTopics": 65
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "arm": "configured-live+backfill",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 1,
+        "atByteLimit": 27,
+        "verifiedActualMaxBytes": 8000,
+        "capViolations": 0,
+        "failedGroups": 1,
+        "failureCodes": {
+          "topic_exploration_failed:submission_missing": 1
+        },
+        "frozenBytes": {
+          "n": 30,
+          "total": 231831,
+          "min": 0,
+          "median": 8000,
+          "p90": 8000,
+          "p95": 8000,
+          "max": 8000
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 75,
+            "recall": 0.8333333333333334,
+            "zeroMatchedDocumentTopics": 15,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 19,
+            "recall": 0.6333333333333333,
+            "zeroMatchedPassageTopics": 7
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 32,
+              "recall": 0.27350427350427353,
+              "zeroMatchedPassageTopics": 63
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 67
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 29,
+          "topics": 87,
+          "documentSelected": {
+            "expected": 87,
+            "selected": 75,
+            "recall": 0.8620689655172413,
+            "zeroMatchedDocumentTopics": 12,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 65,
+            "facts": 30,
+            "covered": 19,
+            "recall": 0.6333333333333333,
+            "zeroMatchedPassageTopics": 7
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 112,
+              "covered": 32,
+              "recall": 0.2857142857142857,
+              "zeroMatchedPassageTopics": 60
+            },
+            "0.9": {
+              "facts": 112,
+              "covered": 28,
+              "recall": 0.25,
+              "zeroMatchedPassageTopics": 64
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "arm": "seeds",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 7961,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 145333,
+          "min": 6132,
+          "median": 7529,
+          "p90": 7926,
+          "p95": 7932,
+          "max": 7961
+        },
+        "maxSourceUnits": 5,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 28,
+            "recall": 0.2828282828282828,
+            "zeroMatchedDocumentTopics": 71,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 15
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 21,
+              "recall": 0.1640625,
+              "zeroMatchedPassageTopics": 83
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 18,
+              "recall": 0.140625,
+              "zeroMatchedPassageTopics": 86
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 28,
+            "recall": 0.2828282828282828,
+            "zeroMatchedDocumentTopics": 71,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 15
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 21,
+              "recall": 0.1640625,
+              "zeroMatchedPassageTopics": 83
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 18,
+              "recall": 0.140625,
+              "zeroMatchedPassageTopics": 86
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "arm": "seeds-windows",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 19,
+        "verifiedActualMaxBytes": 8000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 159923,
+          "min": 7923,
+          "median": 8000,
+          "p90": 8000,
+          "p95": 8000,
+          "max": 8000
+        },
+        "maxSourceUnits": 4,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 41,
+            "recall": 0.41414141414141414,
+            "zeroMatchedDocumentTopics": 58,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 16,
+            "recall": 0.5,
+            "zeroMatchedPassageTopics": 14
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 26,
+              "recall": 0.203125,
+              "zeroMatchedPassageTopics": 80
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 24,
+              "recall": 0.1875,
+              "zeroMatchedPassageTopics": 82
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 41,
+            "recall": 0.41414141414141414,
+            "zeroMatchedDocumentTopics": 58,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 16,
+            "recall": 0.5,
+            "zeroMatchedPassageTopics": 14
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 26,
+              "recall": 0.203125,
+              "zeroMatchedPassageTopics": 80
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 24,
+              "recall": 0.1875,
+              "zeroMatchedPassageTopics": 82
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "arm": "configured-live",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 7530,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 103056,
+          "min": 1845,
+          "median": 5136,
+          "p90": 7123,
+          "p95": 7273,
+          "max": 7530
+        },
+        "maxSourceUnits": 15,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 84,
+            "recall": 0.8484848484848485,
+            "zeroMatchedDocumentTopics": 15,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 12
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 28,
+              "recall": 0.21875,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 23,
+              "recall": 0.1796875,
+              "zeroMatchedPassageTopics": 78
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 84,
+            "recall": 0.8484848484848485,
+            "zeroMatchedDocumentTopics": 15,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 12
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 28,
+              "recall": 0.21875,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 23,
+              "recall": 0.1796875,
+              "zeroMatchedPassageTopics": 78
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "arm": "configured-live+backfill",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 2,
+        "atByteLimit": 19,
+        "verifiedActualMaxBytes": 8000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 159927,
+          "min": 7927,
+          "median": 8000,
+          "p90": 8000,
+          "p95": 8000,
+          "max": 8000
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 86,
+            "recall": 0.8686868686868687,
+            "zeroMatchedDocumentTopics": 13,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 12
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 28,
+              "recall": 0.21875,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 23,
+              "recall": 0.1796875,
+              "zeroMatchedPassageTopics": 78
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 86,
+            "recall": 0.8686868686868687,
+            "zeroMatchedDocumentTopics": 13,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 12
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 28,
+              "recall": 0.21875,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 23,
+              "recall": 0.1796875,
+              "zeroMatchedPassageTopics": 78
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "arm": "seeds",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 15957,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 30,
+          "total": 464227,
+          "min": 14461,
+          "median": 15495,
+          "p90": 15930,
+          "p95": 15943,
+          "max": 15957
+        },
+        "maxSourceUnits": 7,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 60,
+            "recall": 0.6666666666666666,
+            "zeroMatchedDocumentTopics": 30,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 25,
+            "recall": 0.8333333333333334,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 36,
+              "recall": 0.3076923076923077,
+              "zeroMatchedPassageTopics": 63
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 34,
+              "recall": 0.2905982905982906,
+              "zeroMatchedPassageTopics": 65
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 60,
+            "recall": 0.6666666666666666,
+            "zeroMatchedDocumentTopics": 30,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 25,
+            "recall": 0.8333333333333334,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 36,
+              "recall": 0.3076923076923077,
+              "zeroMatchedPassageTopics": 63
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 34,
+              "recall": 0.2905982905982906,
+              "zeroMatchedPassageTopics": 65
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "arm": "seeds-windows",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 30,
+        "verifiedActualMaxBytes": 16000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 30,
+          "total": 480000,
+          "min": 16000,
+          "median": 16000,
+          "p90": 16000,
+          "p95": 16000,
+          "max": 16000
+        },
+        "maxSourceUnits": 8,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 68,
+            "recall": 0.7555555555555555,
+            "zeroMatchedDocumentTopics": 22,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 24,
+            "recall": 0.8,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 36,
+              "recall": 0.3076923076923077,
+              "zeroMatchedPassageTopics": 62
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 34,
+              "recall": 0.2905982905982906,
+              "zeroMatchedPassageTopics": 64
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 68,
+            "recall": 0.7555555555555555,
+            "zeroMatchedDocumentTopics": 22,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 24,
+            "recall": 0.8,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 36,
+              "recall": 0.3076923076923077,
+              "zeroMatchedPassageTopics": 62
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 34,
+              "recall": 0.2905982905982906,
+              "zeroMatchedPassageTopics": 64
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "arm": "configured-live",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 1,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 10618,
+        "capViolations": 0,
+        "failedGroups": 16,
+        "failureCodes": {
+          "topic_exploration_failed:provider_or_submission": 16
+        },
+        "frozenBytes": {
+          "n": 30,
+          "total": 77153,
+          "min": 0,
+          "median": 0,
+          "p90": 6704,
+          "p95": 10238,
+          "max": 10618
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 30,
+            "recall": 0.3333333333333333,
+            "zeroMatchedDocumentTopics": 60,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 5,
+            "recall": 0.16666666666666666,
+            "zeroMatchedPassageTopics": 18
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 11,
+              "recall": 0.09401709401709402,
+              "zeroMatchedPassageTopics": 81
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 10,
+              "recall": 0.08547008547008547,
+              "zeroMatchedPassageTopics": 82
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 14,
+          "topics": 42,
+          "documentSelected": {
+            "expected": 42,
+            "selected": 30,
+            "recall": 0.7142857142857143,
+            "zeroMatchedDocumentTopics": 12,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 6,
+            "excludedTopics": 36,
+            "facts": 10,
+            "covered": 5,
+            "recall": 0.5,
+            "zeroMatchedPassageTopics": 2
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 62,
+              "covered": 11,
+              "recall": 0.1774193548387097,
+              "zeroMatchedPassageTopics": 33
+            },
+            "0.9": {
+              "facts": 62,
+              "covered": 10,
+              "recall": 0.16129032258064516,
+              "zeroMatchedPassageTopics": 34
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "arm": "configured-live+backfill",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 2,
+        "atByteLimit": 13,
+        "verifiedActualMaxBytes": 16000,
+        "capViolations": 0,
+        "failedGroups": 16,
+        "failureCodes": {
+          "topic_exploration_failed:provider_or_submission": 16
+        },
+        "frozenBytes": {
+          "n": 30,
+          "total": 213312,
+          "min": 0,
+          "median": 0,
+          "p90": 16000,
+          "p95": 16000,
+          "max": 16000
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 34,
+            "recall": 0.37777777777777777,
+            "zeroMatchedDocumentTopics": 56,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 5,
+            "recall": 0.16666666666666666,
+            "zeroMatchedPassageTopics": 18
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 11,
+              "recall": 0.09401709401709402,
+              "zeroMatchedPassageTopics": 81
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 10,
+              "recall": 0.08547008547008547,
+              "zeroMatchedPassageTopics": 82
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 14,
+          "topics": 42,
+          "documentSelected": {
+            "expected": 42,
+            "selected": 34,
+            "recall": 0.8095238095238095,
+            "zeroMatchedDocumentTopics": 8,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 6,
+            "excludedTopics": 36,
+            "facts": 10,
+            "covered": 5,
+            "recall": 0.5,
+            "zeroMatchedPassageTopics": 2
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 62,
+              "covered": 11,
+              "recall": 0.1774193548387097,
+              "zeroMatchedPassageTopics": 33
+            },
+            "0.9": {
+              "facts": 62,
+              "covered": 10,
+              "recall": 0.16129032258064516,
+              "zeroMatchedPassageTopics": 34
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "arm": "seeds",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 15972,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 309530,
+          "min": 14399,
+          "median": 15510.5,
+          "p90": 15927,
+          "p95": 15970,
+          "max": 15972
+        },
+        "maxSourceUnits": 7,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 46,
+            "recall": 0.46464646464646464,
+            "zeroMatchedDocumentTopics": 53,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 21,
+            "recall": 0.65625,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 33,
+              "recall": 0.2578125,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 30,
+              "recall": 0.234375,
+              "zeroMatchedPassageTopics": 77
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 46,
+            "recall": 0.46464646464646464,
+            "zeroMatchedDocumentTopics": 53,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 21,
+            "recall": 0.65625,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 33,
+              "recall": 0.2578125,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 30,
+              "recall": 0.234375,
+              "zeroMatchedPassageTopics": 77
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "arm": "seeds-windows",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 19,
+        "verifiedActualMaxBytes": 16000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 319897,
+          "min": 15897,
+          "median": 16000,
+          "p90": 16000,
+          "p95": 16000,
+          "max": 16000
+        },
+        "maxSourceUnits": 7,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 50,
+            "recall": 0.5050505050505051,
+            "zeroMatchedDocumentTopics": 49,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 20,
+            "recall": 0.625,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 33,
+              "recall": 0.2578125,
+              "zeroMatchedPassageTopics": 73
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 29,
+              "recall": 0.2265625,
+              "zeroMatchedPassageTopics": 77
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 50,
+            "recall": 0.5050505050505051,
+            "zeroMatchedDocumentTopics": 49,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 20,
+            "recall": 0.625,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 33,
+              "recall": 0.2578125,
+              "zeroMatchedPassageTopics": 73
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 29,
+              "recall": 0.2265625,
+              "zeroMatchedPassageTopics": 77
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "arm": "configured-live",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 1,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 13145,
+        "capViolations": 0,
+        "failedGroups": 10,
+        "failureCodes": {
+          "topic_exploration_failed:provider_or_submission": 10
+        },
+        "frozenBytes": {
+          "n": 20,
+          "total": 73696,
+          "min": 0,
+          "median": 1491,
+          "p90": 10060,
+          "p95": 11188,
+          "max": 13145
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 40,
+            "recall": 0.40404040404040403,
+            "zeroMatchedDocumentTopics": 59,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 10,
+            "recall": 0.3125,
+            "zeroMatchedPassageTopics": 15
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 15,
+              "recall": 0.1171875,
+              "zeroMatchedPassageTopics": 86
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 13,
+              "recall": 0.1015625,
+              "zeroMatchedPassageTopics": 88
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 10,
+          "topics": 50,
+          "documentSelected": {
+            "expected": 50,
+            "selected": 40,
+            "recall": 0.8,
+            "zeroMatchedDocumentTopics": 10,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 14,
+            "excludedTopics": 36,
+            "facts": 22,
+            "covered": 10,
+            "recall": 0.45454545454545453,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 73,
+              "covered": 15,
+              "recall": 0.2054794520547945,
+              "zeroMatchedPassageTopics": 37
+            },
+            "0.9": {
+              "facts": 73,
+              "covered": 13,
+              "recall": 0.1780821917808219,
+              "zeroMatchedPassageTopics": 39
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "arm": "configured-live+backfill",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 2,
+        "atByteLimit": 8,
+        "verifiedActualMaxBytes": 16000,
+        "capViolations": 0,
+        "failedGroups": 10,
+        "failureCodes": {
+          "topic_exploration_failed:provider_or_submission": 10
+        },
+        "frozenBytes": {
+          "n": 20,
+          "total": 156985,
+          "min": 0,
+          "median": 6572.5,
+          "p90": 16000,
+          "p95": 16000,
+          "max": 16000
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 41,
+            "recall": 0.41414141414141414,
+            "zeroMatchedDocumentTopics": 58,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 11,
+            "recall": 0.34375,
+            "zeroMatchedPassageTopics": 14
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 16,
+              "recall": 0.125,
+              "zeroMatchedPassageTopics": 85
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 14,
+              "recall": 0.109375,
+              "zeroMatchedPassageTopics": 87
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 10,
+          "topics": 50,
+          "documentSelected": {
+            "expected": 50,
+            "selected": 41,
+            "recall": 0.82,
+            "zeroMatchedDocumentTopics": 9,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 14,
+            "excludedTopics": 36,
+            "facts": 22,
+            "covered": 11,
+            "recall": 0.5,
+            "zeroMatchedPassageTopics": 4
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 73,
+              "covered": 16,
+              "recall": 0.2191780821917808,
+              "zeroMatchedPassageTopics": 36
+            },
+            "0.9": {
+              "facts": 73,
+              "covered": 14,
+              "recall": 0.1917808219178082,
+              "zeroMatchedPassageTopics": 38
+            }
+          }
+        }
+      }
+    ],
+    "comparisons": [
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "seeds-windows",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 4,
+          "documentRecall": 0.0444444444444444,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -4,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 30,
+        "bothSuccessfulDelta": {
+          "documentSelected": 4,
+          "documentRecall": 0.0444444444444444,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -4,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "configured-live",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 27,
+          "documentRecall": 0.30000000000000004,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 3,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.025641025641025633,
+          "lenient90Recall": 0.008547008547008572,
+          "zeroMatchedDocumentTopics": -27,
+          "failures": 1
+        },
+        "bothSuccessfulGroups": 29,
+        "bothSuccessfulDelta": {
+          "documentSelected": 29,
+          "documentRecall": 0.3333333333333333,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 3,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.0267857142857143,
+          "lenient90Recall": 0.008928571428571425,
+          "zeroMatchedDocumentTopics": -29,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 30,
+          "documentRecall": 0.33333333333333337,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 4,
+          "lenient90Covered": 2,
+          "lenient80Recall": 0.034188034188034205,
+          "lenient90Recall": 0.017094017094017117,
+          "zeroMatchedDocumentTopics": -30,
+          "failures": 1
+        },
+        "bothSuccessfulGroups": 29,
+        "bothSuccessfulDelta": {
+          "documentSelected": 32,
+          "documentRecall": 0.36781609195402293,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 4,
+          "lenient90Covered": 2,
+          "lenient80Recall": 0.0357142857142857,
+          "lenient90Recall": 0.01785714285714285,
+          "zeroMatchedDocumentTopics": -32,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "configured-live",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 23,
+          "documentRecall": 0.25555555555555565,
+          "strictCovered": -1,
+          "strictRecall": -0.033333333333333326,
+          "lenient80Covered": 3,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.025641025641025633,
+          "lenient90Recall": 0.008547008547008572,
+          "zeroMatchedDocumentTopics": -23,
+          "failures": 1
+        },
+        "bothSuccessfulGroups": 29,
+        "bothSuccessfulDelta": {
+          "documentSelected": 25,
+          "documentRecall": 0.28735632183908044,
+          "strictCovered": -1,
+          "strictRecall": -0.033333333333333326,
+          "lenient80Covered": 3,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.0267857142857143,
+          "lenient90Recall": 0.008928571428571425,
+          "zeroMatchedDocumentTopics": -25,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 26,
+          "documentRecall": 0.288888888888889,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 4,
+          "lenient90Covered": 2,
+          "lenient80Recall": 0.034188034188034205,
+          "lenient90Recall": 0.017094017094017117,
+          "zeroMatchedDocumentTopics": -26,
+          "failures": 1
+        },
+        "bothSuccessfulGroups": 29,
+        "bothSuccessfulDelta": {
+          "documentSelected": 28,
+          "documentRecall": 0.32183908045977005,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 4,
+          "lenient90Covered": 2,
+          "lenient80Recall": 0.0357142857142857,
+          "lenient90Recall": 0.01785714285714285,
+          "zeroMatchedDocumentTopics": -28,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "configured-live",
+        "verifiedBackfillPairs": 30,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 3,
+          "documentRecall": 0.033333333333333326,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 1,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.008547008547008572,
+          "lenient90Recall": 0.008547008547008544,
+          "zeroMatchedDocumentTopics": -3,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 29,
+        "bothSuccessfulDelta": {
+          "documentSelected": 3,
+          "documentRecall": 0.03448275862068961,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 1,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.008928571428571397,
+          "lenient90Recall": 0.008928571428571425,
+          "zeroMatchedDocumentTopics": -3,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "seeds-windows",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 13,
+          "documentRecall": 0.13131313131313133,
+          "strictCovered": 3,
+          "strictRecall": 0.09375,
+          "lenient80Covered": 5,
+          "lenient90Covered": 6,
+          "lenient80Recall": 0.0390625,
+          "lenient90Recall": 0.046875,
+          "zeroMatchedDocumentTopics": -13,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 13,
+          "documentRecall": 0.13131313131313133,
+          "strictCovered": 3,
+          "strictRecall": 0.09375,
+          "lenient80Covered": 5,
+          "lenient90Covered": 6,
+          "lenient80Recall": 0.0390625,
+          "lenient90Recall": 0.046875,
+          "zeroMatchedDocumentTopics": -13,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "configured-live",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 56,
+          "documentRecall": 0.5656565656565657,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 7,
+          "lenient90Covered": 5,
+          "lenient80Recall": 0.0546875,
+          "lenient90Recall": 0.0390625,
+          "zeroMatchedDocumentTopics": -56,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 56,
+          "documentRecall": 0.5656565656565657,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 7,
+          "lenient90Covered": 5,
+          "lenient80Recall": 0.0546875,
+          "lenient90Recall": 0.0390625,
+          "zeroMatchedDocumentTopics": -56,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 58,
+          "documentRecall": 0.5858585858585859,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 7,
+          "lenient90Covered": 5,
+          "lenient80Recall": 0.0546875,
+          "lenient90Recall": 0.0390625,
+          "zeroMatchedDocumentTopics": -58,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 58,
+          "documentRecall": 0.5858585858585859,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 7,
+          "lenient90Covered": 5,
+          "lenient80Recall": 0.0546875,
+          "lenient90Recall": 0.0390625,
+          "zeroMatchedDocumentTopics": -58,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "configured-live",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 43,
+          "documentRecall": 0.43434343434343436,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": 2,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0.015625,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -43,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 43,
+          "documentRecall": 0.43434343434343436,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": 2,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0.015625,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -43,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 45,
+          "documentRecall": 0.4545454545454546,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": 2,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0.015625,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -45,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 45,
+          "documentRecall": 0.4545454545454546,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": 2,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0.015625,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -45,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "configured-live",
+        "verifiedBackfillPairs": 20,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 2,
+          "documentRecall": 0.02020202020202022,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -2,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 2,
+          "documentRecall": 0.02020202020202022,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -2,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "seeds-windows",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 8,
+          "documentRecall": 0.0888888888888889,
+          "strictCovered": -1,
+          "strictRecall": -0.033333333333333326,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -8,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 30,
+        "bothSuccessfulDelta": {
+          "documentSelected": 8,
+          "documentRecall": 0.0888888888888889,
+          "strictCovered": -1,
+          "strictRecall": -0.033333333333333326,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -8,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "configured-live",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": -30,
+          "documentRecall": -0.3333333333333333,
+          "strictCovered": -20,
+          "strictRecall": -0.6666666666666667,
+          "lenient80Covered": -25,
+          "lenient90Covered": -24,
+          "lenient80Recall": -0.2136752136752137,
+          "lenient90Recall": -0.20512820512820515,
+          "zeroMatchedDocumentTopics": 30,
+          "failures": 16
+        },
+        "bothSuccessfulGroups": 14,
+        "bothSuccessfulDelta": {
+          "documentSelected": 6,
+          "documentRecall": 0.1428571428571429,
+          "strictCovered": -2,
+          "strictRecall": -0.19999999999999996,
+          "lenient80Covered": -1,
+          "lenient90Covered": -2,
+          "lenient80Recall": -0.016129032258064502,
+          "lenient90Recall": -0.03225806451612903,
+          "zeroMatchedDocumentTopics": -6,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": -26,
+          "documentRecall": -0.28888888888888886,
+          "strictCovered": -20,
+          "strictRecall": -0.6666666666666667,
+          "lenient80Covered": -25,
+          "lenient90Covered": -24,
+          "lenient80Recall": -0.2136752136752137,
+          "lenient90Recall": -0.20512820512820515,
+          "zeroMatchedDocumentTopics": 26,
+          "failures": 16
+        },
+        "bothSuccessfulGroups": 14,
+        "bothSuccessfulDelta": {
+          "documentSelected": 10,
+          "documentRecall": 0.23809523809523814,
+          "strictCovered": -2,
+          "strictRecall": -0.19999999999999996,
+          "lenient80Covered": -1,
+          "lenient90Covered": -2,
+          "lenient80Recall": -0.016129032258064502,
+          "lenient90Recall": -0.03225806451612903,
+          "zeroMatchedDocumentTopics": -10,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "configured-live",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": -38,
+          "documentRecall": -0.4222222222222222,
+          "strictCovered": -19,
+          "strictRecall": -0.6333333333333334,
+          "lenient80Covered": -25,
+          "lenient90Covered": -24,
+          "lenient80Recall": -0.2136752136752137,
+          "lenient90Recall": -0.20512820512820515,
+          "zeroMatchedDocumentTopics": 38,
+          "failures": 16
+        },
+        "bothSuccessfulGroups": 14,
+        "bothSuccessfulDelta": {
+          "documentSelected": 1,
+          "documentRecall": 0.023809523809523836,
+          "strictCovered": -1,
+          "strictRecall": -0.09999999999999998,
+          "lenient80Covered": -1,
+          "lenient90Covered": -2,
+          "lenient80Recall": -0.016129032258064502,
+          "lenient90Recall": -0.03225806451612903,
+          "zeroMatchedDocumentTopics": -1,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": -34,
+          "documentRecall": -0.37777777777777777,
+          "strictCovered": -19,
+          "strictRecall": -0.6333333333333334,
+          "lenient80Covered": -25,
+          "lenient90Covered": -24,
+          "lenient80Recall": -0.2136752136752137,
+          "lenient90Recall": -0.20512820512820515,
+          "zeroMatchedDocumentTopics": 34,
+          "failures": 16
+        },
+        "bothSuccessfulGroups": 14,
+        "bothSuccessfulDelta": {
+          "documentSelected": 5,
+          "documentRecall": 0.11904761904761907,
+          "strictCovered": -1,
+          "strictRecall": -0.09999999999999998,
+          "lenient80Covered": -1,
+          "lenient90Covered": -2,
+          "lenient80Recall": -0.016129032258064502,
+          "lenient90Recall": -0.03225806451612903,
+          "zeroMatchedDocumentTopics": -5,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "configured-live",
+        "verifiedBackfillPairs": 30,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 4,
+          "documentRecall": 0.04444444444444445,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -4,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 14,
+        "bothSuccessfulDelta": {
+          "documentSelected": 4,
+          "documentRecall": 0.09523809523809523,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -4,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "seeds-windows",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 4,
+          "documentRecall": 0.04040404040404044,
+          "strictCovered": -1,
+          "strictRecall": -0.03125,
+          "lenient80Covered": 0,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -4,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 4,
+          "documentRecall": 0.04040404040404044,
+          "strictCovered": -1,
+          "strictRecall": -0.03125,
+          "lenient80Covered": 0,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -4,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "configured-live",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": -6,
+          "documentRecall": -0.06060606060606061,
+          "strictCovered": -11,
+          "strictRecall": -0.34375,
+          "lenient80Covered": -18,
+          "lenient90Covered": -17,
+          "lenient80Recall": -0.140625,
+          "lenient90Recall": -0.1328125,
+          "zeroMatchedDocumentTopics": 6,
+          "failures": 10
+        },
+        "bothSuccessfulGroups": 10,
+        "bothSuccessfulDelta": {
+          "documentSelected": 14,
+          "documentRecall": 0.28,
+          "strictCovered": -6,
+          "strictRecall": -0.27272727272727276,
+          "lenient80Covered": -6,
+          "lenient90Covered": -8,
+          "lenient80Recall": -0.0821917808219178,
+          "lenient90Recall": -0.1095890410958904,
+          "zeroMatchedDocumentTopics": -14,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": -5,
+          "documentRecall": -0.0505050505050505,
+          "strictCovered": -10,
+          "strictRecall": -0.3125,
+          "lenient80Covered": -17,
+          "lenient90Covered": -16,
+          "lenient80Recall": -0.1328125,
+          "lenient90Recall": -0.125,
+          "zeroMatchedDocumentTopics": 5,
+          "failures": 10
+        },
+        "bothSuccessfulGroups": 10,
+        "bothSuccessfulDelta": {
+          "documentSelected": 15,
+          "documentRecall": 0.29999999999999993,
+          "strictCovered": -5,
+          "strictRecall": -0.2272727272727273,
+          "lenient80Covered": -5,
+          "lenient90Covered": -7,
+          "lenient80Recall": -0.0684931506849315,
+          "lenient90Recall": -0.0958904109589041,
+          "zeroMatchedDocumentTopics": -15,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "configured-live",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": -10,
+          "documentRecall": -0.10101010101010105,
+          "strictCovered": -10,
+          "strictRecall": -0.3125,
+          "lenient80Covered": -18,
+          "lenient90Covered": -16,
+          "lenient80Recall": -0.140625,
+          "lenient90Recall": -0.125,
+          "zeroMatchedDocumentTopics": 10,
+          "failures": 10
+        },
+        "bothSuccessfulGroups": 10,
+        "bothSuccessfulDelta": {
+          "documentSelected": 13,
+          "documentRecall": 0.26,
+          "strictCovered": -5,
+          "strictRecall": -0.22727272727272724,
+          "lenient80Covered": -5,
+          "lenient90Covered": -7,
+          "lenient80Recall": -0.0684931506849315,
+          "lenient90Recall": -0.0958904109589041,
+          "zeroMatchedDocumentTopics": -13,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": -9,
+          "documentRecall": -0.09090909090909094,
+          "strictCovered": -9,
+          "strictRecall": -0.28125,
+          "lenient80Covered": -17,
+          "lenient90Covered": -15,
+          "lenient80Recall": -0.1328125,
+          "lenient90Recall": -0.1171875,
+          "zeroMatchedDocumentTopics": 9,
+          "failures": 10
+        },
+        "bothSuccessfulGroups": 10,
+        "bothSuccessfulDelta": {
+          "documentSelected": 14,
+          "documentRecall": 0.2799999999999999,
+          "strictCovered": -4,
+          "strictRecall": -0.18181818181818177,
+          "lenient80Covered": -4,
+          "lenient90Covered": -6,
+          "lenient80Recall": -0.0547945205479452,
+          "lenient90Recall": -0.0821917808219178,
+          "zeroMatchedDocumentTopics": -14,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "configured-live",
+        "verifiedBackfillPairs": 20,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 1,
+          "documentRecall": 0.01010101010101011,
+          "strictCovered": 1,
+          "strictRecall": 0.03125,
+          "lenient80Covered": 1,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.0078125,
+          "lenient90Recall": 0.0078125,
+          "zeroMatchedDocumentTopics": -1,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 10,
+        "bothSuccessfulDelta": {
+          "documentSelected": 1,
+          "documentRecall": 0.019999999999999907,
+          "strictCovered": 1,
+          "strictRecall": 0.04545454545454547,
+          "lenient80Covered": 1,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.0136986301369863,
+          "lenient90Recall": 0.0136986301369863,
+          "zeroMatchedDocumentTopics": -1,
+          "failures": 0
+        }
+      }
+    ]
+  },
+  "withReruns": {
+    "observedRows": 400,
+    "replacementAudit": {
+      "view": "with-reruns",
+      "originalArchiveSha256": "568b40ef03510245fdec99493675f0b56e498622415d2a6d0275dd796d196f5d",
+      "eligibilityLedgerSha256": "298dc36e9c3b048a33fd9b93af641deb1a4b13b96995111899a8002e86b87c7c",
+      "original16Rows": 100,
+      "newRows": 352,
+      "eligibleOriginalPrimaryWorkIds": 26,
+      "replacementAttempts": 52,
+      "replacedRows": 52,
+      "replacedPairs": 26,
+      "deferredReplacementRows": 0,
+      "replacedFailures": 0
+    },
+    "cells": [
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "arm": "seeds",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 7980,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 30,
+          "total": 217177,
+          "min": 6130,
+          "median": 7532,
+          "p90": 7957,
+          "p95": 7977,
+          "max": 7980
+        },
+        "maxSourceUnits": 5,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 45,
+            "recall": 0.5,
+            "zeroMatchedDocumentTopics": 45,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 18,
+            "recall": 0.6,
+            "zeroMatchedPassageTopics": 11
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 70
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 26,
+              "recall": 0.2222222222222222,
+              "zeroMatchedPassageTopics": 72
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 45,
+            "recall": 0.5,
+            "zeroMatchedDocumentTopics": 45,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 18,
+            "recall": 0.6,
+            "zeroMatchedPassageTopics": 11
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 70
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 26,
+              "recall": 0.2222222222222222,
+              "zeroMatchedPassageTopics": 72
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "arm": "seeds-windows",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 27,
+        "verifiedActualMaxBytes": 8000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 30,
+          "total": 239714,
+          "min": 7866,
+          "median": 8000,
+          "p90": 8000,
+          "p95": 8000,
+          "max": 8000
+        },
+        "maxSourceUnits": 5,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 49,
+            "recall": 0.5444444444444444,
+            "zeroMatchedDocumentTopics": 41,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 19,
+            "recall": 0.6333333333333333,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 70
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 26,
+              "recall": 0.2222222222222222,
+              "zeroMatchedPassageTopics": 72
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 49,
+            "recall": 0.5444444444444444,
+            "zeroMatchedDocumentTopics": 41,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 19,
+            "recall": 0.6333333333333333,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 70
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 26,
+              "recall": 0.2222222222222222,
+              "zeroMatchedPassageTopics": 72
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "arm": "configured-live",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 7352,
+        "capViolations": 0,
+        "failedGroups": 1,
+        "failureCodes": {
+          "topic_exploration_failed:submission_missing": 1
+        },
+        "frozenBytes": {
+          "n": 30,
+          "total": 118147,
+          "min": 0,
+          "median": 3668.5,
+          "p90": 5926,
+          "p95": 6891,
+          "max": 7352
+        },
+        "maxSourceUnits": 15,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 72,
+            "recall": 0.8,
+            "zeroMatchedDocumentTopics": 18,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 18,
+            "recall": 0.6,
+            "zeroMatchedPassageTopics": 8
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 31,
+              "recall": 0.26495726495726496,
+              "zeroMatchedPassageTopics": 64
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 27,
+              "recall": 0.23076923076923078,
+              "zeroMatchedPassageTopics": 68
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 29,
+          "topics": 87,
+          "documentSelected": {
+            "expected": 87,
+            "selected": 72,
+            "recall": 0.8275862068965517,
+            "zeroMatchedDocumentTopics": 15,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 65,
+            "facts": 30,
+            "covered": 18,
+            "recall": 0.6,
+            "zeroMatchedPassageTopics": 8
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 112,
+              "covered": 31,
+              "recall": 0.2767857142857143,
+              "zeroMatchedPassageTopics": 61
+            },
+            "0.9": {
+              "facts": 112,
+              "covered": 27,
+              "recall": 0.24107142857142858,
+              "zeroMatchedPassageTopics": 65
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "arm": "configured-live+backfill",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 1,
+        "atByteLimit": 27,
+        "verifiedActualMaxBytes": 8000,
+        "capViolations": 0,
+        "failedGroups": 1,
+        "failureCodes": {
+          "topic_exploration_failed:submission_missing": 1
+        },
+        "frozenBytes": {
+          "n": 30,
+          "total": 231831,
+          "min": 0,
+          "median": 8000,
+          "p90": 8000,
+          "p95": 8000,
+          "max": 8000
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 75,
+            "recall": 0.8333333333333334,
+            "zeroMatchedDocumentTopics": 15,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 19,
+            "recall": 0.6333333333333333,
+            "zeroMatchedPassageTopics": 7
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 32,
+              "recall": 0.27350427350427353,
+              "zeroMatchedPassageTopics": 63
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 67
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 29,
+          "topics": 87,
+          "documentSelected": {
+            "expected": 87,
+            "selected": 75,
+            "recall": 0.8620689655172413,
+            "zeroMatchedDocumentTopics": 12,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 65,
+            "facts": 30,
+            "covered": 19,
+            "recall": 0.6333333333333333,
+            "zeroMatchedPassageTopics": 7
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 112,
+              "covered": 32,
+              "recall": 0.2857142857142857,
+              "zeroMatchedPassageTopics": 60
+            },
+            "0.9": {
+              "facts": 112,
+              "covered": 28,
+              "recall": 0.25,
+              "zeroMatchedPassageTopics": 64
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "arm": "seeds",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 7961,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 145333,
+          "min": 6132,
+          "median": 7529,
+          "p90": 7926,
+          "p95": 7932,
+          "max": 7961
+        },
+        "maxSourceUnits": 5,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 28,
+            "recall": 0.2828282828282828,
+            "zeroMatchedDocumentTopics": 71,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 15
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 21,
+              "recall": 0.1640625,
+              "zeroMatchedPassageTopics": 83
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 18,
+              "recall": 0.140625,
+              "zeroMatchedPassageTopics": 86
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 28,
+            "recall": 0.2828282828282828,
+            "zeroMatchedDocumentTopics": 71,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 15
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 21,
+              "recall": 0.1640625,
+              "zeroMatchedPassageTopics": 83
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 18,
+              "recall": 0.140625,
+              "zeroMatchedPassageTopics": 86
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "arm": "seeds-windows",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 19,
+        "verifiedActualMaxBytes": 8000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 159923,
+          "min": 7923,
+          "median": 8000,
+          "p90": 8000,
+          "p95": 8000,
+          "max": 8000
+        },
+        "maxSourceUnits": 4,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 41,
+            "recall": 0.41414141414141414,
+            "zeroMatchedDocumentTopics": 58,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 16,
+            "recall": 0.5,
+            "zeroMatchedPassageTopics": 14
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 26,
+              "recall": 0.203125,
+              "zeroMatchedPassageTopics": 80
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 24,
+              "recall": 0.1875,
+              "zeroMatchedPassageTopics": 82
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 41,
+            "recall": 0.41414141414141414,
+            "zeroMatchedDocumentTopics": 58,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 16,
+            "recall": 0.5,
+            "zeroMatchedPassageTopics": 14
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 26,
+              "recall": 0.203125,
+              "zeroMatchedPassageTopics": 80
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 24,
+              "recall": 0.1875,
+              "zeroMatchedPassageTopics": 82
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "arm": "configured-live",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 7530,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 103056,
+          "min": 1845,
+          "median": 5136,
+          "p90": 7123,
+          "p95": 7273,
+          "max": 7530
+        },
+        "maxSourceUnits": 15,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 84,
+            "recall": 0.8484848484848485,
+            "zeroMatchedDocumentTopics": 15,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 12
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 28,
+              "recall": 0.21875,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 23,
+              "recall": 0.1796875,
+              "zeroMatchedPassageTopics": 78
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 84,
+            "recall": 0.8484848484848485,
+            "zeroMatchedDocumentTopics": 15,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 12
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 28,
+              "recall": 0.21875,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 23,
+              "recall": 0.1796875,
+              "zeroMatchedPassageTopics": 78
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "arm": "configured-live+backfill",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 2,
+        "atByteLimit": 19,
+        "verifiedActualMaxBytes": 8000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 159927,
+          "min": 7927,
+          "median": 8000,
+          "p90": 8000,
+          "p95": 8000,
+          "max": 8000
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 86,
+            "recall": 0.8686868686868687,
+            "zeroMatchedDocumentTopics": 13,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 12
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 28,
+              "recall": 0.21875,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 23,
+              "recall": 0.1796875,
+              "zeroMatchedPassageTopics": 78
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 86,
+            "recall": 0.8686868686868687,
+            "zeroMatchedDocumentTopics": 13,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 13,
+            "recall": 0.40625,
+            "zeroMatchedPassageTopics": 12
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 28,
+              "recall": 0.21875,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 23,
+              "recall": 0.1796875,
+              "zeroMatchedPassageTopics": 78
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "arm": "seeds",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 15957,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 30,
+          "total": 464227,
+          "min": 14461,
+          "median": 15495,
+          "p90": 15930,
+          "p95": 15943,
+          "max": 15957
+        },
+        "maxSourceUnits": 7,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 60,
+            "recall": 0.6666666666666666,
+            "zeroMatchedDocumentTopics": 30,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 25,
+            "recall": 0.8333333333333334,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 36,
+              "recall": 0.3076923076923077,
+              "zeroMatchedPassageTopics": 63
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 34,
+              "recall": 0.2905982905982906,
+              "zeroMatchedPassageTopics": 65
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 60,
+            "recall": 0.6666666666666666,
+            "zeroMatchedDocumentTopics": 30,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 25,
+            "recall": 0.8333333333333334,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 36,
+              "recall": 0.3076923076923077,
+              "zeroMatchedPassageTopics": 63
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 34,
+              "recall": 0.2905982905982906,
+              "zeroMatchedPassageTopics": 65
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "arm": "seeds-windows",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 30,
+        "verifiedActualMaxBytes": 16000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 30,
+          "total": 480000,
+          "min": 16000,
+          "median": 16000,
+          "p90": 16000,
+          "p95": 16000,
+          "max": 16000
+        },
+        "maxSourceUnits": 8,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 68,
+            "recall": 0.7555555555555555,
+            "zeroMatchedDocumentTopics": 22,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 24,
+            "recall": 0.8,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 36,
+              "recall": 0.3076923076923077,
+              "zeroMatchedPassageTopics": 62
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 34,
+              "recall": 0.2905982905982906,
+              "zeroMatchedPassageTopics": 64
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 68,
+            "recall": 0.7555555555555555,
+            "zeroMatchedDocumentTopics": 22,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 24,
+            "recall": 0.8,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 36,
+              "recall": 0.3076923076923077,
+              "zeroMatchedPassageTopics": 62
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 34,
+              "recall": 0.2905982905982906,
+              "zeroMatchedPassageTopics": 64
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "arm": "configured-live",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 1,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 10618,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 30,
+          "total": 155003,
+          "min": 1714,
+          "median": 4990.5,
+          "p90": 7286,
+          "p95": 10238,
+          "max": 10618
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 75,
+            "recall": 0.8333333333333334,
+            "zeroMatchedDocumentTopics": 15,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 18,
+            "recall": 0.6,
+            "zeroMatchedPassageTopics": 6
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 31,
+              "recall": 0.26495726495726496,
+              "zeroMatchedPassageTopics": 63
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 27,
+              "recall": 0.23076923076923078,
+              "zeroMatchedPassageTopics": 66
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 75,
+            "recall": 0.8333333333333334,
+            "zeroMatchedDocumentTopics": 15,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 18,
+            "recall": 0.6,
+            "zeroMatchedPassageTopics": 6
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 31,
+              "recall": 0.26495726495726496,
+              "zeroMatchedPassageTopics": 63
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 27,
+              "recall": 0.23076923076923078,
+              "zeroMatchedPassageTopics": 66
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "arm": "configured-live+backfill",
+        "status": "complete",
+        "expectedGroups": 30,
+        "expectedTopics": 90,
+        "observedGroups": 30,
+        "missingGroups": 0,
+        "atSourceLimit": 2,
+        "atByteLimit": 29,
+        "verifiedActualMaxBytes": 16000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 30,
+          "total": 469312,
+          "min": 5312,
+          "median": 16000,
+          "p90": 16000,
+          "p95": 16000,
+          "max": 16000
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 80,
+            "recall": 0.8888888888888888,
+            "zeroMatchedDocumentTopics": 10,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 19,
+            "recall": 0.6333333333333333,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 32,
+              "recall": 0.27350427350427353,
+              "zeroMatchedPassageTopics": 62
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 65
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 30,
+          "topics": 90,
+          "documentSelected": {
+            "expected": 90,
+            "selected": 80,
+            "recall": 0.8888888888888888,
+            "zeroMatchedDocumentTopics": 10,
+            "noResolvedDocumentTopics": 0
+          },
+          "strictPassage": {
+            "eligibleTopics": 22,
+            "excludedTopics": 68,
+            "facts": 30,
+            "covered": 19,
+            "recall": 0.6333333333333333,
+            "zeroMatchedPassageTopics": 5
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 117,
+              "covered": 32,
+              "recall": 0.27350427350427353,
+              "zeroMatchedPassageTopics": 62
+            },
+            "0.9": {
+              "facts": 117,
+              "covered": 28,
+              "recall": 0.23931623931623933,
+              "zeroMatchedPassageTopics": 65
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "arm": "seeds",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 15972,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 309530,
+          "min": 14399,
+          "median": 15510.5,
+          "p90": 15927,
+          "p95": 15970,
+          "max": 15972
+        },
+        "maxSourceUnits": 7,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 46,
+            "recall": 0.46464646464646464,
+            "zeroMatchedDocumentTopics": 53,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 21,
+            "recall": 0.65625,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 33,
+              "recall": 0.2578125,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 30,
+              "recall": 0.234375,
+              "zeroMatchedPassageTopics": 77
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 46,
+            "recall": 0.46464646464646464,
+            "zeroMatchedDocumentTopics": 53,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 21,
+            "recall": 0.65625,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 33,
+              "recall": 0.2578125,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 30,
+              "recall": 0.234375,
+              "zeroMatchedPassageTopics": 77
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "arm": "seeds-windows",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 0,
+        "atByteLimit": 19,
+        "verifiedActualMaxBytes": 16000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 319897,
+          "min": 15897,
+          "median": 16000,
+          "p90": 16000,
+          "p95": 16000,
+          "max": 16000
+        },
+        "maxSourceUnits": 7,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 50,
+            "recall": 0.5050505050505051,
+            "zeroMatchedDocumentTopics": 49,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 20,
+            "recall": 0.625,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 33,
+              "recall": 0.2578125,
+              "zeroMatchedPassageTopics": 73
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 29,
+              "recall": 0.2265625,
+              "zeroMatchedPassageTopics": 77
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 50,
+            "recall": 0.5050505050505051,
+            "zeroMatchedDocumentTopics": 49,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 20,
+            "recall": 0.625,
+            "zeroMatchedPassageTopics": 10
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 33,
+              "recall": 0.2578125,
+              "zeroMatchedPassageTopics": 73
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 29,
+              "recall": 0.2265625,
+              "zeroMatchedPassageTopics": 77
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "arm": "configured-live",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 1,
+        "atByteLimit": 0,
+        "verifiedActualMaxBytes": 13145,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 144209,
+          "min": 2982,
+          "median": 6808,
+          "p90": 11765,
+          "p95": 11890,
+          "max": 13145
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 83,
+            "recall": 0.8383838383838383,
+            "zeroMatchedDocumentTopics": 16,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 17,
+            "recall": 0.53125,
+            "zeroMatchedPassageTopics": 8
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 27,
+              "recall": 0.2109375,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 23,
+              "recall": 0.1796875,
+              "zeroMatchedPassageTopics": 78
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 83,
+            "recall": 0.8383838383838383,
+            "zeroMatchedDocumentTopics": 16,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 17,
+            "recall": 0.53125,
+            "zeroMatchedPassageTopics": 8
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 27,
+              "recall": 0.2109375,
+              "zeroMatchedPassageTopics": 74
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 23,
+              "recall": 0.1796875,
+              "zeroMatchedPassageTopics": 78
+            }
+          }
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "arm": "configured-live+backfill",
+        "status": "complete",
+        "expectedGroups": 20,
+        "expectedTopics": 100,
+        "observedGroups": 20,
+        "missingGroups": 0,
+        "atSourceLimit": 2,
+        "atByteLimit": 18,
+        "verifiedActualMaxBytes": 16000,
+        "capViolations": 0,
+        "failedGroups": 0,
+        "failureCodes": {},
+        "frozenBytes": {
+          "n": 20,
+          "total": 316985,
+          "min": 13145,
+          "median": 16000,
+          "p90": 16000,
+          "p95": 16000,
+          "max": 16000
+        },
+        "maxSourceUnits": 16,
+        "failuresIncluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 85,
+            "recall": 0.8585858585858586,
+            "zeroMatchedDocumentTopics": 14,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 18,
+            "recall": 0.5625,
+            "zeroMatchedPassageTopics": 7
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 29,
+              "recall": 0.2265625,
+              "zeroMatchedPassageTopics": 72
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 24,
+              "recall": 0.1875,
+              "zeroMatchedPassageTopics": 77
+            }
+          }
+        },
+        "failuresExcluded": {
+          "groups": 20,
+          "topics": 100,
+          "documentSelected": {
+            "expected": 99,
+            "selected": 85,
+            "recall": 0.8585858585858586,
+            "zeroMatchedDocumentTopics": 14,
+            "noResolvedDocumentTopics": 1
+          },
+          "strictPassage": {
+            "eligibleTopics": 24,
+            "excludedTopics": 76,
+            "facts": 32,
+            "covered": 18,
+            "recall": 0.5625,
+            "zeroMatchedPassageTopics": 7
+          },
+          "lenientPassage": {
+            "0.8": {
+              "facts": 128,
+              "covered": 29,
+              "recall": 0.2265625,
+              "zeroMatchedPassageTopics": 72
+            },
+            "0.9": {
+              "facts": 128,
+              "covered": 24,
+              "recall": 0.1875,
+              "zeroMatchedPassageTopics": 77
+            }
+          }
+        }
+      }
+    ],
+    "comparisons": [
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "seeds-windows",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 4,
+          "documentRecall": 0.0444444444444444,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -4,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 30,
+        "bothSuccessfulDelta": {
+          "documentSelected": 4,
+          "documentRecall": 0.0444444444444444,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -4,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "configured-live",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 27,
+          "documentRecall": 0.30000000000000004,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 3,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.025641025641025633,
+          "lenient90Recall": 0.008547008547008572,
+          "zeroMatchedDocumentTopics": -27,
+          "failures": 1
+        },
+        "bothSuccessfulGroups": 29,
+        "bothSuccessfulDelta": {
+          "documentSelected": 29,
+          "documentRecall": 0.3333333333333333,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 3,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.0267857142857143,
+          "lenient90Recall": 0.008928571428571425,
+          "zeroMatchedDocumentTopics": -29,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 30,
+          "documentRecall": 0.33333333333333337,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 4,
+          "lenient90Covered": 2,
+          "lenient80Recall": 0.034188034188034205,
+          "lenient90Recall": 0.017094017094017117,
+          "zeroMatchedDocumentTopics": -30,
+          "failures": 1
+        },
+        "bothSuccessfulGroups": 29,
+        "bothSuccessfulDelta": {
+          "documentSelected": 32,
+          "documentRecall": 0.36781609195402293,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 4,
+          "lenient90Covered": 2,
+          "lenient80Recall": 0.0357142857142857,
+          "lenient90Recall": 0.01785714285714285,
+          "zeroMatchedDocumentTopics": -32,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "configured-live",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 23,
+          "documentRecall": 0.25555555555555565,
+          "strictCovered": -1,
+          "strictRecall": -0.033333333333333326,
+          "lenient80Covered": 3,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.025641025641025633,
+          "lenient90Recall": 0.008547008547008572,
+          "zeroMatchedDocumentTopics": -23,
+          "failures": 1
+        },
+        "bothSuccessfulGroups": 29,
+        "bothSuccessfulDelta": {
+          "documentSelected": 25,
+          "documentRecall": 0.28735632183908044,
+          "strictCovered": -1,
+          "strictRecall": -0.033333333333333326,
+          "lenient80Covered": 3,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.0267857142857143,
+          "lenient90Recall": 0.008928571428571425,
+          "zeroMatchedDocumentTopics": -25,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 26,
+          "documentRecall": 0.288888888888889,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 4,
+          "lenient90Covered": 2,
+          "lenient80Recall": 0.034188034188034205,
+          "lenient90Recall": 0.017094017094017117,
+          "zeroMatchedDocumentTopics": -26,
+          "failures": 1
+        },
+        "bothSuccessfulGroups": 29,
+        "bothSuccessfulDelta": {
+          "documentSelected": 28,
+          "documentRecall": 0.32183908045977005,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 4,
+          "lenient90Covered": 2,
+          "lenient80Recall": 0.0357142857142857,
+          "lenient90Recall": 0.01785714285714285,
+          "zeroMatchedDocumentTopics": -28,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "configured-live",
+        "verifiedBackfillPairs": 30,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 3,
+          "documentRecall": 0.033333333333333326,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 1,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.008547008547008572,
+          "lenient90Recall": 0.008547008547008544,
+          "zeroMatchedDocumentTopics": -3,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 29,
+        "bothSuccessfulDelta": {
+          "documentSelected": 3,
+          "documentRecall": 0.03448275862068961,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 1,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.008928571428571397,
+          "lenient90Recall": 0.008928571428571425,
+          "zeroMatchedDocumentTopics": -3,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "seeds-windows",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 13,
+          "documentRecall": 0.13131313131313133,
+          "strictCovered": 3,
+          "strictRecall": 0.09375,
+          "lenient80Covered": 5,
+          "lenient90Covered": 6,
+          "lenient80Recall": 0.0390625,
+          "lenient90Recall": 0.046875,
+          "zeroMatchedDocumentTopics": -13,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 13,
+          "documentRecall": 0.13131313131313133,
+          "strictCovered": 3,
+          "strictRecall": 0.09375,
+          "lenient80Covered": 5,
+          "lenient90Covered": 6,
+          "lenient80Recall": 0.0390625,
+          "lenient90Recall": 0.046875,
+          "zeroMatchedDocumentTopics": -13,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "configured-live",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 56,
+          "documentRecall": 0.5656565656565657,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 7,
+          "lenient90Covered": 5,
+          "lenient80Recall": 0.0546875,
+          "lenient90Recall": 0.0390625,
+          "zeroMatchedDocumentTopics": -56,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 56,
+          "documentRecall": 0.5656565656565657,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 7,
+          "lenient90Covered": 5,
+          "lenient80Recall": 0.0546875,
+          "lenient90Recall": 0.0390625,
+          "zeroMatchedDocumentTopics": -56,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 58,
+          "documentRecall": 0.5858585858585859,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 7,
+          "lenient90Covered": 5,
+          "lenient80Recall": 0.0546875,
+          "lenient90Recall": 0.0390625,
+          "zeroMatchedDocumentTopics": -58,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 58,
+          "documentRecall": 0.5858585858585859,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 7,
+          "lenient90Covered": 5,
+          "lenient80Recall": 0.0546875,
+          "lenient90Recall": 0.0390625,
+          "zeroMatchedDocumentTopics": -58,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "configured-live",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 43,
+          "documentRecall": 0.43434343434343436,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": 2,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0.015625,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -43,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 43,
+          "documentRecall": 0.43434343434343436,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": 2,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0.015625,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -43,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 45,
+          "documentRecall": 0.4545454545454546,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": 2,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0.015625,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -45,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 45,
+          "documentRecall": 0.4545454545454546,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": 2,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0.015625,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -45,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 8000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "configured-live",
+        "verifiedBackfillPairs": 20,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 2,
+          "documentRecall": 0.02020202020202022,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -2,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 2,
+          "documentRecall": 0.02020202020202022,
+          "strictCovered": 0,
+          "strictRecall": 0,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -2,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "seeds-windows",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 8,
+          "documentRecall": 0.0888888888888889,
+          "strictCovered": -1,
+          "strictRecall": -0.033333333333333326,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -8,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 30,
+        "bothSuccessfulDelta": {
+          "documentSelected": 8,
+          "documentRecall": 0.0888888888888889,
+          "strictCovered": -1,
+          "strictRecall": -0.033333333333333326,
+          "lenient80Covered": 0,
+          "lenient90Covered": 0,
+          "lenient80Recall": 0,
+          "lenient90Recall": 0,
+          "zeroMatchedDocumentTopics": -8,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "configured-live",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 15,
+          "documentRecall": 0.16666666666666674,
+          "strictCovered": -7,
+          "strictRecall": -0.2333333333333334,
+          "lenient80Covered": -5,
+          "lenient90Covered": -7,
+          "lenient80Recall": -0.04273504273504275,
+          "lenient90Recall": -0.05982905982905984,
+          "zeroMatchedDocumentTopics": -15,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 30,
+        "bothSuccessfulDelta": {
+          "documentSelected": 15,
+          "documentRecall": 0.16666666666666674,
+          "strictCovered": -7,
+          "strictRecall": -0.2333333333333334,
+          "lenient80Covered": -5,
+          "lenient90Covered": -7,
+          "lenient80Recall": -0.04273504273504275,
+          "lenient90Recall": -0.05982905982905984,
+          "zeroMatchedDocumentTopics": -15,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 20,
+          "documentRecall": 0.2222222222222222,
+          "strictCovered": -6,
+          "strictRecall": -0.20000000000000007,
+          "lenient80Covered": -4,
+          "lenient90Covered": -6,
+          "lenient80Recall": -0.03418803418803418,
+          "lenient90Recall": -0.051282051282051294,
+          "zeroMatchedDocumentTopics": -20,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 30,
+        "bothSuccessfulDelta": {
+          "documentSelected": 20,
+          "documentRecall": 0.2222222222222222,
+          "strictCovered": -6,
+          "strictRecall": -0.20000000000000007,
+          "lenient80Covered": -4,
+          "lenient90Covered": -6,
+          "lenient80Recall": -0.03418803418803418,
+          "lenient90Recall": -0.051282051282051294,
+          "zeroMatchedDocumentTopics": -20,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "configured-live",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 7,
+          "documentRecall": 0.07777777777777783,
+          "strictCovered": -6,
+          "strictRecall": -0.20000000000000007,
+          "lenient80Covered": -5,
+          "lenient90Covered": -7,
+          "lenient80Recall": -0.04273504273504275,
+          "lenient90Recall": -0.05982905982905984,
+          "zeroMatchedDocumentTopics": -7,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 30,
+        "bothSuccessfulDelta": {
+          "documentSelected": 7,
+          "documentRecall": 0.07777777777777783,
+          "strictCovered": -6,
+          "strictRecall": -0.20000000000000007,
+          "lenient80Covered": -5,
+          "lenient90Covered": -7,
+          "lenient80Recall": -0.04273504273504275,
+          "lenient90Recall": -0.05982905982905984,
+          "zeroMatchedDocumentTopics": -7,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 12,
+          "documentRecall": 0.1333333333333333,
+          "strictCovered": -5,
+          "strictRecall": -0.16666666666666674,
+          "lenient80Covered": -4,
+          "lenient90Covered": -6,
+          "lenient80Recall": -0.03418803418803418,
+          "lenient90Recall": -0.051282051282051294,
+          "zeroMatchedDocumentTopics": -12,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 30,
+        "bothSuccessfulDelta": {
+          "documentSelected": 12,
+          "documentRecall": 0.1333333333333333,
+          "strictCovered": -5,
+          "strictRecall": -0.16666666666666674,
+          "lenient80Covered": -4,
+          "lenient90Covered": -6,
+          "lenient80Recall": -0.03418803418803418,
+          "lenient90Recall": -0.051282051282051294,
+          "zeroMatchedDocumentTopics": -12,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 3,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "configured-live",
+        "verifiedBackfillPairs": 30,
+        "matchedGroups": 30,
+        "failureInclusiveDelta": {
+          "documentSelected": 5,
+          "documentRecall": 0.05555555555555547,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 1,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.008547008547008572,
+          "lenient90Recall": 0.008547008547008544,
+          "zeroMatchedDocumentTopics": -5,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 30,
+        "bothSuccessfulDelta": {
+          "documentSelected": 5,
+          "documentRecall": 0.05555555555555547,
+          "strictCovered": 1,
+          "strictRecall": 0.033333333333333326,
+          "lenient80Covered": 1,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.008547008547008572,
+          "lenient90Recall": 0.008547008547008544,
+          "zeroMatchedDocumentTopics": -5,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "seeds-windows",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 4,
+          "documentRecall": 0.04040404040404044,
+          "strictCovered": -1,
+          "strictRecall": -0.03125,
+          "lenient80Covered": 0,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -4,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 4,
+          "documentRecall": 0.04040404040404044,
+          "strictCovered": -1,
+          "strictRecall": -0.03125,
+          "lenient80Covered": 0,
+          "lenient90Covered": -1,
+          "lenient80Recall": 0,
+          "lenient90Recall": -0.0078125,
+          "zeroMatchedDocumentTopics": -4,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "configured-live",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 37,
+          "documentRecall": 0.3737373737373737,
+          "strictCovered": -4,
+          "strictRecall": -0.125,
+          "lenient80Covered": -6,
+          "lenient90Covered": -7,
+          "lenient80Recall": -0.046875,
+          "lenient90Recall": -0.0546875,
+          "zeroMatchedDocumentTopics": -37,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 37,
+          "documentRecall": 0.3737373737373737,
+          "strictCovered": -4,
+          "strictRecall": -0.125,
+          "lenient80Covered": -6,
+          "lenient90Covered": -7,
+          "lenient80Recall": -0.046875,
+          "lenient90Recall": -0.0546875,
+          "zeroMatchedDocumentTopics": -37,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 39,
+          "documentRecall": 0.3939393939393939,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": -4,
+          "lenient90Covered": -6,
+          "lenient80Recall": -0.03125,
+          "lenient90Recall": -0.046875,
+          "zeroMatchedDocumentTopics": -39,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 39,
+          "documentRecall": 0.3939393939393939,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": -4,
+          "lenient90Covered": -6,
+          "lenient80Recall": -0.03125,
+          "lenient90Recall": -0.046875,
+          "zeroMatchedDocumentTopics": -39,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "configured-live",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 33,
+          "documentRecall": 0.33333333333333326,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": -6,
+          "lenient90Covered": -6,
+          "lenient80Recall": -0.046875,
+          "lenient90Recall": -0.046875,
+          "zeroMatchedDocumentTopics": -33,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 33,
+          "documentRecall": 0.33333333333333326,
+          "strictCovered": -3,
+          "strictRecall": -0.09375,
+          "lenient80Covered": -6,
+          "lenient90Covered": -6,
+          "lenient80Recall": -0.046875,
+          "lenient90Recall": -0.046875,
+          "zeroMatchedDocumentTopics": -33,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "seeds-windows",
+        "verifiedBackfillPairs": 0,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 35,
+          "documentRecall": 0.3535353535353535,
+          "strictCovered": -2,
+          "strictRecall": -0.0625,
+          "lenient80Covered": -4,
+          "lenient90Covered": -5,
+          "lenient80Recall": -0.03125,
+          "lenient90Recall": -0.0390625,
+          "zeroMatchedDocumentTopics": -35,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 35,
+          "documentRecall": 0.3535353535353535,
+          "strictCovered": -2,
+          "strictRecall": -0.0625,
+          "lenient80Covered": -4,
+          "lenient90Covered": -5,
+          "lenient80Recall": -0.03125,
+          "lenient90Recall": -0.0390625,
+          "zeroMatchedDocumentTopics": -35,
+          "failures": 0
+        }
+      },
+      {
+        "cohort": "heldout",
+        "capBytes": 16000,
+        "size": 5,
+        "leftArm": "configured-live+backfill",
+        "rightArm": "configured-live",
+        "verifiedBackfillPairs": 20,
+        "matchedGroups": 20,
+        "failureInclusiveDelta": {
+          "documentSelected": 2,
+          "documentRecall": 0.02020202020202022,
+          "strictCovered": 1,
+          "strictRecall": 0.03125,
+          "lenient80Covered": 2,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.015625,
+          "lenient90Recall": 0.0078125,
+          "zeroMatchedDocumentTopics": -2,
+          "failures": 0
+        },
+        "bothSuccessfulGroups": 20,
+        "bothSuccessfulDelta": {
+          "documentSelected": 2,
+          "documentRecall": 0.02020202020202022,
+          "strictCovered": 1,
+          "strictRecall": 0.03125,
+          "lenient80Covered": 2,
+          "lenient90Covered": 1,
+          "lenient80Recall": 0.015625,
+          "lenient90Recall": 0.0078125,
+          "zeroMatchedDocumentTopics": -2,
+          "failures": 0
+        }
+      }
+    ]
+  }
+}

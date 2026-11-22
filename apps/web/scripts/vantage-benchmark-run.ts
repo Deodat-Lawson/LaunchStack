@@ -26,7 +26,12 @@ import {
     projectAzureLive,
 } from "./vantage-benchmark-azure-plan";
 import { createBenchmarkMeter, type BenchmarkMeterSnapshot } from "./vantage-benchmark-meter";
-import { sweepForecast, sweepSchedule, SWEEP_WAVE_SIZE } from "./vantage-benchmark-sweep";
+import {
+    sweepForecast,
+    sweepSchedule,
+    SWEEP_WAVE_SIZE,
+    type SweepStep,
+} from "./vantage-benchmark-sweep";
 import type {
     WeeklyReviewDatabase,
     WeeklyReviewQuery,
@@ -229,6 +234,89 @@ async function loadLiveCheckpoint(
     return { prefix, priorLedger, warmUp };
 }
 
+async function loadSweepCheckpoint(
+    cache: string,
+    outputName: string,
+    captureDir: string,
+    schedule: readonly SweepStep[]
+) {
+    if ((await realpath(captureDir)) !== captureDir)
+        throw new Error("benchmark_live_capture_directory_mismatch");
+    const read = async (root: string, name: string): Promise<unknown> =>
+        JSON.parse(await readFile(await cacheFile(root, name), "utf8"));
+    const status = z
+        .object({
+            complete: z.literal(false),
+            completed: z
+                .number()
+                .int()
+                .positive()
+                .max(schedule.length - 1),
+            expected: z.literal(schedule.length),
+            stopReason: z.literal("usage_unresolved"),
+        })
+        .parse(await read(captureDir, "sweep-status.json"));
+    const rowSchema = z
+        .object({
+            workId: z.string().regex(/^sweep-[0-9]{3}$/),
+            runId: z.string().uuid().optional(),
+            caseId: z.string(),
+            arm: z.enum(["configured-live", "configured-live+backfill"]),
+            cohort: z.enum(["exploratory", "heldout"]),
+            status: z.enum(["ok", "failed"]),
+            retrievalLimits: z.object({ sharedEvidenceBytes: z.number() }).passthrough(),
+        })
+        .passthrough();
+    const rows = z
+        .array(rowSchema)
+        .length(status.completed * 2)
+        .parse(await read(cache, outputName));
+    const priorLedger = (await read(captureDir, "usage-ledger.json")) as BenchmarkMeterSnapshot;
+    const warmUp = warmUpSchema.parse(await read(captureDir, "warm-up.json"));
+    const prefix = schedule.slice(0, status.completed);
+    const workIds = new Set(prefix.map(step => step.workId));
+    if (
+        status.completed % SWEEP_WAVE_SIZE ||
+        priorLedger.hold !== "usage_unresolved" ||
+        !Array.isArray(priorLedger.records) ||
+        priorLedger.records.some(row => !row.workId || !workIds.has(row.workId)) ||
+        warmUp.documents !== warmUp.groundedDigests ||
+        warmUp.ledgerEnd !== 0
+    )
+        throw new Error("benchmark_sweep_checkpoint_not_resumable");
+    for (const [index, step] of prefix.entries()) {
+        const first = rows[index * 2]!;
+        const second = rows[index * 2 + 1]!;
+        if (
+            first.arm !== "configured-live" ||
+            second.arm !== "configured-live+backfill" ||
+            first.runId !== second.runId ||
+            second.backfillOfRunId !== first.runId ||
+            [first, second].some(
+                row =>
+                    row.workId !== step.workId ||
+                    row.caseId !== step.request.groupId ||
+                    row.cohort !== step.cohort ||
+                    row.retrievalLimits.sharedEvidenceBytes !== step.evidenceCapBytes
+            )
+        )
+            throw new Error("benchmark_sweep_checkpoint_request_mismatch");
+        const saved = z
+            .object({
+                workId: z.literal(step.workId),
+                primary: rowSchema,
+                backfill: rowSchema,
+            })
+            .parse(await read(captureDir, step.workId + ".json"));
+        if (
+            JSON.stringify(saved.primary) !== JSON.stringify(first) ||
+            JSON.stringify(saved.backfill) !== JSON.stringify(second)
+        )
+            throw new Error("benchmark_sweep_checkpoint_case_mismatch");
+    }
+    return { completed: status.completed, rows, priorLedger, warmUp };
+}
+
 async function run() {
     const { values } = parseArgs({
         options: {
@@ -273,7 +361,6 @@ async function run() {
         (executeLive && endToEnd !== 0) ||
         (sweep &&
             (!grouped ||
-                resumeLive ||
                 endToEnd !== 0 ||
                 (!executeLive && arm !== "free") ||
                 (executeLive && !preflight && !values["free-proof"])))
@@ -463,8 +550,12 @@ async function run() {
     const live = executeLive ? planAzureLive() : undefined;
     const captureDir = live ? output.replace(/\.json$/, ".evidence") : undefined;
     const checkpoint =
-        captureDir && resumeLive
+        captureDir && resumeLive && !sweep
             ? await loadLiveCheckpoint(cache, outputName, captureDir, requests)
+            : undefined;
+    const sweepCheckpoint =
+        captureDir && resumeLive && sweep
+            ? await loadSweepCheckpoint(cache, outputName, captureDir, sweepSteps)
             : undefined;
     if (live) {
         const inspection = postgres(manifest.databaseUrl, { max: 1 });
@@ -473,8 +564,13 @@ async function run() {
             const missing = await missingDigestDocuments(inspection, digestDocuments);
             if (sweep && missing.length)
                 throw new Error("benchmark_resume_requires_intact_digest_cache");
+            const sweepPrefix = sweepSteps.slice(0, sweepCheckpoint?.completed ?? 0);
             const forecast = sweep
-                ? sweepForecast(sweepSteps, [])
+                ? sweepForecast(
+                      sweepSteps.slice(sweepPrefix.length),
+                      sweepPrefix,
+                      sweepCheckpoint?.priorLedger
+                  )
                 : projectAzureLive({
                       remainingCases: warmWorkspace
                           ? 0
@@ -525,7 +621,9 @@ async function run() {
                   contextTokens: 1_000_000,
                   maxOutputTokens: AZURE_LUNA_OUTPUT_LIMIT,
                   timeoutMs: 150_000,
-                  ...(checkpoint ? { priorLedger: checkpoint.priorLedger } : {}),
+                  ...(checkpoint || sweepCheckpoint
+                      ? { priorLedger: checkpoint?.priorLedger ?? sweepCheckpoint?.priorLedger }
+                      : {}),
                   persist: snapshot =>
                       (ledgerWrites = ledgerWrites.then(() =>
                           replaceLocalJson(resolve(captureDir, "usage-ledger.json"), snapshot)
@@ -633,6 +731,14 @@ async function run() {
             )
                 throw new Error("benchmark_live_checkpoint_changed");
         }
+        if (sweepCheckpoint && captureDir) {
+            const current = await loadSweepCheckpoint(cache, outputName, captureDir, sweepSteps);
+            if (
+                current.completed !== sweepCheckpoint.completed ||
+                JSON.stringify(current.priorLedger) !== JSON.stringify(sweepCheckpoint.priorLedger)
+            )
+                throw new Error("benchmark_live_checkpoint_changed");
+        }
         if (meteredFetch) globalThis.fetch = meteredFetch;
         await assertFixtureDatabase(sql, selectedWorkspaceIds);
         startedLive = Boolean(live);
@@ -642,6 +748,13 @@ async function run() {
                 throw new Error("benchmark_resume_requires_intact_digest_cache");
             await meter.clearCaseDeadlineHold({ terminalCode: caseDeadlineCode });
             console.log("Resuming after checkpoint case " + checkpoint.prefix.length);
+        } else if (sweepCheckpoint && meter) {
+            if ((await missingDigestDocuments(sql, digestDocuments)).length)
+                throw new Error("benchmark_resume_requires_intact_digest_cache");
+            await meter.clearSweepTransportHold(
+                sweepSteps.slice(0, sweepCheckpoint.completed).map(step => step.workId)
+            );
+            console.log("Resuming after saved sweep job " + sweepCheckpoint.completed);
         } else if (azureDigest && meter && captureDir) {
             const warmStart = performance.now();
             let generatedProviderCalls = 0;
@@ -749,7 +862,7 @@ async function run() {
                     sweep: { cohort: step.cohort, evidenceCapBytes: step.evidenceCapBytes },
                     ...(providers ? { providers } : {}),
                 });
-            const results: object[] = [];
+            const results: object[] = [...(sweepCheckpoint?.rows ?? [])];
             if (!meter || !captureDir) {
                 for (const step of sweepSteps) {
                     for (const arm of ["seeds", "scripted"] as const) {
@@ -763,10 +876,14 @@ async function run() {
                 console.log("Captured " + results.length + " free sweep rows.");
                 return;
             }
-            const completed: typeof sweepSteps = [];
+            const completed = sweepSteps.slice(0, sweepCheckpoint?.completed ?? 0);
             const localTimeouts = new Set<string>();
             let stopReason: string | null = null;
-            for (let offset = 0; offset < sweepSteps.length; offset += SWEEP_WAVE_SIZE) {
+            for (
+                let offset = completed.length;
+                offset < sweepSteps.length;
+                offset += SWEEP_WAVE_SIZE
+            ) {
                 const before = meter.snapshot();
                 const projection = sweepForecast(sweepSteps.slice(offset), completed, before);
                 if (projection.projectedUsd > AZURE_LIVE_LIMIT) {
@@ -850,7 +967,10 @@ async function run() {
                 }
                 const state = meter.snapshot();
                 const unresolved = state.records.filter(
-                    row => row.status === "unknown" && !row.continuedAfterCaseDeadline
+                    row =>
+                        row.status === "unknown" &&
+                        !row.continuedAfterCaseDeadline &&
+                        !row.continuedAfterTransportFailure
                 );
                 if (
                     state.hold === "usage_unresolved" &&
@@ -858,6 +978,17 @@ async function run() {
                     unresolved.every(row => row.workId && localTimeouts.has(row.workId))
                 ) {
                     await meter.clearCaseDeadlineHold({ terminalCode: caseDeadlineCode });
+                } else if (
+                    state.hold === "usage_unresolved" &&
+                    unresolved.length > 0 &&
+                    unresolved.every(
+                        row =>
+                            row.workId &&
+                            row.httpStatus === undefined &&
+                            completed.some(step => step.workId === row.workId)
+                    )
+                ) {
+                    await meter.clearSweepTransportHold(completed.map(step => step.workId));
                 } else if (state.hold) {
                     stopReason ??= state.hold;
                 }

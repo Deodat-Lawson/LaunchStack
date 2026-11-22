@@ -42,6 +42,7 @@ export type BenchmarkMeterRecord = {
     workId?: string;
     durationMs?: number;
     continuedAfterCaseDeadline?: true;
+    continuedAfterTransportFailure?: true;
 };
 export type BenchmarkMeterSnapshot = {
     limitUsd: number;
@@ -94,6 +95,7 @@ const recordSchema = z
             .optional(),
         durationMs: amount.optional(),
         continuedAfterCaseDeadline: z.literal(true).optional(),
+        continuedAfterTransportFailure: z.literal(true).optional(),
     })
     .strict();
 const bindingSchema = z
@@ -248,6 +250,11 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                     )
                 )
                     return false;
+                if (
+                    row.continuedAfterTransportFailure &&
+                    (row.status !== "unknown" || row.httpStatus !== undefined || !row.workId)
+                )
+                    return false;
                 if (row.status !== "settled") return row.settledListRateUsd === undefined;
                 if (
                     row.inputTokens === undefined ||
@@ -300,7 +307,12 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             hold ??= "usage_unresolved";
         }
         if (
-            records.some(row => row.status === "unknown" && !row.continuedAfterCaseDeadline) &&
+            records.some(
+                row =>
+                    row.status === "unknown" &&
+                    !row.continuedAfterCaseDeadline &&
+                    !row.continuedAfterTransportFailure
+            ) &&
             !hold
         )
             hold = "usage_unresolved";
@@ -322,14 +334,50 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                     row.status === "reserved" ||
                     (row.status === "unknown" &&
                         !row.continuedAfterCaseDeadline &&
+                        !row.continuedAfterTransportFailure &&
                         row.httpStatus !== undefined &&
                         (row.httpStatus < 200 || row.httpStatus >= 300))
             ) ||
-            !records.some(row => row.status === "unknown" && !row.continuedAfterCaseDeadline)
+            !records.some(
+                row =>
+                    row.status === "unknown" &&
+                    !row.continuedAfterCaseDeadline &&
+                    !row.continuedAfterTransportFailure
+            )
         )
             throw new Error("benchmark_meter_case_deadline_clear_denied");
         for (const row of records)
-            if (row.status === "unknown") row.continuedAfterCaseDeadline = true;
+            if (row.status === "unknown" && !row.continuedAfterTransportFailure)
+                row.continuedAfterCaseDeadline = true;
+        hold = null;
+        await persist();
+    }
+    async function clearSweepTransportHold(completedWorkIds: readonly string[]) {
+        const unacknowledged = records.filter(
+            row =>
+                row.status === "unknown" &&
+                !row.continuedAfterCaseDeadline &&
+                !row.continuedAfterTransportFailure
+        );
+        const terminalIds = new Set(completedWorkIds);
+        if (
+            hold !== "usage_unresolved" ||
+            pending.size ||
+            snapshot().projectedTotalUsd > config.limitUsd ||
+            !completedWorkIds.length ||
+            completedWorkIds.some(id => !/^sweep-[0-9]{3}$/.test(id)) ||
+            records.some(row => row.status === "sent" || row.status === "reserved") ||
+            !unacknowledged.length ||
+            unacknowledged.some(
+                row =>
+                    !row.workId ||
+                    !/^sweep-[0-9]{3}$/.test(row.workId) ||
+                    !terminalIds.has(row.workId) ||
+                    row.httpStatus !== undefined
+            )
+        )
+            throw new Error("benchmark_meter_transport_clear_denied");
+        for (const row of unacknowledged) row.continuedAfterTransportFailure = true;
         hold = null;
         await persist();
     }
@@ -599,5 +647,6 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
         wrapFetch,
         drainPending,
         clearCaseDeadlineHold,
+        clearSweepTransportHold,
     };
 }

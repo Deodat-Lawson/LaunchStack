@@ -382,3 +382,153 @@ it("settled legacy usage is re-priced before accepting its old ledger", async ()
         createBenchmarkMeter({ ...config(), priorLedger: prior, allowLegacyPriorLedger: true })
     ).toThrow("prior_ledger_invalid");
 });
+async function unresolvedSweepLedger(workId = "sweep-019") {
+    const meter = createBenchmarkMeter(config());
+    const send = jest.fn<Promise<Response>, Parameters<typeof fetch>>(async () => {
+        throw Error("socket fixture");
+    });
+    await meter.withWork(workId, async () => {
+        await expect(meter.wrapFetch(send)(endpoint, request())).rejects.toThrow(
+            "usage_unresolved"
+        );
+    });
+    await meter.drainPending();
+    return meter.snapshot();
+}
+it("continues a terminal no-HTTP sweep incident once while retaining its full reservation across restore", async () => {
+    const prior = await unresolvedSweepLedger();
+    const meter = createBenchmarkMeter({ ...config(), priorLedger: prior });
+    await meter.clearSweepTransportHold(["sweep-018", "sweep-019", "sweep-020"]);
+    expect(meter.snapshot()).toMatchObject({
+        hold: null,
+        reservedUsd: prior.reservedUsd,
+        projectedTotalUsd: prior.projectedTotalUsd,
+    });
+    expect(meter.snapshot().records[0]).toMatchObject({
+        id: prior.records[0]!.id,
+        status: "unknown",
+        projectedUsd: prior.records[0]!.projectedUsd,
+        workId: "sweep-019",
+        continuedAfterTransportFailure: true,
+    });
+    await expect(meter.clearSweepTransportHold(["sweep-019"])).rejects.toThrow(
+        "transport_clear_denied"
+    );
+    await meter.releaseUnused();
+    expect(meter.snapshot().reservedUsd).toBe(prior.reservedUsd);
+    const restored = createBenchmarkMeter({ ...config(), priorLedger: meter.snapshot() });
+    expect(restored.snapshot()).toMatchObject({ hold: null, reservedUsd: prior.reservedUsd });
+    await expect(restored.withReservation(prior.records[0]!.id, async () => {})).rejects.toThrow(
+        "reservation_invalid"
+    );
+    await expect(restored.clearSweepTransportHold(["sweep-019"])).rejects.toThrow(
+        "transport_clear_denied"
+    );
+});
+it("allows a second distinct terminal transport incident without acknowledging the earlier record twice", async () => {
+    const first = await unresolvedSweepLedger();
+    const meter = createBenchmarkMeter({ ...config(), priorLedger: first });
+    await meter.clearSweepTransportHold(["sweep-019"]);
+    const send = jest.fn<Promise<Response>, Parameters<typeof fetch>>(async () => {
+        throw Error("new socket fixture");
+    });
+    await meter.withWork("sweep-021", async () => {
+        await expect(meter.wrapFetch(send)(endpoint, request())).rejects.toThrow(
+            "usage_unresolved"
+        );
+    });
+    await meter.drainPending();
+    await meter.clearSweepTransportHold(["sweep-021"]);
+    expect(meter.snapshot().records.filter(row => row.continuedAfterTransportFailure)).toHaveLength(
+        2
+    );
+    expect(meter.snapshot().reservedUsd).toBeCloseTo(first.reservedUsd * 2, 9);
+    await expect(meter.clearSweepTransportHold(["sweep-021"])).rejects.toThrow(
+        "transport_clear_denied"
+    );
+});
+it("requires every new unknown to belong to a valid persisted terminal work ID", async () => {
+    const prior = await unresolvedSweepLedger();
+    const meter = createBenchmarkMeter({ ...config(), priorLedger: prior });
+    await expect(meter.clearSweepTransportHold(["sweep-018"])).rejects.toThrow(
+        "transport_clear_denied"
+    );
+    await expect(meter.clearSweepTransportHold(["invalid"])).rejects.toThrow(
+        "transport_clear_denied"
+    );
+    await expect(meter.clearSweepTransportHold([])).rejects.toThrow("transport_clear_denied");
+    const unbound = await unresolvedLedger();
+    await expect(
+        createBenchmarkMeter({ ...config(), priorLedger: unbound }).clearSweepTransportHold([
+            "sweep-019",
+        ])
+    ).rejects.toThrow("transport_clear_denied");
+    expect(meter.snapshot().hold).toBe("usage_unresolved");
+});
+it("denies HTTP failures, non-usage holds and exposure above the limit", async () => {
+    const prior = await unresolvedSweepLedger();
+    const http = structuredClone(prior);
+    http.records[0]!.httpStatus = 503;
+    await expect(
+        createBenchmarkMeter({ ...config(), priorLedger: http }).clearSweepTransportHold([
+            "sweep-019",
+        ])
+    ).rejects.toThrow("transport_clear_denied");
+    for (const hold of [
+        "provider_error",
+        "persistence_failed",
+        "projected_budget_exceeded",
+        "reservation_exceeded",
+    ]) {
+        await expect(
+            createBenchmarkMeter({
+                ...config(),
+                priorLedger: { ...prior, hold },
+            }).clearSweepTransportHold(["sweep-019"])
+        ).rejects.toThrow("transport_clear_denied");
+    }
+    const over = { ...prior, limitUsd: 0.001 };
+    await expect(
+        createBenchmarkMeter({
+            ...config(),
+            limitUsd: 0.001,
+            priorLedger: over,
+        }).clearSweepTransportHold(["sweep-019"])
+    ).rejects.toThrow("transport_clear_denied");
+});
+it("ignores acknowledged transport incidents during a later verified case-deadline clearance", async () => {
+    const prior = await unresolvedSweepLedger();
+    const meter = createBenchmarkMeter({ ...config(), priorLedger: prior });
+    await meter.clearSweepTransportHold(["sweep-019"]);
+    const send = jest.fn<Promise<Response>, Parameters<typeof fetch>>(async () => {
+        throw Error("deadline fixture");
+    });
+    await expect(meter.wrapFetch(send)(endpoint, request())).rejects.toThrow("usage_unresolved");
+    await meter.drainPending();
+    await meter.clearCaseDeadlineHold({ terminalCode: "topic_exploration_failed:timeout" });
+    expect(meter.snapshot().records[0]?.continuedAfterCaseDeadline).toBeUndefined();
+    expect(meter.snapshot().records[0]?.continuedAfterTransportFailure).toBe(true);
+    expect(meter.snapshot().records[1]?.continuedAfterCaseDeadline).toBe(true);
+    expect(meter.snapshot().reservedUsd).toBeCloseTo(prior.reservedUsd * 2, 9);
+});
+it("denies transport continuation until raw in-flight transport is quiescent", async () => {
+    const meter = createBenchmarkMeter({ ...config(), timeoutMs: 5 });
+    let finish!: (value: Response) => void;
+    const send = jest.fn<Promise<Response>, Parameters<typeof fetch>>(
+        () =>
+            new Promise(resolve => {
+                finish = resolve;
+            })
+    );
+    await meter.withWork("sweep-019", async () => {
+        await expect(meter.wrapFetch(send)(endpoint, request())).rejects.toThrow(
+            "usage_unresolved"
+        );
+    });
+    await expect(meter.clearSweepTransportHold(["sweep-019"])).rejects.toThrow(
+        "transport_clear_denied"
+    );
+    finish(completion());
+    await meter.drainPending();
+    await meter.clearSweepTransportHold(["sweep-019"]);
+});

@@ -37,6 +37,7 @@ import processing from "./processing.json";
 import feedback from "./feedback.json";
 import usage from "./usage.json";
 import fileEditing from "./fileEditing.json";
+import designTemplate from "./designTemplate.json";
 
 const messages = {
     common,
@@ -71,6 +72,7 @@ const messages = {
     feedback,
     usage,
     fileEditing,
+    designTemplate,
 } satisfies Messages;
 
 export default messages;

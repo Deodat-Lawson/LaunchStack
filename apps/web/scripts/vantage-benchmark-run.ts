@@ -1,7 +1,7 @@
 /** External-cache runner. Input contains only questions and fixture workspace IDs. */
 import { randomBytes, randomUUID } from "node:crypto";
 import { spawnSync } from "node:child_process";
-import { access, readFile, realpath, writeFile } from "node:fs/promises";
+import { access, mkdir, readFile, realpath, rename, unlink, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
@@ -10,7 +10,18 @@ import { sql as statement } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/postgres-js";
 import { z } from "zod";
 import { configureSecretBox } from "@launchstack/store/crypto";
-import { configuredTopicSelectionProviders } from "../src/server/vantage/weekly-review-topic-run";
+import { resolveChatModel } from "@launchstack/llm";
+import type { TopicSelectionProviders } from "../src/server/vantage/weekly-review-topic-run";
+import { resolveDocumentDigestProvider } from "../src/server/vantage/document-digest-provider";
+import { createAzureResponsesAgentPort } from "./vantage-benchmark-azure-port";
+import {
+    AZURE_LIVE_LIMIT,
+    AZURE_LUNA_DEPLOYMENT,
+    AZURE_LUNA_OUTPUT_LIMIT,
+    AZURE_LUNA_RESERVATION_PER_MILLION,
+    planAzureLive,
+} from "./vantage-benchmark-azure-plan";
+import { createBenchmarkMeter, type BenchmarkMeterSnapshot } from "./vantage-benchmark-meter";
 import type {
     WeeklyReviewDatabase,
     WeeklyReviewQuery,
@@ -41,6 +52,10 @@ const manifestSchema = z.object({
     enterprises: z.array(workspace).length(5),
 });
 const localJson = z.string().regex(/^[A-Za-z0-9][A-Za-z0-9._-]*\.json$/);
+const caseDeadlineCode = "topic_exploration_failed:timeout";
+type BenchmarkResult = Awaited<ReturnType<typeof runBenchmarkRetrieval>>;
+const caseFile = (directory: string, index: number) =>
+    resolve(directory, "case-" + String(index + 1).padStart(2, "0") + ".json");
 function isWithin(root: string, candidate: string) {
     const offset = relative(root, candidate);
     return !isAbsolute(offset) && offset !== ".." && !offset.startsWith(".." + sep);
@@ -78,6 +93,66 @@ function verifyLockedCache(cache: string) {
     );
     if (check.error || check.status !== 0) throw new Error("benchmark_corpus_verification_failed");
 }
+async function replaceLocalJson(path: string, value: unknown) {
+    const temporary = path + "." + randomUUID() + ".tmp";
+    await writeFile(temporary, JSON.stringify(value) + "\n", { flag: "wx", flush: true });
+    await rename(temporary, path);
+}
+
+async function loadLiveCheckpoint(
+    cache: string,
+    outputName: string,
+    captureDir: string,
+    requests: readonly BenchmarkQuestion[]
+) {
+    if ((await realpath(captureDir)) !== captureDir)
+        throw new Error("benchmark_live_capture_directory_mismatch");
+    const priorLedger = JSON.parse(
+        await readFile(await cacheFile(captureDir, "usage-ledger.json"), "utf8")
+    ) as BenchmarkMeterSnapshot;
+    const prefix = JSON.parse(
+        await readFile(await cacheFile(cache, outputName), "utf8")
+    ) as BenchmarkResult[];
+    if (
+        !Array.isArray(prefix) ||
+        !prefix.length ||
+        prefix.length >= requests.length ||
+        !Array.isArray(priorLedger.records) ||
+        priorLedger.hold !== "usage_unresolved" ||
+        prefix.at(-1)?.failure !== caseDeadlineCode
+    )
+        throw new Error("benchmark_live_checkpoint_not_resumable");
+    let end = 0;
+    for (const [index, result] of prefix.entries()) {
+        const request = requests[index];
+        if (
+            !request ||
+            result.arm !== "configured-live" ||
+            result.caseId !== request.caseId ||
+            result.enterprise !== request.enterprise ||
+            result.workspaceId !== request.workspaceId
+        )
+            throw new Error("benchmark_live_checkpoint_request_mismatch");
+        const name = caseFile(captureDir, index);
+        if ((await realpath(name)) !== name) throw new Error("benchmark_live_case_path_mismatch");
+        const capture = JSON.parse(await readFile(name, "utf8"));
+        if (
+            capture.caseId !== result.caseId ||
+            capture.runId !== result.runId ||
+            capture.status !== result.status ||
+            capture.failure !== result.failure ||
+            capture.ledgerStart !== end ||
+            !Number.isSafeInteger(capture.ledgerEnd) ||
+            capture.ledgerEnd < end
+        )
+            throw new Error("benchmark_live_checkpoint_case_mismatch");
+        end = capture.ledgerEnd;
+    }
+    if (end !== priorLedger.records.length)
+        throw new Error("benchmark_live_checkpoint_ledger_mismatch");
+    return { prefix, priorLedger };
+}
+
 async function run() {
     const { values } = parseArgs({
         options: {
@@ -88,25 +163,40 @@ async function run() {
             "end-to-end": { type: "string", default: "0" },
             "cold-digests": { type: "boolean" },
             "approve-live": { type: "boolean" },
+            "preflight-live": { type: "boolean" },
+            "resume-live": { type: "boolean" },
         },
     });
-    if (!values.cache || !values.requests || !values.output)
-        throw new Error("benchmark_cache_requests_output_required");
     const arm = armSchema.parse(values.arm);
     const executeLive = arm === "configured-live";
+    if (values["preflight-live"] && !executeLive)
+        throw new Error("benchmark_preflight_requires_configured_live");
+    if (values["preflight-live"]) {
+        const { summary } = await planAzureLive();
+        console.log(JSON.stringify(summary, null, 2));
+        if (summary.paddedUsd > summary.limitUsd)
+            throw new Error("benchmark_projected_budget_exceeded");
+        return;
+    }
+    if (!values.cache || !values.requests || !values.output)
+        throw new Error("benchmark_cache_requests_output_required");
     const endToEnd = z.coerce.number().int().min(0).max(2).parse(values["end-to-end"]);
+    const resumeLive = Boolean(values["resume-live"]);
     if (
         executeLive !== Boolean(values["approve-live"]) ||
-        (executeLive && (!values["cold-digests"] || endToEnd !== 0))
+        (resumeLive && !executeLive) ||
+        (executeLive && (Boolean(values["cold-digests"]) === resumeLive || endToEnd !== 0))
     )
-        throw new Error("configured_live_requires_explicit_approval_cold_cache_and_freeze_only");
+        throw new Error("configured_live_requires_explicit_approval_and_freeze_only");
     const cache = await validateExternalCache(values.cache);
     const output = resolve(cache, localJson.parse(values.output));
-    try {
-        await access(output);
-        throw new Error("benchmark_output_already_exists");
-    } catch (error) {
-        if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+    if (!resumeLive) {
+        try {
+            await access(output);
+            throw new Error("benchmark_output_already_exists");
+        } catch (error) {
+            if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+        }
     }
     verifyLockedCache(cache);
     const manifest = manifestSchema.parse(
@@ -129,7 +219,73 @@ async function run() {
     )
         throw new Error("benchmark_workspace_manifest_mismatch");
     assertBenchmarkDatabaseUrl(manifest.databaseUrl);
-    const providers = executeLive ? await configuredTopicSelectionProviders() : undefined;
+    const live = executeLive ? await planAzureLive() : undefined;
+    if (live) {
+        console.log(JSON.stringify(live.summary, null, 2));
+        if (live.summary.paddedUsd > AZURE_LIVE_LIMIT)
+            throw new Error("benchmark_projected_budget_exceeded");
+    }
+    const captureDir = live ? output.replace(/\.json$/, ".evidence") : undefined;
+    const checkpoint =
+        captureDir && resumeLive
+            ? await loadLiveCheckpoint(cache, values.output, captureDir, requests)
+            : undefined;
+    if (live && checkpoint) {
+        const paddedIncludingPriorUsd =
+            live.summary.paddedUsd + checkpoint.priorLedger.projectedTotalUsd;
+        console.log(JSON.stringify({ paddedIncludingPriorUsd, limitUsd: AZURE_LIVE_LIMIT }));
+        if (paddedIncludingPriorUsd > AZURE_LIVE_LIMIT)
+            throw new Error("benchmark_projected_budget_exceeded");
+    }
+    if (captureDir && !resumeLive) {
+        await mkdir(captureDir);
+        await writeFile(output, "[]\n", { flag: "wx", flush: true });
+    }
+    const originalFetch = globalThis.fetch;
+    let ledgerWrites = Promise.resolve();
+    const meter =
+        live && captureDir
+            ? createBenchmarkMeter({
+                  limitUsd: AZURE_LIVE_LIMIT,
+                  modelId: AZURE_LUNA_DEPLOYMENT,
+                  endpointUrl: live.endpoint + "/chat/completions",
+                  pricingSource: live.summary.rateSource,
+                  pricingScope:
+                      "upper published Azure Standard rates, no cache discount, up to EU long-context cache writes",
+                  promptUsdPerToken: AZURE_LUNA_RESERVATION_PER_MILLION.input / 1e6,
+                  cachedPromptUsdPerToken: AZURE_LUNA_RESERVATION_PER_MILLION.input / 1e6,
+                  cacheWriteUsdPerToken: AZURE_LUNA_RESERVATION_PER_MILLION.input / 1e6,
+                  completionUsdPerToken: AZURE_LUNA_RESERVATION_PER_MILLION.output / 1e6,
+                  contextTokens: 1_000_000,
+                  maxOutputTokens: AZURE_LUNA_OUTPUT_LIMIT,
+                  timeoutMs: 150_000,
+                  ...(checkpoint
+                      ? { priorLedger: checkpoint.priorLedger, allowLegacyPriorLedger: true }
+                      : {}),
+                  persist: snapshot =>
+                      (ledgerWrites = ledgerWrites.then(() =>
+                          replaceLocalJson(resolve(captureDir, "usage-ledger.json"), snapshot)
+                      )),
+              })
+            : undefined;
+    const meteredFetch = meter?.wrapFetch(originalFetch);
+    const providers: TopicSelectionProviders | undefined =
+        live && meteredFetch
+            ? {
+                  digest: resolveDocumentDigestProvider(options =>
+                      resolveChatModel({ ...options, config: live.config, streaming: false })
+                  ),
+                  exploration: () =>
+                      createAzureResponsesAgentPort({
+                          endpoint: live.endpoint,
+                          apiKey: live.apiKey,
+                          deployment: AZURE_LUNA_DEPLOYMENT,
+                          reasoningEffort: "high",
+                          operatorInstructions: live.config.endpoint.systemInstructions,
+                          fetch: meteredFetch,
+                      }),
+              }
+            : undefined;
     configureSecretBox({ key: randomBytes(32).toString("base64") });
     const sql = postgres(manifest.databaseUrl, { max: 16 });
     const db = drizzle(sql);
@@ -153,7 +309,32 @@ async function run() {
         },
     };
     const arms: readonly BenchmarkArm[] = arm === "free" ? freeArms : [arm];
+    const selectedWorkspaces = [...allowed.values()];
+    const dumpDigests = async () => {
+        if (!captureDir) return;
+        const digests =
+            await sql`SELECT id::text,company_id::text,document_id::text,version_id::text,
+            content_hash,format_version,headline,items FROM pdr_ai_v2_document_version_digests
+            WHERE company_id=ANY(${selectedWorkspaces}::bigint[]) ORDER BY company_id,version_id,id`;
+        await replaceLocalJson(resolve(captureDir, "digests.json"), digests);
+    };
+    const runLock = captureDir ? resolve(captureDir, "active.lock") : undefined;
+    let locked = false;
+    let startedLive = false;
     try {
+        if (runLock) {
+            await writeFile(runLock, "", { flag: "wx" });
+            locked = true;
+        }
+        if (checkpoint && captureDir) {
+            const current = await loadLiveCheckpoint(cache, values.output, captureDir, requests);
+            if (
+                current.prefix.length !== checkpoint.prefix.length ||
+                JSON.stringify(current.priorLedger) !== JSON.stringify(checkpoint.priorLedger)
+            )
+                throw new Error("benchmark_live_checkpoint_changed");
+        }
+        if (meteredFetch) globalThis.fetch = meteredFetch;
         const [identity] = await sql`SELECT current_database() AS database_name`;
         if (identity?.database_name !== fixtureDatabase)
             throw new Error("benchmark_database_identity_changed");
@@ -165,6 +346,11 @@ async function run() {
             throw new Error("benchmark_fixture_policies_missing");
         if (values["cold-digests"])
             await sql`DELETE FROM pdr_ai_v2_document_version_digests WHERE company_id=ANY(${[...allowed.values()]}::bigint[])`;
+        startedLive = Boolean(live);
+        if (checkpoint && meter) {
+            await meter.clearCaseDeadlineHold({ terminalCode: caseDeadlineCode });
+            console.log("Resuming after checkpoint case " + checkpoint.prefix.length);
+        }
         const jobs: {
             index: number;
             request: BenchmarkQuestion;
@@ -172,6 +358,7 @@ async function run() {
             subject: string;
         }[] = [];
         for (const [index, request] of requests.entries()) {
+            if (index < (checkpoint?.prefix.length ?? 0)) continue;
             for (const currentArm of arms) {
                 const subject = randomUUID();
                 const email = `benchmark-${subject}@example.test`;
@@ -188,7 +375,7 @@ async function run() {
                 jobs.push({ index, request, arm: currentArm, subject });
             }
         }
-        const results: Awaited<ReturnType<typeof runBenchmarkRetrieval>>[] = [];
+        const results: BenchmarkResult[] = checkpoint?.prefix ?? [];
         // Serializable transactions can contend across workspaces on shared run tables.
         // Keep the capture schedule serial while retaining production transaction isolation.
         for (const job of jobs) {
@@ -208,26 +395,75 @@ async function run() {
                     documentScope: { kind: "everything" as const },
                 };
             };
-            results.push(
-                await runBenchmarkRetrieval({
-                    database,
-                    databaseUrl: manifest.databaseUrl,
-                    loadActor,
-                    request: job.request,
-                    arm: job.arm,
-                    week: manifest.week,
-                    asOf: manifest.asOf,
-                    endToEnd: job.index < endToEnd,
-                    ...(providers ? { providers } : {}),
-                })
-            );
+            const ledgerStart = meter?.snapshot().records.length ?? 0;
+            const result = await runBenchmarkRetrieval({
+                database,
+                databaseUrl: manifest.databaseUrl,
+                loadActor,
+                request: job.request,
+                arm: job.arm,
+                week: manifest.week,
+                asOf: manifest.asOf,
+                endToEnd: job.index < endToEnd,
+                ...(providers ? { providers } : {}),
+            });
+            results.push(result);
+            if (captureDir && meter) {
+                await meter.drainPending();
+                const [stored] = result.runId
+                    ? await sql`SELECT trace,digest_ids,snapshot_commitment
+                    FROM pdr_ai_v2_vantage_weekly_review_run_manifests
+                    WHERE run_id=${result.runId}::uuid AND company_id=${id}::bigint
+                      AND owner_id=${job.subject}`
+                    : [];
+                const checkpoint = meter.snapshot();
+                await replaceLocalJson(caseFile(captureDir, job.index), {
+                    ...result,
+                    trace: stored?.trace ?? null,
+                    digestIds: stored?.digest_ids ?? [],
+                    snapshotCommitment: stored?.snapshot_commitment ?? null,
+                    ledgerStart,
+                    ledgerEnd: checkpoint.records.length,
+                });
+                await replaceLocalJson(output, results);
+                await dumpDigests();
+                console.log(
+                    "Live case " +
+                        (job.index + 1) +
+                        " " +
+                        result.status +
+                        " · conservative list-rate $" +
+                        checkpoint.settledListRateUsd.toFixed(3)
+                );
+                if (checkpoint.hold === "usage_unresolved" && result.failure === caseDeadlineCode) {
+                    // The case is terminal. Keep every unknown request reserved and do not rerun it.
+                    if (job.index < requests.length - 1)
+                        await meter.clearCaseDeadlineHold({ terminalCode: caseDeadlineCode });
+                } else if (checkpoint.hold) {
+                    console.log("Live stop " + checkpoint.hold);
+                    break;
+                }
+            }
             if (results.length % 30 === 0)
                 console.log("Captured " + results.length + " of " + jobs.length);
         }
-        await writeFile(output, JSON.stringify(results) + "\n", { flag: "wx" });
+        if (!live) await writeFile(output, JSON.stringify(results) + "\n", { flag: "wx" });
         console.log("Captured " + results.length + " benchmark attempts.");
     } finally {
-        await sql.end();
+        globalThis.fetch = originalFetch;
+        try {
+            await ledgerWrites;
+            if (startedLive && meter && captureDir) {
+                await dumpDigests();
+                await replaceLocalJson(resolve(captureDir, "usage-ledger.json"), meter.snapshot());
+            }
+        } finally {
+            try {
+                await sql.end();
+            } finally {
+                if (runLock && locked) await unlink(runLock);
+            }
+        }
     }
 }
 

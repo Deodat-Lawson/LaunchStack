@@ -51,6 +51,7 @@ export async function prepareTopicSelection(options: {
     query: WeeklyReviewQuery;
     deadlineAt: number;
     providers?: TopicSelectionProviders;
+    onStage?: (stage: "digest" | "exploration") => void;
     record: (values: { trace?: ExplorationTrace; digestIds?: string[] }) => Promise<void>;
 }): Promise<TopicExplorationResult | null> {
     const { seed, actor, query, deadlineAt, record } = options;
@@ -87,6 +88,7 @@ export async function prepareTopicSelection(options: {
                               exploration: createScriptedExplorationPort,
                           }
                         : await configuredTopicSelectionProviders());
+                options.onStage?.("digest");
                 const digests = new Map<string, DocumentDigest>();
                 for (let index = 0; index < seed.documents.length; index += 6) {
                     const batch = seed.documents.slice(index, index + 6);
@@ -154,6 +156,7 @@ export async function prepareTopicSelection(options: {
                         document.digest ? [document.digest.id] : []
                     ),
                 });
+                options.onStage?.("exploration");
                 const port = providers.exploration(documents);
                 const result = await runTopicExploration({
                     catalogue,

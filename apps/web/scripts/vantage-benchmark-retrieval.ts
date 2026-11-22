@@ -208,6 +208,17 @@ export async function runBenchmarkRetrieval(options: {
         estimatedDigestOutputTokens: 0,
     };
     const started = performance.now();
+    type Stage = "setup" | "collect" | "reserve" | "digest" | "exploration" | "freeze" | "finalize";
+    const stageMs: Partial<Record<Stage, number>> = {};
+    let activeStage: Stage = "setup";
+    let stageStart = started;
+    const nextStage = (next: Stage) => {
+        const now = performance.now();
+        stageMs[activeStage] = now - stageStart;
+        activeStage = next;
+        stageStart = now;
+    };
+    let offeredBeforeFailure: { documentId: string; versionId: string; ref: string }[] | undefined;
     const isTopic = options.arm !== "baseline";
     if (request.question.length > 400)
         throw new Error("benchmark_question_exceeds_existing_guidance_limit");
@@ -236,6 +247,7 @@ export async function runBenchmarkRetrieval(options: {
     });
     let reserved = false;
     try {
+        nextStage("collect");
         const context = await authority.collectWeeklyReviewContext(
             actor,
             options.week,
@@ -255,6 +267,12 @@ export async function runBenchmarkRetrieval(options: {
         );
         const current = { ...actor, authorityEpoch: context.authorityEpoch };
         const seed = context.topicSeed;
+        offeredBeforeFailure = seed?.manifest.offered.map(source => ({
+            documentId: source.id,
+            versionId: source.version,
+            ref: source.ref,
+        }));
+        nextStage("reserve");
         let snapshot: WeeklyReviewInput = {
             candidateId: id,
             week: options.week,
@@ -322,6 +340,7 @@ export async function runBenchmarkRetrieval(options: {
                 actor: await options.loadActor(),
                 deadlineAt,
                 providers,
+                onStage: nextStage,
                 query: (sql, args) => options.database.transaction(query => query(sql, args)),
                 record: async values => {
                     if (values.digestIds)
@@ -332,6 +351,7 @@ export async function runBenchmarkRetrieval(options: {
                     await repository.recordExploration(current, id, values);
                 },
             });
+            nextStage("freeze");
             const frozen = await repository.freezeTopic(current, id, query =>
                 authority.withTopicSourceReader(query, current, read =>
                     fitTopicEvidence(id, seed, selection, read)
@@ -339,6 +359,7 @@ export async function runBenchmarkRetrieval(options: {
             );
             snapshot = frozen.input;
         }
+        nextStage("finalize");
         let generation: unknown;
         if (options.endToEnd) {
             try {
@@ -386,7 +407,10 @@ export async function runBenchmarkRetrieval(options: {
                 purpose: source.purpose,
             };
         });
+        stageMs[activeStage] = performance.now() - stageStart;
         return {
+            runId: reserved ? id : undefined,
+            stageMs,
             caseId: request.caseId,
             enterprise: request.enterprise,
             workspaceId: request.workspaceId,
@@ -395,11 +419,7 @@ export async function runBenchmarkRetrieval(options: {
             offeredDefinition: seed
                 ? "ACL-filtered S0 offered set, fixed refs excluded"
                 : "ACL-authorized successfully read baseline candidates: selected and budget/rank omissions; acquisition failures excluded",
-            offered: seed?.manifest.offered.map(source => ({
-                documentId: source.id,
-                versionId: source.version,
-                ref: source.ref,
-            })) ?? [
+            offered: offeredBeforeFailure ?? [
                 ...(context.selectionDiagnostics?.selected ?? []).map(source => ({
                     documentId: source.id,
                     versionId: source.version,
@@ -430,12 +450,16 @@ export async function runBenchmarkRetrieval(options: {
         };
     } catch (error) {
         if (reserved) await repository.fail(actor, id, "benchmark_run_failed");
+        stageMs[activeStage] = performance.now() - stageStart;
         return {
+            runId: reserved ? id : undefined,
+            stageMs,
             caseId: request.caseId,
             enterprise: request.enterprise,
             workspaceId: request.workspaceId,
             arm: options.arm,
             status: "failed",
+            offered: offeredBeforeFailure,
             failure: benchmarkFailureCode(error),
             accounting,
             durationMs: performance.now() - started,

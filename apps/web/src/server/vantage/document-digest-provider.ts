@@ -1,12 +1,15 @@
 import { isChatRoute } from "@launchstack/llm";
 import { type DigestProvider } from "@launchstack/store/document-digests";
-import { resolveConfiguredChatModel } from "~/lib/models";
+import type { ResolveChatModelOptions, ResolvedChatModel } from "@launchstack/llm";
 
-export function resolveDocumentDigestProvider(): DigestProvider {
+export function resolveDocumentDigestProvider(
+    resolveModel?: (options: ResolveChatModelOptions) => ResolvedChatModel
+): DigestProvider {
     const route = process.env.VANTAGE_TOPIC_FIRST_DIGEST_ROUTE ?? "default";
     if (!isChatRoute(route)) throw Error("digest_model_unavailable");
     return async ({ title, text, signal }) => {
-        const model = resolveConfiguredChatModel({
+        const resolver = resolveModel ?? (await import("~/lib/models")).resolveConfiguredChatModel;
+        const model = resolver({
             route,
             maxRetries: 0,
             maxOutputTokens: 6000,
@@ -23,6 +26,9 @@ export function resolveDocumentDigestProvider(): DigestProvider {
             { signal }
         );
         if (typeof response.content !== "string") throw Error("digest_output_invalid");
-        return JSON.parse(response.content) as Awaited<ReturnType<DigestProvider>>;
+        const json = response.content
+            .trim()
+            .replace(/^\x60\x60\x60(?:json)?\s*([\s\S]*?)\s*\x60\x60\x60$/i, "$1");
+        return JSON.parse(json) as Awaited<ReturnType<DigestProvider>>;
     };
 }

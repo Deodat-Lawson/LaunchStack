@@ -25,26 +25,34 @@ import { cn } from "~/lib/utils";
 
 import { toast } from "sonner";
 
-import { defaultChromeDepth, readChromeDepth, writeChromeDepth } from "../lib/preferences";
+import {
+    defaultChromeDepth,
+    readChromeDepth,
+    readStepsPanel,
+    writeChromeDepth,
+} from "../lib/preferences";
 import {
     docMode,
+    onChartHeld,
     pauseAutoArrangeAfterManualMove,
     revealNode,
     setActivePage,
     setAutoLayout,
+    setFlowLayout,
     viewportCentre,
 } from "../model/commands";
+import { activePage, worksAsFlow } from "../model/doc";
+import { dressBox, flowLookOf } from "../model/flowchart/look";
 import { createNodeAt } from "../model/factory";
 import { getMindmap } from "../lib/api";
 import { isImageFile } from "../lib/images";
-import { shapeHoldsText } from "../model/shapes";
+import { isContainer, shapeHoldsText } from "../model/shapes";
+import { containerAt } from "../model/containers";
 import { parseDoc } from "../model/serialize";
 import { EditorStore, type ChromeDepth, type EditorState } from "../model/store";
 import { paintNewTopics } from "../model/topicStyle";
 import type { Point, ShapeId } from "../model/types";
-import { flowVariantUi } from "../variants";
-import { activeFlowLook, dressBox, FLOW_LOOKS } from "../variants/looks";
-import type { FlowVariantId } from "../variants/types";
+import { FlowOverlay, StepsPanel } from "../flow";
 import { BottomBar } from "./BottomBar";
 import { Canvas } from "./Canvas";
 import { useContextTarget } from "~/components/context-menu";
@@ -112,11 +120,6 @@ export interface MindmapEditorProps {
      */
     initialChrome?: ChromeDepth;
     /**
-     * A flowchart direction to try (`variants/`). Only the dev harness passes
-     * one; the product never does, so its editor is unchanged.
-     */
-    flowVariant?: FlowVariantId;
-    /**
      * Where the top bar's back arrow goes. The workspace mounts the editor
      * in place and hands it "return to the preview"; the standalone route
      * leaves it unset and gets a link to the library.
@@ -140,15 +143,12 @@ export function MindmapEditor(props: MindmapEditorProps) {
         const created = new EditorStore(parseDoc(props.initialDoc, props.initialTitle));
         // How much chrome to open with: an explicit request, else what this
         // person last chose for this kind of diagram, else the kind's default.
-        // A direction being tried opens with its own.
         const kind = created.getState().doc.settings.kind;
-        created.setFlowVariant(props.flowVariant ?? null);
         created.setChromeDepth(
-            props.initialChrome ??
-                (props.flowVariant ? FLOW_LOOKS[props.flowVariant].chrome : undefined) ??
-                readChromeDepth(kind) ??
-                defaultChromeDepth(kind)
+            props.initialChrome ?? readChromeDepth(kind) ?? defaultChromeDepth(kind)
         );
+        // A flowchart's Steps panel: as this person last left it, else open.
+        created.setStepsPanel(readStepsPanel());
         return created;
     });
 
@@ -193,14 +193,19 @@ export function MindmapEditor(props: MindmapEditorProps) {
         () => store.getState().selection.length > 0,
         () => false
     );
-    // The flowchart direction being tried, if any (dev harness only).
-    const variantUi = useSyncExternalStore(
+    // A flowchart has its key legend and "What goes here?" menu over the
+    // stage, and its Steps panel beside it — none of them while presenting.
+    const flow = useSyncExternalStore(
         useCallback((cb: () => void) => store.subscribe(cb), [store]),
-        () => flowVariantUi(store),
-        () => null
+        () => worksAsFlow(store.getState().doc.settings.kind),
+        () => false
     );
-    const VariantPanel = presenting ? undefined : variantUi?.SidePanel;
-    const VariantOverlay = presenting ? undefined : variantUi?.StageOverlay;
+    const stepsOpen = useSyncExternalStore(
+        useCallback((cb: () => void) => store.subscribe(cb), [store]),
+        () => store.getState().stepsPanel,
+        () => false
+    );
+    const showSteps = flow && stepsOpen && !presenting;
     const everything = chromeDepth === "everything";
     const leftShown = leftOpen && everything;
     // The inspector is a property sheet. With nothing selected it has no
@@ -268,6 +273,22 @@ export function MindmapEditor(props: MindmapEditorProps) {
             if (id) queueMicrotask(() => revealNode(store, id, stageSizeRef.current));
         });
     }, [store]);
+
+    // A chart that arranged itself and was just placed by hand stays where it
+    // was put; say so, with the way back.
+    useEffect(
+        () =>
+            onChartHeld(store, () =>
+                toast(t("flow.held"), {
+                    description: t("flow.heldBody"),
+                    action: {
+                        label: t("flow.arrangeAgain"),
+                        onClick: () => setFlowLayout(store, "auto"),
+                    },
+                })
+            ),
+        [store, t]
+    );
 
     // Persist a template that was built on open. Runs once.
     const seeded = useRef(false);
@@ -455,8 +476,15 @@ export function MindmapEditor(props: MindmapEditorProps) {
             const world = worldPointAt(e.clientX, e.clientY);
 
             if (shape) {
-                const dropped = createNodeAt(shape as ShapeId, world, { mode: docMode(store) });
-                const look = activeFlowLook(store.getState());
+                // Dropped inside a frame, it joins the frame.
+                const holder = isContainer(shape as ShapeId)
+                    ? null
+                    : containerAt(activePage(store.getState().doc), world);
+                const dropped = createNodeAt(shape as ShapeId, world, {
+                    mode: docMode(store),
+                    parentId: holder?.id ?? null,
+                });
+                const look = flowLookOf(store.getState().doc);
                 const node = look ? dressBox(look, dropped, docMode(store)) : dropped;
                 store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {
                     label: "Add shape",
@@ -612,9 +640,12 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                 minSize={30}
                                 className="flex min-h-0"
                             >
-                                {VariantPanel && (
-                                    <aside className="border-line bg-panel flex min-h-0 w-[300px] shrink-0 flex-col border-r">
-                                        <VariantPanel canvasSize={stageSize} />
+                                {showSteps && (
+                                    <aside
+                                        aria-label={t("flow.steps.panel.title")}
+                                        className="border-line bg-panel flex min-h-0 w-[300px] shrink-0 flex-col border-r"
+                                    >
+                                        <StepsPanel canvasSize={stageSize} />
                                     </aside>
                                 )}
                                 <div
@@ -655,7 +686,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                         canvasSize={stageSize}
                                         onPasteOutline={() => setImportOpen(true)}
                                     />
-                                    {VariantOverlay && <VariantOverlay canvasSize={stageSize} />}
+                                    {flow && !presenting && <FlowOverlay canvasSize={stageSize} />}
 
                                     <FindBar
                                         open={findOpen}

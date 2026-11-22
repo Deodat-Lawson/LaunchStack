@@ -382,7 +382,11 @@
     "copyPresentLink": "复制演示链接",
     "addToSources": "添加到来源",
     "unsaved": "有未保存的更改",
-    "upToDate": "已是最新"
+    "upToDate": "已是最新",
+    "steps": "步骤",
+    "stepsShowTip": "以步骤形式书写流程图",
+    "stepsHideTip": "隐藏步骤",
+    "arrangeAutomatically": "自动排列"
   },
   "bottomBar": {
     "pageOptions": "“{name}”选项",
@@ -840,11 +844,7 @@
     "enter": "<key>Enter</key> 完成 / 下一个",
     "tab": "<key>Tab</key> 子主题",
     "palette": "<key>⌘K</key> 其他所有操作",
-    "paste": "改为粘贴大纲",
-    "startFlow": "添加第一步",
-    "enterFlow": "<key>Enter</key> 完成",
-    "tabFlow": "<key>Tab</key> 下一步",
-    "pasteFlow": "改为粘贴 Mermaid 或大纲"
+    "paste": "改为粘贴大纲"
   },
   "presenter": {
     "overview": "概览",
@@ -904,19 +904,28 @@
     "topicGone": "在建议生成期间，该主题已被删除。",
     "expandUndo": "用 AI 展开"
   },
-  "variants": {
-    "switcher": {
-      "label": "流程图方案",
-      "today": "当前",
-      "hint": "每个方案都从一张空白流程图开始。"
+  "flow": {
+    "held": "这张流程图现在保持在你摆放的位置",
+    "heldBody": "你手动移动了一个方框，之后新增的步骤会放在它所接的方框旁边，其余内容不再移动。",
+    "arrangeAgain": "自动排列",
+    "branch": {
+      "yes": "是",
+      "no": "否"
     },
-    "a": {
-      "empty": {
-        "prompt": "直接输入第一步",
+    "empty": {
+      "title": "开始绘制流程图",
+      "ghost": "输入第一步",
+      "type": "直接输入，为第一步命名",
+      "doubleClick": "双击任意位置选择形状",
+      "write": "或在面板中写下步骤",
+      "keys": {
         "next": "<key>Tab</key> 下一步",
         "branch": "<key>⇧Tab</key> 分支",
         "decision": "以 <key>?</key> 结尾即为判断"
       },
+      "paste": "改为粘贴 Mermaid 或大纲"
+    },
+    "keys": {
       "legend": {
         "title": "按键",
         "label": "绘制流程图的键盘快捷键",
@@ -928,40 +937,14 @@
         "move": "在图中移动",
         "remove": "删除这一步"
       },
-      "keys": {
+      "caps": {
         "next": "Tab",
         "branch": "⇧Tab",
         "decision": "?",
         "remove": "Delete"
-      },
-      "branch": {
-        "yes": "是",
-        "no": "否"
-      },
-      "name": "键盘流程",
-      "blurb": "用 Tab 和 Enter 绘制，流程图自动从上到下排列。"
+      }
     },
-    "b": {
-      "pickerTitle": "添加形状",
-      "pickerLabel": "箭头末端的形状",
-      "shape": {
-        "process": "过程",
-        "decision": "判断",
-        "terminator": "开始/结束",
-        "data": "数据",
-        "document": "文档",
-        "database": "数据库"
-      },
-      "arrow": {
-        "n": "在上方添加方框。拖动可选择形状。",
-        "e": "在右侧添加方框。拖动可选择形状。",
-        "s": "在下方添加方框。拖动可选择形状。",
-        "w": "在左侧添加方框。拖动可选择形状。"
-      },
-      "name": "快速添加箭头",
-      "blurb": "悬停方框时四边出现 + 箭头：点击添加，拖动选择形状。"
-    },
-    "c": {
+    "pick": {
       "menu": {
         "title": "这里放什么？",
         "cancel": "按 <key>Esc</key> 取消",
@@ -975,16 +958,9 @@
         "data": "数据",
         "note": "便签",
         "arrow": "仅箭头"
-      },
-      "empty": {
-        "title": "双击任意位置添加一个步骤",
-        "body": "再从它的边缘拖出，添加下一步。",
-        "start": "选择第一个形状"
-      },
-      "name": "拖放选择",
-      "blurb": "把箭头拖到空白处，再选择放在那里的形状。"
+      }
     },
-    "d": {
+    "steps": {
       "panel": {
         "title": "步骤",
         "count": "{count, plural, =0 {还没有画出内容} other {# 个方框}}",
@@ -992,7 +968,8 @@
         "placeholder": "每行写一个步骤，例如：\n\n开始\n接单\n已付款？\n  是：发货\n  否：-> 接单\n结束",
         "useExample": "使用示例",
         "example": "开始\n收到订单\n检查库存\n有货吗？\n  有：拣货并打包\n  没有：向供应商补货 -> 检查库存\n发货并发送物流单号\n结束",
-        "keys": "Tab 缩进为分支 · Esc 回到流程图"
+        "keys": "Tab 缩进为分支 · Esc 回到流程图",
+        "close": "关闭步骤"
       },
       "kind": {
         "step": "步骤",
@@ -1018,14 +995,7 @@
         "missingTarget": "第 {line} 行：没有名为“{target}”的步骤。",
         "notUnderQuestion": "第 {line} 行：只有问题（以问号结尾的行）才能有分支，所以这一行画成普通步骤。",
         "arrowWithoutStep": "第 {line} 行：箭头上方需要有一个步骤。"
-      },
-      "hint": {
-        "title": "在左侧写下你的步骤",
-        "body": "每一行都会变成一个方框，流程图会自动画出来。",
-        "useExample": "或者从示例开始"
-      },
-      "name": "边写边看",
-      "blurb": "按行输入步骤，流程图自动画出来。"
+      }
     }
   }
 }

@@ -11,8 +11,7 @@ import { activePage, worksAsFlow } from "../model/doc";
 import { screenToWorld } from "../model/geometry";
 import { isDarkSurface } from "../model/palette";
 import type { EditorState } from "../model/store";
-import { useFlowVariantUi } from "../variants";
-import { activeFlowLook } from "../variants/looks";
+import { EmptyFlowHint } from "../flow";
 import styles from "./Canvas.module.css";
 import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
@@ -24,11 +23,10 @@ import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
  * is answered on the canvas instead of in a side panel. Only while the page
  * has no shapes; the first node removes it.
  *
- * What the ghost is depends on how the document works. A mindmap's is its
- * central topic (Focus depth only — Everything depth has the full rail to
- * start from). A flowchart's is its first step, a plain process box, and it
- * shows at either depth: a flowchart opens in Everything, and an empty one
- * still needs its first box and the key (Tab) that makes the next.
+ * What it is depends on how the document works. A mindmap's is its central
+ * topic (Focus depth only — Everything depth has the full rail to start
+ * from). A flowchart's is the three ways to start one — type, double-click,
+ * or write the steps — at either depth (`flow/EmptyFlowHint`).
  *
  * It is HTML laid over the board rather than part of the <svg>, so it opts
  * into the paper's colours itself (`.paper` + `data-paper`, as the canvas
@@ -40,8 +38,6 @@ import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /** The shape a mindmap's centre is drawn with. */
 const CENTRAL_SHAPE = "mind-root";
-/** The shape a flowchart's first step is drawn with. */
-const FIRST_STEP_SHAPE = "process";
 
 const selectDepth = (s: EditorState) => s.chromeDepth;
 const selectPresenting = (s: EditorState) => s.presenting;
@@ -60,23 +56,15 @@ export function EmptyCanvasHint({
     const depth = useEditor(selectDepth);
     const presenting = useEditor(selectPresenting);
     const viewport = useEditor(selectViewport);
-    const VariantHint = useFlowVariantUi()?.EmptyHint;
 
     const flow = worksAsFlow(doc.settings.kind);
     if ((!flow && depth !== "focus") || presenting) return null;
     const page = activePage(doc);
     if (page.nodes.length > 0) return null;
-    // A flowchart direction being tried may say it its own way.
-    if (VariantHint) return <VariantHint canvasSize={canvasSize} />;
+    if (flow) return <EmptyFlowHint onPasteOutline={onPasteOutline} />;
 
     const start = () => {
         const at = screenToWorld(viewport, { x: canvasSize.w / 2, y: canvasSize.h / 2 });
-        if (flow) {
-            const look = activeFlowLook(store.getState());
-            const id = insertShape(store, look?.stepShape ?? FIRST_STEP_SHAPE, at);
-            store.setEditing({ kind: "node", id });
-            return;
-        }
         const id = insertShape(store, CENTRAL_SHAPE, at, { w: 210, h: 78 });
         styleTextSelection(store, { size: 18, bold: true, align: "center" }, "Central topic");
         store.setEditing({ kind: "node", id });
@@ -96,13 +84,13 @@ export function EmptyCanvasHint({
                 onClick={start}
                 className="border-brand/50 text-brand hover:border-brand hover:bg-brand/10 pointer-events-auto rounded-xl border-2 border-dashed px-8 py-4 text-lg font-semibold transition-colors"
             >
-                {flow ? t("startFlow") : t("start")}
+                {t("start")}
             </button>
 
             <p className="text-ink-2 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 px-4 text-[12.5px]">
-                <span>{flow ? t.rich("enterFlow", { key }) : t.rich("enter", { key })}</span>
+                <span>{t.rich("enter", { key })}</span>
                 <span className="text-line">·</span>
-                <span>{flow ? t.rich("tabFlow", { key }) : t.rich("tab", { key })}</span>
+                <span>{t.rich("tab", { key })}</span>
                 <span className="text-line">·</span>
                 <span>{t.rich("palette", { key })}</span>
             </p>
@@ -113,7 +101,7 @@ export function EmptyCanvasHint({
                 className="text-ink-2 hover:text-brand pointer-events-auto flex items-center gap-1.5 text-[12.5px] underline-offset-4 hover:underline"
             >
                 <ClipboardPaste className="size-3.5" />
-                {flow ? t("pasteFlow") : t("paste")}
+                {t("paste")}
             </button>
         </div>
     );

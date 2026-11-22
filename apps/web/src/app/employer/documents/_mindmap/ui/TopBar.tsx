@@ -11,6 +11,7 @@ import {
     Command,
     Download,
     Keyboard,
+    ListOrdered,
     Loader2,
     Network,
     PanelLeft,
@@ -46,7 +47,15 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
-import { arrangeNow, runLayout, setAutoLayout, setDiagramKind, setTitle } from "../model/commands";
+import {
+    arrangeNow,
+    runLayout,
+    setAutoLayout,
+    setDiagramKind,
+    setFlowLayout,
+    setTitle,
+} from "../model/commands";
+import { setStepsPanelOpen } from "../flow";
 import { worksAsFlow } from "../model/doc";
 import type { EditorState, ChromeDepth } from "../model/store";
 import type { DiagramKind } from "../model/types";
@@ -118,6 +127,8 @@ export interface TopBarProps {
 }
 
 const selectAutoLayout = (s: EditorState) => s.doc.settings.autoLayout;
+const selectFlowLayout = (s: EditorState) => s.doc.settings.flowLayout;
+const selectStepsPanel = (s: EditorState) => s.stepsPanel;
 const selectKind = (s: EditorState) => s.doc.settings.kind;
 /** The Works-as choice a kind shows as; a freeform drawing shows neither. */
 const KIND_CHOICE: Record<DiagramKind, string> = {
@@ -132,6 +143,8 @@ export function TopBar(props: TopBarProps) {
     const tc = useTranslations("common");
     const store = useStore();
     const autoLayout = useEditor(selectAutoLayout);
+    const flowLayout = useEditor(selectFlowLayout);
+    const stepsOpen = useEditor(selectStepsPanel);
     const kind = useEditor(selectKind);
     const flow = worksAsFlow(kind);
     const focus = props.depth === "focus";
@@ -277,8 +290,19 @@ export function TopBar(props: TopBarProps) {
                         <Network className="size-3.5" />
                         {t("arrangeNow")}
                     </DropdownMenuItem>
-                    {/* A flowchart is laid out by hand; arranging as you type
-                        is an outline's (and `autoArrangeIfOn` skips flowcharts). */}
+                    {/* A flowchart arranges itself top to bottom until a box is
+                        moved by hand (`flowLayout`); this turns it back on, and
+                        arranges it now. A mindmap's arranging is its own. */}
+                    {flow && (
+                        <DropdownMenuCheckboxItem
+                            checked={flowLayout === "auto"}
+                            onCheckedChange={checked =>
+                                setFlowLayout(store, checked ? "auto" : "manual")
+                            }
+                        >
+                            {t("arrangeAutomatically")}
+                        </DropdownMenuCheckboxItem>
+                    )}
                     {!flow && (
                         <DropdownMenuCheckboxItem
                             checked={autoLayout !== null}
@@ -329,6 +353,30 @@ export function TopBar(props: TopBarProps) {
                     </DropdownMenuSub>
                 </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* The chart as lines, beside it: open unless this person closed it. */}
+            {flow && (
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            aria-pressed={stepsOpen}
+                            onClick={() => setStepsPanelOpen(store, !stepsOpen)}
+                            className={cn(
+                                "h-8 gap-1.5 px-2 text-[13px]",
+                                stepsOpen && "bg-brand-soft text-brand-ink hover:bg-brand-soft"
+                            )}
+                        >
+                            <ListOrdered className="size-4" />
+                            {t("steps")}
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                        {stepsOpen ? t("stepsHideTip") : t("stepsShowTip")}
+                    </TooltipContent>
+                </Tooltip>
+            )}
 
             <span className="flex-1" />
 

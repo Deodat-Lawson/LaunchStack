@@ -60,20 +60,36 @@ import {
     nodeCenter,
     nodesBounds,
     rectCenter,
-    rectsIntersect,
     unionRects,
     zoomAt,
     type ViewportLike,
 } from "./geometry";
 import { computeLayout, suggestChildPosition, type LayoutKind, type LayoutOptions } from "./layout";
-import { swatchFor, SWATCH_BY_ID, THEME_BY_ID, themeMode, type ThemeMode } from "./palette";
+import {
+    neutralsFor,
+    swatchFor,
+    SWATCH_BY_ID,
+    THEME_BY_ID,
+    themeMode,
+    type ThemeMode,
+} from "./palette";
 import { isContainer, shapeDef, shapeTextBox } from "./shapes";
+import { containerAt } from "./containers";
 import { applyThemeToDoc, paintTopics, recolourTopics, topicType } from "./theme";
 import type { CommitOptions, EditorStore } from "./store";
 import { restyleMovedTopics } from "./topicStyle";
 import { sizeForText } from "./grow";
 import { layoutText } from "./text";
-import { activeFlowLook, dressBox, edgeOptions } from "../variants/looks";
+import {
+    branchLabel,
+    edgeBetween,
+    placeAfter,
+    tidyAll,
+    tidyChart,
+    type BranchWords,
+    type FlowStep,
+} from "./flowchart/arrange";
+import { dressBox, edgeOptions, flowLookOf } from "./flowchart/look";
 import type {
     ArrowId,
     DiagramEdge,
@@ -91,6 +107,7 @@ import type {
     VAlign,
     AutoLayoutSetting,
     DiagramKind,
+    FlowLayout,
 } from "./types";
 
 // ---------------------------------------------------------------------------
@@ -130,17 +147,25 @@ export function insertShape(
     at: Point,
     opts: { text?: string; w?: number; h?: number; parentId?: string | null } = {}
 ): string {
-    const made = createNodeAt(shape, at, { ...opts, mode: docMode(store) });
-    // A flowchart direction being tried dresses every new box alike.
-    const look = activeFlowLook(store.getState());
+    // A box placed inside a frame joins it (the frame then holds it as it
+    // grows); a frame placed inside one is not nested by accident.
+    const parentId =
+        opts.parentId !== undefined
+            ? opts.parentId
+            : isContainer(shape)
+              ? null
+              : (containerAt(activePage(store.getState().doc), at)?.id ?? null);
+    const made = createNodeAt(shape, at, { ...opts, parentId, mode: docMode(store) });
+    // On a flowchart every new box wears the flowchart look, whatever made it.
+    const look = flowLookOf(store.getState().doc);
     const node = look
         ? dressBox(look, made, docMode(store), {
               keepSize: opts.w !== undefined || opts.h !== undefined,
           })
         : made;
     const paletteId = store.getState().doc.settings.paletteId;
-    // Dressed by a direction, a topic is not repainted as a branch: that
-    // would put back the bold type and outline the look just took off.
+    // Dressed by the flowchart look, a topic is not repainted as a branch:
+    // that would put back the bold type and outline the look just took off.
     store.updatePage(
         page => (look ? addNodes(page, [node]) : addPainted(page, [node], paletteId)),
         { label: `Add ${shapeDef(shape).name}` }
@@ -566,18 +591,15 @@ export function alignSelection(store: EditorStore, axis: AlignAxis): void {
         }
     };
 
-    store.updatePage(
-        p => {
-            let next = p;
-            for (const nd of nodes) {
-                const d = deltaFor(nd);
-                if (d.x === 0 && d.y === 0) continue;
-                next = translateNodes(next, [nd.id], d);
-            }
-            return next;
-        },
-        { label: `Align ${axis}` }
-    );
+    placeByHand(store, `Align ${axis}`, p => {
+        let next = p;
+        for (const nd of nodes) {
+            const d = deltaFor(nd);
+            if (d.x === 0 && d.y === 0) continue;
+            next = translateNodes(next, [nd.id], d);
+        }
+        return next;
+    });
 }
 
 export function distributeSelection(store: EditorStore, axis: "h" | "v"): void {
@@ -595,21 +617,33 @@ export function distributeSelection(store: EditorStore, axis: "h" | "v"): void {
     const used = nodes.reduce((s, nd) => s + (axis === "h" ? nd.w : nd.h), 0);
     const gap = (totalSpan - used) / (nodes.length - 1);
 
-    store.updatePage(
-        p => {
-            let next = p;
-            let cursor = axis === "h" ? first.x + first.w + gap : first.y + first.h + gap;
-            for (let i = 1; i < nodes.length - 1; i++) {
-                const nd = nodes[i]!;
-                const delta =
-                    axis === "h" ? { x: cursor - nd.x, y: 0 } : { x: 0, y: cursor - nd.y };
-                next = translateNodes(next, [nd.id], delta);
-                cursor += (axis === "h" ? nd.w : nd.h) + gap;
-            }
-            return next;
-        },
-        { label: `Distribute ${axis === "h" ? "horizontally" : "vertically"}` }
-    );
+    placeByHand(store, `Distribute ${axis === "h" ? "horizontally" : "vertically"}`, p => {
+        let next = p;
+        let cursor = axis === "h" ? first.x + first.w + gap : first.y + first.h + gap;
+        for (let i = 1; i < nodes.length - 1; i++) {
+            const nd = nodes[i]!;
+            const delta = axis === "h" ? { x: cursor - nd.x, y: 0 } : { x: 0, y: cursor - nd.y };
+            next = translateNodes(next, [nd.id], delta);
+            cursor += (axis === "h" ? nd.w : nd.h) + gap;
+        }
+        return next;
+    });
+}
+
+/**
+ * Boxes put somewhere by hand (align, distribute): one undo step, and on a
+ * chart that arranges itself the chart is held where it is from now on.
+ */
+function placeByHand(
+    store: EditorStore,
+    label: string,
+    edit: (page: DiagramPage) => DiagramPage
+): void {
+    const before = store.getState().doc;
+    store.group(label, () => {
+        store.updatePage(edit, { label });
+        if (store.getState().doc !== before) holdChartInPlace(store);
+    });
 }
 
 /** Give every selected node the width/height of the largest one. */
@@ -699,14 +733,27 @@ export function shiftEdge(e: DiagramEdge, delta: Point): DiagramEdge {
     };
 }
 
+/**
+ * Move the selection by `delta` (the arrow keys' nudge). On a chart that
+ * arranges itself this is a hand placement: the chart is held where it is
+ * from now on, in the same undo step.
+ */
 export function moveSelection(store: EditorStore, delta: Point, label = "Move"): void {
     const ids = store.selectedNodeIds();
     if (ids.length === 0) return;
     const edgeIds = store.selectedEdgeIds();
-    store.updatePage(page => translateNodes(page, ids, delta, edgeIds), {
-        label,
-        coalesceKey: `move:${ids.join(",")}`,
-    });
+    const hold = arrangesItself(store.getState().doc);
+    store.update(
+        doc => {
+            const page = activePage(doc);
+            const moved = translateNodes(page, ids, delta, edgeIds);
+            if (moved === page) return null;
+            const next = updatePage(doc, page.id, () => moved);
+            return hold ? { ...next, settings: { ...next.settings, flowLayout: "manual" } } : next;
+        },
+        { label, coalesceKey: `move:${ids.join(",")}` }
+    );
+    if (hold && !arrangesItself(store.getState().doc)) chartHeld(store);
 }
 
 /** Scale a set of nodes so their combined bounds become `target`. */
@@ -762,12 +809,31 @@ export function flipSelection(store: EditorStore, axis: "h" | "v"): void {
 // Styling
 // ---------------------------------------------------------------------------
 
+/**
+ * The boxes a style change applies to: the selected ones, with a selected
+ * group standing for its members (a group has no look of its own to change).
+ */
+export function styledNodeIds(store: EditorStore): string[] {
+    const page = activePage(store.getState().doc);
+    const out = new Set<string>();
+    for (const id of store.selectedNodeIds()) {
+        if (nodeById(page, id)?.shape !== "group") {
+            out.add(id);
+            continue;
+        }
+        for (const member of withDescendants(page, [id])) {
+            if (nodeById(page, member)?.shape !== "group") out.add(member);
+        }
+    }
+    return [...out];
+}
+
 export function styleSelection(
     store: EditorStore,
     patch: Partial<NodeStyle>,
     label = "Style"
 ): void {
-    const nodeIds = store.selectedNodeIds();
+    const nodeIds = styledNodeIds(store);
     if (nodeIds.length === 0) return;
     store.updatePage(
         page => mapNodes(page, nodeIds, nd => ({ ...nd, style: { ...nd.style, ...patch } })),
@@ -780,7 +846,7 @@ export function styleTextSelection(
     patch: Partial<TextStyle>,
     label = "Text style"
 ): void {
-    const nodeIds = store.selectedNodeIds();
+    const nodeIds = styledNodeIds(store);
     const edgeIds = store.selectedEdgeIds();
     if (nodeIds.length === 0 && edgeIds.length === 0) return;
     store.updatePage(
@@ -829,7 +895,7 @@ export function styleEdgeSelection(
  */
 export function applySwatch(store: EditorStore, swatchId: string): void {
     if (!SWATCH_BY_ID[swatchId]) return;
-    const ids = store.selectedNodeIds();
+    const ids = styledNodeIds(store);
     if (ids.length === 0) return;
     const { paletteId } = store.getState().doc.settings;
     const sw = swatchFor(swatchId, docMode(store));
@@ -955,9 +1021,9 @@ function sameRect(a: Rect, b: Rect): boolean {
     return a.x === b.x && a.y === b.y && a.w === b.w && a.h === b.h;
 }
 
-/** How a box grows while typing: a direction being tried may keep widths fixed. */
+/** How a box grows while typing: a flowchart's boxes keep their width and grow down. */
 function growOptions(store: EditorStore): { keepWidth?: boolean } {
-    return activeFlowLook(store.getState())?.fixedWidth ? { keepWidth: true } : {};
+    return flowLookOf(store.getState().doc)?.fixedWidth ? { keepWidth: true } : {};
 }
 
 /**
@@ -997,7 +1063,7 @@ export function commitNodeText(store: EditorStore, start: DiagramNode, text: str
     }
     if (text === current.text) return;
     const grown = sizeForText(start, text, growOptions(store));
-    const look = activeFlowLook(store.getState());
+    const look = flowLookOf(store.getState().doc);
     store.group("Edit text", () => {
         store.updatePage(
             page =>
@@ -1006,13 +1072,20 @@ export function commitNodeText(store: EditorStore, start: DiagramNode, text: str
                     // A text mark hugs its words: nobody sizes a caption first
                     // and types second, so its height follows them both ways.
                     const fitted = nd.shape === "text" ? fitToLabel(next) : next;
-                    // A direction being tried may change a box with its words
-                    // (a question becoming a decision), in this same step.
+                    // On a flowchart a box changes with its words (a question
+                    // becoming a decision), in this same step.
                     const patch = look?.afterText?.(fitted, text, docMode(store));
                     return patch ? { ...fitted, ...patch } : fitted;
                 }),
             { label: "Edit text", coalesceKey: `text:${start.id}` }
         );
+        // A step that grew or changed kind, on a chart that arranges itself,
+        // is laid out again with the rest — however the label was finished
+        // (Enter, Tab, Esc, or a click away).
+        const after = nodeById(activePage(store.getState().doc), start.id);
+        if (after && (after.shape !== start.shape || !sameRect(after, start))) {
+            arrangeIfAuto(store, [start.id]);
+        }
         // A topic that grew may now crowd its neighbours on an arranged map.
         if (!sameRect(start, grown)) autoArrangeIfOn(store);
     });
@@ -1148,7 +1221,14 @@ export function setAutoLayout(store: EditorStore, layout: AutoLayoutSetting | nu
 
 /** Run the document's arrangement once, now — auto-arrange or not. */
 export function arrangeNow(store: EditorStore): void {
-    const layout = store.getState().doc.settings.autoLayout ?? { kind: "mindmap" as const };
+    const { settings } = store.getState().doc;
+    // A flowchart is laid out top to bottom, chart by chart, whether or not
+    // it arranges itself; its setting is left as it is.
+    if (worksAsFlow(settings.kind)) {
+        store.updatePage(tidyAll, { label: "Arrange" });
+        return;
+    }
+    const layout = settings.autoLayout ?? { kind: "mindmap" as const };
     store.clearSelection();
     runLayout(store, layout);
 }
@@ -1253,8 +1333,7 @@ export function addChildTopic(
 // Flowchart
 // ---------------------------------------------------------------------------
 
-/** The four ways a next step can go. */
-export type FlowStep = "right" | "left" | "down" | "up";
+export type { FlowStep } from "./flowchart/arrange";
 
 function dominant(v: Point): FlowStep {
     if (Math.abs(v.x) >= Math.abs(v.y)) return v.x >= 0 ? "right" : "left";
@@ -1263,8 +1342,8 @@ function dominant(v: Point): FlowStep {
 
 /**
  * Which way a flowchart reads at this box: on in the direction the line came
- * in, else the way its existing arrows already leave, else to the right —
- * reading order, and the long side of a screen.
+ * in, else the way its existing arrows already leave, else `fallback` — to
+ * the right on a freeform drawing, down on a flowchart.
  */
 export function flowDirection(
     page: DiagramPage,
@@ -1292,22 +1371,151 @@ export function flowDirection(
     return fallback;
 }
 
-/** Gap between a box and the step Tab adds after it. */
-const STEP_GAP = 64;
+// -- the flowchart's arrangement ---------------------------------------------
 
 /**
- * Tab on a box in a flowchart: the next step — the same shape in the same
- * colours, joined by an arrow like the ones already there, one gap further
- * along the flow, and straight into its label. A box already sitting there
- * (a step added before) pushes the new one aside, so a second Tab makes a
- * branch instead of a pile.
+ * Whether this document's flowchart lays itself out: worked as a flowchart,
+ * and `flowLayout` is `auto` (a blank flowchart, until a box is moved by hand).
  */
-export function addNextStep(store: EditorStore, sourceId: string): string | null {
+export function arrangesItself(doc: MindmapDoc): boolean {
+    return worksAsFlow(doc.settings.kind) && doc.settings.flowLayout === "auto";
+}
+
+/**
+ * After a structural edit on a chart that arranges itself, lay out the chart
+ * holding `seeds` top to bottom (`tidyChart`). Part of the edit that called
+ * it: written without an undo entry of its own, so inside a `store.group` one
+ * ⌘Z takes back the edit and the arrangement together. Does nothing on a
+ * hand-placed chart, a mindmap or a freeform drawing.
+ */
+export function arrangeIfAuto(store: EditorStore, seeds: readonly string[]): void {
+    if (!arrangesItself(store.getState().doc)) return;
+    store.updatePage(p => tidyChart(p, seeds), { transient: true });
+}
+
+/**
+ * A box was placed by hand on a chart that arranges itself: from now on the
+ * chart stays where it is put. Written without an undo entry of its own, so
+ * it lands in the same step as the move that caused it — a drag, a nudge, an
+ * align. Returns true when it changed the setting.
+ */
+export function holdChartInPlace(store: EditorStore): boolean {
+    if (!arrangesItself(store.getState().doc)) return false;
+    store.update(
+        doc => ({ ...doc, settings: { ...doc.settings, flowLayout: "manual" as const } }),
+        { transient: true }
+    );
+    chartHeld(store);
+    return true;
+}
+
+const heldListeners = new WeakMap<EditorStore, Set<() => void>>();
+
+/**
+ * Hear when a hand placement stops a chart arranging itself — a drag, a
+ * nudge, an align. The editor says so, with the way back (Layout ›
+ * Arrange automatically).
+ */
+export function onChartHeld(store: EditorStore, fn: () => void): () => void {
+    let set = heldListeners.get(store);
+    if (!set) {
+        set = new Set();
+        heldListeners.set(store, set);
+    }
+    set.add(fn);
+    return () => {
+        set.delete(fn);
+    };
+}
+
+function chartHeld(store: EditorStore): void {
+    for (const fn of heldListeners.get(store) ?? []) fn();
+}
+
+/**
+ * Layout › "Arrange automatically". On: every chart on the page is laid out
+ * top to bottom now, and again after each step added or removed. Off: boxes
+ * stay where they are. One undo step either way.
+ */
+export function setFlowLayout(store: EditorStore, layout: FlowLayout): void {
+    const { settings } = store.getState().doc;
+    if (settings.flowLayout === layout) return;
+    store.group(layout === "auto" ? "Arrange automatically" : "Arrange by hand", () => {
+        store.update(doc => ({ ...doc, settings: { ...doc.settings, flowLayout: layout } }), {
+            label: layout === "auto" ? "Arrange automatically" : "Arrange by hand",
+        });
+        if (layout === "auto") store.updatePage(tidyAll, { transient: true });
+    });
+}
+
+// -- a decision's branches ----------------------------------------------------
+
+const branchWordsByStore = new WeakMap<EditorStore, BranchWords>();
+
+/**
+ * The words a decision's branches are labelled with, in the reader's
+ * language. The editor publishes them once mounted (`flow/FlowOverlay`);
+ * before that — in a test, say — a branch is left unlabelled rather than
+ * labelled in a language nobody chose.
+ */
+export function setBranchWords(store: EditorStore, words: BranchWords): void {
+    branchWordsByStore.set(store, words);
+}
+
+export function branchWordsOf(store: EditorStore): BranchWords {
+    return branchWordsByStore.get(store) ?? { yes: "", no: "" };
+}
+
+/**
+ * Label the arrow `from → to` if `from` is a decision: "Yes" for its first
+ * branch, "No" for its second, in the board's soft ink at 12px. Written
+ * without an undo entry: it is part of the edit that made the arrow.
+ */
+export function labelBranch(store: EditorStore, from: string, to: string): void {
+    const page = activePage(store.getState().doc);
+    const text = branchLabel(page, from, branchWordsOf(store));
+    const edge = edgeBetween(page, from, to);
+    if (!text || !edge || edge.labels.some(l => l.text.trim())) return;
+    const color = neutralsFor(docMode(store)).inkSoft;
+    store.updatePage(
+        pg =>
+            mapEdges(pg, [edge.id], e => ({
+                ...e,
+                labels: [{ text, t: 0.5, offset: 0 }],
+                textStyle: { ...e.textStyle, color, size: 12, bold: false, italic: false },
+            })),
+        { transient: true }
+    );
+}
+
+/**
+ * Tab on a box in a flowchart: the next step, joined by an arrow, and
+ * straight into its label — every path that adds one (Tab, the selection
+ * toolbar's +, the menu's "Add next step") comes here.
+ *
+ * On a flowchart it wears the flowchart look (after a pill, a question or a
+ * note, a plain step) and goes after its box, taking over the arrows that
+ * left it — a step added in the middle of a line joins the line. Out of a
+ * decision it is another branch, and its arrow says "Yes", then "No". The
+ * chart is laid out again if it arranges itself. On a hand-placed
+ * chart nothing moves: the step goes one gap below its box, beside any step
+ * already there. On a freeform drawing it copies the box it follows and its
+ * arrows, one gap along the flow.
+ */
+export function addNextStep(
+    store: EditorStore,
+    sourceId: string,
+    /** A branch beside the box's other steps (⇧Tab), never put in their line. */
+    opts: { branch?: boolean } = {}
+): string | null {
     const page = activePage(store.getState().doc);
     const source = nodeById(page, sourceId);
     if (!source) return null;
+    // A frame or a group is never cloned with an arrow to the copy. An empty
+    // frame gets its first step inside; otherwise Tab on one does nothing.
+    if (isContainer(source.shape)) return firstStepInside(store, source);
 
-    const look = activeFlowLook(store.getState());
+    const look = flowLookOf(store.getState().doc);
     const mode = docMode(store);
     // A mindmap's centre is a filled pill; a step after it is a plain topic.
     const shape =
@@ -1330,39 +1538,11 @@ export function addNextStep(store: EditorStore, sourceId: string): string | null
             : { w: source.w, h: source.h });
 
     const dir = flowDirection(page, sourceId, look?.direction ?? "right");
-    const c = nodeCenter(source);
-    const step = {
-        right: { x: 1, y: 0 },
-        left: { x: -1, y: 0 },
-        down: { x: 0, y: 1 },
-        up: { x: 0, y: -1 },
-    }[dir];
-    const reach =
-        step.x !== 0 ? source.w / 2 + STEP_GAP + size.w / 2 : source.h / 2 + STEP_GAP + size.h / 2;
-    let at = { x: c.x + step.x * reach, y: c.y + step.y * reach };
-    // Sideways past anything already there, so branches fan out.
-    const aside = step.x !== 0 ? { x: 0, y: size.h + 32 } : { x: size.w + 32, y: 0 };
-    const occupied = (p: Point) =>
-        page.nodes.some(
-            nd =>
-                !nd.hidden &&
-                nd.id !== source.id &&
-                !isContainer(nd.shape) &&
-                rectsIntersect(
-                    {
-                        x: p.x - size.w / 2 - 8,
-                        y: p.y - size.h / 2 - 8,
-                        w: size.w + 16,
-                        h: size.h + 16,
-                    },
-                    nodeBounds(nd)
-                )
-        );
-    for (let i = 0; i < 24 && occupied(at); i++) at = { x: at.x + aside.x, y: at.y + aside.y };
+    const at = placeAfter(page, source, size, dir);
 
     const created = createNodeAt(shape, at, { mode, w: size.w, h: size.h });
-    // Under a direction being tried, a step wears that direction's look for
-    // its shape; otherwise it copies the box it follows.
+    // On a flowchart a step wears the look for its shape; on a freeform
+    // drawing it copies the box it follows.
     const dressed = look ? dressBox(look, created, mode, { keepSize: true }) : undefined;
     const next: DiagramNode = {
         ...created,
@@ -1392,28 +1572,61 @@ export function addNextStep(store: EditorStore, sourceId: string): string | null
               }),
     });
 
+    // On a flowchart the new step goes *after* its box, as a new line in the
+    // Steps panel would: the arrows that left the box now leave the new step.
+    // Out of a decision it is another branch, so its arrows stay.
+    const insert = look !== null && source.shape !== "decision" && !opts.branch;
+    const handOn = (p: DiagramPage): DiagramPage =>
+        insert
+            ? {
+                  ...p,
+                  edges: p.edges.map(e =>
+                      e.from.nodeId === sourceId && e.to.nodeId !== sourceId
+                          ? { ...e, from: { ...e.from, nodeId: next.id }, waypoints: [] }
+                          : e
+                  ),
+              }
+            : p;
+
     store.group("Add step", () => {
         store.updatePage(
             p =>
                 addEdges(
                     addNodes(
-                        source.collapsed
-                            ? mapNodes(p, [sourceId], nd => ({ ...nd, collapsed: false }))
-                            : p,
+                        handOn(
+                            source.collapsed
+                                ? mapNodes(p, [sourceId], nd => ({ ...nd, collapsed: false }))
+                                : p
+                        ),
                         [next]
                     ),
                     [edge]
                 ),
             { label: "Add step" }
         );
-        // A direction that lays the chart out for you does it here, in the
-        // same undo step as the box.
-        const relayout = look?.relayout;
-        if (relayout) store.updatePage(p => relayout(p, next.id), { label: "Add step" });
+        if (look) labelBranch(store, sourceId, next.id);
+        // In the same undo step as the box.
+        arrangeIfAuto(store, [next.id]);
     });
     store.selectNodes([next.id]);
     store.setEditing({ kind: "node", id: next.id });
     return next.id;
+}
+
+/**
+ * Tab on an empty frame: its first step, in the top middle of it, joined to
+ * the frame, label open. Null for a group, or a frame that holds something.
+ */
+function firstStepInside(store: EditorStore, frame: DiagramNode): string | null {
+    const page = activePage(store.getState().doc);
+    if (frame.shape === "group" || childrenOf(page, frame.id).length > 0) return null;
+    const look = flowLookOf(store.getState().doc);
+    const shape = look?.stepShape ?? "process";
+    const size = look?.boxLook(shape, docMode(store)).size ?? shapeDef(shape).defaultSize;
+    const at = { x: frame.x + frame.w / 2, y: frame.y + Math.min(frame.h / 2, 48 + size.h / 2) };
+    const id = insertShape(store, shape, at, { parentId: frame.id });
+    store.setEditing({ kind: "node", id });
+    return id;
 }
 
 /**
@@ -1424,7 +1637,8 @@ export function addConnected(store: EditorStore, nodeId: string): string | null 
     const { doc } = store.getState();
     const node = nodeById(activePage(doc), nodeId);
     if (!node) return null;
-    return stepsFrom(doc.settings.kind, node)
+    // A frame or a group: never a copy, never a topic hung off it.
+    return isContainer(node.shape) || stepsFrom(doc.settings.kind, node)
         ? addNextStep(store, nodeId)
         : addChildTopic(store, nodeId);
 }

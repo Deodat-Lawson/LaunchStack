@@ -28,10 +28,19 @@
  * Board colours are document data, not theme tokens (see the README).
  */
 
+import { worksAsFlow } from "../doc";
+import type { CreateEdgeOptions } from "../factory";
 import { sizeForText } from "../grow";
-import { neutralsFor, stickyColors, stickyInk, swatchFor, type ThemeMode } from "../palette";
+import {
+    neutralsFor,
+    stickyColors,
+    stickyInk,
+    swatchFor,
+    themeMode,
+    type ThemeMode,
+} from "../palette";
 import { shapeDef } from "../shapes";
-import type { DiagramNode, ShapeId } from "../types";
+import type { DiagramNode, MindmapDoc, ShapeId } from "../types";
 import { tidyChart } from "./arrange";
 import type { BoxLook, FlowLook } from "./lookTypes";
 import { isStepNode, shapeForKind } from "./steps";
@@ -111,8 +120,11 @@ function nextShape(source: DiagramNode): ShapeId {
 /**
  * A step whose words now make it another kind — "In stock?" a decision,
  * "Start" a pill, a decision whose question mark is gone a step — reshaped
- * and recoloured about the same centre, at the new kind's width, grown down
- * for its words. Null when the kind is unchanged or the box is not a step.
+ * about the same centre and grown down for its words. A box wearing the
+ * flowchart look takes the new kind's size and colour; one with colours of
+ * its own (a template's, an older document's) keeps them, and its size — it
+ * is never repainted. Null when the kind is unchanged or the box is not a
+ * step.
  */
 function afterText(
     node: DiagramNode,
@@ -122,14 +134,16 @@ function afterText(
     if (!isStepNode(node) || text.trim() === "") return null;
     const shape = shapeForKind(stepKindOf(oneLine(text)), node.shape, "process");
     if (shape === node.shape) return null;
+    const dressed =
+        node.style.stroke === "none" && node.style.fill === kindColours(node.shape, mode).fill;
     const look = boxLook(shape, mode);
-    const base = look.size ?? { w: node.w, h: node.h };
+    const base = (dressed ? look.size : undefined) ?? { w: node.w, h: node.h };
     const fresh: DiagramNode = {
         ...node,
         shape,
         w: base.w,
         h: base.h,
-        textStyle: { ...node.textStyle, ...look.text },
+        textStyle: dressed ? { ...node.textStyle, ...look.text } : node.textStyle,
     };
     const { w, h } = sizeForText(fresh, text, { keepWidth: true });
     return {
@@ -138,7 +152,7 @@ function afterText(
         h,
         x: Math.round(node.x + node.w / 2 - w / 2),
         y: Math.round(node.y + node.h / 2 - h / 2),
-        style: { ...node.style, ...look.style },
+        ...(dressed ? { style: { ...node.style, ...look.style } } : {}),
         textStyle: fresh.textStyle,
     };
 }
@@ -166,3 +180,63 @@ export const flowchartLook: FlowLook = {
     relayout: (page, added) => tidyChart(page, [added]),
     afterText,
 };
+
+// ---------------------------------------------------------------------------
+// Dressing new boxes and arrows
+// ---------------------------------------------------------------------------
+
+/**
+ * The look every new box and arrow on this document gets: `flowchartLook` on
+ * a document worked as a flowchart (`worksAsFlow`), null on a mindmap or a
+ * freeform drawing — every caller then does exactly what it did before
+ * flowcharts had a look of their own.
+ */
+export function flowLookOf(doc: MindmapDoc): FlowLook | null {
+    return worksAsFlow(doc.settings.kind) ? flowchartLook : null;
+}
+
+/** The board's lighting, for picking a look's colours. */
+export function boardMode(doc: MindmapDoc): ThemeMode {
+    return themeMode(doc.settings.paletteId);
+}
+
+/**
+ * A new box in the look: its colours and type, and its starting size about
+ * the same centre unless the caller chose the size (a box drawn by dragging
+ * out a rectangle keeps the rectangle).
+ */
+export function dressBox(
+    look: FlowLook,
+    node: DiagramNode,
+    mode: ThemeMode,
+    opts: { keepSize?: boolean } = {}
+): DiagramNode {
+    const box = look.boxLook(node.shape, mode);
+    const size = !opts.keepSize && box.size ? box.size : { w: node.w, h: node.h };
+    const cx = node.x + node.w / 2;
+    const cy = node.y + node.h / 2;
+    return {
+        ...node,
+        x: cx - size.w / 2,
+        y: cy - size.h / 2,
+        w: size.w,
+        h: size.h,
+        style: { ...node.style, ...box.style },
+        textStyle: { ...node.textStyle, ...box.text },
+    };
+}
+
+/** The look's arrow, as `createEdge` options. */
+export function edgeOptions(
+    look: FlowLook,
+    mode: ThemeMode
+): Pick<CreateEdgeOptions, "kind" | "style" | "startArrow" | "endArrow" | "textStyle"> {
+    const e = look.edgeLook(mode);
+    return {
+        kind: e.kind,
+        style: e.style,
+        ...(e.startArrow ? { startArrow: e.startArrow } : {}),
+        ...(e.endArrow ? { endArrow: e.endArrow } : {}),
+        ...(e.text ? { textStyle: e.text } : {}),
+    };
+}

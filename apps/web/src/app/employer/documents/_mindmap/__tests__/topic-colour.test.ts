@@ -22,8 +22,17 @@ import { paintNewTopics, restyleMovedTopics } from "../model/topicStyle";
  * board).
  */
 
+/**
+ * An empty page worked as a mindmap. A blank board is a flowchart, where every
+ * new box wears the flowchart look instead (`flow-look.test.ts`).
+ */
+function blankMap(themeMode: "light" | "dark" = "light") {
+    const base = buildTemplate("blank", "Map", themeMode);
+    return { ...base, settings: { ...base.settings, kind: "mindmap" as const } };
+}
+
 function blankStore(themeMode: "light" | "dark" = "light"): EditorStore {
-    return new EditorStore(buildTemplate("blank", "Map", themeMode));
+    return new EditorStore(blankMap(themeMode));
 }
 
 function page(store: EditorStore) {
@@ -49,7 +58,7 @@ describe("a new central topic", () => {
         "pine",
         "carbon",
     ])("is the %s theme's own centre, and its label is readable", themeId => {
-        const base = buildTemplate("blank", "Map");
+        const base = blankMap();
         const store = new EditorStore({
             ...base,
             settings: { ...base.settings, paletteId: themeId },
@@ -80,7 +89,7 @@ describe("Tab under the centre", () => {
     it("hands out branch hues in the theme's own order, not the factory's placeholder", () => {
         // Forest's hues include the default theme's blue, which every new
         // topic is born wearing; kept, it put blue first (QA, round 2).
-        const base = buildTemplate("blank", "Map");
+        const base = blankMap();
         const store = new EditorStore({
             ...base,
             settings: { ...base.settings, paletteId: "forest" },

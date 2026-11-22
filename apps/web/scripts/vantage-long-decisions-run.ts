@@ -45,7 +45,21 @@ type ExploratoryAccess = StableId & { tool: "digest" | "read"; disclosed: boolea
 async function writeJson(path: string, value: unknown) {
     const temporary = path + "." + randomUUID() + ".tmp";
     await writeFile(temporary, JSON.stringify(value, null, 2) + "\n", { flag: "wx", flush: true });
-    await rename(temporary, path);
+    // Windows readers can briefly hold the destination open. Retry the atomic
+    // replace before the meter can dispatch against a new reservation.
+    for (let attempt = 0; ; attempt++) {
+        try {
+            await rename(temporary, path);
+            return;
+        } catch (error) {
+            if (
+                attempt === 5 ||
+                !["EPERM", "EACCES", "EBUSY"].includes((error as NodeJS.ErrnoException).code ?? "")
+            )
+                throw error;
+            await new Promise(resolve => setTimeout(resolve, (attempt + 1) * 100));
+        }
+    }
 }
 
 function projectToolAccess(
@@ -236,7 +250,11 @@ async function main() {
                     row.workId !== undefined ||
                     !["settled", "unknown"].includes(row.status)
             ) ||
-            priorLedger.hold !== "usage_unresolved"
+            (priorLedger.hold !== null && priorLedger.hold !== "usage_unresolved") ||
+            (priorLedger.hold === null &&
+                priorLedger.records.some(
+                    row => row.status === "unknown" && !row.continuedAfterGenerationNoHttp
+                ))
         )
             throw new Error("long_decisions_warmup_ledger_invalid");
         if (projectedUsd + priorLedger.projectedTotalUsd > LIMIT_USD)
@@ -486,7 +504,7 @@ async function main() {
                 heldExposureUsd: meter.snapshot().reservedUsd,
             });
         };
-        if (resumeWarmup) await recoverNoHttp();
+        if (resumeWarmup && meter.snapshot().hold === "usage_unresolved") await recoverNoHttp();
         const fixedIds = new Set(manifest.fixedSources.map(source => source.documentId));
         const eligible = new Set<string>();
         for (const { group } of schedule) {
@@ -514,8 +532,20 @@ async function main() {
             return row?.version;
         };
         const epoch = await currentEpoch();
-        const query: WeeklyReviewQuery = (queryText, args) =>
-            database.transaction(run => run(queryText, args));
+        const query: WeeklyReviewQuery = async (queryText, args) => {
+            try {
+                return await database.transaction(run => run(queryText, args));
+            } catch (error) {
+                const code =
+                    (error as { code?: unknown; cause?: { code?: unknown } })?.cause?.code ??
+                    (error as { code?: unknown })?.code;
+                await saveDiagnostic({
+                    kind: "digest_database_failure",
+                    code: typeof code === "string" && /^[0-9A-Z]{5}$/.test(code) ? code : "unknown",
+                });
+                throw error;
+            }
+        };
         const startedAt = Date.now();
         const digestIds: string[] = [];
         // Serial batches warm the initial connection and isolate every paid retry.
@@ -529,7 +559,18 @@ async function main() {
                         actor,
                         versionIds: batch,
                         query,
-                        provider: digestProvider,
+                        provider: async input => {
+                            try {
+                                return await digestProvider(input);
+                            } catch (error) {
+                                await saveDiagnostic({
+                                    kind: "digest_provider_failure",
+                                    causeCode: causeCode(error),
+                                    syntaxError: error instanceof SyntaxError,
+                                });
+                                throw error;
+                            }
+                        },
                         authorizeDocument: async document =>
                             canReadIds.has(String(document.id)) &&
                             (await loadActor()).canMutate &&
@@ -540,6 +581,17 @@ async function main() {
                     digestIds.push(...ready.digestIds);
                     break;
                 } catch (error) {
+                    await saveDiagnostic({
+                        kind: "digest_warmup_failure",
+                        ...stableVersion(versionId),
+                        code:
+                            error instanceof WeeklyReviewConflict
+                                ? error.code
+                                : error instanceof Error &&
+                                    /^benchmark_[a-z_]+$/.test(error.message)
+                                  ? error.message
+                                  : "unknown",
+                    });
                     await meter.drainPending();
                     const state = meter.snapshot();
                     const oldIds = new Set(before.records.map(row => row.id));

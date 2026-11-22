@@ -327,7 +327,9 @@ describe("the empty flowchart", () => {
         const m = mount({ empty: true });
         act(() => m.store.setStepsPanel(false));
         act(() => {
-            fireEvent.click(screen.getByRole("button", { name: "Or write the steps in the panel" }));
+            fireEvent.click(
+                screen.getByRole("button", { name: "Or write the steps in the panel" })
+            );
         });
         expect(m.store.getState().stepsPanel).toBe(true);
         m.view.unmount();

@@ -757,6 +757,7 @@ describe("keyless ports", () => {
         expect(ports.creditsPerCandidate).toBe(0);
         expect(ports.compliance).toBeNull();
         expect(ports.profile).toBeDefined();
+        expect(ports.enrichConcurrency).toBe(5);
         await expect(
             ports.model.respond({ system: "", transcript: [], tools: [] })
         ).rejects.toThrow(/no model/);

@@ -400,6 +400,13 @@
       "when": 1794867300000,
       "tag": "20261116221500_storage_deletion_operations",
       "breakpoints": true
+    },
+    {
+      "idx": 57,
+      "version": "7",
+      "when": 1795232605316,
+      "tag": "20261121034325_partner_org_pictures",
+      "breakpoints": true
     }
   ]
 }

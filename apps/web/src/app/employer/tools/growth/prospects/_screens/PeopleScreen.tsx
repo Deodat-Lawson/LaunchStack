@@ -47,12 +47,15 @@ export function PeopleScreen() {
         return () => window.clearTimeout(id);
     }, [q]);
 
-    const res = useResource(segmentId ? `people:${segmentId}:${status}:${debounced}` : null, () =>
-        prospectsApi.people({
-            segmentId: segmentId!,
-            q: debounced || undefined,
-            status: status === "all" ? undefined : status,
-        })
+    const res = useResource(
+        segmentId ? `people:${segmentId}:${status}:${debounced}` : null,
+        () =>
+            prospectsApi.people({
+                segmentId: segmentId!,
+                q: debounced || undefined,
+                status: status === "all" ? undefined : status,
+            }),
+        { keepAcrossMounts: true }
     );
     const people = useMemo(() => res.data?.people ?? [], [res.data]);
     const [selected, setSelected] = useState<Set<string>>(new Set());

@@ -39,7 +39,7 @@ import {
     updateRunMeta,
 } from "@launchstack/pipelines/scenarios/db";
 import { isCounted } from "@launchstack/pipelines/company-metadata";
-import { partnerRelationships } from "@launchstack/pipelines/schema";
+import { distributionPrograms, partnerRelationships } from "@launchstack/pipelines/schema";
 import {
     buildAnalystRequest,
     buildInterviewRequest,
@@ -276,6 +276,19 @@ function cleanSources(raw: Partial<ScenarioSourcesInput> | undefined): ScenarioS
         ],
         searchFiles: raw?.searchFiles === true,
         prospects: raw?.prospects === true,
+        prospectSegmentId:
+            typeof raw?.prospectSegmentId === "string" && raw.prospectSegmentId.length <= 256
+                ? raw.prospectSegmentId
+                : null,
+        prospectIds: Array.isArray(raw?.prospectIds)
+            ? [
+                  ...new Set(
+                      (raw.prospectIds as unknown[]).filter(
+                          (id): id is string => typeof id === "string" && id.length <= 256
+                      )
+                  ),
+              ].slice(0, SCENARIO_LIMITS.prospectsMax)
+            : [],
         brandComments: raw?.brandComments === true,
         companyProfile: raw?.companyProfile === true,
         notes: typeof raw?.notes === "string" ? raw.notes.trim() : "",
@@ -424,7 +437,7 @@ function fileStatus(row: {
 
 export async function scenarioSourceOptions(ctx: Ctx): Promise<ScenarioSourceOptions> {
     const scope = await ctx.documentScope();
-    const [betaApps, docs, [prospects], [comments], [profile]] = await Promise.all([
+    const [betaApps, docs, [prospects], [comments], [profile], segments] = await Promise.all([
         betaAppsOn(ctx.companyId),
         db
             .select({
@@ -477,6 +490,25 @@ export async function scenarioSourceOptions(ctx: Ctx): Promise<ScenarioSourceOpt
                     isNotNull(companyMetadata.metadata)
                 )
             ),
+        db
+            .select({
+                id: distributionPrograms.id,
+                name: distributionPrograms.name,
+                companies: count(partnerRelationships.id),
+            })
+            .from(distributionPrograms)
+            .innerJoin(
+                partnerRelationships,
+                eq(partnerRelationships.programId, distributionPrograms.id)
+            )
+            .where(
+                and(
+                    eq(distributionPrograms.companyId, ctx.companyId),
+                    eq(distributionPrograms.status, "active")
+                )
+            )
+            .groupBy(distributionPrograms.id, distributionPrograms.name)
+            .orderBy(desc(count(partnerRelationships.id))),
     ]);
     return {
         documents: docs.map(d => ({
@@ -489,6 +521,9 @@ export async function scenarioSourceOptions(ctx: Ctx): Promise<ScenarioSourceOpt
             aboutCompany: isCounted(d),
         })),
         prospects: betaApps ? (prospects?.n ?? 0) : 0,
+        prospectSegments: betaApps
+            ? segments.map(s => ({ id: s.id, name: s.name, companies: Number(s.companies) }))
+            : [],
         brandComments: betaApps ? (comments?.n ?? 0) : 0,
         companyProfile: (profile?.n ?? 0) > 0,
         canUpload: ctx.can("documents.upload"),

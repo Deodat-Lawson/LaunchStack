@@ -605,7 +605,10 @@ export async function collectScenarioSources(
                       { sourceType: "prospect", sourceId: "prospects", label: "Prospects" },
                       async () => ({
                           sections: unversioned(
-                              await prospectDrafts(companyId),
+                              await prospectDrafts(companyId, {
+                                  segmentId: s.prospectSegmentId,
+                                  ids: s.prospectIds,
+                              }),
                               "prospect",
                               byOrder
                           ),

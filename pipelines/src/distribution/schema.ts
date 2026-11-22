@@ -141,6 +141,13 @@ export const partnerOrgs = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        // Added by a later migration, so they are last: ADD COLUMN appends, and
+        // CI compares the migrated table with one built from this file.
+        /** The homepage's own share image and icon, as it declares them (https). */
+        imageUrl: varchar("image_url", { length: 2048 }),
+        iconUrl: varchar("icon_url", { length: 2048 }),
+        /** When the site was last checked for pictures, found or not. */
+        picturesCheckedAt: timestamp("pictures_checked_at", { withTimezone: true }),
     },
     table => ({
         resolveKeyUnique: uniqueIndex("partner_orgs_company_resolve_key_unique").on(

@@ -1,5 +1,5 @@
 /** External-cache runner. Input contains only questions and fixture workspace IDs. */
-import { randomBytes, randomUUID } from "node:crypto";
+import { createHash, randomBytes, randomUUID } from "node:crypto";
 import { spawnSync } from "node:child_process";
 import { access, mkdir, readFile, realpath, rename, unlink, writeFile } from "node:fs/promises";
 import { dirname, isAbsolute, relative, resolve, sep } from "node:path";
@@ -33,7 +33,9 @@ import type {
 import {
     assertBenchmarkDatabaseUrl,
     benchmarkFailureCode,
+    BenchmarkGroupSchema,
     BenchmarkQuestionSchema,
+    type BenchmarkGroup,
     type BenchmarkQuestion,
     runBenchmarkRetrieval,
     type BenchmarkArm,
@@ -80,6 +82,11 @@ const warmUpSchema = z.object({
     ledgerEnd: z.number().int().nonnegative(),
 });
 type BenchmarkResult = Awaited<ReturnType<typeof runBenchmarkRetrieval>>;
+type BenchmarkRequest = BenchmarkQuestion | BenchmarkGroup;
+const requestId = (request: BenchmarkRequest) =>
+    "groupId" in request ? request.groupId : request.caseId;
+const topicCount = (requests: readonly BenchmarkRequest[]) =>
+    requests.reduce((sum, request) => sum + ("topics" in request ? request.topics.length : 1), 0);
 const caseFile = (directory: string, index: number) =>
     resolve(directory, "case-" + String(index + 1).padStart(2, "0") + ".json");
 function isWithin(root: string, candidate: string) {
@@ -163,7 +170,7 @@ async function loadLiveCheckpoint(
     cache: string,
     outputName: string,
     captureDir: string,
-    requests: readonly BenchmarkQuestion[]
+    requests: readonly BenchmarkRequest[]
 ) {
     if ((await realpath(captureDir)) !== captureDir)
         throw new Error("benchmark_live_capture_directory_mismatch");
@@ -196,7 +203,7 @@ async function loadLiveCheckpoint(
         if (
             !request ||
             result.arm !== "configured-live" ||
-            result.caseId !== request.caseId ||
+            result.caseId !== requestId(request) ||
             result.enterprise !== request.enterprise ||
             result.workspaceId !== request.workspaceId
         )
@@ -226,6 +233,7 @@ async function run() {
         options: {
             cache: { type: "string" },
             requests: { type: "string" },
+            grouped: { type: "boolean" },
             output: { type: "string" },
             arm: { type: "string", default: "free" },
             "end-to-end": { type: "string", default: "0" },
@@ -238,13 +246,18 @@ async function run() {
     const arm = armSchema.parse(values.arm);
     const executeLive = arm === "configured-live";
     const preflight = Boolean(values["preflight-live"]);
+    const grouped = Boolean(values.grouped);
     const warmWorkspace =
         values["warm-workspace"] === undefined
             ? undefined
             : identifier.parse(values["warm-workspace"]);
     if (preflight && (!executeLive || values["approve-live"]))
         throw new Error("benchmark_preflight_requires_configured_live_without_approval_flag");
-    if (!values.cache || (!preflight && (!values.output || (!values.requests && !warmWorkspace))))
+    if (
+        !values.cache ||
+        (grouped && (!values.requests || warmWorkspace)) ||
+        (!preflight && (!values.output || (!values.requests && !warmWorkspace)))
+    )
         throw new Error("benchmark_cache_requests_output_required");
     const outputName = localJson.parse(values.output ?? "preflight.json");
     const endToEnd = z.coerce.number().int().min(0).max(2).parse(values["end-to-end"]);
@@ -270,19 +283,62 @@ async function run() {
     const manifest = manifestSchema.parse(
         JSON.parse(await readFile(await cacheFile(cache, "corpus-manifest.json"), "utf8"))
     );
-    const requests =
-        warmWorkspace || preflight
-            ? []
-            : z
-                  .array(BenchmarkQuestionSchema)
-                  .min(1)
-                  .max(100)
-                  .parse(
-                      JSON.parse(await readFile(await cacheFile(cache, values.requests!), "utf8"))
-                  );
-    if (executeLive && !warmWorkspace && !preflight && requests.length !== 100)
-        throw new Error("configured_live_requires_the_100_case_sample");
-    if (new Set(requests.map(item => item.caseId)).size !== requests.length)
+    const requests: BenchmarkRequest[] = [];
+    if (!warmWorkspace && (!preflight || grouped)) {
+        const requestText = await readFile(await cacheFile(cache, values.requests!), "utf8");
+        const parsed: unknown = JSON.parse(requestText);
+        if (grouped) {
+            const groups = z.array(BenchmarkGroupSchema).min(1).max(100).parse(parsed);
+            const pool = z
+                .array(BenchmarkQuestionSchema)
+                .length(100)
+                .parse(
+                    JSON.parse(
+                        await readFile(await cacheFile(cache, "sample100-requests.json"), "utf8")
+                    )
+                );
+            const byCase = new Map(pool.map(question => [question.caseId, question]));
+            if (
+                byCase.size !== pool.length ||
+                groups.some(group =>
+                    group.topics.some(topic => {
+                        const original = byCase.get(topic.caseId);
+                        return (
+                            original?.enterprise !== group.enterprise ||
+                            original?.workspaceId !== group.workspaceId ||
+                            original?.question !== topic.question
+                        );
+                    })
+                )
+            )
+                throw new Error("benchmark_group_member_outside_enterprise_pool");
+            const memberships = groups.flatMap(group =>
+                group.topics.map(topic => group.topics.length + ":" + topic.caseId)
+            );
+            if (new Set(memberships).size !== memberships.length)
+                throw new Error("duplicate_benchmark_group_member_in_size");
+            if (
+                executeLive &&
+                (groups.filter(group => group.topics.length === 3).length !== 30 ||
+                    groups.filter(group => group.topics.length === 5).length !== 20)
+            )
+                throw new Error("configured_live_requires_the_50_group_sample");
+            requests.push(...groups);
+            console.log(
+                JSON.stringify({
+                    groupCount: groups.length,
+                    topicPositions: topicCount(groups),
+                    requestsSha256: createHash("sha256").update(requestText, "utf8").digest("hex"),
+                })
+            );
+        } else {
+            const questions = z.array(BenchmarkQuestionSchema).min(1).max(100).parse(parsed);
+            if (executeLive && questions.length !== 100)
+                throw new Error("configured_live_requires_the_100_case_sample");
+            requests.push(...questions);
+        }
+    }
+    if (new Set(requests.map(requestId)).size !== requests.length)
         throw new Error("duplicate_benchmark_case");
     const allowed = new Map(manifest.enterprises.map(item => [item.enterprise, item.workspaceId]));
     if (
@@ -317,7 +373,16 @@ async function run() {
             await assertFixtureDatabase(inspection, selectedWorkspaceIds);
             const missing = await missingDigestDocuments(inspection, digestDocuments);
             const forecast = projectAzureLive({
-                remainingCases: warmWorkspace ? 0 : 100 - (checkpoint?.prefix.length ?? 0),
+                remainingCases: warmWorkspace
+                    ? 0
+                    : (grouped ? requests.length : 100) - (checkpoint?.prefix.length ?? 0),
+                ...(grouped
+                    ? {
+                          remainingTopics: topicCount(
+                              requests.slice(checkpoint?.prefix.length ?? 0)
+                          ),
+                      }
+                    : {}),
                 missingDigestBytes: missing.map(document => document.bytes),
                 currentExposureUsd: checkpoint?.priorLedger.projectedTotalUsd ?? 0,
             });
@@ -542,7 +607,7 @@ async function run() {
                 .reduce((sum, row) => sum + (row.settledListRateUsd ?? row.projectedUsd), 0) ?? 0;
         const jobs: {
             index: number;
-            request: BenchmarkQuestion;
+            request: BenchmarkRequest;
             arm: BenchmarkArm;
             subject: string;
         }[] = [];
@@ -574,6 +639,12 @@ async function run() {
             if (exposure) {
                 const forecast = projectAzureLive({
                     remainingCases: requests.length - results.length,
+                    ...(grouped
+                        ? {
+                              remainingTopics: topicCount(requests.slice(results.length)),
+                              completedTopics: topicCount(requests.slice(0, results.length)),
+                          }
+                        : {}),
                     currentExposureUsd: exposure.projectedTotalUsd,
                     completedExplorationCases: results.length,
                     completedExplorationExposureUsd: Math.max(

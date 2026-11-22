@@ -22,7 +22,10 @@ import {
     type WeeklyReviewAuthorityActor,
 } from "../src/server/vantage/weekly-review-authority";
 import { createWeeklyReviewRepository } from "../src/server/vantage/weekly-review-repository";
-import { createScriptedExplorationPort } from "../src/server/vantage/weekly-review-topic-exploration";
+import {
+    createScriptedExplorationPort,
+    type TopicExplorationResult,
+} from "../src/server/vantage/weekly-review-topic-exploration";
 import {
     prepareTopicSelection,
     prewarmTopicDigests,
@@ -43,6 +46,73 @@ export const BenchmarkQuestionSchema = z
     })
     .strict();
 export type BenchmarkQuestion = z.infer<typeof BenchmarkQuestionSchema>;
+export const BenchmarkGroupSchema = z
+    .object({
+        groupId: z.string().min(1).max(80),
+        enterprise: z.string().min(1).max(200),
+        workspaceId: z.string().regex(/^[1-9]\d*$/),
+        topics: z
+            .array(
+                z
+                    .object({
+                        caseId: z.string().min(1).max(80),
+                        question: z.string().min(1).max(2000),
+                    })
+                    .strict()
+            )
+            .refine(
+                topics => topics.length === 3 || topics.length === 5,
+                "A group must contain exactly three or five topics"
+            )
+            .refine(
+                topics => new Set(topics.map(topic => topic.caseId)).size === topics.length,
+                "Group case IDs must be unique"
+            ),
+    })
+    .strict();
+export type BenchmarkGroup = z.infer<typeof BenchmarkGroupSchema>;
+export type BenchmarkRequest = BenchmarkQuestion | BenchmarkGroup;
+export function benchmarkTopicAttribution(input: {
+    arm: BenchmarkArm;
+    selection: TopicExplorationResult | null;
+    documents: readonly { ref: string; id: string; version: string }[];
+    selected: readonly { documentId: string | null; versionId: string }[];
+}) {
+    const base = {
+        level: "document-version" as const,
+        provenance: "exploration_submission_filtered_to_frozen_survivors" as const,
+    };
+    if (!input.arm.startsWith("configured-live") || input.selection === null)
+        return {
+            ...base,
+            observable: false,
+            entries: [] as { documentId: string; versionId: string; topicIds: string[] }[],
+        };
+    const frozen = new Set(
+        input.selected
+            .filter(source => source.documentId !== null)
+            .map(source => source.documentId + "@" + source.versionId)
+    );
+    const documents = new Map(input.documents.map(document => [document.ref, document]));
+    const associations = new Map<
+        string,
+        { documentId: string; versionId: string; topicIds: string[] }
+    >();
+    for (const item of input.selection.selected) {
+        const document = documents.get(item.ref);
+        if (!document) continue;
+        const key = document.id + "@" + document.version;
+        if (!frozen.has(key)) continue;
+        const prior = associations.get(key);
+        associations.set(key, {
+            documentId: document.id,
+            versionId: document.version,
+            topicIds: [...new Set([...(prior?.topicIds ?? []), ...item.topicIds])],
+        });
+    }
+    return { ...base, observable: true, entries: [...associations.values()] };
+}
+
 export type BenchmarkArm =
     | "baseline"
     | "seeds"
@@ -83,6 +153,7 @@ export function benchmarkFailureCode(error: unknown): string {
             "benchmark_projected_budget_exceeded",
             "benchmark_digest_warm_up_incomplete",
             "benchmark_digest_missing_after_warm_up",
+            "benchmark_group_evidence_budget_exceeded",
         ].includes(error.message)
     )
         return error.message;
@@ -171,7 +242,7 @@ function injectedReportPorts(
     };
 }
 export async function runBenchmarkRetrieval(options: {
-    request: BenchmarkQuestion;
+    request: BenchmarkRequest;
     arm: BenchmarkArm;
     databaseUrl: string;
     database: WeeklyReviewDatabase;
@@ -182,7 +253,18 @@ export async function runBenchmarkRetrieval(options: {
     providers?: TopicSelectionProviders;
 }) {
     assertBenchmarkDatabaseUrl(options.databaseUrl);
-    const request = BenchmarkQuestionSchema.parse(options.request);
+    const request = z.union([BenchmarkQuestionSchema, BenchmarkGroupSchema]).parse(options.request);
+    const grouped = "topics" in request;
+    const caseId = grouped ? request.groupId : request.caseId;
+    const requestedTopics = (
+        grouped ? request.topics : [{ caseId: request.caseId, question: request.question }]
+    ).map(topic => ({ ...topic, topicId: randomUUID() }));
+    const groupMetadata = grouped
+        ? {
+              topics: requestedTopics.map(({ caseId, topicId }) => ({ caseId, topicId })),
+              retrievalLimits: { sharedEvidenceBytes: 80000, sourceUnits: 16 },
+          }
+        : {};
     if (options.arm === "configured-live" && !options.providers)
         throw new Error("benchmark_live_requires_guarded_providers");
     const actor = await options.loadActor();
@@ -227,7 +309,7 @@ export async function runBenchmarkRetrieval(options: {
     };
     let offeredBeforeFailure: { documentId: string; versionId: string; ref: string }[] | undefined;
     const isTopic = options.arm !== "baseline";
-    if (request.question.length > 400)
+    if (requestedTopics.some(topic => topic.question.length > 400))
         throw new Error("benchmark_question_exceeds_existing_guidance_limit");
     await options.database.transaction(async query => {
         const [existing] = await query(
@@ -235,24 +317,30 @@ export async function runBenchmarkRetrieval(options: {
             [actor.companyId, actor.userId]
         );
         if (existing) throw new Error("benchmark_actor_must_be_fresh");
-        await query(
-            "INSERT INTO pdr_ai_v2_vantage_personal_topics(id,company_id,owner_id,title,guidance,status,revision) VALUES ($1::uuid,$2::bigint,$3,$4,$5::jsonb,'active',1)",
-            [
-                randomUUID(),
-                actor.companyId,
-                actor.userId,
-                "Benchmark question",
-                JSON.stringify({
-                    openQuestions: [request.question],
-                    decisionChangers: [],
-                    keywords: [],
-                    people: [],
-                    metrics: [],
-                }),
-            ]
-        );
+        for (const [index, topic] of requestedTopics.entries())
+            await query(
+                grouped
+                    ? "INSERT INTO pdr_ai_v2_vantage_personal_topics(id,company_id,owner_id,title,guidance,status,revision,created_at,updated_at) VALUES ($1::uuid,$2::bigint,$3,$4,$5::jsonb,'active',1,now()-($6::int*interval '1 millisecond'),now()-($6::int*interval '1 millisecond'))"
+                    : "INSERT INTO pdr_ai_v2_vantage_personal_topics(id,company_id,owner_id,title,guidance,status,revision) VALUES ($1::uuid,$2::bigint,$3,$4,$5::jsonb,'active',1)",
+                [
+                    topic.topicId,
+                    actor.companyId,
+                    actor.userId,
+                    "Benchmark question",
+                    JSON.stringify({
+                        openQuestions: [topic.question],
+                        decisionChangers: [],
+                        keywords: [],
+                        people: [],
+                        metrics: [],
+                    }),
+                    ...(grouped ? [requestedTopics.length - index] : []),
+                ]
+            );
     });
     let reserved = false;
+    let submitted: TopicExplorationResult | null = null;
+    let attributionDocuments: { ref: string; id: string; version: string }[] = [];
     try {
         nextStage("collect");
         const context = await authority.collectWeeklyReviewContext(
@@ -409,6 +497,8 @@ export async function runBenchmarkRetrieval(options: {
                     });
                 }
             }
+            submitted = selection;
+            attributionDocuments = [...seed.documents, ...seed.manifest.fixed];
             nextStage("freeze");
             const frozen = await repository.freezeTopic(current, id, query =>
                 authority.withTopicSourceReader(query, current, read =>
@@ -418,6 +508,14 @@ export async function runBenchmarkRetrieval(options: {
             snapshot = frozen.input;
         }
         nextStage("finalize");
+        if (
+            grouped &&
+            snapshot.sources.reduce(
+                (sum, source) => sum + Buffer.byteLength(source.text, "utf8"),
+                0
+            ) > 80000
+        )
+            throw new Error("benchmark_group_evidence_budget_exceeded");
         let generation: unknown;
         if (options.endToEnd) {
             try {
@@ -466,10 +564,11 @@ export async function runBenchmarkRetrieval(options: {
             };
         });
         stageMs[activeStage] = performance.now() - stageStart;
-        return {
+        const completed = {
             runId: reserved ? id : undefined,
             stageMs,
-            caseId: request.caseId,
+            caseId,
+            ...groupMetadata,
             enterprise: request.enterprise,
             workspaceId: request.workspaceId,
             arm: options.arm,
@@ -497,6 +596,16 @@ export async function runBenchmarkRetrieval(options: {
             ],
             selectionDiagnostics: context.selectionDiagnostics,
             selected,
+            ...(grouped
+                ? {
+                      topicAttribution: benchmarkTopicAttribution({
+                          arm: options.arm,
+                          selection: submitted,
+                          documents: attributionDocuments,
+                          selected,
+                      }),
+                  }
+                : {}),
             frozenBytes: snapshot.sources.reduce(
                 (sum, source) => sum + Buffer.byteLength(source.text),
                 0
@@ -506,13 +615,15 @@ export async function runBenchmarkRetrieval(options: {
             accounting,
             durationMs: performance.now() - started,
         };
+        return completed as typeof completed & { failure?: string };
     } catch (error) {
         if (reserved) await repository.fail(actor, id, "benchmark_run_failed");
         stageMs[activeStage] = performance.now() - stageStart;
         return {
             runId: reserved ? id : undefined,
             stageMs,
-            caseId: request.caseId,
+            caseId,
+            ...groupMetadata,
             enterprise: request.enterprise,
             workspaceId: request.workspaceId,
             arm: options.arm,

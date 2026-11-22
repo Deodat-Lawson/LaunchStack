@@ -12,13 +12,18 @@ const rateSource =
 // Nearest-rank p90 of the a68442c2 pilot's per-case exploration exposure
 // (settled conservative charges plus full unresolved request reserves).
 const pilotExplorationP90Usd = 0.0521793;
+// Nearest-rank p90 of exploration-only exposure in the 2e0a8fdc 100-case
+// capture. Charge each topic this single-topic rate in the grouped forecast.
+const singleTopicExplorationP90Usd = 0.014429102;
 const explorationPadding = 1.5;
 
 export function projectAzureLive(input: {
     remainingCases: number;
+    remainingTopics?: number;
     missingDigestBytes?: readonly number[];
     currentExposureUsd?: number;
     completedExplorationCases?: number;
+    completedTopics?: number;
     completedExplorationExposureUsd?: number;
 }) {
     const { input: inputRate, output: outputRate } = AZURE_LUNA_RESERVATION_PER_MILLION;
@@ -28,20 +33,27 @@ export function projectAzureLive(input: {
         0
     );
     // Keep the pilot projection until a small cohort from the changed path is available.
+    const grouped = input.remainingTopics !== undefined;
     const completed = input.completedExplorationCases ?? 0;
+    const completedUnits = grouped ? (input.completedTopics ?? 0) : completed;
     const observedMeanUsd =
-        completed >= 10 ? (input.completedExplorationExposureUsd ?? 0) / completed : 0;
-    const explorationPerCaseUsd =
-        Math.max(pilotExplorationP90Usd, observedMeanUsd) * explorationPadding;
-    const explorationUsd = explorationPerCaseUsd * input.remainingCases;
+        completed >= 10 && completedUnits > 0
+            ? (input.completedExplorationExposureUsd ?? 0) / completedUnits
+            : 0;
+    const explorationUnitP90Usd = grouped ? singleTopicExplorationP90Usd : pilotExplorationP90Usd;
+    const explorationPerUnitUsd =
+        Math.max(explorationUnitP90Usd, observedMeanUsd) * explorationPadding;
+    const explorationUsd = explorationPerUnitUsd * (input.remainingTopics ?? input.remainingCases);
     return {
-        pilotExplorationP90Usd,
+        explorationUnitP90Usd,
+        explorationUnit: grouped ? "topic" : "case",
         explorationPadding,
         remainingCases: input.remainingCases,
+        ...(grouped ? { remainingTopics: input.remainingTopics } : {}),
         missingDigests: input.missingDigestBytes?.length ?? 0,
         digestUsd,
         explorationUsd,
-        explorationPerCaseUsd,
+        explorationPerUnitUsd,
         projectedUsd: (input.currentExposureUsd ?? 0) + digestUsd + explorationUsd,
         limitUsd: AZURE_LIVE_LIMIT,
     };

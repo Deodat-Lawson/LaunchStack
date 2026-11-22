@@ -39,10 +39,12 @@ import {
     scalePt,
     subPt,
 } from "./geometry";
+import { worksAsFlow } from "./doc";
 import { isContainer } from "./shapes";
 import type {
     ArrowId,
     DiagramEdge,
+    DiagramKind,
     DiagramNode,
     DiagramPage,
     Endpoint,
@@ -78,6 +80,16 @@ export interface RouteOptions {
 }
 
 const NO_OPTIONS: RouteOptions = {};
+const FLOW_DOWN: RouteOptions = { flow: "down" };
+
+/**
+ * How a document's connectors route: one worked as a flowchart (`worksAsFlow`)
+ * runs top to bottom. The same object for the same kind, so it can sit in a
+ * memo's dependencies.
+ */
+export function routeOptionsFor(settings: { kind: DiagramKind }): RouteOptions {
+    return worksAsFlow(settings.kind) ? FLOW_DOWN : NO_OPTIONS;
+}
 
 export interface RoutedEdge {
     /** Polyline in world space; at least two points. */

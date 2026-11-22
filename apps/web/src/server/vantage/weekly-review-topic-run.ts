@@ -142,11 +142,15 @@ export async function prepareTopicSelection(options: {
     query: WeeklyReviewQuery;
     deadlineAt: number;
     digests: ReadonlyMap<string, DocumentDigest>;
+    evidenceCapBytes?: number;
     providers?: TopicSelectionProviders;
     onStage?: (stage: "exploration") => void;
     record: (values: { trace?: ExplorationTrace; digestIds?: string[] }) => Promise<void>;
 }): Promise<TopicExplorationResult | null> {
     const { seed, actor, deadlineAt, record } = options;
+    const evidenceCapBytes = options.evidenceCapBytes ?? 80000;
+    if (![8000, 16000, 32000, 80000].includes(evidenceCapBytes))
+        throw new WeeklyReviewConflict("topic_exploration_failed:evidence_budget_invalid");
     if (seed.manifest.configuration.provider === "seeds") return null;
     const controller = new AbortController();
     const expired = () => new WeeklyReviewConflict("topic_exploration_failed:timeout");
@@ -221,6 +225,11 @@ export async function prepareTopicSelection(options: {
                     offered: documents,
                     fixedRefs: catalogue.fixed.map(source => source.ref),
                     fixedDocuments: catalogue.fixed,
+                    evidenceBudget: {
+                        maxEvidenceBytes: evidenceCapBytes,
+                        maxSourceUnits: 16,
+                        fixedSources: seed.context.sources.map(({ ref, text }) => ({ ref, text })),
+                    },
                     topics: seed.manifest.topics.map(topic => ({
                         ...topic,
                         watches: topic.watches.flatMap(id => [

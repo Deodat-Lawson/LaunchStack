@@ -153,6 +153,8 @@ export function benchmarkFailureCode(error: unknown): string {
             "benchmark_projected_budget_exceeded",
             "benchmark_digest_warm_up_incomplete",
             "benchmark_digest_missing_after_warm_up",
+            "benchmark_backfill_priority_violation",
+            "benchmark_sweep_request_invalid",
             "benchmark_group_evidence_budget_exceeded",
         ].includes(error.message)
     )
@@ -241,6 +243,32 @@ function injectedReportPorts(
         }) as typeof invokeStructuredAttempt,
     };
 }
+export const SWEEP_CAPS = [8_000, 16_000, 32_000, 80_000] as const;
+export type SweepCap = (typeof SWEEP_CAPS)[number];
+export type SweepCohort = "exploratory" | "heldout";
+
+function selectedSnapshotSources(snapshot: WeeklyReviewInput) {
+    return snapshot.sources.map(source => {
+        const proof = snapshot.scopedEvidence?.find(parent =>
+            parent.units.some(unit => unit.ref === source.ref)
+        );
+        const unit = proof?.units.find(unit => unit.ref === source.ref);
+        const document = /^doc:(\d+)@/.exec(source.ref);
+        return {
+            documentId: proof?.documentId ?? document?.[1] ?? null,
+            versionId: source.version,
+            ref: source.ref,
+            text: source.text,
+            start: unit?.start ?? 0,
+            end: unit?.end ?? source.text.length,
+            kind: unit ? "excerpt" : "full_document",
+            purpose: source.purpose,
+        };
+    });
+}
+const frozenTextBytes = (snapshot: WeeklyReviewInput) =>
+    snapshot.sources.reduce((sum, source) => sum + Buffer.byteLength(source.text, "utf8"), 0);
+
 export async function runBenchmarkRetrieval(options: {
     request: BenchmarkRequest;
     arm: BenchmarkArm;
@@ -251,18 +279,30 @@ export async function runBenchmarkRetrieval(options: {
     asOf: string;
     endToEnd?: boolean;
     providers?: TopicSelectionProviders;
+    sweep?: { cohort: SweepCohort; evidenceCapBytes: SweepCap };
 }) {
     assertBenchmarkDatabaseUrl(options.databaseUrl);
     const request = z.union([BenchmarkQuestionSchema, BenchmarkGroupSchema]).parse(options.request);
     const grouped = "topics" in request;
     const caseId = grouped ? request.groupId : request.caseId;
+    const cap = options.sweep?.evidenceCapBytes ?? 80_000;
+    if (
+        options.sweep &&
+        (!grouped ||
+            options.endToEnd ||
+            !SWEEP_CAPS.includes(cap) ||
+            (options.sweep.cohort === "heldout" && cap !== 16_000 && cap !== 80_000) ||
+            !["seeds", "scripted", "configured-live"].includes(options.arm))
+    )
+        throw new Error("benchmark_sweep_request_invalid");
     const requestedTopics = (
         grouped ? request.topics : [{ caseId: request.caseId, question: request.question }]
     ).map(topic => ({ ...topic, topicId: randomUUID() }));
     const groupMetadata = grouped
         ? {
               topics: requestedTopics.map(({ caseId, topicId }) => ({ caseId, topicId })),
-              retrievalLimits: { sharedEvidenceBytes: 80000, sourceUnits: 16 },
+              retrievalLimits: { sharedEvidenceBytes: cap, sourceUnits: 16 },
+              ...(options.sweep ? { cohort: options.sweep.cohort } : {}),
           }
         : {};
     if (options.arm === "configured-live" && !options.providers)
@@ -340,6 +380,8 @@ export async function runBenchmarkRetrieval(options: {
     });
     let reserved = false;
     let submitted: TopicExplorationResult | null = null;
+    let backfillSnapshot: WeeklyReviewInput | undefined;
+
     let attributionDocuments: { ref: string; id: string; version: string }[] = [];
     try {
         nextStage("collect");
@@ -489,6 +531,7 @@ export async function runBenchmarkRetrieval(options: {
                         digests,
                         providers,
                         query,
+                        ...(options.sweep ? { evidenceCapBytes: cap } : {}),
                         record: values => repository.recordExploration(current, id, values),
                     });
                 } finally {
@@ -501,20 +544,31 @@ export async function runBenchmarkRetrieval(options: {
             attributionDocuments = [...seed.documents, ...seed.manifest.fixed];
             nextStage("freeze");
             const frozen = await repository.freezeTopic(current, id, query =>
-                authority.withTopicSourceReader(query, current, read =>
-                    fitTopicEvidence(id, seed, selection, read)
-                )
+                authority.withTopicSourceReader(query, current, async read => {
+                    if (!options.sweep) return fitTopicEvidence(id, seed, selection, read);
+                    const paired = options.arm === "configured-live";
+                    const fit = await fitTopicEvidence(id, seed, selection, read, {
+                        evidenceCapBytes: cap,
+                        backfill: paired,
+                    });
+                    if (!paired) return fit;
+                    const primary = fit.primary;
+                    if (
+                        !primary ||
+                        primary.input.sources.length > fit.input.sources.length ||
+                        fingerprint(primary.input.sources) !==
+                            fingerprint(fit.input.sources.slice(0, primary.input.sources.length)) ||
+                        frozenTextBytes(fit.input) > cap
+                    )
+                        throw new Error("benchmark_backfill_priority_violation");
+                    backfillSnapshot = fit.input;
+                    return primary;
+                })
             );
             snapshot = frozen.input;
         }
         nextStage("finalize");
-        if (
-            grouped &&
-            snapshot.sources.reduce(
-                (sum, source) => sum + Buffer.byteLength(source.text, "utf8"),
-                0
-            ) > 80000
-        )
+        if (grouped && frozenTextBytes(snapshot) > cap)
             throw new Error("benchmark_group_evidence_budget_exceeded");
         let generation: unknown;
         if (options.endToEnd) {
@@ -546,23 +600,22 @@ export async function runBenchmarkRetrieval(options: {
                 };
             }
         } else await repository.fail(current, id, "benchmark_retrieval_only_complete");
-        const selected = snapshot.sources.map(source => {
-            const proof = snapshot.scopedEvidence?.find(parent =>
-                parent.units.some(unit => unit.ref === source.ref)
-            );
-            const unit = proof?.units.find(unit => unit.ref === source.ref);
-            const document = /^doc:(\d+)@/.exec(source.ref);
-            return {
-                documentId: proof?.documentId ?? document?.[1] ?? null,
-                versionId: source.version,
-                ref: source.ref,
-                text: source.text,
-                start: unit?.start ?? 0,
-                end: unit?.end ?? source.text.length,
-                kind: unit ? "excerpt" : "full_document",
-                purpose: source.purpose,
-            };
-        });
+        const selected = selectedSnapshotSources(snapshot);
+        const backfillSelected = backfillSnapshot && selectedSnapshotSources(backfillSnapshot);
+        const pairedBackfill =
+            backfillSnapshot && backfillSelected
+                ? {
+                      snapshot: backfillSnapshot,
+                      selected: backfillSelected,
+                      frozenBytes: frozenTextBytes(backfillSnapshot),
+                      topicAttribution: benchmarkTopicAttribution({
+                          arm: options.arm,
+                          selection: submitted,
+                          documents: attributionDocuments,
+                          selected: backfillSelected,
+                      }),
+                  }
+                : undefined;
         stageMs[activeStage] = performance.now() - stageStart;
         const completed = {
             runId: reserved ? id : undefined,
@@ -606,11 +659,10 @@ export async function runBenchmarkRetrieval(options: {
                       }),
                   }
                 : {}),
-            frozenBytes: snapshot.sources.reduce(
-                (sum, source) => sum + Buffer.byteLength(source.text),
-                0
-            ),
+            frozenBytes: frozenTextBytes(snapshot),
             snapshot,
+            ...(pairedBackfill ? { pairedBackfill } : {}),
+
             generation,
             accounting,
             durationMs: performance.now() - started,

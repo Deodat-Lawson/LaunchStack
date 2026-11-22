@@ -10,7 +10,13 @@ import {
     validTopicExcerptRange,
     type TopicExplorationResult,
 } from "./weekly-review-topic-exploration";
-import { topicManifestHash, type TopicOffer, type TopicSeed } from "./weekly-review-topic-types";
+import { lexicalBackfillSpan } from "./weekly-review-topic-backfill";
+import {
+    TOPIC_FIRST_LIMITS,
+    topicManifestHash,
+    type TopicOffer,
+    type TopicSeed,
+} from "./weekly-review-topic-types";
 import {
     WeeklyReviewConflict,
     type FrozenDependency,
@@ -22,7 +28,10 @@ import type {
 } from "./weekly-review-scoped-selection";
 
 type Span = { start: number; end: number };
+export type TopicFreezeOptions = { evidenceCapBytes?: number; backfill?: boolean };
 export type TopicFreeze = {
+    /** Present only for a backfill fit, before any additional sources were admitted. */
+    primary?: TopicFreeze;
     input: WeeklyReviewInput;
     dependencies: FrozenDependency[];
     summary: Pick<TopicRetrievalContext, "mode" | "lane" | "seedReasons"> & { outcome: "frozen" };
@@ -49,8 +58,12 @@ export async function fitTopicEvidence(
     runId: string,
     seed: TopicSeed,
     result: TopicExplorationResult | null,
-    read: ReturnType<typeof createScopedSourceReader>
+    read: ReturnType<typeof createScopedSourceReader>,
+    options: TopicFreezeOptions = {}
 ): Promise<TopicFreeze> {
+    const evidenceCapBytes = options.evidenceCapBytes ?? TOPIC_FIRST_LIMITS.evidenceBytes;
+    if (![8000, 16000, 32000, 80000].includes(evidenceCapBytes))
+        throw new WeeklyReviewConflict("topic_evidence_cap_invalid");
     const { manifest, context } = seed;
     const offered = new Map(seed.documents.map(document => [document.ref, document]));
     const selections = new Map<string, Span[]>();
@@ -125,12 +138,23 @@ export async function fitTopicEvidence(
             },
         };
     };
-    if (!calculateWeeklyReviewBudget(makeInput(), "topic-first").feasible)
-        throw new WeeklyReviewConflict("mandatory_context_budget_exceeded");
+    const evidenceBytes = (values: readonly { text: string }[] = sources) =>
+        values.reduce((total, source) => total + Buffer.byteLength(source.text, "utf8"), 0);
+    const fits = (input: WeeklyReviewInput) =>
+        evidenceBytes(input.sources) <= evidenceCapBytes &&
+        calculateWeeklyReviewBudget(input, "topic-first").feasible;
+    if (!fits(makeInput())) throw new WeeklyReviewConflict("mandatory_context_budget_exceeded");
 
     const addDocument = async (ref: string, spans: Span[], asLane: boolean) => {
         const document = offered.get(ref);
         if (!document || spans.length === 0 || sources.length + spans.length > 16) return false;
+        // The pinned canonical text gives an exact cheap cap check before charging an authorized reread.
+        const addedBytes = spans.reduce(
+            (total, span) =>
+                total + Buffer.byteLength(document.text.slice(span.start, span.end), "utf8"),
+            0
+        );
+        if (evidenceBytes() + addedBytes > evidenceCapBytes) return false;
         const scope: WeeklyReviewSourceScope = {
             version: document.version,
             expectedParentHash: document.hash,
@@ -161,12 +185,7 @@ export async function fitTopicEvidence(
         }));
         const nextSources = [...sources, ...next.sources],
             nextProofs = [...proofs, next.descriptor];
-        if (
-            !calculateWeeklyReviewBudget(
-                makeInput(nextSources, nextProofs, [...seedReasons, ...reasons], nextLane),
-                "topic-first"
-            ).feasible
-        )
+        if (!fits(makeInput(nextSources, nextProofs, [...seedReasons, ...reasons], nextLane)))
             return false;
         sources = nextSources;
         proofs = nextProofs;
@@ -175,6 +194,7 @@ export async function fitTopicEvidence(
         seedReasons.push(...reasons);
         return true;
     };
+    const admitted = new Set<string>();
     let laneRef: string | undefined;
     for (const ref of manifest.lane) {
         const document = offered.get(ref)!;
@@ -182,18 +202,47 @@ export async function fitTopicEvidence(
         const spans = selections.get(ref);
         if (await addDocument(ref, spans?.length ? spans : defaultSpan(document.text), true)) {
             laneRef = ref;
+            admitted.add(ref);
             break;
         }
     }
     for (const [ref, spans] of selections) {
-        if (ref !== laneRef) await addDocument(ref, spans, false);
+        if (ref !== laneRef && (await addDocument(ref, spans, false))) admitted.add(ref);
     }
-    const input = makeInput();
-    return {
-        input,
-        dependencies,
-        summary: { mode: "topic-first", lane, seedReasons, outcome: "frozen" },
-    };
+    const snapshot = (): TopicFreeze => ({
+        input: makeInput(
+            [...sources],
+            [...proofs],
+            seedReasons.map(reason => ({ ...reason })),
+            { ...lane }
+        ),
+        dependencies: [...dependencies],
+        summary: {
+            mode: "topic-first",
+            lane: { ...lane },
+            seedReasons: seedReasons.map(reason => ({ ...reason })),
+            outcome: "frozen",
+        },
+    });
+    const primary = options.backfill ? snapshot() : undefined;
+    if (options.backfill) {
+        for (const document of seed.documents) {
+            if (sources.length >= 16) break;
+            if (admitted.has(document.ref)) continue;
+            const span = lexicalBackfillSpan(
+                document.text,
+                manifest.topics,
+                evidenceCapBytes - evidenceBytes()
+            );
+            if (
+                span &&
+                (await addDocument(document.ref, mergeTopicSpans([span], document.text), false))
+            )
+                admitted.add(document.ref);
+        }
+    }
+    const frozen = snapshot();
+    return primary ? { ...frozen, primary } : frozen;
 }
 
 export function matchesOffer(offer: TopicOffer, dependency: FrozenDependency) {

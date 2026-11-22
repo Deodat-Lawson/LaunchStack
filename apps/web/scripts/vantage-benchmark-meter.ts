@@ -39,6 +39,7 @@ export type BenchmarkMeterRecord = {
     httpStatus?: number;
     failure?: string;
     route?: "digest" | "exploration";
+    workId?: string;
     durationMs?: number;
     continuedAfterCaseDeadline?: true;
 };
@@ -87,6 +88,10 @@ const recordSchema = z
         httpStatus: tokenCount.optional(),
         failure: z.string().optional(),
         route: z.enum(["digest", "exploration"]).optional(),
+        workId: z
+            .string()
+            .regex(/^sweep-[0-9]{3}$/)
+            .optional(),
         durationMs: amount.optional(),
         continuedAfterCaseDeadline: z.literal(true).optional(),
     })
@@ -182,6 +187,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
         config.priorLedger === undefined ? undefined : snapshotSchema.parse(config.priorLedger);
     const records: BenchmarkMeterRecord[] = prior ? structuredClone(prior.records) : [];
     const context = new AsyncLocalStorage<string>();
+    const workContext = new AsyncLocalStorage<string>();
     let hold: string | null = prior?.hold ?? null;
     const pending = new Set<Promise<unknown>>();
     function tracked<T>(promise: Promise<T>): Promise<T> {
@@ -478,6 +484,8 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                 throw new Error("benchmark_meter_reservation_invalid");
             row.status = "sent";
             row.route = responses ? "exploration" : "digest";
+            const workId = workContext.getStore();
+            if (workId) row.workId = workId;
             const dispatchedAt = performance.now();
             await persist();
             const signal = AbortSignal.any([
@@ -582,6 +590,10 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
         snapshot,
         reserveBatch,
         withReservation,
+        withWork<T>(id: string, work: () => Promise<T>) {
+            if (!/^sweep-[0-9]{3}$/.test(id)) throw new Error("benchmark_meter_work_id_invalid");
+            return workContext.run(id, work);
+        },
         releaseUnused,
         assertCanDispatch,
         wrapFetch,

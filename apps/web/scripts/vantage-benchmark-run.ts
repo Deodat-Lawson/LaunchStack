@@ -26,6 +26,7 @@ import {
     projectAzureLive,
 } from "./vantage-benchmark-azure-plan";
 import { createBenchmarkMeter, type BenchmarkMeterSnapshot } from "./vantage-benchmark-meter";
+import { sweepForecast, sweepSchedule, SWEEP_WAVE_SIZE } from "./vantage-benchmark-sweep";
 import type {
     WeeklyReviewDatabase,
     WeeklyReviewQuery,
@@ -234,6 +235,8 @@ async function run() {
             cache: { type: "string" },
             requests: { type: "string" },
             grouped: { type: "boolean" },
+            "heldout-groups": { type: "string" },
+            "free-proof": { type: "string" },
             output: { type: "string" },
             arm: { type: "string", default: "free" },
             "end-to-end": { type: "string", default: "0" },
@@ -247,6 +250,7 @@ async function run() {
     const executeLive = arm === "configured-live";
     const preflight = Boolean(values["preflight-live"]);
     const grouped = Boolean(values.grouped);
+    const sweep = Boolean(values["heldout-groups"]);
     const warmWorkspace =
         values["warm-workspace"] === undefined
             ? undefined
@@ -266,7 +270,13 @@ async function run() {
         (!preflight && executeLive !== Boolean(values["approve-live"])) ||
         (resumeLive && (!executeLive || warmWorkspace || preflight)) ||
         (warmWorkspace && !executeLive) ||
-        (executeLive && endToEnd !== 0)
+        (executeLive && endToEnd !== 0) ||
+        (sweep &&
+            (!grouped ||
+                resumeLive ||
+                endToEnd !== 0 ||
+                (!executeLive && arm !== "free") ||
+                (executeLive && !preflight && !values["free-proof"])))
     )
         throw new Error("configured_live_requires_explicit_approval_and_freeze_only");
     const cache = await validateExternalCache(values.cache);
@@ -340,6 +350,93 @@ async function run() {
     }
     if (new Set(requests.map(requestId)).size !== requests.length)
         throw new Error("duplicate_benchmark_case");
+    const sweepSteps = sweep
+        ? await (async () => {
+              const heldoutText = await readFile(
+                  await cacheFile(cache, values["heldout-groups"]!),
+                  "utf8"
+              );
+              const heldout = z
+                  .array(BenchmarkGroupSchema)
+                  .length(50)
+                  .parse(JSON.parse(heldoutText));
+              const pool = z
+                  .array(BenchmarkQuestionSchema)
+                  .length(100)
+                  .parse(
+                      JSON.parse(
+                          await readFile(await cacheFile(cache, "heldout100-requests.json"), "utf8")
+                      )
+                  );
+              const sourceByCase = new Map(pool.map(row => [row.caseId, row]));
+              const bySize = heldout.flatMap(group =>
+                  group.topics.map(topic => group.topics.length + ":" + topic.caseId)
+              );
+              const exploratory = z.array(BenchmarkGroupSchema).length(50).parse(requests);
+              if (
+                  sourceByCase.size !== 100 ||
+                  new Set(bySize).size !== bySize.length ||
+                  new Set(heldout.map(row => row.groupId)).size !== heldout.length ||
+                  heldout.filter(row => row.topics.length === 3).length !== 30 ||
+                  exploratory.filter(row => row.topics.length === 3).length !== 30 ||
+                  heldout.some(group =>
+                      group.topics.some(topic => {
+                          const source = sourceByCase.get(topic.caseId);
+                          return (
+                              source?.question !== topic.question ||
+                              source?.enterprise !== group.enterprise ||
+                              source?.workspaceId !== group.workspaceId
+                          );
+                      })
+                  )
+              )
+                  throw new Error("benchmark_heldout_roster_invalid");
+              console.log(
+                  JSON.stringify({
+                      heldoutGroupCount: heldout.length,
+                      heldoutRequestsSha256: createHash("sha256")
+                          .update(heldoutText, "utf8")
+                          .digest("hex"),
+                  })
+              );
+              return sweepSchedule(exploratory, heldout);
+          })()
+        : [];
+    if (sweep && executeLive && !preflight) {
+        const proof = z
+            .array(
+                z.object({
+                    cohort: z.enum(["exploratory", "heldout"]),
+                    caseId: z.string(),
+                    arm: z.enum(["seeds", "scripted"]),
+                    retrievalLimits: z.object({ sharedEvidenceBytes: z.number() }),
+                    accounting: z.object({ paidModelCalls: z.literal(0) }),
+                })
+            )
+            .length(sweepSteps.length * 2)
+            .parse(
+                JSON.parse(await readFile(await cacheFile(cache, values["free-proof"]!), "utf8"))
+            );
+        const observed = new Set(
+            proof.map(row =>
+                [row.cohort, row.caseId, row.retrievalLimits.sharedEvidenceBytes, row.arm].join(":")
+            )
+        );
+        if (
+            observed.size !== proof.length ||
+            sweepSteps.some(step =>
+                ["seeds", "scripted"].some(
+                    arm =>
+                        !observed.has(
+                            [step.cohort, step.request.groupId, step.evidenceCapBytes, arm].join(
+                                ":"
+                            )
+                        )
+                )
+            )
+        )
+            throw new Error("benchmark_sweep_free_coverage_required");
+    }
     const allowed = new Map(manifest.enterprises.map(item => [item.enterprise, item.workspaceId]));
     if (
         allowed.size !== 5 ||
@@ -349,7 +446,9 @@ async function run() {
         ) ||
         new Set(manifest.documents.map(document => document.versionId)).size !==
             manifest.documents.length ||
-        requests.some(request => allowed.get(request.enterprise) !== request.workspaceId)
+        [...requests, ...sweepSteps.map(step => step.request)].some(
+            request => allowed.get(request.enterprise) !== request.workspaceId
+        )
     )
         throw new Error("benchmark_workspace_manifest_mismatch");
     assertBenchmarkDatabaseUrl(manifest.databaseUrl);
@@ -372,20 +471,24 @@ async function run() {
         try {
             await assertFixtureDatabase(inspection, selectedWorkspaceIds);
             const missing = await missingDigestDocuments(inspection, digestDocuments);
-            const forecast = projectAzureLive({
-                remainingCases: warmWorkspace
-                    ? 0
-                    : (grouped ? requests.length : 100) - (checkpoint?.prefix.length ?? 0),
-                ...(grouped
-                    ? {
-                          remainingTopics: topicCount(
-                              requests.slice(checkpoint?.prefix.length ?? 0)
-                          ),
-                      }
-                    : {}),
-                missingDigestBytes: missing.map(document => document.bytes),
-                currentExposureUsd: checkpoint?.priorLedger.projectedTotalUsd ?? 0,
-            });
+            if (sweep && missing.length)
+                throw new Error("benchmark_resume_requires_intact_digest_cache");
+            const forecast = sweep
+                ? sweepForecast(sweepSteps, [])
+                : projectAzureLive({
+                      remainingCases: warmWorkspace
+                          ? 0
+                          : (grouped ? requests.length : 100) - (checkpoint?.prefix.length ?? 0),
+                      ...(grouped
+                          ? {
+                                remainingTopics: topicCount(
+                                    requests.slice(checkpoint?.prefix.length ?? 0)
+                                ),
+                            }
+                          : {}),
+                      missingDigestBytes: missing.map(document => document.bytes),
+                      currentExposureUsd: checkpoint?.priorLedger.projectedTotalUsd ?? 0,
+                  });
             console.log(
                 JSON.stringify(
                     { routes: live.routes, rateSource: live.rateSource, forecast },
@@ -474,6 +577,15 @@ async function run() {
             });
         },
     };
+    if (sweep && executeLive) {
+        let queued: Promise<unknown> = Promise.resolve();
+        const transaction = database.transaction.bind(database);
+        database.transaction = work => {
+            const next = queued.then(() => transaction(work));
+            queued = next.catch(() => undefined);
+            return next;
+        };
+    }
     const query: WeeklyReviewQuery = (text, args) =>
         database.transaction(runQuery => runQuery(text, args));
     const loadOwner = async (workspaceId: string, subject: string) => {
@@ -605,6 +717,176 @@ async function run() {
                 ?.snapshot()
                 .records.slice(0, warmUp?.ledgerEnd ?? 0)
                 .reduce((sum, row) => sum + (row.settledListRateUsd ?? row.projectedUsd), 0) ?? 0;
+        const createOwner = async (workspaceId: string) => {
+            const subject = randomUUID();
+            const email = `benchmark-${subject}@example.test`;
+            await sql.begin(async tx => {
+                await tx`INSERT INTO pdr_ai_v2_auth_user(id,name,email,created_at,updated_at)
+                    VALUES (${subject},'Benchmark owner',${email},now(),now())`;
+                const [owner] =
+                    await tx`INSERT INTO pdr_ai_v2_users(name,email,"userId",company_id,role,status)
+                    VALUES ('Benchmark owner',${email},${subject},${workspaceId},'employer','active') RETURNING id`;
+                if (!owner) throw new Error("benchmark_owner_insert_failed");
+                await tx`INSERT INTO pdr_ai_v2_user_company_memberships(user_id,company_id,role,status)
+                    VALUES (${owner.id},${workspaceId},'owner','active')`;
+            });
+            return subject;
+        };
+        if (sweep) {
+            const runStep = async (
+                step: (typeof sweepSteps)[number],
+                currentArm: BenchmarkArm,
+                subject: string
+            ) =>
+                runBenchmarkRetrieval({
+                    database,
+                    databaseUrl: manifest.databaseUrl,
+                    loadActor: () => loadOwner(step.request.workspaceId, subject),
+                    request: step.request,
+                    arm: currentArm,
+                    week: manifest.week,
+                    asOf: manifest.asOf,
+                    sweep: { cohort: step.cohort, evidenceCapBytes: step.evidenceCapBytes },
+                    ...(providers ? { providers } : {}),
+                });
+            const results: object[] = [];
+            if (!meter || !captureDir) {
+                for (const step of sweepSteps) {
+                    for (const arm of ["seeds", "scripted"] as const) {
+                        results.push(
+                            await runStep(step, arm, await createOwner(step.request.workspaceId))
+                        );
+                    }
+                    if (results.length % 50 === 0) console.log("Free sweep rows " + results.length);
+                }
+                await writeFile(output, JSON.stringify(results) + "\n", { flag: "wx" });
+                console.log("Captured " + results.length + " free sweep rows.");
+                return;
+            }
+            const completed: typeof sweepSteps = [];
+            const localTimeouts = new Set<string>();
+            let stopReason: string | null = null;
+            for (let offset = 0; offset < sweepSteps.length; offset += SWEEP_WAVE_SIZE) {
+                const before = meter.snapshot();
+                const projection = sweepForecast(sweepSteps.slice(offset), completed, before);
+                if (projection.projectedUsd > AZURE_LIVE_LIMIT) {
+                    stopReason = "projected_budget_exceeded";
+                    console.log(JSON.stringify({ liveStop: stopReason, projection }));
+                    break;
+                }
+                const wave = [];
+                for (const step of sweepSteps.slice(offset, offset + SWEEP_WAVE_SIZE)) {
+                    wave.push({ step, subject: await createOwner(step.request.workspaceId) });
+                }
+                const settled = await Promise.allSettled(
+                    wave.map(({ step, subject }) =>
+                        meter.withWork(step.workId, () => runStep(step, "configured-live", subject))
+                    )
+                );
+                await meter.drainPending();
+                for (const [index, outcome] of settled.entries()) {
+                    const job = wave[index]!;
+                    if (outcome.status === "rejected") {
+                        stopReason ??= "benchmark_sweep_execution_failed";
+                        const failed = {
+                            workId: job.step.workId,
+                            groupId: job.step.request.groupId,
+                            cohort: job.step.cohort,
+                            evidenceCapBytes: job.step.evidenceCapBytes,
+                            failure: benchmarkFailureCode(outcome.reason),
+                        };
+                        await replaceLocalJson(
+                            resolve(captureDir, job.step.workId + "-failed.json"),
+                            failed
+                        );
+                        console.log(JSON.stringify(failed));
+                        continue;
+                    }
+                    const result = outcome.value;
+                    const { pairedBackfill, ...primary } =
+                        "pairedBackfill" in result
+                            ? result
+                            : { ...result, pairedBackfill: undefined };
+                    const backfill = {
+                        ...primary,
+                        arm: "configured-live+backfill",
+                        backfillOfRunId: primary.runId,
+                        accounting: {
+                            ...primary.accounting,
+                            paidModelCalls: 0,
+                            digestProviderCalls: 0,
+                            explorationResponses: 0,
+                        },
+                        ...(primary.status === "ok" && pairedBackfill
+                            ? pairedBackfill
+                            : {
+                                  status: "failed",
+                                  failure: primary.failure ?? "benchmark_backfill_failed",
+                                  selected: undefined,
+                                  snapshot: undefined,
+                                  frozenBytes: undefined,
+                                  topicAttribution: undefined,
+                              }),
+                    };
+                    if (primary.failure === caseDeadlineCode) localTimeouts.add(job.step.workId);
+                    const [stored] = primary.runId
+                        ? await sql`SELECT trace,digest_ids,snapshot_commitment
+                            FROM pdr_ai_v2_vantage_weekly_review_run_manifests
+                            WHERE run_id=${primary.runId}::uuid AND company_id=${job.step.request.workspaceId}::bigint
+                              AND owner_id=${job.subject}`
+                        : [];
+                    const labelledPrimary = { ...primary, workId: job.step.workId };
+                    const labelledBackfill = { ...backfill, workId: job.step.workId };
+                    await replaceLocalJson(resolve(captureDir, job.step.workId + ".json"), {
+                        workId: job.step.workId,
+                        primary: labelledPrimary,
+                        backfill: labelledBackfill,
+                        trace: stored?.trace ?? null,
+                        digestIds: stored?.digest_ids ?? [],
+                        snapshotCommitment: stored?.snapshot_commitment ?? null,
+                    });
+                    completed.push(job.step);
+                    results.push(labelledPrimary, labelledBackfill);
+                }
+                const state = meter.snapshot();
+                const unresolved = state.records.filter(
+                    row => row.status === "unknown" && !row.continuedAfterCaseDeadline
+                );
+                if (
+                    state.hold === "usage_unresolved" &&
+                    unresolved.length > 0 &&
+                    unresolved.every(row => row.workId && localTimeouts.has(row.workId))
+                ) {
+                    await meter.clearCaseDeadlineHold({ terminalCode: caseDeadlineCode });
+                } else if (state.hold) {
+                    stopReason ??= state.hold;
+                }
+                console.log(
+                    JSON.stringify({
+                        sweepCompleted: completed.length,
+                        sweepExpected: sweepSteps.length,
+                        cohort: wave[0]?.step.cohort,
+                        conservativeExposureUsd: state.projectedTotalUsd,
+                        stopReason,
+                    })
+                );
+                if (stopReason) break;
+            }
+            await replaceLocalJson(output, results);
+            await replaceLocalJson(resolve(captureDir, "sweep-status.json"), {
+                complete: completed.length === sweepSteps.length && !stopReason,
+                completed: completed.length,
+                expected: sweepSteps.length,
+                stopReason,
+                forecast: sweepForecast(
+                    sweepSteps.filter(step => !completed.includes(step)),
+                    completed,
+                    meter.snapshot()
+                ),
+            });
+            console.log("Captured " + results.length + " live and paired backfill sweep rows.");
+            return;
+        }
         const jobs: {
             index: number;
             request: BenchmarkRequest;
@@ -614,18 +896,7 @@ async function run() {
         for (const [index, request] of requests.entries()) {
             if (index < (checkpoint?.prefix.length ?? 0)) continue;
             for (const currentArm of arms) {
-                const subject = randomUUID();
-                const email = `benchmark-${subject}@example.test`;
-                await sql.begin(async tx => {
-                    await tx`INSERT INTO pdr_ai_v2_auth_user(id,name,email,created_at,updated_at)
-                        VALUES (${subject},'Benchmark owner',${email},now(),now())`;
-                    const [owner] =
-                        await tx`INSERT INTO pdr_ai_v2_users(name,email,"userId",company_id,role,status)
-                        VALUES ('Benchmark owner',${email},${subject},${request.workspaceId},'employer','active') RETURNING id`;
-                    if (!owner) throw new Error("benchmark_owner_insert_failed");
-                    await tx`INSERT INTO pdr_ai_v2_user_company_memberships(user_id,company_id,role,status)
-                        VALUES (${owner.id},${request.workspaceId},'owner','active')`;
-                });
+                const subject = await createOwner(request.workspaceId);
                 jobs.push({ index, request, arm: currentArm, subject });
             }
         }

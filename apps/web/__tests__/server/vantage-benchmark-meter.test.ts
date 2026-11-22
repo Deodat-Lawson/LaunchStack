@@ -67,6 +67,17 @@ it("records native tokens and labels settled list-rate cost with invoice billing
     expect(send.mock.calls[0]![1]?.redirect).toBe("error");
     expect(c.persist).toHaveBeenCalledTimes(3);
 });
+it("binds interleaved paid requests to independent sweep work", async () => {
+    const meter = createBenchmarkMeter(config());
+    const send = jest.fn<Promise<Response>, Parameters<typeof fetch>>(async () => completion());
+    const invoke = meter.wrapFetch(send);
+    await Promise.all([
+        meter.withWork("sweep-001", () => invoke(endpoint, request())),
+        meter.withWork("sweep-002", () => invoke(endpoint, request())),
+    ]);
+    expect(meter.snapshot().records.map(row => row.workId)).toEqual(["sweep-001", "sweep-002"]);
+    expect(meter.snapshot().records.every(row => row.status === "settled")).toBe(true);
+});
 it("rejects a batch above the approved projection before any dispatch", async () => {
     const meter = createBenchmarkMeter({ ...config(), limitUsd: 0.005 });
     await expect(meter.reserveBatch([100, 100])).rejects.toThrow("projected_budget_exceeded");

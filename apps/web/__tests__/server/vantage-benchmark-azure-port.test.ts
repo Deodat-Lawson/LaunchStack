@@ -247,6 +247,7 @@ test("replays every original Azure call with an output when the agent rejects ov
         });
     const port = createAzureResponsesAgentPort({ ...config, fetch: invoke });
     const result = await runTopicExploration({
+        evidenceBudget: { maxEvidenceBytes: 80000, maxSourceUnits: 16, fixedSources: [] },
         catalogue: [],
         topics: [],
         offered: [{ ref: "doc:1@2", title: "Versioned source", text: "x".repeat(1000) }],

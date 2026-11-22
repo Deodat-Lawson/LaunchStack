@@ -16,8 +16,18 @@ import {
     nodeById,
     visibleNodes,
     withDescendants,
+    worksAsFlow,
 } from "../model/doc";
-import { docMode, insertShape, scaleNodesToBounds } from "../model/commands";
+import {
+    docMode,
+    edgesMovingWith,
+    holdChartInPlace,
+    insertEdge,
+    insertShape,
+    removeBend,
+    scaleNodesToBounds,
+    shiftEdge,
+} from "../model/commands";
 import { paintNewTopics } from "../model/topicStyle";
 import { createEdge, createNode, createNodeAt } from "../model/factory";
 import {
@@ -28,21 +38,45 @@ import {
     nodeRect,
     nodesBounds,
     normalizeRect,
-    portNormal,
-    portPoint,
+    projectOntoPolyline,
     rectContains,
+    rectContainsRect,
     rectsIntersect,
     screenToWorld,
     snap as snapValue,
+    worldToScreen,
     zoomAt,
 } from "../model/geometry";
 import { isContainer, shapeDef, shapeHoldsText } from "../model/shapes";
-import { routeEdge, waypointInsertIndex } from "../model/routing";
+import {
+    dropStaleBends,
+    isRedundantBend,
+    routeEdge,
+    routeOptionsFor,
+    waypointInsertIndex,
+} from "../model/routing";
 import { angleFromCentre, resizeBounds, resizeNode, type ResizeHandle } from "../model/resize";
 import { computeSnap, SNAP_THRESHOLD } from "../model/snapping";
 import type { EditorStore } from "../model/store";
 import { useIsActive } from "./EditorContext";
-import type { DiagramNode, Point, PortId, Rect, ShapeId } from "../model/types";
+import { flowUiFor } from "../flow";
+import {
+    clickTarget,
+    containerAt,
+    FRAME_EDGE,
+    onFrameBody,
+    outermostGroup,
+} from "../model/containers";
+import { dressBox, edgeOptions, flowLookOf } from "../model/flowchart/look";
+import type {
+    DiagramEdge,
+    DiagramNode,
+    DiagramPage,
+    Point,
+    PortId,
+    Rect,
+    ShapeId,
+} from "../model/types";
 
 /**
  * The parts of a pointer move the handler actually reads.
@@ -85,6 +119,7 @@ interface Gesture {
         | "rotate"
         | "connect"
         | "waypoint"
+        | "label"
         | "ink"
         | "insert";
     /** World point where the pointer went down. */
@@ -95,6 +130,8 @@ interface Gesture {
     ids: string[];
     /** Snapshot of the nodes when the gesture began. */
     startNodes: DiagramNode[];
+    /** Connectors whose bends and free ends travel with a move, as they began. */
+    startEdges: DiagramEdge[];
     startBounds: Rect | null;
     handle: ResizeHandle | null;
     /** True once the pointer travelled far enough to count as a drag. */
@@ -105,6 +142,14 @@ interface Gesture {
     edgeId: string | null;
     endpoint: "from" | "to" | null;
     waypointIndex: number;
+    /**
+     * Where a bend will go once the pointer actually drags the connector's
+     * body. Nothing is added on press: a click (or the second click of the
+     * double-click that labels a line) used to leave a bend behind.
+     */
+    bendAt: number | null;
+    /** Which of the connector's labels a "label" gesture is sliding. */
+    labelIndex: number;
     /** Ink stroke points, world space. */
     inkPoints: Point[];
     /** Insert-with-drag. */
@@ -120,6 +165,7 @@ const IDLE: Gesture = {
     originScreen: { x: 0, y: 0 },
     ids: [],
     startNodes: [],
+    startEdges: [],
     startBounds: null,
     handle: null,
     moved: false,
@@ -128,6 +174,8 @@ const IDLE: Gesture = {
     edgeId: null,
     endpoint: null,
     waypointIndex: -1,
+    bendAt: null,
+    labelIndex: -1,
     inkPoints: [],
     insertShape: null,
     startRotation: 0,
@@ -137,6 +185,43 @@ const IDLE: Gesture = {
 
 /** Pointer travel (screen px) before a click becomes a drag. */
 const DRAG_THRESHOLD = 3;
+/** How close to straight (screen px) a dragged bend must land to be taken out. */
+const BEND_STRAIGHT_TOLERANCE = 6;
+/**
+ * How far inside a shape's outline (screen px) a press still grabs one of its
+ * connection dots. The dots sit on the outline with a generous hit circle, so
+ * without this a click just inside a box's edge — to select it, or to drag
+ * it — started a connector instead, and a plain click there made a new box.
+ */
+const PORT_INNER_GRACE = 4;
+/** A connector dragged out of a dot shorter than this (screen px) was a slip. */
+const MIN_CONNECT_DRAG = 40;
+
+/**
+ * What a pointer event is really over. While the canvas holds pointer capture
+ * every event names the canvas itself as its target, whatever is under the
+ * pointer; ask the document instead (pointer capture does not affect it).
+ */
+function hitTarget(
+    target: Element | null,
+    svg: SVGSVGElement | null,
+    e: { clientX: number; clientY: number }
+): Element | null {
+    if (target !== svg || typeof document.elementFromPoint !== "function") return target;
+    const under = document.elementFromPoint(e.clientX, e.clientY);
+    return under && svg?.contains(under) ? under : target;
+}
+
+/** The index of the connector label under `target`, if it is one. */
+function labelIndexOf(target: Element | null): number | null {
+    const raw = target?.closest("[data-edge-label]")?.getAttribute("data-edge-label");
+    const index = raw === undefined || raw === null ? NaN : Number(raw);
+    return Number.isInteger(index) ? index : null;
+}
+
+function insideBy(r: Rect, p: Point, by: number): boolean {
+    return p.x > r.x + by && p.x < r.x + r.w - by && p.y > r.y + by && p.y < r.y + r.h - by;
+}
 
 /**
  * Contextmenu events this hook raised itself after a right-click released
@@ -173,6 +258,12 @@ export interface CanvasCallbacks {
      * shape was placed by hand.
      */
     onGestureEnd?: (label: string) => void;
+    /**
+     * The title a frame made with the rail's Frame tool starts with ("Frame",
+     * in the reader's language), selected in its field so typing replaces it.
+     * Without one a new frame has no title to see or double-click.
+     */
+    frameTitle?: string;
 }
 
 export function useCanvasInteractions(
@@ -207,9 +298,18 @@ export function useCanvasInteractions(
      * of the shape you were trying to rename. Pointer events have no such
      * rule, so the second pointerdown is the honest answer.
      */
-    const lastHit = useRef<{ nodeId: string | null; edgeId: string | null }>({
+    const lastHit = useRef<{
+        nodeId: string | null;
+        edgeId: string | null;
+        /** A connector's bend handle, which a double-click removes. */
+        bend: { edgeId: string; index: number } | null;
+        /** Which label of `edgeId` was pressed, when one was. */
+        label: number | null;
+    }>({
         nodeId: null,
         edgeId: null,
+        bend: null,
+        label: null,
     });
     // Callbacks come from the editor shell and change identity every render;
     // routing them through a ref keeps every handler below stable.
@@ -241,6 +341,33 @@ export function useCanvasInteractions(
             window.removeEventListener("blur", blur);
         };
     }, []);
+
+    // Escape during a drag abandons it — a connector half drawn, a box half
+    // moved, a marquee — and puts everything back as it was. It used to do
+    // nothing, and the release then made the connector anyway. Captured
+    // first, so the editor's own Escape (clear the selection) does not also
+    // run for the same key.
+    useEffect(() => {
+        const onKey = (e: KeyboardEvent) => {
+            if (e.key !== "Escape" || !isActiveRef.current()) return;
+            const g = gesture.current;
+            if (g.kind === "none" || g.kind === "pan") return;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            if (frame.current !== null) {
+                cancelAnimationFrame(frame.current);
+                frame.current = null;
+            }
+            pending.current = [];
+            store.cancelInteraction();
+            store.setMarquee(null);
+            store.setGuides([]);
+            store.setDrag({ kind: "none" });
+            gesture.current = { ...IDLE };
+        };
+        window.addEventListener("keydown", onKey, true);
+        return () => window.removeEventListener("keydown", onKey, true);
+    }, [store]);
 
     /**
      * Cached bounding rect of the canvas element.
@@ -340,6 +467,11 @@ export function useCanvasInteractions(
         (e: ReactPointerEvent<SVGSVGElement>) => {
             const state = store.getState();
             if (state.presenting) return;
+            // Measure the canvas afresh once per gesture. The cache is only
+            // cleared by a resize or scroll, and a panel or menu can move the
+            // canvas without either: the first box double-clicked onto a new
+            // board landed 52px from the pointer.
+            rectRef.current = null;
 
             const world = toWorld(e.clientX, e.clientY);
             const screen = toScreen(e.clientX, e.clientY);
@@ -360,16 +492,24 @@ export function useCanvasInteractions(
                 store.setDrag({ kind: "pan" });
                 return;
             }
-            const target = e.target as Element | null;
+            const target = hitTarget(e.target as Element | null, svgRef.current, e);
             const additive = e.shiftKey || e.metaKey || e.ctrlKey;
 
             // Before any branch below can return early: a resize handle, a
             // port and a pan all end the gesture without reaching the general
             // hit test, and the double-click handler still needs to know what
             // was under the pointer.
+            const bendEl = target?.closest("[data-waypoint]");
+            const bendEdge = bendEl?.getAttribute("data-edge-id");
+            const bendIndex = Number(bendEl?.getAttribute("data-waypoint"));
             lastHit.current = {
                 nodeId: target?.closest("[data-node-id]")?.getAttribute("data-node-id") ?? null,
                 edgeId: target?.closest("[data-edge-id]")?.getAttribute("data-edge-id") ?? null,
+                bend:
+                    bendEdge && Number.isInteger(bendIndex)
+                        ? { edgeId: bendEdge, index: bendIndex }
+                        : null,
+                label: labelIndexOf(target),
             };
 
             svgRef.current?.setPointerCapture(e.pointerId);
@@ -444,7 +584,14 @@ export function useCanvasInteractions(
                 const end = endpointEl.getAttribute("data-endpoint");
                 if (edgeId && (end === "from" || end === "to")) {
                     store.beginInteraction("Reconnect");
-                    gesture.current = { ...base, kind: "connect", edgeId, endpoint: end };
+                    const edge = page.edges.find(ed => ed.id === edgeId);
+                    gesture.current = {
+                        ...base,
+                        kind: "connect",
+                        edgeId,
+                        endpoint: end,
+                        startEdges: edge ? [edge] : [],
+                    };
                     store.setDrag({
                         kind: "connect",
                         fromNodeId: null,
@@ -477,7 +624,13 @@ export function useCanvasInteractions(
             if (portEl) {
                 const nodeId = portEl.getAttribute("data-node-id");
                 const port = portEl.getAttribute("data-port") as PortId | null;
-                if (nodeId) {
+                const owner = nodeId ? nodeById(page, nodeId) : undefined;
+                // A press inside the box is a press on the box: select or
+                // move it (below). Dots are grabbed on or outside the outline.
+                const onBox =
+                    owner !== undefined &&
+                    insideBy(nodeBounds(owner), world, PORT_INNER_GRACE / state.viewport.zoom);
+                if (nodeId && !onBox) {
                     store.beginInteraction("Connect");
                     gesture.current = {
                         ...base,
@@ -582,28 +735,73 @@ export function useCanvasInteractions(
             }
 
             // -- select tool --------------------------------------------------
+
+            /**
+             * Drag the whole selection, from wherever the press landed on it:
+             * one of its boxes, one of its connectors, or the space between
+             * them inside its frame. Bends and free ends of the connectors
+             * that belong to it travel too.
+             */
+            const startMove = (): boolean => {
+                const ids = store.selectedNodeIds().filter(id => !nodeById(page, id)?.locked);
+                if (ids.length === 0) return false;
+                const moving = withDescendants(page, ids);
+                const startNodes = moving
+                    .map(id => nodeById(page, id))
+                    .filter((nd): nd is DiagramNode => nd !== undefined);
+                const startEdges = edgesMovingWith(page, moving, store.selectedEdgeIds());
+                store.beginInteraction("Move");
+                gesture.current = { ...base, kind: "move", ids, startNodes, startEdges };
+                store.setDrag({ kind: "move", ids, origin: world });
+                return true;
+            };
+
+            // A connector's label: slide it along the line.
+            const labelIndex = labelIndexOf(target);
+            if (edgeId && !nodeId && labelIndex !== null && !additive) {
+                const edge = page.edges.find(e => e.id === edgeId);
+                if (edge && !edge.locked) {
+                    if (!store.isSelected("edge", edgeId)) {
+                        store.setSelection([{ kind: "edge", id: edgeId }]);
+                    }
+                    store.beginInteraction("Move label");
+                    gesture.current = { ...base, kind: "label", edgeId, labelIndex };
+                    return;
+                }
+            }
+
             if (edgeId && !nodeId) {
                 const wasSelected = store.isSelected("edge", edgeId);
+                // One connector of a bigger selection: the press moves all of
+                // it, exactly as a press on one of its boxes would.
+                if (wasSelected && !additive && store.selectedNodeIds().length > 0 && startMove()) {
+                    return;
+                }
                 if (additive) store.toggleSelection({ kind: "edge", id: edgeId });
                 else if (!wasSelected) store.setSelection([{ kind: "edge", id: edgeId }]);
 
                 // Dragging the body of an already-selected connector adds a bend
                 // there and drags it — the standard way to route a line by hand.
+                // The bend is only made once the pointer moves (`bendAt`), so
+                // clicking a selected line changes nothing.
                 const edge = page.edges.find(e => e.id === edgeId);
                 if (wasSelected && !additive && edge && !edge.locked) {
-                    const routed = routeEdge(edge, id => nodeById(page, id));
+                    const routed = routeEdge(
+                        edge,
+                        id => nodeById(page, id),
+                        visibleNodes(page),
+                        page.edges,
+                        routeOptionsFor(state.doc.settings)
+                    );
                     const index = waypointInsertIndex(routed, edge.waypoints, world);
                     store.beginInteraction("Route connector");
-                    store.updatePage(
-                        p =>
-                            mapEdges(p, [edgeId], ed => {
-                                const waypoints = [...ed.waypoints];
-                                waypoints.splice(index, 0, world);
-                                return { ...ed, waypoints };
-                            }),
-                        { transient: true }
-                    );
-                    gesture.current = { ...base, kind: "waypoint", edgeId, waypointIndex: index };
+                    gesture.current = {
+                        ...base,
+                        kind: "waypoint",
+                        edgeId,
+                        waypointIndex: -1,
+                        bendAt: index,
+                    };
                     store.setDrag({ kind: "waypoint", edgeId, index });
                     return;
                 }
@@ -611,25 +809,44 @@ export function useCanvasInteractions(
                 return;
             }
 
-            if (nodeId) {
+            // A frame's empty inside is room to select in, as on the canvas:
+            // a drag there is a marquee over the boxes it holds. The frame
+            // itself moves by its title or its edge, or once it is selected.
+            const pressed = nodeId ? nodeById(page, nodeId) : undefined;
+            const inFrame =
+                pressed !== undefined &&
+                !additive &&
+                !store.isSelected("node", pressed.id) &&
+                onFrameBody(pressed, world, FRAME_EDGE / state.viewport.zoom);
+
+            if (nodeId && !inFrame) {
                 const node = nodeById(page, nodeId);
                 if (node?.locked) {
                     gesture.current = { ...base, kind: "none" };
                     return;
                 }
+                // A box in a group is taken as its group, unless someone is
+                // working inside the group already (double-click goes in).
+                const target = clickTarget(page, nodeId, store.getState().selection);
                 if (additive) {
-                    store.toggleSelection({ kind: "node", id: nodeId });
-                } else if (!store.isSelected("node", nodeId)) {
-                    store.setSelection([{ kind: "node", id: nodeId }]);
+                    store.toggleSelection({ kind: "node", id: target });
+                } else if (!store.isSelected("node", target)) {
+                    store.setSelection([{ kind: "node", id: target }]);
                 }
-                const ids = store.selectedNodeIds().filter(id => !nodeById(page, id)?.locked);
-                const startNodes = withDescendants(page, ids)
+                if (!startMove()) gesture.current = { ...base, kind: "none" };
+                return;
+            }
+
+            // Empty space inside a multi-selection's frame is part of it, as
+            // in Figma and FigJam: pressing there drags the lot rather than
+            // throwing the selection away for a marquee.
+            if (!additive) {
+                const selected = store
+                    .selectedNodeIds()
                     .map(id => nodeById(page, id))
                     .filter((nd): nd is DiagramNode => nd !== undefined);
-                store.beginInteraction("Move");
-                gesture.current = { ...base, kind: "move", ids, startNodes };
-                store.setDrag({ kind: "move", ids, origin: world });
-                return;
+                const frame = selected.length > 1 ? nodesBounds(selected) : null;
+                if (frame && rectContains(frame, world) && startMove()) return;
             }
 
             // -- empty canvas: marquee ---------------------------------------
@@ -726,13 +943,21 @@ export function useCanvasInteractions(
 
                     // Rebuild from the gesture's starting snapshot each frame so
                     // rounding never accumulates across a long drag.
+                    const delta = { x: totalDx, y: totalDy };
                     store.updatePage(
-                        p =>
-                            mapNodes(p, movingIds, nd => {
+                        p => {
+                            const moved = mapNodes(p, movingIds, nd => {
                                 const start = g.startNodes.find(s => s.id === nd.id);
                                 if (!start) return nd;
                                 return { ...nd, x: start.x + totalDx, y: start.y + totalDy };
-                            }),
+                            });
+                            if (g.startEdges.length === 0) return moved;
+                            const startEdges = new Map(g.startEdges.map(ed => [ed.id, ed]));
+                            return mapEdges(moved, [...startEdges.keys()], ed => {
+                                const start = startEdges.get(ed.id);
+                                return start ? shiftEdge(start, delta) : ed;
+                            });
+                        },
                         { transient: true }
                     );
                     return;
@@ -827,24 +1052,96 @@ export function useCanvasInteractions(
                         typeof document.elementFromPoint === "function"
                             ? document.elementFromPoint(e.clientX, e.clientY)
                             : e.target;
-                    const overNode =
+                    const hit =
                         under?.closest("[data-node-id]")?.getAttribute("data-node-id") ?? null;
                     const overPort =
                         under?.closest("[data-port]")?.getAttribute("data-port") ?? null;
+                    // Near a shape counts as on it: its dots light up, and
+                    // the end attaches there on release.
+                    // The shape the line starts from is never its own target.
+                    const overNode =
+                        (hit !== g.fromNodeId ? hit : null) ??
+                        snapTarget(activePage(state.doc), world, state.viewport.zoom, g.fromNodeId);
+                    const port = overNode && hit === overNode ? overPort : null;
                     const drag = state.drag;
                     if (drag.kind === "connect") {
                         store.setDrag({
                             ...drag,
                             to: world,
                             hoverNodeId: overNode,
-                            hoverPort: overPort,
+                            hoverPort: port,
                         });
                     }
+                    // Re-dragging an end: the connector itself follows, so it
+                    // reads as moving this line rather than drawing a new one.
+                    const original = g.startEdges[0];
+                    if (g.edgeId && g.endpoint && original) {
+                        const end = g.endpoint;
+                        const was = original[end];
+                        const next = overNode
+                            ? { nodeId: overNode, port: (port as PortId | null) ?? "auto" }
+                            : { point: world };
+                        store.updatePage(
+                            p =>
+                                mapEdges(p, [original.id], () => ({
+                                    ...original,
+                                    [end]: next,
+                                    waypoints: overNode === was.nodeId ? original.waypoints : [],
+                                })),
+                            { transient: true }
+                        );
+                    }
+                    return;
+                }
+
+                case "label": {
+                    if (!g.edgeId) return;
+                    const page = activePage(state.doc);
+                    const edge = page.edges.find(e => e.id === g.edgeId);
+                    if (!edge) return;
+                    const routed = routeEdge(
+                        edge,
+                        id => nodeById(page, id),
+                        visibleNodes(page),
+                        page.edges,
+                        routeOptionsFor(state.doc.settings)
+                    );
+                    // Labels ride on the line: only how far along it moves.
+                    const t = Math.min(
+                        Math.max(projectOntoPolyline(routed.points, world).t, 0.04),
+                        0.96
+                    );
+                    const index = g.labelIndex;
+                    store.updatePage(
+                        p =>
+                            mapEdges(p, [edge.id], ed => ({
+                                ...ed,
+                                labels: ed.labels.map((l, i) =>
+                                    i === index ? { ...l, t, offset: 0 } : l
+                                ),
+                            })),
+                        { transient: true }
+                    );
                     return;
                 }
 
                 case "waypoint": {
                     if (!g.edgeId) return;
+                    if (g.bendAt !== null) {
+                        // The drag has started: make the bend it is dragging.
+                        const at = g.bendAt;
+                        g.bendAt = null;
+                        g.waypointIndex = at;
+                        store.updatePage(
+                            p =>
+                                mapEdges(p, [g.edgeId!], ed => {
+                                    const waypoints = [...ed.waypoints];
+                                    waypoints.splice(at, 0, world);
+                                    return { ...ed, waypoints };
+                                }),
+                            { transient: true }
+                        );
+                    }
                     const index = g.waypointIndex;
                     const snapped = state.doc.settings.snapToGrid
                         ? {
@@ -984,11 +1281,16 @@ export function useCanvasInteractions(
             }
             flushMoves();
 
+            // Released whatever the gesture was: a press that started nothing
+            // (selecting a connector) used to keep the canvas capturing, so
+            // the second press of a quick double-click reported the canvas as
+            // its target and the double-click made a box instead of a label.
+            const svg = svgRef.current;
+            if (svg?.hasPointerCapture?.(e.pointerId)) svg.releasePointerCapture(e.pointerId);
             const g = gesture.current;
             if (g.kind === "none") return;
             const state = store.getState();
             const world = toWorld(e.clientX, e.clientY);
-            svgRef.current?.releasePointerCapture(e.pointerId);
 
             switch (g.kind) {
                 case "marquee": {
@@ -996,11 +1298,38 @@ export function useCanvasInteractions(
                     store.setMarquee(null);
                     if (rect && g.moved) {
                         const page = activePage(state.doc);
-                        const hits = visibleNodes(page)
-                            .filter(nd => !nd.locked && rectsIntersect(rect, nodeBounds(nd)))
-                            // Selecting a group member selects the group.
-                            .map(nd => nd.id);
-                        const refs = hits.map(id => ({ kind: "node" as const, id }));
+                        const hits = [
+                            ...new Set(
+                                visibleNodes(page)
+                                    .filter(
+                                        nd =>
+                                            !nd.locked &&
+                                            nd.shape !== "group" &&
+                                            // A frame is caught whole, never by
+                                            // a marquee drawn inside it.
+                                            (isContainer(nd.shape)
+                                                ? rectContainsRect(rect, nodeBounds(nd))
+                                                : rectsIntersect(rect, nodeBounds(nd)))
+                                    )
+                                    // Selecting a group member selects the group.
+                                    .map(nd => outermostGroup(page, nd.id)?.id ?? nd.id)
+                            ),
+                        ];
+                        // The connectors running between the boxes caught are
+                        // part of what was lassoed, so they come too — and a
+                        // drag then carries their bends with the boxes.
+                        const caught = new Set(withDescendants(page, hits));
+                        const edgeHits = page.edges.filter(
+                            ed =>
+                                !ed.locked &&
+                                !ed.hidden &&
+                                (ed.from.nodeId ? caught.has(ed.from.nodeId) : false) &&
+                                (ed.to.nodeId ? caught.has(ed.to.nodeId) : false)
+                        );
+                        const refs = [
+                            ...hits.map(id => ({ kind: "node" as const, id })),
+                            ...edgeHits.map(ed => ({ kind: "edge" as const, id: ed.id })),
+                        ];
                         store.setSelection(g.additive ? [...state.selection, ...refs] : refs);
                     }
                     break;
@@ -1008,7 +1337,23 @@ export function useCanvasInteractions(
 
                 case "move": {
                     store.setGuides([]);
-                    if (g.moved) reparentIntoContainers(store, g.ids);
+                    if (g.moved) {
+                        reparentIntoContainers(store, g.ids);
+                        // Bends that no longer make a clean path are already
+                        // drawn without; take them out so their handles go too.
+                        const moved = withDescendants(activePage(store.getState().doc), g.ids);
+                        store.updatePage(p => dropStaleBends(p, moved), { transient: true });
+                        // A box moved by hand on a chart that arranges itself:
+                        // the chart stays where it is put from now on, and that
+                        // is part of this move's undo step.
+                        holdChartInPlace(store);
+                    }
+                    const settled = store.endInteraction();
+                    if (settled) cb.current.onGestureEnd?.(settled);
+                    break;
+                }
+
+                case "label": {
                     const settled = store.endInteraction();
                     if (settled) cb.current.onGestureEnd?.(settled);
                     break;
@@ -1019,6 +1364,33 @@ export function useCanvasInteractions(
                 case "waypoint":
                 case "ink": {
                     store.setGuides([]);
+                    if (g.kind === "waypoint" && g.moved && g.edgeId && g.waypointIndex >= 0) {
+                        const now = store.getState();
+                        const page = activePage(now.doc);
+                        const edge = page.edges.find(ed => ed.id === g.edgeId);
+                        const index = g.waypointIndex;
+                        if (
+                            edge &&
+                            isRedundantBend(
+                                edge,
+                                index,
+                                id => nodeById(page, id),
+                                BEND_STRAIGHT_TOLERANCE / now.viewport.zoom,
+                                visibleNodes(page),
+                                page.edges,
+                                routeOptionsFor(now.doc.settings)
+                            )
+                        ) {
+                            store.updatePage(
+                                p =>
+                                    mapEdges(p, [edge.id], ed => ({
+                                        ...ed,
+                                        waypoints: ed.waypoints.filter((_, i) => i !== index),
+                                    })),
+                                { transient: true }
+                            );
+                        }
+                    }
                     if (g.kind === "ink" && !g.moved && g.ids[0]) {
                         // A tap with the pen leaves nothing behind.
                         const id = g.ids[0];
@@ -1037,7 +1409,9 @@ export function useCanvasInteractions(
                 }
 
                 case "connect": {
-                    const spawned = finishConnect(store, g, world);
+                    const spawned = finishConnect(store, g, world, w =>
+                        stagePoint(svgRef.current, store.getState().viewport, w)
+                    );
                     if (spawned && shapeHoldsText(spawned.shape)) {
                         cb.current.onEditText({ kind: "node", id: spawned.id });
                     }
@@ -1048,16 +1422,30 @@ export function useCanvasInteractions(
                     const rect = state.marquee;
                     store.setMarquee(null);
                     const shape = g.insertShape ?? "rectangle";
+                    // A frame starts with a title to see, double-click and rename.
+                    const title = shape === "frame" ? cb.current.frameTitle : undefined;
                     let insertedId: string;
                     if (g.moved && rect && rect.w > 8 && rect.h > 8) {
-                        const node = createNode({
+                        const drawn = createNode({
                             shape,
                             mode: docMode(store),
                             x: rect.x,
                             y: rect.y,
                             w: rect.w,
                             h: rect.h,
+                            ...(title ? { text: title } : {}),
+                            // Drawn inside a frame, it joins the frame.
+                            parentId: isContainer(shape)
+                                ? null
+                                : (containerAt(activePage(state.doc), {
+                                      x: rect.x + rect.w / 2,
+                                      y: rect.y + rect.h / 2,
+                                  })?.id ?? null),
                         });
+                        const look = flowLookOf(store.getState().doc);
+                        const node = look
+                            ? dressBox(look, drawn, docMode(store), { keepSize: true })
+                            : drawn;
                         store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {
                             transient: true,
                         });
@@ -1067,7 +1455,12 @@ export function useCanvasInteractions(
                         insertedId = node.id;
                     } else {
                         store.cancelInteraction();
-                        insertedId = insertShape(store, shape, g.origin);
+                        insertedId = insertShape(
+                            store,
+                            shape,
+                            g.origin,
+                            title ? { text: title } : {}
+                        );
                     }
                     // Disarm first: `setTool` clears `editing`, so opening the
                     // label above this line would silently undo it — which is
@@ -1150,20 +1543,43 @@ export function useCanvasInteractions(
         (e: ReactMouseEvent<SVGSVGElement>) => {
             const state = store.getState();
             if (state.presenting) return;
+            rectRef.current = null;
 
             // `lastHit` first, `e.target` only as a fallback: see the ref's
             // docblock for why the event's own target lies here. Reading the
             // event too covers the case where a double-click arrives without a
             // preceding pointerdown we saw (synthetic events, some a11y tools).
-            const target = e.target as Element | null;
+            const target = hitTarget(e.target as Element | null, svgRef.current, e);
+            // A bend's handle: double-clicking it takes the bend out, the
+            // draw.io convention — otherwise a bend, once made, could only be
+            // cleared together with every other one ("Reset route").
+            const bend = lastHit.current.bend;
+            if (bend) {
+                removeBend(store, bend.edgeId, bend.index);
+                store.setSelection([{ kind: "edge", id: bend.edgeId }]);
+                return;
+            }
             const nodeId =
                 lastHit.current.nodeId ??
                 target?.closest("[data-node-id]")?.getAttribute("data-node-id") ??
                 null;
-            if (nodeId) {
-                const page = activePage(state.doc);
-                const node = nodeById(page, nodeId);
-                if (node?.locked) return;
+            const world = toWorld(e.clientX, e.clientY);
+            const page = activePage(state.doc);
+            const hitNode = nodeId ? nodeById(page, nodeId) : undefined;
+            // Inside a frame, below its title, a double-click is a double-click
+            // on the board there — what it makes joins the frame. Its title is
+            // renamed by double-clicking the title itself.
+            const frame =
+                hitNode && hitNode.shape === "frame" && world.y > hitNode.y ? hitNode : undefined;
+            if (nodeId && hitNode && !frame) {
+                if (hitNode.locked) return;
+                // A box in a group: the first double-click goes inside the
+                // group and selects it; the next one opens its label.
+                const group = outermostGroup(page, nodeId);
+                if (group && !store.isSelected("node", nodeId)) {
+                    store.selectNodes([nodeId]);
+                    return;
+                }
                 store.selectNodes([nodeId]);
                 cb.current.onEditText({ kind: "node", id: nodeId });
                 return;
@@ -1174,18 +1590,45 @@ export function useCanvasInteractions(
                 null;
             if (edgeId) {
                 store.setSelection([{ kind: "edge", id: edgeId }]);
-                cb.current.onEditText({ kind: "edge-label", id: edgeId, index: 0 });
+                // The label double-clicked, or the first (a connector carries
+                // one label unless someone adds more).
+                cb.current.onEditText({
+                    kind: "edge-label",
+                    id: edgeId,
+                    index: lastHit.current.label ?? 0,
+                });
                 return;
             }
-            // Empty canvas: drop a topic where they clicked and start typing.
-            const world = toWorld(e.clientX, e.clientY);
-            const node = createNodeAt("mind-branch", world, { mode: docMode(store) });
-            store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), { label: "Add topic" });
-            paintNewTopics(store, [node.id]);
+            // Empty canvas: on a flowchart, the "What goes here?" menu opens
+            // there; on a mindmap, a topic is dropped where they clicked, and
+            // typing starts.
+            if (
+                flowUiFor(store)?.onCanvasDoubleClick(store, {
+                    world,
+                    screen: stagePoint(svgRef.current, state.viewport, world),
+                })
+            ) {
+                return;
+            }
+            const flow = worksAsFlow(state.doc.settings.kind);
+            const look = flowLookOf(state.doc);
+            const made = createNodeAt(
+                look ? look.stepShape : flow ? "process" : "mind-branch",
+                world,
+                {
+                    mode: docMode(store),
+                    parentId: frame?.id ?? containerAt(page, world)?.id ?? null,
+                }
+            );
+            const node = look ? dressBox(look, made, docMode(store)) : made;
+            store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {
+                label: flow ? "Add step" : "Add topic",
+            });
+            if (!flow) paintNewTopics(store, [node.id]);
             store.selectNodes([node.id]);
             cb.current.onEditText({ kind: "node", id: node.id });
         },
-        [store, toWorld]
+        [store, svgRef, toWorld]
     );
 
     const onContextMenu = useCallback(
@@ -1295,10 +1738,49 @@ function reparentIntoContainers(store: EditorStore, movedIds: readonly string[])
 }
 
 /**
- * Ends a connector gesture. Returns the node a port *click* spawned (so the
- * caller can drop the user into its label), null for every other outcome.
+ * Ends a connector gesture. Returns the box the drag made (so the caller can
+ * drop the user into its label), null for every other outcome.
+ *
+ * Out of one of a shape's dots:
+ * - onto another shape's body, or close enough to it (`snapTarget`): joined
+ *   by the sides that face each other — the dot was a handle to start the
+ *   drag, not a promise about where the line leaves (left pinned, a drag
+ *   from a right-hand dot to a box on the left ran back through its own box);
+ * - onto another shape's dot: pinned to both dots, the precise gesture;
+ * - into empty space from a topic: the next topic (the mindmap gesture);
+ * - into empty space from any other shape: the arrow, with a free end to
+ *   re-drag onto the intended shape — a missed drop must not invent a box;
+ * - a click, or a drag too short to mean anything: just selects the box. A
+ *   plain click on a dot used to mint a new box, and the dots reach a few
+ *   pixels into the shape, so clicking near an edge to select a box made one.
+ *
+ * Whatever is drawn ends up selected, so Delete takes it straight back.
  */
-function finishConnect(store: EditorStore, g: Gesture, world: Point): DiagramNode | null {
+/**
+ * Where a board point sits on the editor's stage (the element marked
+ * `data-mindmap-stage`), in CSS px from its top-left — where a direction's
+ * `StageOverlay` positions a menu. The canvas can sit below rulers, so the
+ * <svg>'s own offset inside the stage is added.
+ */
+function stagePoint(
+    svg: SVGSVGElement | null,
+    viewport: { x: number; y: number; zoom: number },
+    world: Point
+): Point {
+    const onSvg = worldToScreen(viewport, world);
+    const stage = svg?.closest("[data-mindmap-stage]");
+    if (!svg || !stage) return onSvg;
+    const a = svg.getBoundingClientRect();
+    const b = stage.getBoundingClientRect();
+    return { x: onSvg.x + a.left - b.left, y: onSvg.y + a.top - b.top };
+}
+
+function finishConnect(
+    store: EditorStore,
+    g: Gesture,
+    world: Point,
+    toStage: (world: Point) => Point
+): DiagramNode | null {
     const state = store.getState();
     const drag = state.drag;
     const hoverNodeId = drag.kind === "connect" ? drag.hoverNodeId : null;
@@ -1313,7 +1795,12 @@ function finishConnect(store: EditorStore, g: Gesture, world: Point): DiagramNod
                     const next = hoverNodeId
                         ? { nodeId: hoverNodeId, port: (hoverPort as PortId) ?? "auto" }
                         : { point: world };
-                    return end === "from" ? { ...ed, from: next } : { ...ed, to: next };
+                    // A bend placed for the old end rarely suits the new one.
+                    const reset = hoverNodeId !== (end === "from" ? ed.from : ed.to).nodeId;
+                    return {
+                        ...(end === "from" ? { ...ed, from: next } : { ...ed, to: next }),
+                        waypoints: reset ? [] : ed.waypoints,
+                    };
                 }),
             { transient: true }
         );
@@ -1323,43 +1810,81 @@ function finishConnect(store: EditorStore, g: Gesture, world: Point): DiagramNod
 
     const page = activePage(state.doc);
     const fromNodeId = g.fromNodeId;
+    const source = fromNodeId ? nodeById(page, fromNodeId) : undefined;
+    const fromDot = source !== undefined && g.fromPort !== null && g.fromPort !== "auto";
+    const travelled = Math.hypot(world.x - g.origin.x, world.y - g.origin.y) * state.viewport.zoom;
 
-    // Dragging out of a *topic's* port into empty space creates the next
-    // topic — the single most-used gesture in a mindmap, so it must not
-    // require a second click on the shape palette. Every other shape gets
-    // what the gesture looks like and no more: a connector, left dangling at
-    // the drop point (re-drag the arrowhead to attach it). A missed drop on
-    // a flowchart must not invent a box.
     let targetNodeId = hoverNodeId;
     let created: DiagramNode | null = null;
+    // Released back on (or right beside) the box it came from: nothing. A
+    // line from a box to a point inside itself is drawn under its fill,
+    // invisible and unclickable; one to just outside it is a stub.
+    const home = source ? nodeBounds(source) : null;
+    const reach = SNAP_TO_SHAPE / state.viewport.zoom;
+    const backHome =
+        home !== null &&
+        !targetNodeId &&
+        world.x >= home.x - reach &&
+        world.x <= home.x + home.w + reach &&
+        world.y >= home.y - reach &&
+        world.y <= home.y + home.h + reach;
+    const flow = flowUiFor(store);
     if (!targetNodeId) {
-        if (!g.moved) {
-            return spawnFromPortClick(store, g);
+        const click = !g.moved || (fromDot && travelled < MIN_CONNECT_DRAG);
+        if (click || backHome) {
+            store.cancelInteraction();
+            if (fromDot && source) store.selectNodes([source.id]);
+            return null;
         }
-        const source = fromNodeId ? nodeById(page, fromNodeId) : undefined;
-        if (source?.shape.startsWith("mind-")) {
-            // The new topic inherits its parent's look unless the parent is
-            // the root, whose filled-pill styling would swamp a child.
-            created = createNodeAt("mind-branch", world, {
-                mode: docMode(store),
-                w: source.shape !== "mind-root" ? source.w : 160,
-                h: source.shape !== "mind-root" ? source.h : 54,
+        if (fromNodeId && flow) {
+            // An arrow let go over empty space on a flowchart: the "What goes
+            // here?" menu opens there. The drag is undone first, so whatever
+            // it makes is its own undo step; dismissing it leaves nothing.
+            store.cancelInteraction();
+            const handled = flow.onConnectDropInSpace(store, {
+                sourceId: fromNodeId,
+                port: g.fromPort,
+                world,
+                screen: toStage(world),
             });
+            if (!handled) {
+                const look = flowLookOf(store.getState().doc);
+                insertEdge(
+                    store,
+                    createEdge({
+                        from: { nodeId: fromNodeId, port: "auto" },
+                        to: { point: world },
+                        kind: state.doc.settings.defaultEdgeKind,
+                        ...(look ? edgeOptions(look, docMode(store)) : {}),
+                    })
+                );
+            }
+            return null;
+        }
+        if (fromDot && source?.shape.startsWith("mind-")) {
+            created = nextTopicLike(store, source, world);
             targetNodeId = created.id;
         }
     }
 
     if (fromNodeId && targetNodeId === fromNodeId && !created) {
         store.cancelInteraction();
+        if (fromDot && source) store.selectNodes([source.id]);
         return null;
     }
 
+    // The target end is pinned when it was dropped on a dot; the start never
+    // is (pinned too, a drop on the near dot of a box behind it made the line
+    // leave by the far side and U-turn round its own box).
+    const pinned = targetNodeId !== null && created === null && hoverPort !== null;
+    const look = flowLookOf(state.doc);
     const edge = createEdge({
-        from: fromNodeId ? { nodeId: fromNodeId, port: g.fromPort ?? "auto" } : { point: g.origin },
+        from: fromNodeId ? { nodeId: fromNodeId, port: "auto" } : { point: g.origin },
         to: targetNodeId
-            ? { nodeId: targetNodeId, port: (hoverPort ?? "auto") as PortId }
+            ? { nodeId: targetNodeId, port: pinned ? (hoverPort as PortId) : "auto" }
             : { point: world },
         kind: state.doc.settings.defaultEdgeKind,
+        ...(look ? edgeOptions(look, docMode(store)) : {}),
     });
 
     store.updatePage(
@@ -1371,58 +1896,54 @@ function finishConnect(store: EditorStore, g: Gesture, world: Point): DiagramNod
         { transient: true }
     );
     store.endInteraction();
-    // A topic pulled out of a topic joins that branch: its colour and its
-    // connector's come from where it now sits, like one added with Tab.
-    if (created) paintNewTopics(store, [created.id]);
-    if (created) store.selectNodes([created.id]);
+    if (created) {
+        // A topic pulled out of a topic joins that branch: its colour and its
+        // connector's come from where it now sits, like one added with Tab.
+        if (isTopicShape(created.shape)) paintNewTopics(store, [created.id]);
+        store.selectNodes([created.id]);
+        return created;
+    }
+    // The line just drawn is what the next key acts on: Delete takes it back,
+    // a double-click labels it.
+    store.setSelection([{ kind: "edge", id: edge.id }]);
     return null;
 }
 
+/** The topic a connector dragged out of a topic into empty space makes. */
+function nextTopicLike(store: EditorStore, source: DiagramNode, at: Point): DiagramNode {
+    // The new topic inherits its parent's look unless the parent is the
+    // root, whose filled-pill styling would swamp a child.
+    return createNodeAt("mind-branch", at, {
+        mode: docMode(store),
+        w: source.shape !== "mind-root" ? source.w : 160,
+        h: source.shape !== "mind-root" ? source.h : 54,
+    });
+}
+
+/** How near (screen px) a dropped connector end must be to a shape to attach to it. */
+const SNAP_TO_SHAPE = 24;
+
 /**
- * Lucid's click-a-port: a plain click on a port (no drag) mints the next
- * shape one step out in the port's direction, already connected. A topic
- * spawns a topic; anything else spawns its own kind, in its own colours.
+ * The shape a connector end being dragged at `world` would attach to: the
+ * one under the pointer, else the nearest within `SNAP_TO_SHAPE` of its
+ * outline. A line released a few pixels short of a box used to be left
+ * dangling beside it.
  */
-function spawnFromPortClick(store: EditorStore, g: Gesture): DiagramNode | null {
-    const state = store.getState();
-    const page = activePage(state.doc);
-    const source = g.fromNodeId ? nodeById(page, g.fromNodeId) : undefined;
-    const port = g.fromPort;
-    if (!source || !port || port === "auto") {
-        store.cancelInteraction();
-        return null;
+function snapTarget(
+    page: DiagramPage,
+    world: Point,
+    zoom: number,
+    exclude: string | null
+): string | null {
+    const reach = SNAP_TO_SHAPE / zoom;
+    let best: { id: string; d: number } | null = null;
+    for (const nd of visibleNodes(page)) {
+        if (nd.id === exclude || nd.locked || isContainer(nd.shape) || nd.shape === "ink") continue;
+        const r = nodeBounds(nd);
+        const dx = Math.max(r.x - world.x, 0, world.x - (r.x + r.w));
+        const dy = Math.max(r.y - world.y, 0, world.y - (r.y + r.h));
+        const d = Math.hypot(dx, dy);
+        if (d <= reach && (!best || d < best.d)) best = { id: nd.id, d };
     }
-
-    const isMind = source.shape.startsWith("mind-");
-    const shape: ShapeId = isMind ? "mind-branch" : source.shape;
-    const w = source.shape === "mind-root" ? 160 : source.w;
-    const h = source.shape === "mind-root" ? 54 : source.h;
-
-    const at = portPoint(source, port);
-    const dir = portNormal(source, port);
-    const GAP = 56;
-    let spawned = createNodeAt(
-        shape,
-        {
-            x: at.x + dir.x * (GAP + w / 2),
-            y: at.y + dir.y * (GAP + h / 2),
-        },
-        { mode: docMode(store), w, h }
-    );
-    if (!isMind) {
-        spawned = { ...spawned, style: { ...source.style }, textStyle: { ...source.textStyle } };
-    }
-
-    const edge = createEdge({
-        from: { nodeId: source.id, port },
-        to: { nodeId: spawned.id, port: "auto" },
-        kind: state.doc.settings.defaultEdgeKind,
-    });
-    store.updatePage(p => ({ ...p, nodes: [...p.nodes, spawned], edges: [...p.edges, edge] }), {
-        transient: true,
-    });
-    store.endInteraction();
-    if (isMind) paintNewTopics(store, [spawned.id]);
-    store.selectNodes([spawned.id]);
-    return spawned;
+    return best?.id ?? null;
 }

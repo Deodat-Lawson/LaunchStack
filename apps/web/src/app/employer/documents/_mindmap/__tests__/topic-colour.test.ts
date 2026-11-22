@@ -22,8 +22,17 @@ import { paintNewTopics, restyleMovedTopics } from "../model/topicStyle";
  * board).
  */
 
+/**
+ * An empty page worked as a mindmap. A blank board is a flowchart, where every
+ * new box wears the flowchart look instead (`flow-look.test.ts`).
+ */
+function blankMap(themeMode: "light" | "dark" = "light") {
+    const base = buildTemplate("blank", "Map", themeMode);
+    return { ...base, settings: { ...base.settings, kind: "mindmap" as const } };
+}
+
 function blankStore(themeMode: "light" | "dark" = "light"): EditorStore {
-    return new EditorStore(buildTemplate("blank", "Map", themeMode));
+    return new EditorStore(blankMap(themeMode));
 }
 
 function page(store: EditorStore) {
@@ -49,7 +58,7 @@ describe("a new central topic", () => {
         "pine",
         "carbon",
     ])("is the %s theme's own centre, and its label is readable", themeId => {
-        const base = buildTemplate("blank", "Map");
+        const base = blankMap();
         const store = new EditorStore({
             ...base,
             settings: { ...base.settings, paletteId: themeId },
@@ -80,7 +89,7 @@ describe("Tab under the centre", () => {
     it("hands out branch hues in the theme's own order, not the factory's placeholder", () => {
         // Forest's hues include the default theme's blue, which every new
         // topic is born wearing; kept, it put blue first (QA, round 2).
-        const base = buildTemplate("blank", "Map");
+        const base = blankMap();
         const store = new EditorStore({
             ...base,
             settings: { ...base.settings, paletteId: "forest" },
@@ -140,19 +149,21 @@ describe("the colour dots", () => {
         expect(nd.style.stroke).toBe(swatchFor("green", "dark").stroke);
     });
 
-    it("recolour a whole branch — its details and their lines — not one box", () => {
+    it("recolour only the box picked — not the topics below it, not the lines", () => {
+        // Changing one box used to repaint its whole path (2026-11-21).
         const store = blankStore();
         const root = startMap(store);
         const branch = addChildTopic(store, root)!;
         const detail = addChildTopic(store, branch)!;
         store.setEditing(null);
+        const before = page(store);
         store.selectNodes([branch]);
         applySwatch(store, "orange");
         const orange = swatchFor("orange", "light").stroke;
         const p = page(store);
-        expect(nodeById(p, detail)!.style.stroke).toBe(orange);
-        expect(p.edges.find(e => e.to.nodeId === detail)!.style.stroke).toBe(orange);
-        expect(p.edges.find(e => e.to.nodeId === branch)!.style.stroke).toBe(orange);
+        expect(nodeById(p, branch)!.style.stroke).toBe(orange);
+        expect(nodeById(p, detail)!.style).toEqual(nodeById(before, detail)!.style);
+        expect(p.edges).toEqual(before.edges);
     });
 
     it("on the centre recolour the centre alone, not every branch", () => {
@@ -207,12 +218,65 @@ describe("moving and folding", () => {
 });
 
 describe("paintNewTopics", () => {
-    it("leaves a topic floating free at the size it was made with, not the centre's", () => {
+    it("letters a topic floating free as the main branch it is drawn as, not as the centre", () => {
         const store = blankStore();
         const node = createNodeAt("mind-branch", { x: 400, y: 400 }, { mode: "light" });
         store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), { label: "Add topic" });
         paintNewTopics(store, [node.id]);
-        expect(nodeById(page(store), node.id)!.textStyle).toMatchObject({ size: 14, bold: false });
+        expect(nodeById(page(store), node.id)!.textStyle).toMatchObject({ size: 15, bold: true });
+    });
+});
+
+describe("a new box's label", () => {
+    /** What a topic's label looks like, apart from its colour. */
+    const type = (store: EditorStore, id: string) => {
+        const { size, bold, family, italic } = nodeById(page(store), id)!.textStyle;
+        return { size, bold, family, italic };
+    };
+
+    // The report: boxes that look the same — tinted fill, 2px outline — came
+    // out bold or regular depending on how they were made. Every way of
+    // making a main-branch box must letter it the same.
+    it("is the same whichever way a main-branch box is made", () => {
+        const store = blankStore();
+        const root = startMap(store);
+        const viaTab = addChildTopic(store, root)!;
+        store.setEditing(null);
+
+        // Topic tool click and the palette's click-to-place.
+        const viaTool = insertShape(store, "mind-branch", { x: 600, y: 600 });
+        // Double-click on the canvas, a palette drop, a Topic-tool drag.
+        const loose = createNodeAt("mind-branch", { x: 900, y: 900 }, { mode: "light" });
+        store.updatePage(p => ({ ...p, nodes: [...p.nodes, loose] }), { label: "Add topic" });
+        paintNewTopics(store, [loose.id]);
+
+        const expected = type(store, viaTab);
+        expect(expected).toMatchObject({ size: 15, bold: true });
+        expect(type(store, viaTool)).toEqual(expected);
+        expect(type(store, loose.id)).toEqual(expected);
+        // And they sit on the same rung of the ladder (hues differ by branch;
+        // the 2px main-branch outline does not), so type and look agree.
+        const outline = (id: string) => nodeById(page(store), id)!.style.strokeWidth;
+        expect(outline(viaTool)).toBe(outline(viaTab));
+        expect(outline(loose.id)).toBe(outline(viaTab));
+    });
+
+    it("gives a free topic's first child the same type as its parent, not a bolder one", () => {
+        const store = blankStore();
+        const loose = insertShape(store, "mind-branch", { x: 0, y: 0 });
+        const child = addChildTopic(store, loose)!;
+        store.setEditing(null);
+        expect(type(store, child)).toEqual(type(store, loose));
+    });
+
+    it("keeps the centre at 18px bold and a subtopic at 13.5px regular", () => {
+        const store = blankStore();
+        const root = startMap(store);
+        const branch = addChildTopic(store, root)!;
+        const detail = addChildTopic(store, branch)!;
+        store.setEditing(null);
+        expect(type(store, root)).toMatchObject({ size: 18, bold: true });
+        expect(type(store, detail)).toMatchObject({ size: 13.5, bold: false });
     });
 });
 

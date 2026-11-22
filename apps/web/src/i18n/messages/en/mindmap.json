@@ -347,6 +347,11 @@
     "redo": "Redo",
     "redoTip": "Redo ⇧⌘Z",
     "layout": "Layout",
+    "worksAs": "Works as",
+    "kinds": {
+      "flowchart": "Flowchart — Tab adds the next step",
+      "mindmap": "Mindmap — Tab adds a child topic"
+    },
     "arrangeNow": "Arrange now",
     "autoArrange": "Auto-arrange as I type",
     "arrangeAs": "Arrange as",
@@ -377,7 +382,11 @@
     "copyPresentLink": "Copy presentation link",
     "addToSources": "Add to sources",
     "unsaved": "Unsaved changes",
-    "upToDate": "Up to date"
+    "upToDate": "Up to date",
+    "steps": "Steps",
+    "stepsShowTip": "Write the chart as steps",
+    "stepsHideTip": "Hide the steps",
+    "arrangeAutomatically": "Arrange automatically"
   },
   "bottomBar": {
     "pageOptions": "{name} options",
@@ -544,6 +553,7 @@
     "label": "Selection",
     "addChild": "Add child",
     "addChildTopic": "Add child topic",
+    "addStep": "Add next step",
     "colour": "Colour",
     "smaller": "Smaller text",
     "larger": "Larger text",
@@ -553,7 +563,7 @@
   "contextMenu": {
     "label": "Canvas actions",
     "addSibling": "Add sibling topic",
-    "addConnected": "Add connected shape",
+    "addConnected": "Add next step",
     "more": "More",
     "paste": "Paste",
     "autoLayout": "Auto-layout",
@@ -665,7 +675,7 @@
       "quickShapes": "Rectangle / ellipse / diamond / rounded",
       "finishNext": "Finish typing · again for the next topic",
       "topicBefore": "New topic before this one",
-      "addChild": "Add child topic",
+      "addChild": "Add child topic · next step on a flowchart",
       "outdent": "Outdent topic",
       "nearest": "Go to the nearest topic that way",
       "moveTopic": "Move topic up / down",
@@ -855,7 +865,9 @@
     "failed": "Couldn't save — retrying shortly"
   },
   "canvas": {
-    "dropImage": "Drop an image"
+    "frameTitle": "Frame",
+    "dropImage": "Drop an image",
+    "bendHint": "Drag to reroute · double-click to remove the bend"
   },
   "viewer": {
     "opening": "Opening…"
@@ -892,5 +904,101 @@
     "expandFailed": "Couldn't suggest subtopics just now. Try again.",
     "topicGone": "That topic was deleted while the suggestions were on their way.",
     "expandUndo": "Expand with AI"
+  },
+  "flow": {
+    "held": "This chart now stays where you put it",
+    "heldBody": "You moved a box by hand, so new steps go beside the box they follow and nothing else moves.",
+    "arrangeAgain": "Arrange automatically",
+    "branch": {
+      "yes": "Yes",
+      "no": "No"
+    },
+    "empty": {
+      "title": "Start your flowchart",
+      "ghost": "Type your first step",
+      "type": "Start typing to name the first step",
+      "doubleClick": "Double-click anywhere to pick a shape",
+      "write": "Or write the steps in the panel",
+      "keys": {
+        "next": "<key>Tab</key> next step",
+        "branch": "<key>⇧Tab</key> branch",
+        "decision": "end with <key>?</key> for a decision"
+      },
+      "paste": "Paste Mermaid or an outline instead"
+    },
+    "keys": {
+      "legend": {
+        "title": "Keys",
+        "label": "Keyboard shortcuts for drawing the chart",
+        "hide": "Hide keys",
+        "show": "Show keys",
+        "next": "Next step",
+        "branch": "Branch beside",
+        "decision": "Question → decision",
+        "move": "Move around",
+        "remove": "Remove step"
+      },
+      "caps": {
+        "next": "Tab",
+        "branch": "⇧Tab",
+        "decision": "?",
+        "remove": "Delete"
+      }
+    },
+    "pick": {
+      "menu": {
+        "title": "What goes here?",
+        "cancel": "<key>Esc</key> to cancel",
+        "fromArrow": "Pick what goes at the end of the arrow",
+        "here": "Pick a shape to add here"
+      },
+      "picks": {
+        "step": "Step",
+        "decision": "Decision",
+        "terminal": "Start/End",
+        "data": "Data",
+        "note": "Note",
+        "arrow": "Just the arrow"
+      }
+    },
+    "steps": {
+      "panel": {
+        "title": "Steps",
+        "count": "{count, plural, =0 {nothing drawn yet} one {# box} other {# boxes}}",
+        "editorLabel": "Steps, one per line",
+        "placeholder": "Write one step per line, for example:\n\nStart\nTake the order\nPaid?\n  Yes: Ship it\n  No: -> Take the order\nEnd",
+        "useExample": "Use an example",
+        "example": "Start\nReceive the order\nCheck stock\nIn stock?\n  Yes: Pick and pack\n  No: Reorder from supplier -> Check stock\nShip and send tracking\nEnd",
+        "keys": "Tab indents a branch · Esc goes back to the chart",
+        "close": "Close the steps"
+      },
+      "kind": {
+        "step": "Step",
+        "decision": "Decision",
+        "start": "Start",
+        "end": "End",
+        "arrow": "Arrow"
+      },
+      "syntax": {
+        "title": "How to write it",
+        "stepCode": "Pack the order",
+        "step": "a step; lines join in order",
+        "decisionCode": "In stock?",
+        "decision": "ends in ? — a decision",
+        "branchCode": "  Yes: Ship it",
+        "branch": "indented under it — a branch",
+        "jumpCode": "-> Pack the order",
+        "jump": "goes to that step instead",
+        "endsCode": "Start · End",
+        "ends": "a rounded start or end",
+        "blankCode": "(blank line)",
+        "blank": "starts a separate chain — not joined to the line above"
+      },
+      "notes": {
+        "missingTarget": "Line {line}: no step is called “{target}”.",
+        "notUnderQuestion": "Line {line}: only a question (a line ending in ?) has branches, so this is drawn as a step.",
+        "arrowWithoutStep": "Line {line}: an arrow needs a step above it."
+      }
+    }
   }
 }

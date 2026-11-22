@@ -2,7 +2,7 @@
 
 import React, { memo } from "react";
 
-import { nodeBounds, nodesBounds, portPoint } from "../model/geometry";
+import { nodeBounds, nodesBounds, portNormal, portPoint } from "../model/geometry";
 import { handlePosition, rotatedCursor, rotationGripPosition } from "../model/resize";
 import { shapePorts } from "../model/shapes";
 import type { ResizeHandle } from "../model/resize";
@@ -241,6 +241,13 @@ interface PortsProps {
     zoom: number;
     /** Highlight the port the pointer is over during a connect drag. */
     activePort?: string | null;
+    /**
+     * Draw the side dots a little outside the outline, clear of the resize
+     * handles a selected shape shows there. Corner dots are dropped, and so is
+     * the top one, which would sit under the rotate handle — any dot starts a
+     * connector, and the line attaches by the sides facing its target anyway.
+     */
+    outside?: boolean;
 }
 
 /**
@@ -248,15 +255,23 @@ interface PortsProps {
  * out is how every connector gets made, so they have to be visible without a
  * mode switch.
  */
-export const NodePorts = memo(function NodePorts({ node, zoom, activePort }: PortsProps) {
+export const NodePorts = memo(function NodePorts({
+    node,
+    zoom,
+    activePort,
+    outside = false,
+}: PortsProps) {
     const px = (v: number) => v / zoom;
-    const ports = shapePorts(node.shape);
+    const all = shapePorts(node.shape);
+    const ports = outside ? all.filter(p => p === "e" || p === "s" || p === "w") : all;
     if (node.locked) return null;
 
     return (
         <g>
             {ports.map(port => {
-                const p = portPoint(node, port);
+                const on = portPoint(node, port);
+                const out = portNormal(node, port);
+                const p = outside ? { x: on.x + out.x * px(16), y: on.y + out.y * px(16) } : on;
                 const active = activePort === port;
                 return (
                     <g key={port} data-node-id={node.id} data-port={port}>

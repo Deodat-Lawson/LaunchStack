@@ -23,6 +23,7 @@ import { parseThemeChoice } from "@launchstack/design-tokens/theme";
 import {
     AI_EDIT_SNAPSHOT_LABEL,
     describeDiagram,
+    pageReadsAsSteps,
     pageStyle,
     runDiagramEdits,
     type DiagramEdit,
@@ -159,14 +160,19 @@ export async function loadDiagram(
     return { row, doc: parseDoc(row.doc, row.title), canEdit: canEditDraftAt(access.level) };
 }
 
-/** A diagram as a model reads it: what it is, where, and every shape with its id. */
+/**
+ * A diagram as a model reads it: what it is, where, and every shape with its
+ * id — a flowchart as step text, with each step's box id.
+ */
 export function diagramText(loaded: LoadedDiagram): string {
     const { row, doc } = loaded;
     return [
         `Diagram "${row.title}" (m${row.id}): a ${diagramKind(doc)}, ${diagramPlace(normalizeFolderPath(row.folder))}.`,
-        loaded.canEdit
-            ? "You can change it with edit_diagram, naming shapes by their ids (the n_… after each label)."
-            : "The person can view this diagram but not change it.",
+        !loaded.canEdit
+            ? "The person can view this diagram but not change it."
+            : pageReadsAsSteps(doc)
+              ? "You can change it with edit_diagram: send steps — the step text below, every line, changed where asked (boxes whose words you keep keep their ids) — or edits naming boxes by their ids (the n_… after each label)."
+              : "You can change it with edit_diagram, naming shapes by their ids (the n_… after each label).",
         describeDiagram(doc),
         ...(loaded.canEdit
             ? [

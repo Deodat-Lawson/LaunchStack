@@ -8,6 +8,7 @@ import { buildTemplate } from "~/app/employer/documents/_mindmap/model/templates
 import { applyThemeToDoc } from "~/app/employer/documents/_mindmap/model/theme";
 import { MindmapEditor } from "~/app/employer/documents/_mindmap/ui/MindmapEditor";
 import { MindmapPreview as ReadOnlyMindmap } from "~/app/employer/documents/_mindmap/ui/MindmapPreview";
+import { Toaster } from "~/components/ui/sonner";
 
 /**
  * Local harness for the mindmap editor. It reproduces the real chrome chain —
@@ -21,7 +22,8 @@ import { MindmapPreview as ReadOnlyMindmap } from "~/app/employer/documents/_min
  * canvas, no chrome, so a layout bug in one shows up in the other.
  * `?chrome=focus|everything` overrides the chrome depth the document's kind
  * would pick (see the mindmap README, "Chrome depths"). `?board=dark` and
- * `?theme=<id>` pick the board's lighting and theme.
+ * `?theme=<id>` pick the board's lighting and theme. `?template=blank` is a
+ * blank flowchart, as Add knowledge › Mindmap › Blank makes one.
  */
 
 /**
@@ -31,12 +33,20 @@ import { MindmapPreview as ReadOnlyMindmap } from "~/app/employer/documents/_min
  * the first heartbeat through before it took hold.
  */
 let stubbed = false;
+/**
+ * The stub server's revision, one per board id, so a save from one board can
+ * never look like a newer version of another.
+ */
+const stubRevisions = new Map<number, number>();
+function boardIdOf(url: string): number {
+    const match = /\/api\/mindmaps\/(\d+)/.exec(url);
+    return match ? Number(match[1]) : 0;
+}
 function stubMindmapApi() {
     if (stubbed || typeof window === "undefined") return;
     stubbed = true;
 
     const real = window.fetch.bind(window);
-    let revision = 1;
 
     window.fetch = async (input, init) => {
         const url =
@@ -49,12 +59,14 @@ function stubMindmapApi() {
                 headers: { "Content-Type": "application/json" },
             });
 
+        const id = boardIdOf(url);
+        const revision = stubRevisions.get(id) ?? 1;
         if (url.includes("/presence")) return json({ peers: [], revision });
         if (url.includes("/versions")) return json({ versions: [] });
         if (/\/api\/mindmaps(\?|$)/.test(url)) return json({ mindmaps: [], folders: [] });
         if (init?.method && init.method !== "GET") {
-            revision += 1;
-            return json({ mindmap: { revision }, revision });
+            stubRevisions.set(id, revision + 1);
+            return json({ mindmap: { revision: revision + 1 }, revision: revision + 1 });
         }
         return json({ mindmap: { revision } });
     };
@@ -74,8 +86,8 @@ export function MindmapPreview() {
 
     const preview = query?.get("view") === "preview";
     const template = query ? (query.get("template") ?? "mindmap") : null;
-    // The document's kind picks the chrome depth (a mindmap opens in focus,
-    // a flowchart in everything); `?chrome=focus|everything` overrides it.
+    // The document's kind picks the chrome depth (a freeform drawing opens in
+    // everything, the rest in focus); `?chrome=focus|everything` overrides it.
     const chromeParam = query?.get("chrome");
     const chrome =
         chromeParam === "focus" || chromeParam === "everything" ? chromeParam : undefined;
@@ -111,6 +123,8 @@ export function MindmapPreview() {
                     )}
                 </ToolsStudioShell>
             </DriftShell>
+            {/* The employer layout's, so the editor's toasts show here too. */}
+            <Toaster richColors position="top-right" />
         </div>
     );
 }

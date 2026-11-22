@@ -2,7 +2,15 @@
 
 import React, { memo, useMemo } from "react";
 
-import { labelAnchor, renderPath, trimPolyline, type RoutedEdge } from "../model/routing";
+import {
+    CORNER_RADIUS,
+    cornerRadii,
+    labelAnchor,
+    renderPath,
+    roundedPolylinePath,
+    trimPolyline,
+    type RoutedEdge,
+} from "../model/routing";
 import { fontFamilyCss, layoutText } from "../model/text";
 import type { DiagramEdge } from "../model/types";
 import { ArrowHead, arrowInset } from "./arrows";
@@ -22,6 +30,15 @@ interface EdgeViewProps {
     hovered: boolean;
     /** Hide labels while one of them is being edited in an overlay. */
     editingLabelIndex?: number;
+    /** Where each label is drawn along the line, when moved off another (`placeLabels`). */
+    labelTs?: readonly number[];
+    /**
+     * Draw the labels here. The canvas draws them in a layer of their own
+     * above every connector instead (`EdgeLabels`): inside each connector's
+     * group, a connector drawn later painted straight through an earlier
+     * one's label.
+     */
+    withLabels?: boolean;
 }
 
 export const HIT_WIDTH = 14;
@@ -32,6 +49,8 @@ export const EdgeView = memo(function EdgeView({
     selected,
     hovered,
     editingLabelIndex,
+    labelTs,
+    withLabels = true,
 }: EdgeViewProps) {
     const { style } = edge;
     const dash = dashArray(style.strokeStyle, style.strokeWidth);
@@ -42,11 +61,26 @@ export const EdgeView = memo(function EdgeView({
         const startInset = arrowInset(edge.startArrow, style.strokeWidth);
         const endInset = arrowInset(edge.endArrow, style.strokeWidth);
         if (startInset === 0 && endInset === 0) return routed.path;
-        return renderPath(edge.kind, trimPolyline(routed.points, startInset, endInset));
+        const trimmed = trimPolyline(routed.points, startInset, endInset);
+        // A route drawn with rounded corners (an elbow, or a curved line's
+        // detour) keeps the corners of the full route when shortened for its
+        // arrowheads: rounded afresh, a short last leg got a tighter last
+        // corner than the selection halo drawn round the full route.
+        const radius = routed.cornerRadius ?? (edge.kind === "elbow" ? CORNER_RADIUS : null);
+        if (radius === null) return renderPath(edge.kind, trimmed);
+        const sameCorners = trimmed.length === routed.points.length;
+        return roundedPolylinePath(
+            trimmed,
+            radius,
+            sameCorners ? cornerRadii(routed.points, radius) : undefined
+        );
     }, [edge.startArrow, edge.endArrow, edge.kind, style.strokeWidth, routed]);
 
     return (
-        <g opacity={style.opacity}>
+        // Drawing only: the canvas's wide transparent hit path under this is
+        // what the pointer meets (one cursor, one target, all along the
+        // line). Labels opt back in so they can be grabbed.
+        <g opacity={style.opacity} style={{ pointerEvents: "none" }}>
             {(selected || hovered) && (
                 <path
                     d={routed.path}
@@ -82,9 +116,36 @@ export const EdgeView = memo(function EdgeView({
                 strokeWidth={style.strokeWidth}
             />
 
+            {withLabels && (
+                <EdgeLabels
+                    edge={edge}
+                    routed={routed}
+                    labelTs={labelTs}
+                    editingLabelIndex={editingLabelIndex}
+                />
+            )}
+        </g>
+    );
+});
+
+/** A connector's labels: pills on the line, grabbable and double-clickable. */
+export const EdgeLabels = memo(function EdgeLabels({
+    edge,
+    routed,
+    labelTs,
+    editingLabelIndex,
+}: {
+    edge: DiagramEdge;
+    routed: RoutedEdge;
+    labelTs?: readonly number[];
+    editingLabelIndex?: number;
+}) {
+    if (!edge.labels.some(l => l.text)) return null;
+    return (
+        <g opacity={edge.style.opacity}>
             {edge.labels.map((label, i) =>
                 label.text && i !== editingLabelIndex ? (
-                    <EdgeLabel key={i} edge={edge} routed={routed} index={i} />
+                    <EdgeLabel key={i} edge={edge} routed={routed} index={i} t={labelTs?.[i]} />
                 ) : null
             )}
         </g>
@@ -95,14 +156,16 @@ function EdgeLabel({
     edge,
     routed,
     index,
+    t,
 }: {
     edge: DiagramEdge;
     routed: RoutedEdge;
     index: number;
+    t?: number;
 }) {
     const label = edge.labels[index];
     if (!label) return null;
-    const at = labelAnchor(routed, label.t, label.offset);
+    const at = labelAnchor(routed, t ?? label.t, label.offset);
     const laid = layoutText(label.text, edge.textStyle, 240);
     const padX = 6;
     const padY = 3;
@@ -110,7 +173,8 @@ function EdgeLabel({
     const h = laid.height + padY * 2;
 
     return (
-        <g transform={`translate(${at.x - w / 2} ${at.y - h / 2})`}>
+        // Grab a label to slide it along its line; double-click to edit it.
+        <g data-edge-label={index} transform={`translate(${at.x - w / 2} ${at.y - h / 2})`}>
             <rect
                 width={w}
                 height={h}
@@ -118,6 +182,7 @@ function EdgeLabel({
                 fill="var(--panel)"
                 stroke="var(--line)"
                 strokeWidth={0.75}
+                style={{ pointerEvents: "all", cursor: "move" }}
             />
             <text
                 x={w / 2}

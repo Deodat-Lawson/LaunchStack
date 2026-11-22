@@ -5,6 +5,7 @@ import { render, screen, waitFor, within } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import "@testing-library/jest-dom";
 
+import { defaultChromeDepth } from "../lib/preferences";
 import { buildCommands } from "../ui/CommandPalette";
 import { MindmapEditor } from "../ui/MindmapEditor";
 import { buildTemplate } from "../model/templates";
@@ -115,9 +116,17 @@ describe("chrome depth", () => {
         expect(everything).toBeGreaterThan(focus * 3);
     });
 
-    test("a flowchart opens with everything", () => {
+    test("a flowchart opens in focus too, with its Steps panel", () => {
         mount("flowchart");
-        expect(screen.getByPlaceholderText("Search shapes…")).toBeInTheDocument();
+        expect(screen.queryByPlaceholderText("Search shapes…")).toBeNull();
+        expect(screen.getByRole("textbox", { name: "Steps, one per line" })).toBeInTheDocument();
+    });
+
+    test("only a freeform drawing opens with everything", () => {
+        expect(defaultChromeDepth("freeform")).toBe("everything");
+        for (const kind of ["flowchart", "board", "mindmap"] as const) {
+            expect(defaultChromeDepth(kind)).toBe("focus");
+        }
     });
 
     test("the toggle switches depth and remembers the choice for that kind", async () => {

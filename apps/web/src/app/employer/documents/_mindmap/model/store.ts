@@ -12,6 +12,7 @@
  * structural sharing the edit already paid for.
  */
 
+import { fitContainers } from "./containers";
 import { activePage, updatePage } from "./doc";
 import { MAX_ZOOM, MIN_ZOOM, clamp } from "./geometry";
 import type { SnapGuide } from "./snapping";
@@ -116,6 +117,12 @@ export interface EditorState {
     presenting: boolean;
     chromeDepth: ChromeDepth;
     /**
+     * Whether a flowchart's Steps panel is open beside the canvas. View
+     * state, like the chrome depth: the person's choice, remembered in their
+     * browser (`lib/preferences.ts`), never written to the document.
+     */
+    stepsPanel: boolean;
+    /**
      * Branch ids shown as collapsed without being written to the document.
      * Presenting folds and unfolds through this, so a presentation never
      * dirties the file it is showing.
@@ -186,6 +193,7 @@ export class EditorStore {
             saving: false,
             presenting: false,
             chromeDepth: "everything",
+            stepsPanel: false,
             folded: NO_FOLDS,
             canUndo: false,
             canRedo: false,
@@ -294,15 +302,21 @@ export class EditorStore {
      * (or `null`) is a no-op, so callers can bail out without an `if`.
      */
     update(fn: (doc: MindmapDoc) => MindmapDoc | null, options: CommitOptions = {}): void {
-        const next = fn(this.state.doc);
-        if (!next || next === this.state.doc) return;
+        const raw = fn(this.state.doc);
+        if (!raw || raw === this.state.doc) return;
+        // Groups follow their members on every frame; frames grow to hold
+        // theirs only once something lands (not while it is being dragged,
+        // or a box could never be dragged out of one).
+        const preview = this.isPreviewFrame(options);
+        const next = this.fitted(this.state.doc, raw, !preview);
 
         if (!options.transient) this.pushHistory(options);
         this.state = {
             ...this.state,
             doc: next,
             dirty: true,
-            commitId: this.isPreviewFrame(options) ? this.state.commitId : this.state.commitId + 1,
+            commitId: preview ? this.state.commitId : this.state.commitId + 1,
+            selection: next === raw ? this.state.selection : this.present(next),
         };
         this.refreshHistoryFlags();
         this.emit();
@@ -323,6 +337,30 @@ export class EditorStore {
      */
     private isPreviewFrame(options: CommitOptions): boolean {
         return options.transient === true && this.interactionBase !== null;
+    }
+
+    /**
+     * `next` with its groups and frames holding what they hold
+     * (`model/containers.ts`), page by page, comparing with `prev`.
+     */
+    private fitted(prev: MindmapDoc, next: MindmapDoc, frames: boolean): MindmapDoc {
+        let changed = false;
+        const pages = next.pages.map(p => {
+            const before = prev.pages.find(q => q.id === p.id) ?? null;
+            if (before === p) return p;
+            const fit = fitContainers(before, p, { frames });
+            if (fit !== p) changed = true;
+            return fit;
+        });
+        return changed ? { ...next, pages } : next;
+    }
+
+    /** The selection, less anything `doc` no longer has (an emptied group). */
+    private present(doc: MindmapDoc): SelectionRef[] {
+        const page = activePage(doc);
+        const nodes = new Set(page.nodes.map(nd => nd.id));
+        const kept = this.state.selection.filter(s => s.kind !== "node" || nodes.has(s.id));
+        return kept.length === this.state.selection.length ? this.state.selection : kept;
     }
 
     /** Convenience: edit the active page. */
@@ -430,7 +468,14 @@ export class EditorStore {
         // The gesture's frames were previews. This is the commit that wakes the
         // panels so they catch up to where the shape actually landed — without
         // it they would show the document as it was before the drag, forever.
-        this.state = { ...this.state, commitId: this.state.commitId + 1 };
+        // A frame grows now to hold a child that landed past its edge.
+        const doc = this.fitted(base.doc, this.state.doc, true);
+        this.state = {
+            ...this.state,
+            doc,
+            commitId: this.state.commitId + 1,
+            selection: doc === this.state.doc ? this.state.selection : this.present(doc),
+        };
         this.refreshHistoryFlags();
         this.emit();
         return base.label;
@@ -599,6 +644,11 @@ export class EditorStore {
 
     setChromeDepth(chromeDepth: ChromeDepth): void {
         this.set({ chromeDepth });
+    }
+
+    setStepsPanel(stepsPanel: boolean): void {
+        if (this.state.stepsPanel === stepsPanel) return;
+        this.set({ stepsPanel });
     }
 
     setFolded(ids: Iterable<string>): void {

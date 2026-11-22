@@ -7,20 +7,26 @@ import { ClipboardPaste } from "lucide-react";
 import { cn } from "~/lib/utils";
 
 import { insertShape, styleTextSelection } from "../model/commands";
-import { activePage } from "../model/doc";
+import { activePage, worksAsFlow } from "../model/doc";
 import { screenToWorld } from "../model/geometry";
 import { isDarkSurface } from "../model/palette";
 import type { EditorState } from "../model/store";
+import { EmptyFlowHint } from "../flow";
 import styles from "./Canvas.module.css";
 import { useCommittedDoc, useEditor, useStore } from "./EditorContext";
 
 /**
  * What a blank canvas says.
  *
- * Nothing, today. This puts a ghost topic where the first one will go, and
+ * Nothing, today. This puts a ghost box where the first one will go, and
  * the three keys that grow it, so the first question — "where do I type?" —
- * is answered on the canvas instead of in a side panel. Focus depth only, and
- * only while the page has no shapes; the first node removes it.
+ * is answered on the canvas instead of in a side panel. Only while the page
+ * has no shapes; the first node removes it.
+ *
+ * What it is depends on how the document works. A mindmap's is its central
+ * topic (Focus depth only — Everything depth has the full rail to start
+ * from). A flowchart's is the three ways to start one — type, double-click,
+ * or write the steps — at either depth (`flow/EmptyFlowHint`).
  *
  * It is HTML laid over the board rather than part of the <svg>, so it opts
  * into the paper's colours itself (`.paper` + `data-paper`, as the canvas
@@ -51,9 +57,11 @@ export function EmptyCanvasHint({
     const presenting = useEditor(selectPresenting);
     const viewport = useEditor(selectViewport);
 
-    if (depth !== "focus" || presenting) return null;
+    const flow = worksAsFlow(doc.settings.kind);
+    if ((!flow && depth !== "focus") || presenting) return null;
     const page = activePage(doc);
     if (page.nodes.length > 0) return null;
+    if (flow) return <EmptyFlowHint onPasteOutline={onPasteOutline} />;
 
     const start = () => {
         const at = screenToWorld(viewport, { x: canvasSize.w / 2, y: canvasSize.h / 2 });

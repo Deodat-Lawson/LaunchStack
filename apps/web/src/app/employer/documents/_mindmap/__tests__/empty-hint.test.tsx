@@ -34,17 +34,18 @@ beforeAll(() => {
     ) as unknown as typeof fetch;
 });
 
-function mount(board: "light" | "dark") {
+function mount(board: "light" | "dark", kind: "flowchart" | "mindmap" = "mindmap") {
+    const blank = buildTemplate("blank", "Hint", board);
     return render(
         <MindmapEditor
             mindmapId={1}
-            initialDoc={buildTemplate("blank", "Hint", board)}
+            initialDoc={{ ...blank, settings: { ...blank.settings, kind } }}
             initialTitle="Hint"
             initialRevision={1}
             folder="Unfiled"
             publishedDocumentId={null}
             author="Ada Lovelace"
-            initialChrome="focus"
+            initialChrome={kind === "mindmap" ? "focus" : "everything"}
         />
     );
 }
@@ -60,4 +61,20 @@ describe("the empty-board prompt", () => {
         // which would fall back to the app theme.
         expect(prompt.className).not.toMatch(/brand-ink|brand-soft/);
     });
+
+    it.each(["light", "dark"] as const)(
+        "on a flowchart offers the three ways to start, at full chrome too, on a %s board",
+        board => {
+            mount(board, "flowchart");
+            expect(screen.queryByRole("button", { name: "Type your idea" })).toBeNull();
+            const ghost = screen.getByRole("button", { name: "Type your first step" });
+            expect(ghost.closest("[data-paper]")).toHaveAttribute("data-paper", board);
+            const card = ghost.closest("[data-flow-empty-card]")!;
+            // Opaque, in the paper's own panel colour.
+            expect(card.className).toContain("bg-panel");
+            expect(card).toHaveTextContent("Double-click anywhere to pick a shape");
+            expect(card).toHaveTextContent("Or write the steps in the panel");
+            expect(screen.getByText("next step")).toBeInTheDocument();
+        }
+    );
 });

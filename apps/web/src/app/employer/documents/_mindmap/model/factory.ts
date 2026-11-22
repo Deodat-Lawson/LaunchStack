@@ -18,6 +18,7 @@ import {
     type ThemeMode,
 } from "./palette";
 import { shapeDef } from "./shapes";
+import { topicType } from "./theme";
 import {
     DOC_SCHEMA_VERSION,
     type DiagramEdge,
@@ -116,6 +117,7 @@ export function defaultSettings(overrides: Partial<DocSettings> = {}): DocSettin
         showRulers: false,
         defaultEdgeKind: "elbow",
         paletteId: "default",
+        flowLayout: "manual",
         ...overrides,
     };
 }
@@ -168,10 +170,13 @@ function presetFor(
             };
         }
         case "mind-branch": {
+            // A main branch's type, because a topic with nothing above it is
+            // drawn as one (`drawnLevel`): a 14px regular default sat beside
+            // the 15px bold branches Tab makes in the same tinted box.
             const sw = swatchFor(themeFor(null, mode).cycle[0]!, mode);
             return {
                 style: { fill: sw.fill, stroke: sw.stroke, strokeWidth: 1.5, radius: 10 },
-                text: { color: sw.ink, size: 14, bold: false },
+                text: { color: sw.ink, ...topicType(1) },
             };
         }
         case "mind-leaf":
@@ -366,6 +371,8 @@ export interface CreateEdgeOptions {
     endArrow?: DiagramEdge["endArrow"];
     label?: string;
     waypoints?: Point[];
+    /** The type of its labels, over the default (12px, grey). */
+    textStyle?: Partial<TextStyle>;
 }
 
 export function createEdge(opts: CreateEdgeOptions): DiagramEdge {
@@ -379,7 +386,11 @@ export function createEdge(opts: CreateEdgeOptions): DiagramEdge {
         startArrow: opts.startArrow ?? "none",
         endArrow: opts.endArrow ?? "arrow",
         labels: opts.label ? [{ text: opts.label, t: 0.5, offset: 0 }] : [],
-        textStyle: defaultTextStyle({ size: 12, color: "oklch(0.42 0.01 280)" }),
+        textStyle: defaultTextStyle({
+            size: 12,
+            color: "oklch(0.42 0.01 280)",
+            ...opts.textStyle,
+        }),
         locked: false,
         hidden: false,
     };

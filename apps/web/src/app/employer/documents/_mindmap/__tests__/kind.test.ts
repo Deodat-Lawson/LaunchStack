@@ -10,14 +10,18 @@ import { DOC_SCHEMA_VERSION, type ShapeId } from "../model/types";
  */
 
 describe("diagram kind", () => {
-    test("every template seeds a kind, and only the tree templates auto-arrange", () => {
+    test("every template seeds a kind, and only the mindmap auto-arranges", () => {
         for (const meta of TEMPLATE_META) {
             const doc = buildTemplate(meta.id);
             expect(doc.settings.kind).toBe(kindForTemplate(meta.id, meta.category));
-            expect(doc.settings.autoLayout !== null).toBe(
-                meta.id === "blank" || meta.id === "mindmap"
-            );
+            expect(doc.settings.autoLayout !== null).toBe(meta.id === "mindmap");
         }
+    });
+
+    test("a blank canvas works as a flowchart, laid out by hand", () => {
+        const doc = buildTemplate("blank");
+        expect(doc.settings.kind).toBe("flowchart");
+        expect(doc.settings.autoLayout).toBeNull();
     });
 
     test("the gallery's categories fold to the editor's kinds", () => {

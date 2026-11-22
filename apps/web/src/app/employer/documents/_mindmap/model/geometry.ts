@@ -293,8 +293,32 @@ export function portNormal(n: DiagramNode, port: Exclude<PortId, "auto">): Point
  * the target against each side's outward normal, so a rotated node still
  * chooses the visually-correct side.
  */
-export function autoPort(n: DiagramNode, target: Point): Exclude<PortId, "auto"> {
+export function autoPort(
+    n: DiagramNode,
+    target: Point,
+    /**
+     * `target` is a bend someone placed: if it sits straight below/above the
+     * box (within its width) or straight beside it (within its height), use
+     * that side whatever the angle. One just below a wide box's bottom-right
+     * corner, read by angle as "right", made the line leave by the right side
+     * and double back through its own box. Anything else — and the other box,
+     * always — is read by angle (between two boxes that reads better: a
+     * diamond's Yes and No leave by its side tips, not both by the bottom).
+     */
+    proportional = false
+): Exclude<PortId, "auto"> {
     const c = nodeCenter(n);
+    if (proportional && (n.rotation ?? 0) % 360 === 0) {
+        // Straight below or above the box (within its width), or straight
+        // beside it (within its height): that side, whatever the angle. A
+        // bend off a corner diagonally is read by angle like anything else —
+        // treating every bend by the box's proportions made a small bend on a
+        // line into a box's side flip it to the box's bottom.
+        const withinX = target.x >= n.x && target.x <= n.x + n.w;
+        const withinY = target.y >= n.y && target.y <= n.y + n.h;
+        if (withinX && !withinY) return target.y > c.y ? "s" : "n";
+        if (withinY && !withinX) return target.x > c.x ? "e" : "w";
+    }
     const dir = subPt(target, c);
     const len = Math.hypot(dir.x, dir.y);
     if (len < EPSILON) return "e";

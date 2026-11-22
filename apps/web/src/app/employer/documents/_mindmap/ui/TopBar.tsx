@@ -11,6 +11,7 @@ import {
     Command,
     Download,
     Keyboard,
+    ListOrdered,
     Loader2,
     Network,
     PanelLeft,
@@ -32,6 +33,9 @@ import {
     DropdownMenuCheckboxItem,
     DropdownMenuContent,
     DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuRadioGroup,
+    DropdownMenuRadioItem,
     DropdownMenuSeparator,
     DropdownMenuSub,
     DropdownMenuSubContent,
@@ -43,8 +47,18 @@ import { ScrollArea } from "~/components/ui/scroll-area";
 import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
-import { arrangeNow, runLayout, setAutoLayout, setTitle } from "../model/commands";
+import {
+    arrangeNow,
+    runLayout,
+    setAutoLayout,
+    setDiagramKind,
+    setFlowLayout,
+    setTitle,
+} from "../model/commands";
+import { setStepsPanelOpen } from "../flow";
+import { worksAsFlow } from "../model/doc";
 import type { EditorState, ChromeDepth } from "../model/store";
+import type { DiagramKind } from "../model/types";
 import { useEditor, useStore } from "./EditorContext";
 import { PageSettings } from "./Inspector";
 import { PresenceAvatars } from "./PresenceLayer";
@@ -110,15 +124,31 @@ export interface TopBarProps {
     onHistory: () => void;
     /** Put a link that opens the map straight into Present on the clipboard. */
     onCopyPresentLink?: () => void;
+    /** The page was just arranged from the Layout menu: bring it into view. */
+    onArranged?: () => void;
 }
 
 const selectAutoLayout = (s: EditorState) => s.doc.settings.autoLayout;
+const selectFlowLayout = (s: EditorState) => s.doc.settings.flowLayout;
+const selectStepsPanel = (s: EditorState) => s.stepsPanel;
+const selectKind = (s: EditorState) => s.doc.settings.kind;
+/** The Works-as choice a kind shows as; a freeform drawing shows neither. */
+const KIND_CHOICE: Record<DiagramKind, string> = {
+    flowchart: "flowchart",
+    board: "flowchart",
+    mindmap: "mindmap",
+    freeform: "",
+};
 
 export function TopBar(props: TopBarProps) {
     const t = useTranslations("mindmap.topBar");
     const tc = useTranslations("common");
     const store = useStore();
     const autoLayout = useEditor(selectAutoLayout);
+    const flowLayout = useEditor(selectFlowLayout);
+    const stepsOpen = useEditor(selectStepsPanel);
+    const kind = useEditor(selectKind);
+    const flow = worksAsFlow(kind);
     const focus = props.depth === "focus";
     const docTitle = useEditor(selectTitle);
     const state = useEditor(selectSaveState, saveStateEqual);
@@ -237,21 +267,64 @@ export function TopBar(props: TopBarProps) {
                     </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="start">
-                    <DropdownMenuItem onSelect={() => arrangeNow(store)}>
+                    {/* How the document works: Tab, Enter, Delete, the collapse
+                        buttons and auto-arrange all follow this (see
+                        `worksAsFlow`). A map built as a flowchart out of
+                        topics is switched here, without redrawing it. */}
+                    <DropdownMenuLabel className="text-ink-3 text-[11px] font-medium">
+                        {t("worksAs")}
+                    </DropdownMenuLabel>
+                    <DropdownMenuRadioGroup
+                        value={KIND_CHOICE[kind]}
+                        onValueChange={value =>
+                            setDiagramKind(store, value === "mindmap" ? "mindmap" : "flowchart")
+                        }
+                    >
+                        <DropdownMenuRadioItem value="flowchart">
+                            {t("kinds.flowchart")}
+                        </DropdownMenuRadioItem>
+                        <DropdownMenuRadioItem value="mindmap">
+                            {t("kinds.mindmap")}
+                        </DropdownMenuRadioItem>
+                    </DropdownMenuRadioGroup>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem
+                        onSelect={() => {
+                            arrangeNow(store);
+                            props.onArranged?.();
+                        }}
+                    >
                         <Network className="size-3.5" />
                         {t("arrangeNow")}
                     </DropdownMenuItem>
-                    <DropdownMenuCheckboxItem
-                        checked={autoLayout !== null}
-                        onCheckedChange={checked =>
-                            setAutoLayout(
-                                store,
-                                checked ? (autoLayout ?? { kind: "mindmap" }) : null
-                            )
-                        }
-                    >
-                        {t("autoArrange")}
-                    </DropdownMenuCheckboxItem>
+                    {/* A flowchart arranges itself top to bottom until a box is
+                        moved by hand (`flowLayout`); this turns it back on, and
+                        arranges it now. A mindmap's arranging is its own. */}
+                    {flow && (
+                        <DropdownMenuCheckboxItem
+                            checked={flowLayout === "auto"}
+                            onCheckedChange={checked => {
+                                setFlowLayout(store, checked ? "auto" : "manual");
+                                // Turning it on arranges the chart now: keep it on screen.
+                                if (checked) props.onArranged?.();
+                            }}
+                        >
+                            {t("arrangeAutomatically")}
+                        </DropdownMenuCheckboxItem>
+                    )}
+                    {!flow && (
+                        <DropdownMenuCheckboxItem
+                            checked={autoLayout !== null}
+                            onCheckedChange={checked =>
+                                setAutoLayout(
+                                    store,
+                                    checked ? (autoLayout ?? { kind: "mindmap" }) : null
+                                )
+                            }
+                        >
+                            {t("autoArrange")}
+                        </DropdownMenuCheckboxItem>
+                    )}
                     <DropdownMenuSeparator />
                     <DropdownMenuSub>
                         <DropdownMenuSubTrigger>{t("arrangeAs")}</DropdownMenuSubTrigger>
@@ -289,6 +362,30 @@ export function TopBar(props: TopBarProps) {
                     </DropdownMenuSub>
                 </DropdownMenuContent>
             </DropdownMenu>
+
+            {/* The chart as lines, beside it: open unless this person closed it. */}
+            {flow && (
+                <Tooltip>
+                    <TooltipTrigger asChild>
+                        <Button
+                            variant="ghost"
+                            size="sm"
+                            aria-pressed={stepsOpen}
+                            onClick={() => setStepsPanelOpen(store, !stepsOpen)}
+                            className={cn(
+                                "h-8 gap-1.5 px-2 text-[13px]",
+                                stepsOpen && "bg-brand-soft text-brand-ink hover:bg-brand-soft"
+                            )}
+                        >
+                            <ListOrdered className="size-4" />
+                            {t("steps")}
+                        </Button>
+                    </TooltipTrigger>
+                    <TooltipContent side="bottom">
+                        {stepsOpen ? t("stepsHideTip") : t("stepsShowTip")}
+                    </TooltipContent>
+                </Tooltip>
+            )}
 
             <span className="flex-1" />
 

@@ -347,6 +347,11 @@
     "redo": "重做",
     "redoTip": "重做 ⇧⌘Z",
     "layout": "布局",
+    "worksAs": "用作",
+    "kinds": {
+      "flowchart": "流程图 — Tab 添加下一步",
+      "mindmap": "思维导图 — Tab 添加子主题"
+    },
     "arrangeNow": "立即整理",
     "autoArrange": "输入时自动整理",
     "arrangeAs": "排列方式",
@@ -377,7 +382,11 @@
     "copyPresentLink": "复制演示链接",
     "addToSources": "添加到来源",
     "unsaved": "有未保存的更改",
-    "upToDate": "已是最新"
+    "upToDate": "已是最新",
+    "steps": "步骤",
+    "stepsShowTip": "以步骤形式书写流程图",
+    "stepsHideTip": "隐藏步骤",
+    "arrangeAutomatically": "自动排列"
   },
   "bottomBar": {
     "pageOptions": "“{name}”选项",
@@ -544,6 +553,7 @@
     "label": "所选内容",
     "addChild": "添加子主题",
     "addChildTopic": "添加子主题",
+    "addStep": "添加下一步",
     "colour": "颜色",
     "smaller": "缩小文字",
     "larger": "放大文字",
@@ -553,7 +563,7 @@
   "contextMenu": {
     "label": "画布操作",
     "addSibling": "添加同级主题",
-    "addConnected": "添加相连形状",
+    "addConnected": "添加下一步",
     "more": "更多",
     "paste": "粘贴",
     "autoLayout": "自动布局",
@@ -665,7 +675,7 @@
       "quickShapes": "矩形 / 椭圆 / 菱形 / 圆角矩形",
       "finishNext": "完成输入 · 再按一次添加下一个主题",
       "topicBefore": "在此主题之前新建主题",
-      "addChild": "添加子主题",
+      "addChild": "添加子主题 · 流程图中为添加下一步",
       "outdent": "主题升级",
       "nearest": "跳到该方向上最近的主题",
       "moveTopic": "上移 / 下移主题",
@@ -855,7 +865,9 @@
     "failed": "保存失败 — 稍后将自动重试"
   },
   "canvas": {
-    "dropImage": "拖入图片"
+    "frameTitle": "框架",
+    "dropImage": "拖入图片",
+    "bendHint": "拖动可改走线 · 双击可删除此折点"
   },
   "viewer": {
     "opening": "正在打开…"
@@ -892,5 +904,101 @@
     "expandFailed": "暂时无法建议子主题，请重试。",
     "topicGone": "在建议生成期间，该主题已被删除。",
     "expandUndo": "用 AI 展开"
+  },
+  "flow": {
+    "held": "这张流程图现在保持在你摆放的位置",
+    "heldBody": "你手动移动了一个方框，之后新增的步骤会放在它所接的方框旁边，其余内容不再移动。",
+    "arrangeAgain": "自动排列",
+    "branch": {
+      "yes": "是",
+      "no": "否"
+    },
+    "empty": {
+      "title": "开始绘制流程图",
+      "ghost": "输入第一步",
+      "type": "直接输入，为第一步命名",
+      "doubleClick": "双击任意位置选择形状",
+      "write": "或在面板中写下步骤",
+      "keys": {
+        "next": "<key>Tab</key> 下一步",
+        "branch": "<key>⇧Tab</key> 分支",
+        "decision": "以 <key>?</key> 结尾即为判断"
+      },
+      "paste": "改为粘贴 Mermaid 或大纲"
+    },
+    "keys": {
+      "legend": {
+        "title": "按键",
+        "label": "绘制流程图的键盘快捷键",
+        "hide": "隐藏按键提示",
+        "show": "显示按键提示",
+        "next": "下一步",
+        "branch": "旁边加分支",
+        "decision": "问句 → 判断",
+        "move": "在图中移动",
+        "remove": "删除这一步"
+      },
+      "caps": {
+        "next": "Tab",
+        "branch": "⇧Tab",
+        "decision": "?",
+        "remove": "Delete"
+      }
+    },
+    "pick": {
+      "menu": {
+        "title": "这里放什么？",
+        "cancel": "按 <key>Esc</key> 取消",
+        "fromArrow": "选择箭头末端要放的形状",
+        "here": "选择要添加到这里的形状"
+      },
+      "picks": {
+        "step": "步骤",
+        "decision": "判断",
+        "terminal": "开始/结束",
+        "data": "数据",
+        "note": "便签",
+        "arrow": "仅箭头"
+      }
+    },
+    "steps": {
+      "panel": {
+        "title": "步骤",
+        "count": "{count, plural, =0 {还没有画出内容} other {# 个方框}}",
+        "editorLabel": "步骤，每行一个",
+        "placeholder": "每行写一个步骤，例如：\n\n开始\n接单\n已付款？\n  是：发货\n  否：-> 接单\n结束",
+        "useExample": "使用示例",
+        "example": "开始\n收到订单\n检查库存\n有货吗？\n  有：拣货并打包\n  没有：向供应商补货 -> 检查库存\n发货并发送物流单号\n结束",
+        "keys": "Tab 缩进为分支 · Esc 回到流程图",
+        "close": "关闭步骤"
+      },
+      "kind": {
+        "step": "步骤",
+        "decision": "判断",
+        "start": "开始",
+        "end": "结束",
+        "arrow": "箭头"
+      },
+      "syntax": {
+        "title": "写法",
+        "stepCode": "打包订单",
+        "step": "一个步骤；各行按顺序相连",
+        "decisionCode": "有货吗？",
+        "decision": "以问号结尾：判断",
+        "branchCode": "  是：发货",
+        "branch": "缩进在判断下：分支",
+        "jumpCode": "-> 打包订单",
+        "jump": "改为跳到那个步骤",
+        "endsCode": "开始 · 结束",
+        "ends": "圆角的开始或结束",
+        "blankCode": "（空行）",
+        "blank": "开始另一条流程，不与上一行相连"
+      },
+      "notes": {
+        "missingTarget": "第 {line} 行：没有名为“{target}”的步骤。",
+        "notUnderQuestion": "第 {line} 行：只有问题（以问号结尾的行）才能有分支，所以这一行画成普通步骤。",
+        "arrowWithoutStep": "第 {line} 行：箭头上方需要有一个步骤。"
+      }
+    }
   }
 }

@@ -8,15 +8,17 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "~/components/ui/tooltip
 import { cn } from "~/lib/utils";
 
 import {
-    addChildTopic,
+    addConnected,
+    styledNodeIds,
     applySwatch,
     deleteTopicsOrSelection,
     docMode,
     styleTextSelection,
 } from "../model/commands";
-import { activePage, nodeById } from "../model/doc";
+import { activePage, nodeById, worksAsFlow } from "../model/doc";
 import { nodesBounds, worldToScreen } from "../model/geometry";
 import { SWATCH_BY_ID, swatchFor } from "../model/palette";
+import { shapeTextBox } from "../model/shapes";
 
 import type { EditorState } from "../model/store";
 import type { DiagramNode } from "../model/types";
@@ -72,13 +74,24 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
     const bounds = nodesBounds(nodes);
     if (!bounds) return null;
 
-    const top = worldToScreen(viewport, { x: bounds.x + bounds.w / 2, y: bounds.y });
+    // A frame's title sits above it, and the toolbar must never cover it:
+    // a click on the title selects the frame, and the second click of a
+    // double-click (which renames it) has to land on the title, not on us.
+    const titleTop = Math.min(
+        ...nodes.map(nd => nd.y + Math.min(0, shapeTextBox(nd.shape, nd.w, nd.h).y))
+    );
+    const top = worldToScreen(viewport, { x: bounds.x + bounds.w / 2, y: titleTop });
     const bottom = worldToScreen(viewport, { x: bounds.x + bounds.w / 2, y: bounds.y + bounds.h });
     // Above the shape unless that would leave the stage; then below it.
     const above = top.y - TOOLBAR_HEIGHT - GAP >= 6;
     const y = above ? top.y - TOOLBAR_HEIGHT - GAP : bottom.y + GAP;
 
-    const first = nodes[0]!;
+    // A group shows (and its colour and type change) as its members do.
+    const members = styledNodeIds(store)
+        .map(id => nodeById(page, id))
+        .filter((nd): nd is DiagramNode => nd !== undefined);
+    const first = members[0] ?? nodes[0]!;
+    const flow = worksAsFlow(doc.settings.kind);
     const size = first.textStyle.size;
     const mode = docMode(store);
 
@@ -92,12 +105,17 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
             onPointerDown={e => e.stopPropagation()}
             onMouseDown={e => e.stopPropagation()}
         >
-            <Tip label={t("selectionToolbar.addChild")} hint="Tab">
+            <Tip
+                label={flow ? t("selectionToolbar.addStep") : t("selectionToolbar.addChild")}
+                hint="Tab"
+            >
                 <button
                     type="button"
-                    onClick={() => addChildTopic(store, first.id)}
+                    onClick={() => addConnected(store, nodes[0]!.id)}
                     className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-7 items-center justify-center rounded-md transition-colors"
-                    aria-label={t("selectionToolbar.addChildTopic")}
+                    aria-label={
+                        flow ? t("selectionToolbar.addStep") : t("selectionToolbar.addChildTopic")
+                    }
                 >
                     <Plus className="size-4" />
                 </button>
@@ -112,10 +130,16 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
             >
                 {PICKER.map(id => SWATCH_BY_ID[id]!).map(sw => {
                     const tone = swatchFor(sw.id, mode);
-                    // A central topic wears its hue as the fill, not the outline.
-                    const worn =
-                        first.shape === "mind-root" ? first.style.fill : first.style.stroke;
-                    const active = worn === tone.stroke;
+                    // A central topic wears its hue as the fill, not the outline;
+                    // so does a flowchart box, which has no outline at all.
+                    const byFill =
+                        first.shape === "mind-root" ||
+                        first.style.stroke === "none" ||
+                        first.style.strokeWidth === 0;
+                    const active = byFill
+                        ? first.style.fill ===
+                          (first.shape === "mind-root" ? tone.stroke : tone.fill)
+                        : first.style.stroke === tone.stroke;
                     const name = swatchName(t, sw);
                     return (
                         <Tip key={sw.id} label={name}>

@@ -5,20 +5,25 @@
  * same name, "Generate with AI" in the gallery and "Expand with AI" on a
  * topic — never asks a model for coordinates or colours. It asks for what
  * models write well: an indented outline for anything shaped like a tree
- * (mindmaps, org charts, breakdowns) and Mermaid for flowcharts. This module
- * turns either into an ordinary document, built from the same factories,
- * painted by the same theme code and placed by the same layouts as a map
- * someone drew, so what comes back opens, edits, presents and publishes like
- * one.
+ * (mindmaps, org charts, breakdowns) and, for flowcharts, the step language
+ * (`./flowchart/syntax.ts`) — one step per line, "?" a decision, indented
+ * `Yes: …` branches, `-> Step` loops — with Mermaid still accepted for a
+ * chart that needs groups or a sideways flow. This module turns any of them
+ * into an ordinary document, built from the same factories and placed by the
+ * same layouts as a map someone drew; a flowchart's boxes and arrows are made
+ * in the product's flowchart look, as the editor makes them. So what comes
+ * back opens, edits, presents and publishes like one.
  *
  * Pure: no React, no DOM, no server. Text measurement falls back to a
  * per-character estimate where there is no canvas (`text.ts`).
  */
 
 import { createDoc, createEdge, createNode, createPage, defaultTextStyle } from "./factory";
+import { describeStepNotes, flowchartLook, parseSteps, stepsToFlowchart } from "./flowchart";
 import { normalizeOrigin, runAutoLayout } from "./template-helpers";
 import { mermaidToDoc } from "./mermaid";
-import { defaultThemeFor, type ThemeMode } from "./palette";
+import { defaultThemeFor, themeMode, type ThemeMode } from "./palette";
+import { isContainer } from "./shapes";
 import { layoutText } from "./text";
 import { applyThemeToDoc, topicType } from "./theme";
 import type {
@@ -52,8 +57,22 @@ export interface DiagramSpec {
     type: DiagramType;
     /** For mindmap, org_chart and tree: one topic per line, children indented. */
     outline?: string;
-    /** For flowchart: a Mermaid `flowchart`. */
+    /** For flowchart: the step language (`./flowchart/syntax.ts`). Preferred. */
+    steps?: string;
+    /** For flowchart: a Mermaid `flowchart`, for groups or a sideways flow. */
     mermaid?: string;
+}
+
+/** Text that is Mermaid rather than steps: it opens with `flowchart` or `graph`. */
+export function looksLikeMermaid(text: string): boolean {
+    const first = text.split(/\r?\n/).find(line => line.trim() !== "" && !/^\s*```/.test(line));
+    return /^\s*(flowchart|graph)\b/i.test(first ?? "");
+}
+
+/** A fenced block's body, or the text itself: models wrap what they write in ``` fences. */
+export function unfenced(text: string): string {
+    const fenced = /^\s*```[\w-]*[ \t]*\n([\s\S]*?)\n\s*```\s*$/.exec(text);
+    return fenced ? fenced[1]! : text;
 }
 
 export interface BuildOptions {
@@ -291,31 +310,25 @@ export function buildDiagram(spec: DiagramSpec, options: BuildOptions = {}): Min
     const title = cleanTopic(spec.title) || "Untitled diagram";
 
     if (spec.type === "flowchart") {
-        const source = (spec.mermaid ?? "").trim();
-        if (!source)
-            throw new DiagramSpecError("A flowchart needs `mermaid`: a Mermaid flowchart.");
+        // What the text is decides how it is read, whichever field it came in:
+        // models put steps under `mermaid` and Mermaid under `steps`.
+        const steps = unfenced(spec.steps ?? "").trim();
+        const mermaid = unfenced(spec.mermaid ?? "").trim();
+        const source = steps || mermaid;
+        if (!source) {
+            throw new DiagramSpecError(
+                "A flowchart needs `steps`: one step per line, a question ending in ? with its branches indented under it as 'Yes: step'."
+            );
+        }
         if (source.length > DIAGRAM_LIMITS.sourceChars) {
             throw new DiagramSpecError(
-                `The Mermaid source is too long (over ${DIAGRAM_LIMITS.sourceChars} characters).`
+                `The flowchart is too long (over ${DIAGRAM_LIMITS.sourceChars} characters).`
             );
         }
-        const raw = mermaidToDoc(source, title, pageName);
-        const count = raw.pages[0]?.nodes.length ?? 0;
-        if (count === 0) {
-            throw new DiagramSpecError(
-                "The Mermaid source had no nodes I could read. Write a flowchart such as:\nflowchart TD\n  A[Start] --> B{Ready?}\n  B -->|yes| C[Ship]"
-            );
-        }
-        if (count > DIAGRAM_LIMITS.nodes) {
-            throw new DiagramSpecError(
-                `That flowchart has ${count} nodes; keep it to ${DIAGRAM_LIMITS.nodes} or fewer.`
-            );
-        }
-        // Painted like any board in this theme, so the Theme picker repaints
-        // it the same way later. Its frames are paper frames, which the theme
-        // keeps as paper (`applyThemeToPage`).
-        const themed = applyThemeToDoc(raw, themeId);
-        return normalizeOrigin({ ...themed, title });
+        const asMermaid = looksLikeMermaid(source) || (!steps && /-{2,}>|={2,}>/.test(source));
+        return asMermaid
+            ? mermaidFlowchart(source, title, pageName, themeId)
+            : stepsFlowchart(source, title, pageName, themeId);
     }
 
     const source = (spec.outline ?? "").trim();
@@ -356,6 +369,116 @@ export function buildDiagram(spec: DiagramSpec, options: BuildOptions = {}): Min
         layout.direction ? { direction: layout.direction } : {}
     );
     return normalizeOrigin(placed);
+}
+
+// ---------------------------------------------------------------------------
+// Flowcharts
+// ---------------------------------------------------------------------------
+
+/** The settings every flowchart an AI makes starts with. */
+function flowchartDoc(title: string, page: DiagramPage, flowLayout: "auto" | "manual"): MindmapDoc {
+    const base = createDoc(title, [page]);
+    return {
+        ...base,
+        settings: {
+            ...base.settings,
+            kind: "flowchart",
+            autoLayout: null,
+            defaultEdgeKind: "elbow",
+            flowLayout,
+        },
+    };
+}
+
+/**
+ * A flowchart from the step language, drawn by `stepsToFlowchart` in the
+ * product's look, top to bottom, on auto layout: it goes on arranging itself
+ * as steps are added until someone moves a box by hand. Anything the parser
+ * could not use (an arrow to a step that is not there, a branch with no
+ * question above it) fails the whole spec, with each problem said back.
+ */
+export function stepsFlowchart(
+    source: string,
+    title: string,
+    pageName: string,
+    themeId: string
+): MindmapDoc {
+    const parse = parseSteps(source);
+    if (parse.steps.length === 0) {
+        throw new DiagramSpecError(
+            "The steps had no step I could read. Write one step per line, e.g.:\nStart\nReceive the order\nIn stock?\n  Yes: Ship it\n  No: Reorder -> Receive the order\nEnd"
+        );
+    }
+    if (parse.steps.length > DIAGRAM_LIMITS.nodes) {
+        throw new DiagramSpecError(
+            `That flowchart has ${parse.steps.length} steps; keep it to ${DIAGRAM_LIMITS.nodes} or fewer.`
+        );
+    }
+    if (parse.notes.length > 0) {
+        throw new DiagramSpecError(
+            [
+                "Nothing was drawn: some lines could not be read.",
+                ...describeStepNotes(source, parse.notes),
+            ].join("\n")
+        );
+    }
+    const long = parse.steps.find(s => s.label.length > DIAGRAM_LIMITS.labelChars);
+    if (long) {
+        throw new DiagramSpecError(
+            `Line ${long.line + 1} is ${long.label.length} characters long; keep a step to ${DIAGRAM_LIMITS.labelChars} or fewer.`
+        );
+    }
+    // The paper first (background and palette), then the steps on it.
+    const paper = applyThemeToDoc(flowchartDoc(title, createPage(pageName), "auto"), themeId);
+    const drawn = stepsToFlowchart(paper.pages[0]!, source, themeMode(themeId));
+    return normalizeOrigin({ ...paper, pages: [drawn.page] });
+}
+
+/**
+ * A flowchart from Mermaid: laid out in the source's direction with its
+ * subgraphs as frames, its boxes and arrows in the product's look. Laid out
+ * by hand from then on (`flowLayout: "manual"`): an auto layout would fold a
+ * sideways flow and its frames into one top-to-bottom column.
+ */
+function mermaidFlowchart(
+    source: string,
+    title: string,
+    pageName: string,
+    themeId: string
+): MindmapDoc {
+    const mode = themeMode(themeId);
+    const raw = mermaidToDoc(source, title, pageName, { look: flowchartLook, mode });
+    const count = raw.pages[0]?.nodes.length ?? 0;
+    if (count === 0) {
+        throw new DiagramSpecError(
+            "The Mermaid source had no nodes I could read. Write a flowchart such as:\nflowchart TD\n  A[Start] --> B{Ready?}\n  B -->|yes| C[Ship]"
+        );
+    }
+    if (count > DIAGRAM_LIMITS.nodes) {
+        throw new DiagramSpecError(
+            `That flowchart has ${count} nodes; keep it to ${DIAGRAM_LIMITS.nodes} or fewer.`
+        );
+    }
+    // The theme lays the paper and keeps the frames as paper frames
+    // (`applyThemeToPage`); the boxes and arrows keep the look they were made in.
+    const rawPage = raw.pages[0]!;
+    const madeNode = new Map(rawPage.nodes.map(nd => [nd.id, nd]));
+    const madeEdge = new Map(rawPage.edges.map(e => [e.id, e]));
+    const themed = applyThemeToDoc(flowchartDoc(title, rawPage, "manual"), themeId);
+    const pages = themed.pages.map(page => ({
+        ...page,
+        nodes: page.nodes.map(nd => {
+            const made = madeNode.get(nd.id);
+            return made && !isContainer(nd.shape)
+                ? { ...nd, style: made.style, textStyle: made.textStyle }
+                : nd;
+        }),
+        edges: page.edges.map(e => {
+            const made = madeEdge.get(e.id);
+            return made ? { ...e, style: made.style, textStyle: made.textStyle } : e;
+        }),
+    }));
+    return normalizeOrigin({ ...themed, pages });
 }
 
 /** The outline a model would write for a page of topics — what `read_diagram` shows and edits extend. */

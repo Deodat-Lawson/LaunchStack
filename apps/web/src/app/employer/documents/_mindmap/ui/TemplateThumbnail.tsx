@@ -7,7 +7,8 @@ import { useAppThemeMode } from "./useAppThemeMode";
 
 import { nodeLookup, pageBounds } from "../model/doc";
 import { expandRect } from "../model/geometry";
-import { routeEdge } from "../model/routing";
+import { nudgeRoutes } from "../model/tidy";
+import { routeEdge, routeOptionsFor } from "../model/routing";
 import { shapeDef, shapeGeometry, shapeTextBox } from "../model/shapes";
 import { buildTemplate } from "../model/templates";
 import type { ThemeMode } from "../model/palette";
@@ -72,9 +73,19 @@ export function DocThumbnail({ doc, detail = false }: { doc: MindmapDoc; detail?
             // Containers first, then connectors, then shapes: the canvas's order.
             containers: page.nodes.filter(nd => !nd.hidden && shapeDef(nd.shape).container),
             nodes: page.nodes.filter(nd => !nd.hidden && !shapeDef(nd.shape).container),
-            edges: page.edges
-                .filter(e => !e.hidden)
-                .map(e => ({ edge: e, routed: routeEdge(e, lookup) })),
+            edges: (() => {
+                const shown = page.edges.filter(e => !e.hidden);
+                const routes = nudgeRoutes(
+                    new Map(
+                        shown.map(e => [
+                            e.id,
+                            routeEdge(e, lookup, page.nodes, shown, routeOptionsFor(doc.settings)),
+                        ])
+                    ),
+                    shown
+                );
+                return shown.map(e => ({ edge: e, routed: routes.get(e.id)! }));
+            })(),
             background: page.background.color,
         };
     }, [doc, detail]);

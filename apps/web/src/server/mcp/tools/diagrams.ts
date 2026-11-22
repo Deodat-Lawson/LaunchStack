@@ -12,8 +12,10 @@
  * - `edit_diagram` takes edit access to the draft and never writes over a
  *   save it did not see; the version before is kept in its history.
  *
- * The assistant's model writes the diagram (an outline or a Mermaid
- * flowchart); nothing here calls a model.
+ * The assistant's model writes the diagram (an outline, or a flowchart in
+ * the step language — Mermaid still accepted); nothing here calls a model.
+ * Flowcharts are read back in the same step language, with each step's box
+ * id, and can be rewritten from it (`edit_diagram` with `steps`).
  */
 import { z } from "zod";
 
@@ -23,6 +25,7 @@ import {
     CreateDiagramArgs,
     DIAGRAM_EDIT_JSON_SCHEMA,
     EditDiagramArgs,
+    STEPS_LANGUAGE,
     toDiagramEdits,
 } from "~/server/chat-diagram-tools";
 import { UNFILED_FOLDER, isUnfiledFolder, normalizeFolderPath } from "~/lib/folders/path";
@@ -147,7 +150,8 @@ export const readDiagramTool = defineTool({
     name: "read_diagram",
     title: "Read a LaunchStack diagram",
     description:
-        "Read one diagram as text: a mind map as its outline of topics, a flowchart as its shapes and arrows, every shape with its id (n_…) for edit_diagram.",
+        "Read one diagram as text: a mind map as its outline of topics; a flowchart as step text in a ```steps block, with the id (n_…) of each step's box listed under it; anything else as its shapes and arrows. Every shape comes with its id for edit_diagram. " +
+        STEPS_LANGUAGE,
     inputSchema: {
         type: "object",
         properties: { diagram: DIAGRAM_ID_SCHEMA },
@@ -196,15 +200,25 @@ export const createDiagramTool = defineTool({
     description:
         "Draw a new diagram in the person's LaunchStack workspace, as a Mindmap they can open, edit, present, share and cite. " +
         "type mindmap, org_chart or tree: send outline — the centre on the first line, then one topic per line, each indented two spaces under its parent, as '- ' bullets. " +
-        "type flowchart: send mermaid — a Mermaid flowchart ('flowchart TD' or 'flowchart LR'), decisions as {...} with labelled branches, subgraph blocks for phases or teams. " +
-        "It goes in the person's Private section (only they can see it) unless they name a folder. Returns its id and a url to open it.",
+        "type flowchart: send steps (preferred) — the step language below; it is drawn top to bottom, coloured by kind, and arranges itself as steps are added. Send mermaid instead only for a flowchart that needs subgraphs or a left-to-right flow. " +
+        "It goes in the person's Private section (only they can see it) unless they name a folder. Returns its id and a url to open it. " +
+        STEPS_LANGUAGE,
     inputSchema: {
         type: "object",
         properties: {
             title: { type: "string", maxLength: 200 },
             type: { type: "string", enum: [...DIAGRAM_TYPES] },
             outline: { type: "string", maxLength: 40_000 },
-            mermaid: { type: "string", maxLength: 40_000 },
+            steps: {
+                type: "string",
+                maxLength: 40_000,
+                description: "For flowchart: one step per line in the step language.",
+            },
+            mermaid: {
+                type: "string",
+                maxLength: 40_000,
+                description: "For a flowchart that needs subgraphs or a left-to-right flow.",
+            },
             folder: {
                 type: "string",
                 maxLength: 256,
@@ -235,11 +249,11 @@ export const createDiagramTool = defineTool({
     requires: { scope: MCP_SCOPE_WRITE, permission: "documents.upload" },
     rateLimit: DIAGRAM_WRITE_RATE_LIMIT,
     args: CreateDiagramArgs,
-    async run({ title, type, outline, mermaid, folder }, { principal, origin }) {
+    async run({ title, type, outline, steps, mermaid, folder }, { principal, origin }) {
         const path = normalizeFolderPath(folder);
         try {
             const { row, doc } = await createDiagram(principal.ctx, {
-                spec: { title, type, outline, mermaid },
+                spec: { title, type, outline, steps, mermaid },
                 folder: isUnfiledFolder(path) || /^private$/i.test(path) ? UNFILED_FOLDER : path,
                 // No browser to read a theme from: the app's default lighting.
                 mode: "dark",
@@ -283,20 +297,26 @@ export const editDiagramTool = defineTool({
     name: "edit_diagram",
     title: "Edit a LaunchStack diagram",
     description:
-        "Change an existing diagram with small operations naming the ids read_diagram shows: add, rename, remove, move, connect, disconnect, arrange. " +
-        "All operations apply together or none do; the version before is kept in the diagram's history. Returns what changed and the diagram as it now is.",
+        "Change an existing diagram. For a flowchart, prefer steps: the whole chart rewritten in the step language read_diagram showed it in — boxes whose words you keep keep their ids (and their comments and links), new lines become new boxes, lines you drop are removed, and a blank line keeps the steps either side of it unjoined (keep the ones it showed). " +
+        "For a mind map, or one small change, send edits: operations naming the ids read_diagram shows — add, rename, remove, move, connect, disconnect, arrange. Steps are drawn first, then edits. " +
+        "Everything applies together or nothing does; the version before is kept in the diagram's history. Returns what changed and the diagram as it now is.",
     inputSchema: {
         type: "object",
         properties: {
             diagram: DIAGRAM_ID_SCHEMA,
+            steps: {
+                type: "string",
+                maxLength: 40_000,
+                description:
+                    "Flowcharts: the whole chart as step text, every line (blank lines too), changed where asked.",
+            },
             edits: {
                 type: "array",
                 items: DIAGRAM_EDIT_JSON_SCHEMA,
-                minItems: 1,
                 maxItems: MAX_EDITS,
             },
         },
-        required: ["diagram", "edits"],
+        required: ["diagram"],
         additionalProperties: false,
     },
     outputSchema: {
@@ -322,11 +342,11 @@ export const editDiagramTool = defineTool({
     requires: { scope: MCP_SCOPE_WRITE, permission: "documents.edit" },
     rateLimit: DIAGRAM_WRITE_RATE_LIMIT,
     args: EditDiagramArgs,
-    async run({ diagram, edits }, { principal, origin }) {
+    async run({ diagram, edits, steps }, { principal, origin }) {
         const id = parseDiagramId(diagram);
         if (id === null) return { ok: false, message: notFound(diagram) };
         try {
-            const result = await editDiagram(principal.ctx, id, toDiagramEdits(edits));
+            const result = await editDiagram(principal.ctx, id, toDiagramEdits(edits, steps));
             const url = diagramUrl(origin, id);
             return {
                 ok: true,

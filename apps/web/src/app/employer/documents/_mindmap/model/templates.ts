@@ -838,6 +838,9 @@ export function buildTemplate(
         ...doc.settings,
         kind: kindForTemplate(t.id, TEMPLATE_META_BY_ID[t.id]?.category),
         autoLayout: AUTO_ARRANGED.has(t.id) ? ({ kind: "mindmap" } as const) : null,
+        // A blank flowchart arranges itself as steps are added; a template's
+        // sample was laid out by hand and keeps its places.
+        flowLayout: t.id === "blank" ? ("auto" as const) : ("manual" as const),
     };
     return applyThemeToDoc({ ...doc, settings }, defaultThemeFor(mode));
 }
@@ -845,13 +848,19 @@ export function buildTemplate(
 /**
  * Templates whose whole point is a tree that grows as you type. The concept
  * map is a graph with cross-links and the brainstorm board is columns of
- * stickies — a tidy-tree pass would wreck both, so they stay off.
+ * stickies — a tidy-tree pass would wreck both, so they stay off. A blank
+ * canvas is a flowchart (below), laid out by hand.
  */
-const AUTO_ARRANGED: ReadonlySet<string> = new Set(["blank", "mindmap"]);
+const AUTO_ARRANGED: ReadonlySet<string> = new Set(["mindmap"]);
 
 /** The gallery's category, folded to the kinds the editor distinguishes. */
 export function kindForTemplate(id: string, category: TemplateCategory | undefined): DiagramKind {
     if (id === "brainstorm") return "board";
+    // People start from nothing to draw boxes and arrows far more often than
+    // an outline (the Mindmap template is one click away for that), so a
+    // blank canvas works as a flowchart: Tab adds the next step, nothing
+    // re-arranges what was placed by hand.
+    if (id === "blank") return "flowchart";
     switch (category) {
         case "Mindmap":
             return "mindmap";

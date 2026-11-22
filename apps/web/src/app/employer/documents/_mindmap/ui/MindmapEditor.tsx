@@ -20,28 +20,43 @@ import {
 } from "lucide-react";
 
 import { ResizableHandle, ResizablePanel, ResizablePanelGroup } from "~/components/ui/resizable";
+import { Sheet, SheetContainerProvider, SheetContent, SheetTitle } from "~/components/ui/sheet";
 import { TooltipProvider } from "~/components/ui/tooltip";
 import { cn } from "~/lib/utils";
 
 import { toast } from "sonner";
 
-import { defaultChromeDepth, readChromeDepth, writeChromeDepth } from "../lib/preferences";
+import {
+    defaultChromeDepth,
+    readChromeDepth,
+    NARROW_EDITOR,
+    narrowWindow,
+    readStepsPanel,
+    writeChromeDepth,
+} from "../lib/preferences";
 import {
     docMode,
+    onChartHeld,
     pauseAutoArrangeAfterManualMove,
     revealNode,
+    revealPage,
     setActivePage,
     setAutoLayout,
+    setFlowLayout,
     viewportCentre,
 } from "../model/commands";
+import { activePage, worksAsFlow } from "../model/doc";
+import { dressBox, flowLookOf } from "../model/flowchart/look";
 import { createNodeAt } from "../model/factory";
 import { getMindmap } from "../lib/api";
 import { isImageFile } from "../lib/images";
-import { shapeHoldsText } from "../model/shapes";
+import { isContainer, shapeHoldsText } from "../model/shapes";
+import { containerAt } from "../model/containers";
 import { parseDoc } from "../model/serialize";
 import { EditorStore, type ChromeDepth, type EditorState } from "../model/store";
 import { paintNewTopics } from "../model/topicStyle";
 import type { Point, ShapeId } from "../model/types";
+import { FlowOverlay, setStepsPanelOpen, StepsPanel } from "../flow";
 import { BottomBar } from "./BottomBar";
 import { Canvas } from "./Canvas";
 import { useContextTarget } from "~/components/context-menu";
@@ -136,11 +151,24 @@ export function MindmapEditor(props: MindmapEditorProps) {
         created.setChromeDepth(
             props.initialChrome ?? readChromeDepth(kind) ?? defaultChromeDepth(kind)
         );
+        // A flowchart's Steps panel: as this person last left it, else open
+        // (closed on a narrow screen, where it would cover the canvas).
+        created.setStepsPanel(readStepsPanel(!narrowWindow()));
         return created;
     });
 
     const stageRef = useRef<HTMLDivElement | null>(null);
     const stageSize = useElementSize(stageRef);
+    // The canvas's whole column (the Steps panel docked in it, and the stage):
+    // too narrow, and the panel opens over the stage instead of beside it. The
+    // element is state too, because the panel's sheet mounts inside it.
+    const regionRef = useRef<HTMLDivElement | null>(null);
+    const [region, setRegion] = useState<HTMLDivElement | null>(null);
+    const regionSize = useElementSize(regionRef);
+    const attachRegion = useCallback((el: HTMLDivElement | null) => {
+        regionRef.current = el;
+        setRegion(el);
+    }, []);
     /**
      * Read by every window-level listener below. A ref, not the prop, because
      * the listeners are installed once and must see the current answer.
@@ -180,6 +208,20 @@ export function MindmapEditor(props: MindmapEditorProps) {
         () => store.getState().selection.length > 0,
         () => false
     );
+    // A flowchart has its key legend and "What goes here?" menu over the
+    // stage, and its Steps panel beside it — none of them while presenting.
+    const flow = useSyncExternalStore(
+        useCallback((cb: () => void) => store.subscribe(cb), [store]),
+        () => worksAsFlow(store.getState().doc.settings.kind),
+        () => false
+    );
+    const stepsOpen = useSyncExternalStore(
+        useCallback((cb: () => void) => store.subscribe(cb), [store]),
+        () => store.getState().stepsPanel,
+        () => false
+    );
+    const showSteps = flow && stepsOpen && !presenting;
+    const narrow = regionSize.w > 0 ? regionSize.w < NARROW_EDITOR : narrowWindow();
     const everything = chromeDepth === "everything";
     const leftShown = leftOpen && everything;
     // The inspector is a property sheet. With nothing selected it has no
@@ -247,6 +289,26 @@ export function MindmapEditor(props: MindmapEditorProps) {
             if (id) queueMicrotask(() => revealNode(store, id, stageSizeRef.current));
         });
     }, [store]);
+
+    // A chart that arranged itself and was just placed by hand stays where it
+    // was put; say so, with the way back.
+    useEffect(
+        () =>
+            onChartHeld(store, () =>
+                toast(t("flow.held"), {
+                    description: t("flow.heldBody"),
+                    action: {
+                        label: t("flow.arrangeAgain"),
+                        onClick: () => {
+                            setFlowLayout(store, "auto");
+                            // Arranged now: keep the chart on screen.
+                            revealPage(store, stageSizeRef.current);
+                        },
+                    },
+                })
+            ),
+        [store, t]
+    );
 
     // Persist a template that was built on open. Runs once.
     const seeded = useRef(false);
@@ -365,6 +427,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
             onEditText: (target: { kind: "node" | "edge-label"; id: string; index?: number }) =>
                 store.setEditing(target),
             onOpenComments: () => setLeftTab("comments"),
+            frameTitle: t("canvas.frameTitle"),
             // A shape placed by hand should stay where it was put, so a Move or
             // Resize ends auto-arrange — with the way back one click away.
             onGestureEnd: (label: string) => {
@@ -434,7 +497,16 @@ export function MindmapEditor(props: MindmapEditorProps) {
             const world = worldPointAt(e.clientX, e.clientY);
 
             if (shape) {
-                const node = createNodeAt(shape as ShapeId, world, { mode: docMode(store) });
+                // Dropped inside a frame, it joins the frame.
+                const holder = isContainer(shape as ShapeId)
+                    ? null
+                    : containerAt(activePage(store.getState().doc), world);
+                const dropped = createNodeAt(shape as ShapeId, world, {
+                    mode: docMode(store),
+                    parentId: holder?.id ?? null,
+                });
+                const look = flowLookOf(store.getState().doc);
+                const node = look ? dressBox(look, dropped, docMode(store)) : dropped;
                 store.updatePage(p => ({ ...p, nodes: [...p.nodes, node] }), {
                     label: "Add shape",
                 });
@@ -498,6 +570,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
                             }}
                             onToggleLeft={() => setLeftOpen(v => !v)}
                             onToggleRight={() => setRightOpen(v => !v)}
+                            onArranged={() => revealPage(store, stageSizeRef.current)}
                         />
                     )}
 
@@ -590,62 +663,116 @@ export function MindmapEditor(props: MindmapEditorProps) {
                                 className="flex min-h-0"
                             >
                                 <div
-                                    ref={stageRef}
+                                    ref={attachRegion}
                                     className="relative flex min-h-0 min-w-0 flex-1"
-                                    onDragOver={e => {
-                                        const types = e.dataTransfer.types;
-                                        if (
-                                            types.includes("application/x-launchstack-shape") ||
-                                            types.includes("Files")
-                                        ) {
-                                            e.preventDefault();
-                                            e.dataTransfer.dropEffect = "copy";
-                                        }
-                                    }}
-                                    onDrop={onDrop}
                                 >
-                                    <div className="flex min-h-0 min-w-0 flex-1" {...canvasTarget}>
-                                        <Canvas
-                                            callbacks={canvasCallbacks}
-                                            peers={presence.peers}
-                                            onCursorMove={presence.reportCursor}
+                                    {showSteps && !narrow && (
+                                        <aside
+                                            aria-label={t("flow.steps.panel.title")}
+                                            className="border-line bg-panel flex min-h-0 w-[300px] shrink-0 flex-col border-r"
                                         >
-                                            <TextEditorOverlay />
-                                        </Canvas>
-                                    </div>
-
-                                    <ConnectedStaleBanner staleBy={presence.staleBy} />
-
-                                    <SelectionToolbar
-                                        onMore={() => {
-                                            store.setChromeDepth("everything");
-                                            setRightOpen(true);
+                                            <StepsPanel canvasSize={stageSize} />
+                                        </aside>
+                                    )}
+                                    {/* Too narrow to sit beside the canvas: over it, as a
+                                    sheet scoped to this column — its ✕, Esc or a tap
+                                    on the canvas beside it closes it. */}
+                                    {flow && !presenting && narrow && (
+                                        <SheetContainerProvider container={region}>
+                                            <Sheet
+                                                open={stepsOpen}
+                                                onOpenChange={open =>
+                                                    setStepsPanelOpen(store, open)
+                                                }
+                                            >
+                                                <SheetContent
+                                                    side="left"
+                                                    aria-describedby={undefined}
+                                                    onOpenAutoFocus={e => {
+                                                        // Into the sheet, so Esc closes it, but not
+                                                        // into its lines: no keyboard pops up.
+                                                        e.preventDefault();
+                                                        region
+                                                            ?.querySelector<HTMLElement>(
+                                                                "[data-slot='sheet-content']"
+                                                            )
+                                                            ?.focus();
+                                                    }}
+                                                    className="bg-panel absolute w-[min(300px,calc(100%-48px))] gap-0 p-0 sm:max-w-none"
+                                                >
+                                                    <SheetTitle className="sr-only">
+                                                        {t("flow.steps.panel.title")}
+                                                    </SheetTitle>
+                                                    <StepsPanel canvasSize={stageSize} inSheet />
+                                                </SheetContent>
+                                            </Sheet>
+                                        </SheetContainerProvider>
+                                    )}
+                                    <div
+                                        ref={stageRef}
+                                        data-mindmap-stage=""
+                                        className="relative flex min-h-0 min-w-0 flex-1"
+                                        onDragOver={e => {
+                                            const types = e.dataTransfer.types;
+                                            if (
+                                                types.includes("application/x-launchstack-shape") ||
+                                                types.includes("Files")
+                                            ) {
+                                                e.preventDefault();
+                                                e.dataTransfer.dropEffect = "copy";
+                                            }
                                         }}
-                                    />
-                                    <EmptyCanvasHint
-                                        canvasSize={stageSize}
-                                        onPasteOutline={() => setImportOpen(true)}
-                                    />
+                                        onDrop={onDrop}
+                                    >
+                                        <div
+                                            className="flex min-h-0 min-w-0 flex-1"
+                                            {...canvasTarget}
+                                        >
+                                            <Canvas
+                                                callbacks={canvasCallbacks}
+                                                peers={presence.peers}
+                                                onCursorMove={presence.reportCursor}
+                                            >
+                                                <TextEditorOverlay />
+                                            </Canvas>
+                                        </div>
 
-                                    <FindBar
-                                        open={findOpen}
-                                        onClose={() => setFindOpen(false)}
-                                        canvasSize={stageSize}
-                                    />
+                                        <ConnectedStaleBanner staleBy={presence.staleBy} />
 
-                                    {presenting &&
-                                        (chromeDepth === "focus" ? (
-                                            <Presenter
-                                                canvasSize={stageSize}
-                                                isActive={isActive}
-                                                onExit={togglePresent}
-                                            />
-                                        ) : (
-                                            <PresentationControls
-                                                onExit={togglePresent}
-                                                onStep={stepPage}
-                                            />
-                                        ))}
+                                        <SelectionToolbar
+                                            onMore={() => {
+                                                store.setChromeDepth("everything");
+                                                setRightOpen(true);
+                                            }}
+                                        />
+                                        <EmptyCanvasHint
+                                            canvasSize={stageSize}
+                                            onPasteOutline={() => setImportOpen(true)}
+                                        />
+                                        {flow && !presenting && (
+                                            <FlowOverlay canvasSize={stageSize} />
+                                        )}
+
+                                        <FindBar
+                                            open={findOpen}
+                                            onClose={() => setFindOpen(false)}
+                                            canvasSize={stageSize}
+                                        />
+
+                                        {presenting &&
+                                            (chromeDepth === "focus" ? (
+                                                <Presenter
+                                                    canvasSize={stageSize}
+                                                    isActive={isActive}
+                                                    onExit={togglePresent}
+                                                />
+                                            ) : (
+                                                <PresentationControls
+                                                    onExit={togglePresent}
+                                                    onStep={stepPage}
+                                                />
+                                            ))}
+                                    </div>
                                 </div>
                             </ResizablePanel>
 

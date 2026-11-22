@@ -181,6 +181,46 @@ describe("MCP diagram tools", () => {
         expect(bad).toMatchObject({ ok: false, message: "Edit 1: no shape. Nothing was changed." });
     });
 
+    it("reads a flowchart as step text, and rewrites one from steps", async () => {
+        const steps = "Start\nIn stock?\n  Yes: Ship it\n  No: Reorder -> In stock?\nEnd";
+        const chart = buildDiagram({ title: "Orders", type: "flowchart", steps });
+        (loadDiagram as jest.Mock).mockResolvedValueOnce({
+            row: { id: 8, title: "Orders", folder: "" },
+            doc: chart,
+            canEdit: true,
+        });
+        const read = await call(readDiagramTool, { diagram: "m8" });
+        expect(read.ok && read.text).toContain("```steps\n" + steps + "\n```");
+        expect(read.ok && read.text).toMatch(/- In stock\? \(id: n_\w+\)/);
+        expect(read.ok && read.text).toContain("send steps");
+
+        (editDiagram as jest.Mock).mockResolvedValueOnce({
+            row: { id: 8, title: "Orders", folder: "", revision: 4 },
+            doc: chart,
+            applied: ["Redrew the flowchart from 5 steps: kept 5 of its boxes."],
+            added: [],
+        });
+        const ok = await call(editDiagramTool, { diagram: "m8", steps });
+        expect(editDiagram).toHaveBeenCalledWith(principal.ctx, 8, [{ op: "steps", text: steps }]);
+        expect(ok).toMatchObject({ ok: true, structured: { revision: 4 } });
+    });
+
+    it("draws a flowchart from steps, and teaches the language in its descriptions", async () => {
+        (createDiagram as jest.Mock).mockResolvedValueOnce({
+            row: { id: 9, title: "Orders", folder: "" },
+            doc: DOC,
+        });
+        await call(createDiagramTool, { title: "Orders", type: "flowchart", steps: "A\nB?" });
+        expect(createDiagram).toHaveBeenCalledWith(
+            principal.ctx,
+            expect.objectContaining({ spec: expect.objectContaining({ steps: "A\nB?" }) })
+        );
+        for (const tool of [readDiagramTool, createDiagramTool]) {
+            expect(tool.description).toContain("No: Reorder from supplier -> Receive the order");
+        }
+        expect(editDiagramTool.description).toContain("For a flowchart, prefer steps");
+    });
+
     it("rejects an edit with no operations before touching anything", async () => {
         const answer = await call(editDiagramTool, { diagram: "m8", edits: [] });
         expect(answer.ok).toBe(false);

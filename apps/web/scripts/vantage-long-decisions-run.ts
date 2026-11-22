@@ -10,7 +10,10 @@ import { configureSecretBox } from "@launchstack/store/crypto";
 import { resolveChatModel } from "@launchstack/llm";
 import { resolveDocumentDigestProvider } from "../src/server/vantage/document-digest-provider";
 import { explorationDocumentHandle } from "../src/server/vantage/weekly-review-topic-exploration";
-import type { TopicSelectionProviders } from "../src/server/vantage/weekly-review-topic-run";
+import {
+    prewarmTopicDigests,
+    type TopicSelectionProviders,
+} from "../src/server/vantage/weekly-review-topic-run";
 import {
     WeeklyReviewConflict,
     type WeeklyReviewDatabase,
@@ -193,12 +196,17 @@ async function main() {
               })
             : undefined;
     const meteredFetch = meter?.wrapFetch(originalFetch);
+    const digestProvider = azure
+        ? resolveDocumentDigestProvider(options =>
+              resolveChatModel({ ...options, config: azure.config, streaming: false })
+          )
+        : undefined;
     const providers: TopicSelectionProviders | undefined =
         azure && meteredFetch
             ? {
-                  digest: resolveDocumentDigestProvider(options =>
-                      resolveChatModel({ ...options, config: azure.config, streaming: false })
-                  ),
+                  digest: async () => {
+                      throw new Error("benchmark_digest_missing_after_warm_up");
+                  },
                   exploration(documents) {
                       if (
                           documents.some(doc => {
@@ -268,6 +276,74 @@ async function main() {
                 documentScope: workspace.documentScope,
             };
         };
+    };
+    const warmOfferedDigests = async () => {
+        if (!digestProvider || !meter) throw new Error("long_decisions_live_provider_missing");
+        const fixedIds = new Set(manifest.fixedSources.map(source => source.documentId));
+        const eligible = new Set<string>();
+        for (const { group } of schedule) {
+            const cutoff = manifest.weeks.find(week => week.id === group.weekId)?.cutoff;
+            if (!cutoff) throw new Error("long_decisions_unknown_reporting_week");
+            for (const document of manifest.documents) {
+                if (document.visibility !== "actor_readable" || fixedIds.has(document.id)) continue;
+                const version = document.versions
+                    .filter(item => Date.parse(item.publishedAt) < Date.parse(cutoff))
+                    .at(-1);
+                if (version) eligible.add(version.id);
+            }
+        }
+        const versionIds = [...byVersion]
+            .filter(([, stable]) => eligible.has(stable.versionId))
+            .map(([id]) => id);
+        if (versionIds.length !== eligible.size)
+            throw new Error("long_decisions_digest_inventory_invalid");
+        const loadActor = await createActor();
+        const actor = await loadActor();
+        const canReadIds = new Set(workspace.readableDocumentIds);
+        const currentEpoch = async () => {
+            const [row] = await sql`SELECT version::text FROM pdr_ai_v2_vantage_weekly_review_epochs
+                WHERE company_id=${workspace.workspaceId}::bigint`;
+            return row?.version;
+        };
+        const epoch = await currentEpoch();
+        const query: WeeklyReviewQuery = (queryText, args) =>
+            database.transaction(run => run(queryText, args));
+        const startedAt = Date.now();
+        const digestIds: string[] = [];
+        // A small batch keeps the cold digest step off the exploration clock and limits concurrent transports.
+        for (let index = 0; index < versionIds.length; index += 2) {
+            meter.assertCanDispatch();
+            const batch = versionIds.slice(index, index + 2);
+            const ready = await prewarmTopicDigests({
+                actor,
+                versionIds: batch,
+                query,
+                provider: digestProvider,
+                authorizeDocument: async document =>
+                    canReadIds.has(String(document.id)) &&
+                    (await loadActor()).canMutate &&
+                    (await currentEpoch()) === epoch,
+            });
+            if (ready.digests.size !== batch.length)
+                throw new Error("benchmark_digest_warm_up_incomplete");
+            digestIds.push(...ready.digestIds);
+        }
+        await meter.drainPending();
+        const audit = {
+            versions: versionIds.map(stableVersion),
+            digestIds,
+            elapsedMs: Date.now() - startedAt,
+            exposureUsd: meter.snapshot().projectedTotalUsd,
+        };
+        await writeJson(resolve(capture, "digest-warmup.json"), audit);
+        console.log(
+            JSON.stringify({
+                digestWarmup: digestIds.length,
+                exposureUsd: audit.exposureUsd,
+                durationMs: audit.elapsedMs,
+            })
+        );
+        return audit.exposureUsd;
     };
     await writeJson(resolve(capture, "method.json"), {
         specSha256: manifest.specSha256,
@@ -446,20 +522,19 @@ async function main() {
                 for (const arm of FREE_ARMS) rows.push(...(await runJob(job, arm)));
             await writeJson(resolve(capture, split + "-rows.json"), rows);
             if (!meter) continue;
+            if (split === "dev") exposureAfterWarmup = await warmOfferedDigests();
             for (const job of jobs) {
                 meter.assertCanDispatch();
                 const exposure = meter.snapshot().projectedTotalUsd;
                 const observedUsd =
-                    liveCases > 3 ? ((exposure - exposureAfterWarmup) / (liveCases - 1)) * 1.5 : 0;
+                    liveCases > 3 ? ((exposure - exposureAfterWarmup) / liveCases) * 1.5 : 0;
                 const predicted =
                     exposure +
-                    (liveCases === 0 ? coldDigestExposure : 0) +
                     (schedule.length - liveCases) * Math.max(explorationUnitUsd, observedUsd);
                 if (predicted > LIMIT_USD)
                     throw new Error("long_decisions_projected_budget_exceeded");
                 rows.push(...(await runJob(job, "live")));
                 await meter.drainPending();
-                if (liveCases === 0) exposureAfterWarmup = meter.snapshot().projectedTotalUsd;
                 liveCases++;
                 await writeJson(resolve(capture, split + "-rows.json"), rows);
             }

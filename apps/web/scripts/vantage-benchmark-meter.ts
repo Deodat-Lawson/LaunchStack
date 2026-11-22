@@ -748,8 +748,14 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                 await persist();
                 if (
                     hold &&
-                    !(config.allowGenerationTransportRecovery && !responses && hold === "usage_unresolved" && response.ok)
-                ) throw new Error("benchmark_meter_hold:" + hold);
+                    !(
+                        config.allowGenerationTransportRecovery &&
+                        !responses &&
+                        hold === "usage_unresolved" &&
+                        response.ok
+                    )
+                )
+                    throw new Error("benchmark_meter_hold:" + hold);
                 if (!response.ok && scoped) throw requestFailure(row, signal, retryAttempt);
                 return response;
             } catch (error) {

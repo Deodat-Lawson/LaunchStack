@@ -1,5 +1,6 @@
 import { activePage, graphIndex, isMindmapPage, topicParent } from "../model/doc";
-import { buildDiagram, DiagramSpecError, parseOutline } from "../model/generate";
+import { flowchartLook, flowchartToSteps } from "../model/flowchart";
+import { buildDiagram, DiagramSpecError, looksLikeMermaid, parseOutline } from "../model/generate";
 import { FRAME_PAPER, themeMode } from "../model/palette";
 import { parseDoc } from "../model/serialize";
 
@@ -145,7 +146,7 @@ describe("buildDiagram", () => {
         expect(() => buildDiagram({ title: "x", type: "mindmap", outline: "  " })).toThrow(
             DiagramSpecError
         );
-        expect(() => buildDiagram({ title: "x", type: "flowchart" })).toThrow(/needs `mermaid`/);
+        expect(() => buildDiagram({ title: "x", type: "flowchart" })).toThrow(/needs `steps`/);
         const huge = Array.from({ length: 300 }, (_, i) => `  - Topic ${i}`).join("\n");
         expect(() =>
             buildDiagram({ title: "x", type: "mindmap", outline: `Root\n${huge}` })
@@ -163,5 +164,119 @@ describe("generated flowchart frames", () => {
             const frame = page.nodes.find(n => n.shape === "frame")!;
             expect(frame.style.fill).toBe(FRAME_PAPER[mode].fill);
         }
+    });
+});
+
+const REFUNDS = [
+    "Start",
+    "Request a refund",
+    "Within 30 days?",
+    "  Yes: Refund the card",
+    "  No: Offer store credit -> End",
+    "Email the receipt",
+    "End",
+].join("\n");
+
+describe("flowcharts from steps", () => {
+    test("are drawn in the product look, top to bottom, on auto layout", () => {
+        for (const mode of ["light", "dark"] as const) {
+            const doc = buildDiagram(
+                { title: "Refunds", type: "flowchart", steps: REFUNDS },
+                { mode }
+            );
+            const page = activePage(doc);
+            expect(doc.settings.kind).toBe("flowchart");
+            expect(doc.settings.flowLayout).toBe("auto");
+            expect(themeMode(doc.settings.paletteId)).toBe(mode);
+            expect(page.nodes).toHaveLength(7);
+            for (const n of page.nodes) {
+                const look = flowchartLook.boxLook(n.shape, mode);
+                expect(n.style.fill).toBe(look.style.fill);
+                expect(n.style.stroke).toBe("none");
+                expect(n.textStyle.size).toBe(15);
+                expect(n.textStyle.bold).toBe(false);
+            }
+            const shape = (text: string) => page.nodes.find(n => n.text === text)!.shape;
+            expect(shape("Within 30 days?")).toBe("decision");
+            expect(shape("Start")).toBe("terminator");
+            const y = (text: string) => page.nodes.find(n => n.text === text)!.y;
+            expect(y("Start")).toBeLessThan(y("Request a refund"));
+            expect(y("Request a refund")).toBeLessThan(y("Within 30 days?"));
+            expect(page.edges.map(e => e.labels[0]?.text).filter(Boolean)).toEqual(["Yes", "No"]);
+            for (const e of page.edges)
+                expect(e.style.stroke).toBe(flowchartLook.edgeLook(mode).style.stroke);
+        }
+    });
+
+    test("read back as the steps they were written in", () => {
+        const doc = buildDiagram({ title: "Refunds", type: "flowchart", steps: REFUNDS });
+        expect(flowchartToSteps(activePage(doc)).text).toBe(REFUNDS);
+    });
+
+    test("survive the trust boundary unchanged", () => {
+        const doc = buildDiagram({ title: "Refunds", type: "flowchart", steps: REFUNDS });
+        expect(parseDoc(JSON.parse(JSON.stringify(doc)))).toEqual(doc);
+    });
+
+    test("refuse lines they cannot read, saying which and why, and draw nothing", () => {
+        let caught: unknown;
+        try {
+            buildDiagram({
+                title: "x",
+                type: "flowchart",
+                steps: "Start\nPack -> Nowhere\n  Yes: Ship",
+            });
+        } catch (error) {
+            caught = error;
+        }
+        expect(caught).toBeInstanceOf(DiagramSpecError);
+        const message = (caught as Error).message;
+        expect(message).toMatch(/Line 2 \("Pack -> Nowhere"\): "-> Nowhere" points at no step/);
+        expect(message).toMatch(/Line 3 .* is indented, but the step above it is not a question/);
+    });
+
+    test("read the text for what it is, whichever field it came in, fences and all", () => {
+        const mermaidInSteps = buildDiagram({
+            title: "x",
+            type: "flowchart",
+            steps: "flowchart LR\n A[Order] --> B{Paid?}\n B -->|yes| C[Ship]",
+        });
+        expect(mermaidInSteps.settings.flowLayout).toBe("manual");
+        expect(activePage(mermaidInSteps).nodes).toHaveLength(3);
+
+        const stepsInMermaid = buildDiagram({
+            title: "x",
+            type: "flowchart",
+            mermaid: "```\nOrder\nPaid?\n  Yes: Ship\n```",
+        });
+        expect(stepsInMermaid.settings.flowLayout).toBe("auto");
+        expect(activePage(stepsInMermaid).nodes.map(n => n.text)).toEqual([
+            "Order",
+            "Paid?",
+            "Ship",
+        ]);
+
+        expect(looksLikeMermaid("graph TD\nA-->B")).toBe(true);
+        expect(looksLikeMermaid("Start\nShip it")).toBe(false);
+    });
+
+    test("from Mermaid, keep their frames as paper and dress every box and arrow in the look", () => {
+        const doc = buildDiagram(
+            {
+                title: "x",
+                type: "flowchart",
+                mermaid:
+                    "flowchart TD\n subgraph P [Phase one]\n A([Start]) --> B{Ready?}\n end\n B -->|yes| C[Ship]",
+            },
+            { mode: "dark" }
+        );
+        const page = activePage(doc);
+        expect(page.nodes.find(n => n.shape === "frame")!.style.fill).toBe(FRAME_PAPER.dark.fill);
+        for (const n of page.nodes.filter(n => n.shape !== "frame")) {
+            expect(n.style.fill).toBe(flowchartLook.boxLook(n.shape, "dark").style.fill);
+            expect(n.style.stroke).toBe("none");
+            expect(n.textStyle.size).toBe(15);
+        }
+        expect(page.edges[0]!.style.stroke).toBe(flowchartLook.edgeLook("dark").style.stroke);
     });
 });

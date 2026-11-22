@@ -20,7 +20,7 @@
 
 import type { DiagramEdge, DiagramNode, DiagramPage } from "../types";
 import { edgeLabel, isStepNode } from "./steps";
-import { oneLine, parseSteps, type StepLine, type StepsParse } from "./syntax";
+import { oneLine, parseSteps, stepKindOf, type StepLine, type StepsParse } from "./syntax";
 
 /** Lines and the boxes they were drawn as. */
 export interface StepsBinding {
@@ -58,9 +58,12 @@ function idsForText(text: string, byLine: ReadonlyArray<string | null>): Written
 /**
  * Step boxes in text order: `order` first (the order they were last written),
  * then any others right after the step that leads into them, else at the end.
+ * With no `order` — a page never written out — the order the chart flows in
+ * ({@link flowOrder}).
  */
 function textOrder(page: DiagramPage, order: readonly string[]): DiagramNode[] {
     const steps = page.nodes.filter(nd => isStepNode(nd) && oneLine(nd.text) !== "");
+    if (order.length === 0) return flowOrder(page, steps);
     const byId = new Map(steps.map(nd => [nd.id, nd]));
     const out: DiagramNode[] = [];
     const placed = new Set<string>();
@@ -79,6 +82,64 @@ function textOrder(page: DiagramPage, order: readonly string[]): DiagramNode[] {
         else out.push(nd);
         placed.add(nd.id);
     }
+    return out;
+}
+
+/**
+ * Step boxes in the order the chart flows: from each step nothing leads into
+ * (a Start pill first), along the arrows in the order they were drawn. A
+ * decision's branches come straight after it in the order their arrows were
+ * made — Yes before No, as they were written or added — and what each branch
+ * leads on to follows the whole block, which is how the step language writes
+ * a question. Steps no arrow reaches from a beginning (a loop with no way in)
+ * follow in page order.
+ */
+function flowOrder(page: DiagramPage, steps: readonly DiagramNode[]): DiagramNode[] {
+    const byId = new Map(steps.map(nd => [nd.id, nd]));
+    const next = new Map<string, string[]>();
+    const fed = new Set<string>();
+    for (const e of page.edges) {
+        const a = e.from.nodeId;
+        const b = e.to.nodeId;
+        if (!a || !b || a === b || !byId.has(a) || !byId.has(b)) continue;
+        const list = next.get(a) ?? [];
+        if (!list.includes(b)) list.push(b);
+        next.set(a, list);
+        fed.add(b);
+    }
+
+    const out: DiagramNode[] = [];
+    const placed = new Set<string>();
+    const led = new Set<string>();
+    const place = (id: string) => {
+        placed.add(id);
+        out.push(byId.get(id)!);
+    };
+    // What a placed step leads on to.
+    const lead = (id: string) => {
+        if (led.has(id)) return;
+        led.add(id);
+        const targets = next.get(id) ?? [];
+        if (byId.get(id)!.shape !== "decision") {
+            for (const t of targets) visit(t);
+            return;
+        }
+        const block = targets.filter(t => !placed.has(t) && byId.get(t)!.shape !== "decision");
+        block.forEach(place);
+        for (const t of targets) {
+            if (block.includes(t)) lead(t);
+            else visit(t);
+        }
+    };
+    const visit = (id: string) => {
+        if (placed.has(id)) return;
+        place(id);
+        lead(id);
+    };
+
+    const beginnings = steps.filter(nd => !fed.has(nd.id));
+    const starts = beginnings.filter(nd => stepKindOf(oneLine(nd.text)) === "start");
+    for (const nd of [...starts, ...beginnings, ...steps]) visit(nd.id);
     return out;
 }
 

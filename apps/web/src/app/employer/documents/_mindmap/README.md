@@ -578,26 +578,62 @@ The editor is also something an AI can draw in. Four ways in, one engine:
 | Topic → "Expand with AI" | Subtopics for one topic (`POST /api/mindmaps/expand`), added by the editor's own commands        | `ui/useAiExpand.ts`                                           |
 
 **Models write text, never coordinates.** A model is asked for what models
-write well: an indented outline for anything tree-shaped and Mermaid for
-flowcharts. `generate.ts` turns either into an ordinary document with the
-same factories, theme painter and layouts as a map someone drew — so a
-generated map opens, edits, presents and publishes like any other, and the
-Theme picker repaints it the same way. Outlines tolerate what models
-actually send (bullets or not, headings, a plain title line over its
-bullets, Mermaid's `mindmap` syntax); Mermaid tolerates chains, `&`,
-both label forms, quoted labels and nested subgraphs.
+write well: an indented outline for anything tree-shaped, and for flowcharts
+the **step language** — the text the Steps panel shows beside a chart
+(`model/flowchart/syntax.ts`). `generate.ts` turns either into an ordinary
+document with the same factories, theme painter and layouts as a map someone
+drew — so a generated map opens, edits, presents and publishes like any
+other. Outlines tolerate what models actually send (bullets or not,
+headings, a plain title line over its bullets, Mermaid's `mindmap` syntax).
+Mermaid is still accepted for a flowchart that needs groups (subgraphs) or a
+left-to-right flow, and tolerates chains, `&`, both label forms, quoted
+labels and nested subgraphs; what the text _is_ decides how it is read,
+whichever field it arrived in, fences and all.
+
+**Flowcharts go in and out as steps.** One language for the person typing in
+the Steps panel, the agent reading and writing, and the published text, so
+an agent reads what it writes back and writes what a person would type:
+
+```
+Start
+Receive the order
+In stock?
+  Yes: Pick and pack
+  No: Reorder from supplier -> Receive the order
+Ship it
+End
+```
+
+| Way                           | What happens                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Read** (`read_diagram`)     | A page that reads as steps (`readsAsSteps`: a `kind: "flowchart"` page of flowchart symbols, or any drawing the step text says exactly) comes out as the step text in a ` ```steps ` fence, then "Boxes": each step's id as `(id: n_…)`, in line order. Then whatever the text cannot carry (`stepsGap`): arrows to notes, words on a non-branch arrow, joins the text implies that the page lacks, other shapes, frames — so nothing is hidden. A decision's branches come out in the order their arrows were made (Yes before No). Mind maps keep their outline; a graph of non-flowchart shapes (ERD, architecture) keeps the shapes-and-arrows list. |
+| **Create** (`create_diagram`) | `type: "flowchart"` with `steps`: drawn by `stepsToFlowchart` in the product look (`flowchartLook`: coloured by kind, no outline, 15px regular), top to bottom, `kind: "flowchart"`, `flowLayout: "auto"`. From Mermaid: the same look, frames kept as paper, `flowLayout: "manual"`.                                                                                                                                                                                                                                                                                                                                                                    |
+| **Rewrite** (`edit_diagram`)  | `steps`: the whole chart rewritten — the `{ op: "steps", text }` edit, drawn before any id `edits` in the same batch. Boxes whose words stay keep their id (and comments, links); new lines get new boxes; dropped lines' boxes go; notes, text marks and frames stay.                                                                                                                                                                                                                                                                                                                                                                                   |
+| **Index** (publish)           | `toMarkdownOutline(doc, { sections: true })` — what the route uploads and the Publish dialog previews — writes such a page as its step text under a one-line legend, then its notes, groups and any arrows the text does not show. The download export is unchanged.                                                                                                                                                                                                                                                                                                                                                                                     |
+
+Anything the parser cannot use (an arrow to words no step has, a branch
+under a line that is not a question, an arrow with no step to leave from)
+fails the create or the rewrite, and every problem is said back by line
+(`describeStepNotes`) — a rewrite never half-applies. `diagramToolsPrompt`
+and the MCP tool descriptions teach the language once with the example above
+(`STEPS_LANGUAGE` in `agent-edits.ts`) and tell the model to prefer steps for
+flowcharts.
 
 **Edits are operations on ids, run through the editor's commands.**
 `describeDiagram` writes the active page out with every shape's id beside its
 label as `(id: n_…)` — never in square brackets, which Ask reads as a
 citation. `edit_diagram` takes `add`, `rename`, `remove`, `move`, `connect`,
 `disconnect` and `arrange`; a topic added this way is made by `addChildTopic`,
-so it is the topic Tab would have made. A batch is all or nothing
-(`runDiagramEdits` works on a scratch `EditorStore`). On the server
-(`~/server/mindmap/agent`) the result is written only over the revision it
-read, retried once on a fresh read, and the version before is kept in the
-history as "Before an AI edit". In the editor (`applyDiagramEdits`) it lands
-as one undo entry and autosave writes it.
+so it is the topic Tab would have made. On a flowchart, a box `add` makes is
+in the product look with its kind from its words ("In stock?" a decision),
+`connect` draws the look's arrow, `rename` changes a step's kind with its
+words as typing does (`flowchartLook.afterText`), and a chart on
+`flowLayout: "auto"` takes added steps into its arrangement (`tidyChart`). A
+batch is all or nothing (`runDiagramEdits` works on a scratch `EditorStore`).
+On the server (`~/server/mindmap/agent`) the result is written only over the
+revision it read, retried once on a fresh read, and the version before is
+kept in the history as "Before an AI edit". In the editor
+(`applyDiagramEdits`) it lands as one undo entry and autosave writes it.
 
 **Access is the editor's.** Reading sees the drafts the person may open;
 creating goes through `createMindmapDraft` (no folder is their Private

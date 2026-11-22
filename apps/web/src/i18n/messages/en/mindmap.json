@@ -382,7 +382,11 @@
     "copyPresentLink": "Copy presentation link",
     "addToSources": "Add to sources",
     "unsaved": "Unsaved changes",
-    "upToDate": "Up to date"
+    "upToDate": "Up to date",
+    "steps": "Steps",
+    "stepsShowTip": "Write the chart as steps",
+    "stepsHideTip": "Hide the steps",
+    "arrangeAutomatically": "Arrange automatically"
   },
   "bottomBar": {
     "pageOptions": "{name} options",
@@ -840,11 +844,7 @@
     "enter": "<key>Enter</key> finish / next",
     "tab": "<key>Tab</key> child",
     "palette": "<key>⌘K</key> everything else",
-    "paste": "Paste an outline instead",
-    "startFlow": "Add the first step",
-    "enterFlow": "<key>Enter</key> finish",
-    "tabFlow": "<key>Tab</key> next step",
-    "pasteFlow": "Paste Mermaid or an outline instead"
+    "paste": "Paste an outline instead"
   },
   "presenter": {
     "overview": "Overview",
@@ -904,19 +904,28 @@
     "topicGone": "That topic was deleted while the suggestions were on their way.",
     "expandUndo": "Expand with AI"
   },
-  "variants": {
-    "switcher": {
-      "label": "Flowchart direction",
-      "today": "Today",
-      "hint": "Each direction starts a fresh blank flowchart."
+  "flow": {
+    "held": "This chart now stays where you put it",
+    "heldBody": "You moved a box by hand, so new steps go beside the box they follow and nothing else moves.",
+    "arrangeAgain": "Arrange automatically",
+    "branch": {
+      "yes": "Yes",
+      "no": "No"
     },
-    "a": {
-      "empty": {
-        "prompt": "Start typing your first step",
+    "empty": {
+      "title": "Start your flowchart",
+      "ghost": "Type your first step",
+      "type": "Start typing to name the first step",
+      "doubleClick": "Double-click anywhere to pick a shape",
+      "write": "Or write the steps in the panel",
+      "keys": {
         "next": "<key>Tab</key> next step",
         "branch": "<key>⇧Tab</key> branch",
         "decision": "end with <key>?</key> for a decision"
       },
+      "paste": "Paste Mermaid or an outline instead"
+    },
+    "keys": {
       "legend": {
         "title": "Keys",
         "label": "Keyboard shortcuts for drawing the chart",
@@ -928,40 +937,14 @@
         "move": "Move around",
         "remove": "Remove step"
       },
-      "keys": {
+      "caps": {
         "next": "Tab",
         "branch": "⇧Tab",
         "decision": "?",
         "remove": "Delete"
-      },
-      "branch": {
-        "yes": "Yes",
-        "no": "No"
-      },
-      "name": "Keyboard flow",
-      "blurb": "Tab and Enter draw the chart; it lays itself out top to bottom."
+      }
     },
-    "b": {
-      "pickerTitle": "Add a shape",
-      "pickerLabel": "Shape for the end of the arrow",
-      "shape": {
-        "process": "Process",
-        "decision": "Decision",
-        "terminator": "Start/End",
-        "data": "Data",
-        "document": "Document",
-        "database": "Database"
-      },
-      "arrow": {
-        "n": "Add a box above. Drag to pick a shape.",
-        "e": "Add a box to the right. Drag to pick a shape.",
-        "s": "Add a box below. Drag to pick a shape.",
-        "w": "Add a box to the left. Drag to pick a shape."
-      },
-      "name": "Quick-add arrows",
-      "blurb": "Hover a box for + arrows on every side: click to add, drag to pick."
-    },
-    "c": {
+    "pick": {
       "menu": {
         "title": "What goes here?",
         "cancel": "<key>Esc</key> to cancel",
@@ -975,16 +958,9 @@
         "data": "Data",
         "note": "Note",
         "arrow": "Just the arrow"
-      },
-      "empty": {
-        "title": "Double-click anywhere to add a step",
-        "body": "then drag from its edge to add what comes next.",
-        "start": "Choose the first shape"
-      },
-      "name": "Drop and pick",
-      "blurb": "Drag an arrow into space and pick what goes there."
+      }
     },
-    "d": {
+    "steps": {
       "panel": {
         "title": "Steps",
         "count": "{count, plural, =0 {nothing drawn yet} one {# box} other {# boxes}}",
@@ -992,7 +968,8 @@
         "placeholder": "Write one step per line, for example:\n\nStart\nTake the order\nPaid?\n  Yes: Ship it\n  No: -> Take the order\nEnd",
         "useExample": "Use an example",
         "example": "Start\nReceive the order\nCheck stock\nIn stock?\n  Yes: Pick and pack\n  No: Reorder from supplier -> Check stock\nShip and send tracking\nEnd",
-        "keys": "Tab indents a branch · Esc goes back to the chart"
+        "keys": "Tab indents a branch · Esc goes back to the chart",
+        "close": "Close the steps"
       },
       "kind": {
         "step": "Step",
@@ -1018,14 +995,7 @@
         "missingTarget": "Line {line}: no step is called “{target}”.",
         "notUnderQuestion": "Line {line}: only a question (a line ending in ?) has branches, so this is drawn as a step.",
         "arrowWithoutStep": "Line {line}: an arrow needs a step above it."
-      },
-      "hint": {
-        "title": "Write your steps on the left",
-        "body": "Each line becomes a box, and the chart draws itself.",
-        "useExample": "Or start from an example"
-      },
-      "name": "Write it, see it",
-      "blurb": "Type the steps as lines and the chart draws itself."
+      }
     }
   }
 }

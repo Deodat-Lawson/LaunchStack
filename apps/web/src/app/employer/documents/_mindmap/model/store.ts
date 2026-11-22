@@ -14,7 +14,6 @@
 
 import { activePage, updatePage } from "./doc";
 import { MAX_ZOOM, MIN_ZOOM, clamp } from "./geometry";
-import type { FlowVariantId } from "../variants/types";
 import type { SnapGuide } from "./snapping";
 import type {
     DiagramPage,
@@ -117,10 +116,11 @@ export interface EditorState {
     presenting: boolean;
     chromeDepth: ChromeDepth;
     /**
-     * The flowchart direction being tried (`variants/`), or null — always null
-     * in the product. Only the dev harness mounts the editor with one.
+     * Whether a flowchart's Steps panel is open beside the canvas. View
+     * state, like the chrome depth: the person's choice, remembered in their
+     * browser (`lib/preferences.ts`), never written to the document.
      */
-    flowVariant: FlowVariantId | null;
+    stepsPanel: boolean;
     /**
      * Branch ids shown as collapsed without being written to the document.
      * Presenting folds and unfolds through this, so a presentation never
@@ -192,7 +192,7 @@ export class EditorStore {
             saving: false,
             presenting: false,
             chromeDepth: "everything",
-            flowVariant: null,
+            stepsPanel: false,
             folded: NO_FOLDS,
             canUndo: false,
             canRedo: false,
@@ -608,8 +608,9 @@ export class EditorStore {
         this.set({ chromeDepth });
     }
 
-    setFlowVariant(flowVariant: FlowVariantId | null): void {
-        this.set({ flowVariant });
+    setStepsPanel(stepsPanel: boolean): void {
+        if (this.state.stepsPanel === stepsPanel) return;
+        this.set({ stepsPanel });
     }
 
     setFolded(ids: Iterable<string>): void {

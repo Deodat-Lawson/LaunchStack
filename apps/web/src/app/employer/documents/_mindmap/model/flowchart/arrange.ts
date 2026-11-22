@@ -1,15 +1,20 @@
 /**
- * Direction A's chart, as pure page edits: laying a chart out top to bottom,
- * the label a decision's next branch gets, taking a step out and joining the
- * line around it, and where the arrow keys go. No store, no React — the
- * look (`look.ts`) and the key handlers (`actions.ts`) both call these.
+ * A flowchart's arrangement, as pure page edits: laying a chart out top to
+ * bottom (`tidyChart`, when the document's `flowLayout` is `auto`), placing
+ * a new step beside the box it follows without moving anything (`placeAfter`,
+ * `keepPlaced`, when it is `manual`), the label a decision's next branch
+ * gets, taking a step out and joining the line around it, and where the
+ * arrow keys go. No store, no React — `model/commands.ts` and the flowchart
+ * UI (`flow/`) both call these.
  */
 
 import { graphIndex, insertEdgesBeside, nodeById, removeNodes } from "../doc";
 import { createEdge } from "../factory";
+import { nodeBounds, nodeCenter, nodesBounds, rectsIntersect } from "../geometry";
+import { sizeForText } from "../grow";
 import { layeredLayout } from "../layered";
 import { isContainer } from "../shapes";
-import type { DiagramEdge, DiagramNode, DiagramPage } from "../types";
+import type { DiagramEdge, DiagramNode, DiagramPage, Point } from "../types";
 
 /** Every step's starting size. Taller only when its words wrap. */
 export const STEP_SIZE = { w: 176, h: 56 } as const;
@@ -351,4 +356,177 @@ export function firstStep(page: DiagramPage): string | null {
         steps.find(nd => !fed.has(nd.id)) ??
         steps[0];
     return start?.id ?? null;
+}
+
+// ---------------------------------------------------------------------------
+// Placing without arranging (a hand-placed chart)
+// ---------------------------------------------------------------------------
+
+/** Which way a new step leaves the box it follows. */
+export type FlowStep = "right" | "left" | "down" | "up";
+
+/** Gap between a box and the step placed after it. */
+export const STEP_GAP = 64;
+
+/**
+ * Where a box of `size` goes after `source`, heading `dir`: one gap further
+ * along, then sideways past anything already there, so a second step fans
+ * out beside the first instead of piling onto it. Returns its centre. Only
+ * the new box is placed — nothing on the page moves.
+ */
+export function placeAfter(
+    page: DiagramPage,
+    source: DiagramNode,
+    size: { w: number; h: number },
+    dir: FlowStep
+): Point {
+    const c = nodeCenter(source);
+    const step = {
+        right: { x: 1, y: 0 },
+        left: { x: -1, y: 0 },
+        down: { x: 0, y: 1 },
+        up: { x: 0, y: -1 },
+    }[dir];
+    const reach =
+        step.x !== 0 ? source.w / 2 + STEP_GAP + size.w / 2 : source.h / 2 + STEP_GAP + size.h / 2;
+    let at = { x: c.x + step.x * reach, y: c.y + step.y * reach };
+    const aside = step.x !== 0 ? { x: 0, y: size.h + 32 } : { x: size.w + 32, y: 0 };
+    const occupied = (p: Point) =>
+        page.nodes.some(
+            nd =>
+                !nd.hidden &&
+                nd.id !== source.id &&
+                !isContainer(nd.shape) &&
+                rectsIntersect(
+                    {
+                        x: p.x - size.w / 2 - 8,
+                        y: p.y - size.h / 2 - 8,
+                        w: size.w + 16,
+                        h: size.h + 16,
+                    },
+                    nodeBounds(nd)
+                )
+        );
+    for (let i = 0; i < 24 && occupied(at); i++) at = { x: at.x + aside.x, y: at.y + aside.y };
+    return at;
+}
+
+/** `now` about `was`'s centre. */
+function centredOn(was: DiagramNode, now: DiagramNode, w: number, h: number): DiagramNode {
+    return {
+        ...now,
+        w,
+        h,
+        x: Math.round(was.x + was.w / 2 - w / 2),
+        y: Math.round(was.y + was.h / 2 - h / 2),
+    };
+}
+
+/**
+ * `after` — a page just redrawn from step text, laid out from scratch — with
+ * everything that was already on `before` put back where it was, for a chart
+ * someone placed by hand (`flowLayout: "manual"`):
+ *
+ * - a box whose words and kind are unchanged keeps its place and size;
+ * - a box whose words changed keeps its place and width and grows down for
+ *   them (never smaller), the canvas's own rule;
+ * - a box that changed kind (a question mark added) keeps its centre, at
+ *   its new kind's size;
+ * - a new box goes after the box it follows, below it and beside that
+ *   box's other steps (`placeAfter`), or below the chart when nothing leads
+ *   into it;
+ * - an arrow that was there keeps its bends and the sides it uses.
+ */
+export function keepPlaced(before: DiagramPage, after: DiagramPage): DiagramPage {
+    const old = new Map(before.nodes.map(nd => [nd.id, nd]));
+    if (old.size === 0 || after === before) return after;
+
+    const placed = new Map<string, DiagramNode>();
+    const fresh: DiagramNode[] = [];
+    for (const nd of after.nodes) {
+        const was = old.get(nd.id);
+        if (!was) {
+            fresh.push(nd);
+            continue;
+        }
+        if (was.shape !== nd.shape) {
+            placed.set(nd.id, centredOn(was, nd, nd.w, nd.h));
+        } else if (was.text === nd.text) {
+            placed.set(nd.id, { ...nd, x: was.x, y: was.y, w: was.w, h: was.h });
+        } else {
+            const grown = sizeForText({ ...was, text: nd.text }, nd.text, { keepWidth: true });
+            placed.set(nd.id, { ...nd, ...grown });
+        }
+    }
+
+    const sofar = (): DiagramPage => ({ ...after, nodes: [...placed.values()] });
+    let pending = fresh;
+    while (pending.length > 0) {
+        const waiting: DiagramNode[] = [];
+        for (const nd of pending) {
+            const into = after.edges.find(
+                e =>
+                    e.to.nodeId === nd.id &&
+                    !!e.from.nodeId &&
+                    e.from.nodeId !== nd.id &&
+                    placed.has(e.from.nodeId)
+            );
+            if (!into) {
+                waiting.push(nd);
+                continue;
+            }
+            const c = placeAfter(sofar(), placed.get(into.from.nodeId!)!, nd, "down");
+            placed.set(nd.id, {
+                ...nd,
+                x: Math.round(c.x - nd.w / 2),
+                y: Math.round(c.y - nd.h / 2),
+            });
+        }
+        if (waiting.length === pending.length) {
+            // Nothing placed leads into any of them: the first goes below the
+            // chart, and the rest can follow it.
+            const nd = waiting.shift()!;
+            const bounds = nodesBounds([...placed.values()]);
+            placed.set(
+                nd.id,
+                bounds
+                    ? {
+                          ...nd,
+                          x: Math.round(bounds.x + bounds.w / 2 - nd.w / 2),
+                          y: Math.round(bounds.y + bounds.h + STEP_GAP),
+                      }
+                    : nd
+            );
+        }
+        pending = waiting;
+    }
+
+    const oldEdges = new Map(before.edges.map(e => [e.id, e]));
+    return {
+        ...after,
+        nodes: after.nodes.map(nd => placed.get(nd.id) ?? nd),
+        edges: after.edges.map(e => {
+            const was = oldEdges.get(e.id);
+            if (!was || was.from.nodeId !== e.from.nodeId || was.to.nodeId !== e.to.nodeId) {
+                return e;
+            }
+            return { ...e, from: was.from, to: was.to, waypoints: was.waypoints };
+        }),
+    };
+}
+
+/**
+ * Every chart on the page laid out top to bottom, each from where its own
+ * first step is (`tidyChart` per chart). Boxes joined to nothing stay put.
+ */
+export function tidyAll(page: DiagramPage): DiagramPage {
+    let next = page;
+    const done = new Set<string>();
+    for (const nd of page.nodes) {
+        if (done.has(nd.id)) continue;
+        const chart = chartOf(next, [nd.id]);
+        for (const id of chart) done.add(id);
+        if (chart.length > 1) next = tidyChart(next, chart);
+    }
+    return next;
 }

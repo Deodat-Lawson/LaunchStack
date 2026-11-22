@@ -63,12 +63,17 @@ describe("the empty-board prompt", () => {
     });
 
     it.each(["light", "dark"] as const)(
-        "on a flowchart offers the first step, at full chrome too, on a %s board",
+        "on a flowchart offers the three ways to start, at full chrome too, on a %s board",
         board => {
             mount(board, "flowchart");
             expect(screen.queryByRole("button", { name: "Type your idea" })).toBeNull();
-            const prompt = screen.getByRole("button", { name: "Add the first step" });
-            expect(prompt.closest("[data-paper]")).toHaveAttribute("data-paper", board);
+            const ghost = screen.getByRole("button", { name: "Type your first step" });
+            expect(ghost.closest("[data-paper]")).toHaveAttribute("data-paper", board);
+            const card = ghost.closest("[data-flow-empty-card]")!;
+            // Opaque, in the paper's own panel colour.
+            expect(card.className).toContain("bg-panel");
+            expect(card).toHaveTextContent("Double-click anywhere to pick a shape");
+            expect(card).toHaveTextContent("Or write the steps in the panel");
             expect(screen.getByText("next step")).toBeInTheDocument();
         }
     );

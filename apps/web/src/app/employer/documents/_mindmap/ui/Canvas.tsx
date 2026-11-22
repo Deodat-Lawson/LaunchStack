@@ -27,7 +27,7 @@ import type { PresencePeer } from "./usePresence";
 import { NodePorts, SelectionOverlay } from "./SelectionOverlay";
 import { CanvasDefs, ShapeView, useCanvasIdScope } from "./ShapeView";
 import { useCanvasInteractions, type CanvasCallbacks } from "./useCanvasInteractions";
-import { useFlowVariantUi } from "../variants";
+import { GhostLayer } from "../flow";
 import { useElementSize } from "./useElementSize";
 import styles from "./Canvas.module.css";
 
@@ -114,7 +114,6 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
     const labelTs = useMemo(() => placeLabels(edges, routed), [edges, routed]);
 
     const flow = worksAsFlow(doc.settings.kind);
-    const VariantLayer = useFlowVariantUi()?.CanvasLayer;
     const childCounts = useMemo(() => {
         const idx = graphIndex(page);
         const counts = new Map<string, number>();
@@ -391,8 +390,9 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
                             ))}
                         </g>
 
-                        {/* A flowchart direction being tried draws its own marks here. */}
-                        {VariantLayer && <VariantLayer />}
+                        {/* On a flowchart, the preview of a pick from the "What goes
+                            here?" menu. */}
+                        {flow && <GhostLayer />}
 
                         <EdgeHandles
                             edges={edges.filter(e => selectedEdgeIds.has(e.id))}

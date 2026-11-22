@@ -7,6 +7,7 @@ import {
     setDiagramKind,
 } from "../model/commands";
 import { activePage, stepsFrom, worksAsFlow } from "../model/doc";
+import { flowchartLook } from "../model/flowchart/look";
 import { createDoc, createEdge, createNode, createPage } from "../model/factory";
 import { nodeBounds, rectsIntersect } from "../model/geometry";
 import { EditorStore } from "../model/store";
@@ -44,23 +45,33 @@ describe("which documents work as flowcharts", () => {
 });
 
 describe("Tab on a flowchart: the next step", () => {
-    it("is the same shape and colours, to the right, joined by an arrow", () => {
+    it("is a step in the flowchart look, below, joined by an arrow", () => {
         const a = createNode({ shape: "process", x: 0, y: 0, w: 160, h: 70, text: "Write" });
         a.style = { ...a.style, fill: "oklch(0.9 0.05 200)", stroke: "oklch(0.5 0.1 200)" };
         const store = storeWith("flowchart", [a]);
         const id = addNextStep(store, a.id)!;
         const next = node(store, id);
         expect(next.shape).toBe("process");
-        expect(next.style.fill).toBe(a.style.fill);
+        expect(next.style.fill).toBe(flowchartLook.boxLook("process", "light").style.fill);
         expect(next.text).toBe("");
-        expect(next.x).toBeGreaterThan(a.x + a.w);
-        expect(next.y + next.h / 2).toBeCloseTo(a.y + a.h / 2);
+        expect(next.y).toBeGreaterThan(a.y + a.h);
+        expect(next.x + next.w / 2).toBeCloseTo(a.x + a.w / 2);
         const edge = page(store).edges.find(e => e.to.nodeId === id)!;
         expect(edge.from.nodeId).toBe(a.id);
-        expect(edge.endArrow).not.toBe("none");
+        expect(edge).toMatchObject({ kind: "elbow", endArrow: "arrow" });
         // Straight into its label, selected.
         expect(store.getState().editing).toMatchObject({ kind: "node", id });
         expect(store.selectedNodeIds()).toEqual([id]);
+    });
+
+    it("on a freeform drawing, is the same shape and colours, to the right", () => {
+        const a = createNode({ shape: "process", x: 0, y: 0, w: 160, h: 70, text: "Write" });
+        a.style = { ...a.style, fill: "oklch(0.9 0.05 200)", stroke: "oklch(0.5 0.1 200)" };
+        const store = storeWith("freeform", [a]);
+        const next = node(store, addNextStep(store, a.id)!);
+        expect(next.style.fill).toBe(a.style.fill);
+        expect(next.x).toBeGreaterThan(a.x + a.w);
+        expect(next.y + next.h / 2).toBeCloseTo(a.y + a.h / 2);
     });
 
     it("carries on the way the line came in", () => {
@@ -84,19 +95,24 @@ describe("Tab on a flowchart: the next step", () => {
         expect(rectsIntersect(nodeBounds(first), nodeBounds(second))).toBe(false);
     });
 
-    it("copies the look of the arrows already there", () => {
+    it("on a freeform drawing, copies the look of the arrows already there", () => {
         const a = createNode({ shape: "process", x: 0, y: 0 });
         const b = createNode({ shape: "process", x: -300, y: 0 });
         const into: DiagramEdge = {
             ...createEdge({ from: { nodeId: b.id }, to: { nodeId: a.id }, kind: "curved" }),
         };
         into.style = { ...into.style, stroke: "oklch(0.5 0.15 30)", strokeWidth: 3 };
-        const store = storeWith("flowchart", [a, b], [into]);
+        const store = storeWith("freeform", [a, b], [into]);
         const id = addNextStep(store, a.id)!;
         const edge = page(store).edges.find(e => e.to.nodeId === id)!;
         expect(edge.kind).toBe("curved");
         expect(edge.style.stroke).toBe("oklch(0.5 0.15 30)");
         expect(edge.style.strokeWidth).toBe(3);
+        // On a flowchart every new arrow is the flowchart's.
+        const flow = storeWith("flowchart", [a, b], [into]);
+        const madeId = addNextStep(flow, a.id);
+        const made = page(flow).edges.find(e => e.to.nodeId === madeId)!;
+        expect(made).toMatchObject({ kind: "elbow", style: { strokeWidth: 1.5 } });
     });
 
     it("is one undo step", () => {
@@ -115,7 +131,8 @@ describe("Tab on a flowchart: the next step", () => {
         const edge = page(store).edges.find(e => e.to.nodeId === id)!;
         // A topic child would hang off a line with no arrowhead.
         expect(edge.endArrow).not.toBe("none");
-        expect(node(store, id).x).toBeGreaterThan(t.x + t.w);
+        expect(node(store, id).shape).toBe("process");
+        expect(node(store, id).y).toBeGreaterThan(t.y + t.h);
     });
 });
 

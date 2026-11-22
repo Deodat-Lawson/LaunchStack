@@ -21,6 +21,7 @@ import {
 import {
     docMode,
     edgesMovingWith,
+    holdChartInPlace,
     insertEdge,
     insertShape,
     removeBend,
@@ -51,8 +52,8 @@ import { angleFromCentre, resizeBounds, resizeNode, type ResizeHandle } from "..
 import { computeSnap, SNAP_THRESHOLD } from "../model/snapping";
 import type { EditorStore } from "../model/store";
 import { useIsActive } from "./EditorContext";
-import { flowVariantUi } from "../variants";
-import { activeFlowLook, dressBox, edgeOptions } from "../variants/looks";
+import { flowUiFor } from "../flow";
+import { dressBox, edgeOptions, flowLookOf } from "../model/flowchart/look";
 import type {
     DiagramEdge,
     DiagramNode,
@@ -1289,6 +1290,10 @@ export function useCanvasInteractions(
                 case "move": {
                     store.setGuides([]);
                     if (g.moved) reparentIntoContainers(store, g.ids);
+                    // A box moved by hand on a chart that arranges itself: the
+                    // chart stays where it is put from now on, and that is part
+                    // of this move's undo step.
+                    if (g.moved) holdChartInPlace(store);
                     const settled = store.endInteraction();
                     if (settled) cb.current.onGestureEnd?.(settled);
                     break;
@@ -1372,7 +1377,7 @@ export function useCanvasInteractions(
                             w: rect.w,
                             h: rect.h,
                         });
-                        const look = activeFlowLook(store.getState());
+                        const look = flowLookOf(store.getState().doc);
                         const node = look
                             ? dressBox(look, drawn, docMode(store), { keepSize: true })
                             : drawn;
@@ -1511,12 +1516,12 @@ export function useCanvasInteractions(
                 });
                 return;
             }
-            // Empty canvas: drop a box where they clicked and start typing — a
-            // topic on a mindmap, a process step on a flowchart.
+            // Empty canvas: on a flowchart, the "What goes here?" menu opens
+            // there; on a mindmap, a topic is dropped where they clicked, and
+            // typing starts.
             const world = toWorld(e.clientX, e.clientY);
-            const variant = flowVariantUi(store);
             if (
-                variant?.onCanvasDoubleClick?.(store, {
+                flowUiFor(store)?.onCanvasDoubleClick(store, {
                     world,
                     screen: stagePoint(svgRef.current, state.viewport, world),
                 })
@@ -1524,7 +1529,7 @@ export function useCanvasInteractions(
                 return;
             }
             const flow = worksAsFlow(state.doc.settings.kind);
-            const look = activeFlowLook(state);
+            const look = flowLookOf(state.doc);
             const made = createNodeAt(
                 look ? look.stepShape : flow ? "process" : "mind-branch",
                 world,
@@ -1738,35 +1743,27 @@ function finishConnect(
         world.x <= home.x + home.w + reach &&
         world.y >= home.y - reach &&
         world.y <= home.y + home.h + reach;
-    const variant = flowVariantUi(store);
+    const flow = flowUiFor(store);
     if (!targetNodeId) {
         const click = !g.moved || (fromDot && travelled < MIN_CONNECT_DRAG);
         if (click || backHome) {
             store.cancelInteraction();
-            // A direction being tried may answer a plain click on a dot (or
-            // on its own marks carrying `data-port`).
-            if (click && fromNodeId && variant?.onPortClick?.(store, fromNodeId, g.fromPort)) {
-                return null;
-            }
             if (fromDot && source) store.selectNodes([source.id]);
             return null;
         }
-        if (fromDot && source?.shape.startsWith("mind-")) {
-            created = nextTopicLike(store, source, world);
-            targetNodeId = created.id;
-        } else if (fromNodeId && variant?.onConnectDropInSpace) {
-            // An arrow let go over empty space: the direction decides what
-            // goes there. The drag is undone first, so whatever it makes is
-            // its own undo step; declining leaves the editor's dangling arrow.
+        if (fromNodeId && flow) {
+            // An arrow let go over empty space on a flowchart: the "What goes
+            // here?" menu opens there. The drag is undone first, so whatever
+            // it makes is its own undo step; dismissing it leaves nothing.
             store.cancelInteraction();
-            const handled = variant.onConnectDropInSpace(store, {
+            const handled = flow.onConnectDropInSpace(store, {
                 sourceId: fromNodeId,
                 port: g.fromPort,
                 world,
                 screen: toStage(world),
             });
             if (!handled) {
-                const look = activeFlowLook(store.getState());
+                const look = flowLookOf(store.getState().doc);
                 insertEdge(
                     store,
                     createEdge({
@@ -1778,6 +1775,10 @@ function finishConnect(
                 );
             }
             return null;
+        }
+        if (fromDot && source?.shape.startsWith("mind-")) {
+            created = nextTopicLike(store, source, world);
+            targetNodeId = created.id;
         }
     }
 
@@ -1791,7 +1792,7 @@ function finishConnect(
     // is (pinned too, a drop on the near dot of a box behind it made the line
     // leave by the far side and U-turn round its own box).
     const pinned = targetNodeId !== null && created === null && hoverPort !== null;
-    const look = activeFlowLook(state);
+    const look = flowLookOf(state.doc);
     const edge = createEdge({
         from: fromNodeId ? { nodeId: fromNodeId, port: "auto" } : { point: g.origin },
         to: targetNodeId

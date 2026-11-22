@@ -118,10 +118,15 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
             >
                 {PICKER.map(id => SWATCH_BY_ID[id]!).map(sw => {
                     const tone = swatchFor(sw.id, mode);
-                    // A central topic wears its hue as the fill, not the outline.
-                    const worn =
-                        first.shape === "mind-root" ? first.style.fill : first.style.stroke;
-                    const active = worn === tone.stroke;
+                    // A central topic wears its hue as the fill, not the outline;
+                    // so does a flowchart box, which has no outline at all.
+                    const byFill =
+                        first.shape === "mind-root" ||
+                        first.style.stroke === "none" ||
+                        first.style.strokeWidth === 0;
+                    const active = byFill
+                        ? first.style.fill === (first.shape === "mind-root" ? tone.stroke : tone.fill)
+                        : first.style.stroke === tone.stroke;
                     const name = swatchName(t, sw);
                     return (
                         <Tip key={sw.id} label={name}>

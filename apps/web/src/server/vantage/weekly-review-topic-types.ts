@@ -18,6 +18,7 @@ export const TOPIC_FIRST_LIMITS = Object.freeze({
     judgeMs: 120000,
     expirySeconds: 210,
 });
+export type TopicEvidenceStrategy = "live-docs+windows";
 export type TopicProvider = "seeds" | "scripted" | "configured";
 export type TopicSeedReason = "watch" | "carryover" | "question" | "change" | "lane" | "recency";
 export type TopicOffer = {
@@ -40,7 +41,11 @@ export type TopicManifest = {
     asOf: string;
     epoch: string;
     expectedActiveId: string | null;
-    configuration: { provider: TopicProvider; scoped: boolean };
+    configuration: {
+        provider: TopicProvider;
+        scoped: boolean;
+        evidenceStrategy?: TopicEvidenceStrategy;
+    };
     revisions: { policy: number; preference: number; role: number | null };
     topics: PersonalTopic[];
     fixed: TopicFixed[];
@@ -72,4 +77,14 @@ export function topicFirstProvider(env = process.env): TopicProvider | null {
     if (injected && (provider === "scripted" || provider === "seeds")) return provider;
     if (!injected && provider === "configured") return provider;
     throw new Error("topic_first_provider_invalid");
+}
+
+/** Optional frozen-evidence policy, captured with the run manifest before reservation. */
+export function topicFirstEvidenceStrategy(
+    env: Record<string, string | undefined> = process.env
+): TopicEvidenceStrategy | undefined {
+    const value = env.VANTAGE_TOPIC_FIRST_EVIDENCE_STRATEGY;
+    if (value === undefined || value === "") return undefined;
+    if (value === "live-docs+windows") return value;
+    throw new Error("topic_first_evidence_strategy_invalid");
 }

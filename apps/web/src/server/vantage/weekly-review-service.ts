@@ -26,7 +26,11 @@ import {
     prewarmTopicDigests,
     resolveTopicSelectionProviders,
 } from "./weekly-review-topic-run";
-import { TOPIC_FIRST_LIMITS, topicFirstProvider } from "./weekly-review-topic-types";
+import {
+    TOPIC_FIRST_LIMITS,
+    topicFirstProvider,
+    topicFirstEvidenceStrategy,
+} from "./weekly-review-topic-types";
 import { weeklyReviewTestPorts } from "./weekly-review-test-provider";
 import {
     dynamicRetrievalConfiguration,
@@ -142,6 +146,11 @@ export async function generateWeeklyReview(
           })
         : await authority.collectWeeklyReviewContext(actor, args.weekStart, identity);
     const seed = context.topicSeed;
+    if (seed) {
+        const evidenceStrategy = topicFirstEvidenceStrategy();
+        if (evidenceStrategy)
+            seed.manifest.configuration = { ...seed.manifest.configuration, evidenceStrategy };
+    }
     const current = { ...actor, authorityEpoch: context.authorityEpoch };
     let input: WeeklyReviewInput = {
         candidateId: context.inputIdentity?.candidateId ?? randomUUID(),

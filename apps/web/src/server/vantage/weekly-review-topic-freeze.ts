@@ -13,6 +13,7 @@ import {
     topicManifestHash,
     type TopicOffer,
     type TopicSeed,
+    type TopicEvidenceStrategy,
 } from "./weekly-review-topic-types";
 import {
     WeeklyReviewConflict,
@@ -29,10 +30,14 @@ export type TopicFreezeOptions = {
     evidenceCapBytes?: number;
     backfill?: boolean;
     seedWindows?: boolean;
+    strategy?: TopicEvidenceStrategy;
+    /** Benchmark-only snapshots from the same charged selection; no exploration rerun. */
+    compareVariants?: boolean;
 };
 export type TopicFreeze = {
     /** Present only for a backfill fit, before any additional sources were admitted. */
     primary?: TopicFreeze;
+    comparisons?: { live: TopicFreeze; liveBackfill: TopicFreeze };
     input: WeeklyReviewInput;
     dependencies: FrozenDependency[];
     summary: Pick<TopicRetrievalContext, "mode" | "lane" | "seedReasons" | "degradation"> & {
@@ -68,6 +73,19 @@ export async function fitTopicEvidence(
     if (![8000, 16000, 32000, 80000].includes(evidenceCapBytes))
         throw new WeeklyReviewConflict("topic_evidence_cap_invalid");
     const { manifest, context } = seed;
+    const strategy = options.strategy ?? manifest.configuration.evidenceStrategy;
+    if (strategy !== undefined && strategy !== "live-docs+windows")
+        throw new WeeklyReviewConflict("topic_evidence_strategy_invalid");
+    if (
+        options.strategy &&
+        manifest.configuration.evidenceStrategy &&
+        options.strategy !== manifest.configuration.evidenceStrategy
+    )
+        throw new WeeklyReviewConflict("topic_evidence_strategy_mismatch");
+    const boundedVariants = strategy === "live-docs+windows" || options.compareVariants === true;
+    let authorizedReads = 0,
+        acquiredParentBytes = 0;
+    const authorizedScopes = new Map<string, Awaited<ReturnType<typeof read>>>();
     const degradation = result?.degradation;
     const seedWindows = result === null && options.seedWindows === true;
     const offered = new Map(seed.documents.map(document => [document.ref, document]));
@@ -174,13 +192,27 @@ export async function fitTopicEvidence(
                 excerptHash: canonicalTextHash(document.text.slice(start, end)),
             })),
         };
-        const next = await read(
-            document.id,
-            document.purpose,
-            manifest.cutoff,
-            scope,
-            "topic-first:" + topicManifestHash(manifest)
-        );
+        const cacheKey = JSON.stringify([ref, scope]);
+        let next = boundedVariants ? authorizedScopes.get(cacheKey) : undefined;
+        if (!next) {
+            const parentBytes = Buffer.byteLength(document.text, "utf8");
+            if (
+                boundedVariants &&
+                (authorizedReads >= TOPIC_FIRST_LIMITS.offered ||
+                    acquiredParentBytes + parentBytes > TOPIC_FIRST_LIMITS.loadedParentBytes)
+            )
+                return false;
+            authorizedReads++;
+            acquiredParentBytes += parentBytes;
+            next = await read(
+                document.id,
+                document.purpose,
+                manifest.cutoff,
+                scope,
+                "topic-first:" + topicManifestHash(manifest)
+            );
+            if (boundedVariants) authorizedScopes.set(cacheKey, next);
+        }
         if (
             next.descriptor.audience !== document.audience ||
             next.descriptor.versionDate !== document.versionDate
@@ -273,16 +305,130 @@ export async function fitTopicEvidence(
             ...(degradation ? { degradation } : {}),
         },
     });
-    const primary = options.backfill ? snapshot() : undefined;
-    if (options.backfill && !degradation) {
+    const live = snapshot();
+    const restore = (frozen: TopicFreeze) => {
+        sources = [...frozen.input.sources] as WeeklyReviewSource[];
+        proofs = [...(frozen.input.scopedEvidence ?? [])];
+        dependencies.splice(0, dependencies.length, ...frozen.dependencies);
+        seedReasons.splice(0, seedReasons.length, ...frozen.summary.seedReasons);
+        Object.assign(lane, frozen.summary.lane);
+        admitted.clear();
+        for (const descriptor of proofs)
+            admitted.add(`doc:${descriptor.documentId}@${descriptor.parentVersion}`);
+    };
+    const fillSeeds = async () => {
         for (const document of seed.documents) {
             if (sources.length >= 16) break;
             if (admitted.has(document.ref)) continue;
             if (await addLexicalWindow(document.ref, false)) admitted.add(document.ref);
         }
+    };
+    let hybrid: TopicFreeze | undefined;
+    if (strategy === "live-docs+windows" && !degradation) {
+        restore(live);
+        // Bounded planning over pinned text only. At most one authorized upgrade per
+        // chosen parent; no repeated full refits or reader calls while tuning a window.
+        for (const [ref, original] of selections) {
+            const document = offered.get(ref)!;
+            const existingSources = sources.filter(
+                source =>
+                    source.id === document.id &&
+                    source.version === document.version &&
+                    source.purpose === document.purpose
+            );
+            // The lane may have admitted a default span even when the model's
+            // selection has no spans. Every already-frozen range stays protected.
+            const protectedRanges = mergeTopicSpans(
+                [
+                    ...original,
+                    ...proofs
+                        .filter(
+                            proof =>
+                                proof.documentId === document.id &&
+                                proof.parentVersion === document.version &&
+                                proof.purpose === document.purpose
+                        )
+                        .flatMap(proof => proof.units.map(({ start, end }) => ({ start, end }))),
+                ],
+                document.text
+            );
+            const priorBytes = evidenceBytes(existingSources);
+            const availableBytes = evidenceCapBytes - evidenceBytes() + priorBytes;
+            const availableUnits = 16 - sources.length + existingSources.length;
+            let allowance = availableBytes;
+            let candidate: Span[] | null = null;
+            for (let attempt = 0; attempt < 6 && allowance >= 200; attempt++) {
+                const window = lexicalBackfillSpan(document.text, manifest.topics, allowance);
+                if (!window) break;
+                try {
+                    const merged = mergeTopicSpans([...protectedRanges, window], document.text);
+                    const bytes = merged.reduce(
+                        (sum, span) =>
+                            sum +
+                            Buffer.byteLength(document.text.slice(span.start, span.end), "utf8"),
+                        0
+                    );
+                    if (
+                        merged.length <= availableUnits &&
+                        bytes <= availableBytes &&
+                        JSON.stringify(merged) !== JSON.stringify(protectedRanges)
+                    ) {
+                        candidate = merged;
+                        break;
+                    }
+                } catch (error) {
+                    if (
+                        !(error instanceof WeeklyReviewConflict) ||
+                        error.message !== "topic_exploration_failed:range_invalid"
+                    )
+                        throw error;
+                }
+                allowance = Math.floor(allowance / 2);
+            }
+            if (!candidate) continue;
+            const before = snapshot();
+            const priorRefs = new Set(existingSources.map(source => source.ref));
+            sources = sources.filter(source => !priorRefs.has(source.ref));
+            proofs = proofs.filter(
+                proof =>
+                    !(
+                        proof.documentId === document.id &&
+                        proof.parentVersion === document.version &&
+                        proof.purpose === document.purpose
+                    )
+            );
+            for (let index = dependencies.length - 1; index >= 0; index--) {
+                const dependency = dependencies[index]!;
+                if (
+                    dependency.kind === "scoped-document" &&
+                    dependency.id === document.id &&
+                    dependency.version === document.version &&
+                    dependency.purpose === document.purpose
+                )
+                    dependencies.splice(index, 1);
+            }
+            for (let index = seedReasons.length - 1; index >= 0; index--)
+                if (priorRefs.has(seedReasons[index]!.ref)) seedReasons.splice(index, 1);
+            if (await addDocument(ref, candidate, ref === laneRef)) admitted.add(ref);
+            else restore(before);
+        }
+        await fillSeeds();
+        hybrid = snapshot();
     }
-    const frozen = snapshot();
-    return primary ? { ...frozen, primary } : frozen;
+    // Comparison work follows the hybrid so it cannot consume that strategy's
+    // acquisition allowance or alter its result. Identical scopes reuse one read.
+    let liveBackfill: TopicFreeze | undefined;
+    if (options.backfill || options.compareVariants) {
+        restore(live);
+        if (!degradation) await fillSeeds();
+        liveBackfill = snapshot();
+    }
+    const frozen = hybrid ?? (options.backfill ? liveBackfill! : live);
+    const primary = options.backfill ? live : undefined;
+    const comparisons = options.compareVariants
+        ? { live, liveBackfill: liveBackfill ?? live }
+        : undefined;
+    return { ...frozen, ...(primary ? { primary } : {}), ...(comparisons ? { comparisons } : {}) };
 }
 
 export function matchesOffer(offer: TopicOffer, dependency: FrozenDependency) {

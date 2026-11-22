@@ -1,5 +1,9 @@
 import { fitTopicEvidence, mergeTopicSpans } from "~/server/vantage/weekly-review-topic-freeze";
-import type { TopicSeed } from "~/server/vantage/weekly-review-topic-types";
+import {
+    topicFirstEvidenceStrategy,
+    topicManifestHash,
+    type TopicSeed,
+} from "~/server/vantage/weekly-review-topic-types";
 import type { createScopedSourceReader } from "~/server/vantage/weekly-review-scoped-selection";
 import type { PreparedTopicSelection } from "~/server/vantage/weekly-review-topic-run";
 import { TopicRetrievalContextSchema } from "@launchstack/pipelines/vantage/topic-retrieval-v1";
@@ -347,4 +351,192 @@ it("normalizes a generated seed excerpt before the 6000-unit surrogate boundary"
             ]),
         ])
     );
+});
+
+async function hybridFixture() {
+    const seed = fixture();
+    const chosen = seed.documents[0]!;
+    chosen.text =
+        "uncovered filler ".repeat(800) + " launch acceptance evidence " + "tail ".repeat(1200);
+    const extra = {
+        ...chosen,
+        id: "3",
+        version: "3",
+        ref: "doc:3@3",
+        title: "Seed backfill",
+        text: "seed filler ".repeat(800) + " launch seed evidence " + "tail ".repeat(1000),
+    };
+    seed.documents = [extra, chosen];
+    seed.manifest.offered = seed.documents;
+    seed.manifest.topics = [
+        {
+            id: "topic",
+            revision: 1,
+            title: "Launch",
+            openQuestions: ["What changed launch acceptance?"],
+            keywords: [],
+            decisionChangers: [],
+            people: [],
+            metrics: [],
+            status: "active",
+            watches: [],
+        },
+    ];
+    seed.manifest.configuration.evidenceStrategy = "live-docs+windows";
+    const readers = new Map(
+        await Promise.all(seed.documents.map(async d => [d.id, await authorizedReader(d)] as const))
+    );
+    const read = jest.fn<
+        ReturnType<ReturnType<typeof createScopedSourceReader>>,
+        Parameters<ReturnType<typeof createScopedSourceReader>>
+    >((...args) => readers.get(args[0])!(...args));
+    const result = {
+        selected: [{ ref: chosen.ref, topicIds: ["topic"], spans: [{ start: 0, end: 400 }] }],
+    };
+    return { seed, chosen, extra, read, result };
+}
+it("pins hybrid opt-in in the manifest hash and rejects unknown strategies", () => {
+    const seed = fixture(),
+        plain = topicManifestHash(seed.manifest);
+    expect(topicFirstEvidenceStrategy({})).toBeUndefined();
+    expect(
+        topicFirstEvidenceStrategy({ VANTAGE_TOPIC_FIRST_EVIDENCE_STRATEGY: "live-docs+windows" })
+    ).toBe("live-docs+windows");
+    expect(() =>
+        topicFirstEvidenceStrategy({ VANTAGE_TOPIC_FIRST_EVIDENCE_STRATEGY: "other" })
+    ).toThrow("strategy_invalid");
+    seed.manifest.configuration.evidenceStrategy = "live-docs+windows";
+    expect(topicManifestHash(seed.manifest)).not.toBe(plain);
+});
+it("compares three freezes from one selection and preserves uncovered original ranges", async () => {
+    const { seed, chosen, read, result } = await hybridFixture();
+    const frozen = await fitTopicEvidence("run", seed, result, read, {
+        evidenceCapBytes: 8000,
+        compareVariants: true,
+    });
+    const plain = frozen.comparisons!.live,
+        backfill = frozen.comparisons!.liveBackfill;
+    expect(plain.input.sources.map(s => s.text).join("")).not.toContain("launch");
+    expect(backfill.input.sources.map(s => s.text).join("")).toContain("launch seed evidence");
+    expect(
+        frozen.input.sources
+            .filter(s =>
+                frozen.input.scopedEvidence?.some(
+                    p => p.documentId === chosen.id && p.units.some(u => u.ref === s.ref)
+                )
+            )
+            .map(s => s.text)
+            .join("")
+    ).toContain("launch acceptance evidence");
+    for (const variant of [plain, backfill, frozen]) {
+        expect(variant.input.sources[0]).toEqual(seed.context.sources[0]);
+        expect(
+            variant.input.sources.some(source => source.text.includes(chosen.text.slice(0, 400)))
+        ).toBe(true);
+        expect(variant.input.sources.length).toBeLessThanOrEqual(16);
+        expect(
+            variant.input.sources.reduce((n, source) => n + Buffer.byteLength(source.text), 0)
+        ).toBeLessThanOrEqual(8000);
+    }
+    const stamps = read.mock.calls.map(call => JSON.stringify([call[0], call[3]]));
+    expect(new Set(stamps).size).toBe(stamps.length);
+    expect(read.mock.calls.filter(call => call[0] === chosen.id)).toHaveLength(2);
+    const unpaired = await fitTopicEvidence("run", seed, result, read, { evidenceCapBytes: 8000 });
+    expect(unpaired.input).toEqual(frozen.input);
+});
+it("gives chosen-document windows priority over seed backfill and bounds authorized reads", async () => {
+    const { seed, chosen, extra, read, result } = await hybridFixture();
+    seed.context.sources[0]!.text = "f".repeat(5000);
+    const frozen = await fitTopicEvidence("run", seed, result, read, { evidenceCapBytes: 8000 });
+    expect(
+        frozen.input.sources
+            .filter(source =>
+                frozen.input.scopedEvidence?.some(
+                    p => p.documentId === chosen.id && p.units.some(u => u.ref === source.ref)
+                )
+            )
+            .map(s => s.text)
+            .join("")
+    ).toContain("launch acceptance evidence");
+    expect(read.mock.calls.filter(call => call[0] === chosen.id)).toHaveLength(2);
+    expect(read.mock.calls.slice(0, 2).map(call => call[0])).toEqual([chosen.id, chosen.id]);
+    expect(read.mock.calls.filter(call => call[0] === extra.id).length).toBeLessThanOrEqual(1);
+    expect(read.mock.calls.length).toBeLessThanOrEqual(3);
+    expect(
+        frozen.input.sources.reduce((n, source) => n + Buffer.byteLength(source.text), 0)
+    ).toBeLessThanOrEqual(8000);
+});
+it("never expands degraded reads even when hybrid and comparisons are requested", async () => {
+    const { seed, chosen, read, result } = await hybridFixture();
+    const frozen = await fitTopicEvidence("run", seed, { ...result, degradation }, read, {
+        evidenceCapBytes: 8000,
+        compareVariants: true,
+    });
+    expect(read).toHaveBeenCalledTimes(1);
+    expect(
+        frozen.input.sources
+            .filter(source =>
+                frozen.input.scopedEvidence
+                    ?.find(p => p.documentId === chosen.id)
+                    ?.units.some(u => u.ref === source.ref)
+            )
+            .map(s => s.text)
+    ).toEqual([chosen.text.slice(0, 400)]);
+    expect(frozen.comparisons!.live.input).toEqual(frozen.input);
+    expect(frozen.comparisons!.liveBackfill.input).toEqual(frozen.input);
+});
+it.each(["source_access_denied", "source_authority_changed", "retrieval_acquisition_timeout"])(
+    "fails closed on %s during a hybrid upgrade",
+    async code => {
+        const { seed, read, result } = await hybridFixture();
+        read.mockImplementationOnce(read.getMockImplementation()!).mockRejectedValueOnce(
+            new WeeklyReviewConflict(code, 403)
+        );
+        await expect(
+            fitTopicEvidence("run", seed, result, read, { evidenceCapBytes: 8000 })
+        ).rejects.toThrow(code);
+    }
+);
+it("does not drop six original ranges to force a seventh selected-document window", async () => {
+    const { seed, chosen, read } = await hybridFixture();
+    seed.documents = [chosen];
+    seed.manifest.offered = [chosen];
+    const spans = Array.from({ length: 6 }, (_, i) => ({ start: i * 400, end: i * 400 + 200 }));
+    const frozen = await fitTopicEvidence(
+        "run",
+        seed,
+        { selected: [{ ref: chosen.ref, topicIds: [], spans }] },
+        read,
+        { evidenceCapBytes: 16000 }
+    );
+    expect(
+        frozen.input.scopedEvidence![0]!.units.map(({ start, end }) => ({ start, end }))
+    ).toEqual(spans);
+    expect(read).toHaveBeenCalledTimes(1);
+});
+
+it("preserves a plain lane's default range when the selected lane has empty spans", async () => {
+    const { seed, chosen, read } = await hybridFixture();
+    seed.manifest.lane = [chosen.ref];
+    const frozen = await fitTopicEvidence(
+        "run",
+        seed,
+        { selected: [{ ref: chosen.ref, topicIds: [], spans: [] }] },
+        read,
+        { evidenceCapBytes: 16000, compareVariants: true }
+    );
+    const prior = frozen.comparisons!.live.input.scopedEvidence!.find(
+        proof => proof.documentId === chosen.id
+    )!;
+    const hybrid = frozen.input.scopedEvidence!.find(proof => proof.documentId === chosen.id)!;
+    expect(prior.units.map(({ start, end }) => ({ start, end }))).toEqual([
+        { start: 0, end: 6000 },
+    ]);
+    for (const range of prior.units)
+        expect(hybrid.units.some(unit => unit.start <= range.start && unit.end >= range.end)).toBe(
+            true
+        );
+    expect(hybrid.units.length).toBe(2);
+    expect(frozen.summary.lane.outcome).toBe("admitted");
+    expect(frozen.input.sources[0]).toEqual(seed.context.sources[0]);
 });

@@ -21,6 +21,8 @@ export type BenchmarkMeterConfig = {
     allowLegacyPriorLedger?: boolean;
     /** Opt-in request-local retries; legacy accounting/hold behavior remains the default. */
     transportReliability?: "scoped-retry-v1";
+    /** Allows an explicit generator checkpoint to retain and acknowledge requests without HTTP responses. */
+    allowGenerationTransportRecovery?: boolean;
 };
 export type BenchmarkMeterRecord = {
     id: string;
@@ -45,6 +47,7 @@ export type BenchmarkMeterRecord = {
     durationMs?: number;
     continuedAfterCaseDeadline?: true;
     continuedAfterTransportFailure?: true;
+    continuedAfterGenerationNoHttp?: true;
     scopedTransportFailure?: true;
     requestId?: string;
     attempt?: number;
@@ -129,6 +132,7 @@ const recordSchema = z
         durationMs: amount.optional(),
         continuedAfterCaseDeadline: z.literal(true).optional(),
         continuedAfterTransportFailure: z.literal(true).optional(),
+        continuedAfterGenerationNoHttp: z.literal(true).optional(),
         scopedTransportFailure: z.literal(true).optional(),
         requestId: z.string().uuid().optional(),
         attempt: z.number().int().min(1).max(3).optional(),
@@ -298,6 +302,15 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                 )
                     return false;
                 if (
+                    row.continuedAfterGenerationNoHttp &&
+                    (!config.allowGenerationTransportRecovery ||
+                        row.status !== "unknown" ||
+                        row.httpStatus !== undefined ||
+                        row.route !== "digest" ||
+                        row.workId)
+                )
+                    return false;
+                if (
                     (row.scopedTransportFailure || row.requestId || row.attempt) &&
                     (config.transportReliability !== "scoped-retry-v1" ||
                         !row.requestId ||
@@ -362,6 +375,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                     row.status === "unknown" &&
                     !row.continuedAfterCaseDeadline &&
                     !row.continuedAfterTransportFailure &&
+                    !row.continuedAfterGenerationNoHttp &&
                     !row.scopedTransportFailure
             ) &&
             !hold
@@ -370,6 +384,32 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
     }
     async function drainPending() {
         while (pending.size) await Promise.allSettled([...pending]);
+    }
+    async function clearGenerationTransportHold(expectedUnknownCount: number) {
+        const unknown = records.filter(
+            row => row.status === "unknown" && !row.continuedAfterGenerationNoHttp
+        );
+        if (
+            !config.allowGenerationTransportRecovery ||
+            hold !== "usage_unresolved" ||
+            pending.size ||
+            snapshot().projectedTotalUsd > config.limitUsd ||
+            expectedUnknownCount < 1 ||
+            unknown.length !== expectedUnknownCount ||
+            records.some(row => row.status === "sent" || row.status === "reserved") ||
+            unknown.some(
+                row =>
+                    row.httpStatus !== undefined ||
+                    row.route !== "digest" ||
+                    row.workId !== undefined ||
+                    row.failure !== "usage_unresolved" ||
+                    row.settledListRateUsd !== undefined
+            )
+        )
+            throw new Error("benchmark_meter_generation_transport_clear_denied");
+        for (const row of unknown) row.continuedAfterGenerationNoHttp = true;
+        hold = null;
+        await persist();
     }
     async function clearCaseDeadlineHold(confirmation: {
         terminalCode: "topic_exploration_failed:timeout";
@@ -706,7 +746,10 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                 if (!response.ok && scoped)
                     row.failure = requestFailure(row, signal, retryAttempt).code;
                 await persist();
-                if (hold) throw new Error("benchmark_meter_hold:" + hold);
+                if (
+                    hold &&
+                    !(config.allowGenerationTransportRecovery && !responses && hold === "usage_unresolved" && response.ok)
+                ) throw new Error("benchmark_meter_hold:" + hold);
                 if (!response.ok && scoped) throw requestFailure(row, signal, retryAttempt);
                 return response;
             } catch (error) {
@@ -832,5 +875,6 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
         drainPending,
         clearCaseDeadlineHold,
         clearSweepTransportHold,
+        clearGenerationTransportHold,
     };
 }

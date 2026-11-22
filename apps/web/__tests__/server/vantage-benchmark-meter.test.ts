@@ -465,6 +465,40 @@ it("requires every new unknown to belong to a valid persisted terminal work ID",
     ).rejects.toThrow("transport_clear_denied");
     expect(meter.snapshot().hold).toBe("usage_unresolved");
 });
+it("acknowledges no-HTTP generation only when opt-in and checkpoint count match", async () => {
+    const initial = createBenchmarkMeter(config());
+    await expect(
+        initial.wrapFetch(async () => {
+            throw Error("no response");
+        })(endpoint, request())
+    ).rejects.toThrow("usage_unresolved");
+    const priorLedger = initial.snapshot();
+    await expect(initial.clearGenerationTransportHold(1)).rejects.toThrow("transport_clear_denied");
+    const recoveryConfig = { ...config(), allowGenerationTransportRecovery: true };
+    const recovery = createBenchmarkMeter({ ...recoveryConfig, priorLedger });
+    await expect(recovery.clearGenerationTransportHold(2)).rejects.toThrow(
+        "transport_clear_denied"
+    );
+    await recovery.clearGenerationTransportHold(1);
+    const checkpoint = recovery.snapshot();
+    expect(checkpoint.projectedTotalUsd).toBe(priorLedger.projectedTotalUsd);
+    expect(checkpoint.records[0]).toMatchObject({
+        status: "unknown",
+        continuedAfterGenerationNoHttp: true,
+    });
+    const restored = createBenchmarkMeter({ ...recoveryConfig, priorLedger: checkpoint });
+    expect(restored.snapshot().hold).toBeNull();
+    expect(restored.snapshot().reservedUsd).toBe(priorLedger.reservedUsd);
+    await restored.wrapFetch(async () => completion())(endpoint, request());
+    expect(restored.snapshot().records.map(row => row.status)).toEqual(["unknown", "settled"]);
+    const http = structuredClone(priorLedger);
+    http.records[0]!.httpStatus = 503;
+    await expect(
+        createBenchmarkMeter({ ...recoveryConfig, priorLedger: http }).clearGenerationTransportHold(
+            1
+        )
+    ).rejects.toThrow("transport_clear_denied");
+});
 it("denies HTTP failures, non-usage holds and exposure above the limit", async () => {
     const prior = await unresolvedSweepLedger();
     const http = structuredClone(prior);

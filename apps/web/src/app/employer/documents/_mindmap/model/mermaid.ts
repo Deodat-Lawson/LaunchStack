@@ -18,7 +18,10 @@
  */
 
 import { createDoc, createEdge, createNode, createPage, defaultTextStyle } from "./factory";
+import type { FlowLook } from "./flowchart/lookTypes";
+import { stepSize } from "./flowchart/steps";
 import { layeredLayout, type LayeredDirection } from "./layered";
+import type { ThemeMode } from "./palette";
 import { layoutText } from "./text";
 import { shapeTextBox } from "./shapes";
 import type {
@@ -413,22 +416,35 @@ export function sizeForLabel(
     return { w, h };
 }
 
+/** Dress the boxes and arrows in a flowchart look as they are made. */
+export interface MermaidLook {
+    look: FlowLook;
+    mode: ThemeMode;
+}
+
 /**
  * A Mermaid flowchart as a document: boxes sized to their labels, laid out in
  * layers in the source's direction, subgraphs as frames. `pageName` is the
- * page's name in the reader's language.
+ * page's name in the reader's language. With `dress`, every box and arrow is
+ * made in that look (the AI tools draw in the product's flowchart look); the
+ * Import dialog leaves it out and gets plain boxes the theme paints.
  */
 export function mermaidToDoc(
     text: string,
     title = "Imported diagram",
-    pageName = "Page 1"
+    pageName = "Page 1",
+    dress?: MermaidLook
 ): MindmapDoc {
     const graph = parseMermaidFlowchart(text);
     const textStyle = defaultTextStyle(LABEL_STYLE);
 
     const nodeByKey = new Map<string, DiagramNode>();
     for (const n of graph.nodes) {
-        const size = sizeForLabel(n.shape, n.label, textStyle);
+        const box = dress?.look.boxLook(n.shape, dress.mode);
+        const style = defaultTextStyle({ ...LABEL_STYLE, ...box?.text });
+        const size = box?.size
+            ? stepSize(n.shape, n.label, style, box.size)
+            : sizeForLabel(n.shape, n.label, style);
         nodeByKey.set(
             n.key,
             createNode({
@@ -438,7 +454,8 @@ export function mermaidToDoc(
                 w: size.w,
                 h: size.h,
                 text: n.label,
-                textStyle: LABEL_STYLE,
+                textStyle: { ...LABEL_STYLE, ...box?.text },
+                ...(box ? { style: box.style, mode: dress!.mode } : {}),
             })
         );
     }
@@ -504,6 +521,7 @@ export function mermaidToDoc(
     }
 
     const endpoint = (key: string) => (nodeByKey.get(key) ?? frameByKey.get(key))?.id;
+    const edgeLook = dress?.look.edgeLook(dress.mode);
     const edges: DiagramEdge[] = graph.edges.flatMap(e => {
         const from = endpoint(e.from);
         const to = endpoint(e.to);
@@ -513,11 +531,18 @@ export function mermaidToDoc(
             createEdge({
                 from: { nodeId: from, port: "auto" },
                 to: { nodeId: to, port: "auto" },
-                kind: "elbow",
+                kind: edgeLook?.kind ?? "elbow",
                 label: e.label,
+                // The source's arrowheads and dashes say something; the look
+                // only sets the colour, the weight and the label type.
                 startArrow: e.startArrow,
                 endArrow: e.endArrow,
-                style: { strokeStyle, ...(e.stroke === "thick" ? { strokeWidth: 3 } : {}) },
+                style: {
+                    ...edgeLook?.style,
+                    strokeStyle,
+                    ...(e.stroke === "thick" ? { strokeWidth: 3 } : {}),
+                },
+                ...(edgeLook?.text ? { textStyle: edgeLook.text } : {}),
             }),
         ];
     });

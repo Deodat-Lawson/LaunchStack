@@ -3,6 +3,8 @@
 import React, { memo, useMemo } from "react";
 
 import {
+    CORNER_RADIUS,
+    cornerRadii,
     labelAnchor,
     renderPath,
     roundedPolylinePath,
@@ -60,11 +62,18 @@ export const EdgeView = memo(function EdgeView({
         const endInset = arrowInset(edge.endArrow, style.strokeWidth);
         if (startInset === 0 && endInset === 0) return routed.path;
         const trimmed = trimPolyline(routed.points, startInset, endInset);
-        // A route drawn with rounded corners (a curved line's detour) keeps
-        // them when shortened for its arrowheads.
-        return routed.cornerRadius
-            ? roundedPolylinePath(trimmed, routed.cornerRadius)
-            : renderPath(edge.kind, trimmed);
+        // A route drawn with rounded corners (an elbow, or a curved line's
+        // detour) keeps the corners of the full route when shortened for its
+        // arrowheads: rounded afresh, a short last leg got a tighter last
+        // corner than the selection halo drawn round the full route.
+        const radius = routed.cornerRadius ?? (edge.kind === "elbow" ? CORNER_RADIUS : null);
+        if (radius === null) return renderPath(edge.kind, trimmed);
+        const sameCorners = trimmed.length === routed.points.length;
+        return roundedPolylinePath(
+            trimmed,
+            radius,
+            sameCorners ? cornerRadii(routed.points, radius) : undefined
+        );
     }, [edge.startArrow, edge.endArrow, edge.kind, style.strokeWidth, routed]);
 
     return (

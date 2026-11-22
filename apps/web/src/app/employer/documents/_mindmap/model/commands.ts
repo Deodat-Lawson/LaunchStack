@@ -44,6 +44,7 @@ import {
     worksAsFlow,
     type NavDirection,
 } from "./doc";
+import { dropStaleBends } from "./routing";
 import {
     createEdge,
     createNode,
@@ -689,11 +690,15 @@ export function translateNodes(
     }
     const next = mapNodes(page, all, nd => ({ ...nd, x: nd.x + delta.x, y: nd.y + delta.y }));
     const carried = edgesMovingWith(next, all, selectedEdgeIds);
-    if (carried.length === 0) return next;
-    return mapEdges(
-        next,
-        carried.map(e => e.id),
-        e => shiftEdge(e, delta)
+    // Bends left behind that no longer make a clean path go (routing.ts).
+    if (carried.length === 0) return dropStaleBends(next, all);
+    return dropStaleBends(
+        mapEdges(
+            next,
+            carried.map(e => e.id),
+            e => shiftEdge(e, delta)
+        ),
+        all
     );
 }
 

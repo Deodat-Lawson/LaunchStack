@@ -1,8 +1,11 @@
 import { createEdge, createNode } from "../model/factory";
 import { distanceToPolyline } from "../model/geometry";
 import {
+    CORNER_RADIUS,
+    cornerRadii,
     labelAnchor,
     renderPath,
+    roundedPolylinePath,
     routeEdge,
     trimPolyline,
     waypointInsertIndex,
@@ -190,6 +193,58 @@ describe("renderPath", () => {
         const d = renderPath("straight", points);
         expect(d).not.toContain("Q");
         expect(d).not.toContain("C");
+    });
+});
+
+describe("rounded corners", () => {
+    /** Each fillet's start and end — the L before a Q, and the Q's end point. */
+    const fillets = (d: string) =>
+        [...d.matchAll(/L (\S+) (\S+) Q \S+ \S+ (\S+) (\S+)/g)].map(m => ({
+            enter: { x: Number(m[1]), y: Number(m[2]) },
+            exit: { x: Number(m[3]), y: Number(m[4]) },
+        }));
+
+    it("never round further than half a middle leg, or a whole end leg", () => {
+        // A Z with a 10px middle run and a 6px first leg.
+        const z = [
+            { x: 0, y: 0 },
+            { x: 6, y: 0 },
+            { x: 6, y: 10 },
+            { x: 60, y: 10 },
+        ];
+        expect(cornerRadii(z)).toEqual([5, 5]);
+        expect(cornerRadii(z, 4)).toEqual([4, 4]);
+        // Long legs get the full radius.
+        expect(
+            cornerRadii([
+                { x: 0, y: 0 },
+                { x: 100, y: 0 },
+                { x: 100, y: 100 },
+            ])
+        ).toEqual([CORNER_RADIUS]);
+        // The two corners of a short run meet in its middle and no further.
+        const [first, second] = fillets(roundedPolylinePath(z));
+        expect(first!.exit.y).toBeCloseTo(5);
+        expect(second!.enter.y).toBeCloseTo(5);
+    });
+
+    it("keeps the full route's corners on a copy pulled back for its arrowheads", () => {
+        const route = [
+            { x: 0, y: 0 },
+            { x: 0, y: 60 },
+            { x: 200, y: 60 },
+            { x: 200, y: 82 },
+        ];
+        // The last leg is 22: pulled back 10 for a head, it would be
+        // rounded tighter than the halo drawn round the full route.
+        const trimmed = trimPolyline(route, 0, 10);
+        const full = fillets(roundedPolylinePath(route));
+        const same = fillets(roundedPolylinePath(trimmed, CORNER_RADIUS, cornerRadii(route)));
+        expect(same).toEqual(full);
+        // And a radius asked for never overshoots a leg that is too short for it.
+        const tiny = trimPolyline(route, 0, 20);
+        const clamped = fillets(roundedPolylinePath(tiny, CORNER_RADIUS, cornerRadii(route)));
+        expect(clamped[1]!.exit.y).toBeLessThanOrEqual(62 + 0.01);
     });
 });
 

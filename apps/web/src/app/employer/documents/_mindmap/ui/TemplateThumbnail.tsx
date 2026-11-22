@@ -8,7 +8,7 @@ import { useAppThemeMode } from "./useAppThemeMode";
 import { nodeLookup, pageBounds } from "../model/doc";
 import { expandRect } from "../model/geometry";
 import { nudgeRoutes } from "../model/tidy";
-import { routeEdge } from "../model/routing";
+import { routeEdge, routeOptionsFor } from "../model/routing";
 import { shapeDef, shapeGeometry, shapeTextBox } from "../model/shapes";
 import { buildTemplate } from "../model/templates";
 import type { ThemeMode } from "../model/palette";
@@ -76,7 +76,12 @@ export function DocThumbnail({ doc, detail = false }: { doc: MindmapDoc; detail?
             edges: (() => {
                 const shown = page.edges.filter(e => !e.hidden);
                 const routes = nudgeRoutes(
-                    new Map(shown.map(e => [e.id, routeEdge(e, lookup, page.nodes, shown)])),
+                    new Map(
+                        shown.map(e => [
+                            e.id,
+                            routeEdge(e, lookup, page.nodes, shown, routeOptionsFor(doc.settings)),
+                        ])
+                    ),
                     shown
                 );
                 return shown.map(e => ({ edge: e, routed: routes.get(e.id)! }));

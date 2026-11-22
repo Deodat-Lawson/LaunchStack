@@ -13,7 +13,7 @@ import {
     worksAsFlow,
 } from "../model/doc";
 import { nodeBounds, nodesBounds } from "../model/geometry";
-import { routeEdgeCached, type RoutedEdge } from "../model/routing";
+import { routeEdgeCached, routeOptionsFor, type RoutedEdge } from "../model/routing";
 import { nudgeRoutes, placeLabels } from "../model/tidy";
 import { isDarkSurface } from "../model/palette";
 import { shapeDef } from "../model/shapes";
@@ -100,18 +100,22 @@ export function Canvas({ callbacks, peers, onCursorMove, children }: CanvasProps
     }, [nodes]);
     const edges = useMemo(() => visibleEdges(page, render.folded), [page, render.folded]);
     const lookup = useMemo(() => nodeLookup(page), [page]);
+    // A flowchart's arrows run top to bottom (`routeOptionsFor`).
+    const routeOptions = routeOptionsFor(doc.settings);
     // `routeEdgeCached` returns the previous `RoutedEdge` object for any edge
     // whose own inputs did not change, so this Map is rebuilt each frame but
     // its *values* stay identical — which is what lets `EdgeView`'s memo hit.
     const routed = useMemo(() => {
         const map = new Map<string, RoutedEdge>();
-        for (const e of edges) map.set(e.id, routeEdgeCached(e, lookup, nodes, edges));
+        for (const e of edges) {
+            map.set(e.id, routeEdgeCached(e, lookup, nodes, edges, routeOptions));
+        }
         // Connectors are routed one at a time; this pulls apart the ones that
         // ended up on the same line (see model/tidy.ts).
         return nudgeRoutes(map, edges);
-    }, [edges, lookup, nodes]);
-    // Labels that would print over each other slide along their lines.
-    const labelTs = useMemo(() => placeLabels(edges, routed), [edges, routed]);
+    }, [edges, lookup, nodes, routeOptions]);
+    // Labels that would print over each other, or over a box, slide along their lines.
+    const labelTs = useMemo(() => placeLabels(edges, routed, nodes), [edges, routed, nodes]);
 
     const flow = worksAsFlow(doc.settings.kind);
     const childCounts = useMemo(() => {

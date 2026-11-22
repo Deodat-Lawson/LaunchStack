@@ -378,13 +378,39 @@ on the side it would have used; a detour arriving on a side already in use
 lands beside the lines there, on the end nearer where it comes from. Spreading and straightening only happen on
 sides that are straight along the whole box (`FLAT` — rectangles, topics,
 stickies, a cylinder's sides, a terminator's top and bottom…); a diamond's
-or a circle's ends stay on its own ports. Sides are chosen by the direction
-of the other box, except toward a bend someone placed that sits straight
-beside the box — within its width (above or below) or its height (left or
-right) — which takes that side (`autoPort`'s `proportional`): a bend just
-below a wide box's corner is below it, and read by angle as "right" the line
-doubled back through its own box. A bend off a corner diagonally is read by
-angle, so a small bend does not flip which side a line uses.
+or a circle's ends stay on its own ports.
+
+**Which sides.** An elbow with no bends picks its sides from where its two
+boxes are (`chooseEnds` in `routing.ts`): every pair of sides is drawn and
+priced — length, a price per corner, steep prices for a leg under `MIN_LEG`
+(20) or a last leg too short for the arrowhead and its corner, and for any
+run back behind a side it leaves or enters (a U-turn) — and the cheapest
+wins. So lined-up boxes are joined straight, a box mostly beside goes side
+to side, one mostly below end to end, and a diagonal takes one clean bend
+(an L) when both legs are comfortably long, else a Z whose middle run sits
+halfway (moved only to give the arrowhead its room). On a document worked as
+a flowchart (`routeOptionsFor` — every surface passes it) a step clearly
+below is joined bottom to top; a decision's branches keep its side tips. A
+tip already used by another line (lines cannot spread along a vertex) costs
+as much as leaving a pin. Before this, sides were read by angle between
+centres, and a box below and to the right got a Z with two 30px stubs and a
+squeezed head. While a box is dragged the sides it had are kept until
+another pair is clearly better, and after they change they hold until the
+box has moved 8px on (`SIDE_HYSTERESIS`, `SIDE_SETTLE`), so a line does not
+flicker near a diagonal. An end pinned to a dot keeps it while that side
+still faces the other box; once the pin would force a U-turn the end is
+routed automatically. Bends someone placed that no longer make a clean path
+— one now on or in a box, or a line through them crossing its own box — are
+ignored (`hasStaleBends`) and taken out when the box drag ends
+(`dropStaleBends`); bends on a group moved together travel with it.
+
+Toward a bend someone placed, a side is chosen by direction, except a bend
+that sits straight beside the box — within its width (above or below) or its
+height (left or right) — takes that side (`autoPort`'s `proportional`): a
+bend just below a wide box's corner is below it, and read by angle as
+"right" the line doubled back through its own box. A bend off a corner
+diagonally is read by angle, so a small bend does not flip which side a line
+uses. Straight and curved connectors still aim by angle.
 
 **Going around boxes.** A connector nobody has routed by hand goes around the
 shapes between its ends instead of under or over them (`avoidingRoute` in

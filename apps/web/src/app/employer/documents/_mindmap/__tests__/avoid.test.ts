@@ -253,11 +253,18 @@ describe("ends on shapes that are not flat", () => {
         const e1 = edge(d, p, "elbow");
         const e2 = edge(d, q, "elbow");
         const all = [e1, e2];
-        for (const e of all) {
-            const r = routeEdge(e, lookupOf([d, p, q]), [d, p, q], all);
-            // The east tip is the only point of a diamond's east "side".
-            expect(r.start).toEqual({ x: 160, y: 50 });
-        }
+        const tips = [
+            { x: 80, y: 0 },
+            { x: 160, y: 50 },
+            { x: 80, y: 100 },
+            { x: 0, y: 50 },
+        ];
+        const starts = all.map(e => routeEdge(e, lookupOf([d, p, q]), [d, p, q], all).start);
+        // A tip is the only point of a diamond's "side": every end sits on one…
+        for (const start of starts) expect(tips).toContainEqual(start);
+        // …and two lines do not share one (they used to run on top of each
+        // other out of the east tip until they forked).
+        expect(starts[0]).not.toEqual(starts[1]);
     });
 });
 

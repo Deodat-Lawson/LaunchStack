@@ -11,7 +11,7 @@ import {
 } from "../model/commands";
 import { activePage, nodeById, nodeLookup, removeNodes, worksAsFlow } from "../model/doc";
 import { worldToScreen } from "../model/geometry";
-import { labelAnchor, routeEdge } from "../model/routing";
+import { labelAnchor, routeEdge, routeOptionsFor } from "../model/routing";
 import { shapeTextBox } from "../model/shapes";
 import { fontFamilyCss, layoutText } from "../model/text";
 import type { EditorState } from "../model/store";
@@ -249,7 +249,13 @@ export function TextEditorOverlay() {
         top = topLeft.y + offset;
         height = Math.max(blockH, node.textStyle.size * viewport.zoom * 1.2);
     } else if (edge) {
-        const routed = routeEdge(edge, nodeLookup(page), page.nodes, page.edges);
+        const routed = routeEdge(
+            edge,
+            nodeLookup(page),
+            page.nodes,
+            page.edges,
+            routeOptionsFor(doc.settings)
+        );
         const label = edge.labels[editing.index ?? 0];
         const at = labelAnchor(routed, label?.t ?? 0.5, label?.offset ?? 0);
         const screen = worldToScreen(viewport, at);

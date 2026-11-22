@@ -118,16 +118,25 @@ export function orthogonalDetour(opts: {
     ends: readonly PortOption[];
     blocked: readonly Rect[];
     bounds: Rect;
+    /** How far a route runs straight out of its start before it may turn. */
     stub: number;
+    /**
+     * The same into its end, when that needs more — room for an arrowhead,
+     * so the last leg is never squeezed. Defaults to `stub`.
+     */
+    endStub?: number;
 }): Point[] | null {
     const { blocked, bounds, stub } = opts;
-    const stubOf = (o: PortOption) => ({
-        x: o.point.x + o.normal.x * stub,
-        y: o.point.y + o.normal.y * stub,
+    const endStub = opts.endStub ?? stub;
+    const outOf = (o: PortOption, by: number) => ({
+        x: o.point.x + o.normal.x * by,
+        y: o.point.y + o.normal.y * by,
     });
     const free = (p: Point) => !blocked.some(r => strictlyInside(p, r));
-    const starts = opts.starts.filter(o => free(stubOf(o)));
-    const ends = opts.ends.filter(o => free(stubOf(o)));
+    const starts = opts.starts.filter(o => free(outOf(o, stub)));
+    const ends = opts.ends.filter(o => free(outOf(o, endStub)));
+    const startStub = (o: PortOption) => outOf(o, stub);
+    const endStubOf = (o: PortOption) => outOf(o, endStub);
     if (starts.length === 0 || ends.length === 0) return null;
 
     const lo = { x: bounds.x, y: bounds.y };
@@ -137,7 +146,8 @@ export function orthogonalDetour(opts: {
             lo.x,
             hi.x,
             ...blocked.flatMap(r => [r.x, r.x + r.w]),
-            ...[...starts, ...ends].map(o => stubOf(o).x),
+            ...starts.map(o => startStub(o).x),
+            ...ends.map(o => endStubOf(o).x),
         ],
         lo.x,
         hi.x
@@ -147,7 +157,8 @@ export function orthogonalDetour(opts: {
             lo.y,
             hi.y,
             ...blocked.flatMap(r => [r.y, r.y + r.h]),
-            ...[...starts, ...ends].map(o => stubOf(o).y),
+            ...starts.map(o => startStub(o).y),
+            ...ends.map(o => endStubOf(o).y),
         ],
         lo.y,
         hi.y
@@ -183,7 +194,7 @@ export function orthogonalDetour(opts: {
 
     const targets = new Map<number, { need: number; penalty: number; option: PortOption }[]>();
     for (const o of ends) {
-        const idx = indexOf(stubOf(o));
+        const idx = indexOf(endStubOf(o));
         if (idx === undefined) continue;
         const list = targets.get(idx) ?? [];
         // Arriving means travelling into the box: against its normal.
@@ -209,7 +220,7 @@ export function orthogonalDetour(opts: {
     const heap = new MinHeap();
 
     for (const o of starts) {
-        const idx = indexOf(stubOf(o));
+        const idx = indexOf(startStub(o));
         if (idx === undefined) continue;
         const s = idx * 4 + dirOf(o.normal);
         if (o.penalty < g[s]!) {

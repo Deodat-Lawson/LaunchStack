@@ -989,7 +989,9 @@
         "jumpCode": "-> Pack the order",
         "jump": "goes to that step instead",
         "endsCode": "Start · End",
-        "ends": "a rounded start or end"
+        "ends": "a rounded start or end",
+        "blankCode": "(blank line)",
+        "blank": "starts a separate chain — not joined to the line above"
       },
       "notes": {
         "missingTarget": "Line {line}: no step is called “{target}”.",

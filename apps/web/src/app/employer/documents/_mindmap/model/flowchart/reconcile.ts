@@ -14,13 +14,24 @@
  *   follows, a connector drawn between two steps becomes a `-> Step`. Lines
  *   the edit did not touch keep their spacing, blank lines and all.
  *
+ * Two steps the page does not join are written with a blank line between
+ * them when nothing else would keep them apart — a box dropped on its own,
+ * an arrow someone deleted — since a blank line starts a separate chain.
+ *
  * Both return the box id behind each step of the text they produce, so the
  * chart drawn from it keeps every box (`applySteps`'s `ids`).
  */
 
 import type { DiagramEdge, DiagramNode, DiagramPage } from "../types";
 import { edgeLabel, isStepNode } from "./steps";
-import { oneLine, parseSteps, stepKindOf, type StepLine, type StepsParse } from "./syntax";
+import {
+    normalizeLabel,
+    oneLine,
+    parseSteps,
+    stepKindOf,
+    type StepLine,
+    type StepsParse,
+} from "./syntax";
 
 /** Lines and the boxes they were drawn as. */
 export interface StepsBinding {
@@ -43,6 +54,11 @@ function wordsOf(nd: DiagramNode): string {
     const words = oneLine(nd.text);
     if (nd.shape === "decision" && words && !/[?？]$/.test(words)) return `${words}?`;
     return words;
+}
+
+/** A box that reads as End: nothing flows out of it, so nothing needs keeping apart. */
+function ends(nd: DiagramNode): boolean {
+    return stepKindOf(wordsOf(nd)) === "end";
 }
 
 /** Align ids by line with the steps `text` parses into. */
@@ -189,14 +205,23 @@ export function serializeSteps(page: DiagramPage, order: readonly string[] = [])
                 edges[0]!.to.nodeId === nextId &&
                 edgeLabel(edges[0]!) === "";
             if (plainOnward) return;
+            // A branch with no arrow out would flow on into the next line (and
+            // a question with no branches would too): then a blank line keeps
+            // the next line apart, and the branches that do go on there say so.
+            const stops = (b: DiagramNode) => (out.get(b.id) ?? []).length === 0 && !ends(b);
+            const apart =
+                nextId !== null && (edges.length === 0 || block.some(k => stops(steps[k]!)));
             for (const k of block) {
                 const b = steps[k]!;
                 const via = edges.find(e => e.to.nodeId === b.id)!;
                 const label = edgeLabel(via);
-                const onward = (out.get(b.id) ?? []).filter(e => e.to.nodeId !== nextId);
+                const leaving = out.get(b.id) ?? [];
+                const onward = leaving.filter(e => e.to.nodeId !== nextId);
                 const jump = onward[0]
                     ? ` -> ${wordsOf(steps[index.get(onward[0].to.nodeId!)!]!)}`
-                    : "";
+                    : apart && leaving.some(e => e.to.nodeId === nextId)
+                      ? ` -> ${wordsOf(steps[next]!)}`
+                      : "";
                 push(`${INDENT}${label ? `${label}: ` : ""}${wordsOf(b)}${jump}`, b.id);
             }
             for (const e of edges) {
@@ -205,6 +230,7 @@ export function serializeSteps(page: DiagramPage, order: readonly string[] = [])
                 const target = wordsOf(steps[index.get(e.to.nodeId!)!]!);
                 push(`${INDENT}${label ? `${label}: ` : ""}-> ${target}`, null);
             }
+            if (apart) push("", null);
             return;
         }
         const next = nextFree(i);
@@ -215,6 +241,9 @@ export function serializeSteps(page: DiagramPage, order: readonly string[] = [])
             (targets.length === 1 && targets[0]!.id === nextId && edgeLabel(edges[0]!) === "");
         if (implied) {
             push(wordsOf(nd), nd.id);
+            // Joined to nothing, it would flow on into the next line: a blank
+            // line keeps them apart.
+            if (targets.length === 0 && nextId !== null && !ends(nd)) push("", null);
             return;
         }
         push(`${wordsOf(nd)} -> ${wordsOf(targets[0]!)}`, nd.id);
@@ -515,5 +544,116 @@ export function reconcileSteps(base: StepsBinding, page: DiagramPage): WrittenSt
         for (const r of row.after) emit(r);
     };
     rows.forEach(emit);
-    return idsForText(lines.join("\n"), byLine);
+    return keepApart(lines, byLine, page);
+}
+
+/**
+ * The lines, with a blank line put in wherever a step would flow on into the
+ * next line but the page has no arrow between them — an arrow deleted on the
+ * canvas, a box dropped on its own after the last step, the steps either
+ * side of a box deleted without joining them, a branch added under a
+ * question that goes nowhere yet. When a branch is kept apart that way, the
+ * branches beside it that do go on to the next line say so with `-> Step`.
+ */
+function keepApart(
+    lines: readonly string[],
+    byLine: ReadonlyArray<string | null>,
+    page: DiagramPage
+): WrittenSteps {
+    const parse = parseSteps(lines.join("\n"));
+    const joined = new Set(page.edges.map(e => `${e.from.nodeId}>${e.to.nodeId}`));
+    const idOf = (step: number) => byLine[parse.steps[step]!.line] ?? null;
+    const isJoined = (from: number, to: number) => {
+        const a = idOf(from);
+        const b = idOf(to);
+        return !a || !b || joined.has(`${a}>${b}`);
+    };
+    /** Lines a blank line goes before. */
+    const before = new Set<number>();
+    /** Branch lines that now say where they go: line → the words of the step. */
+    const onTo = new Map<number, string>();
+    /** Arrows from a decision's block on into the line after it, by that line's step. */
+    const onward = new Map<number, number[]>();
+    parse.links.forEach((link, k) => {
+        const from = parse.steps[link.from]!;
+        const line = parse.lines[link.line]!;
+        if (link.via === "flow" && from.branchOf === null && link.line === from.line) {
+            if (!isJoined(link.from, link.to)) before.add(parse.steps[link.to]!.line);
+            return;
+        }
+        // A branch line with no `->` of its own that leads past its block.
+        if (line.branch && line.target === null && link.to !== line.step) {
+            onward.set(link.to, [...(onward.get(link.to) ?? []), k]);
+        }
+    });
+    const firstWith = new Map<string, number>();
+    parse.steps.forEach((st, i) => {
+        const key = normalizeLabel(st.label);
+        if (key && !firstWith.has(key)) firstWith.set(key, i);
+    });
+    for (const [to, ks] of onward) {
+        const links = ks.map(k => parse.links[k]!);
+        if (links.every(l => isJoined(l.from, l.to))) continue;
+        const target = parse.steps[to]!;
+        // `-> words` must find this step, not an earlier one with the same words.
+        if (firstWith.get(normalizeLabel(target.label)) !== to) continue;
+        before.add(target.line);
+        for (const l of links) if (isJoined(l.from, l.to)) onTo.set(l.line, target.label);
+    }
+    if (before.size === 0) return idsForText(lines.join("\n"), byLine);
+    const outLines: string[] = [];
+    const outIds: Array<string | null> = [];
+    lines.forEach((line, i) => {
+        if (before.has(i) && (outLines[outLines.length - 1] ?? "").trim() !== "") {
+            outLines.push("");
+            outIds.push(null);
+        }
+        const target = onTo.get(i);
+        outLines.push(target ? `${line.trimEnd()} -> ${target}` : line);
+        outIds.push(byLine[i] ?? null);
+    });
+    return idsForText(outLines.join("\n"), outIds);
+}
+
+/**
+ * The page as the lines can say it: a box with no words yet (Tab, then
+ * nothing typed) has no line, so an arrow through it reads as one arrow from
+ * the step before it to the step after. Everything else is as it was.
+ */
+export function withoutWordless(page: DiagramPage): DiagramPage {
+    const wordless = new Set(
+        page.nodes.filter(nd => isStepNode(nd) && oneLine(nd.text) === "").map(nd => nd.id)
+    );
+    if (wordless.size === 0) return page;
+    const kept = page.edges.filter(
+        e => !wordless.has(e.from.nodeId ?? "") && !wordless.has(e.to.nodeId ?? "")
+    );
+    const have = new Set(kept.map(e => `${e.from.nodeId}>${e.to.nodeId}`));
+    const through: DiagramEdge[] = [];
+    for (const first of page.edges) {
+        const a = first.from.nodeId;
+        if (!a || wordless.has(a) || !wordless.has(first.to.nodeId ?? "")) continue;
+        // Every step past the wordless boxes this arrow leads into.
+        const seen = new Set<string>();
+        const queue = [first.to.nodeId!];
+        while (queue.length > 0) {
+            const id = queue.shift()!;
+            if (seen.has(id)) continue;
+            seen.add(id);
+            for (const e of page.edges) {
+                const b = e.to.nodeId;
+                if (e.from.nodeId !== id || !b || b === a) continue;
+                if (wordless.has(b)) queue.push(b);
+                else if (!have.has(`${a}>${b}`)) {
+                    have.add(`${a}>${b}`);
+                    through.push({ ...first, id: `${first.id}~${b}`, to: { ...e.to } });
+                }
+            }
+        }
+    }
+    return {
+        ...page,
+        nodes: page.nodes.filter(nd => !wordless.has(nd.id)),
+        edges: [...kept, ...through],
+    };
 }

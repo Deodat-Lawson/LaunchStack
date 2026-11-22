@@ -297,7 +297,7 @@ export const editDiagramTool = defineTool({
     name: "edit_diagram",
     title: "Edit a LaunchStack diagram",
     description:
-        "Change an existing diagram. For a flowchart, prefer steps: the whole chart rewritten in the step language read_diagram showed it in — boxes whose words you keep keep their ids (and their comments and links), new lines become new boxes, lines you drop are removed. " +
+        "Change an existing diagram. For a flowchart, prefer steps: the whole chart rewritten in the step language read_diagram showed it in — boxes whose words you keep keep their ids (and their comments and links), new lines become new boxes, lines you drop are removed, and a blank line keeps the steps either side of it unjoined (keep the ones it showed). " +
         "For a mind map, or one small change, send edits: operations naming the ids read_diagram shows — add, rename, remove, move, connect, disconnect, arrange. Steps are drawn first, then edits. " +
         "Everything applies together or nothing does; the version before is kept in the diagram's history. Returns what changed and the diagram as it now is.",
     inputSchema: {
@@ -308,7 +308,7 @@ export const editDiagramTool = defineTool({
                 type: "string",
                 maxLength: 40_000,
                 description:
-                    "Flowcharts: the whole chart as step text, every line, changed where asked.",
+                    "Flowcharts: the whole chart as step text, every line (blank lines too), changed where asked.",
             },
             edits: {
                 type: "array",

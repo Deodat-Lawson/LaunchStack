@@ -139,9 +139,12 @@ describe("describeDiagram on a flowchart", () => {
         expect(text).toMatch(
             /Arrows the steps do not show:\n- Pick and pack \(id: n_\w+\) → Ask Sam/
         );
-        expect(text).toContain(
-            `- Pick and pack (id: ${pick}) does not lead to Ship it (id: ${ship})`
+        // The join taken away is said by the steps themselves: a blank line
+        // ends the question's block, so Pick and pack no longer flows on.
+        expect(fenced(text)).toContain(
+            "  Yes: Pick and pack\n  No: Reorder from supplier -> Receive the order\n\nShip it"
         );
+        expect(text).not.toContain("does not lead to");
     });
 
     test("leaves a mind map as its outline", () => {

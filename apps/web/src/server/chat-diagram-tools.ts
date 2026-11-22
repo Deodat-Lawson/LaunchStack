@@ -592,7 +592,7 @@ export function diagramToolsPrompt(session: Pick<DiagramToolSession, "tools">): 
     lines.push(
         "To answer about or change an existing diagram, call `find_diagrams` (with no query it lists the ones opened most recently; the first is usually the one on screen when they say 'this'), then `read_diagram`. It shows a flowchart as step text, with each step's box id listed under it." +
             (names.has("edit_diagram")
-                ? " Change a flowchart with `edit_diagram` and `steps`: the text read_diagram showed, every line, changed where the person asked — boxes whose words you keep keep their ids, so their comments and links stay. Change a mind map, or make one small change, with `edits` naming shapes by the ids (n_…) read_diagram shows. Say which diagram you changed."
+                ? " Change a flowchart with `edit_diagram` and `steps`: the text read_diagram showed, every line, changed where the person asked — boxes whose words you keep keep their ids, so their comments and links stay. Keep its blank lines where they are: each one keeps two steps unjoined. Change a mind map, or make one small change, with `edits` naming shapes by the ids (n_…) read_diagram shows. Say which diagram you changed."
                 : " You cannot change diagrams for this person here; describe the change for them to make.")
     );
     if (names.has("create_diagram") || names.has("edit_diagram")) {

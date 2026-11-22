@@ -106,7 +106,7 @@ function drawsInFlowLook(doc: MindmapDoc, p: DiagramPage): boolean {
  * the MCP tools and the editor's own generate call.
  */
 export const STEPS_LANGUAGE = [
-    'The step language: one step per line, joined in order. A line ending in "?" is a decision; its branches are the lines indented two spaces under it, written "Label: step". "-> Step" after a step (or a branch) sends it to the step with those exact words instead of the next line — a loop back, or a jump ahead. A line that is just Start or End is a pill; End goes nowhere. Example:',
+    'The step language: one step per line, joined in order. A line ending in "?" is a decision; its branches are the lines indented two spaces under it, written "Label: step". "-> Step" after a step (or a branch) sends it to the step with those exact words instead of the next line — a loop back, or a jump ahead. A line that is just Start or End is a pill; End goes nowhere. A blank line starts a separate chain: the line after it is not joined to the line before it, so leave no blank lines inside a chart unless two steps really are not joined. Example:',
     "Start",
     "Receive the order",
     "In stock?",
@@ -118,7 +118,7 @@ export const STEPS_LANGUAGE = [
 
 /** The step language, said once to a model reading a flowchart. */
 export const STEPS_LEGEND =
-    'one step per line, joined in order; a line ending in "?" is a decision, and the lines indented under it are its branches, written "Label: step"; "-> Step" is an arrow to the step with those words; a line that is just Start or End is a pill';
+    'one step per line, joined in order; a line ending in "?" is a decision, and the lines indented under it are its branches, written "Label: step"; "-> Step" is an arrow to the step with those words; a line that is just Start or End is a pill; a blank line starts a separate chain, not joined to the line before it';
 
 function label(text: string): string {
     const flat = text.replace(/\s+/g, " ").trim();

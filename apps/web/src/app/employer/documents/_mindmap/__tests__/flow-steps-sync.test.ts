@@ -16,6 +16,8 @@ import { applySteps, isStepNode, matchSteps, structureOf } from "../model/flowch
 import { flowchartLook } from "../model/flowchart/look";
 import { reconcileSteps, serializeSteps } from "../model/flowchart/reconcile";
 import { BURST_IDLE, PREVIEW_MAX_WAIT, StepsSync } from "../flow/steps/sync";
+import { openAt, pick } from "../flow/pick/menu";
+import { PICKS } from "../flow/pick/place";
 import { parseSteps } from "../model/flowchart/syntax";
 
 /**
@@ -371,15 +373,18 @@ describe("Steps: chart → text", () => {
         expect(arrows(store)).toEqual(["Fix → Test", "Start → Fix", "Test → Start"]);
     });
 
-    it("Tab on a decision adds a branch line", async () => {
+    it("Tab on a decision adds a branch line; a branch that goes nowhere yet is kept apart", async () => {
         const { store, sync } = setup();
         write(sync, "Paid?\n  Yes: Ship\nDone");
         const added = addNextStep(store, byText(store, "Paid?").id)!;
         commitNodeText(store, nodeById(page(store), added)!, "Refund");
         store.setEditing(null);
         await caughtUp();
-        expect(sync.getSnapshot().text).toBe("Paid?\n  Yes: Ship\n  Refund\nDone");
-        expect(arrows(store)).toContain("Refund → Done");
+        // The new branch has no arrow out on the canvas, so the lines say so:
+        // the block ends in a blank line, and Ship says where it goes.
+        expect(sync.getSnapshot().text).toBe("Paid?\n  Yes: Ship -> Done\n  Refund\n\nDone");
+        expect(arrows(store)).not.toContain("Refund → Done");
+        expect(arrows(store)).toContain("Ship → Done");
         expect(byText(store, "Refund").id).toBe(added);
     });
 
@@ -442,28 +447,30 @@ describe("Steps: chart → text", () => {
         expect(lines.slice(2).sort()).toEqual(["  No: Reorder", "  Yes: Pack"]);
     });
 
-    it("Delete on a box takes its line, and joins the lines around it", async () => {
+    it("a box deleted without joining takes its line; the lines either side part with a blank line", async () => {
         const { store, sync } = setup();
         write(sync, "Start\nPack\nShip\nEnd");
         store.selectNodes([byText(store, "Pack").id]);
         deleteSelection(store);
         await caughtUp();
-        expect(sync.getSnapshot().text).toBe("Start\nShip\nEnd");
-        expect(arrows(store)).toEqual(["Ship → End", "Start → Ship"]);
+        // The selection's delete takes the box only: nothing joins Start to
+        // Ship on the canvas, and nothing is drawn back.
+        expect(sync.getSnapshot().text).toBe("Start\n\nShip\nEnd");
+        expect(arrows(store)).toEqual(["Ship → End"]);
         expect(store.getState().selection).toEqual([]);
     });
 
-    it("Delete on a decision lifts its branches into its place", async () => {
+    it("a decision deleted without joining lifts its branches into its place", async () => {
         const { store, sync } = setup();
         write(sync, "Start\nPaid?\n  Yes: Ship\n  No: -> Start\nEnd");
         store.selectNodes([byText(store, "Paid?").id]);
         deleteSelection(store);
         await caughtUp();
-        expect(sync.getSnapshot().text).toBe("Start\nShip\nEnd");
-        expect(arrows(store)).toEqual(["Ship → End", "Start → Ship"]);
+        expect(sync.getSnapshot().text).toBe("Start\n\nShip\nEnd");
+        expect(arrows(store)).toEqual(["Ship → End"]);
     });
 
-    it("Delete on a written-out arrow takes the `->` out", async () => {
+    it("Delete on a written-out arrow takes the `->` out, and nothing flows in its place", async () => {
         const { store, sync } = setup();
         write(sync, "A -> C\nB\nC");
         const ac = page(store).edges.find(
@@ -472,19 +479,31 @@ describe("Steps: chart → text", () => {
         store.setSelection([{ kind: "edge", id: ac.id }]);
         deleteSelection(store);
         await caughtUp();
-        expect(sync.getSnapshot().text).toBe("A\nB\nC");
-        expect(arrows(store)).toEqual(["A → B", "B → C"]);
+        expect(sync.getSnapshot().text).toBe("A\n\nB\nC");
+        expect(arrows(store)).toEqual(["B → C"]);
     });
 
-    it("puts back an arrow the lines imply, since the lines are the truth", async () => {
+    it("an arrow deleted on the canvas stays deleted: a blank line keeps the steps apart", async () => {
         const { store, sync } = setup();
-        write(sync, "A\nB");
-        const ab = page(store).edges[0]!;
+        write(sync, "A\nB\nC");
+        const before = store.getState().doc;
+        const ab = page(store).edges.find(
+            e => e.from.nodeId === byText(store, "A").id && e.to.nodeId === byText(store, "B").id
+        )!;
         store.setSelection([{ kind: "edge", id: ab.id }]);
         deleteSelection(store);
+        const deleted = store.getState().doc;
         await caughtUp();
-        expect(sync.getSnapshot().text).toBe("A\nB");
-        expect(arrows(store)).toEqual(["A → B"]);
+        expect(sync.getSnapshot().text).toBe("A\n\nB\nC");
+        expect(arrows(store)).toEqual(["B → C"]);
+        // The panel wrote nothing to the chart: the delete is the last edit.
+        expect(store.getState().doc).toBe(deleted);
+        expect(store.historyLabels().undo).toBe("Delete");
+        // Undo brings the arrow and the lines back.
+        store.undo();
+        await caughtUp();
+        expect(store.getState().doc).toBe(before);
+        expect(sync.getSnapshot().text).toBe("A\nB\nC");
     });
 
     it("writes a connector drawn between two steps as `-> Step`", async () => {
@@ -543,6 +562,93 @@ describe("Steps: chart → text", () => {
         store.setEditing(null);
         await caughtUp();
         expect(sync.getSnapshot().text).toBe("Alpha\nB");
+    });
+});
+
+describe("Steps: a canvas edit never redraws the chart (panel open)", () => {
+    /** Double-click on empty canvas at `at` and pick `id` from the menu, as the canvas does. */
+    function dropBox(store: EditorStore, at: { x: number; y: number }, id: string, words: string) {
+        openAt(store, { world: at, screen: at });
+        pick(store, PICKS.find(p => p.id === id)!);
+        const made = store.getState().selection[0]!.id;
+        rename(store, made, words);
+        return made;
+    }
+
+    it("a box dropped on its own stays unjoined, where it was put; the lines keep it apart", async () => {
+        const { store, sync } = setup();
+        write(sync, "Alpha\nBeta");
+        const lone = dropBox(store, { x: 1250, y: 200 }, "step", "Lone");
+        const put = nodeById(page(store), lone)!;
+        await caughtUp();
+        expect(sync.getSnapshot().text).toBe("Alpha\nBeta\n\nLone");
+        expect(arrows(store)).toEqual(["Alpha → Beta"]);
+        const now = nodeById(page(store), lone)!;
+        expect({ x: now.x, y: now.y }).toEqual({ x: put.x, y: put.y });
+        expect(centre(now)).toEqual({ x: 1250, y: 200 });
+    });
+
+    it("typing in the panel afterwards leaves the lone box alone, on a chart that arranges itself", async () => {
+        const { store, sync } = setup();
+        write(sync, "Alpha\nBeta");
+        const lone = dropBox(store, { x: 1250, y: 200 }, "step", "Lone");
+        await caughtUp();
+        write(sync, "Alpha\nBeta\nGamma\n\nLone");
+        expect(arrows(store)).toEqual(["Alpha → Beta", "Beta → Gamma"]);
+        expect(centre(nodeById(page(store), lone)!)).toEqual({ x: 1250, y: 200 });
+        // The chart the lines hold is still arranged: Gamma below Beta.
+        expect(centre(byText(store, "Gamma")).y).toBeGreaterThan(centre(byText(store, "Beta")).y);
+        expect(centre(byText(store, "Gamma")).x).toBe(centre(byText(store, "Beta")).x);
+    });
+
+    it("two boxes dropped on their own stay two boxes, not a chain", async () => {
+        const { store, sync } = setup();
+        dropBox(store, { x: 300, y: 200 }, "decision", "Approve");
+        dropBox(store, { x: 700, y: 200 }, "terminal", "Order placed");
+        await caughtUp();
+        expect(page(store).edges).toEqual([]);
+        expect(
+            sync
+                .getSnapshot()
+                .text.split("\n")
+                .filter(l => l.trim() === "")
+        ).toHaveLength(1);
+    });
+
+    it("round trip: canvas → lines → canvas draws the same chart, for a deleted arrow and a lone box", async () => {
+        const { store, sync } = setup();
+        write(sync, "Start\nPack\nShip\nEnd");
+        const ps = page(store).edges.find(
+            e =>
+                e.from.nodeId === byText(store, "Pack").id &&
+                e.to.nodeId === byText(store, "Ship").id
+        )!;
+        store.setSelection([{ kind: "edge", id: ps.id }]);
+        deleteSelection(store);
+        const lone = dropBox(store, { x: 900, y: 500 }, "step", "Lone");
+        await caughtUp();
+        const canvas = page(store);
+        const { text, bound } = sync.getSnapshot();
+        expect(text).toBe("Start\nPack\n\nShip\nEnd\nLone");
+        // Drawn back as the panel would draw it: nothing changes.
+        const again = applySteps(canvas, parseSteps(text), {
+            look: flowchartLook,
+            mode: "light",
+            ids: bound.ids,
+            keepPlaced: true,
+        });
+        expect(structureOf(again.page)).toBe(structureOf(canvas));
+        expect(again.page).toBe(canvas);
+        // And written from scratch, the same.
+        const fresh = serializeSteps(canvas);
+        const drawn = applySteps(canvas, parseSteps(fresh.text), {
+            look: flowchartLook,
+            mode: "light",
+            ids: fresh.ids,
+            keepPlaced: true,
+        });
+        expect(structureOf(drawn.page)).toBe(structureOf(canvas));
+        expect(nodeById(drawn.page, lone)).toEqual(nodeById(canvas, lone));
     });
 });
 

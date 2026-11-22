@@ -264,18 +264,23 @@ No; picked inside a frame, the box joins it.
 
 The chart as lines, in a panel docked left of the canvas: one step per line,
 joined in order; a line ending in "?" is a decision; indented `Label: step`
-lines are its branches; `-> Step` jumps; Start and End are pills (the
-grammar is `model/flowchart/syntax.ts`, shared with agents). A top-bar
-**Steps** button toggles it; it is open unless the person closed it
-(`lib/preferences.ts`, per browser) and never shown while presenting.
+lines are its branches; `-> Step` jumps; Start and End are pills; a blank
+line starts a separate chain — the line after it is not joined to the line
+before it (the grammar is `model/flowchart/syntax.ts`, shared with agents).
+A top-bar **Steps** button toggles it; it is open unless the person closed
+it (`lib/preferences.ts`, per browser) and never shown while presenting.
 
 Typing is drawn within ~300ms, one undo step per burst, boxes keeping their
-ids. Selecting a box lights its line (every selected box's line); the caret's
-line selects its box. A canvas edit — a rename, Tab, Delete — is written into
-the lines; the canvas wins: the lines are edited where they stand when that
-says the same chart, else written out afresh, and the chart is only redrawn
-from them to put back an arrow they imply, never to take away or change a
-box or an arrow the canvas has (`StepsSync`).
+ids; boxes already on the page keep their places (a box on its own stays
+where it was put), and on a chart that arranges itself each chain the lines
+hold is arranged. Selecting a box lights its line (every selected box's
+line); the caret's line selects its box. Only typing in the panel draws the
+chart. A canvas edit — a rename, Tab, Delete, a deleted arrow, a box
+dropped on its own — only ever rewrites the lines, never the chart
+(`StepsSync`): they are edited where they stand when that says the chart,
+else written out afresh, and two steps the canvas does not join are kept
+apart with a blank line. So the lines always say the canvas, and drawing
+them again changes nothing.
 
 ### Arrangement (`DocSettings.flowLayout`)
 
@@ -704,7 +709,11 @@ whichever field it arrived in, fences and all.
 
 **Flowcharts go in and out as steps.** One language for the person typing in
 the Steps panel, the agent reading and writing, and the published text, so
-an agent reads what it writes back and writes what a person would type:
+an agent reads what it writes back and writes what a person would type. A
+blank line starts a separate chain — the line after it is not joined to the
+line before it — which is how the text says a box on its own, or two steps
+whose arrow was deleted; agents are told to keep the blank lines they read
+and to add none for spacing:
 
 ```
 Start

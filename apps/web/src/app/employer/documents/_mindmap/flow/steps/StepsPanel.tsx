@@ -402,14 +402,16 @@ export function StepsPanel({ canvasSize }: { canvasSize: Size }) {
                     {t("syntax.title")}
                 </h3>
                 <dl className="grid grid-cols-[auto_1fr] items-baseline gap-x-3 gap-y-1 text-[11.5px]">
-                    {(["step", "decision", "branch", "jump", "ends"] as const).map(rule => (
-                        <React.Fragment key={rule}>
-                            <dt className="text-ink-2 whitespace-pre font-mono text-[11px]">
-                                {t(`syntax.${rule}Code`)}
-                            </dt>
-                            <dd className="text-ink-3">{t(`syntax.${rule}`)}</dd>
-                        </React.Fragment>
-                    ))}
+                    {(["step", "decision", "branch", "jump", "ends", "blank"] as const).map(
+                        rule => (
+                            <React.Fragment key={rule}>
+                                <dt className="text-ink-2 whitespace-pre font-mono text-[11px]">
+                                    {t(`syntax.${rule}Code`)}
+                                </dt>
+                                <dd className="text-ink-3">{t(`syntax.${rule}`)}</dd>
+                            </React.Fragment>
+                        )
+                    )}
                 </dl>
                 <p className="text-ink-3 mt-2 text-[11px]">{t("panel.keys")}</p>
             </footer>

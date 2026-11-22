@@ -809,12 +809,31 @@ export function flipSelection(store: EditorStore, axis: "h" | "v"): void {
 // Styling
 // ---------------------------------------------------------------------------
 
+/**
+ * The boxes a style change applies to: the selected ones, with a selected
+ * group standing for its members (a group has no look of its own to change).
+ */
+export function styledNodeIds(store: EditorStore): string[] {
+    const page = activePage(store.getState().doc);
+    const out = new Set<string>();
+    for (const id of store.selectedNodeIds()) {
+        if (nodeById(page, id)?.shape !== "group") {
+            out.add(id);
+            continue;
+        }
+        for (const member of withDescendants(page, [id])) {
+            if (nodeById(page, member)?.shape !== "group") out.add(member);
+        }
+    }
+    return [...out];
+}
+
 export function styleSelection(
     store: EditorStore,
     patch: Partial<NodeStyle>,
     label = "Style"
 ): void {
-    const nodeIds = store.selectedNodeIds();
+    const nodeIds = styledNodeIds(store);
     if (nodeIds.length === 0) return;
     store.updatePage(
         page => mapNodes(page, nodeIds, nd => ({ ...nd, style: { ...nd.style, ...patch } })),
@@ -827,7 +846,7 @@ export function styleTextSelection(
     patch: Partial<TextStyle>,
     label = "Text style"
 ): void {
-    const nodeIds = store.selectedNodeIds();
+    const nodeIds = styledNodeIds(store);
     const edgeIds = store.selectedEdgeIds();
     if (nodeIds.length === 0 && edgeIds.length === 0) return;
     store.updatePage(
@@ -876,7 +895,7 @@ export function styleEdgeSelection(
  */
 export function applySwatch(store: EditorStore, swatchId: string): void {
     if (!SWATCH_BY_ID[swatchId]) return;
-    const ids = store.selectedNodeIds();
+    const ids = styledNodeIds(store);
     if (ids.length === 0) return;
     const { paletteId } = store.getState().doc.settings;
     const sw = swatchFor(swatchId, docMode(store));

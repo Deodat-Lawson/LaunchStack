@@ -10,10 +10,13 @@ import { BURST_IDLE, PREVIEW_MAX_WAIT, StepsSync } from "../flow/steps/sync";
 import {
     addConnected,
     addNextStep,
+    applySwatch,
     commitNodeText,
     groupSelection,
     setBranchWords,
+    styleTextSelection,
 } from "../model/commands";
+import { swatchFor } from "../model/palette";
 import { fitContainers } from "../model/containers";
 import { activePage, childrenOf, nodeById } from "../model/doc";
 import { createDoc, createEdge, createNode, createPage } from "../model/factory";
@@ -249,6 +252,19 @@ describe("1 · a group holds together", () => {
         );
         expect(nodeById(page(s.store), s.group)).toBeUndefined();
         expect(s.store.getState().selection).toEqual([]);
+    });
+
+    it("a colour or a type size picked with the group selected changes its boxes", () => {
+        const s = scene();
+        s.store.selectNodes([s.group]);
+        applySwatch(s.store, "green");
+        styleTextSelection(s.store, { size: 18 });
+        const green = swatchFor("green", "light");
+        for (const id of [s.g1, s.g2]) {
+            expect(node(s.store, id).style.fill).toBe(green.fill);
+            expect(node(s.store, id).textStyle.size).toBe(18);
+        }
+        expect(node(s.store, s.inside).style.fill).not.toBe(green.fill);
     });
 
     it("a marquee over a grouped box selects the group", () => {

@@ -9,6 +9,7 @@ import { cn } from "~/lib/utils";
 
 import {
     addConnected,
+    styledNodeIds,
     applySwatch,
     deleteTopicsOrSelection,
     docMode,
@@ -78,7 +79,11 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
     const above = top.y - TOOLBAR_HEIGHT - GAP >= 6;
     const y = above ? top.y - TOOLBAR_HEIGHT - GAP : bottom.y + GAP;
 
-    const first = nodes[0]!;
+    // A group shows (and its colour and type change) as its members do.
+    const members = styledNodeIds(store)
+        .map(id => nodeById(page, id))
+        .filter((nd): nd is DiagramNode => nd !== undefined);
+    const first = members[0] ?? nodes[0]!;
     const flow = worksAsFlow(doc.settings.kind);
     const size = first.textStyle.size;
     const mode = docMode(store);
@@ -99,7 +104,7 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
             >
                 <button
                     type="button"
-                    onClick={() => addConnected(store, first.id)}
+                    onClick={() => addConnected(store, nodes[0]!.id)}
                     className="text-ink-2 hover:bg-brand-soft hover:text-brand-ink flex size-7 items-center justify-center rounded-md transition-colors"
                     aria-label={
                         flow ? t("selectionToolbar.addStep") : t("selectionToolbar.addChildTopic")
@@ -125,7 +130,8 @@ export function SelectionToolbar({ onMore }: { onMore: () => void }) {
                         first.style.stroke === "none" ||
                         first.style.strokeWidth === 0;
                     const active = byFill
-                        ? first.style.fill === (first.shape === "mind-root" ? tone.stroke : tone.fill)
+                        ? first.style.fill ===
+                          (first.shape === "mind-root" ? tone.stroke : tone.fill)
                         : first.style.stroke === tone.stroke;
                     const name = swatchName(t, sw);
                     return (

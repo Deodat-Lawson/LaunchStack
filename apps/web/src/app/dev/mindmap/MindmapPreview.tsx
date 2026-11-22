@@ -8,6 +8,7 @@ import { buildTemplate } from "~/app/employer/documents/_mindmap/model/templates
 import { applyThemeToDoc } from "~/app/employer/documents/_mindmap/model/theme";
 import { MindmapEditor } from "~/app/employer/documents/_mindmap/ui/MindmapEditor";
 import { MindmapPreview as ReadOnlyMindmap } from "~/app/employer/documents/_mindmap/ui/MindmapPreview";
+import { Toaster } from "~/components/ui/sonner";
 
 /**
  * Local harness for the mindmap editor. It reproduces the real chrome chain —
@@ -122,6 +123,8 @@ export function MindmapPreview() {
                     )}
                 </ToolsStudioShell>
             </DriftShell>
+            {/* The employer layout's, so the editor's toasts show here too. */}
+            <Toaster richColors position="top-right" />
         </div>
     );
 }

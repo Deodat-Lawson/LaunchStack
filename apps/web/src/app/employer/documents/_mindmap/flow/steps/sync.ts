@@ -282,6 +282,8 @@ export class StepsSync {
             ...(base.text.trim() === "" ? [] : [draw(reconcileSteps(base, page))]),
             draw(serializeSteps(page)),
         ];
+        // Whatever says the canvas exactly first; an arrow put back only when
+        // no lines can say the chart without it.
         const drawn =
             tries.find(t => t.fit === "same") ??
             tries.find(t => t.fit === "adds") ??

@@ -4,6 +4,7 @@ import {
     stripContextHeader,
 } from "@launchstack/conversion/ocr/chunker";
 
+import { buildDiagram } from "~/app/employer/documents/_mindmap/model/generate";
 import { toMarkdownOutline } from "~/app/employer/documents/_mindmap/model/serialize";
 import { buildTemplate, TEMPLATE_BY_ID } from "~/app/employer/documents/_mindmap/model/templates";
 import type { MindmapDoc } from "~/app/employer/documents/_mindmap/model/types";
@@ -138,6 +139,33 @@ describe("a published mindmap, as the embedder sees it", () => {
                 expect(strings.some(s => s.includes(label))).toBe(true);
             }
         }
+    });
+
+    it("indexes a flowchart as its step text, every step whole and under the chart's title", async () => {
+        const lines = ["Start"];
+        for (let i = 0; i < 30; i++) {
+            lines.push(`Check order batch ${i} for damage`);
+            if (i % 6 === 2) {
+                lines.push(
+                    `Batch ${i} damaged?`,
+                    `  Yes: Return batch ${i} -> Check order batch ${i} for damage`,
+                    `  No: Accept batch ${i}`
+                );
+            }
+        }
+        lines.push("End");
+        const steps = lines.join("\n");
+        const doc = buildDiagram({ title: "Receiving", type: "flowchart", steps });
+        const markdown = toMarkdownOutline(doc, { sections: true });
+        expect(markdown).toContain("```steps\n" + steps + "\n```");
+        const strings = await embeddedStrings(doc, true);
+        expect(strings.length).toBeGreaterThan(1);
+        for (const text of strings) expect(text).toMatch(/^Receiving/);
+        for (const line of lines) {
+            expect(strings.some(s => s.includes(line))).toBe(true);
+        }
+        // The export people download is unchanged: an outline, not steps.
+        expect(toMarkdownOutline(doc)).not.toContain("```steps");
     });
 
     it("keeps the download export as one outline, without section headings", () => {

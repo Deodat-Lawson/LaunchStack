@@ -19,9 +19,10 @@ import {
     makeId,
 } from "./factory";
 import { graphIndex, isMindmapPage } from "./doc";
+import { flowchartToSteps, readsAsSteps, stepsGap } from "./flowchart";
 import { mermaidToDoc } from "./mermaid";
 import { branchSwatch } from "./palette";
-import { SHAPE_BY_ID } from "./shapes";
+import { isContainer, SHAPE_BY_ID } from "./shapes";
 import { nonEmpty, trimmedOr } from "./strings";
 import {
     DOC_SCHEMA_VERSION,
@@ -343,7 +344,9 @@ export function serializeDoc(doc: MindmapDoc): string {
 
 export interface OutlineOptions {
     /**
-     * Put every top-level branch under its own Markdown heading.
+     * The form that is indexed (the publish route, and the Publish dialog's
+     * preview of it): every top-level branch under its own Markdown heading,
+     * and a flowchart page as its step text.
      *
      * The heading-aware chunker splits on headings and stamps each chunk
      * with the heading path, and that path is prepended to the text that is
@@ -355,10 +358,64 @@ export interface OutlineOptions {
     sections?: boolean;
 }
 
+/** Said once above a flowchart's indexed steps, so a reader knows how to read them. */
+export const INDEXED_STEPS_INTRO =
+    "Flowchart steps, in order (a line ending in ? is a decision; the lines indented under it are its branches; -> names the step it goes to):";
+
+/**
+ * A flowchart page as it is indexed: its step text — the language the Steps
+ * panel shows and the agent tools read and write — fenced, so a step that
+ * starts with "#" or "-" is never read as Markdown; then whatever the steps
+ * do not carry: notes, the groups steps are drawn in, and arrows the text
+ * does not show.
+ */
+function flowchartSection(page: DiagramPage, heading: string): string[] {
+    const written = flowchartToSteps(page);
+    const out = [INDEXED_STEPS_INTRO, "", "```steps", ...written.text.split("\n"), "```", ""];
+    const words = (nd: { text: string }) => nd.text.replace(/\s+/g, " ").trim();
+    const byId = new Map(page.nodes.map(nd => [nd.id, nd]));
+    const steps = new Set(written.ids.filter((id): id is string => id !== null));
+
+    const notes = page.nodes.filter(
+        nd => !steps.has(nd.id) && !isContainer(nd.shape) && !nd.hidden && words(nd)
+    );
+    if (notes.length > 0) out.push(`${heading}Notes`, "", ...notes.map(nd => `- ${words(nd)}`), "");
+
+    const groups = page.nodes.filter(nd => isContainer(nd.shape) && words(nd));
+    if (groups.length > 0) {
+        out.push(`${heading}Groups`, "");
+        for (const g of groups) {
+            const members = page.nodes.filter(nd => nd.parentId === g.id && words(nd));
+            out.push(`- ${words(g)}${members.length ? `: ${members.map(words).join(", ")}` : ""}`);
+        }
+        out.push("");
+    }
+
+    const gap = stepsGap(page, written);
+    const extra = [...gap.unshown, ...gap.relabelled.map(r => r.edge)].filter(
+        e => e.from.nodeId && e.to.nodeId
+    );
+    if (extra.length > 0) {
+        out.push(`${heading}Connections`, "");
+        for (const e of extra) {
+            const label = e.labels
+                .map(l => l.text)
+                .filter(Boolean)
+                .join(" / ");
+            const a = trimmedOr(byId.get(e.from.nodeId!)?.text, "?");
+            const b = trimmedOr(byId.get(e.to.nodeId!)?.text, "?");
+            out.push(`- ${a} → ${b}${label ? `: ${label}` : ""}`);
+        }
+        out.push("");
+    }
+    return out;
+}
+
 /**
  * Depth-first outline of every page. This is the text that gets indexed when a
  * mindmap is published as a knowledge source, so it has to read as prose-ish
- * structure rather than a dump of coordinates.
+ * structure rather than a dump of coordinates. With `sections` (the indexed
+ * form), a flowchart page is written as its step text instead.
  */
 export function toMarkdownOutline(doc: MindmapDoc, options: OutlineOptions = {}): string {
     const sections = options.sections === true;
@@ -370,6 +427,10 @@ export function toMarkdownOutline(doc: MindmapDoc, options: OutlineOptions = {})
 
     for (const page of doc.pages) {
         if (doc.pages.length > 1) out.push(`${pageHeading}${page.name}`, "");
+        if (sections && readsAsSteps(page, doc.settings.kind)) {
+            out.push(...flowchartSection(page, branchHeading));
+            continue;
+        }
         const idx = graphIndex(page);
         const byId = new Map(page.nodes.map(nd => [nd.id, nd]));
         const roots = page.nodes.filter(nd => (idx.in.get(nd.id) ?? []).length === 0);

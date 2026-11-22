@@ -637,7 +637,7 @@ const SIDE_COST = {
     /** Leaving by a side turned away from the other box (× 1 − cos); arriving, half that. */
     facing: 60,
     /** Side to side when mostly beside, end to end when mostly above or below. */
-    axis: 120,
+    axis: 160,
     /**
      * On a flowchart, a target downstream joined end to end — out of the
      * bottom, into the top on a chart that runs down — from a flat side (a

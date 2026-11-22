@@ -1,0 +1,19 @@
+{
+  "specSha256": "c73efe0c9c73ebe120ff4abd8301adf6d3e464b04476ced2df124b3e04d566ab",
+  "schemaVersion": "long-decisions-validation/1",
+  "documents": 50,
+  "versions": 62,
+  "anchorPositionUnit": "UTF-8 bytes",
+  "scopeOffsetUnit": "UTF-16 half-open",
+  "minBytes": 29762,
+  "maxBytes": 30732,
+  "anchors": 50,
+  "labelLeakFailures": 0,
+  "global": {
+    "sentences": 13199,
+    "repeatedSentences": 1,
+    "repeatedSentenceRate": 0.00007576331540268203
+  },
+  "maxVersionRepeatedSentenceRate": 0,
+  "repetitionLimit": 0.08
+}

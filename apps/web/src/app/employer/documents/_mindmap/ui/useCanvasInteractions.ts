@@ -46,7 +46,13 @@ import {
     zoomAt,
 } from "../model/geometry";
 import { isContainer, shapeDef, shapeHoldsText } from "../model/shapes";
-import { isRedundantBend, routeEdge, waypointInsertIndex } from "../model/routing";
+import {
+    dropStaleBends,
+    isRedundantBend,
+    routeEdge,
+    routeOptionsFor,
+    waypointInsertIndex,
+} from "../model/routing";
 import { angleFromCentre, resizeBounds, resizeNode, type ResizeHandle } from "../model/resize";
 import { computeSnap, SNAP_THRESHOLD } from "../model/snapping";
 import type { EditorStore } from "../model/store";
@@ -769,7 +775,8 @@ export function useCanvasInteractions(
                         edge,
                         id => nodeById(page, id),
                         visibleNodes(page),
-                        page.edges
+                        page.edges,
+                        routeOptionsFor(state.doc.settings)
                     );
                     const index = waypointInsertIndex(routed, edge.waypoints, world);
                     store.beginInteraction("Route connector");
@@ -1068,7 +1075,8 @@ export function useCanvasInteractions(
                         edge,
                         id => nodeById(page, id),
                         visibleNodes(page),
-                        page.edges
+                        page.edges,
+                        routeOptionsFor(state.doc.settings)
                     );
                     // Labels ride on the line: only how far along it moves.
                     const t = Math.min(
@@ -1288,7 +1296,13 @@ export function useCanvasInteractions(
 
                 case "move": {
                     store.setGuides([]);
-                    if (g.moved) reparentIntoContainers(store, g.ids);
+                    if (g.moved) {
+                        reparentIntoContainers(store, g.ids);
+                        // Bends that no longer make a clean path are already
+                        // drawn without; take them out so their handles go too.
+                        const moved = withDescendants(activePage(store.getState().doc), g.ids);
+                        store.updatePage(p => dropStaleBends(p, moved), { transient: true });
+                    }
                     const settled = store.endInteraction();
                     if (settled) cb.current.onGestureEnd?.(settled);
                     break;
@@ -1318,7 +1332,8 @@ export function useCanvasInteractions(
                                 id => nodeById(page, id),
                                 BEND_STRAIGHT_TOLERANCE / now.viewport.zoom,
                                 visibleNodes(page),
-                                page.edges
+                                page.edges,
+                                routeOptionsFor(now.doc.settings)
                             )
                         ) {
                             store.updatePage(

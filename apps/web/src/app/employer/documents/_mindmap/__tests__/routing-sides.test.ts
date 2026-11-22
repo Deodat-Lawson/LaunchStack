@@ -229,6 +229,30 @@ describe("sides from where the boxes are", () => {
     });
 });
 
+describe("tips", () => {
+    it("keeps a line coming into a decision off the tip its own branch leaves by", () => {
+        // A step up and to the right of the decision, the No branch out to
+        // the right: both used the right-hand tip and ran on top of each other.
+        const decision = box(0, 0, 160, 100, "diamond");
+        const fix = box(560, -40);
+        const step = box(250, -125);
+        const no = elbow(decision, fix);
+        const into = elbow(step, decision);
+        const lookup = lookupOf(decision, fix, step);
+        const alone = routeEdge(into, lookup, undefined, []);
+        expect(alone.end).toEqual({ x: 160, y: 50 });
+
+        forgetRouteSides();
+        const all = [no, into];
+        const branch = routeEdge(no, lookup, undefined, all);
+        const coming = routeEdge(into, lookup, undefined, all);
+        expect(branch.start).toEqual({ x: 160, y: 50 });
+        // Into the top tip instead, with one clean bend.
+        expect(coming.end).toEqual({ x: 80, y: 0 });
+        expect(coming.points).toHaveLength(3);
+    });
+});
+
 describe("ends pinned to a dot", () => {
     const a = box(0, 0);
 

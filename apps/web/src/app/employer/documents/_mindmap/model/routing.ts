@@ -660,6 +660,12 @@ const SIDE_COST = {
     flowEntry: 40,
     /** Leaving the dot an end was pinned to. */
     unpin: 300,
+    /**
+     * A tip (a diamond's vertex, a circle's side) another connector already
+     * uses: lines cannot spread along a tip, so two on one ran on top of
+     * each other.
+     */
+    tipTaken: 300,
 } as const;
 
 /** A route keeps the sides it used until another pair is better by this much. */
@@ -713,6 +719,11 @@ function endOptions(node: DiagramNode, end: Endpoint): EndOption[] {
         { side: sideOf(normal), end: { point: portPoint(node, port), normal }, pinned, penalty: 0 },
         ...sides,
     ];
+}
+
+/** What landing on `side` of `node` costs when it is a tip another line holds. */
+function tipCost(node: DiagramNode, side: Side, taken: string): number {
+    return taken.includes(side) && !flatSide(node, side) ? SIDE_COST.tipTaken : 0;
 }
 
 /** How far any point of `pts` lies behind the side `end` sits on. */
@@ -827,15 +838,20 @@ interface ChoiceMemo {
     from: DiagramNode;
     to: DiagramNode;
     flow: FlowDirection | null;
+    /** Tips other connectors hold at each end (`takenTips`). */
+    tips: string;
     choice: SideChoice;
 }
 
 let choiceCache = new WeakMap<DiagramEdge, ChoiceMemo>();
+/** The same, for a connector's choice on its own (`baseEnds`). */
+let baseCache = new WeakMap<DiagramEdge, ChoiceMemo>();
 
 /** Forget every remembered side choice (tests start from a clean slate). */
 export function forgetRouteSides(): void {
     sideMemory.clear();
     choiceCache = new WeakMap();
+    baseCache = new WeakMap();
     staleCache = new WeakMap();
 }
 
@@ -857,8 +873,30 @@ export function forgetRouteSides(): void {
 function chooseEnds(
     edge: DiagramEdge,
     lookup: NodeLookup,
-    options: RouteOptions
+    options: RouteOptions,
+    /** The page's connectors, so a tip another line holds is avoided. */
+    edges: readonly DiagramEdge[] = NO_EDGES
 ): SideChoice | null {
+    const ends = choosable(edge, lookup);
+    if (!ends) return null;
+    const { from, to } = ends;
+    const flow = options.flow ?? null;
+    const tips = tipsKey(edge, from, to, lookup, options, edges);
+    const memo = choiceCache.get(edge);
+    if (memo && memo.from === from && memo.to === to && memo.flow === flow && memo.tips === tips) {
+        return memo.choice;
+    }
+    const [takenFrom = "", takenTo = ""] = tips.split("|");
+    const choice = pickSides(edge, from, to, flow, takenFrom, takenTo, true);
+    choiceCache.set(edge, { from, to, flow, tips, choice });
+    return choice;
+}
+
+/** The two boxes of an elbow `chooseEnds` places, or null where the old rules stand. */
+function choosable(
+    edge: DiagramEdge,
+    lookup: NodeLookup
+): { from: DiagramNode; to: DiagramNode } | null {
     if (edge.kind !== "elbow" || edge.waypoints.length > 0) return null;
     const fromId = edge.from.nodeId;
     const toId = edge.to.nodeId;
@@ -867,19 +905,91 @@ function chooseEnds(
     const from = lookup(fromId);
     const to = lookup(toId);
     if (!from || !to || from.rotation % 360 !== 0 || to.rotation % 360 !== 0) return null;
+    return { from, to };
+}
+
+/**
+ * The choice a connector makes on its own, before other lines' tips are
+ * counted: what `takenTips` reads of its neighbours, so no choice waits on
+ * another that waits on it. Reads the remembered sides but does not write
+ * them.
+ */
+function baseEnds(edge: DiagramEdge, lookup: NodeLookup, options: RouteOptions): SideChoice | null {
+    const ends = choosable(edge, lookup);
+    if (!ends) return null;
+    const { from, to } = ends;
     const flow = options.flow ?? null;
-    const memo = choiceCache.get(edge);
+    const memo = baseCache.get(edge);
     if (memo && memo.from === from && memo.to === to && memo.flow === flow) return memo.choice;
-    const choice = pickSides(edge, from, to, flow);
-    choiceCache.set(edge, { from, to, flow, choice });
+    const choice = pickSides(edge, from, to, flow, "", "", false);
+    baseCache.set(edge, { from, to, flow, tips: "", choice });
     return choice;
+}
+
+/** The side of `node` connector `other` (as routed) uses on its own (`baseEnds`). */
+function baseSideAt(
+    other: DiagramEdge,
+    node: DiagramNode,
+    lookup: NodeLookup,
+    options: RouteOptions
+): Side {
+    const which = other.from.nodeId === node.id ? "from" : "to";
+    const base = baseEnds(other, lookup, options);
+    if (base) return which === "from" ? base.fromSide : base.toSide;
+    const port = other[which].port ?? "auto";
+    if (port !== "auto" && port !== "c") return sideOf(portNormal(node, port));
+    return autoPort(node, towardOf(other, which, lookup), other.waypoints.length > 0) as Side;
+}
+
+/**
+ * The tips of `node` (sides that are not flat — a diamond's vertices) that
+ * connectors ahead of `edge` use: a decision's own branches before the lines
+ * coming into it, then by id. Sorted letters, "" when none.
+ */
+function takenTips(
+    edge: DiagramEdge,
+    node: DiagramNode,
+    lookup: NodeLookup,
+    options: RouteOptions,
+    edges: readonly DiagramEdge[]
+): string {
+    if (edges.length < 2 || SIDES.every(side => flatSide(node, side))) return "";
+    const mineOut = edge.from.nodeId === node.id;
+    const taken = new Set<Side>();
+    for (const raw of incidentEdges(edges, node.id)) {
+        if (raw.id === edge.id || raw.from.nodeId === raw.to.nodeId) continue;
+        const other = effectiveEdge(raw, lookup);
+        const theirsOut = other.from.nodeId === node.id;
+        const ahead = theirsOut !== mineOut ? theirsOut : other.id < edge.id;
+        if (!ahead) continue;
+        const side = baseSideAt(other, node, lookup, options);
+        if (!flatSide(node, side)) taken.add(side);
+    }
+    return [...taken].sort().join("");
+}
+
+/** `takenTips` at both ends, as `chooseEnds` and `routeEdgeCached` key on it. */
+function tipsKey(
+    edge: DiagramEdge,
+    from: DiagramNode,
+    to: DiagramNode,
+    lookup: NodeLookup,
+    options: RouteOptions,
+    edges: readonly DiagramEdge[]
+): string {
+    return `${takenTips(edge, from, lookup, options, edges)}|${takenTips(edge, to, lookup, options, edges)}`;
 }
 
 function pickSides(
     edge: DiagramEdge,
     from: DiagramNode,
     to: DiagramNode,
-    flow: FlowDirection | null
+    flow: FlowDirection | null,
+    /** Tips of each box other connectors hold (`takenTips`). */
+    takenFrom: string,
+    takenTo: string,
+    /** Write the choice to `sideMemory` (not for `baseEnds`). */
+    remember: boolean
 ): SideChoice {
     const ca = nodeCenter(from);
     const cb = nodeCenter(to);
@@ -915,7 +1025,12 @@ function pickSides(
             const pts = plainElbow(fo.end, tp.end, ctx.needs);
             candidates.push({
                 key: `${fo.pinned ? "pin-" : ""}${fo.side}>${tp.pinned ? "pin-" : ""}${tp.side}`,
-                cost: fo.penalty + tp.penalty + pairCost(pts, fo.end, tp.end, ctx),
+                cost:
+                    fo.penalty +
+                    tp.penalty +
+                    tipCost(from, fo.side, takenFrom) +
+                    tipCost(to, tp.side, takenTo) +
+                    pairCost(pts, fo.end, tp.end, ctx),
                 choice: {
                     a: fo.end,
                     b: tp.end,
@@ -942,6 +1057,8 @@ function pickSides(
             cost:
                 pin(edge.from, fromSide) +
                 pin(edge.to, toSide) +
+                tipCost(from, fromSide, takenFrom) +
+                tipCost(to, toSide, takenTo) +
                 pairCost([lined.from.point, lined.to.point], lined.from, lined.to, ctx),
             choice: {
                 a: lined.from,
@@ -964,6 +1081,7 @@ function pickSides(
         const slack = settling ? SIDE_SETTLE_SLACK : SIDE_HYSTERESIS;
         if (kept && kept.cost <= best.cost + slack) best = kept;
     }
+    if (!remember) return best.choice;
     if (sideMemory.size >= SIDE_MEMORY_MAX) sideMemory.clear();
     sideMemory.set(edge.id, {
         fromId: from.id,
@@ -1081,13 +1199,14 @@ function autoSideAt(
     edge: DiagramEdge,
     which: "from" | "to",
     lookup: NodeLookup,
-    options: RouteOptions
+    options: RouteOptions,
+    edges: readonly DiagramEdge[]
 ): Side | null {
     const end = edge[which];
     if (!end.nodeId || edge.from.nodeId === edge.to.nodeId) return null;
     const node = lookup(end.nodeId);
     if (!node || node.rotation % 360 !== 0) return null;
-    const chosen = chooseEnds(edge, lookup, options);
+    const chosen = chooseEnds(edge, lookup, options, edges);
     if (chosen) {
         if (which === "from") return chosen.autoFrom ? chosen.fromSide : null;
         return chosen.autoTo ? chosen.toSide : null;
@@ -1111,7 +1230,7 @@ export function sideSlotInfo(
     const edge = effectiveEdge(edgeIn, lookup);
     const nodeId = edge[which].nodeId;
     const node = nodeId ? lookup(nodeId) : undefined;
-    const side = autoSideAt(edge, which, lookup, options);
+    const side = autoSideAt(edge, which, lookup, options, edges);
     if (!nodeId || !node || !side || !flatSide(node, side)) return { slot: 0.5, count: 1 };
     // Ordered by the direction each line leaves in — its angle from the
     // side's outward normal, along the side's own axis — so lines fanning out
@@ -1128,9 +1247,9 @@ export function sideSlotInfo(
         if (other.from.nodeId === nodeId) at.push("from");
         if (other.to.nodeId === nodeId) at.push("to");
         // A neighbour that goes around a box leaves by another side.
-        if (other.id !== edge.id && detours(other, lookup, obstacles, options)) continue;
+        if (other.id !== edge.id && detours(other, lookup, obstacles, options, edges)) continue;
         for (const w of at) {
-            if (autoSideAt(other, w, lookup, options) !== side) continue;
+            if (autoSideAt(other, w, lookup, options, edges) !== side) continue;
             const toward = towardOf(other, w, lookup);
             const d = { x: toward.x - centre.x, y: toward.y - centre.y };
             const key = Math.atan2(d.x * along.x + d.y * along.y, d.x * normal.x + d.y * normal.y);
@@ -1311,10 +1430,11 @@ function sideUsedAt(
     other: DiagramEdge,
     node: DiagramNode,
     lookup: NodeLookup,
-    options: RouteOptions
+    options: RouteOptions,
+    edges: readonly DiagramEdge[]
 ): Side {
     const which = other.from.nodeId === node.id ? "from" : "to";
-    const chosen = chooseEnds(other, lookup, options);
+    const chosen = chooseEnds(other, lookup, options, edges);
     if (chosen) return which === "from" ? chosen.fromSide : chosen.toSide;
     const port = other[which].port ?? "auto";
     if (port !== "auto" && port !== "c") return sideOf(portNormal(node, port));
@@ -1328,14 +1448,14 @@ function sideUsedAt(
 function busySides(
     node: DiagramNode,
     edge: DiagramEdge,
-    incident: readonly DiagramEdge[],
+    edges: readonly DiagramEdge[],
     lookup: NodeLookup,
     options: RouteOptions
 ): Map<Side, number> {
     const out = new Map<Side, number>();
-    for (const raw of incident) {
+    for (const raw of incidentEdges(edges, node.id)) {
         if (raw.id === edge.id || raw.from.nodeId === raw.to.nodeId) continue;
-        const side = sideUsedAt(effectiveEdge(raw, lookup), node, lookup, options);
+        const side = sideUsedAt(effectiveEdge(raw, lookup), node, lookup, options, edges);
         out.set(side, (out.get(side) ?? 0) + 1);
     }
     return out;
@@ -1440,7 +1560,7 @@ function avoidingRoute(
             plain.autoFrom,
             sideOf(plain.a.normal),
             nodeCenter(to),
-            busySides(from, edge, incidentEdges(edges, from.id), lookup, options)
+            busySides(from, edge, edges, lookup, options)
         ),
         ends: portOptions(
             to,
@@ -1448,7 +1568,7 @@ function avoidingRoute(
             plain.autoTo,
             sideOf(plain.b.normal),
             nodeCenter(from),
-            busySides(to, edge, incidentEdges(edges, to.id), lookup, options)
+            busySides(to, edge, edges, lookup, options)
         ),
         blocked: [
             ...padded,
@@ -1495,8 +1615,13 @@ function bentEnds(edge: DiagramEdge, lookup: NodeLookup): { a: ResolvedEnd; b: R
 }
 
 /** A connector's ends before any spreading or detour (`edge` as routed). */
-function plainEnds(edge: DiagramEdge, lookup: NodeLookup, options: RouteOptions): PlainEnds {
-    const chosen = chooseEnds(edge, lookup, options);
+function plainEnds(
+    edge: DiagramEdge,
+    lookup: NodeLookup,
+    options: RouteOptions,
+    edges: readonly DiagramEdge[]
+): PlainEnds {
+    const chosen = chooseEnds(edge, lookup, options, edges);
     if (chosen) {
         return {
             lined: chosen.lined,
@@ -1532,14 +1657,15 @@ function detours(
     edge: DiagramEdge,
     lookup: NodeLookup,
     obstacles: readonly DiagramNode[] | undefined,
-    options: RouteOptions
+    options: RouteOptions,
+    edges: readonly DiagramEdge[]
 ): boolean {
     if (!obstacles || edge.waypoints.length > 0) return false;
     const from = edge.from.nodeId ? lookup(edge.from.nodeId) : undefined;
     const to = edge.to.nodeId ? lookup(edge.to.nodeId) : undefined;
     if (!from || !to || from.id === to.id) return false;
     if (from.rotation % 360 !== 0 || to.rotation % 360 !== 0) return false;
-    const { a, b } = plainEnds(edge, lookup, options);
+    const { a, b } = plainEnds(edge, lookup, options, edges);
     const inTheWay = [
         ...nearbyObstacles(from, to, obstacles).map(nodeBounds),
         nodeBounds(from),
@@ -1580,7 +1706,7 @@ export function routeEdge(
     }
 
     const edge = effectiveEdge(edgeIn, lookup);
-    const plain = plainEnds(edge, lookup, options);
+    const plain = plainEnds(edge, lookup, options, edges);
     let { a, b } = plain;
     if (edges.length > 1) {
         if (plain.lined) {
@@ -1654,6 +1780,8 @@ interface RouteMemo {
     busy: string;
     /** Where its ends sit along their sides (`sideSlot`). */
     slots: string;
+    /** Tips of its boxes other connectors hold (`takenTips`). */
+    tips: string;
     routed: RoutedEdge;
 }
 
@@ -1707,9 +1835,9 @@ export function routeEdgeCached(
     const busy =
         near.length > 0 && from && to
             ? [
-                  ...busySides(from, edge, incidentEdges(edges, from.id), lookup, options),
+                  ...busySides(from, edge, edges, lookup, options),
                   ["|", 0],
-                  ...busySides(to, edge, incidentEdges(edges, to.id), lookup, options),
+                  ...busySides(to, edge, edges, lookup, options),
               ]
                   .map(([side, n]) => `${side}${n}`)
                   .join("")
@@ -1720,6 +1848,9 @@ export function routeEdgeCached(
             ? `${sideSlot(edge, "from", lookup, edges, obstacles, options)}|${sideSlot(edge, "to", lookup, edges, obstacles, options)}`
             : "";
 
+    const ends = choosable(edge, lookup);
+    const tips = ends ? tipsKey(edge, ends.from, ends.to, lookup, options, edges) : "";
+
     const hit = routeCache.get(edgeIn);
     if (
         hit &&
@@ -1728,13 +1859,14 @@ export function routeEdgeCached(
         hit.flow === flow &&
         hit.busy === busy &&
         hit.slots === slots &&
+        hit.tips === tips &&
         sameNodes(hit.near, near)
     ) {
         return hit.routed;
     }
 
     const routed = routeEdge(edgeIn, lookup, obstacles, edges, options);
-    routeCache.set(edgeIn, { from, to, flow, near, busy, slots, routed });
+    routeCache.set(edgeIn, { from, to, flow, near, busy, slots, tips, routed });
     return routed;
 }
 

@@ -46,6 +46,8 @@ the move. The glue on the workspace side is `_workspace/useWorkspaceData`
 ```
 _mindmap/
   model/     pure TypeScript — no React, no DOM, fully unit-tested
+    flowchart/  the flowchart look, its arrangement, and the step language
+  flow/      the flowchart editor's UI: keys, the "What goes here?" menu, Steps
   ui/        React components and hooks
   lib/       browser-only helpers (export, image decoding, API client)
   __tests__/ unit tests for model/, render + interaction tests for ui/
@@ -59,29 +61,31 @@ resize keeps the opposite corner pinned) rather than screenshots.
 
 ### model/
 
-| Module           | Responsibility                                                                                                       |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------- |
-| `types.ts`       | The document shape. `DOC_SCHEMA_VERSION` lives here.                                                                 |
-| `factory.ts`     | The only place a node/edge/page/doc literal is constructed.                                                          |
-| `shapes.ts`      | ~60 shapes as pure `(w, h) → SVG path` functions. One registry drives the canvas, the palette thumbnails and export. |
-| `geometry.ts`    | Rects, rotation, ports, polylines, viewport transforms.                                                              |
-| `routing.ts`     | Straight / elbow / curved connectors, arrowhead orientation, bend insertion.                                         |
-| `layout.ts`      | Tidy-tree layouts: mindmap (both sides), tree, org, radial, grid.                                                    |
-| `layered.ts`     | Layered (Sugiyama) layout for flowcharts: loops, merges, long edges, subgraph clusters.                              |
-| `mermaid.ts`     | Mermaid flowchart parser and builder (shapes, labels, chains, subgraphs → frames), laid out by `layered.ts`.         |
-| `generate.ts`    | AI specs → documents: an outline (mindmap, org chart, tree) or Mermaid (flowchart), themed and laid out.             |
-| `agent-edits.ts` | How a model reads a page (`describeDiagram`) and changes it (`runDiagramEdits` / `applyDiagramEdits`).               |
-| `snapping.ts`    | Grid quantisation, edge/centre alignment, equal-spacing detection.                                                   |
-| `resize.ts`      | Resize in the shape's own rotated frame; multi-select box scaling.                                                   |
-| `text.ts`        | Measurement and wrapping — SVG has no line breaking.                                                                 |
-| `grow.ts`        | Boxes that grow with their text: wider to a cap, then taller; never below their drawn size.                          |
-| `avoid.ts`       | Orthogonal A\* around boxes — the detour a connector takes when its plain route crosses one.                         |
-| `tidy.ts`        | Connectors as a set: nudges apart elbows sharing a channel, moves labels off each other and off their own bends.     |
-| `doc.ts`         | Queries and immutable edits. Two hierarchies: containment (`parentId`) and graph (edges).                            |
-| `commands.ts`    | Every user-facing operation. Toolbar, menu, shortcut and palette all route through here, so they cannot drift.       |
-| `store.ts`       | External store + snapshot-based undo/redo with gesture coalescing.                                                   |
-| `serialize.ts`   | The trust boundary. `parseDoc` never throws. Markdown/Mermaid/CSV import and export (Mermaid via `mermaid.ts`).      |
-| `templates.ts`   | Starter documents, built from the same factories.                                                                    |
+| Module           | Responsibility                                                                                                         |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `types.ts`       | The document shape. `DOC_SCHEMA_VERSION` lives here.                                                                   |
+| `factory.ts`     | The only place a node/edge/page/doc literal is constructed.                                                            |
+| `shapes.ts`      | ~60 shapes as pure `(w, h) → SVG path` functions. One registry drives the canvas, the palette thumbnails and export.   |
+| `geometry.ts`    | Rects, rotation, ports, polylines, viewport transforms.                                                                |
+| `routing.ts`     | Straight / elbow / curved connectors, arrowhead orientation, bend insertion.                                           |
+| `layout.ts`      | Tidy-tree layouts: mindmap (both sides), tree, org, radial, grid.                                                      |
+| `layered.ts`     | Layered (Sugiyama) layout for flowcharts: loops, merges, long edges, subgraph clusters.                                |
+| `mermaid.ts`     | Mermaid flowchart parser and builder (shapes, labels, chains, subgraphs → frames), laid out by `layered.ts`.           |
+| `generate.ts`    | AI specs → documents: an outline (mindmap, org chart, tree) or Mermaid (flowchart), themed and laid out.               |
+| `agent-edits.ts` | How a model reads a page (`describeDiagram`) and changes it (`runDiagramEdits` / `applyDiagramEdits`).                 |
+| `snapping.ts`    | Grid quantisation, edge/centre alignment, equal-spacing detection.                                                     |
+| `resize.ts`      | Resize in the shape's own rotated frame; multi-select box scaling.                                                     |
+| `text.ts`        | Measurement and wrapping — SVG has no line breaking.                                                                   |
+| `grow.ts`        | Boxes that grow with their text: wider to a cap, then taller; never below their drawn size.                            |
+| `avoid.ts`       | Orthogonal A\* around boxes — the detour a connector takes when its plain route crosses one.                           |
+| `tidy.ts`        | Connectors as a set: nudges apart elbows sharing a channel, moves labels off each other and off their own bends.       |
+| `doc.ts`         | Queries and immutable edits. Two hierarchies: containment (`parentId`) and graph (edges).                              |
+| `containers.ts`  | Groups wrap their members; frames grow to hold theirs. Applied by the store on every write (see below).                |
+| `flowchart/`     | The flowchart look (`look.ts`), its arrangement (`arrange.ts`) and the step language (`syntax`, `steps`, `reconcile`). |
+| `commands.ts`    | Every user-facing operation. Toolbar, menu, shortcut and palette all route through here, so they cannot drift.         |
+| `store.ts`       | External store + snapshot-based undo/redo with gesture coalescing.                                                     |
+| `serialize.ts`   | The trust boundary. `parseDoc` never throws. Markdown/Mermaid/CSV import and export (Mermaid via `mermaid.ts`).        |
+| `templates.ts`   | Starter documents, built from the same factories.                                                                      |
 
 ### Nodes vs. annotations
 
@@ -128,6 +132,30 @@ where an edge sits in that list (`insertEdgesBeside`), not to coordinates. A
 topic's parent is its first incoming edge from another topic (`topicParent`),
 and the reorder only ever moves an edge earlier so that stays true.
 
+### Groups and frames
+
+Both are containment, and both hold what they hold (`model/containers.ts`,
+applied by the store at its write boundary, so no command can leave one out
+of step):
+
+- A **group** (⌘G) is exactly the bounds of its members. A click on a
+  grouped box selects the group — so a drag moves all of it, arrows and
+  bends included — and a marquee over a member selects the group too
+  (Figma's and PowerPoint's rule). A double-click goes inside and selects the
+  box; from there a click picks another member, and a double-click opens a
+  label. The group follows a member that moves, grows or goes; an empty group
+  goes too.
+- A **frame** grows to hold a child that lands past its edge — added by
+  Tab, the menu or the Steps panel, dropped, drawn, or dragged — and never
+  shrinks on its own. Only at a commit: while a box is dragged the frame
+  stays put, so a box leaves a frame when its centre does
+  (`reparentIntoContainers`). A drag on a frame's empty inside is a marquee
+  over what it holds (a marquee catches a frame only whole); the frame moves
+  by its title or its edge, or once it is selected. A double-click inside
+  adds a box there, in the frame; a double-click on the title renames it.
+  Tab never clones a frame or a group: on an empty frame it adds the first
+  step inside, otherwise it does nothing.
+
 ## Keyboard
 
 `ui/useKeyboard.ts` is the whole map, and its `SHORTCUTS` table is the
@@ -169,9 +197,7 @@ Every structural edit — add, outdent, reorder, delete — runs its auto-arrang
 pass inside `store.group`, so one ⌘Z takes back the edit and the layout
 together.
 
-The table is a mindmap's. On a flowchart (next section) a topic-shaped box
-is a box: Tab adds the next step, Enter opens its text, arrows nudge, Delete
-takes only the box.
+The table is a mindmap's. A flowchart has its own keys (next section).
 
 ## Flowcharts
 
@@ -183,54 +209,112 @@ is `DocSettings.kind`, asked through `worksAsFlow` (flowchart and board) and
 Layout menu — **Works as: Flowchart / Mindmap** (`setDiagramKind`) — so a map
 someone built as a flowchart out of topics is fixed without redrawing it.
 
-On a flowchart:
+A document worked as a flowchart is drawn three ways at once — by keys, by
+picking shapes, and by writing steps — chosen from four prototypes tried side
+by side (the keyboard flow, drop-and-pick, and write-it-see-it; quick-add
+arrows was dropped). Mindmaps and freeform drawings are untouched by all of
+it: every hook below is skipped unless `worksAsFlow`.
 
-- **Tab adds the next step** (`addNextStep`): the same shape in the same
-  colours, one gap further along the flow (the way the line came in, else the
-  way the box's arrows already leave, else rightwards), joined by an arrow
-  styled like the ones already there, and straight into its label. A second
-  Tab on the same box fans out beside the first instead of stacking on it.
-  The selection toolbar's + and the menu's "Add next step" are the same
-  command (`addConnected`), so they cannot drift from the key.
-- **Delete takes the box only**, never the steps after it, topic-shaped or not.
-- **Nothing re-arranges**: `autoArrangeIfOn` skips flowcharts, and the Layout
-  menu hides "Auto-arrange as I type".
-- **No fold buttons** — a box with arrows out is not a branch to fold (one
-  already folded keeps its button: it is the way back). On a mindmap a fold
-  button shows while its topic is hovered or selected, as in XMind and
-  MindNode; drawn on every topic with a line out, it sat on each connector
-  like a stray shape that could not be deleted.
-- Double-clicking the canvas makes a process box; the empty-page prompt is
-  "Add the first step" and shows at either chrome depth.
+### The look
 
-On a freeform drawing (imports, untyped documents) Tab steps from any box
-that is not a topic, and topics keep the outliner's keys.
+Every new box and arrow on a flowchart, by every path (the first box, Tab,
+⇧Tab, the menu, a double-click, the rail's tools, the shape library, the
+Steps panel, agents), wears `flowchartLook` (`model/flowchart/look.ts`,
+reached through `flowLookOf(doc)`, `dressBox`, `edgeOptions`): coloured by
+kind — a step blue, a decision amber, Start/End green, data violet, a note
+sticky yellow — no outline, a soft shadow, 15px regular type; right-angled
+arrows in the board's soft ink, 12px labels. A label ending in "?" makes its
+box a decision when it is finished, "Start" or "End" a pill (`afterText`, in
+`commitNodeText`'s undo step); boxes keep their width and grow down. Boxes
+already on a document are never repainted.
 
-## Flowchart directions (prototypes)
+### Keys (`flow/keys`)
 
-Four ways of making and joining boxes on a flowchart are being tried side by
-side so one can be picked and built properly: **A Keyboard flow**, **B
-Quick-add arrows**, **C Drop and pick** and **D Write it, see it**. Open
-`/dev/mindmap?variant=a` (or `b`, `c`, `d`); a switcher pinned to the bottom
-of the page moves between them and back to **Today**.
+| Key                | While typing a label        | One step selected                  | Several selected | Empty board     |
+| ------------------ | --------------------------- | ---------------------------------- | ---------------- | --------------- |
+| Any character      | —                           | —                                  | —                | Start the chart |
+| Tab                | Finish, add the next step   | Add the next step after it         | —                | —               |
+| ⇧Tab               | Finish, add a branch beside | Add a branch beside it             | —                | —               |
+| Enter              | Finish                      | Open its label                     | —                | Start it empty  |
+| Esc                | Finish; an empty step goes  | Clear the selection                | Clear it         | —               |
+| ↑ ↓ ← →            | —                           | Walk the chart                     | Nudge 1px        | —               |
+| ⌥ / ⇧ + arrows     | —                           | Nudge 1px / 10px                   | Nudge 1px / 10px | —               |
+| Delete / Backspace | —                           | Remove it, join the line around it | Delete them      | —               |
 
-They live in `variants/`, one folder each, and plug into the editor through
-one switch, `EditorState.flowVariant`. It is null unless the editor is mounted
-with `flowVariant`, which only the dev harness does, so the product editor is
-unchanged. A direction has two halves (`variants/types.ts`):
+Tab puts the new step _after_ its box, as a new line in the Steps panel
+would: the arrows that left the box now leave the new step. Out of a
+decision it is another branch, and its arrow says **Yes**, then **No**, in
+the reader's language — from every path that adds a step (`addNextStep`:
+Tab, the selection toolbar's +, the menu's "Add next step"). The key legend
+sits in the stage's bottom-left corner, opaque, foldable to a button (the
+choice remembered per browser), gone on an empty board.
 
-- a **look** (`FlowLook`, pure): the box and arrow every creation path makes
-  (`dressBox`, `edgeOptions` in `variants/looks.ts`, read by `insertShape`,
-  `addNextStep`, the double-click, the drawn rectangle, the palette drop and a
-  drawn connector), the way the flow runs, an optional re-layout after a step
-  is added, and an optional change a label can make to its box;
-- a **UI** (`FlowVariantUi`): first say over canvas keys and label-field keys,
-  a double-click on empty canvas, a click on a dot, an arrow let go over empty
-  space, plus marks on the canvas, a stage overlay, a docked panel and its own
-  empty-page prompt.
+### "What goes here?" (`flow/pick`)
 
-Every hook is skipped when no direction is set or the document is not worked
-as a flowchart.
+An arrow dragged out of a box and let go over empty space opens a menu
+there — Step, Decision, Start/End, Data, Note, Just the arrow — with a
+dashed preview of the pick on the board; a double-click on empty canvas opens
+it too, without "Just the arrow". 1–6 pick straight away, arrows and Enter
+pick the highlighted one, Esc or a click elsewhere closes it and leaves
+nothing. A pick is one undo step; out of a decision its arrow says Yes, then
+No; picked inside a frame, the box joins it.
+
+### Steps (`flow/steps`)
+
+The chart as lines, in a panel docked left of the canvas: one step per line,
+joined in order; a line ending in "?" is a decision; indented `Label: step`
+lines are its branches; `-> Step` jumps; Start and End are pills (the
+grammar is `model/flowchart/syntax.ts`, shared with agents). A top-bar
+**Steps** button toggles it; it is open unless the person closed it
+(`lib/preferences.ts`, per browser) and never shown while presenting.
+
+Typing is drawn within ~300ms, one undo step per burst, boxes keeping their
+ids. Selecting a box lights its line (every selected box's line); the caret's
+line selects its box. A canvas edit — a rename, Tab, Delete — is written into
+the lines; the canvas wins: the lines are edited where they stand when that
+says the same chart, else written out afresh, and the chart is only redrawn
+from them to put back an arrow they imply, never to take away or change a
+box or an arrow the canvas has (`StepsSync`).
+
+### Arrangement (`DocSettings.flowLayout`)
+
+| `flowLayout` | What happens                                                                                     |
+| ------------ | ------------------------------------------------------------------------------------------------ |
+| `auto`       | After every structural change the chart is laid out top to bottom (`tidyChart`, `arrangeIfAuto`) |
+| `manual`     | Nothing already placed moves; a new box goes below the box it follows, beside its other steps    |
+
+A blank flowchart is `auto`; a template's sample and anything saved before
+the setting existed is `manual`, so **opening a document never moves
+anything**. Structural changes are Tab, ⇧Tab, a menu pick, a Steps edit,
+Delete joining the line, and a finished label that reshapes or grows a box;
+the arrangement lands in the same undo step. Moving a box by hand — a drag,
+a group drag, a nudge, an align — turns the chart `manual` in that move's
+undo step (`holdChartInPlace`), and a toast says so with **Arrange
+automatically**; the same toggle is in the Layout menu (turning it on
+arranges now). Layout › Arrange now lays it out once and leaves the setting.
+`tidyChart` is a tidy tree when the chart is one, the layered layout for
+merges and loops, kept where its first step is; boxes in a frame are laid
+out among themselves, inside it. On a hand-placed chart the Steps panel
+passes `applySteps`' `keepPlaced`, so a reworded line never moves its box.
+
+### Selecting several
+
+A drag on empty canvas (or on a frame's empty inside) selects every box it
+touches and the arrows between them; ⇧- or ⌘-click adds and removes; ⌘A
+selects everything. Dragging any selected box, a selected arrow, or empty
+space inside the selection's frame moves all of it, bends included; arrow
+keys nudge a selection of several. The selection toolbar's colours apply to
+the selected boxes only. None of the flowchart's own gestures get in the
+way: a marquee never opens the menu, and a drag that starts on a box moves
+it — an arrow is drawn only from a dot.
+
+Also on a flowchart: Delete takes the box only, never the steps after it;
+there are no fold buttons (a box with arrows out is not a branch to fold);
+the empty board is one opaque card with the three ways to start — start
+typing (a ghost of the first step, where it will land), double-click to
+pick a shape, or write the steps in the panel — and the keys that grow it.
+On a freeform drawing Tab steps from any box that is not a topic, and topics
+keep the outliner's keys.
 
 ## Boxes that grow with their text
 
@@ -258,6 +342,7 @@ label and closing it unchanged is not an edit and does not resize anything.
 | another shape's body, or within 24px of it | joined by the sides that face each other; while you approach, that shape alone gets an outline and its dots |
 | another shape's dot                        | the end pinned to that dot (the start never is)                                                             |
 | empty space, from a topic                  | the next topic (the mindmap gesture)                                                                        |
+| empty space, on a flowchart                | the "What goes here?" menu (see Flowcharts)                                                                 |
 | empty space, from any other shape          | the arrow with a free end, to re-drag onto the right shape                                                  |
 | a few pixels away, or a plain click        | nothing — the click selects the box                                                                         |
 
@@ -626,15 +711,17 @@ The editor is a full diagramming application, and most people who open it
 want four branches and a Present button. So the chrome has two depths, and
 the document's kind picks which one it opens at:
 
-| Depth          | What is on screen                                                                              | Opens for                            |
-| -------------- | ---------------------------------------------------------------------------------------------- | ------------------------------------ |
-| **Focus**      | The canvas, a rail of five tools, a toolbar on the selection, an 8‑item context menu, ⌘K       | `kind: "mindmap"` and `"board"`      |
-| **Everything** | Both side panels, the 60‑shape library, the full inspector, snapping, arrange — today's editor | `kind: "flowchart"` and `"freeform"` |
+| Depth          | What is on screen                                                                              | Opens for                                      |
+| -------------- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------- |
+| **Focus**      | The canvas, a rail of five tools, a toolbar on the selection, an 8‑item context menu, ⌘K       | `kind: "mindmap"`, `"board"` and `"flowchart"` |
+| **Everything** | Both side panels, the 60‑shape library, the full inspector, snapping, arrange — today's editor | `kind: "freeform"`                             |
 
 `DocSettings.kind` is set from the template's category by `buildTemplate`
 (`kindForTemplate`). Documents saved before it existed are classified on load
 by `inferKind` in `serialize.ts`: a page drawn with nothing but topics is a
-mindmap, anything else — an empty page included — keeps Everything. The
+mindmap, anything else — an empty page included — keeps Everything. A
+flowchart opens in Focus: its keys, the menu, the Steps panel and the
+toolbar on the selection are the whole of drawing one. The
 person's own choice wins over both, remembered per kind in `localStorage`
 (`lib/preferences.ts`), and the Simple ⇄ Everything toggle in the top bar
 is how they make it. Every command and shortcut works in both depths; ⌘K
@@ -645,7 +732,8 @@ Three things follow from the depth being _chrome_ and nothing more:
 
 - **The document renders identically in both.** Depth is `EditorState`, never
   `DocSettings`; a file does not know or care how it was last looked at.
-- **Auto-arrange is document data** (`settings.autoLayout`), on for the
+- **Auto-arrange is document data** (`settings.autoLayout` for a mindmap,
+  `settings.flowLayout` for a flowchart — see Flowcharts), on for the
   `mindmap` template. `commands.ts` re-runs it after every structural edit —
   but only on a mindmap, and only on a page that is nothing but topics
   (`isMindmapPage`), so a flowchart is never re-flowed into a tree because one
@@ -663,7 +751,8 @@ Three things follow from the depth being _chrome_ and nothing more:
 → `DriftShell` → `ToolsStudioShell` → editor — with a template document and
 `/api/mindmaps/*` answered locally, so the canvas can be driven without a real
 session or a row in the database. `?template=flowchart` picks a starter (ids in
-`model/template-meta.ts`); `?view=preview` mounts the read-only preview the
+`model/template-meta.ts`; `?template=blank` is a blank flowchart, as the
+product makes one, and `&board=dark` a dark board); `?view=preview` mounts the read-only preview the
 workspace viewer uses instead, which shares the canvas and therefore its
 layout bugs. The route 404s in production.
 

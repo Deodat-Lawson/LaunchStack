@@ -865,6 +865,7 @@
     "failed": "保存失败 — 稍后将自动重试"
   },
   "canvas": {
+    "frameTitle": "框架",
     "dropImage": "拖入图片",
     "bendHint": "拖动可改走线 · 双击可删除此折点"
   },

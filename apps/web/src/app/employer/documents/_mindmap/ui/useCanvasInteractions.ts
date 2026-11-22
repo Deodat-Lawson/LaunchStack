@@ -258,6 +258,12 @@ export interface CanvasCallbacks {
      * shape was placed by hand.
      */
     onGestureEnd?: (label: string) => void;
+    /**
+     * The title a frame made with the rail's Frame tool starts with ("Frame",
+     * in the reader's language), selected in its field so typing replaces it.
+     * Without one a new frame has no title to see or double-click.
+     */
+    frameTitle?: string;
 }
 
 export function useCanvasInteractions(
@@ -1416,6 +1422,8 @@ export function useCanvasInteractions(
                     const rect = state.marquee;
                     store.setMarquee(null);
                     const shape = g.insertShape ?? "rectangle";
+                    // A frame starts with a title to see, double-click and rename.
+                    const title = shape === "frame" ? cb.current.frameTitle : undefined;
                     let insertedId: string;
                     if (g.moved && rect && rect.w > 8 && rect.h > 8) {
                         const drawn = createNode({
@@ -1425,6 +1433,7 @@ export function useCanvasInteractions(
                             y: rect.y,
                             w: rect.w,
                             h: rect.h,
+                            ...(title ? { text: title } : {}),
                             // Drawn inside a frame, it joins the frame.
                             parentId: isContainer(shape)
                                 ? null
@@ -1446,7 +1455,12 @@ export function useCanvasInteractions(
                         insertedId = node.id;
                     } else {
                         store.cancelInteraction();
-                        insertedId = insertShape(store, shape, g.origin);
+                        insertedId = insertShape(
+                            store,
+                            shape,
+                            g.origin,
+                            title ? { text: title } : {}
+                        );
                     }
                     // Disarm first: `setTool` clears `editing`, so opening the
                     // label above this line would silently undo it — which is

@@ -865,6 +865,7 @@
     "failed": "Couldn't save — retrying shortly"
   },
   "canvas": {
+    "frameTitle": "Frame",
     "dropImage": "Drop an image",
     "bendHint": "Drag to reroute · double-click to remove the bend"
   },

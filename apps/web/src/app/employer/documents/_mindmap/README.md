@@ -153,6 +153,10 @@ of step):
   over what it holds (a marquee catches a frame only whole); the frame moves
   by its title or its edge, or once it is selected. A double-click inside
   adds a box there, in the frame; a double-click on the title renames it.
+  A frame drawn with the rail's Frame tool starts titled "Frame" (in the
+  reader's language), the title selected so typing names it, and the
+  selection toolbar sits above a selected frame's title, never over it (the
+  second click of that double-click has to land on the title).
   Tab never clones a frame or a group: on an empty frame it adds the first
   step inside, otherwise it does nothing.
 

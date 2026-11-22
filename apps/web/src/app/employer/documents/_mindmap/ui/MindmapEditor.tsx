@@ -407,6 +407,7 @@ export function MindmapEditor(props: MindmapEditorProps) {
             onEditText: (target: { kind: "node" | "edge-label"; id: string; index?: number }) =>
                 store.setEditing(target),
             onOpenComments: () => setLeftTab("comments"),
+            frameTitle: t("canvas.frameTitle"),
             // A shape placed by hand should stay where it was put, so a Move or
             // Resize ends auto-arrange — with the way back one click away.
             onGestureEnd: (label: string) => {

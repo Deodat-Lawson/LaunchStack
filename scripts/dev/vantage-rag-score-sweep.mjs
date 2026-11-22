@@ -45,6 +45,8 @@ export const RELIABILITY_SCORE_METHOD = Object.freeze({
     schemaVersion: "vantage-retrieval-reliability-method/1",
     arms: RELIABILITY_ARMS,
     cohortCaps: RELIABILITY_CAPS,
+    pairing:
+        "Exact matched-group and both-successful comparisons against seeds and seeds-windows; backfill also compared with its originating live arm",
     views: "Without reruns retains original 16 KB attempts plus new 8 KB attempts. With reruns replaces only predeclared failed transport-affected 16 KB attempts once, retaining replacement failures.",
 });
 export const RELIABILITY_SCORE_METHOD_SHA256 = createHash("sha256")
@@ -454,6 +456,14 @@ export function scoreSweep(cohorts, corpus, runs, { mode = "original" } = {}) {
                         size,
                         ...paired(scoring, partition, size, candidate, "seeds"),
                     });
+                if (mode === "heldout-reliability")
+                    for (const candidate of ["configured-live", "configured-live+backfill"])
+                        pairs.push({
+                            cohort: cohort.cohort,
+                            capBytes: cap,
+                            size,
+                            ...paired(scoring, partition, size, candidate, "seeds-windows"),
+                        });
                 pairs.push({
                     cohort: cohort.cohort,
                     capBytes: cap,

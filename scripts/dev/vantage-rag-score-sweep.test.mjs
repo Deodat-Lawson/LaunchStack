@@ -271,6 +271,30 @@ test("explicit reliability mode permits heldout8/16 and seeds-windows without ch
         /identity_invalid/
     );
 });
+test("reliability compares live directly with seeds-windows on matched and both-successful groups", () => {
+    const runs = [
+        run("heldout", "seeds-windows", "a", 8000),
+        run("heldout", "configured-live", "a", 8000, {
+            status: "failed",
+            failure: "topic_exploration_failed:timeout",
+        }),
+    ];
+    const score = scoreSweep([cohorts[1]], corpus, runs, { mode: "heldout-reliability" });
+    const pair = score.summary.pairs.find(
+        pair =>
+            pair.capBytes === 8000 &&
+            pair.size === 3 &&
+            pair.leftArm === "configured-live" &&
+            pair.rightArm === "seeds-windows"
+    );
+    assert.equal(pair.matched.groups, 1);
+    assert.equal(pair.matched.delta.documentSelected, -1);
+    assert.equal(pair.bothSuccessful.groups, 0);
+    assert.equal(
+        pair.matched.left.failuresIncluded.documentSelected.expected,
+        pair.matched.right.failuresIncluded.documentSelected.expected
+    );
+});
 test("reliability views retain original16 without reruns and replace eligible pairs once including failures", () => {
     const f = reliabilityFixture();
     const new8 = run("heldout", "seeds", "a", 8000);

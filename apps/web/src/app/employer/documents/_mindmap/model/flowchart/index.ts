@@ -50,7 +50,7 @@ export function stepsToFlowchart(
     page: DiagramPage,
     text: string,
     mode: ThemeMode,
-    opts: { order?: readonly string[]; origin?: Point } = {}
+    opts: { order?: readonly string[]; origin?: Point; keepPlaced?: boolean } = {}
 ): { page: DiagramPage; ids: string[]; notes: StepNote[] } {
     const parse = parseSteps(text);
     const result = applySteps(page, parse, {
@@ -58,6 +58,8 @@ export function stepsToFlowchart(
         mode,
         ...(opts.order ? { order: opts.order } : {}),
         ...(opts.origin ? { origin: opts.origin } : {}),
+        // A hand-placed chart keeps its places; only new steps are placed.
+        ...(opts.keepPlaced ? { keepPlaced: true } : {}),
     });
     return { page: result.page, ids: result.ids, notes: parse.notes };
 }

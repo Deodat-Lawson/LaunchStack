@@ -803,7 +803,12 @@ function stepsEdit(
     const mode = themeMode(doc.settings.paletteId);
     // Matched in the order the agent read them, so retyped lines keep their boxes.
     const order = flowchartToSteps(p).ids.filter((id): id is string => id !== null);
-    const result = stepsToFlowchart(p, text, mode, { order });
+    // A chart someone placed by hand keeps its places; only new steps are
+    // placed, beside the step they follow (`flowLayout`).
+    const result = stepsToFlowchart(p, text, mode, {
+        order,
+        keepPlaced: doc.settings.flowLayout === "manual",
+    });
     store.updatePage(() => result.page, { label: "Rewrite steps" });
 
     const was = new Map(before.map(n => [n.id, n]));

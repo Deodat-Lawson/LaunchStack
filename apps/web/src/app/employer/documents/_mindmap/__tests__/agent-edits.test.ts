@@ -180,6 +180,31 @@ describe("rewriting a flowchart from steps", () => {
         );
     });
 
+    test("leaves a hand-placed chart's boxes where they were and places only the new step", () => {
+        const doc = stepsChart();
+        const page = activePage(doc);
+        // Someone moved "Ship it" off to the side, so the chart is hand-placed.
+        const shipId = idOf(page, "Ship it");
+        const moved: MindmapDoc = {
+            ...doc,
+            settings: { ...doc.settings, flowLayout: "manual" },
+            pages: [
+                {
+                    ...page,
+                    nodes: page.nodes.map(n => (n.id === shipId ? { ...n, x: n.x + 400 } : n)),
+                },
+            ],
+        };
+        const before = new Map(activePage(moved).nodes.map(n => [n.id, { x: n.x, y: n.y }]));
+        const result = runDiagramEdits(moved, [{ op: "steps", text: REWRITE }]);
+        const next = activePage(result.doc);
+        for (const n of next.nodes) {
+            const was = before.get(n.id);
+            if (was) expect({ x: n.x, y: n.y }).toEqual(was);
+        }
+        expect(result.added).toHaveLength(1);
+    });
+
     test("removes the boxes of steps left out, and keeps notes on the page", () => {
         const doc = stepsChart();
         const page = activePage(doc);

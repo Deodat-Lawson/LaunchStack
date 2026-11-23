@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from "vitest";
-import type { ResolvedChatModel } from "@launchstack/llm";
+import { InvalidStructuredAttemptError, type ResolvedChatModel } from "@launchstack/llm";
 import { RATED_CRITERIA, type ValidationJudge, type Judgment } from "./validation/contracts";
 import { evaluateVantage } from "./validation/evaluate";
 import { outputUnits } from "./validation/input";
@@ -445,6 +445,29 @@ describe("content-free topic-first failure diagnostics", () => {
             return { error: error as Error, snapshot };
         }
     }
+    it.each([
+        ["json_invalid", "generation_output_json_invalid"],
+        ["schema_invalid", "generation_output_schema_invalid"],
+        ["output_too_large", "generation_output_too_large"],
+        [undefined, "generation_structured_output_invalid"],
+    ] as const)("audits a pre-validation generation failure (%s)", async (reason, code) => {
+        const p = ports();
+        const structuredFailure = new InvalidStructuredAttemptError(reason);
+        structuredFailure.message = "PRIVATE_CANARY";
+        p.invoke.mockRejectedValue(structuredFailure);
+        const { error, snapshot } = await failure(p);
+        expect(error.message).toBe(code);
+        expect(snapshot.stage).toBe("generation");
+        expect(snapshot.ruleCodes).toEqual([code]);
+        expect(snapshot.counts).toMatchObject({
+            sourceUnits: 1,
+            citationsChecked: null,
+            citationsFailed: null,
+        });
+        expect(p.invoke).toHaveBeenCalledTimes(1);
+        expect(p.authorizeDispatch).toHaveBeenCalledTimes(1);
+        expect(p.authorizeDispatch).toHaveBeenCalledWith("generation");
+    });
     it.each([
         [
             "report_schema_invalid",

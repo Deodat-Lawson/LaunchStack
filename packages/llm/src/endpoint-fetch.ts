@@ -14,13 +14,17 @@
  *    the SDK sees a short message keyed by status, worded so
  *    `describeChatEndpointError` can still classify it.
  * 3. The provider's usage report on a successful completion goes to the
- *    scope's recorder (usage-meter.ts), so every call is counted whichever
- *    feature made it.
+ *    scope's recorder (usage-meter.ts). Opt-in journaled calls report usage
+ *    through each attempt's settlement instead.
  */
 
 import type { ChatEndpointConfig, ChatModelBehavior } from "./types";
 import { prepareUsageMeter, type UsageMeterContext } from "./usage-meter";
-import { fetchWithProviderRetry, type ChatProviderRetryPolicy } from "./provider-retry";
+import {
+    fetchWithProviderRetry,
+    type ChatProviderAttemptUsageIdentity,
+    type ChatProviderRetryPolicy,
+} from "./provider-retry";
 
 type Fetch = typeof globalThis.fetch;
 type PreparedRequestGuard = (body: string) => Promise<void>;
@@ -164,14 +168,26 @@ export function createEndpointFetch(
                 throw new Error("Expected a prepared JSON request.");
             await guard(send.body);
         }
-        const metered = prepareUsageMeter(input, { owner: endpoint.owner, ...meter });
+        const usageIdentity: ChatProviderAttemptUsageIdentity | undefined =
+            providerRetry?.usageAccounting === "settlement"
+                ? {
+                      owner: meter?.owner ?? endpoint.owner ?? "deployment",
+                      route: meter?.route,
+                      modelId: meter?.modelId,
+                      pricing: meter?.pricing,
+                  }
+                : undefined;
+        const metered = usageIdentity
+            ? null
+            : prepareUsageMeter(input, { owner: endpoint.owner, ...meter });
         const response = providerRetry
             ? await fetchWithProviderRetry(
                   input,
                   send,
                   baseFetch ?? globalThis.fetch,
                   providerRetry,
-                  guard
+                  guard,
+                  usageIdentity
               )
             : await (baseFetch ?? globalThis.fetch)(input, send);
         if (response.ok) return metered ? metered(response) : response;

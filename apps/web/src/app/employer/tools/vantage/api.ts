@@ -43,13 +43,12 @@ export type {
 };
 
 /** Each kind is named and explained by `vantage.evidenceKind.label.<kind>` / `.hint.<kind>`. */
-export const EVIDENCE_KINDS: readonly VantageEvidenceKind[] = [
+export const EVIDENCE_KINDS: readonly Exclude<VantageEvidenceKind, "document">[] = [
     "note",
     "interview",
     "link",
     "task",
     "claim",
-    "document",
 ];
 
 export interface EvidenceInput {

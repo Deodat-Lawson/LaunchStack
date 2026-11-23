@@ -1,12 +1,15 @@
 jest.mock("@launchstack/store/client", () => ({ getDb: jest.fn() }));
+import { PgDialect } from "drizzle-orm/pg-core";
+import { getDb } from "@launchstack/store/client";
 import {
     authorizeLegacyAgendaRead,
-    filterLegacyEvidenceRead,
+    authorizeLegacyCommitmentRead,
+    authorizeLegacyCommitmentSource,
     authorizeLegacyEvidenceMutation,
     authorizeLegacyOverviewRead,
     type LegacyReadStore,
 } from "~/server/vantage/legacy-read-authority";
-import type { AgendaDto, EvidenceDto } from "@launchstack/pipelines/vantage";
+import { listEvidence, type AgendaDto, type CommitmentDto } from "@launchstack/pipelines/vantage";
 import type { VantageCtx } from "~/app/api/vantage/_http";
 import type { OverviewDto } from "~/server/vantage/service";
 const ctx: VantageCtx = { companyId: 1n, userId: "u", can: () => true };
@@ -18,6 +21,8 @@ const agenda = (): AgendaDto =>
     }) as unknown as AgendaDto;
 const store = (): LegacyReadStore => ({
     agendaOwner: jest.fn(async companyId => (companyId === 1n ? "u" : null)),
+    agenda: jest.fn(async () => agenda()),
+    topicAgendaId: jest.fn(async () => "a"),
     records: jest.fn(async () => [{ id: "e", createdByUserId: "u", kind: "note" }]),
 });
 describe("legacy native private report authority", () => {
@@ -95,30 +100,35 @@ describe("legacy native private report authority", () => {
 });
 
 describe("retained manual evidence authority", () => {
-    const items = [{ id: "e" }] as EvidenceDto[];
-    it.each([
-        ["u", "private", "note", 1],
-        ["other", "private", "note", 0],
-        ["other", "shared", "note", 1],
-        ["u", "shared", "document", 0],
-        ["other", "shared", "document", 0],
-    ])("filters %s / %s / %s", async (createdByUserId, visibility, kind, count) => {
-        const s = store();
-        s.records = jest.fn(async () => [{ id: "e", createdByUserId, visibility, kind }]);
-        expect(await filterLegacyEvidenceRead(ctx, items, s)).toHaveLength(count);
-        expect(s.records).toHaveBeenCalledWith(1n, "ev", ["e"]);
-    });
-    it("withholds missing and cross-company rows", async () => {
-        const s = store();
-        s.records = async () => [];
-        expect(await filterLegacyEvidenceRead({ ...ctx, companyId: 2n }, items, s)).toEqual([]);
-    });
-    it("requires read capability before loading evidence", async () => {
-        const s = store();
-        await expect(
-            filterLegacyEvidenceRead({ ...ctx, can: () => false }, items, s)
-        ).rejects.toMatchObject({ status: 403 });
-        expect(s.records).not.toHaveBeenCalled();
+    it("applies workspace, creator/sharing and source predicates before the page limit", async () => {
+        const query = {
+            from: jest.fn().mockReturnThis(),
+            where: jest.fn().mockReturnThis(),
+            orderBy: jest.fn().mockReturnThis(),
+            limit: jest.fn().mockResolvedValue([
+                { id: "owned", createdByUserId: "u", createdAt: new Date(0) },
+                { id: "shared", createdByUserId: "other", createdAt: new Date(0) },
+            ]),
+        };
+        jest.mocked(getDb).mockReturnValue({ select: () => query } as never);
+        const evidence = await listEvidence({
+            companyId: 1n,
+            viewer: { userId: "u", canEdit: true },
+            limit: 2,
+        });
+        const { sql, params } = new PgDialect().sqlToQuery(query.where.mock.calls[0]![0]);
+        expect(sql).toMatch(
+            /"company_id" = \$1 and .*"kind" <> \$2 and \(.*"created_by_user_id" = \$3 or .*"visibility" = \$4\)/
+        );
+        expect(params.map(String)).toEqual(["1", "document", "u", "shared"]);
+        expect(query.limit).toHaveBeenCalledWith(2);
+        expect(query.where.mock.invocationCallOrder[0]).toBeLessThan(
+            query.limit.mock.invocationCallOrder[0]!
+        );
+        expect(evidence.map(({ id, canEdit }) => ({ id, canEdit }))).toEqual([
+            { id: "owned", canEdit: true },
+            { id: "shared", canEdit: false },
+        ]);
     });
     it.each([
         ["other", "note"],
@@ -137,6 +147,47 @@ describe("retained manual evidence authority", () => {
                 { ...ctx, can: p => p === "documents.read" },
                 "e",
                 store()
+            )
+        ).rejects.toMatchObject({ status: 403 });
+    });
+});
+
+describe("linked legacy commitment authority", () => {
+    it("resolves topic-only historical links to their authorized agenda", async () => {
+        const s = store();
+        await expect(
+            authorizeLegacyCommitmentSource(ctx, { agendaId: null, topicId: "topic" }, s)
+        ).resolves.toBeUndefined();
+        expect(s.topicAgendaId).toHaveBeenCalledWith(1n, "topic");
+        expect(s.agenda).toHaveBeenCalledWith(1n, "a");
+    });
+
+    it("rejects a mismatched topic and agenda link", async () => {
+        const s = store();
+        await expect(
+            authorizeLegacyCommitmentSource(ctx, { agendaId: "different", topicId: "topic" }, s)
+        ).rejects.toMatchObject({ status: 403 });
+        expect(s.agenda).not.toHaveBeenCalled();
+    });
+
+    it("does not expose a linked title after the source is denied", async () => {
+        const s = store();
+        s.records = async (_companyId, kind) =>
+            kind === "cm"
+                ? [{ id: "c", createdByUserId: "u", agendaId: "a", topicId: "topic" }]
+                : [];
+        await expect(
+            authorizeLegacyCommitmentRead(
+                ctx,
+                [
+                    {
+                        id: "c",
+                        agendaId: "a",
+                        topicId: "topic",
+                        topicTitle: "Private",
+                    } as CommitmentDto,
+                ],
+                s
             )
         ).rejects.toMatchObject({ status: 403 });
     });

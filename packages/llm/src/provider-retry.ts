@@ -1,3 +1,5 @@
+import type { ChatModelPricing } from "./types";
+
 /** Opt-in physical retry policy. SDK and logical/structured retries remain disabled. */
 export type ChatProviderStatusClass =
     | "success"
@@ -22,12 +24,27 @@ export interface ChatProviderAttemptOutcome {
     };
 }
 
+/** Configured metering identity. No request or response content is included. */
+export interface ChatProviderAttemptUsageIdentity {
+    owner: "deployment" | "workspace";
+    route?: string;
+    modelId?: string;
+    pricing?: ChatModelPricing;
+}
+
 export interface ChatProviderRetryPolicy {
     deadlineAt: number;
+    /** The settlement hook writes usage with the journal; suppress the response meter. */
+    usageAccounting?: "settlement";
     beforeAttempt(info: {
         attempt: number;
         messageBytes: number;
-    }): Promise<(outcome: ChatProviderAttemptOutcome) => Promise<void>>;
+    }): Promise<
+        (
+            outcome: ChatProviderAttemptOutcome,
+            usageIdentity?: ChatProviderAttemptUsageIdentity
+        ) => Promise<void>
+    >;
 }
 
 type Fetch = typeof globalThis.fetch;
@@ -113,7 +130,8 @@ export async function fetchWithProviderRetry(
     init: Parameters<Fetch>[1],
     send: Fetch,
     policy: ChatProviderRetryPolicy,
-    guard?: (body: string) => Promise<void>
+    guard?: (body: string) => Promise<void>,
+    usageIdentity?: ChatProviderAttemptUsageIdentity
 ): Promise<Response> {
     if (!Number.isFinite(policy.deadlineAt)) throw new Error("Invalid provider deadline.");
     const callerSignal = init?.signal ?? (input instanceof Request ? input.signal : undefined);
@@ -198,6 +216,7 @@ export async function fetchWithProviderRetry(
             let generatedOutput = false;
             let receivedBody = false;
             let retryAfterMs: number | undefined;
+            let usage: ChatProviderAttemptOutcome["usage"];
             try {
                 check();
                 response = await withinDeadline(() => send(input, { ...init, signal }));
@@ -209,7 +228,6 @@ export async function fetchWithProviderRetry(
                         ? "unavailable"
                         : "rejected";
                 retryAfterMs = retryAfter(response);
-                let usage: ChatProviderAttemptOutcome["usage"];
                 // Vantage uses JSON completions. Never buffer a streaming consumer's body.
                 if (!response.headers.get("content-type")?.includes("text/event-stream")) {
                     // Observe the first body byte without consuming the response returned to the SDK.
@@ -255,11 +273,15 @@ export async function fetchWithProviderRetry(
                             ? "connection_failed"
                             : "unknown",
                     httpStatus: response?.status ?? null,
-                    ...(safeConnectionFailure && retryAfterMs !== undefined ? { retryAfterMs } : {}),
+                    ...(safeConnectionFailure && retryAfterMs !== undefined
+                        ? { retryAfterMs }
+                        : {}),
+                    ...(usage ? { usage } : {}),
                 };
             }
             // Settlement failure must stop the logical call rather than repeat a possibly paid send.
-            await settle(outcome);
+            if (usageIdentity) await settle(outcome, usageIdentity);
+            else await settle(outcome);
             check();
             const retryable = !failed
                 ? !generatedOutput && (response?.status === 429 || response?.status === 503)

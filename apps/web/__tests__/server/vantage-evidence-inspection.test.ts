@@ -1,5 +1,6 @@
 jest.mock("~/server/vantage/weekly-review-service", () => ({
     weeklyReviewDatabase: { transaction: jest.fn() },
+    loadWeeklyReviewActor: jest.fn(),
     weeklyReviewServices: jest.fn(),
     weeklyReviewEnabled: jest.fn(() => false),
 }));
@@ -18,6 +19,7 @@ import { GET as sourceGET } from "~/app/api/vantage/reviews/context/source/route
 import { PATCH } from "~/app/api/vantage/reviews/context/route";
 import { reviewActor } from "~/app/api/vantage/reviews/_http";
 import {
+    loadWeeklyReviewActor,
     weeklyReviewDatabase,
     weeklyReviewServices,
     weeklyReviewEnabled,
@@ -371,14 +373,19 @@ describe("exact source pin inspection (offline)", () => {
         expect(weeklyReviewDatabase.transaction).not.toHaveBeenCalled();
     });
     it("reconstructs current actor inside the epoch transaction with flags off", async () => {
-        databaseFixture({ missingPin: true });
+        const { calls } = databaseFixture({ missingPin: true });
+        jest.mocked(loadWeeklyReviewActor).mockImplementation(async () => {
+            expect(calls.at(-1)?.sql).toContain("FOR SHARE");
+            return actor;
+        });
         const response = await sourceGET(
             new Request(
                 "http://localhost/api/vantage/reviews/context/source?documentId=7&purpose=personal-star"
             )
         );
         expect(response.status).toBe(200);
-        expect(reviewActor).toHaveBeenCalledTimes(2);
+        expect(reviewActor).toHaveBeenCalledTimes(1);
+        expect(loadWeeklyReviewActor).toHaveBeenCalledWith(expect.any(Function));
         expect((await response.json()).pin.status).toBe("missing_version");
     });
 });

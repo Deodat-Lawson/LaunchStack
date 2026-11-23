@@ -39,20 +39,18 @@ export function EvidenceDialog({
     open,
     onOpenChange,
     initial,
-    defaultKind = "note",
     onSaved,
 }: {
     open: boolean;
     onOpenChange: (open: boolean) => void;
     initial?: EvidenceDto | null;
-    defaultKind?: VantageEvidenceKind;
     onSaved: (saved: EvidenceDto) => void;
 }) {
     const errorText = useErrorText();
     const t = useTranslations("vantage.evidenceDialog");
     const tk = useTranslations("vantage.evidenceKind");
     const tc = useTranslations("common");
-    const [kind, setKind] = useState<VantageEvidenceKind>(defaultKind);
+    const [kind, setKind] = useState<Exclude<VantageEvidenceKind, "document">>("note");
     const [title, setTitle] = useState("");
     const [body, setBody] = useState("");
     const [source, setSource] = useState("");
@@ -65,7 +63,7 @@ export function EvidenceDialog({
 
     useEffect(() => {
         if (!open) return;
-        setKind(initial?.kind ?? defaultKind);
+        setKind(initial?.kind && initial.kind !== "document" ? initial.kind : "note");
         setTitle(initial?.title ?? "");
         setBody(initial?.body ?? "");
         setSource(initial?.source ?? "");
@@ -73,7 +71,7 @@ export function EvidenceDialog({
         setObservedAt(initial?.observedAt ?? todayIso());
         setShared(initial?.visibility === "shared");
         setError(null);
-    }, [open, initial, defaultKind]);
+    }, [open, initial]);
 
     const readFile = async (file: File) => {
         if (file.size > 2_000_000) {
@@ -84,7 +82,6 @@ export function EvidenceDialog({
         setBody(current => (current.trim() ? `${current.trim()}\n\n${text}` : text));
         if (!title.trim()) setTitle(file.name.replace(/\.[^.]+$/, ""));
         if (!source.trim()) setSource(file.name);
-        if (kind === "note") setKind("document");
     };
 
     const save = async () => {
@@ -125,7 +122,9 @@ export function EvidenceDialog({
                         <Field label={t("kind")} hint={tk(`hint.${kind}`)}>
                             <Select
                                 value={kind}
-                                onValueChange={v => setKind(v as VantageEvidenceKind)}
+                                onValueChange={v =>
+                                    setKind(v as Exclude<VantageEvidenceKind, "document">)
+                                }
                             >
                                 <SelectTrigger aria-label={t("kind")}>
                                     <SelectValue />

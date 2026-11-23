@@ -5,6 +5,8 @@ import type {
 import type { TopicSeed } from "./weekly-review-topic-types";
 import type { SelectionDiagnostics } from "./weekly-review-internal-selection";
 import type { WeeklyReviewRetrievalContext } from "@launchstack/pipelines/vantage/dynamic-retrieval-v3";
+import type { ChatUsageEvent } from "@launchstack/llm";
+import type { Tx } from "~/server/workspace/db-types";
 export type {
     WeeklyReviewFailureInput,
     WeeklyReviewFailureRecord,
@@ -31,10 +33,16 @@ export interface FrozenDependency {
     hash: string;
     purpose: SourcePurpose;
 }
-export type WeeklyReviewQuery = (
-    text: string,
-    parameters?: unknown[]
-) => Promise<Record<string, unknown>[]>;
+export interface WeeklyReviewQuery {
+    (text: string, parameters?: unknown[]): Promise<Record<string, unknown>[]>;
+    executor?: Tx;
+    recordAiUsage?(
+        companyId: bigint,
+        userId: string,
+        event: ChatUsageEvent,
+        options?: { reportedTotalTokens: number }
+    ): Promise<void>;
+}
 export interface WeeklyReviewDatabase {
     transaction<T>(work: (query: WeeklyReviewQuery) => Promise<T>): Promise<T>;
 }

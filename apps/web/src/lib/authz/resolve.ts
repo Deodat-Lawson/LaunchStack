@@ -10,6 +10,7 @@ import { and, eq } from "drizzle-orm";
 
 import { db } from "~/server/db";
 import { workspaceRoles } from "~/server/db/schema";
+import type { Executor } from "~/server/workspace/db-types";
 
 import {
     builtinRolePermissions,
@@ -27,14 +28,18 @@ export interface ResolvedRole {
     custom: boolean;
 }
 
-export async function resolveRole(companyId: bigint, roleSlug: string): Promise<ResolvedRole> {
+export async function resolveRole(
+    companyId: bigint,
+    roleSlug: string,
+    executor: Executor = db
+): Promise<ResolvedRole> {
     const slug = normalizeRoleSlug(roleSlug);
     const builtin = builtinRolePermissions(slug);
     if (builtin) {
         return { slug, name: null, permissions: builtin, custom: false };
     }
 
-    const [row] = await db
+    const [row] = await executor
         .select({ name: workspaceRoles.name, permissions: workspaceRoles.permissions })
         .from(workspaceRoles)
         .where(and(eq(workspaceRoles.companyId, companyId), eq(workspaceRoles.slug, slug)))
@@ -54,7 +59,8 @@ export async function resolveRole(companyId: bigint, roleSlug: string): Promise<
 
 export async function resolvePermissionsForRole(
     companyId: bigint,
-    roleSlug: string
+    roleSlug: string,
+    executor?: Executor
 ): Promise<ReadonlySet<Permission>> {
-    return (await resolveRole(companyId, roleSlug)).permissions;
+    return (await resolveRole(companyId, roleSlug, executor)).permissions;
 }

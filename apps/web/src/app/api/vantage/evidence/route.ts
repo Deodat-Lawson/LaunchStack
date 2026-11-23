@@ -1,4 +1,3 @@
-import { filterLegacyEvidenceRead } from "~/server/vantage/legacy-read-authority";
 // GET  /api/vantage/evidence?kind=&since= — the inbox
 // POST /api/vantage/evidence — add one item
 import type { NextRequest } from "next/server";
@@ -38,8 +37,9 @@ export async function GET(request: NextRequest) {
             companyId: auth.ctx.companyId,
             kind,
             since: since && isIsoDate(since) ? since : undefined,
+            viewer: { userId: auth.ctx.userId, canEdit: auth.ctx.can("documents.edit") },
         });
-        return json({ evidence: await filterLegacyEvidenceRead(auth.ctx, items) });
+        return json({ evidence: items });
     } catch (err) {
         return handleVantageError("GET evidence", err, request);
     }
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
                 sourceUrl: parsed.data.sourceUrl === "" ? null : (parsed.data.sourceUrl ?? null),
             },
         });
-        return json({ evidence: item }, 201);
+        return json({ evidence: { ...item, canEdit: true } }, 201);
     } catch (err) {
         return handleVantageError("POST evidence", err, request);
     }

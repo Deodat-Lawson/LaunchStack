@@ -121,6 +121,7 @@ export function boundedInternalQuery(raw: WeeklyReviewQuery, topicFirst = false)
             throw error;
         }
     };
+    query.executor = raw.executor;
     return { query, acquisition, deadlineAt: startedAt + INTERNAL_RETRIEVAL_LIMITS.deadlineMs };
 }
 

@@ -1,7 +1,7 @@
 // POST /api/vantage/metrics/observations — one number for one period
 import type { NextRequest } from "next/server";
 
-import { createObservations, listObservations } from "@launchstack/pipelines/vantage";
+import { createObservation } from "@launchstack/pipelines/vantage";
 
 import {
     error,
@@ -22,13 +22,12 @@ export async function POST(request: NextRequest) {
     try {
         const parsed = ObservationSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
-        await createObservations({
+        const observation = await createObservation({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
-            inputs: [parsed.data],
+            input: parsed.data,
         });
-        const observations = await listObservations({ companyId: auth.ctx.companyId });
-        return json({ observations }, 201);
+        return json({ observations: [observation] }, 201);
     } catch (err) {
         return handleVantageError("POST observation", err, request);
     }

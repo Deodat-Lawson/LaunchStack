@@ -513,6 +513,7 @@
       "topicNotHere": "That topic is not here.",
       "deadlineNotHere": "That deadline is not here.",
       "adminTriage": "Only a workspace admin can see program triage.",
+      "adminReadDeadlines": "Only a workspace admin can see program deadlines.",
       "adminAddDeadline": "Only a workspace admin can add program deadlines.",
       "adminRemoveDeadline": "Only a workspace admin can remove program deadlines.",
       "checkForm": "Check the form and try again."

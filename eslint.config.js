@@ -194,6 +194,8 @@ const eslintConfig = [
             "**/.next/**",
             "**/node_modules/**",
             "**/dist/**",
+            // Disposable local runs and their fixture scripts are outside the workspace.
+            "test-output/**",
             // Generated migration SQL + drizzle journal/snapshots.
             "**/drizzle/**",
             "**/next-env.d.ts",
@@ -234,7 +236,10 @@ const eslintConfig = [
         languageOptions: {
             parser: tsParser,
             parserOptions: {
-                project: true,
+                // Share TypeScript's document registry across the workspace
+                // projects so monolithic lint fits the CI heap budget.
+                projectService: true,
+                tsconfigRootDir: __dirname,
             },
         },
 

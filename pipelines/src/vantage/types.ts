@@ -39,6 +39,8 @@ export interface EvidenceDto {
     visibility: VantageVisibility;
     tags: string[];
     createdAt: string;
+    /** Present on evidence-inbox responses for the current viewer. */
+    canEdit?: boolean;
 }
 
 export interface MetricDefinitionDto {
@@ -128,6 +130,8 @@ export interface CommitmentDto {
     shared: boolean;
     resolvedAt: string | null;
     createdAt: string;
+    /** Present on commitment-ledger reads for the current viewer. */
+    canEdit?: boolean;
 }
 
 export interface DeadlineDto {

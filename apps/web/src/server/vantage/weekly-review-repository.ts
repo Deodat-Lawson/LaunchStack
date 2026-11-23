@@ -5,6 +5,8 @@ import {
 } from "@launchstack/pipelines/vantage/weekly-review-validation";
 import { createHash, randomUUID } from "node:crypto";
 import { z } from "zod";
+import type { ChatProviderAttemptUsageIdentity } from "@launchstack/llm";
+import { createSlot } from "@launchstack/runtime/slot";
 import { decryptSecret, encryptSecret } from "@launchstack/store/crypto";
 import {
     calculateWeeklyReviewBudget,
@@ -40,6 +42,7 @@ import {
     type WeeklyReviewFailureInput,
     type WeeklyReviewProviderAttemptInput,
 } from "./weekly-review-failure-record";
+import { recordWeeklyReviewAttemptUsage } from "./weekly-review-attempt-usage";
 
 const WeeklyReviewV21SchemaForCarryover = z.object({
     topics: z.array(
@@ -283,15 +286,50 @@ const runSummary = (row: Record<string, unknown>) => ({
     created_at: row.created_at == null ? null : scalarText(row.created_at),
     failureRecord: failureOf(row),
 });
+
+// Route bundles and request-scoped repositories share the queue in each web process.
+// Database locks, constraints, and SERIALIZABLE retries still fence other processes.
+const mutationQueue = createSlot<Map<string, Promise<void>>>("vantage-weekly-review-mutations");
+
+async function serializeMutation<T>(
+    actor: WeeklyReviewActor,
+    scope: "run" | "reservation",
+    id: string,
+    work: () => Promise<T>
+): Promise<T> {
+    const tails = mutationQueue.get() ?? new Map<string, Promise<void>>();
+    mutationQueue.set(tails);
+    const key = JSON.stringify([actor.companyId, actor.userId, scope, id]);
+    const previous = tails.get(key);
+    let release!: () => void;
+    const tail = new Promise<void>(resolve => {
+        release = resolve;
+    });
+    tails.set(key, tail);
+    try {
+        await previous;
+        return await work();
+    } finally {
+        release();
+        if (tails.get(key) === tail) tails.delete(key);
+    }
+}
+
 export function createWeeklyReviewRepository(
     database: WeeklyReviewDatabase,
     authority: AssertWeeklyReviewAuthority
 ) {
-    const transact = async <T>(work: (query: WeeklyReviewQuery) => Promise<T>): Promise<T> => {
+    const transact = async <T>(
+        work: (query: WeeklyReviewQuery) => Promise<T>,
+        access?: "READ ONLY"
+    ): Promise<T> => {
         for (let attempt = 0; attempt < 3; attempt++) {
             try {
                 return await database.transaction(async query => {
-                    await query("SET TRANSACTION ISOLATION LEVEL SERIALIZABLE");
+                    await query(
+                        "SET TRANSACTION ISOLATION LEVEL SERIALIZABLE" +
+                            (access ? ", " + access : "")
+                    );
                     await query("SET LOCAL lock_timeout='1000ms'");
                     await query("SET LOCAL statement_timeout='5000ms'");
                     return work(query);
@@ -310,47 +348,25 @@ export function createWeeklyReviewRepository(
         }
         throw new WeeklyReviewConflict("review_concurrent_update");
     };
-    // A reserved run belongs to this repository instance. Parallel physical
-    // attempts otherwise compete for the same run row and can exhaust the
-    // bounded SERIALIZABLE retries before dispatch or terminal accounting.
-    // Queue only journal transactions, never provider work. Other instances
-    // remain fenced by the existing database isolation and row locks.
-    const journalTails = new Map<string, Promise<void>>();
-    const journalTransaction = async <T>(
+    const runTransaction = <T>(
+        actor: WeeklyReviewActor,
         id: string,
         work: (query: WeeklyReviewQuery) => Promise<T>
-    ): Promise<T> => {
-        const previous = journalTails.get(id) ?? Promise.resolve();
-        let release!: () => void;
-        const tail = new Promise<void>(resolve => {
-            release = resolve;
-        });
-        journalTails.set(id, tail);
-        await previous;
-        try {
-            return await transact(work);
-        } finally {
-            release();
-            if (journalTails.get(id) === tail) journalTails.delete(id);
-        }
-    };
-    // Failed-run trace retention is zero. Historical failures are swept on owner access.
-    const redactFailedTraces = async (query: WeeklyReviewQuery, actor: WeeklyReviewActor) => {
-        // Backfill old terminal rows without consulting the removed source trace.
-        // Diagnostic uncertainty remains null; unknown is never reported as zero.
-        await query(
-            "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET failure_record=COALESCE(failure_record,$3::jsonb),ciphertext=NULL,key_version=NULL WHERE company_id=$1::bigint AND owner_id=$2 AND status='failed' AND (failure_record IS NULL OR ciphertext IS NOT NULL OR key_version IS NOT NULL)",
-            [
-                actor.companyId,
-                actor.userId,
-                JSON.stringify(weeklyReviewFailureRecord("candidate_not_admitted")),
-            ]
+    ) =>
+        // PostgreSQL accepts equivalent UUID spellings in path parameters.
+        serializeMutation(actor, "run", id.replace(/[{}-]/g, "").toLowerCase(), () =>
+            transact(work)
         );
-        await query(
-            "UPDATE pdr_ai_v2_vantage_weekly_review_run_manifests m SET trace=NULL FROM pdr_ai_v2_vantage_weekly_review_runs r WHERE m.run_id=r.id AND r.company_id=$1::bigint AND r.owner_id=$2 AND r.status='failed' AND m.trace IS NOT NULL",
-            [actor.companyId, actor.userId]
+    const reservationTransaction = <T>(
+        actor: WeeklyReviewActor,
+        key: string,
+        work: (query: WeeklyReviewQuery) => Promise<T>
+    ) => serializeMutation(actor, "reservation", key, () => transact(work));
+    const clearTerminalTrace = (query: WeeklyReviewQuery, id: string) =>
+        query(
+            "UPDATE pdr_ai_v2_vantage_weekly_review_run_manifests SET trace=NULL WHERE run_id=$1::uuid AND trace IS NOT NULL",
+            [id]
         );
-    };
     const rowFor = async (
         query: WeeklyReviewQuery,
         actor: WeeklyReviewActor,
@@ -451,7 +467,6 @@ export function createWeeklyReviewRepository(
     return {
         findByKey(actor: WeeklyReviewActor, week: string, key: string) {
             return transact(async query => {
-                await redactFailedTraces(query, actor);
                 const [row] = await query(
                     "SELECT id,week_start,status FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=$1::bigint AND owner_id=$2 AND idempotency_key=$3",
                     [actor.companyId, actor.userId, key]
@@ -460,10 +475,10 @@ export function createWeeklyReviewRepository(
                 if (scalarText(row.week_start).slice(0, 10) !== week)
                     throw new WeeklyReviewConflict("idempotency_conflict");
                 return { id: String(row.id), status: String(row.status) };
-            });
+            }, "READ ONLY");
         },
         reserveTopic(actor: WeeklyReviewActor, key: string, id: string, manifest: TopicManifest) {
-            return transact(async query => {
+            return reservationTransaction(actor, key, async query => {
                 const rows = await query(
                     `
                     INSERT INTO pdr_ai_v2_vantage_weekly_review_runs
@@ -515,7 +530,7 @@ export function createWeeklyReviewRepository(
             });
         },
         beginDigestPreparation(actor: WeeklyReviewActor, id: string) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (
                     row.status !== "reserved" ||
@@ -548,7 +563,7 @@ export function createWeeklyReviewRepository(
                 };
             }
         ) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (
                     row.status !== "reserved" ||
@@ -567,7 +582,7 @@ export function createWeeklyReviewRepository(
             });
         },
         claimExploration(actor: WeeklyReviewActor, id: string) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (
                     row.status !== "reserved" ||
@@ -600,7 +615,7 @@ export function createWeeklyReviewRepository(
             id: string,
             build: (query: WeeklyReviewQuery) => Promise<TopicFreeze>
         ) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (
                     row.status !== "reserved" ||
@@ -652,7 +667,7 @@ export function createWeeklyReviewRepository(
                 timing?: { explorationStartedAt?: string; explorationCompletedAt?: string };
             }
         ) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (row.status !== "reserved" || !row.exploration_dispatched || row.snapshot_hash)
                     throw new WeeklyReviewConflict("review_not_reserved");
@@ -752,13 +767,11 @@ export function createWeeklyReviewRepository(
             }
         },
         expireUncertain(actor: WeeklyReviewActor, id: string) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 await authority(query, actor, [], "recovery");
-                if (row.status !== "reserved") {
-                    await redactFailedTraces(query, actor);
+                if (row.status !== "reserved")
                     return { id, status: String(row.status), expired: false };
-                }
                 const changed = await query(
                     "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET status='failed',failure_code='dispatch_uncertain_expired',failure_record=$3::jsonb,ciphertext=NULL,key_version=NULL WHERE id=$1::uuid AND status='reserved' AND retrieval_mode='topic_first' AND coalesce(last_dispatch_at,created_at)<=now()-($2::int*interval '1 second') RETURNING id",
                     [
@@ -781,7 +794,7 @@ export function createWeeklyReviewRepository(
                     "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET failure_record=$2::jsonb WHERE id=$1::uuid AND status='failed'",
                     [id, JSON.stringify(failure)]
                 );
-                await redactFailedTraces(query, actor);
+                await clearTerminalTrace(query, id);
                 return { id, status: "failed", expired: true };
             });
         },
@@ -790,7 +803,7 @@ export function createWeeklyReviewRepository(
             id: string,
             input: { expectedActiveId: string | null; key: string }
         ) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (row.status !== "accepted")
                     throw new WeeklyReviewConflict("review_not_accepted");
@@ -853,7 +866,7 @@ export function createWeeklyReviewRepository(
             dependencies: FrozenDependency[],
             candidateId?: string
         ) {
-            return transact(async query => {
+            return reservationTransaction(actor, key, async query => {
                 await authority(query, actor, dependencies, "prepare");
                 const rows = await query(
                     "INSERT INTO pdr_ai_v2_vantage_weekly_review_runs(id,company_id,owner_id,week_start,idempotency_key,input_hash,status,dependencies) VALUES($1::uuid,$2::bigint,$3,$4::date,$5,$6,'reserved',$7::jsonb) ON CONFLICT(company_id,owner_id,idempotency_key) DO NOTHING RETURNING *",
@@ -894,7 +907,7 @@ export function createWeeklyReviewRepository(
             expectedActiveId?: string | null,
             snapshotHash?: string
         ) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (row.status !== "reserved")
                     throw new WeeklyReviewConflict("review_not_reserved");
@@ -937,7 +950,7 @@ export function createWeeklyReviewRepository(
             expectedActiveId?: string | null,
             snapshotHash?: string
         ) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 await checkedRetryDispatch(
                     query,
@@ -956,7 +969,7 @@ export function createWeeklyReviewRepository(
             input: WeeklyReviewProviderAttemptInput
         ): Promise<string> {
             const attemptId = randomUUID();
-            return journalTransaction(id, async query => {
+            return runTransaction(actor, id, async query => {
                 if (
                     !(PROVIDER_ATTEMPT_STAGES as readonly string[]).includes(input.stage) ||
                     !Number.isSafeInteger(input.attempt) ||
@@ -1037,9 +1050,10 @@ export function createWeeklyReviewRepository(
             actor: WeeklyReviewActor,
             id: string,
             attemptId: string,
-            outcome: unknown
+            outcome: unknown,
+            usageIdentity?: ChatProviderAttemptUsageIdentity
         ): Promise<void> {
-            return journalTransaction(id, async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 const attempt = requireRow(
                     await query(
@@ -1060,6 +1074,8 @@ export function createWeeklyReviewRepository(
                     "UPDATE pdr_ai_v2_vantage_weekly_review_provider_attempts SET outcome=$2::jsonb,settled_at=clock_timestamp() WHERE id=$1::uuid AND settled_at IS NULL",
                     [attemptId, JSON.stringify(safe)]
                 );
+                if (usageIdentity)
+                    await recordWeeklyReviewAttemptUsage(query, actor, safe.usage, usageIdentity);
                 if (row.status === "failed") {
                     const previous = failureOf(row)!;
                     const accounting = await attemptAccounting(query, actor, id);
@@ -1085,12 +1101,9 @@ export function createWeeklyReviewRepository(
             code: string,
             diagnostic?: WeeklyReviewFailureInput
         ) {
-            return journalTransaction(id, async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
-                if (row.status !== "reserved") {
-                    await redactFailedTraces(query, actor);
-                    return;
-                }
+                if (row.status !== "reserved") return;
                 const accounting = await attemptAccounting(query, actor, id);
                 const failure = weeklyReviewFailureRecord(code, {
                     ...diagnostic,
@@ -1107,7 +1120,7 @@ export function createWeeklyReviewRepository(
                     "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET status='failed',failure_code=$4,failure_record=$5::jsonb,ciphertext=NULL,key_version=NULL WHERE id=$1::uuid AND company_id=$2::bigint AND owner_id=$3 AND status='reserved'",
                     [id, actor.companyId, actor.userId, failure.code, JSON.stringify(failure)]
                 );
-                await redactFailedTraces(query, actor);
+                await clearTerminalTrace(query, id);
             });
         },
         accept(
@@ -1115,7 +1128,7 @@ export function createWeeklyReviewRepository(
             id: string,
             input: { report: unknown; evidence: unknown; expectedActiveId: string | null }
         ) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (row.status !== "reserved")
                     throw new WeeklyReviewConflict("review_not_reserved");
@@ -1499,17 +1512,15 @@ export function createWeeklyReviewRepository(
         },
         list(actor: WeeklyReviewActor) {
             return transact(async query => {
-                await redactFailedTraces(query, actor);
                 const rows = await query(
                     "SELECT id,week_start,status,review_version,created_at,failure_code,failure_record FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=$1::bigint AND owner_id=$2 ORDER BY created_at DESC,id DESC LIMIT 52",
                     [actor.companyId, actor.userId]
                 );
                 return rows.map(runSummary);
-            });
+            }, "READ ONLY");
         },
         status(actor: WeeklyReviewActor, id: string) {
             return transact(async query => {
-                await redactFailedTraces(query, actor);
                 const row = await rowFor(query, actor, id);
                 const attempts = await query(
                     "SELECT id,stage,attempt_ordinal,message_bytes,started_at,settled_at,outcome FROM pdr_ai_v2_vantage_weekly_review_provider_attempts WHERE company_id=$1::bigint AND owner_id=$2 AND run_id=$3::uuid ORDER BY started_at DESC,id DESC LIMIT 257",
@@ -1520,7 +1531,7 @@ export function createWeeklyReviewRepository(
                     providerAttempts: attempts.slice(0, 256).map(weeklyReviewProviderAttempt),
                     providerAttemptsTruncated: attempts.length > 256,
                 };
-            });
+            }, "READ ONLY");
         },
         decide(
             actor: WeeklyReviewActor,
@@ -1533,7 +1544,7 @@ export function createWeeklyReviewRepository(
                 outcome?: string;
             }
         ) {
-            return transact(async query => {
+            return runTransaction(actor, id, async query => {
                 const row = await rowFor(query, actor, id, true);
                 if (row.status !== "accepted")
                     throw new WeeklyReviewConflict("review_not_accepted");

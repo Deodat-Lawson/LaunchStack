@@ -27,10 +27,7 @@ export async function GET(request: NextRequest, { params }: Params) {
         if (!agenda) return error(say(request, "agendaNotHere"), 404);
         await authorizeLegacyAgendaRead(auth.ctx, agenda);
         const commitments = await listCommitments({ companyId: auth.ctx.companyId, agendaId: id });
-        await authorizeLegacyCommitmentRead(
-            auth.ctx,
-            commitments.map(item => item.id)
-        );
+        await authorizeLegacyCommitmentRead(auth.ctx, commitments);
         const includePrivate = request.nextUrl.searchParams.get("private") === "1";
         // Which cited notes are private, so the shared copy can withhold them.
         const prefix = `${REF_PREFIX.evidence}:`;

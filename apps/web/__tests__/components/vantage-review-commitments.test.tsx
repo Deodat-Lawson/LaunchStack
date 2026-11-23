@@ -38,10 +38,14 @@ test("review-to-commitment bridge artifacts are absent while legacy commitment e
     );
 });
 
+test("runtime schema accepts only the implemented secret-box configuration", () => {
+    const source = read("src/env.ts");
+    expect(source).not.toMatch(/SECRET_BOX_(?:CURRENT_VERSION|PREVIOUS_KEYS)/);
+    expect(source).toContain("EMBEDDING_SECRETS_KEY");
+});
+
 test("deployment configuration does not advertise unsupported secret-box rotation controls", () => {
-    for (const path of ["../../.env.example", "src/env.ts"]) {
-        const source = read(path);
-        expect(source).not.toMatch(/SECRET_BOX_(?:CURRENT_VERSION|PREVIOUS_KEYS)/);
-        expect(source).toContain("EMBEDDING_SECRETS_KEY");
-    }
+    const source = read("../../.env.example");
+    expect(source).not.toMatch(/SECRET_BOX_(?:CURRENT_VERSION|PREVIOUS_KEYS)/);
+    expect(source).toContain("EMBEDDING_SECRETS_KEY");
 });

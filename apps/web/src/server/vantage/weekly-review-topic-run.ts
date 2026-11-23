@@ -82,6 +82,13 @@ export type TopicDigestTiming = {
     digestDurationMs: number;
 };
 
+const MAX_PARALLEL_DIGESTS = 6;
+
+export function topicDigestConcurrency(poolSize: number): number {
+    // Leave one lease for other work where the pool has more than one connection.
+    return Math.max(1, Math.min(MAX_PARALLEL_DIGESTS, poolSize - 1));
+}
+
 /** Reusable workspace prewarm. Query calls must each use their own short transaction. */
 export async function prewarmTopicDigests(options: {
     actor: WeeklyReviewAuthorityActor;
@@ -91,11 +98,15 @@ export async function prewarmTopicDigests(options: {
     authorizeDocument: (document: { id: number; category: string }) => Promise<boolean>;
     cachePolicy?: "shared" | "ephemeral";
     timeoutMs?: number;
+    poolSize?: () => number;
 }) {
     const { actor, query } = options;
     if (!actor.canRead || !actor.canMutate)
         throw new WeeklyReviewConflict("review_mutation_denied", 403);
     const started = Date.now();
+    const concurrency = options.poolSize
+        ? topicDigestConcurrency(options.poolSize())
+        : MAX_PARALLEL_DIGESTS;
     const timeoutMs = Math.max(
         1,
         Math.min(900000, options.timeoutMs ?? TOPIC_FIRST_LIMITS.digestMs)
@@ -114,9 +125,9 @@ export async function prewarmTopicDigests(options: {
             (async () => {
                 const collected = new Map<string, DocumentDigest>();
                 const versions = [...new Set(options.versionIds)];
-                for (let index = 0; index < versions.length; index += 6) {
+                for (let index = 0; index < versions.length; index += concurrency) {
                     const results = await Promise.all(
-                        versions.slice(index, index + 6).map(version =>
+                        versions.slice(index, index + concurrency).map(version =>
                             getDigestsForVersions({
                                 companyId: actor.companyId,
                                 versionIds: [version],

@@ -19,6 +19,7 @@ import { and, eq, inArray, notInArray, or, sql, type AnyColumn, type SQL } from 
 
 import { category, document } from "@launchstack/store/schema";
 import { db } from "~/server/db";
+import type { Executor } from "~/server/workspace/db-types";
 import {
     documentGrants,
     documentSettings,
@@ -66,7 +67,10 @@ function principalMatches(
     }
 }
 
-export async function resolveDocumentScope(subject: ScopeSubject): Promise<DocumentScope> {
+export async function resolveDocumentScope(
+    subject: ScopeSubject,
+    executor: Executor = db
+): Promise<DocumentScope> {
     if (!subject.permissions.has("documents.read")) return SCOPE_NOTHING;
 
     const role = normalizeRoleSlug(subject.role);
@@ -74,7 +78,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
 
     // 1. What is restricted in this workspace?
     const [restrictedFolders, restrictedDocuments] = await Promise.all([
-        db
+        executor
             .select({ categoryId: folderSettings.categoryId, name: category.name })
             .from(folderSettings)
             .innerJoin(category, eq(category.id, folderSettings.categoryId))
@@ -84,7 +88,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
                     eq(folderSettings.visibility, "restricted")
                 )
             ),
-        db
+        executor
             .select({ documentId: documentSettings.documentId, category: document.category })
             .from(documentSettings)
             .innerJoin(document, eq(document.id, documentSettings.documentId))
@@ -101,7 +105,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
     }
 
     // 2. Which principals is the caller?
-    const groupRows = await db
+    const groupRows = await executor
         .select({ groupId: workspaceGroupMembers.groupId })
         .from(workspaceGroupMembers)
         .where(eq(workspaceGroupMembers.userId, subject.userPk));
@@ -119,7 +123,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
     const [folderGrantRows, documentGrantRows] = await Promise.all([
         folderIds.length === 0
             ? Promise.resolve<FolderGrantRow[]>([])
-            : db
+            : executor
                   .select({
                       categoryId: folderGrants.categoryId,
                       principalType: folderGrants.principalType,
@@ -134,7 +138,7 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
                   ),
         documentIds.length === 0
             ? Promise.resolve<DocumentGrantRow[]>([])
-            : db
+            : executor
                   .select({
                       documentId: documentGrants.documentId,
                       principalType: documentGrants.principalType,
@@ -195,10 +199,15 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
               deniedDocumentIds,
               allowedDocumentIds,
           };
-    const reach = await reachInGrants(subject.companyId, principal, {
-        restrictedFolderIds: new Set(folderIds.map(String)),
-        restrictedDocumentIds: new Set(documentIds.map(String)),
-    });
+    const reach = await reachInGrants(
+        subject.companyId,
+        principal,
+        {
+            restrictedFolderIds: new Set(folderIds.map(String)),
+            restrictedDocumentIds: new Set(documentIds.map(String)),
+        },
+        executor
+    );
     for (const path of reach.folders) {
         if (!scopeAllowsCategory(interim, path)) grantedCategories.push(path);
     }
@@ -245,7 +254,8 @@ async function reachInGrants(
     restricted: {
         restrictedFolderIds: ReadonlySet<string>;
         restrictedDocumentIds: ReadonlySet<string>;
-    }
+    },
+    executor: Executor
 ): Promise<{ folders: string[]; documents: { id: number; category: string | null }[] }> {
     const groupIds = [...principal.groupIds];
     const reaches = (table: typeof folderGrants | typeof documentGrants) =>
@@ -257,7 +267,7 @@ async function reachInGrants(
             eq(table.principalType, "role")
         );
     const [folderRows, documentRows] = await Promise.all([
-        db
+        executor
             .select({
                 categoryId: folderGrants.categoryId,
                 name: category.name,
@@ -267,7 +277,7 @@ async function reachInGrants(
             .from(folderGrants)
             .innerJoin(category, eq(category.id, folderGrants.categoryId))
             .where(and(eq(folderGrants.companyId, companyId), reaches(folderGrants))),
-        db
+        executor
             .select({
                 documentId: documentGrants.documentId,
                 category: document.category,

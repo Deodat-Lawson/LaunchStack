@@ -42,7 +42,7 @@ export type TopicAuthorityCheckpoint = "digest" | "retained-tool" | "provider";
 
 export function createWeeklyReviewAuthority(
     database: WeeklyReviewDatabase,
-    loadActor: () => Promise<WeeklyReviewAuthorityActor>,
+    loadActor: (query: WeeklyReviewQuery) => Promise<WeeklyReviewAuthorityActor>,
     options: {
         internalRetrievalV1?: boolean;
         scopedEvidenceV2?: boolean;
@@ -67,13 +67,12 @@ export function createWeeklyReviewAuthority(
         const remaining = actorDeadline === undefined ? undefined : actorDeadline - Date.now();
         if (remaining !== undefined && remaining <= 0)
             throw new WeeklyReviewConflict("retrieval_acquisition_timeout", 503);
-        // Reject and release the epoch transaction when a separate auth read stalls.
-        // The pending read itself cannot be cancelled by this adapter.
+        // Session lookup has its own pool. Workspace authority reads reuse this transaction.
         const actor =
             remaining === undefined
-                ? await loadActor()
+                ? await loadActor(query)
                 : await Promise.race([
-                      loadActor(),
+                      loadActor(query),
                       new Promise<never>((_, reject) => {
                           actorTimer = setTimeout(
                               () =>

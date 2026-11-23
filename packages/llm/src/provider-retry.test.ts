@@ -5,9 +5,13 @@ import { createEndpointFetch, guardEndpointFetch } from "./endpoint-fetch";
 import { getChatModelPreset } from "./presets";
 import { createOpenAiCompatibleChat } from "./openai-compatible-transport";
 import { applyMessageBehavior } from "./messages";
-import { invokeStructuredAttempt, InvalidStructuredAttemptError } from "./structured-attempt";
+import { invokeStructuredAttempt, type InvalidStructuredAttemptError } from "./structured-attempt";
 import type { ResolvedChatModel } from "./chat-model-factory";
-import type { ChatProviderAttemptOutcome, ChatProviderRetryPolicy } from "./provider-retry";
+import type {
+    ChatProviderAttemptOutcome,
+    ChatProviderAttemptUsageIdentity,
+    ChatProviderRetryPolicy,
+} from "./provider-retry";
 
 const endpoint = {
     owner: "workspace" as const,
@@ -27,14 +31,19 @@ const socketReset = () => new TypeError("socket reset", { cause: { code: "ECONNR
 
 function harness(base: typeof fetch, signal?: AbortSignal, deadlineMs = 20_000) {
     const outcomes: ChatProviderAttemptOutcome[] = [];
+    const identities: (ChatProviderAttemptUsageIdentity | undefined)[] = [];
     const attempts: { attempt: number; messageBytes: number }[] = [];
     const listeners: (() => void)[] = [];
     const policy: ChatProviderRetryPolicy = {
         deadlineAt: Date.now() + deadlineMs,
         beforeAttempt: vi.fn(async info => {
             attempts.push(info);
-            return async (outcome: ChatProviderAttemptOutcome) => {
+            return async (
+                outcome: ChatProviderAttemptOutcome,
+                usageIdentity?: ChatProviderAttemptUsageIdentity
+            ) => {
                 outcomes.push(outcome);
+                identities.push(usageIdentity);
                 listeners.splice(0).forEach(resolve => resolve());
             };
         }),
@@ -42,6 +51,7 @@ function harness(base: typeof fetch, signal?: AbortSignal, deadlineMs = 20_000) 
     return {
         policy,
         outcomes,
+        identities,
         attempts,
         settled: () => new Promise<void>(resolve => listeners.push(resolve)),
         fetch: createEndpointFetch(endpoint, behavior, base, undefined, undefined, policy),
@@ -451,62 +461,92 @@ describe("opt-in journaled provider retries", () => {
         expect(h.outcomes).toEqual([{ statusClass: "success", httpStatus: 200 }]);
     });
 
-    it("keeps SDK retries disabled and structured authorization logical once", async () => {
-        const h = harness(async () => json());
-        const base = vi.fn(async (_input, init) => {
-            expect(init.redirect).toBe("error");
-            return base.mock.calls.length === 1
-                ? json(503, { "retry-after": "0" })
-                : json(200, undefined, {
-                      id: "synthetic",
-                      object: "chat.completion",
-                      created: 1,
-                      model: "synthetic",
-                      choices: [
+    it.each([undefined, "settlement"] as const)(
+        "keeps one structured authorization and accounts usage through %s",
+        async usageAccounting => {
+            const h = harness(async () => json());
+            h.policy.usageAccounting = usageAccounting;
+            const base = vi.fn(async (_input, init) => {
+                expect(init.redirect).toBe("error");
+                return base.mock.calls.length === 1
+                    ? json(
+                          503,
+                          { "retry-after": "0" },
                           {
-                              index: 0,
-                              message: { role: "assistant", content: '{"ok":false}' },
-                              finish_reason: "stop",
-                          },
-                      ],
-                      usage: { prompt_tokens: 5, completion_tokens: 2, total_tokens: 7 },
-                  });
-        });
-        vi.stubGlobal("fetch", base);
-        const recorder = { record: vi.fn() };
-        const chat = createOpenAiCompatibleChat({
-            endpoint,
-            behavior,
-            modelId: "synthetic",
-            maxRetries: 8,
-            providerRetry: h.policy,
-            usage: { recorder },
-        });
-        expect(chat.lc_kwargs.maxRetries).toBe(0);
-        const model = {
-            behavior,
-            chat,
-            prepareMessages: messages => applyMessageBehavior(behavior, messages),
-        } as ResolvedChatModel;
-        const authorizer = vi.fn(async () => {});
-        await expect(
-            invokeStructuredAttempt(
-                model,
-                z.object({ ok: z.literal(true) }),
-                [new HumanMessage("hello")],
-                {
-                    signal: new AbortController().signal,
-                    timeoutMs: 5000,
-                    maxOutputTokens: 256,
-                    maxInputBytes: 200000,
-                    beforeDispatch: authorizer,
-                }
-            )
-        ).rejects.toBeInstanceOf(InvalidStructuredAttemptError);
-        expect(base).toHaveBeenCalledTimes(2);
-        expect(authorizer).toHaveBeenCalledTimes(1);
-        expect(h.outcomes).toHaveLength(2);
-        expect(h.outcomes[1]?.usage).toMatchObject({ totalTokens: 7 });
-        expect(recorder.record).toHaveBeenCalledTimes(1);
-    });
+                              usage: { prompt_tokens: 3, completion_tokens: 0, total_tokens: 3 },
+                          }
+                      )
+                    : json(200, undefined, {
+                          id: "synthetic",
+                          object: "chat.completion",
+                          created: 1,
+                          model: "synthetic",
+                          choices: [
+                              {
+                                  index: 0,
+                                  message: { role: "assistant", content: '{"ok":false}' },
+                                  finish_reason: "stop",
+                              },
+                          ],
+                          usage: { prompt_tokens: 5, completion_tokens: 2, total_tokens: 7 },
+                      });
+            });
+            vi.stubGlobal("fetch", base);
+            const recorder = { record: vi.fn() };
+            const pricing = { input: 0.25, output: 1.25 };
+            const chat = createOpenAiCompatibleChat({
+                endpoint,
+                behavior,
+                modelId: "synthetic",
+                maxRetries: 8,
+                providerRetry: h.policy,
+                usage: { recorder, route: "default", pricing },
+            });
+            expect(chat.lc_kwargs.maxRetries).toBe(0);
+            const model = {
+                behavior,
+                chat,
+                prepareMessages: messages => applyMessageBehavior(behavior, messages),
+            } as ResolvedChatModel;
+            const authorizer = vi.fn(async () => {});
+            await expect(
+                invokeStructuredAttempt(
+                    model,
+                    z.object({ ok: z.literal(true) }),
+                    [new HumanMessage("hello")],
+                    {
+                        signal: new AbortController().signal,
+                        timeoutMs: 5000,
+                        maxOutputTokens: 256,
+                        maxInputBytes: 200000,
+                        beforeDispatch: authorizer,
+                    }
+                )
+            ).rejects.toMatchObject({
+                name: "InvalidStructuredAttemptError",
+                reason: "schema_invalid",
+            } satisfies Partial<InvalidStructuredAttemptError>);
+            expect(base).toHaveBeenCalledTimes(2);
+            expect(authorizer).toHaveBeenCalledTimes(1);
+            expect(h.outcomes).toHaveLength(2);
+            expect(h.outcomes[0]).toMatchObject({
+                httpStatus: 503,
+                usage: { inputTokens: 3, outputTokens: 0, totalTokens: 3 },
+            });
+            expect(h.outcomes[1]?.usage).toMatchObject({ totalTokens: 7 });
+            if (usageAccounting === "settlement") {
+                const identity = {
+                    owner: "workspace",
+                    modelId: "synthetic",
+                    route: "default",
+                    pricing,
+                };
+                expect(h.identities).toEqual([identity, identity]);
+                expect(recorder.record).not.toHaveBeenCalled();
+            } else {
+                expect(h.identities).toEqual([undefined, undefined]);
+                expect(recorder.record).toHaveBeenCalledTimes(1);
+            }
+        }
+    );
 });

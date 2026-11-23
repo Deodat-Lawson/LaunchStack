@@ -59,9 +59,11 @@ jest.mock("@launchstack/pipelines/vantage/weekly-review-v21", () => ({
     reviewFingerprint: () => "test-input-hash",
 }));
 
-it.each(["digest", "exploring", "writing", "checking", "authority"])(
+const timingFailures = ["digest-timing", "authority-timing"];
+it.each(["digest", "exploring", "writing", "checking", "authority", ...timingFailures])(
     "preserves the active report on a %s failure",
-    async segment => {
+    async scenario => {
+        const segment = scenario.replace(/-timing$/, "");
         jest.clearAllMocks();
         mockScopedStages.length = 0;
         const env = jest.replaceProperty(process, "env", {
@@ -112,8 +114,14 @@ it.each(["digest", "exploring", "writing", "checking", "authority"])(
                 findByKey: jest.fn(async () => null),
                 reserveTopic: jest.fn(async () => ({ created: true, id: "candidate" })),
                 beginDigestPreparation: jest.fn(),
-                recordDigestPreparation: jest.fn(),
-                recordExploration: jest.fn(),
+                recordDigestPreparation: jest.fn(async () => {
+                    if (scenario === "digest-timing")
+                        throw new WeeklyReviewConflict("review_concurrent_update");
+                }),
+                recordExploration: jest.fn(async (_actor, _id, values) => {
+                    if (scenario === "authority-timing" && values.timing?.explorationCompletedAt)
+                        throw new WeeklyReviewConflict("review_concurrent_update");
+                }),
                 claimExploration: jest.fn(async () => Date.now() + 1000),
                 freezeTopic: jest.fn(async () => ({ input })),
                 authorizeDispatch: jest.fn(),

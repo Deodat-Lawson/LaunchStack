@@ -73,3 +73,27 @@ it("does not turn operational errors into authorized history", async () => {
     jest.mocked(authorizeLegacyAgendaRead).mockRejectedValue(new Error("store unavailable"));
     await expect(loader.load(ctx)).rejects.toThrow("store unavailable");
 });
+it("scans older weeks when inaccessible agendas would fill the requested page", async () => {
+    const rows = [
+        { id: "denied", weekStart: "2026-11-16", summary: "Protected" },
+        { id: "visible", weekStart: "2026-11-09", summary: "Available" },
+    ];
+    const query = {
+        from: jest.fn().mockReturnThis(),
+        where: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        limit: jest
+            .fn()
+            .mockResolvedValueOnce([rows[0]])
+            .mockResolvedValueOnce([rows[1]])
+            .mockResolvedValue([]),
+    };
+    jest.mocked(db.select).mockReturnValue(query as never);
+    jest.mocked(authorizeLegacyAgendaRead).mockRejectedValueOnce(
+        new VantageError("denied", 403, "legacy_report_forbidden")
+    );
+    expect(await loader.load({ ...ctx, limit: 1 })).toEqual([
+        expect.objectContaining({ refId: "visible", subtitle: "Available" }),
+    ]);
+    expect(query.limit.mock.calls).toEqual([[1], [1]]);
+});

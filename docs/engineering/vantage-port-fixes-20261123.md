@@ -152,3 +152,78 @@ The rebuilt app ran each fixture once more with the same profile. Build passed a
 | **Total** | **50** | **42** | **201,902** | **32,042** | **0.03047829** |
 
 Six 429 responses reported no usage. Billing remained unresolved for the two reset sends, with a combined conservative estimate of USD 0.01256880. Using the same higher post-tracking rates listed above, reported usage plus both unresolved sends came to USD 0.10197720, below the USD 5 cap.
+
+## V2 planning audit follow-up
+
+These fixes address the planning audit at `0d3d52cad9d7`. Verification below used injected providers and disposable databases. The earlier live results above remain historical.
+
+### Pool liveness
+
+Fresh workspace membership, role, Beta and document-scope reads reuse the transaction that holds the authority epoch lock. Session lookup uses its dedicated authentication pool. Each run limits its digest fanout to six or one fewer than the engine pool's capacity, with serial work on a one-slot pool. A process-wide limiter shares the same budget for short digest transactions across runs and route bundles. Provider waits hold no engine connection. The same transactional authority check covers retained tools, evidence inspection and dispatch.
+
+Against `0d3d52cad9d7`, two simultaneous four-digest reviews timed out at 750 ms with both injected pool leases locked and eight waiters. The one-slot authority check also timed out with one locked lease and one waiter. Both pass with the fix. The regression also checks that a one-slot pool still detects Beta, capability, epoch and pinned content revocation. A simultaneous JSON and NDJSON POST test exercises both production request paths. [Service](../../apps/web/src/server/vantage/weekly-review-service.ts#L116) · [Pool tests](../../apps/web/__tests__/server/vantage-topic-authority-pool.test.ts)
+
+### Retained route authorization and history
+
+Observation POST returns a one-item array with the record it inserted. The negative test gives the caller edit capability without read capability and verifies the response omits existing observations. The legacy ledger now requires read capability and applies the overview and export source checks to linked agendas. Linked actions require creator ownership and visible sources. Explicitly shared standalone records stay readable to program managers. Only the creator may modify or delete a record. A source-denied agenda test verifies the linked data is withheld. Both negative tests reproduced the disclosure on the audit base.
+
+Evidence applies its viewer filter before limiting pages. Agenda and workspace history scan past denied summaries until they fill the requested page or reach the end. The combined agenda list uses an empty selection for a denied week and still returns authorized summaries. The direct lookup retains its refusal and shared history retains its no-delete policy. Retired agenda creation now requires edit capability. The retired changes return a uniform 410 without looking up a record after Beta and capability checks. The program deadline list requires `settings.manage`. [Observation](../../apps/web/src/app/api/vantage/metrics/observations/route.ts#L17) · [Ledger policy](../../apps/web/src/server/vantage/legacy-read-authority.ts#L167) · [Agenda paging](../../apps/web/src/server/vantage/legacy-agenda-list.ts#L22) · [Negative tests](../../apps/web/__tests__/server/vantage-legacy-capture-routes.test.ts)
+
+### Run writer serialization
+
+The queue is shared across request-scoped repositories and route bundles in one process. Reservations use the owner and idempotency key. Existing runs use the owner and normalized run ID. Database row locks, serializable retries and uniqueness still protect writes across processes. Acceptance and restore use an additional owner/week advisory lock and active-pointer compare-and-swap.
+
+| Entry point | Queued writers |
+| --- | --- |
+| Review POST, JSON and NDJSON | `reserveTopic`, `beginDigestPreparation`, `recordDigestPreparation`, `claimExploration`, `recordExploration`, `freezeTopic`, `authorizeDispatch`, `beginProviderAttempt`, `completeProviderAttempt`, `accept`, `fail` |
+| Locked dispatch revalidation | `revalidateDispatch` |
+| Recovery POST | `expireUncertain` |
+| Restore POST | `restore` |
+| Decision POST | `decide` |
+| Historical repository helper, with no production start route | `reserve` |
+
+Digest and exploration failures retain their original error when a timing write fails. Disposable PostgreSQL tests race reservations, attempt starts and settlements, stage advances, acceptance, expiry, restore and decisions across independent repository instances. The base replay produced 19 serialization failures across three database cases, including one exhausted start and two exhausted settlements. The eight current PostgreSQL cases passed. [Queue](../../apps/web/src/server/vantage/weekly-review-repository.ts#L292) · [Contention tests](../../apps/web/__tests__/server/vantage-provider-attempt-concurrency.postgres.test.ts)
+
+### Attempt usage and structured failures
+
+Workspace usage accrues from the sanitized journal outcome in the same transaction that settles the attempt. A duplicate settlement leaves usage unchanged. Retried 429 and 503 responses contribute reported usage, as does a completed HTTP 200 whose output fails to parse. Known totals with an unknown token split contribute weighted usage and stay unpriced. Older journal rows were not replayed into the meter. Tests cover rollback and deduplication, the retry and failed-parse sequence, and ordinary transport metering.
+
+Generation now records distinct codes for invalid JSON, schema mismatch and oversized output. The failed HTTP 200 remains terminal with `candidate_not_admitted`. The exact structured rejection of the historical first 12-document run is unavailable. [Settlement](../../apps/web/src/server/vantage/weekly-review-repository.ts#L1049) · [Usage mapping](../../apps/web/src/server/vantage/weekly-review-attempt-usage.ts#L9) · [Generation diagnostics](../../pipelines/src/vantage/weekly-review-v21.ts#L581)
+
+### Failed trace cleanup
+
+Run failure and explicit expiry clear the affected run's trace, ciphertext and key version in the terminal transaction. The content-free failure record remains. Status, list and idempotency lookups run in read-only transactions. The existing forward migration handles historical failed rows. The PostgreSQL regression checks that a late settlement retains diagnostics and that reads issue no cleanup writes. The baseline read replay issued ten extra updates. [Terminalization](../../apps/web/src/server/vantage/weekly-review-repository.ts#L769) · [Read-only history](../../apps/web/src/server/vantage/weekly-review-repository.ts#L1513)
+
+### Retained UI actions
+
+The Commitments screen no longer offers the retired legacy agenda decision action. The Evidence screen omits document capture and restricts shared-record edits and deletion to the creator. Note files still attach as manual text. The UI tests exercise the retained screens with shared records. [Screen tests](../../apps/web/__tests__/components/vantage-legacy-screens.test.tsx)
+
+### Lint memory and verification
+
+The lint comparison ran one ESLint process over the full checkout with `--max-old-space-size=8192`. Memory below is peak Windows working set, which includes memory outside the V8 heap. The main snapshot used the same locked dependencies as the branch.
+
+| Source | Peak working set | Result |
+| --- | ---: | --- |
+| `origin/main` at `ac57e02ae877` | 8,597.7 MiB | V8 heap exhaustion, exit 134 |
+| Port fixes before the lint configuration change | 8,609.7 MiB | V8 heap exhaustion, exit 134 |
+| Port fixes with shared TypeScript document registry | 7,975.3 MiB | Passed, exit 0 |
+
+Both original configurations reach the same heap ceiling. TypeScript's project service lets the workspace projects share a document registry while retaining the existing type-aware rules. ESLint now excludes the gitignored root `test-output` tree. Its local calibration scripts previously reached typed rules outside a workspace project. [Lint configuration](../../eslint.config.js#L193)
+
+The original deployment configuration test opened both the runtime schema and an environment template. The assertions now run separately. The runtime schema passed. The template assertion remains available in ordinary verification and was skipped for this run because the explicit audit boundary disallows opening environment files.
+
+| Check | Result |
+| --- | --- |
+| Workspace `pnpm typecheck` | Passed |
+| Monolithic `pnpm lint` at 8,192 MB | 3,538 files, zero errors and 26 warnings |
+| Package test suites | 2,179 passed, one Windows symlink capability skip across 174 files |
+| Full web enumeration and targeted reruns | 10,030 passed, 10 skipped across 807 suites |
+| `pnpm build` | Passed in 177.8 seconds. Next.js generated all 211 static pages |
+
+The first full web invocation recorded 10,010 passes, 20 failures and 10 skips. All eight failed suites passed targeted reruns, including Collab, storage CLI and PDF subprocess tests. Those reruns account for the additional 20 passes above. Authentication suites passed in the full run. The streaming fixture now supplies a local tokenizer and a valid stream. The simulator test verifies that the owner's saved commitment includes its editability flag on subsequent reads.
+
+Windows sandbox restrictions affected SWC's native cache and test subprocess startup. Package tests passed using Vitest's native config loader. The guarded native-user reruns restored subprocess access without loading environment files.
+
+### Unverified
+
+Same-process pool liveness is verified with an injected finite pool. The contention tests used real local PostgreSQL. Separate web processes, historical accepted trace contents, provider invoices and live model quality were not verified in this round. No paid calls were made. Authority-trigger lock contention remains a separate pre-merge item.

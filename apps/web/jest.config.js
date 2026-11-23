@@ -39,6 +39,8 @@ const esmDeps = [
     "trim-lines",
     "longest-streak",
     "zwitch",
+    "p-limit",
+    "yocto-queue",
     "estree-util[A-Za-z0-9_-]*",
     "hastscript",
     "web-namespaces",

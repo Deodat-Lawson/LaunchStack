@@ -19,6 +19,7 @@ import {
 import { Input } from "~/components/ui/input";
 import { cn } from "~/lib/utils";
 import { useErrorText } from "~/lib/tools/errorText";
+import { usePermissions } from "~/lib/use-permissions";
 
 import { EVIDENCE_KINDS, vantageApi, type EvidenceDto, type VantageEvidenceKind } from "../api";
 import { EvidenceDialog } from "../_components/EvidenceDialog";
@@ -43,6 +44,8 @@ export function EvidenceScreen() {
     const tk = useTranslations("vantage.evidenceKind");
     const tc = useTranslations("common");
     const format = useFormatter();
+    const { can } = usePermissions();
+    const canEdit = can("documents.edit");
     const list = useResource("vantage:evidence", () => vantageApi.evidence());
     const overview = useResource("vantage:overview", () => vantageApi.overview());
     const hidden = useHiddenSuggestions();
@@ -108,20 +111,21 @@ export function EvidenceScreen() {
                 accent={t("accent")}
                 sub={list.data ? t("sub", { count: items.length }) : undefined}
                 actions={
-                    <Button size="sm" onClick={() => setAdding(true)}>
-                        {t("add")}
-                    </Button>
+                    canEdit && (
+                        <Button size="sm" onClick={() => setAdding(true)}>
+                            {t("add")}
+                        </Button>
+                    )
                 }
             />
 
             {list.error && <InlineError message={list.error} onRetry={() => void list.reload()} />}
 
-            {nudges.length > 0 && (
+            {canEdit && nudges.length > 0 && (
                 <WeekSuggestions
                     groups={nudges}
                     act={act}
                     gone={gone}
-                    onDecide={() => undefined}
                     onLogEvidence={() => setAdding(true)}
                 />
             )}
@@ -169,9 +173,11 @@ export function EvidenceScreen() {
                     title={t("emptyTitle")}
                     body={t("emptyBody")}
                     action={
-                        <Button size="sm" onClick={() => setAdding(true)}>
-                            {t("addFirst")}
-                        </Button>
+                        canEdit && (
+                            <Button size="sm" onClick={() => setAdding(true)}>
+                                {t("addFirst")}
+                            </Button>
+                        )
                     }
                 />
             ) : filtered.length === 0 ? (
@@ -206,46 +212,50 @@ export function EvidenceScreen() {
                                     />
                                     {/* Not modal: its items open dialogs, and a modal menu that hands off to a
                                         dialog leaves the page unclickable once the dialog closes. */}
-                                    <DropdownMenu modal={false}>
-                                        <DropdownMenuTrigger asChild>
-                                            <Button
-                                                variant="ghost"
-                                                size="icon"
-                                                className="size-7"
-                                                aria-label={t("actionsFor", { title: e.title })}
-                                            >
-                                                <MoreHorizontal className="size-4" />
-                                            </Button>
-                                        </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end">
-                                            <DropdownMenuItem onSelect={() => setEditing(e)}>
-                                                {tc("actions.edit")}
-                                            </DropdownMenuItem>
-                                            <DropdownMenuItem onSelect={() => void toggleShared(e)}>
-                                                {e.visibility === "shared"
-                                                    ? t("makePrivate")
-                                                    : t("share")}
-                                            </DropdownMenuItem>
-                                            {e.sourceUrl && (
-                                                <DropdownMenuItem asChild>
-                                                    <a
-                                                        href={e.sourceUrl}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                    >
-                                                        {t("openLink")}{" "}
-                                                        <ExternalLink className="ml-auto size-3" />
-                                                    </a>
+                                    {canEdit && e.canEdit === true && (
+                                        <DropdownMenu modal={false}>
+                                            <DropdownMenuTrigger asChild>
+                                                <Button
+                                                    variant="ghost"
+                                                    size="icon"
+                                                    className="size-7"
+                                                    aria-label={t("actionsFor", { title: e.title })}
+                                                >
+                                                    <MoreHorizontal className="size-4" />
+                                                </Button>
+                                            </DropdownMenuTrigger>
+                                            <DropdownMenuContent align="end">
+                                                <DropdownMenuItem onSelect={() => setEditing(e)}>
+                                                    {tc("actions.edit")}
                                                 </DropdownMenuItem>
-                                            )}
-                                            <DropdownMenuItem
-                                                className="text-danger"
-                                                onSelect={() => void remove(e)}
-                                            >
-                                                {tc("actions.remove")}
-                                            </DropdownMenuItem>
-                                        </DropdownMenuContent>
-                                    </DropdownMenu>
+                                                <DropdownMenuItem
+                                                    onSelect={() => void toggleShared(e)}
+                                                >
+                                                    {e.visibility === "shared"
+                                                        ? t("makePrivate")
+                                                        : t("share")}
+                                                </DropdownMenuItem>
+                                                {e.sourceUrl && (
+                                                    <DropdownMenuItem asChild>
+                                                        <a
+                                                            href={e.sourceUrl}
+                                                            target="_blank"
+                                                            rel="noreferrer"
+                                                        >
+                                                            {t("openLink")}{" "}
+                                                            <ExternalLink className="ml-auto size-3" />
+                                                        </a>
+                                                    </DropdownMenuItem>
+                                                )}
+                                                <DropdownMenuItem
+                                                    className="text-danger"
+                                                    onSelect={() => void remove(e)}
+                                                >
+                                                    {tc("actions.remove")}
+                                                </DropdownMenuItem>
+                                            </DropdownMenuContent>
+                                        </DropdownMenu>
+                                    )}
                                 </div>
                                 {expanded && (
                                     <div className="px-4 pb-3 pl-[calc(1rem+3.25rem)]">
@@ -284,20 +294,24 @@ export function EvidenceScreen() {
                 </div>
             )}
 
-            <EvidenceDialog
-                open={adding}
-                onOpenChange={setAdding}
-                onSaved={() => {
-                    void list.reload();
-                    void overview.reload();
-                }}
-            />
-            <EvidenceDialog
-                open={editing !== null}
-                onOpenChange={o => !o && setEditing(null)}
-                initial={editing}
-                onSaved={() => void list.reload()}
-            />
+            {canEdit && (
+                <>
+                    <EvidenceDialog
+                        open={adding}
+                        onOpenChange={setAdding}
+                        onSaved={() => {
+                            void list.reload();
+                            void overview.reload();
+                        }}
+                    />
+                    <EvidenceDialog
+                        open={editing !== null}
+                        onOpenChange={o => !o && setEditing(null)}
+                        initial={editing}
+                        onSaved={() => void list.reload()}
+                    />
+                </>
+            )}
         </div>
     );
 }

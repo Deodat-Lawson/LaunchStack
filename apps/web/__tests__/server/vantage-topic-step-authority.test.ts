@@ -186,10 +186,16 @@ it.each(["beta", "actor", "capability", "epoch", "scope", "restriction", "hash"]
     }
 );
 
-it("enforces the persistence allowlist and expires both new and historical failed traces", async () => {
+it("enforces the persistence allowlist and clears only the newly failed run's trace", async () => {
     const actor = { companyId: "1", userId: "owner" };
     const queries: { sql: string; args: unknown[] }[] = [];
-    const row = { status: "reserved", exploration_dispatched: true, snapshot_hash: null };
+    const row = {
+        id: "run",
+        week_start: "2026-11-09",
+        status: "reserved",
+        exploration_dispatched: true,
+        snapshot_hash: null,
+    };
     const query = async (sql: string, args: unknown[] = []) => {
         queries.push({ sql, args });
         if (sql.startsWith("SELECT * FROM pdr_ai_v2_vantage_weekly_review_runs")) return [row];
@@ -235,10 +241,11 @@ it("enforces the persistence allowlist and expires both new and historical faile
     await repository.fail(actor, "run", "topic_authority_revoked");
     expect(queries.at(-1)).toMatchObject({
         sql: expect.stringContaining("SET trace=NULL"),
-        args: ["1", "owner"],
+        args: ["run"],
     });
-    expect(queries.at(-1)?.sql).toContain("r.status='failed'");
+    expect(queries.at(-1)?.sql).toContain("WHERE run_id=$1::uuid");
     await repository.findByKey(actor, "2026-11-09", "key");
     await repository.list(actor);
-    expect(queries.filter(query => query.sql.includes("SET trace=NULL"))).toHaveLength(3);
+    await repository.status(actor, "run");
+    expect(queries.filter(query => query.sql.includes("SET trace=NULL"))).toHaveLength(1);
 });

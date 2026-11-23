@@ -2,10 +2,13 @@ import { weekStartOf, parseIsoDate, toIsoDate } from "@launchstack/pipelines/van
 import type { WeeklyReviewStage } from "./weekly-review-client-types";
 import { randomUUID } from "node:crypto";
 import { sql } from "drizzle-orm";
+import pLimit from "p-limit";
+import { createSlot } from "@launchstack/runtime/slot";
 import {
     isChatRoute,
     type ChatProviderRetryPolicy,
     type ChatProviderAttemptOutcome,
+    type ChatProviderAttemptUsageIdentity,
 } from "@launchstack/llm";
 import {
     runWeeklyReviewV21,
@@ -14,17 +17,20 @@ import {
 } from "@launchstack/pipelines/vantage/weekly-review-v21";
 import { getEngine } from "~/server/engine";
 import { requireBetaAppContext } from "~/server/beta-apps";
+import { recordAiUsage } from "~/server/ai-usage/record";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import {
     createWeeklyReviewAuthority,
     type TopicAuthorityCheckpoint,
+    type WeeklyReviewAuthorityActor,
 } from "./weekly-review-authority";
 import { createWeeklyReviewRepository } from "./weekly-review-repository";
 import {
     WeeklyReviewConflict,
     type WeeklyReviewDatabase,
     type WeeklyReviewActor,
+    type WeeklyReviewQuery,
 } from "./weekly-review-types";
 import { fingerprint } from "@launchstack/pipelines/vantage/weekly-review-validation";
 import { fitTopicEvidence } from "./weekly-review-topic-freeze";
@@ -32,6 +38,7 @@ import {
     prepareTopicSelection,
     prewarmTopicDigests,
     resolveTopicSelectionProviders,
+    topicDigestConcurrency,
 } from "./weekly-review-topic-run";
 import {
     TOPIC_FIRST_LIMITS,
@@ -52,7 +59,7 @@ export function weeklyReviewEnabled() {
 export const weeklyReviewDatabase: WeeklyReviewDatabase = {
     async transaction(work) {
         return getEngine().db.transaction(async tx => {
-            const query = async (text: string, parameters: unknown[] = []) => {
+            const query: WeeklyReviewQuery = async (text, parameters = []) => {
                 const parts = text
                     .split(/(\$\d+)/g)
                     .map(part =>
@@ -65,12 +72,21 @@ export const weeklyReviewDatabase: WeeklyReviewDatabase = {
                     unknown
                 >[];
             };
+            query.executor = tx;
+            query.recordAiUsage = (companyId, userId, event, options) =>
+                recordAiUsage(companyId, "vantage", event, new Date(), userId, {
+                    writer: tx,
+                    ...options,
+                });
             return work(query);
         });
     },
 };
-async function currentActor() {
-    const result = await requireBetaAppContext();
+export async function loadWeeklyReviewActor(
+    query?: WeeklyReviewQuery
+): Promise<WeeklyReviewAuthorityActor> {
+    if (query && !query.executor) throw new WeeklyReviewConflict("review_access_denied", 403);
+    const result = await requireBetaAppContext(query?.executor);
     if (!result.success) throw new WeeklyReviewConflict("review_access_denied", 403);
     const ctx = result.data;
     return {
@@ -84,7 +100,7 @@ async function currentActor() {
     };
 }
 export function weeklyReviewServices() {
-    const authority = createWeeklyReviewAuthority(weeklyReviewDatabase, currentActor, {
+    const authority = createWeeklyReviewAuthority(weeklyReviewDatabase, loadWeeklyReviewActor, {
         internalRetrievalV1: true,
         scopedEvidenceV2: true,
     });
@@ -97,6 +113,35 @@ export function weeklyReviewServices() {
         ),
     };
 }
+const digestConnectionLimits = createSlot<WeakMap<object, ReturnType<typeof pLimit>>>(
+    "vantage-weekly-review-digest-connection-limits"
+);
+
+function digestPoolSize(): number {
+    return getEngine().dbHandle.client.options.max;
+}
+
+function runDigestTransaction<T>(work: () => Promise<T>): Promise<T> {
+    const pool = getEngine().dbHandle.client;
+    const limits = digestConnectionLimits.get() ?? new WeakMap<object, ReturnType<typeof pLimit>>();
+    digestConnectionLimits.set(limits);
+    let limit = limits.get(pool);
+    if (!limit) {
+        limit = pLimit(topicDigestConcurrency(pool.options.max));
+        limits.set(pool, limit);
+    }
+    // A permit covers a short DB transaction. Provider waits hold no pool permit.
+    return limit(work);
+}
+
+async function recordFailedStageTiming(write: () => Promise<unknown>) {
+    try {
+        await write();
+    } catch {
+        // Terminalization still needs the original stage error.
+    }
+}
+
 /** Reject rather than normalize: stored idempotency and active pointers use exact dates. */
 export function assertWeeklyReviewWeek(week: string) {
     const date = parseIsoDate(week);
@@ -175,22 +220,33 @@ export async function generateWeeklyReview(
         if (terminal || Date.now() >= runDeadlineAt)
             throw new WeeklyReviewConflict("review_deadline_exceeded", 503);
     };
+    const stageDeadlines: Partial<Record<WeeklyReviewProviderStage, number>> = {};
+    const withDigestTransaction = <T>(work: () => Promise<T>) =>
+        runDigestTransaction(() => {
+            checkRun();
+            if (Date.now() >= (stageDeadlines.digest ?? runDeadlineAt))
+                throw new WeeklyReviewConflict("topic_digest_failed:timeout");
+            return work();
+        });
     const authorizeStep = async (checkpoint: TopicAuthorityCheckpoint) => {
         checkRun();
         if (!weeklyReviewEnabled()) throw new WeeklyReviewConflict("weekly_review_disabled", 404);
-        await weeklyReviewDatabase.transaction(async query => {
-            await query("SET LOCAL statement_timeout='5000ms'");
-            await authority.assertTopicStep(query, current, seed.manifest, checkpoint);
-        });
+        const authorize = () =>
+            weeklyReviewDatabase.transaction(async query => {
+                await query("SET LOCAL statement_timeout='5000ms'");
+                await authority.assertTopicStep(query, current, seed.manifest, checkpoint);
+            });
+        if (checkpoint === "digest") await withDigestTransaction(authorize);
+        else await authorize();
         checkRun();
     };
-    const stageDeadlines: Partial<Record<WeeklyReviewProviderStage, number>> = {};
     const retryPolicies: Partial<Record<WeeklyReviewProviderStage, ChatProviderRetryPolicy>> = {};
     const retryPolicy = (
         kind: WeeklyReviewProviderStage,
         deadlineAt = runDeadlineAt
     ): ChatProviderRetryPolicy => {
         const policy: ChatProviderRetryPolicy = {
+            usageAccounting: "settlement",
             deadlineAt: Math.min(runDeadlineAt, deadlineAt),
             async beforeAttempt(info) {
                 checkRun();
@@ -215,14 +271,18 @@ export async function generateWeeklyReview(
                 });
                 providerAttempts++;
                 messageBytes = info.messageBytes;
-                const settle = async (outcome: ChatProviderAttemptOutcome) => {
+                const settle = async (
+                    outcome: ChatProviderAttemptOutcome,
+                    usageIdentity?: ChatProviderAttemptUsageIdentity
+                ) => {
                     lastOutcome = outcome;
                     if (outcome.statusClass !== "success") providerFailures++;
                     await repository.completeProviderAttempt(
                         current,
                         reserved.id,
                         attemptId,
-                        outcome
+                        outcome,
+                        usageIdentity
                     );
                 };
                 try {
@@ -318,9 +378,11 @@ export async function generateWeeklyReview(
                                         ),
                                 });
                                 prepared = await prewarmTopicDigests({
-                                    actor: await currentActor(),
+                                    actor: await loadWeeklyReviewActor(),
                                     versionIds: seed.documents.map(document => document.version),
-                                    query,
+                                    query: (statement, parameters) =>
+                                        withDigestTransaction(() => query(statement, parameters)),
+                                    poolSize: digestPoolSize,
                                     provider: providers.digest,
                                     timeoutMs: Math.max(1, stageDeadlines.digest - Date.now()),
                                     authorizeDocument: async () => {
@@ -335,13 +397,15 @@ export async function generateWeeklyReview(
                             }
                         } catch (error) {
                             if (needsDigests)
-                                await repository.recordDigestPreparation(current, reserved.id, {
-                                    timing: {
-                                        digestCompletedAt: new Date().toISOString(),
-                                        digestDurationMs: Date.now() - digestStarted,
-                                        digestOutcome: "failed",
-                                    },
-                                });
+                                await recordFailedStageTiming(() =>
+                                    repository.recordDigestPreparation(current, reserved.id, {
+                                        timing: {
+                                            digestCompletedAt: new Date().toISOString(),
+                                            digestDurationMs: Date.now() - digestStarted,
+                                            digestOutcome: "failed",
+                                        },
+                                    })
+                                );
                             throw error;
                         }
                         checkRun();
@@ -355,11 +419,15 @@ export async function generateWeeklyReview(
                         await repository.recordExploration(current, reserved.id, {
                             timing: { explorationStartedAt: new Date().toISOString() },
                         });
+                        const recordExplorationCompletion = () =>
+                            repository.recordExploration(current, reserved.id, {
+                                timing: { explorationCompletedAt: new Date().toISOString() },
+                            });
                         let selection;
                         try {
                             selection = await prepareTopicSelection({
                                 seed,
-                                actor: await currentActor(),
+                                actor: await loadWeeklyReviewActor(),
                                 deadlineAt,
                                 digests: prepared.digests,
                                 providers,
@@ -368,11 +436,11 @@ export async function generateWeeklyReview(
                                 record: values =>
                                     repository.recordExploration(current, reserved.id, values),
                             });
-                        } finally {
-                            await repository.recordExploration(current, reserved.id, {
-                                timing: { explorationCompletedAt: new Date().toISOString() },
-                            });
+                        } catch (error) {
+                            await recordFailedStageTiming(recordExplorationCompletion);
+                            throw error;
                         }
+                        await recordExplorationCompletion();
                         checkRun();
                         const frozen = await repository.freezeTopic(current, reserved.id, query =>
                             authority.withTopicSourceReader(query, current, read =>

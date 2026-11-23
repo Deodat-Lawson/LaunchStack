@@ -35,7 +35,7 @@ export async function PATCH(request: NextRequest, { params }: Params) {
         const patch = { ...parsed.data };
         if (patch.sourceUrl === "") patch.sourceUrl = null;
         const item = await updateEvidence({ companyId: auth.ctx.companyId, id, patch });
-        return json({ evidence: item });
+        return json({ evidence: { ...item, canEdit: true } });
     } catch (err) {
         return handleVantageError("PATCH evidence", err, request);
     }

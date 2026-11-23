@@ -26,13 +26,19 @@ import {
 } from "~/lib/require-workspace-context";
 import { BETA_APPS_SETTING } from "~/lib/settings/registry";
 import { readWorkspaceSetting } from "~/server/settings/store";
+import type { Executor } from "~/server/workspace/db-types";
 
 /** The `code` of the refusal, so a client can tell it from a permission 403. */
 export const BETA_APPS_OFF_CODE = "beta_apps_off";
 
 /** Whether the workspace has its beta apps on. Off by default. */
-export async function betaAppsOn(companyId: bigint): Promise<boolean> {
-    return (await readWorkspaceSetting<boolean>(companyId, BETA_APPS_SETTING)) === true;
+export async function betaAppsOn(
+    companyId: bigint,
+    ...connection: [executor?: Executor]
+): Promise<boolean> {
+    return (
+        (await readWorkspaceSetting<boolean>(companyId, BETA_APPS_SETTING, ...connection)) === true
+    );
 }
 
 /** The refusal, in the reader's language: 403 with `code: "beta_apps_off"`. */
@@ -50,10 +56,12 @@ export async function betaAppsOffResponse(): Promise<NextResponse> {
  * route works in, or the response to send instead — the usual 401/403 for
  * who is asking, or the 403 above while the workspace has beta apps off.
  */
-export async function requireBetaAppContext(): Promise<WorkspaceContextResult> {
-    const result = await requireWorkspaceContext();
+export async function requireBetaAppContext(
+    ...connection: [executor?: Executor]
+): Promise<WorkspaceContextResult> {
+    const result = await requireWorkspaceContext(...connection);
     if (!result.success) return result;
-    if (!(await betaAppsOn(result.data.companyId))) {
+    if (!(await betaAppsOn(result.data.companyId, ...connection))) {
         return { success: false, response: await betaAppsOffResponse() };
     }
     return result;

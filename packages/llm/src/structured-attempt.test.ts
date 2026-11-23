@@ -30,7 +30,7 @@ function injectedModel(instructions = "endpoint policy") {
 }
 
 const schema = z.object({ ok: z.boolean() });
-const completion = () =>
+const completion = (content = '{"ok":true}') =>
     new Response(
         JSON.stringify({
             id: "injected",
@@ -40,7 +40,7 @@ const completion = () =>
             choices: [
                 {
                     index: 0,
-                    message: { role: "assistant", content: '{"ok":true}' },
+                    message: { role: "assistant", content },
                     finish_reason: "stop",
                 },
             ],
@@ -50,6 +50,26 @@ const completion = () =>
     );
 
 describe("final prepared structured input", () => {
+    it.each([
+        { content: "PRIVATE_PROVIDER_RESPONSE", reason: "json_invalid" },
+        { content: '{"ok":"PRIVATE_PROVIDER_RESPONSE"}', reason: "schema_invalid" },
+        { content: "x".repeat(32_000) + "PRIVATE_PROVIDER_RESPONSE", reason: "output_too_large" },
+    ])("classifies a structured response failure as $reason", async ({ content, reason }) => {
+        const send = vi.fn(async () => completion(content));
+        vi.stubGlobal("fetch", send);
+        await expect(
+            invokeStructuredAttempt(injectedModel(), schema, [new HumanMessage("hello")], {
+                signal: new AbortController().signal,
+                timeoutMs: 1000,
+                maxOutputTokens: 256,
+            })
+        ).rejects.toMatchObject({
+            name: "InvalidStructuredAttemptError",
+            message: "The model returned invalid structured output.",
+            reason,
+        });
+        expect(send).toHaveBeenCalledTimes(1);
+    });
     it.each([24000, 200000, 240000])(
         "admits exactly %i bytes and rejects one more before dispatch",
         async maximum => {

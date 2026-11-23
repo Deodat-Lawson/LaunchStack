@@ -233,14 +233,45 @@ describe("request parameters follow declared behavior", () => {
     });
 
     it("streams when the model declares streaming support", async () => {
+        const chunk = {
+            id: "chatcmpl-stream",
+            choices: [
+                {
+                    index: 0,
+                    delta: { role: "assistant", content: "ok" },
+                    finish_reason: "stop",
+                },
+            ],
+        };
+        respondWith = () => ({
+            status: 200,
+            contentType: "text/event-stream",
+            payload: `data: ${JSON.stringify(chunk)}\n\ndata: [DONE]\n\n`,
+        });
         const resolved = resolveChatModel({
             config: deployment(FULL_SUPPORT),
             streaming: true,
         });
-        // The mock returns a non-streaming body; we only assert the request flag,
-        // which is what the behavior contract governs.
-        await resolved.chat.invoke([new HumanMessage("hi")]).catch(() => undefined);
-        expect(captured[0]!.body.stream).toBe(true);
+        // Streaming invoke estimates usage by loading a tokenizer. Serve the
+        // fixture locally so the wire contract can be tested offline.
+        const fetch = globalThis.fetch;
+        const fetchWithTokenizer = jest
+            .spyOn(globalThis, "fetch")
+            .mockImplementation((url, init) => {
+                if (typeof url === "string" && url.startsWith("https://tiktoken.pages.dev/js/"))
+                    return Promise.resolve(
+                        Response.json({ pat_str: ".", bpe_ranks: "", special_tokens: {} })
+                    );
+                return fetch(url, init);
+            });
+        try {
+            const result = await resolved.chat.invoke([new HumanMessage("hi")]);
+            expect(result.content).toBe("ok");
+            expect(captured).toHaveLength(1);
+            expect(captured[0]!.body.stream).toBe(true);
+        } finally {
+            fetchWithTokenizer.mockRestore();
+        }
     });
 });
 

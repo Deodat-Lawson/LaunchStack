@@ -28,6 +28,7 @@ import { getServerSession } from "~/server/auth";
 
 import { db } from "~/server/db";
 import { users, userCompanyMemberships } from "~/server/db/schema";
+import type { Executor } from "~/server/workspace/db-types";
 import { resolveActiveCompanyForUser } from "~/lib/active-workspace";
 import { resolvePermissionsForRole } from "~/lib/authz/resolve";
 import { resolveDocumentScope } from "~/lib/authz/scope";
@@ -142,14 +143,17 @@ export function buildWorkspaceContext(input: {
  * company. The role always comes from that membership; the legacy global
  * `users.role` is never consulted.
  */
-export async function requireWorkspaceContext(): Promise<WorkspaceContextResult> {
+export async function requireWorkspaceContext(
+    executor?: Executor
+): Promise<WorkspaceContextResult> {
     const session = await getServerSession();
     const authUserId = session?.user.id;
     if (!authUserId) {
         return unauthorized();
     }
 
-    const [user] = await db
+    const reader = executor ?? db;
+    const [user] = await reader
         .select({
             id: users.id,
             companyId: users.companyId,
@@ -163,7 +167,7 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
 
     let companyId: bigint | null;
     try {
-        companyId = await resolveActiveCompanyForUser(user.id, user.companyId);
+        companyId = await resolveActiveCompanyForUser(user.id, user.companyId, executor);
     } catch {
         console.error(`[requireWorkspaceContext] Failed to resolve company for user ${authUserId}`);
         return internalError();
@@ -176,7 +180,7 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
 
     const userPk = BigInt(user.id);
 
-    const [membership] = await db
+    const [membership] = await reader
         .select({ role: userCompanyMemberships.role, status: userCompanyMemberships.status })
         .from(userCompanyMemberships)
         .where(
@@ -203,7 +207,7 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
 
     let permissions: ReadonlySet<Permission>;
     try {
-        permissions = await resolvePermissionsForRole(companyId, membership.role);
+        permissions = await resolvePermissionsForRole(companyId, membership.role, executor);
     } catch (error) {
         console.error(
             `[requireWorkspaceContext] Failed to resolve role for user ${authUserId}`,
@@ -221,6 +225,9 @@ export async function requireWorkspaceContext(): Promise<WorkspaceContextResult>
             role: membership.role,
             status,
             permissions,
+            ...(executor
+                ? { resolveScope: subject => resolveDocumentScope(subject, executor) }
+                : {}),
         }),
     };
 }

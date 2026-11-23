@@ -18,6 +18,8 @@ import { DeadlineSchema } from "../_schemas";
 export async function GET(request: Request) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("settings.manage"))
+        return error(say(request, "adminReadDeadlines"), 403, { permission: "settings.manage" });
     try {
         const deadlines = await listDeadlines({
             companyId: auth.ctx.companyId,

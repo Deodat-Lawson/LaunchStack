@@ -44,7 +44,7 @@ export function WeekSuggestions({
     /** The next meeting's week, for the group heading. */
     meetingWeek?: { start: string; end: string };
     /** Open the decision dialog: a next step without an owner, or a different decision. */
-    onDecide: (topic: TopicDto) => void;
+    onDecide?: (topic: TopicDto) => void;
     /** For the "log a conversation" nudge; screens without that group leave it out. */
     onLogEvidence?: () => void;
     /** For the "record this week's numbers" nudge. */
@@ -118,7 +118,7 @@ function Suggestion({
 }: {
     s: WeekSuggestion;
     act: (id: string, work: () => Promise<Outcome>) => Promise<void>;
-    onDecide: (topic: TopicDto) => void;
+    onDecide?: (topic: TopicDto) => void;
     onLogEvidence?: () => void;
     onRecordNumbers?: () => void;
     onOpenTopic?: (topic: TopicDto) => void;
@@ -170,7 +170,7 @@ function Suggestion({
                 <CheckInSuggestion id={s.id} commitment={s.commitment} late={s.late} act={act} />
             );
         case "commit":
-            return (
+            return onDecide ? (
                 <CommitSuggestion
                     id={s.id}
                     topic={s.topic}
@@ -178,7 +178,7 @@ function Suggestion({
                     act={act}
                     onDecide={onDecide}
                 />
-            );
+            ) : null;
         case "record-numbers": {
             const names = s.metrics.map(m => m.name);
             const listed =

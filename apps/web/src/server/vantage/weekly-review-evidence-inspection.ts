@@ -141,7 +141,7 @@ async function exactPreview(
 export async function inspectContextSource(
     database: WeeklyReviewDatabase,
     expected: WeeklyReviewActor,
-    loadActor: () => Promise<WeeklyReviewAuthorityActor>,
+    loadActor: (query: WeeklyReviewQuery) => Promise<WeeklyReviewAuthorityActor>,
     input: ContextSourceInspection
 ) {
     return database.transaction(async raw => {
@@ -156,7 +156,7 @@ export async function inspectContextSource(
         );
         let timer: ReturnType<typeof setTimeout> | undefined;
         const actor = await Promise.race([
-            loadActor(),
+            loadActor(query),
             new Promise<never>((_, reject) => {
                 timer = setTimeout(
                     () => reject(new WeeklyReviewConflict("retrieval_acquisition_timeout", 503)),

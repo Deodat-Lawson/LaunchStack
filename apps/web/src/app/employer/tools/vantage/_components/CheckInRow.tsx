@@ -40,10 +40,12 @@ export function CheckInRow({
     commitment,
     onChange,
     showTopic = true,
+    canEdit = true,
 }: {
     commitment: CommitmentDto;
     onChange: () => void;
     showTopic?: boolean;
+    canEdit?: boolean;
 }) {
     const errorText = useErrorText();
     const t = useTranslations("vantage.checkIn");
@@ -108,84 +110,86 @@ export function CheckInRow({
                 )}
             </div>
             <CommitmentStatus commitment={commitment} />
-            <Popover
-                open={open}
-                onOpenChange={o => {
-                    setOpen(o);
-                    if (!o) setPending(null);
-                }}
-            >
-                <PopoverTrigger asChild>
-                    <Button variant="outline" size="sm">
-                        {isOpen ? t("checkIn") : t("change")}
-                    </Button>
-                </PopoverTrigger>
-                <PopoverContent align="end" className="w-[340px] p-3">
-                    <div className="text-ink text-[13px] font-medium">{commitment.title}</div>
-                    {commitment.test && (
-                        <p className="text-ink-3 mt-1 text-[12px]">
-                            {t("wasResolved", { test: commitment.test })}
-                        </p>
-                    )}
-                    <div className="mt-3 flex flex-wrap gap-1.5">
-                        {(["done", "missed", "dropped"] as const).map(s => (
-                            <Button
-                                key={s}
-                                type="button"
-                                size="sm"
-                                variant={pending === s ? "default" : "outline"}
-                                onClick={() => setPending(s)}
-                                disabled={busy}
-                            >
-                                {t(`status.${s}`)}
-                            </Button>
-                        ))}
-                        {!isOpen && (
-                            <Button
-                                type="button"
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => void resolve("open")}
-                                disabled={busy}
-                            >
-                                {t("reopen")}
-                            </Button>
+            {canEdit && (
+                <Popover
+                    open={open}
+                    onOpenChange={o => {
+                        setOpen(o);
+                        if (!o) setPending(null);
+                    }}
+                >
+                    <PopoverTrigger asChild>
+                        <Button variant="outline" size="sm">
+                            {isOpen ? t("checkIn") : t("change")}
+                        </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="end" className="w-[340px] p-3">
+                        <div className="text-ink text-[13px] font-medium">{commitment.title}</div>
+                        {commitment.test && (
+                            <p className="text-ink-3 mt-1 text-[12px]">
+                                {t("wasResolved", { test: commitment.test })}
+                            </p>
                         )}
-                    </div>
-                    {pending && (
-                        <div className="mt-3 flex flex-col gap-2">
-                            <label
-                                className="text-ink-2 text-[12px] font-medium"
-                                htmlFor={`outcome-${commitment.id}`}
-                            >
-                                {t("learnedLabel")}
-                            </label>
-                            <Textarea
-                                id={`outcome-${commitment.id}`}
-                                value={outcome}
-                                onChange={e => setOutcome(e.target.value)}
-                                rows={3}
-                                placeholder={
-                                    pending === "done"
-                                        ? t("placeholder.done")
-                                        : pending === "missed"
-                                          ? t("placeholder.missed")
-                                          : t("placeholder.dropped")
-                                }
-                            />
-                            <div className="flex justify-end">
+                        <div className="mt-3 flex flex-wrap gap-1.5">
+                            {(["done", "missed", "dropped"] as const).map(s => (
                                 <Button
+                                    key={s}
+                                    type="button"
                                     size="sm"
-                                    onClick={() => void resolve(pending)}
-                                    disabled={busy || !outcome.trim()}
+                                    variant={pending === s ? "default" : "outline"}
+                                    onClick={() => setPending(s)}
+                                    disabled={busy}
                                 >
-                                    {t("save")}
+                                    {t(`status.${s}`)}
                                 </Button>
-                            </div>
+                            ))}
+                            {!isOpen && (
+                                <Button
+                                    type="button"
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => void resolve("open")}
+                                    disabled={busy}
+                                >
+                                    {t("reopen")}
+                                </Button>
+                            )}
                         </div>
-                    )}
-                </PopoverContent>
-            </Popover>
+                        {pending && (
+                            <div className="mt-3 flex flex-col gap-2">
+                                <label
+                                    className="text-ink-2 text-[12px] font-medium"
+                                    htmlFor={`outcome-${commitment.id}`}
+                                >
+                                    {t("learnedLabel")}
+                                </label>
+                                <Textarea
+                                    id={`outcome-${commitment.id}`}
+                                    value={outcome}
+                                    onChange={e => setOutcome(e.target.value)}
+                                    rows={3}
+                                    placeholder={
+                                        pending === "done"
+                                            ? t("placeholder.done")
+                                            : pending === "missed"
+                                              ? t("placeholder.missed")
+                                              : t("placeholder.dropped")
+                                    }
+                                />
+                                <div className="flex justify-end">
+                                    <Button
+                                        size="sm"
+                                        onClick={() => void resolve(pending)}
+                                        disabled={busy || !outcome.trim()}
+                                    >
+                                        {t("save")}
+                                    </Button>
+                                </div>
+                            </div>
+                        )}
+                    </PopoverContent>
+                </Popover>
+            )}
         </div>
     );
 }

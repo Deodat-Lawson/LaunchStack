@@ -486,7 +486,12 @@ export async function simulateVantage(
             membershipStatus: "active",
             companyId: 1,
             company: "Harborlight (fictional preview)",
-            permissions: admin ? ["settings.manage", "documents.upload"] : ["documents.upload"],
+            permissions: [
+                "documents.read",
+                "documents.edit",
+                "documents.upload",
+                ...(admin ? ["settings.manage"] : []),
+            ],
         });
     }
     const [api, tool, ...rest] = url.pathname.split("/").filter(Boolean);
@@ -515,19 +520,27 @@ export async function simulateVantage(
             const kind = url.searchParams.get("kind");
             const since = url.searchParams.get("since");
             const evidence = W.evidence
-                .filter(e => (!kind || e.kind === kind) && (!since || e.observedAt >= since))
-                .sort(byDesc(e => `${e.observedAt}${e.createdAt}`));
+                .filter(
+                    e =>
+                        e.kind !== "document" &&
+                        (!kind || e.kind === kind) &&
+                        (!since || e.observedAt >= since)
+                )
+                .sort(byDesc(e => `${e.observedAt}${e.createdAt}`))
+                .map(item => ({ ...item, canEdit: true }));
             return json({ evidence });
         }
         case "POST evidence": {
             if (!str("title").trim()) return json({ error: "Give it a title." }, 400);
             const evidence = makeEvidence(body as unknown as EvidenceInput);
             W.evidence.push(evidence);
-            return json({ evidence }, 201);
+            return json({ evidence: { ...evidence, canEdit: true } }, 201);
         }
         case "PATCH evidence/:id": {
             const evidence = find(W.evidence, key);
-            return evidence ? json({ evidence: Object.assign(evidence, body) }) : missing();
+            return evidence
+                ? json({ evidence: { ...Object.assign(evidence, body), canEdit: true } })
+                : missing();
         }
         case "DELETE evidence/:id":
             W.evidence = W.evidence.filter(e => e.id !== key);
@@ -566,11 +579,12 @@ export async function simulateVantage(
             const def = find(W.definitions, str("metricId"));
             if (!def) return json({ error: "Pick a metric." }, 400);
             const o = body as { value: number; periodStart: string; periodEnd: string };
-            W.observations.push({
+            const observation = {
                 ...makeObservation(def, { ...o, source: str("source") || null }),
                 note: str("note") || null,
-            });
-            return json({ observations: observationsNewestFirst() }, 201);
+            };
+            W.observations.push(observation);
+            return json({ observations: [observation] }, 201);
         }
         case "DELETE metrics/observations/:id":
             W.observations = W.observations.filter(o => o.id !== rest[2]);
@@ -578,7 +592,10 @@ export async function simulateVantage(
 
         case "GET commitments": {
             const status = url.searchParams.get("status");
-            return json({ commitments: W.commitments.filter(c => !status || c.status === status) });
+            const commitments = W.commitments
+                .filter(c => !status || status.split(",").includes(c.status))
+                .map(item => ({ ...item, canEdit: true }));
+            return json({ commitments });
         }
         case "POST commitments": {
             if (!str("title").trim() || !str("owner").trim()) {

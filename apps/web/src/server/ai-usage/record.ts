@@ -10,9 +10,9 @@
  * calls touches one row fifty times rather than writing fifty. Each is weighed
  * into chat-token equivalents as it is written (./weights).
  *
- * Bookkeeping, not billing: it runs off the response path, a failed write is
- * logged and dropped, and nothing here refuses work. The balance in
- * `token_accounts` is untouched (see the schema file for why the two differ).
+ * The default recorder logs and drops failed writes off the response path.
+ * Journaled callers can write through their existing transaction. The balance
+ * in `token_accounts` is separate from this meter.
  */
 
 import { sql } from "drizzle-orm";
@@ -36,17 +36,30 @@ export async function recordAiUsage(
     feature: AiFeature,
     event: ChatUsageEvent,
     at: Date = new Date(),
-    userId = ""
+    userId = "",
+    {
+        writer = db,
+        reportedTotalTokens,
+    }: {
+        writer?: Pick<typeof db, "insert">;
+        /** Known token count when the provider omitted part of the breakdown. */
+        reportedTotalTokens?: number;
+    } = {}
 ): Promise<void> {
     const kind = event.kind ?? "chat";
     // A search uses no tokens; it counts in calls. Everything else counts in tokens.
     const isSearch = kind === "web_search" || kind === "web_contents";
     const calls = isSearch ? Math.max(0, Math.round(event.calls ?? 1)) : 1;
-    if (isSearch ? calls <= 0 : event.inputTokens + event.outputTokens <= 0) return;
-    const { weightedTokens, costUsd } = weighUsage({ ...event, kind, calls });
+    const tokens = reportedTotalTokens ?? event.inputTokens + event.outputTokens;
+    if (isSearch ? calls <= 0 : tokens <= 0) return;
+    const { weightedTokens, costUsd } = weighUsage(
+        { ...event, kind, calls },
+        undefined,
+        reportedTotalTokens
+    );
     const priced = costUsd !== undefined;
     const cost = (costUsd ?? 0).toFixed(10);
-    await db
+    await writer
         .insert(aiUsageDaily)
         .values({
             companyId,

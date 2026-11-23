@@ -8,9 +8,11 @@ import { normalizeModelContent } from "./normalize-content";
 import { hasPreparedRequestTransport, singleAttemptChat } from "./openai-compatible-transport";
 import { normalizeTokenUsage } from "./usage";
 
+export type StructuredAttemptFailureReason = "json_invalid" | "schema_invalid" | "output_too_large";
+
 export class InvalidStructuredAttemptError extends Error {
     override readonly name = "InvalidStructuredAttemptError";
-    constructor() {
+    constructor(readonly reason?: StructuredAttemptFailureReason) {
         super("The model returned invalid structured output.");
     }
 }
@@ -94,10 +96,19 @@ export async function invokeStructuredAttempt<T>(
         throw preparationError ?? error;
     });
     const text = normalizeModelContent(response.content);
+    if (Buffer.byteLength(text, "utf8") > 32000)
+        throw new InvalidStructuredAttemptError("output_too_large");
+    let payload: unknown;
     try {
-        if (Buffer.byteLength(text, "utf8") > 32000) throw new Error("oversized");
-        return { result: schema.parse(JSON.parse(text)), usage: normalizeTokenUsage(response) };
+        payload = JSON.parse(text);
     } catch {
-        throw new InvalidStructuredAttemptError();
+        throw new InvalidStructuredAttemptError("json_invalid");
     }
+    let result: T;
+    try {
+        result = schema.parse(payload);
+    } catch {
+        throw new InvalidStructuredAttemptError("schema_invalid");
+    }
+    return { result, usage: normalizeTokenUsage(response) };
 }

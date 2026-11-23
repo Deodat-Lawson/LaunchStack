@@ -513,6 +513,7 @@
       "topicNotHere": "找不到这个议题。",
       "deadlineNotHere": "找不到这个截止日期。",
       "adminTriage": "只有工作区管理员可以查看各团队的求助情况。",
+      "adminReadDeadlines": "只有工作区管理员可以查看项目截止日期。",
       "adminAddDeadline": "只有工作区管理员可以添加项目截止日期。",
       "adminRemoveDeadline": "只有工作区管理员可以移除项目截止日期。",
       "checkForm": "请检查表单后重试。"

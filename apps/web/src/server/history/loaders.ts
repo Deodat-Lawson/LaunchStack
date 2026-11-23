@@ -21,11 +21,10 @@
  * page for it — they just do not pretend to be links.
  */
 
-import { getAgenda, VantageError } from "@launchstack/pipelines/vantage";
-import { authorizeLegacyAgendaRead } from "~/server/vantage/legacy-read-authority";
+import { listVisibleLegacyAgendas } from "~/server/vantage/legacy-agenda-list";
 import type { VantageCtx } from "~/app/api/vantage/_http";
 
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, lt } from "drizzle-orm";
 
 import type { Locale } from "~/i18n/locales";
 import { translatorFor } from "~/i18n/translate";
@@ -48,7 +47,7 @@ import {
 export interface HistoryLoaderContext {
     can?: VantageCtx["can"];
     companyId: bigint;
-    /** Auth subject id. Only the chat loader narrows by it; runs are workspace-wide. */
+    /** Auth subject id for personal history and creator-restricted loaders. */
     userId: string;
     /** Per-loader row cap, before the merge trims to the request's limit. */
     limit: number;
@@ -384,38 +383,34 @@ const vantageLoader: HistoryLoader = {
     async load({ companyId, userId, can, limit, locale }) {
         if (!can?.("documents.read")) return [];
         const t = historyWords(locale);
-        const rows = await db
-            .select({
-                id: vantageAgendas.id,
-                status: vantageAgendas.status,
-                weekStart: vantageAgendas.weekStart,
-                summary: vantageAgendas.summary,
-                createdAt: vantageAgendas.createdAt,
-                generatedAt: vantageAgendas.generatedAt,
-                heldAt: vantageAgendas.heldAt,
-                updatedAt: vantageAgendas.updatedAt,
-            })
-            .from(vantageAgendas)
-            .where(
-                and(
-                    eq(vantageAgendas.companyId, companyId),
-                    eq(vantageAgendas.createdByUserId, userId)
-                )
-            )
-            .orderBy(desc(vantageAgendas.weekStart))
-            .limit(limit);
-
-        const visible = [];
-        for (const row of rows) {
-            const agenda = await getAgenda({ companyId, id: row.id });
-            if (!agenda) continue;
-            try {
-                await authorizeLegacyAgendaRead({ companyId, userId, can }, agenda);
-                visible.push(row);
-            } catch (error) {
-                if (!(error instanceof VantageError) || error.status !== 403) throw error;
-            }
-        }
+        const visible = await listVisibleLegacyAgendas(
+            { companyId, userId, can },
+            limit,
+            (beforeWeek, pageSize) =>
+                db
+                    .select({
+                        id: vantageAgendas.id,
+                        status: vantageAgendas.status,
+                        weekStart: vantageAgendas.weekStart,
+                        summary: vantageAgendas.summary,
+                        createdAt: vantageAgendas.createdAt,
+                        generatedAt: vantageAgendas.generatedAt,
+                        heldAt: vantageAgendas.heldAt,
+                        updatedAt: vantageAgendas.updatedAt,
+                    })
+                    .from(vantageAgendas)
+                    .where(
+                        and(
+                            eq(vantageAgendas.companyId, companyId),
+                            eq(vantageAgendas.createdByUserId, userId),
+                            beforeWeek === undefined
+                                ? undefined
+                                : lt(vantageAgendas.weekStart, beforeWeek)
+                        )
+                    )
+                    .orderBy(desc(vantageAgendas.weekStart))
+                    .limit(pageSize)
+        );
         return visible.map(row => ({
             id: `vantage:${row.id}`,
             kind: "vantage" as const,

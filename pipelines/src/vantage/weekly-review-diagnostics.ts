@@ -1,5 +1,9 @@
 /** Content-free, closed vocabulary. Never derive a code from provider or source text. */
 export const WEEKLY_REVIEW_DIAGNOSTIC_RULE_CODES = [
+    "generation_structured_output_invalid",
+    "generation_output_json_invalid",
+    "generation_output_schema_invalid",
+    "generation_output_too_large",
     "report_schema_invalid",
     "generation_validation_failed",
     "evaluation_input_invalid",
@@ -76,7 +80,11 @@ export const WEEKLY_REVIEW_DIAGNOSTIC_RULE_CODES = [
     "empty-output",
 ] as const;
 export type WeeklyReviewRuleCode = (typeof WEEKLY_REVIEW_DIAGNOSTIC_RULE_CODES)[number];
-export type WeeklyReviewDiagnosticStage = "generation_validation" | "evaluation_input" | "judge";
+export type WeeklyReviewDiagnosticStage =
+    | "generation"
+    | "generation_validation"
+    | "evaluation_input"
+    | "judge";
 export type WeeklyReviewDiagnosticCounts = Record<
     "sourceUnits" | "evidenceBytes" | "messageBytes" | "citationsChecked" | "citationsFailed",
     number | null
@@ -102,7 +110,9 @@ function sanitize(snapshot: WeeklyReviewDiagnosticSnapshot): WeeklyReviewDiagnos
             typeof value === "number" && Number.isSafeInteger(value) && value >= 0 ? value : null;
     }
     return {
-        stage: ["generation_validation", "evaluation_input", "judge"].includes(snapshot.stage)
+        stage: ["generation", "generation_validation", "evaluation_input", "judge"].includes(
+            snapshot.stage
+        )
             ? snapshot.stage
             : "generation_validation",
         ruleCodes: [...new Set(snapshot.ruleCodes.filter(code => codes.has(code)))],

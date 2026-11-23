@@ -12,6 +12,7 @@ import {
     type TopicSelectionRetry,
 } from "~/server/vantage/weekly-review-topic-run";
 import { resolveConfiguredChatModel } from "~/lib/models";
+import { getEngine } from "~/server/engine";
 import { resolveDocumentDigestProvider } from "~/server/vantage/document-digest-provider";
 import { WeeklyReviewConflict } from "~/server/vantage/weekly-review-types";
 import type { ChatProviderRetryPolicy, ResolveChatModelOptions } from "@launchstack/llm";
@@ -41,6 +42,7 @@ jest.mock("~/server/vantage/weekly-review-repository", () => ({
     createWeeklyReviewRepository: jest.fn(),
 }));
 jest.mock("~/server/vantage/weekly-review-topic-run", () => ({
+    ...jest.requireActual("~/server/vantage/weekly-review-topic-run"),
     prewarmTopicDigests: jest.fn(),
     prepareTopicSelection: jest.fn(),
     resolveTopicSelectionProviders: jest.fn(),
@@ -66,6 +68,9 @@ function fixture(
         | "typed"
         | "deadline" = "success"
 ) {
+    jest.mocked(getEngine).mockReturnValue({
+        dbHandle: { client: { options: { max: 10 } } },
+    } as never);
     const env = jest.replaceProperty(process, "env", {
         ...process.env,
         VANTAGE_WEEKLY_REVIEW_ENABLED: "true",
@@ -287,7 +292,8 @@ it.each(["revoke", "creation", "late_creation"] as const)(
                     expect.anything(),
                     "run",
                     "generation-1",
-                    { statusClass: "aborted", httpStatus: null }
+                    { statusClass: "aborted", httpStatus: null },
+                    undefined
                 );
             expect(f.repository.fail).toHaveBeenCalledWith(
                 f.actor,

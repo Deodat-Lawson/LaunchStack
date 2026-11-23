@@ -86,12 +86,14 @@ suite("native action integrity against isolated PostgreSQL", () => {
         await expect(
             updateCommitment({
                 companyId,
+                userId: actor,
                 id: first.commitmentId!,
                 patch: { expectedContentVersion: 1, status: "done" },
             })
         ).rejects.toMatchObject({ code: "outcome_required" });
         const resolved = await updateCommitment({
             companyId,
+            userId: actor,
             id: first.commitmentId!,
             patch: {
                 expectedContentVersion: 1,
@@ -103,6 +105,7 @@ suite("native action integrity against isolated PostgreSQL", () => {
         await expect(
             updateCommitment({
                 companyId,
+                userId: actor,
                 id: first.commitmentId!,
                 patch: { expectedContentVersion: 1, status: "done", outcome: "Stale" },
             })

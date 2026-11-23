@@ -28,6 +28,7 @@ import type { NextResponse } from "next/server";
 
 import { db } from "~/server/db";
 import { users, userCompanyMemberships } from "~/server/db/schema";
+import type { Executor } from "~/server/workspace/db-types";
 
 export const ACTIVE_WORKSPACE_COOKIE = "pdr_active_company";
 const COOKIE_MAX_AGE = 60 * 60 * 24 * 30; // 30 days
@@ -84,7 +85,8 @@ export async function getActiveCompanyId(authUserId: string): Promise<bigint | n
  */
 export async function resolveActiveCompanyForUser(
     userPk: number | bigint,
-    defaultCompanyId: number | bigint
+    defaultCompanyId: number | bigint,
+    executor: Executor = db
 ): Promise<bigint | null> {
     const userPkBig = typeof userPk === "bigint" ? userPk : BigInt(userPk);
     const defaultBig =
@@ -95,7 +97,7 @@ export async function resolveActiveCompanyForUser(
 
     // Every membership, most recently opened first: one small read answers
     // all of the cases below.
-    const memberships = await db
+    const memberships = await executor
         .select({
             companyId: userCompanyMemberships.companyId,
             status: userCompanyMemberships.status,

@@ -21,11 +21,11 @@ import { Input } from "~/components/ui/input";
 import { Switch } from "~/components/ui/switch";
 import { cn } from "~/lib/utils";
 import { useErrorText } from "~/lib/tools/errorText";
+import { usePermissions } from "~/lib/use-permissions";
 
-import { vantageApi, type CommitmentDto, type TopicDto } from "../api";
+import { vantageApi, type CommitmentDto } from "../api";
 import { CheckInRow } from "../_components/CheckInRow";
 import { Field, FormError } from "../_components/Primitives";
-import { DecisionDialog } from "../_components/TopicDialogs";
 import { WeekSuggestions } from "../_components/WeekSuggestions";
 import { useOneClick } from "../_lib/actions";
 import { addDaysIso, todayIso } from "../_lib/format";
@@ -37,13 +37,13 @@ type View = "open" | "resolved" | "all";
 /**
  * The promise ledger: every commitment a meeting produced, with its owner,
  * due date and the test that settles it. Open ones first, late ones on top.
- * Above it, the same follow-through suggestions This week shows — promises
- * due, as Done / Missed / Not yet, and a held meeting's next steps to
- * commit to — answered with one click.
+ * Promises due soon appear above the ledger for check-in.
  */
 export function CommitmentsScreen() {
     const t = useTranslations("vantage.commitments");
     const tc = useTranslations("common");
+    const { can } = usePermissions();
+    const canEdit = can("documents.edit");
     const res = useResource("vantage:commitments", () => vantageApi.commitments());
     const overview = useResource("vantage:overview", () => vantageApi.overview());
     const hidden = useHiddenSuggestions();
@@ -56,7 +56,6 @@ export function CommitmentsScreen() {
     const { act, gone } = useOneClick(refresh);
     const [view, setView] = useState<View>("open");
     const [adding, setAdding] = useState(false);
-    const [deciding, setDeciding] = useState<TopicDto | null>(null);
 
     const all = useMemo(() => res.data?.commitments ?? [], [res.data]);
     const today = todayIso();
@@ -75,15 +74,19 @@ export function CommitmentsScreen() {
         [all]
     );
     const late = open.filter(c => c.dueOn < today).length;
-    const followThrough = useMemo(
-        () =>
-            overview.data
-                ? weekSuggestions(overview.data, { today, hidden }).filter(
-                      g => g.id === "follow-through"
-                  )
-                : [],
-        [overview.data, today, hidden]
-    );
+    const followThrough = useMemo(() => {
+        if (!overview.data || !canEdit) return [];
+        const editable = new Set(all.filter(item => item.canEdit).map(item => item.id));
+        return weekSuggestions(overview.data, { today, hidden })
+            .filter(group => group.id === "follow-through")
+            .map(group => ({
+                ...group,
+                items: group.items.filter(
+                    item => item.kind === "check-in" && editable.has(item.commitment.id)
+                ),
+            }))
+            .filter(group => group.items.length > 0);
+    }, [overview.data, today, hidden, canEdit, all]);
     const shown = view === "open" ? open : view === "resolved" ? resolved : [...open, ...resolved];
 
     return (
@@ -101,21 +104,18 @@ export function CommitmentsScreen() {
                         : undefined
                 }
                 actions={
-                    <Button size="sm" onClick={() => setAdding(true)}>
-                        {t("add")}
-                    </Button>
+                    canEdit && (
+                        <Button size="sm" onClick={() => setAdding(true)}>
+                            {t("add")}
+                        </Button>
+                    )
                 }
             />
 
             {res.error && <InlineError message={res.error} onRetry={() => void res.reload()} />}
 
             {followThrough.length > 0 && (
-                <WeekSuggestions
-                    groups={followThrough}
-                    act={act}
-                    gone={gone}
-                    onDecide={setDeciding}
-                />
+                <WeekSuggestions groups={followThrough} act={act} gone={gone} />
             )}
 
             <div className="flex flex-wrap gap-1" role="tablist" aria-label={t("viewLabel")}>
@@ -174,9 +174,11 @@ export function CommitmentsScreen() {
                         title={t("emptyTitle")}
                         body={t("emptyBody")}
                         action={
-                            <Button size="sm" variant="outline" onClick={() => setAdding(true)}>
-                                {t("addByHand")}
-                            </Button>
+                            canEdit && (
+                                <Button size="sm" variant="outline" onClick={() => setAdding(true)}>
+                                    {t("addByHand")}
+                                </Button>
+                            )
                         }
                     />
                 ) : shown.length === 0 ? (
@@ -184,23 +186,24 @@ export function CommitmentsScreen() {
                 ) : (
                     <div className="border-line bg-panel rounded-lg border">
                         {shown.map(c => (
-                            <CheckInRow key={c.id} commitment={c} onChange={() => void refresh()} />
+                            <CheckInRow
+                                key={c.id}
+                                commitment={c}
+                                canEdit={canEdit && c.canEdit === true}
+                                onChange={() => void refresh()}
+                            />
                         ))}
                     </div>
                 )}
             </section>
 
-            <AddCommitmentDialog
-                open={adding}
-                onOpenChange={setAdding}
-                onSaved={() => void refresh()}
-            />
-            <DecisionDialog
-                open={deciding !== null}
-                onOpenChange={o => !o && setDeciding(null)}
-                topic={deciding}
-                onSaved={() => void refresh()}
-            />
+            {canEdit && (
+                <AddCommitmentDialog
+                    open={adding}
+                    onOpenChange={setAdding}
+                    onSaved={() => void refresh()}
+                />
+            )}
         </div>
     );
 }

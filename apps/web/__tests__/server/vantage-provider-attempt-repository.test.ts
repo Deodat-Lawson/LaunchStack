@@ -53,7 +53,10 @@ function fixture() {
         } as Record<string, unknown>,
         attempts: [] as Record<string, unknown>[],
         active: null as string | null,
+        trace: { synthetic: true } as object | null,
+        usage: [] as Parameters<NonNullable<WeeklyReviewQuery["recordAiUsage"]>>[],
     };
+    const meter = jest.fn(async () => {});
     const sqlLog: { sql: string; args: unknown[] }[] = [];
     let tail = Promise.resolve();
     const database: WeeklyReviewDatabase = {
@@ -134,12 +137,8 @@ function fixture() {
                     local.row.key_version = null;
                     return [{ id }];
                 }
-                if (sql.includes("SET failure_record=COALESCE")) {
-                    if (local.row.status === "failed") {
-                        local.row.failure_record ??= JSON.parse(String(args[2]));
-                        local.row.ciphertext = null;
-                        local.row.key_version = null;
-                    }
+                if (sql.includes("SET trace=NULL") && args[0] === id) {
+                    local.trace = null;
                     return [];
                 }
                 if (sql.includes("SET failure_record=$2")) {
@@ -148,6 +147,10 @@ function fixture() {
                 }
                 if (sql.startsWith("SELECT id,week_start,status")) return [local.row];
                 return [];
+            };
+            query.recordAiUsage = async (...args) => {
+                local.usage.push(args);
+                await meter();
             };
             try {
                 const result = await work(query);
@@ -163,6 +166,7 @@ function fixture() {
         state,
         sqlLog,
         authority,
+        meter,
         repository: createWeeklyReviewRepository(database, authority),
     };
 }
@@ -229,6 +233,7 @@ it("records content-free terminal failure and allows idempotent post-terminal se
         validatorCodes: ["invalid_source_citation", "CONFIDENTIAL_SOURCE_MARKER"],
         counts: { citationsChecked: 3, citationsFailed: 1, sourceUnits: 2 },
     });
+    expect(f.state.trace).toBeNull();
     expect(f.state.row).toMatchObject({
         status: "failed",
         ciphertext: null,
@@ -259,6 +264,49 @@ it("records content-free terminal failure and allows idempotent post-terminal se
             httpStatus: 200,
         })
     ).rejects.toThrow("provider_attempt_already_settled");
+});
+it("atomically meters reported usage once, including a terminal non-OK attempt", async () => {
+    const f = fixture();
+    const identity = { owner: "deployment", route: "default", modelId: "synthetic" } as const;
+    const known = await start(f);
+    const unknown = await start(f, 2);
+    const outcome = {
+        statusClass: "unavailable",
+        httpStatus: 503,
+        usage: { inputTokens: 9, outputTokens: 4, totalTokens: 13, cachedInputTokens: 2 },
+    };
+    f.meter.mockRejectedValueOnce(new Error("meter_failed"));
+    await expect(
+        f.repository.completeProviderAttempt(actor, id, known, outcome, identity)
+    ).rejects.toThrow("meter_failed");
+    expect(f.state.attempts[0]).toMatchObject({ settled_at: null, outcome: null });
+    expect(f.state.usage).toEqual([]);
+
+    await f.repository.fail(actor, id, "provider_unavailable");
+    await f.repository.completeProviderAttempt(actor, id, known, outcome, identity);
+    await f.repository.completeProviderAttempt(actor, id, known, outcome, identity);
+    await f.repository.completeProviderAttempt(
+        actor,
+        id,
+        unknown,
+        { statusClass: "unavailable", httpStatus: 503 },
+        identity
+    );
+
+    expect(f.state.usage).toEqual([
+        [
+            1n,
+            actor.userId,
+            { ...identity, inputTokens: 9, outputTokens: 4, cachedInputTokens: 2 },
+            undefined,
+        ],
+    ]);
+    const status = await f.repository.status(actor, id);
+    const unknownAttempt = status.providerAttempts.find(attempt => attempt.id === unknown);
+    expect(unknownAttempt).toMatchObject({
+        status: "settled",
+        outcome: { usage: { totalTokens: null } },
+    });
 });
 it("serializes concurrent digest attempts and failure without losing rows or resurrecting the run", async () => {
     const f = fixture();
@@ -305,6 +353,7 @@ it("expires uncertain runs and retains pending attempts as unknown accounting", 
     const f = fixture();
     await start(f);
     await f.repository.expireUncertain(actor, id);
+    expect(f.state.trace).toBeNull();
     const result = await f.repository.status(actor, id);
     expect(result.failureRecord).toMatchObject({
         stage: "recovery",
@@ -314,11 +363,12 @@ it("expires uncertain runs and retains pending attempts as unknown accounting", 
     });
     expect(result.providerAttempts[0]?.status).toBe("pending");
 });
-it("lists legacy failures with stable safe fallback and blocks cross-owner/company status", async () => {
+it("lists legacy failures with a safe fallback and only issues SELECTs on owner reads", async () => {
     const f = fixture();
     Object.assign(f.state.row, {
         status: "failed",
         failure_code: "CONFIDENTIAL_SOURCE_MARKER",
+        ciphertext: "legacy-ciphertext",
         key_version: 8,
     });
     expect((await f.repository.list(actor))[0]?.failureRecord).toMatchObject({
@@ -326,13 +376,28 @@ it("lists legacy failures with stable safe fallback and blocks cross-owner/compa
         code: "candidate_not_admitted",
         counts: { evidenceBytes: null },
     });
-    expect(f.state.row.key_version).toBeNull();
+    const status = await f.repository.status(actor, id);
+    expect(status.failureRecord?.code).toBe("candidate_not_admitted");
+    await f.repository.findByKey(actor, "2026-11-16", "legacy-key");
     await expect(f.repository.status({ ...actor, userId: "colleague" }, id)).rejects.toThrow(
         "review_not_found"
     );
     await expect(f.repository.status({ ...actor, companyId: "2" }, id)).rejects.toThrow(
         "review_not_found"
     );
+    expect(f.state.row).toMatchObject({
+        ciphertext: "legacy-ciphertext",
+        key_version: 8,
+        failure_record: null,
+    });
+    expect(f.state.trace).toEqual({ synthetic: true });
+    const reads = f.sqlLog.filter(item => !item.sql.startsWith("SET "));
+    expect(reads).toHaveLength(6);
+    expect(
+        reads.every(item => item.sql.startsWith("SELECT ") && !item.sql.includes("FOR UPDATE"))
+    ).toBe(true);
+    expect(JSON.stringify(status)).not.toContain("legacy-ciphertext");
+    expect(JSON.stringify(status)).not.toContain("CONFIDENTIAL_SOURCE_MARKER");
 });
 it("does not overwrite accepted or already failed diagnostics with a late failure", async () => {
     const f = fixture();

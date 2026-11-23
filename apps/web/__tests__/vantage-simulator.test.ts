@@ -220,7 +220,7 @@ test("explicit commitment creation persists to subsequent reads", async () => {
     const created = await response.json();
     const after = await (await request("commitments")).json();
     expect(after.commitments).toHaveLength(before.commitments.length + 1);
-    expect(after.commitments).toContainEqual(created.commitment);
+    expect(after.commitments).toContainEqual({ ...created.commitment, canEdit: true });
 });
 
 test("configured scopes freeze exact excerpts and return their range and coverage", async () => {

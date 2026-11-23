@@ -18,7 +18,12 @@ export {
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
-import { invokeStructuredAttempt, type ResolvedChatModel } from "@launchstack/llm";
+import {
+    InvalidStructuredAttemptError,
+    invokeStructuredAttempt,
+    type ResolvedChatModel,
+    type StructuredAttemptFailureReason,
+} from "@launchstack/llm";
 import { evaluateVantage } from "./validation/evaluate";
 import { createModelValidationJudge } from "./validation/judge";
 import {
@@ -512,6 +517,28 @@ export async function runWeeklyReviewV21(
         !calculateWeeklyReviewBudget(input, ports.budgetProfile).feasible
     )
         throw Error("context_budget_exceeded");
+    const diagnosticCounts: WeeklyReviewDiagnosticCounts = {
+        sourceUnits: input.sources.length,
+        evidenceBytes: input.sources.reduce(
+            (sum, source) => sum + Buffer.byteLength(source.text),
+            0
+        ),
+        messageBytes: null,
+        citationsChecked: null,
+        citationsFailed: null,
+    };
+    const diagnostic = (
+        error: unknown,
+        stage: WeeklyReviewDiagnosticStage,
+        fallback: WeeklyReviewRuleCode
+    ) => {
+        if (!topic) throw error;
+        throw new WeeklyReviewDiagnosticError(error instanceof Error ? error.message : fallback, {
+            stage,
+            ruleCodes: [weeklyReviewRuleForError(error, fallback)],
+            counts: diagnosticCounts,
+        });
+    };
     let timer: ReturnType<typeof setTimeout> | undefined;
     const deadline = new Promise<never>((_, reject) => {
         timer = setTimeout(() => {
@@ -549,36 +576,33 @@ export async function runWeeklyReviewV21(
             }
         ),
         deadline,
-    ]).finally(() => {
-        if (timer) clearTimeout(timer);
-    });
+    ])
+        .catch(error => {
+            if (!topic || !(error instanceof InvalidStructuredAttemptError)) throw error;
+            const ruleByReason: Record<StructuredAttemptFailureReason, WeeklyReviewRuleCode> = {
+                json_invalid: "generation_output_json_invalid",
+                schema_invalid: "generation_output_schema_invalid",
+                output_too_large: "generation_output_too_large",
+            };
+            const reason = error.reason;
+            const code =
+                reason && Object.hasOwn(ruleByReason, reason)
+                    ? ruleByReason[reason]
+                    : "generation_structured_output_invalid";
+            throw new WeeklyReviewDiagnosticError(code, {
+                stage: "generation",
+                ruleCodes: [code],
+                counts: diagnosticCounts,
+            });
+        })
+        .finally(() => {
+            if (timer) clearTimeout(timer);
+        });
     try {
         ports.onGenerationComplete?.();
     } catch {
         // Progress observers cannot affect validation or model calls.
     }
-    const diagnosticCounts: WeeklyReviewDiagnosticCounts = {
-        sourceUnits: input.sources.length,
-        evidenceBytes: input.sources.reduce(
-            (sum, source) => sum + Buffer.byteLength(source.text),
-            0
-        ),
-        messageBytes: null,
-        citationsChecked: null,
-        citationsFailed: null,
-    };
-    const diagnostic = (
-        error: unknown,
-        stage: WeeklyReviewDiagnosticStage,
-        fallback: WeeklyReviewRuleCode
-    ) => {
-        if (!topic) throw error;
-        throw new WeeklyReviewDiagnosticError(error instanceof Error ? error.message : fallback, {
-            stage,
-            ruleCodes: [weeklyReviewRuleForError(error, fallback)],
-            counts: diagnosticCounts,
-        });
-    };
     const validate = <T>(
         stage: WeeklyReviewDiagnosticStage,
         fallback: WeeklyReviewRuleCode,

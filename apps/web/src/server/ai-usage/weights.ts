@@ -196,26 +196,31 @@ export interface WeighedUsage {
  * unpriced), and costs what its model's price says. An embedding on a
  * workspace's own endpoint is weighed but not priced, since that workspace's
  * provider bills it. A `ratio` entry weighs without inventing a cost.
+ * A known token total without a complete split can be weighed but is unpriced.
  */
 export function weighUsage(
     event: ChatUsageEvent,
-    chatPrice: ChatPrice = standardChatPrice()
+    chatPrice: ChatPrice = standardChatPrice(),
+    reportedTotalTokens?: number
 ): WeighedUsage {
     const kind = event.kind ?? "chat";
     const perToken = chatPrice.perMillion / 1_000_000;
     if (kind === "chat") {
-        const tokens = event.inputTokens + event.outputTokens;
+        const tokens = reportedTotalTokens ?? event.inputTokens + event.outputTokens;
+        const hasBreakdown = reportedTotalTokens === undefined;
+        const statedCost =
+            hasBreakdown && event.costUsd !== undefined ? { costUsd: event.costUsd } : {};
         const rate = chatRate(event);
         if (!rate) {
             return {
                 weightedTokens: tokens,
-                ...(event.costUsd !== undefined ? { costUsd: event.costUsd } : {}),
+                ...statedCost,
             };
         }
         if ("ratio" in rate) {
             return {
                 weightedTokens: wholeTokensUp(tokens * rate.ratio),
-                ...(event.costUsd !== undefined ? { costUsd: event.costUsd } : {}),
+                ...statedCost,
             };
         }
         // Against the Standard model's own price, so it stays one for one
@@ -223,7 +228,7 @@ export function weighUsage(
         const standard = standardModelPerMillion() ?? chatPrice.perMillion;
         return {
             weightedTokens: wholeTokensUp((tokens * blendedPerMillion(rate.pricing)) / standard),
-            costUsd: event.costUsd ?? priceUsage(event, rate.pricing),
+            ...(hasBreakdown ? { costUsd: event.costUsd ?? priceUsage(event, rate.pricing) } : {}),
         };
     }
     if (kind === "embedding") {

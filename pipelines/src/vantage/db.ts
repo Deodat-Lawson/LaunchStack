@@ -5,7 +5,7 @@
  */
 import { createHash, randomUUID } from "node:crypto";
 
-import { and, asc, desc, eq, gte, inArray, sql } from "drizzle-orm";
+import { and, asc, desc, eq, gte, inArray, isNull, lt, ne, or, sql } from "drizzle-orm";
 
 import { getDb } from "@launchstack/store/client";
 
@@ -136,17 +136,35 @@ export async function listEvidence(args: {
     kind?: VantageEvidenceKind;
     since?: string;
     limit?: number;
+    viewer?: { userId: string; canEdit: boolean };
 }): Promise<EvidenceDto[]> {
     const conditions = [eq(vantageEvidence.companyId, args.companyId)];
     if (args.kind) conditions.push(eq(vantageEvidence.kind, args.kind));
     if (args.since) conditions.push(gte(vantageEvidence.observedAt, args.since));
+    const viewer = args.viewer;
+    if (viewer) {
+        conditions.push(
+            ne(vantageEvidence.kind, "document"),
+            or(
+                eq(vantageEvidence.createdByUserId, viewer.userId),
+                eq(vantageEvidence.visibility, "shared")
+            )!
+        );
+    }
     const rows = await getDb()
         .select()
         .from(vantageEvidence)
         .where(and(...conditions))
-        .orderBy(desc(vantageEvidence.observedAt), desc(vantageEvidence.createdAt))
+        .orderBy(
+            desc(vantageEvidence.observedAt),
+            desc(vantageEvidence.createdAt),
+            desc(vantageEvidence.id)
+        )
         .limit(args.limit ?? 200);
-    return rows.map(toEvidenceDto);
+    return rows.map(row => ({
+        ...toEvidenceDto(row),
+        ...(viewer && { canEdit: viewer.canEdit && row.createdByUserId === viewer.userId }),
+    }));
 }
 
 export async function listEvidenceRows(args: {
@@ -403,7 +421,14 @@ export async function listObservations(args: {
             desc(vantageMetricObservations.createdAt)
         )
         .limit(args.limit ?? 500);
-    return rows.map(({ row, key, name }) => ({
+    return rows.map(({ row, key, name }) => toObservationDto(row, { key, name }));
+}
+
+function toObservationDto(
+    row: VantageMetricObservationRow,
+    { key, name }: Pick<VantageMetricDefinitionRow, "key" | "name">
+): MetricObservationDto {
+    return {
         id: row.id,
         metricId: row.metricId,
         metricKey: key,
@@ -414,7 +439,7 @@ export async function listObservations(args: {
         source: row.source ?? null,
         note: row.note ?? null,
         createdAt: row.createdAt.toISOString(),
-    }));
+    };
 }
 
 export interface ObservationInput {
@@ -426,17 +451,25 @@ export interface ObservationInput {
     note?: string | null;
 }
 
-export async function createObservations(args: {
+async function prepareObservations(args: {
     companyId: bigint;
     userId: string;
     inputs: ObservationInput[];
-}): Promise<number> {
-    if (args.inputs.length === 0) return 0;
-    const owned = await listMetricDefinitionRows(args.companyId);
-    const ids = new Set(owned.map(d => d.id));
-    const values = args.inputs
-        .filter(i => ids.has(i.metricId))
-        .map(i => ({
+}) {
+    const definitions = new Map(
+        (await listMetricDefinitionRows(args.companyId)).map(definition => [
+            definition.id,
+            definition,
+        ])
+    );
+    const values = args.inputs.map(i => {
+        if (!definitions.has(i.metricId))
+            throw new VantageError(
+                "One of those metrics is not in this workspace.",
+                400,
+                "invalid"
+            );
+        return {
             id: randomUUID(),
             companyId: args.companyId,
             createdByUserId: args.userId,
@@ -446,11 +479,30 @@ export async function createObservations(args: {
             periodEnd: i.periodEnd,
             source: orNull(i.source),
             note: orNull(i.note),
-        }));
-    if (values.length !== args.inputs.length)
-        throw new VantageError("One of those metrics is not in this workspace.", 400, "invalid");
+        };
+    });
+    return { values, definitions };
+}
+
+export async function createObservations(args: {
+    companyId: bigint;
+    userId: string;
+    inputs: ObservationInput[];
+}): Promise<number> {
+    if (args.inputs.length === 0) return 0;
+    const { values } = await prepareObservations(args);
     await getDb().insert(vantageMetricObservations).values(values);
     return values.length;
+}
+
+export async function createObservation(args: {
+    companyId: bigint;
+    userId: string;
+    input: ObservationInput;
+}): Promise<MetricObservationDto> {
+    const { values, definitions } = await prepareObservations({ ...args, inputs: [args.input] });
+    const [row] = await getDb().insert(vantageMetricObservations).values(values).returning();
+    return toObservationDto(row!, definitions.get(args.input.metricId)!);
 }
 
 export async function deleteObservation(args: { companyId: bigint; id: string }): Promise<void> {
@@ -505,16 +557,32 @@ export async function listCommitments(args: {
     status?: VantageCommitmentStatus[];
     agendaId?: string;
     sharedOnly?: boolean;
+    viewer?: { userId: string; canSeeProgramShares: boolean };
 }): Promise<CommitmentDto[]> {
     const conditions = [eq(vantageCommitments.companyId, args.companyId)];
     if (args.status && args.status.length > 0)
         conditions.push(inArray(vantageCommitments.status, args.status));
     if (args.agendaId) conditions.push(eq(vantageCommitments.agendaId, args.agendaId));
     if (args.sharedOnly) conditions.push(eq(vantageCommitments.shared, true));
+    if (args.viewer) {
+        const own = eq(vantageCommitments.createdByUserId, args.viewer.userId);
+        const standaloneShared = and(
+            eq(vantageCommitments.shared, true),
+            isNull(vantageCommitments.agendaId),
+            isNull(vantageCommitments.topicId)
+        );
+        conditions.push(args.viewer.canSeeProgramShares ? or(own, standaloneShared)! : own);
+    }
     const rows = await getDb()
         .select({ row: vantageCommitments, topicTitle: vantageAgendaTopics.title })
         .from(vantageCommitments)
-        .leftJoin(vantageAgendaTopics, eq(vantageAgendaTopics.id, vantageCommitments.topicId))
+        .leftJoin(
+            vantageAgendaTopics,
+            and(
+                eq(vantageAgendaTopics.id, vantageCommitments.topicId),
+                eq(vantageAgendaTopics.companyId, vantageCommitments.companyId)
+            )
+        )
         .where(and(...conditions))
         .orderBy(asc(vantageCommitments.dueOn), desc(vantageCommitments.createdAt));
     return rows.map(({ row, topicTitle }) => toCommitmentDto(row, topicTitle ?? null));
@@ -625,6 +693,7 @@ export async function createCommitment(args: {
 
 export async function updateCommitment(args: {
     companyId: bigint;
+    userId: string;
     id: string;
     patch: {
         expectedContentVersion: number;
@@ -665,6 +734,7 @@ export async function updateCommitment(args: {
             and(
                 eq(vantageCommitments.id, args.id),
                 eq(vantageCommitments.companyId, args.companyId),
+                eq(vantageCommitments.createdByUserId, args.userId),
                 eq(vantageCommitments.contentVersion, p.expectedContentVersion)
             )
         )
@@ -798,9 +868,16 @@ export async function getAgenda(args: {
 
 export async function listAgendas(args: {
     companyId: bigint;
+    creatorUserId?: string;
+    beforeWeek?: string;
     limit?: number;
 }): Promise<AgendaSummaryDto[]> {
     const db = getDb();
+    const conditions = [eq(vantageAgendas.companyId, args.companyId)];
+    if (args.creatorUserId !== undefined)
+        conditions.push(eq(vantageAgendas.createdByUserId, args.creatorUserId));
+    if (args.beforeWeek !== undefined)
+        conditions.push(lt(vantageAgendas.weekStart, args.beforeWeek));
     const rows = await db
         .select({
             row: vantageAgendas,
@@ -808,8 +885,14 @@ export async function listAgendas(args: {
             decidedCount: sql<number>`count(${vantageAgendaTopics.id}) filter (where ${vantageAgendaTopics.decision} is not null)`,
         })
         .from(vantageAgendas)
-        .leftJoin(vantageAgendaTopics, eq(vantageAgendaTopics.agendaId, vantageAgendas.id))
-        .where(eq(vantageAgendas.companyId, args.companyId))
+        .leftJoin(
+            vantageAgendaTopics,
+            and(
+                eq(vantageAgendaTopics.agendaId, vantageAgendas.id),
+                eq(vantageAgendaTopics.companyId, vantageAgendas.companyId)
+            )
+        )
+        .where(and(...conditions))
         .groupBy(vantageAgendas.id)
         .orderBy(desc(vantageAgendas.weekStart))
         .limit(args.limit ?? 26);

@@ -309,6 +309,16 @@ describe("chat weighed by its price against the Standard model's", () => {
         expect(weighUsage(chat()).weightedTokens).toBe(4000);
     });
 
+    it("weighs a reported total without pricing an unknown split", () => {
+        mockChatModelsConfig.mockReturnValue(modelsConfig({ input: 0.3, output: 2.5 }));
+        const usage = chat({
+            inputTokens: 0,
+            outputTokens: 0,
+            pricing: { input: 1.2, output: 10 },
+        });
+        expect(weighUsage(usage, undefined, 100)).toEqual({ weightedTokens: 400 });
+    });
+
     it("counts the Standard model itself one for one, and a dearer one by its ratio", () => {
         // Standard blends to (3 × 0.3 + 2.5) / 4 = 0.85 per 1M.
         mockChatModelsConfig.mockReturnValue(modelsConfig({ input: 0.3, output: 2.5 }));

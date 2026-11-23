@@ -26,6 +26,7 @@ import type { ChatProviderRetryPolicy } from "./provider-retry";
 export type {
     ChatProviderRetryPolicy,
     ChatProviderAttemptOutcome,
+    ChatProviderAttemptUsageIdentity,
     ChatProviderStatusClass,
 } from "./provider-retry";
 import {

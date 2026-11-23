@@ -772,7 +772,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                         row.scopedTransportFailure = true;
                     } else {
                         row.failure = "usage_unresolved";
-                        hold = "usage_unresolved";
+                        hold ??= "usage_unresolved";
                     }
                     await persist();
                 }

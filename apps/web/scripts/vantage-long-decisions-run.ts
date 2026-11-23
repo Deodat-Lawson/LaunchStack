@@ -104,6 +104,7 @@ async function main() {
             cache: { type: "string" },
             "approve-live": { type: "boolean" },
             "spec-version": { type: "string", default: "v1" },
+            "digest-workers": { type: "string", default: "1" },
             resume: { type: "boolean" },
             "resume-warmup": { type: "boolean" },
             "preflight-live": { type: "boolean" },
@@ -116,6 +117,17 @@ async function main() {
     const cache = resolve(values.cache);
     const revision = values["spec-version"];
     if (revision !== "v1" && revision !== "v2") throw new Error("long_decisions_revision_invalid");
+    const digestWorkers = Number(values["digest-workers"]);
+    if (
+        !["1", "2"].includes(values["digest-workers"]) ||
+        (digestWorkers === 2 &&
+            (revision !== "v2" ||
+                (!values["approve-live"] && !values["preflight-live"]) ||
+                values["ingest-only"] ||
+                values["injected-smoke"] ||
+                values["local-fixture-lock"]))
+    )
+        throw new Error("long_decisions_digest_workers_invalid");
     const resumeRun = values.resume === true;
     if (
         resumeRun &&
@@ -217,6 +229,7 @@ async function main() {
                 routes: azure.routes,
                 coldDigestExposure,
                 paidExplorations: schedule.length,
+                ...(revision === "v2" ? { digestWorkers } : {}),
                 projectedUsd,
                 limitUsd: LIMIT_USD,
             })
@@ -245,6 +258,7 @@ async function main() {
             ? {
                   revision,
                   liveConcurrency: 1,
+                  digestWorkers,
                   warmup: "actual_free_catalogue_union_per_split",
                   cutoffs: manifest.weeks.map(week => ({ id: week.id, asOf: week.cutoff })),
                   forecastReference: {
@@ -532,6 +546,8 @@ async function main() {
             ? code
             : "transport_failure";
     };
+    let diagnosticPersistenceFailed = false;
+    let diagnosticWrites = Promise.resolve();
     const diagnostics: unknown[] = [];
     if (resumeWarmup || resumeRun) {
         try {
@@ -547,7 +563,21 @@ async function main() {
     const saveDiagnostic = async (value: unknown) => {
         diagnostics.push(value);
         console.log(JSON.stringify(value));
-        await writeJson(resolve(capture, "warmup-diagnostics.json"), diagnostics);
+        if (revision !== "v2" || digestWorkers !== 2) {
+            await writeJson(resolve(capture, "warmup-diagnostics.json"), diagnostics);
+            return;
+        }
+        const snapshot = structuredClone(diagnostics);
+        const write = diagnosticWrites.then(() =>
+            writeJson(resolve(capture, "warmup-diagnostics.json"), snapshot)
+        );
+        diagnosticWrites = write;
+        try {
+            await write;
+        } catch (error) {
+            diagnosticPersistenceFailed = true;
+            throw error;
+        }
     };
     const diagnosedFetch: typeof fetch = async (input, init) => {
         try {
@@ -772,6 +802,7 @@ async function main() {
                     !row.scopedTransportFailure
             );
             if (
+                diagnosticPersistenceFailed ||
                 state.hold !== "usage_unresolved" ||
                 unknown.length === 0 ||
                 unknown.some(
@@ -864,97 +895,214 @@ async function main() {
         };
         const startedAt = Date.now();
         const digestIds: string[] = [];
-        // Serial batches warm the initial connection and isolate every paid retry.
-        for (const [versionIndex, versionId] of versionIds.entries()) {
-            if (revision === "v2") {
-                const coldRemaining = versionIds.slice(versionIndex).reduce((sum, id) => {
-                    const stable = stableVersion(id);
-                    const version = manifest.documents
-                        .flatMap(document => document.versions)
-                        .find(v => v.id === stable.versionId);
-                    if (!version) throw new Error("long_decisions_unknown_result_source");
-                    return sum + digestForecast(version.bytes);
-                }, 0);
-                if (remainingProjection(completedWarmup ? 0 : coldRemaining) > LIMIT_USD)
-                    throw new Error("long_decisions_projected_budget_exceeded");
-            }
-            const batch = [versionId];
-            for (let attempt = 0; attempt < 2; attempt++) {
-                meter.assertCanDispatch();
-                const before = meter.snapshot();
-                try {
-                    const ready = await prewarmTopicDigests({
-                        actor,
-                        versionIds: batch,
-                        query,
-                        provider: async input => {
-                            if (completedWarmup)
-                                throw new Error("long_decisions_warmup_cache_missing");
-                            try {
-                                return await digestProvider(input);
-                            } catch (error) {
-                                await saveDiagnostic({
-                                    kind: "digest_provider_failure",
-                                    causeCode: causeCode(error),
-                                    syntaxError: error instanceof SyntaxError,
-                                });
-                                throw error;
-                            }
-                        },
-                        authorizeDocument: async document =>
-                            canReadIds.has(String(document.id)) &&
-                            (await loadActor()).canMutate &&
-                            (await currentEpoch()) === epoch,
-                    });
-                    if (ready.digests.size !== batch.length)
-                        throw new Error("benchmark_digest_warm_up_incomplete");
-                    digestIds.push(...ready.digestIds);
-                    cacheCoveredVersions.add(versionId);
-                    if (
-                        revision === "v2" &&
-                        ((versionIndex + 1) % 10 === 0 || versionIndex + 1 === versionIds.length)
-                    )
-                        await saveDiagnostic({
-                            kind: "digest_progress",
-                            split,
-                            checkedVersions: versionIndex + 1,
-                            requiredVersions: versionIds.length,
-                            requests: meter.snapshot().records.length,
-                            exposureUsd: meter.snapshot().projectedTotalUsd,
+        if (revision === "v1") {
+            // Serial batches warm the initial connection and isolate every paid retry.
+            for (const versionId of versionIds) {
+                const batch = [versionId];
+                for (let attempt = 0; attempt < 2; attempt++) {
+                    meter.assertCanDispatch();
+                    const before = meter.snapshot();
+                    try {
+                        const ready = await prewarmTopicDigests({
+                            actor,
+                            versionIds: batch,
+                            query,
+                            provider: async input => {
+                                if (completedWarmup)
+                                    throw new Error("long_decisions_warmup_cache_missing");
+                                try {
+                                    return await digestProvider(input);
+                                } catch (error) {
+                                    await saveDiagnostic({
+                                        kind: "digest_provider_failure",
+                                        causeCode: causeCode(error),
+                                        syntaxError: error instanceof SyntaxError,
+                                    });
+                                    throw error;
+                                }
+                            },
+                            authorizeDocument: async document =>
+                                canReadIds.has(String(document.id)) &&
+                                (await loadActor()).canMutate &&
+                                (await currentEpoch()) === epoch,
                         });
-                    break;
-                } catch (error) {
-                    await saveDiagnostic({
-                        kind: "digest_warmup_failure",
-                        ...stableVersion(versionId),
-                        code:
-                            error instanceof WeeklyReviewConflict
-                                ? error.code
-                                : error instanceof Error &&
-                                    /^benchmark_[a-z_]+$/.test(error.message)
-                                  ? error.message
-                                  : "unknown",
-                    });
+                        if (ready.digests.size !== batch.length)
+                            throw new Error("benchmark_digest_warm_up_incomplete");
+                        digestIds.push(...ready.digestIds);
+                        cacheCoveredVersions.add(versionId);
+                        break;
+                    } catch (error) {
+                        await saveDiagnostic({
+                            kind: "digest_warmup_failure",
+                            ...stableVersion(versionId),
+                            code:
+                                error instanceof WeeklyReviewConflict
+                                    ? error.code
+                                    : error instanceof Error &&
+                                        /^benchmark_[a-z_]+$/.test(error.message)
+                                      ? error.message
+                                      : "unknown",
+                        });
+                        await meter.drainPending();
+                        const state = meter.snapshot();
+                        const oldIds = new Set(before.records.map(row => row.id));
+                        const added = state.records.filter(row => !oldIds.has(row.id));
+                        if (
+                            attempt !== 0 ||
+                            added.length !== 1 ||
+                            added.some(
+                                row =>
+                                    row.status !== "unknown" ||
+                                    row.httpStatus !== undefined ||
+                                    row.route !== "digest" ||
+                                    row.workId !== undefined
+                            ) ||
+                            state.hold !== "usage_unresolved"
+                        )
+                            throw error;
+                        await recoverNoHttp(new Set(added.map(row => row.id)));
+                    }
+                }
+            }
+        } else {
+            const idsByVersion = new Map<string, string>();
+            for (let offset = 0; offset < versionIds.length; ) {
+                const batch = versionIds.slice(offset, offset + (offset === 0 ? 1 : digestWorkers));
+                let pending = [...batch];
+                for (let attempt = 0; attempt < 2; attempt++) {
+                    if (diagnosticPersistenceFailed)
+                        throw new Error("long_decisions_capture_persistence_failed");
+                    if (remainingProjection() > LIMIT_USD)
+                        throw new Error("long_decisions_projected_budget_exceeded");
+                    meter.assertCanDispatch();
+                    const before = meter.snapshot();
+                    const providerErrors = new Map<string, "usage_unresolved" | "other">();
+                    const outcomes = await Promise.allSettled(
+                        pending.map(async versionId => {
+                            // Separate service controllers keep one failed transport from aborting
+                            // a settled sibling before its digest reaches the real shared cache.
+                            const ready = await prewarmTopicDigests({
+                                actor,
+                                versionIds: [versionId],
+                                query,
+                                provider: async input => {
+                                    if (completedWarmup)
+                                        throw new Error("long_decisions_warmup_cache_missing");
+                                    try {
+                                        return await digestProvider(input);
+                                    } catch (error) {
+                                        const usageHold =
+                                            error instanceof Error &&
+                                            error.message.includes(
+                                                "benchmark_meter_hold:usage_unresolved"
+                                            );
+                                        providerErrors.set(
+                                            versionId,
+                                            usageHold ? "usage_unresolved" : "other"
+                                        );
+                                        await saveDiagnostic({
+                                            kind: "digest_provider_failure",
+                                            ...stableVersion(versionId),
+                                            causeCode: causeCode(error),
+                                            syntaxError: error instanceof SyntaxError,
+                                        });
+                                        throw error;
+                                    }
+                                },
+                                authorizeDocument: async document =>
+                                    canReadIds.has(String(document.id)) &&
+                                    (await loadActor()).canMutate &&
+                                    (await currentEpoch()) === epoch,
+                            });
+                            if (
+                                ready.digests.size !== 1 ||
+                                ready.digestIds.length !== 1 ||
+                                !ready.digestIds[0]
+                            )
+                                throw new Error("benchmark_digest_warm_up_incomplete");
+                            return { versionId, digestId: ready.digestIds[0] };
+                        })
+                    );
                     await meter.drainPending();
+                    const failed: string[] = [];
+                    let firstError: unknown;
+                    for (const [index, outcome] of outcomes.entries()) {
+                        const versionId = pending[index]!;
+                        if (outcome.status === "fulfilled") {
+                            idsByVersion.set(versionId, outcome.value.digestId);
+                            cacheCoveredVersions.add(versionId);
+                        } else {
+                            failed.push(versionId);
+                            firstError ??= outcome.reason;
+                            await saveDiagnostic({
+                                kind: "digest_warmup_failure",
+                                ...stableVersion(versionId),
+                                code:
+                                    outcome.reason instanceof WeeklyReviewConflict
+                                        ? outcome.reason.code
+                                        : "unknown",
+                            });
+                        }
+                    }
                     const state = meter.snapshot();
                     const oldIds = new Set(before.records.map(row => row.id));
                     const added = state.records.filter(row => !oldIds.has(row.id));
+                    const unknown = added.filter(row => row.status === "unknown");
+                    const invalidSibling = added.some(
+                        row =>
+                            row.route !== "digest" ||
+                            row.workId !== undefined ||
+                            !(["unknown", "settled"] as string[]).includes(row.status) ||
+                            (row.status === "settled" &&
+                                (row.httpStatus === undefined ||
+                                    row.httpStatus < 200 ||
+                                    row.httpStatus >= 300 ||
+                                    (row.settledListRateUsd ?? Infinity) >
+                                        row.projectedUsd + 1e-9 ||
+                                    (row.inputTokens ?? Infinity) > row.inputTokenCeiling ||
+                                    (row.outputTokens ?? Infinity) > row.outputTokenCeiling))
+                    );
+                    if (diagnosticPersistenceFailed || invalidSibling)
+                        throw new Error("long_decisions_digest_batch_invariant");
+                    if (state.hold && state.hold !== "usage_unresolved")
+                        throw new Error("benchmark_meter_hold:" + state.hold);
+                    if (!failed.length) {
+                        if (state.hold) throw new Error("benchmark_meter_hold:" + state.hold);
+                        break;
+                    }
                     if (
                         attempt !== 0 ||
-                        added.length !== 1 ||
-                        added.some(
+                        state.hold !== "usage_unresolved" ||
+                        added.length > pending.length ||
+                        unknown.length === 0 ||
+                        unknown.some(
                             row =>
-                                row.status !== "unknown" ||
                                 row.httpStatus !== undefined ||
-                                row.route !== "digest" ||
-                                row.workId !== undefined
+                                row.failure !== "usage_unresolved" ||
+                                row.settledListRateUsd !== undefined
                         ) ||
-                        state.hold !== "usage_unresolved"
+                        failed.some(version => providerErrors.get(version) !== "usage_unresolved")
                     )
-                        throw error;
-                    await recoverNoHttp(new Set(added.map(row => row.id)));
+                        throw firstError;
+                    await recoverNoHttp(new Set(unknown.map(row => row.id)));
+                    pending = failed;
                 }
+                offset += batch.length;
+                if (
+                    Math.floor(offset / 10) > Math.floor((offset - batch.length) / 10) ||
+                    offset === versionIds.length
+                )
+                    await saveDiagnostic({
+                        kind: "digest_progress",
+                        split,
+                        checkedVersions: offset,
+                        requiredVersions: versionIds.length,
+                        digestWorkers,
+                        requests: meter.snapshot().records.length,
+                        exposureUsd: meter.snapshot().projectedTotalUsd,
+                    });
             }
+            digestIds.push(...versionIds.map(versionId => idsByVersion.get(versionId)!));
         }
         await meter.drainPending();
         const audit = {
@@ -964,6 +1112,7 @@ async function main() {
                       specSha256: manifest.specSha256,
                       split,
                       source: "actual_free_catalogue_union",
+                      digestWorkers,
                   }
                 : {}),
             versions: versionIds.map(stableVersion),

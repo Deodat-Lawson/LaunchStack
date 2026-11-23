@@ -559,6 +559,35 @@ it("denies HTTP failures, non-usage holds and exposure above the limit", async (
         }).clearSweepTransportHold(["sweep-019"])
     ).rejects.toThrow("transport_clear_denied");
 });
+it("does not overwrite a sibling chat provider-error hold with a socket failure", async () => {
+    const meter = createBenchmarkMeter({ ...config(), allowGenerationTransportRecovery: true });
+    let transportStarted: () => void = () => {};
+    let failTransport: () => void = () => {};
+    const entered = new Promise<void>(resolve => {
+        transportStarted = resolve;
+    });
+    const stalled = meter.wrapFetch(
+        () =>
+            new Promise<Response>((_, reject) => {
+                failTransport = () => reject(new Error("socket fixture"));
+                transportStarted();
+            })
+    )(endpoint, request());
+    const outcome = expect(stalled).rejects.toThrow("provider_error");
+    await entered;
+    await expect(
+        meter.wrapFetch(async () => new Response(await completion().text(), { status: 429 }))(
+            endpoint,
+            request()
+        )
+    ).rejects.toThrow("provider_error");
+    failTransport();
+    await outcome;
+    await meter.drainPending();
+    expect(meter.snapshot().hold).toBe("provider_error");
+    expect(meter.snapshot().reservedUsd).toBeGreaterThan(0);
+    await expect(meter.clearGenerationTransportHold(1)).rejects.toThrow("transport_clear_denied");
+});
 it("ignores acknowledged transport incidents during a later verified case-deadline clearance", async () => {
     const prior = await unresolvedSweepLedger();
     const meter = createBenchmarkMeter({ ...config(), priorLedger: prior });

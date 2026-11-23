@@ -644,6 +644,202 @@ const nativeResponse = (status = 200, usage = true) =>
         { status, headers: { "content-type": "application/json" } }
     );
 const reliableConfig = () => ({ ...config(), transportReliability: "scoped-retry-v1" as const });
+const postTrackedConfig = (limitUsd = 20, baselineRecordIds: string[] = []) => ({
+    ...reliableConfig(),
+    postTrackedSpend: { limitUsd, baselineRecordIds },
+});
+it("post-tracked spending starts at the pinned baseline and ignores future reservations", async () => {
+    const initial = createBenchmarkMeter(reliableConfig());
+    await initial.wrapFetch(async () => nativeResponse())(responsesUrl, responseRequest());
+    const prior = initial.snapshot();
+    const meter = createBenchmarkMeter({
+        ...postTrackedConfig(
+            0.000007,
+            prior.records.map(row => row.id)
+        ),
+        priorLedger: prior,
+    });
+    await meter.reserveBatch([10000, 10000]);
+    expect(meter.snapshot().postTrackedSpend?.actualSpendUsd).toBe(0);
+    const send = jest.fn<Promise<Response>, Parameters<typeof fetch>>(async () => nativeResponse());
+    await meter.wrapFetch(send)(responsesUrl, responseRequest());
+    await meter.wrapFetch(send)(responsesUrl, responseRequest());
+    await expect(meter.wrapFetch(send)(responsesUrl, responseRequest())).rejects.toThrow(
+        "actual_budget_exceeded"
+    );
+    expect(send).toHaveBeenCalledTimes(2);
+    expect(meter.snapshot().postTrackedSpend?.actualSpendUsd).toBe(0.000014);
+    expect(
+        meter
+            .snapshot()
+            .records.filter(row => row.dispatchSequence)
+            .map(row => [row.dispatchSequence, row.actualSpendAtDispatchUsd])
+    ).toEqual([
+        [1, 0],
+        [2, 0.000007],
+    ]);
+    const restored = createBenchmarkMeter({
+        ...postTrackedConfig(
+            0.000007,
+            prior.records.map(row => row.id)
+        ),
+        priorLedger: meter.snapshot(),
+    });
+    expect(() => restored.assertCanDispatch()).toThrow("actual_budget_exceeded");
+    expect(() =>
+        createBenchmarkMeter({
+            ...postTrackedConfig(0.000007),
+            priorLedger: meter.snapshot(),
+        })
+    ).toThrow("post_tracked_binding_invalid");
+});
+it("post-tracked unknown usage counts its full reserve once and blocks retries after crossing", async () => {
+    const meter = createBenchmarkMeter(postTrackedConfig(0.000001));
+    const send = jest.fn<Promise<Response>, Parameters<typeof fetch>>(async () => {
+        throw Error("socket");
+    });
+    await expect(meter.wrapFetch(send)(responsesUrl, responseRequest())).rejects.toThrow(
+        "actual_budget_exceeded"
+    );
+    expect(send).toHaveBeenCalledTimes(1);
+    const state = meter.snapshot();
+    expect(state.records).toHaveLength(1);
+    expect(state.records[0]).toMatchObject({ status: "unknown", failure: "no_http" });
+    expect(state.postTrackedSpend?.actualSpendUsd).toBe(state.records[0]!.projectedUsd);
+});
+it("post-tracked overshoot lets already dispatched requests settle and stops future dispatch", async () => {
+    const meter = createBenchmarkMeter(postTrackedConfig(0.000001));
+    const finish: ((response: Response) => void)[] = [];
+    const send = jest.fn<Promise<Response>, Parameters<typeof fetch>>(
+        () => new Promise(resolve => finish.push(resolve))
+    );
+    const invoke = meter.wrapFetch(send);
+    const pending = [
+        invoke(responsesUrl, responseRequest()),
+        invoke(responsesUrl, responseRequest()),
+    ];
+    while (finish.length < 2) await new Promise(resolve => setTimeout(resolve, 0));
+    finish[0]!(nativeResponse());
+    await expect(pending[0]).resolves.toBeInstanceOf(Response);
+    await expect(invoke(responsesUrl, responseRequest())).rejects.toThrow("actual_budget_exceeded");
+    finish[1]!(nativeResponse());
+    await expect(pending[1]).resolves.toBeInstanceOf(Response);
+    expect(send).toHaveBeenCalledTimes(2);
+    expect(meter.snapshot().postTrackedSpend?.actualSpendUsd).toBe(0.000014);
+    expect(meter.snapshot().records.every(row => row.status === "settled")).toBe(true);
+});
+it("post-tracked resume rejects altered settled totals and an incomplete initial baseline", async () => {
+    const original = createBenchmarkMeter(reliableConfig());
+    await original.wrapFetch(async () => nativeResponse())(responsesUrl, responseRequest());
+    const prior = original.snapshot();
+    expect(() => createBenchmarkMeter({ ...postTrackedConfig(), priorLedger: prior })).toThrow(
+        "post_tracked_binding_invalid"
+    );
+    const meter = createBenchmarkMeter({
+        ...postTrackedConfig(
+            20,
+            prior.records.map(row => row.id)
+        ),
+        priorLedger: prior,
+    });
+    await meter.wrapFetch(async () => nativeResponse())(responsesUrl, responseRequest());
+    const tampered = meter.snapshot();
+    tampered.postTrackedSpend!.actualSpendUsd = 0;
+    expect(() =>
+        createBenchmarkMeter({
+            ...postTrackedConfig(
+                20,
+                prior.records.map(row => row.id)
+            ),
+            priorLedger: tampered,
+        })
+    ).toThrow("prior_ledger_invalid");
+});
+it("post-tracked mode still rejects usage that exceeds the request reservation", async () => {
+    const meter = createBenchmarkMeter(postTrackedConfig());
+    await expect(
+        meter.wrapFetch(
+            async () =>
+                new Response(
+                    JSON.stringify({
+                        usage: { input_tokens: 999999, output_tokens: 10 },
+                    })
+                )
+        )(responsesUrl, responseRequest())
+    ).rejects.toThrow("reservation_exceeded");
+    expect(meter.snapshot().hold).toBe("reservation_exceeded");
+    expect(meter.snapshot().postTrackedSpend!.actualSpendUsd).toBeGreaterThan(0);
+});
+it("post-tracked 429 and 5xx without usage preserve scoped retry charges and dispatch order", async () => {
+    const meter = createBenchmarkMeter(postTrackedConfig());
+    const send = jest
+        .fn<Promise<Response>, Parameters<typeof fetch>>()
+        .mockResolvedValueOnce(nativeResponse(429, false))
+        .mockResolvedValueOnce(nativeResponse(503, false))
+        .mockResolvedValueOnce(nativeResponse());
+    await expect(meter.wrapFetch(send)(responsesUrl, responseRequest())).resolves.toBeInstanceOf(
+        Response
+    );
+    const state = meter.snapshot();
+    expect(state.hold).toBeNull();
+    expect(state.records.map(row => [row.dispatchSequence, row.attempt, row.failure])).toEqual([
+        [1, 1, "http_429"],
+        [2, 2, "http_5xx"],
+        [3, 3, undefined],
+    ]);
+    expect(state.postTrackedSpend?.actualSpendUsd).toBeCloseTo(
+        state.records[0]!.projectedUsd + state.records[1]!.projectedUsd + 0.000007,
+        9
+    );
+});
+it.each(["reserved", "sent"])(
+    "post-tracked settlement blocks a native dispatch waiting for %s persistence",
+    async phase => {
+        let releasePersistence!: () => void;
+        let persistenceBlocked!: () => void;
+        const blocked = new Promise<void>(resolve => {
+            persistenceBlocked = resolve;
+        });
+        const gate = new Promise<void>(resolve => {
+            releasePersistence = resolve;
+        });
+        const meter = createBenchmarkMeter({
+            ...postTrackedConfig(0.000001),
+            persist: async snapshot => {
+                if (
+                    snapshot.records.length === 2 &&
+                    snapshot.records[0]?.status === "sent" &&
+                    snapshot.records[1]?.status === phase
+                ) {
+                    persistenceBlocked();
+                    await gate;
+                }
+            },
+        });
+        let finishFirst!: (response: Response) => void;
+        const send = jest.fn<Promise<Response>, Parameters<typeof fetch>>(
+            () =>
+                new Promise(resolve => {
+                    finishFirst = resolve;
+                })
+        );
+        const invoke = meter.wrapFetch(send);
+        const first = invoke(responsesUrl, responseRequest());
+        while (!finishFirst) await new Promise(resolve => setTimeout(resolve, 0));
+        const second = invoke(responsesUrl, responseRequest());
+        const secondResult = second.catch(error => error);
+        await blocked;
+        finishFirst(nativeResponse());
+        while (!meter.snapshot().records.some(row => row.status === "settled"))
+            await new Promise(resolve => setTimeout(resolve, 0));
+        releasePersistence();
+        await expect(first).resolves.toBeInstanceOf(Response);
+        expect((await secondResult).message).toContain("actual_budget_exceeded");
+        expect(send).toHaveBeenCalledTimes(1);
+        expect(meter.snapshot().records[1]).toMatchObject({ status: "released" });
+        expect(meter.snapshot().records[1]).not.toHaveProperty("dispatchSequence");
+    }
+);
 it("isolates concurrent scoped transport failures and accounts every bounded retry once", async () => {
     const meter = createBenchmarkMeter(reliableConfig());
     const send = jest.fn<Promise<Response>, Parameters<typeof fetch>>(async (_url, init) => {

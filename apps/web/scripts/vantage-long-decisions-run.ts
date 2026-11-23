@@ -37,11 +37,43 @@ import {
 
 const CAP_BYTES = [16000, 32000, 80000] as const;
 const LIMIT_USD = 5;
+const RESUME_LIMIT_USD = 20;
+const RESUME_CONCURRENCY = 4;
+const REDUCED_CONCURRENCY = 2;
 const FREE_ARMS = ["seeds-only", "seeds-windows"] as const;
 const LIVE_ARMS = ["live", "live+backfill", "live-docs+windows"] as const;
 const SPLITS = ["dev", "heldout"] as const;
 type StableId = { documentId: string; versionId: string };
 type ExploratoryAccess = StableId & { tool: "digest" | "read"; disclosed: boolean };
+type LiveResumeCapture = {
+    workId: string;
+    limit: number;
+    active: number;
+    startedAt: string;
+};
+
+function transportSlowdown(records: BenchmarkMeterSnapshot["records"]) {
+    const requests = records
+        .filter(row => row.dispatchSequence !== undefined && row.status !== "released")
+        .sort((a, b) => a.dispatchSequence! - b.dispatchSequence!);
+    for (let i = 20; i <= requests.length; i++) {
+        const window = requests.slice(i - 20, i);
+        if (window.some(row => row.status === "sent" || row.status === "reserved")) continue;
+        const failures = window.filter(
+            row =>
+                row.httpStatus === undefined ||
+                row.httpStatus === 429 ||
+                (row.httpStatus >= 500 && row.httpStatus <= 599)
+        ).length;
+        if (failures > 2)
+            return {
+                first: window[0]!.dispatchSequence,
+                last: window[19]!.dispatchSequence,
+                failures,
+            };
+    }
+    return null;
+}
 
 async function writeJson(path: string, value: unknown) {
     const temporary = path + "." + randomUUID() + ".tmp";
@@ -107,6 +139,7 @@ async function main() {
             "spec-version": { type: "string", default: "v1" },
             "digest-workers": { type: "string", default: "1" },
             resume: { type: "boolean" },
+            "post-settlement": { type: "boolean" },
             "resume-warmup": { type: "boolean" },
             "preflight-live": { type: "boolean" },
             "ingest-only": { type: "boolean" },
@@ -130,6 +163,9 @@ async function main() {
     )
         throw new Error("long_decisions_digest_workers_invalid");
     const resumeRun = values.resume === true;
+    const postSettlement = values["post-settlement"] === true;
+    if (postSettlement && !resumeRun)
+        throw new Error("long_decisions_post_settlement_requires_resume");
     if (
         resumeRun &&
         (revision !== "v2" ||
@@ -224,7 +260,15 @@ async function main() {
             ? reference.explorationP90Usd * reference.padding * reference.catalogueScale * bodyScale
             : 0.0521793 * 1.5;
     const projectedUsd = coldDigestExposure + schedule.length * explorationUnitUsd;
-    if (azure) {
+    if (azure && postSettlement) {
+        console.log(
+            JSON.stringify({
+                routes: azure.routes,
+                resumeLimitUsd: RESUME_LIMIT_USD,
+                digestWorkers,
+            })
+        );
+    } else if (azure) {
         console.log(
             JSON.stringify({
                 routes: azure.routes,
@@ -288,6 +332,8 @@ async function main() {
     >();
     const jobFile = (job: (typeof schedule)[number], arm: string) =>
         [job.group.id, job.capBytes, arm].join("-") + ".json";
+    const workId = (job: (typeof schedule)[number]) =>
+        "sweep-" + String(schedule.indexOf(job) + 1).padStart(3, "0");
     if (resumeRun) {
         const savedMethod = JSON.parse(await readFile(resolve(capture, "method.json"), "utf8"));
         if (JSON.stringify(savedMethod) !== JSON.stringify(method))
@@ -302,9 +348,31 @@ async function main() {
             "digest-warmup-dev.json",
             "digest-warmup-heldout.json",
             "progress.json",
+            ...(postSettlement
+                ? [
+                      "score-summary-replay.json",
+                      "score-summary.json",
+                      "scores-private-replay.json",
+                      "scores-private.json",
+                      "scoring-contract.json",
+                  ]
+                : []),
         ]);
+        const freeCapture = resolve(cache, "free-check-v2");
+        const freeNames = postSettlement ? new Set(await readdir(freeCapture)) : new Set<string>();
+        if (postSettlement) {
+            const freeMethod = JSON.parse(
+                await readFile(resolve(freeCapture, "method.json"), "utf8")
+            );
+            if (
+                JSON.stringify(freeMethod) !==
+                JSON.stringify({ ...method, digestWorkers: 1, projection: null })
+            )
+                throw new Error("long_decisions_free_capture_method_mismatch");
+        }
         const completedWork = new Set<string>();
         let missing = false;
+        let previousLiveSplitIncomplete = false;
         for (const split of SPLITS) {
             const jobs = schedule.filter(job => job.split === split);
             const expected: {
@@ -317,12 +385,23 @@ async function main() {
             for (const { job, arm } of expected) {
                 const name = jobFile(job, arm);
                 allowed.add(name);
-                if (!names.has(name)) {
+                const source = names.has(name)
+                    ? capture
+                    : postSettlement && arm !== "live" && freeNames.has(name)
+                      ? freeCapture
+                      : null;
+                if (!source) {
+                    if (postSettlement && arm !== "live")
+                        throw new Error("long_decisions_free_capture_missing");
                     missing = true;
                     continue;
                 }
-                if (missing) throw new Error("long_decisions_resume_prefix_invalid");
-                const saved = JSON.parse(await readFile(resolve(capture, name), "utf8"));
+                if (
+                    (!postSettlement && missing) ||
+                    (postSettlement && previousLiveSplitIncomplete && arm === "live")
+                )
+                    throw new Error("long_decisions_resume_prefix_invalid");
+                const saved = JSON.parse(await readFile(resolve(source, name), "utf8"));
                 const week = manifest.weeks.find(week => week.id === job.group.weekId)!;
                 const arms = arm === "live" ? LIVE_ARMS : [arm];
                 if (
@@ -337,17 +416,18 @@ async function main() {
                             row.capBytes !== job.capBytes ||
                             row.arm !== arms[i] ||
                             !["completed", "degraded", "failed"].includes(String(row.status)) ||
-                            !Array.isArray(row.selected)
+                            !Array.isArray(row.selected) ||
+                            (postSettlement &&
+                                arm !== "live" &&
+                                (row.status !== "completed" || saved.result?.status !== "ok"))
                     ) ||
                     !saved.result
                 )
                     throw new Error("long_decisions_resume_capture_invalid");
                 resumedCaptures.set(name, saved);
-                if (arm === "live")
-                    completedWork.add(
-                        "sweep-" + String(schedule.indexOf(job) + 1).padStart(3, "0")
-                    );
+                if (arm === "live") completedWork.add(workId(job));
             }
+            previousLiveSplitIncomplete ||= jobs.some(job => !completedWork.has(workId(job)));
         }
         if ([...names].some(name => !allowed.has(name)))
             throw new Error("long_decisions_resume_capture_invalid");
@@ -361,16 +441,28 @@ async function main() {
                     (row.workId !== undefined && !completedWork.has(row.workId)) ||
                     (row.route === "exploration" && row.workId === undefined)
             ) ||
-            !([null, "usage_unresolved"] as unknown[]).includes(priorLedger.hold)
+            ![
+                null,
+                "usage_unresolved",
+                ...(postSettlement ? ["actual_budget_exceeded"] : []),
+            ].includes(priorLedger.hold)
         )
             throw new Error("long_decisions_resume_uncaptured_dispatch");
         if (
+            !postSettlement &&
             coldDigestExposure +
                 (schedule.length - completedWork.size) * explorationUnitUsd +
                 priorLedger.projectedTotalUsd >
-            LIMIT_USD
+                LIMIT_USD
         )
             throw new Error("long_decisions_projected_budget_exceeded");
+        if (!postSettlement && priorLedger.postTrackedSpend)
+            throw new Error("long_decisions_post_settlement_resume_required");
+        if (
+            priorLedger.postTrackedSpend?.limitUsd !== undefined &&
+            priorLedger.postTrackedSpend.limitUsd !== RESUME_LIMIT_USD
+        )
+            throw new Error("long_decisions_post_settlement_limit_mismatch");
     }
     if (resumeWarmup) {
         const savedMethod = JSON.parse(await readFile(resolve(capture, "method.json"), "utf8"));
@@ -471,7 +563,7 @@ async function main() {
     const cacheCoveredVersions = new Set<string>();
     const observedSplitCatalogues = new Set<string>();
     const futureInventory = new Map<string, Set<string>>();
-    for (const split of SPLITS) {
+    for (const split of postSettlement ? [] : SPLITS) {
         const needed = new Set<string>();
         for (const job of schedule.filter(job => job.split === split)) {
             const cutoff = manifest.weeks.find(week => week.id === job.group.weekId)!.cutoff;
@@ -616,6 +708,16 @@ async function main() {
                   timeoutMs: 150_000,
                   transportReliability: "scoped-retry-v1",
                   allowGenerationTransportRecovery: true,
+                  ...(postSettlement && priorLedger
+                      ? {
+                            postTrackedSpend: {
+                                limitUsd: RESUME_LIMIT_USD,
+                                baselineRecordIds:
+                                    priorLedger.postTrackedSpend?.baselineRecordIds ??
+                                    priorLedger.records.map(row => row.id),
+                            },
+                        }
+                      : {}),
                   ...(priorLedger ? { priorLedger } : {}),
                   persist: snapshot => writeJson(resolve(capture, "usage-ledger.json"), snapshot),
               })
@@ -977,7 +1079,7 @@ async function main() {
                 for (let attempt = 0; attempt < 2; attempt++) {
                     if (diagnosticPersistenceFailed)
                         throw new Error("long_decisions_capture_persistence_failed");
-                    if (remainingProjection() > LIMIT_USD)
+                    if (!postSettlement && remainingProjection() > LIMIT_USD)
                         throw new Error("long_decisions_projected_budget_exceeded");
                     meter.assertCanDispatch();
                     const before = meter.snapshot();
@@ -1137,13 +1239,14 @@ async function main() {
             elapsedMs: Date.now() - startedAt,
             exposureUsd: meter.snapshot().projectedTotalUsd,
         };
-        await writeJson(
-            resolve(
-                capture,
-                revision === "v2" ? `digest-warmup-${split}.json` : "digest-warmup.json"
-            ),
-            audit
-        );
+        if (!postSettlement || !completedWarmup)
+            await writeJson(
+                resolve(
+                    capture,
+                    revision === "v2" ? `digest-warmup-${split}.json` : "digest-warmup.json"
+                ),
+                audit
+            );
         console.log(
             JSON.stringify({
                 digestWarmup: digestIds.length,
@@ -1175,7 +1278,11 @@ async function main() {
         let exposureAfterWarmup = 0;
         const runJob = async (
             job: (typeof schedule)[number],
-            arm: (typeof FREE_ARMS)[number] | "live"
+            arm: (typeof FREE_ARMS)[number] | "live",
+            prepared?: {
+                loadActor: Awaited<ReturnType<typeof createActor>>;
+                admission: LiveResumeCapture;
+            }
         ) => {
             const { split, group, capBytes } = job;
             const saved = resumedCaptures.get(jobFile(job, arm));
@@ -1188,7 +1295,7 @@ async function main() {
             }
             const week = manifest.weeks.find(week => week.id === group.weekId);
             if (!week) throw new Error("long_decisions_unknown_reporting_week");
-            const loadActor = await createActor();
+            const loadActor = prepared?.loadActor ?? (await createActor());
             const execute = () =>
                 runBenchmarkRetrieval({
                     arm:
@@ -1219,10 +1326,7 @@ async function main() {
                 });
             const result =
                 arm === "live" && meter
-                    ? await meter.withWork(
-                          "sweep-" + String(liveCases + 1).padStart(3, "0"),
-                          execute
-                      )
+                    ? await meter.withWork(workId(job), execute)
                     : await execute();
             const [record] = result.runId
                 ? await sql`SELECT trace,digest_ids FROM pdr_ai_v2_vantage_weekly_review_run_manifests
@@ -1305,6 +1409,14 @@ async function main() {
                 rows,
                 result,
                 trace: record?.trace ?? null,
+                ...(prepared
+                    ? {
+                          liveResume: {
+                              ...prepared.admission,
+                              finishedAt: new Date().toISOString(),
+                          },
+                      }
+                    : {}),
             });
             if (
                 rows.some(row =>
@@ -1318,7 +1430,7 @@ async function main() {
                 throw new Error("long_decisions_restricted_source_disclosed");
             completed++;
             if (arm === "live") completedLiveKeys.add(jobFile(job, arm));
-            if (revision === "v2")
+            if (revision === "v2" && !postSettlement)
                 await writeJson(resolve(capture, "progress.json"), {
                     revision,
                     completed,
@@ -1339,12 +1451,123 @@ async function main() {
                     arm,
                     status: rows[0]?.status,
                     failure: result.failure,
-                    exposureUsd: meter?.snapshot().projectedTotalUsd,
+                    ...(postSettlement
+                        ? {
+                              resumeSpendUsd: meter?.snapshot().postTrackedSpend?.actualSpendUsd,
+                              concurrency: prepared?.admission.limit,
+                              activeAtStart: prepared?.admission.active,
+                          }
+                        : { exposureUsd: meter?.snapshot().projectedTotalUsd }),
                 })
             );
             if (revision === "v2" && arm !== "live" && rows.some(row => row.status === "failed"))
                 throw new Error("long_decisions_free_control_failed");
             return rows;
+        };
+        let slowdownReported = diagnostics.some(
+            event => (event as { kind?: string })?.kind === "transport_slowdown"
+        );
+        const resumeConcurrency = async () => {
+            const slowdown = transportSlowdown(meter!.snapshot().records);
+            if (slowdown && !slowdownReported) {
+                await saveDiagnostic({
+                    kind: "transport_slowdown",
+                    ...slowdown,
+                    concurrency: REDUCED_CONCURRENCY,
+                });
+                slowdownReported = true;
+            }
+            return slowdown ? REDUCED_CONCURRENCY : RESUME_CONCURRENCY;
+        };
+        const actualLimitCrossed = () =>
+            (meter?.snapshot().postTrackedSpend?.actualSpendUsd ?? 0) > RESUME_LIMIT_USD;
+        const resumeLiveSplit = async (
+            split: (typeof SPLITS)[number],
+            jobs: typeof schedule,
+            freeRows: unknown[]
+        ) => {
+            type Job = (typeof schedule)[number];
+            type Rows = Awaited<ReturnType<typeof runJob>>;
+            const liveRows = new Map<Job, Rows>();
+            const pending: Job[] = [];
+            for (const job of jobs) {
+                if (resumedCaptures.has(jobFile(job, "live")))
+                    liveRows.set(job, await runJob(job, "live"));
+                else pending.push(job);
+            }
+            // Membership creation advances the company authority epoch. Prepare
+            // every distinct owner before any exploration in this split starts.
+            const actors = new Map<Job, Awaited<ReturnType<typeof createActor>>>();
+            if (!actualLimitCrossed())
+                for (const job of pending) actors.set(job, await createActor());
+            type Completion = { job: Job; rows: Rows } | { job: Job; error: unknown };
+            const active = new Map<Job, Promise<Completion>>();
+            let cursor = 0;
+            let terminalError: { error: unknown } | undefined;
+            const saveRows = () =>
+                writeJson(resolve(capture, split + "-rows.json"), [
+                    ...freeRows,
+                    ...jobs.flatMap(job => liveRows.get(job) ?? []),
+                ]);
+            while (cursor < pending.length || active.size) {
+                let limit = REDUCED_CONCURRENCY;
+                try {
+                    limit = await resumeConcurrency();
+                } catch (error) {
+                    terminalError ??= { error };
+                }
+                while (
+                    cursor < pending.length &&
+                    active.size < limit &&
+                    !terminalError &&
+                    !actualLimitCrossed()
+                ) {
+                    try {
+                        meter!.assertCanDispatch();
+                    } catch (error) {
+                        if (!actualLimitCrossed()) terminalError = { error };
+                        break;
+                    }
+                    const job = pending[cursor++]!;
+                    active.set(
+                        job,
+                        runJob(job, "live", {
+                            loadActor: actors.get(job)!,
+                            admission: {
+                                workId: workId(job),
+                                limit,
+                                active: active.size + 1,
+                                startedAt: new Date().toISOString(),
+                            },
+                        }).then(
+                            rows => ({ job, rows }),
+                            error => ({ job, error })
+                        )
+                    );
+                }
+                if (!active.size) break;
+                const finished = await Promise.race(active.values());
+                active.delete(finished.job);
+                if ("rows" in finished) liveRows.set(finished.job, finished.rows);
+                else terminalError ??= { error: finished.error };
+                try {
+                    await saveRows();
+                } catch (error) {
+                    terminalError ??= { error };
+                }
+            }
+            await meter!.drainPending();
+            await resumeConcurrency();
+            if (terminalError) throw terminalError.error;
+            await saveRows();
+            console.log(
+                JSON.stringify({
+                    split,
+                    completedLiveJobs: liveRows.size,
+                    expectedLiveJobs: jobs.length,
+                    resumeSpendUsd: meter!.snapshot().postTrackedSpend?.actualSpendUsd,
+                })
+            );
         };
         if (smoke) {
             const job = schedule.find(job => job.split === "dev" && job.capBytes === 80000);
@@ -1367,7 +1590,20 @@ async function main() {
                 (revision === "v2" || split === "dev") &&
                 jobs.some(job => !completedLiveKeys.has(jobFile(job, "live")))
             )
-                exposureAfterWarmup = await warmOfferedDigests(split);
+                try {
+                    if (!postSettlement || !actualLimitCrossed())
+                        exposureAfterWarmup = await warmOfferedDigests(split);
+                } catch (error) {
+                    if (!postSettlement || !actualLimitCrossed()) throw error;
+                }
+            if (postSettlement) {
+                await resumeLiveSplit(split, jobs, rows);
+                if (actualLimitCrossed()) {
+                    console.log(JSON.stringify({ stopReason: "actual_budget_exceeded", split }));
+                    break;
+                }
+                continue;
+            }
             for (const job of jobs) {
                 meter.assertCanDispatch();
                 const exposure = meter.snapshot().projectedTotalUsd;

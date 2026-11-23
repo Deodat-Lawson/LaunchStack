@@ -17,6 +17,8 @@ export type BenchmarkMeterConfig = {
     timeoutMs: number;
     persist: (snapshot: BenchmarkMeterSnapshot) => Promise<void>;
     priorLedger?: BenchmarkMeterSnapshot;
+    /** Explicit resume-only settlement budget. Earlier record IDs retain their original charge. */
+    postTrackedSpend?: { limitUsd: number; baselineRecordIds: readonly string[] };
     /** First pilot ledger predates the binding. Every row is still re-priced and validated. */
     allowLegacyPriorLedger?: boolean;
     /** Opt-in request-local retries; legacy accounting/hold behavior remains the default. */
@@ -51,6 +53,8 @@ export type BenchmarkMeterRecord = {
     scopedTransportFailure?: true;
     requestId?: string;
     attempt?: number;
+    dispatchSequence?: number;
+    actualSpendAtDispatchUsd?: number;
 };
 export type BenchmarkMeterSnapshot = {
     limitUsd: number;
@@ -63,6 +67,7 @@ export type BenchmarkMeterSnapshot = {
     hold: string | null;
     records: BenchmarkMeterRecord[];
     configuration?: BenchmarkMeterBinding;
+    postTrackedSpend?: { limitUsd: number; baselineRecordIds: string[]; actualSpendUsd: number };
 };
 export type BenchmarkMeterBinding = {
     modelId: string;
@@ -136,6 +141,8 @@ const recordSchema = z
         scopedTransportFailure: z.literal(true).optional(),
         requestId: z.string().uuid().optional(),
         attempt: z.number().int().min(1).max(3).optional(),
+        dispatchSequence: tokenCount.positive().optional(),
+        actualSpendAtDispatchUsd: amount.optional(),
     })
     .strict();
 const bindingSchema = z
@@ -171,10 +178,19 @@ const snapshotSchema = z
                 "reservation_exceeded",
                 "list_rate_budget_exceeded",
                 "provider_error",
+                "actual_budget_exceeded",
             ])
             .nullable(),
         records: z.array(recordSchema),
         configuration: bindingSchema.optional(),
+        postTrackedSpend: z
+            .object({
+                limitUsd: amount.positive().max(20),
+                baselineRecordIds: z.array(z.string().min(1)),
+                actualSpendUsd: amount,
+            })
+            .strict()
+            .optional(),
     })
     .strict();
 const nonnegative = (value: unknown): value is number =>
@@ -184,6 +200,11 @@ const integer = (value: unknown): value is number =>
 const upwardUsd = (value: number) => Math.ceil(value * 1e9) / 1e9;
 export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
     if (
+        (config.postTrackedSpend !== undefined &&
+            (!nonnegative(config.postTrackedSpend.limitUsd) ||
+                config.postTrackedSpend.limitUsd === 0 ||
+                config.postTrackedSpend.limitUsd > 20 ||
+                !Array.isArray(config.postTrackedSpend.baselineRecordIds))) ||
         !nonnegative(config.limitUsd) ||
         config.limitUsd > 15 ||
         config.limitUsd === 0 ||
@@ -234,9 +255,44 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
     const prior =
         config.priorLedger === undefined ? undefined : snapshotSchema.parse(config.priorLedger);
     const records: BenchmarkMeterRecord[] = prior ? structuredClone(prior.records) : [];
+    const postTrackedSpend = config.postTrackedSpend;
+    const baselineIds = new Set(postTrackedSpend?.baselineRecordIds ?? []);
+    if (
+        (prior?.postTrackedSpend && !postTrackedSpend) ||
+        (postTrackedSpend &&
+            (baselineIds.size !== postTrackedSpend.baselineRecordIds.length ||
+                [...baselineIds].some(id => !records.some(row => row.id === id)) ||
+                (!prior?.postTrackedSpend && records.some(row => !baselineIds.has(row.id))) ||
+                (prior?.postTrackedSpend &&
+                    (prior.postTrackedSpend.limitUsd !== postTrackedSpend.limitUsd ||
+                        JSON.stringify(prior.postTrackedSpend.baselineRecordIds) !==
+                            JSON.stringify(postTrackedSpend.baselineRecordIds)))))
+    )
+        throw new Error("benchmark_meter_post_tracked_binding_invalid");
+    let dispatchSequence = Math.max(0, ...records.map(row => row.dispatchSequence ?? 0));
+    function actualSpendUsd() {
+        const nanodollars = records.reduce((sum, row) => {
+            if (baselineIds.has(row.id)) return sum;
+            const cost =
+                row.status === "settled"
+                    ? (row.settledListRateUsd ?? 0)
+                    : row.status === "unknown"
+                      ? row.projectedUsd
+                      : 0;
+            return sum + Math.round(cost * 1e9);
+        }, 0);
+        return nanodollars / 1e9;
+    }
+
     const context = new AsyncLocalStorage<string>();
     const workContext = new AsyncLocalStorage<string>();
     let hold: string | null = prior?.hold ?? null;
+    if (
+        postTrackedSpend &&
+        !prior?.postTrackedSpend &&
+        ["projected_budget_exceeded", "list_rate_budget_exceeded"].includes(hold ?? "")
+    )
+        hold = null;
     const pending = new Set<Promise<unknown>>();
     function tracked<T>(promise: Promise<T>): Promise<T> {
         pending.add(promise);
@@ -268,6 +324,15 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             pricingScope: config.pricingScope,
             records: structuredClone(records),
             configuration,
+            ...(postTrackedSpend
+                ? {
+                      postTrackedSpend: {
+                          limitUsd: postTrackedSpend.limitUsd,
+                          baselineRecordIds: [...postTrackedSpend.baselineRecordIds],
+                          actualSpendUsd: actualSpendUsd(),
+                      },
+                  }
+                : {}),
         };
     }
     if (prior) {
@@ -345,10 +410,21 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             !valid ||
             !matches(current.settledListRateUsd, prior.settledListRateUsd) ||
             !matches(current.reservedUsd, prior.reservedUsd) ||
-            !matches(current.projectedTotalUsd, prior.projectedTotalUsd)
+            !matches(current.projectedTotalUsd, prior.projectedTotalUsd) ||
+            (prior.postTrackedSpend &&
+                !matches(actualSpendUsd(), prior.postTrackedSpend.actualSpendUsd)) ||
+            new Set(
+                records.flatMap(row =>
+                    row.dispatchSequence === undefined ? [] : [row.dispatchSequence]
+                )
+            ).size !== records.filter(row => row.dispatchSequence !== undefined).length
         )
             throw new Error("benchmark_meter_prior_ledger_invalid");
-        if (current.projectedTotalUsd > config.limitUsd && (!hold || hold === "usage_unresolved"))
+        if (
+            !postTrackedSpend &&
+            current.projectedTotalUsd > config.limitUsd &&
+            (!hold || hold === "usage_unresolved")
+        )
             hold = "projected_budget_exceeded";
         if (
             records.some(
@@ -398,7 +474,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             !config.allowGenerationTransportRecovery ||
             hold !== "usage_unresolved" ||
             pending.size ||
-            snapshot().projectedTotalUsd > config.limitUsd ||
+            (!postTrackedSpend && snapshot().projectedTotalUsd > config.limitUsd) ||
             expectedUnknownCount < 1 ||
             unknown.length !== expectedUnknownCount ||
             records.some(row => row.status === "sent" || row.status === "reserved") ||
@@ -422,7 +498,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
         if (
             confirmation?.terminalCode !== "topic_exploration_failed:timeout" ||
             hold !== "usage_unresolved" ||
-            snapshot().projectedTotalUsd > config.limitUsd ||
+            (!postTrackedSpend && snapshot().projectedTotalUsd > config.limitUsd) ||
             pending.size ||
             records.some(
                 row =>
@@ -461,7 +537,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
         if (
             hold !== "usage_unresolved" ||
             pending.size ||
-            snapshot().projectedTotalUsd > config.limitUsd ||
+            (!postTrackedSpend && snapshot().projectedTotalUsd > config.limitUsd) ||
             !completedWorkIds.length ||
             completedWorkIds.some(id => !/^sweep-[0-9]{3}$/.test(id)) ||
             records.some(row => row.status === "sent" || row.status === "reserved") ||
@@ -479,7 +555,12 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
         hold = null;
         await persist();
     }
+    function updateActualSpendHold() {
+        if (postTrackedSpend && actualSpendUsd() > postTrackedSpend.limitUsd && !hold)
+            hold = "actual_budget_exceeded";
+    }
     function assertCanDispatch() {
+        updateActualSpendHold();
         if (hold) throw new Error("benchmark_meter_hold:" + hold);
     }
     async function persist() {
@@ -518,6 +599,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             status: "reserved" as const,
         }));
         if (
+            !postTrackedSpend &&
             upwardUsd(
                 snapshot().projectedTotalUsd + batch.reduce((sum, row) => sum + row.projectedUsd, 0)
             ) > config.limitUsd
@@ -635,10 +717,18 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             const reservedId =
                 (retryAttempt === 0 ? context.getStore() : undefined) ??
                 (await reserveBatch([ceiling]))[0]!;
-            assertCanDispatch();
             const row = records.find(item => item.id === reservedId);
             if (!row || row.status !== "reserved" || ceiling > row.inputTokenCeiling)
                 throw new Error("benchmark_meter_reservation_invalid");
+            try {
+                assertCanDispatch();
+            } catch (error) {
+                if (postTrackedSpend) {
+                    row.status = "released";
+                    await persist();
+                }
+                throw error;
+            }
             if (sharedSignal?.aborted) {
                 row.status = "released";
                 await persist();
@@ -654,6 +744,15 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             if (workId) row.workId = workId;
             const dispatchedAt = performance.now();
             await persist();
+            if (postTrackedSpend) {
+                try {
+                    assertCanDispatch();
+                } catch (error) {
+                    row.status = "released";
+                    await persist();
+                    throw error;
+                }
+            }
             const signal =
                 sharedSignal ??
                 AbortSignal.any([
@@ -673,6 +772,10 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
             });
             try {
                 signal.throwIfAborted();
+                if (postTrackedSpend) {
+                    row.dispatchSequence = ++dispatchSequence;
+                    row.actualSpendAtDispatchUsd = actualSpendUsd();
+                }
                 const response = await Promise.race([
                     (scoped ? <T>(promise: Promise<T>) => promise : tracked)(
                         baseFetch(input, {
@@ -746,13 +849,15 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                     row.outputTokens > row.outputTokenCeiling
                 )
                     hold = "reservation_exceeded";
-                else if (snapshot().settledListRateUsd > config.limitUsd)
+                else if (!postTrackedSpend && snapshot().settledListRateUsd > config.limitUsd)
                     hold = "list_rate_budget_exceeded";
                 if (!response.ok && scoped)
                     row.failure = requestFailure(row, signal, retryAttempt).code;
+                updateActualSpendHold();
                 await persist();
                 if (
                     hold &&
+                    hold !== "actual_budget_exceeded" &&
                     !(
                         config.allowGenerationTransportRecovery &&
                         !responses &&
@@ -774,6 +879,7 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
                         row.failure = "usage_unresolved";
                         hold ??= "usage_unresolved";
                     }
+                    updateActualSpendHold();
                     await persist();
                 }
                 if (scoped && !hold)

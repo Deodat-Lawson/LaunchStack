@@ -107,6 +107,7 @@ async function main() {
             "recover-no-http": { type: "boolean", default: false },
             "rebind-empty-canary": { type: "boolean", default: false },
             "allow-scheduled-followups": { type: "boolean", default: false },
+            "allow-structured-quantities": { type: "boolean", default: false },
             "approved-spec-sha256": { type: "string" },
         },
     });
@@ -336,6 +337,86 @@ async function main() {
                     pinnedStrictPrefixes: renderPolicy.strictPrefixes.length,
                 })
             );
+        const quantityPolicyPath = resolve(output, "generation-quantity-policy.json");
+        const quantityPolicySchema = renderPolicySchema.extend({
+            schemaVersion: z.literal("long-decisions-quantity-policy/1"),
+            subsequentPolicy: z.literal("rendered-quantity-clauses/1"),
+        });
+        let quantityPolicyText = await readOptional(quantityPolicyPath);
+        if (values["allow-structured-quantities"] && (!profile.dense || !values.resume))
+            throw Error("long_generation_quantity_policy_resume_required");
+        if (values["allow-structured-quantities"] && !quantityPolicyText) {
+            const strictVersions = [];
+            for (const { version } of orderedVersions) {
+                const canonical = await readOptional(resolve(output, `${version.id}.md`));
+                if (canonical !== undefined)
+                    strictVersions.push({ versionId: version.id, sha256: sha256(canonical) });
+            }
+            const pinned = new Set(strictVersions.map(version => version.versionId));
+            const partial = new Map<string, number>();
+            for (const file of await readdir(output)) {
+                const match = /^([A-Za-z0-9_-]+)\.s([0-4])\.a[0-3]\.json\.started$/.exec(file);
+                if (!match || pinned.has(match[1]!)) continue;
+                if (!orderedVersions.some(({ version }) => version.id === match[1]))
+                    throw Error("long_generation_quantity_policy_invalid");
+                partial.set(match[1]!, Math.max(partial.get(match[1]!) ?? 0, Number(match[2])));
+            }
+            const policy = {
+                schemaVersion: "long-decisions-quantity-policy/1",
+                specSha256,
+                strictVersions,
+                strictPrefixes: [...partial]
+                    .filter(([, beforeSection]) => beforeSection > 0)
+                    .map(([versionId, beforeSection]) => ({ versionId, beforeSection })),
+                subsequentPolicy: "rendered-quantity-clauses/1",
+            };
+            await writeFile(quantityPolicyPath, JSON.stringify(policy, null, 2) + "\n", {
+                flag: "wx",
+                flush: true,
+            });
+            quantityPolicyText = JSON.stringify(policy);
+        }
+        const quantityPolicy = quantityPolicyText
+            ? quantityPolicySchema.parse(JSON.parse(quantityPolicyText))
+            : undefined;
+        if (quantityPolicy) {
+            if (
+                !profile.dense ||
+                quantityPolicy.specSha256 !== specSha256 ||
+                new Set(quantityPolicy.strictVersions.map(version => version.versionId)).size !==
+                    quantityPolicy.strictVersions.length ||
+                new Set(quantityPolicy.strictPrefixes.map(prefix => prefix.versionId)).size !==
+                    quantityPolicy.strictPrefixes.length ||
+                quantityPolicy.strictPrefixes.some(
+                    prefix =>
+                        !orderedVersions.some(({ version }) => version.id === prefix.versionId)
+                )
+            )
+                throw Error("long_generation_quantity_policy_invalid");
+            for (const pinned of quantityPolicy.strictVersions) {
+                const canonical = await readOptional(resolve(output, `${pinned.versionId}.md`));
+                if (
+                    !orderedVersions.some(({ version }) => version.id === pinned.versionId) ||
+                    canonical === undefined ||
+                    sha256(canonical) !== pinned.sha256
+                )
+                    throw Error("long_generation_quantity_policy_invalid");
+            }
+            console.log(
+                JSON.stringify({
+                    quantityPolicy: quantityPolicy.subsequentPolicy,
+                    pinnedStrictVersions: quantityPolicy.strictVersions.length,
+                    pinnedStrictPrefixes: quantityPolicy.strictPrefixes.length,
+                })
+            );
+        }
+        const densityOptions = (versionId: string, section: number) => ({
+            explicitStructuredQuantities: administrativeRenderOptions(
+                quantityPolicy,
+                versionId,
+                section
+            ).allowScheduledFollowups,
+        });
         const recoveryPath = resolve(
             output,
             profile.dense
@@ -441,7 +522,11 @@ async function main() {
                                     : record.text,
                                 sectionTarget(pair.document, pair.version, completed)
                             );
-                            if (profile.dense) validateDenseSection(accepted);
+                            if (profile.dense)
+                                validateDenseSection(
+                                    accepted,
+                                    densityOptions(pair.version.id, earlier)
+                                );
                             break;
                         } catch {
                             /* rejected response consumes its attempt */
@@ -661,7 +746,8 @@ async function main() {
                               )
                             : text;
                         const fitted = fitSectionParagraphs(prose, targetSectionBytes);
-                        if (profile.dense) validateDenseSection(fitted);
+                        if (profile.dense)
+                            validateDenseSection(fitted, densityOptions(version.id, section));
                         if (allAnchors.some(a => text.includes(a.text) || text.includes(a.marker)))
                             throw Error("long_generation_prose_anchor_leak");
                         accepted = fitted;
@@ -764,6 +850,14 @@ async function main() {
             const bytes = await readFile(renderPolicyPath);
             files.push({
                 file: "generation-render-policy.json",
+                sha256: sha256(bytes),
+                bytes: bytes.length,
+            });
+        }
+        if (quantityPolicy) {
+            const bytes = await readFile(quantityPolicyPath);
+            files.push({
+                file: "generation-quantity-policy.json",
                 sha256: sha256(bytes),
                 bytes: bytes.length,
             });

@@ -26,6 +26,7 @@ import {
     validateDenseSection,
     renderAdministrativeEntries,
     administrativeRenderOptions,
+    renderedQuantityCount,
 } from "../../scripts/vantage-long-decisions-generate-core";
 
 it("pins accepted strict versions and partial prefixes across later resumes", () => {
@@ -110,6 +111,48 @@ it("renders provider-created dated administrative tuples into coherent varied de
     ]);
     const raw = JSON.stringify(entries);
     const rendered = renderAdministrativeEntries(raw, "2026-10-10T12:00:00Z");
+    const novelUnits = entries.map(entry => {
+        const copy = [...entry];
+        copy[5] = "tally dividers";
+        return copy;
+    });
+    const novelProse = renderAdministrativeEntries(JSON.stringify(novelUnits), "2026-10-10");
+    expect(renderedQuantityCount(novelProse)).toBe(15);
+    expect(() => validateDenseSection(novelProse)).toThrow("density_invalid");
+    expect(validateDenseSection(novelProse, { explicitStructuredQuantities: true })).toMatchObject({
+        validatedQuantityCount: 15,
+        quantityCounter: "rendered-quantity-clauses/1",
+    });
+    expect(proseSpecificity(novelProse).numericOrDateSentences).toBe(
+        proseSpecificity(rendered).numericOrDateSentences
+    );
+    expect(
+        renderedQuantityCount(
+            "The reference PF-8 was approved on 2026-10-05. For the PF-8 dividers, the clerk retained the form. The team checked 15 dividers."
+        )
+    ).toBe(0);
+    const quantityPolicy = {
+        strictVersions: [{ versionId: "old" }],
+        strictPrefixes: [{ versionId: "partial", beforeSection: 3 }],
+    };
+    expect(() =>
+        validateDenseSection(novelProse, {
+            explicitStructuredQuantities: administrativeRenderOptions(quantityPolicy, "partial", 2)
+                .allowScheduledFollowups,
+        })
+    ).toThrow("density_invalid");
+    expect(
+        validateDenseSection(novelProse, {
+            explicitStructuredQuantities: administrativeRenderOptions(quantityPolicy, "partial", 3)
+                .allowScheduledFollowups,
+        }).validatedQuantityCount
+    ).toBe(15);
+    expect(() =>
+        validateDenseSection(novelProse, {
+            explicitStructuredQuantities: administrativeRenderOptions(quantityPolicy, "old", 4)
+                .allowScheduledFollowups,
+        })
+    ).toThrow("density_invalid");
     expect(validateDenseSection(rendered).share).toBeGreaterThanOrEqual(0.85);
     expect(proseSpecificity(rendered).share).toBeLessThanOrEqual(0.9);
     expect(renderAdministrativeEntries("```json\n" + raw + "\n```", "2026-10-10")).toBe(rendered);

@@ -504,6 +504,19 @@ export function exactSentences(text: string) {
         .filter(Boolean);
 }
 /** Numeric/date density is a declared lexical proxy, independent of answer labels. */
+export function renderedQuantityCount(text: string) {
+    const amount = String.raw`\d+(?:[.,]\d+)*`;
+    const unit = String.raw`[\p{L}][\p{L}\p{M} '\-/()]{1,39}`;
+    const frames = [
+        new RegExp(String.raw`, covering ${amount} ${unit}\.(?=\s|$)`, "gu"),
+        new RegExp(
+            String.raw`(?:^|[.!?]\s+)${amount} ${unit} formed the recorded allocation, while `,
+            "gu"
+        ),
+        new RegExp(String.raw`\bFor the ${amount} ${unit}, `, "gu"),
+    ];
+    return frames.reduce((count, frame) => count + [...text.matchAll(frame)].length, 0);
+}
 export function proseSpecificity(text: string) {
     const body = text
         .split(/\r?\n/)
@@ -542,6 +555,7 @@ export function proseSpecificity(text: string) {
         distinctDates: new Set(dates(body)).size,
         quantities: quantities(body).length,
         quantitiesWithUnits: unitQuantities.length,
+        renderedQuantities: renderedQuantityCount(body),
         namedPeople: new Set(body.match(/\b[A-Z][a-z]{1,}\s+[A-Z][a-z]{1,}\b/g) ?? []).size,
         decisionSentences: sentences.filter(sentence =>
             /\b(?:approved|rejected|retained|deferred|authorized|decided|declined|adopted|cancelled|accepted|denied|confirmed)\b/i.test(
@@ -550,17 +564,29 @@ export function proseSpecificity(text: string) {
         ).length,
     };
 }
-export function validateDenseSection(text: string) {
+export function validateDenseSection(
+    text: string,
+    options: { explicitStructuredQuantities?: boolean } = {}
+) {
     const density = proseSpecificity(text);
+    const quantityCount = options.explicitStructuredQuantities
+        ? density.renderedQuantities
+        : density.quantitiesWithUnits;
     if (
         density.share < 0.85 ||
         density.distinctDates < 3 ||
-        density.quantitiesWithUnits < 4 ||
+        quantityCount < 4 ||
         density.namedPeople < 2 ||
         density.decisionSentences < 2
     )
         throw Error("long_generation_section_density_invalid");
-    return density;
+    return {
+        ...density,
+        validatedQuantityCount: quantityCount,
+        quantityCounter: options.explicitStructuredQuantities
+            ? "rendered-quantity-clauses/1"
+            : "lexical-units/1",
+    };
 }
 export const normalizedWording = (text: string) =>
     text

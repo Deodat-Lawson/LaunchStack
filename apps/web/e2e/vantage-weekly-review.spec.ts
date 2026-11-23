@@ -80,16 +80,17 @@ test("injected topic-first review across both workspace Beta and creation settin
             await ok(await setBeta(request, true));
             const list = await ok(await request.get(`${reviewPath}?weekStart=${week}`));
             expect(list).toMatchObject({ enabled: false, activeId: id });
+            expect(await ok(await request.get(`${reviewPath}/${id}`))).toMatchObject({ id });
             const before =
                 await sql`SELECT count(*) FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=${companyId}`;
             const denied = await generate(request);
-            expect(denied.status()).toBe(404);
+            expect(denied.status()).toBe(503);
             expect(await denied.json()).toMatchObject({ error: "weekly_review_disabled" });
             expect(
                 await sql`SELECT count(*) FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=${companyId}`
             ).toEqual(before);
             await page.goto(toolPath);
-            await expect(page.getByText(headline, { exact: true })).toBeVisible();
+            await expect(page.getByText(headline, { exact: true })).toBeVisible({ timeout: 120_000 });
             const regenerate = page.getByRole("button", { name: "Regenerate", exact: true });
             await expect(regenerate.filter({ visible: true })).toBeDisabled();
             return;

@@ -67,7 +67,7 @@ Rates used per million tokens were USD 0.10 uncached input, USD 0.01 cached inpu
 
 A forward product migration, `20261123220000_vantage_failure_attempt_accounting.sql`, adds the failure record and the provider-attempt ledger. Failed and expired runs keep a stage, allowlisted validator or Judge rule codes, numeric counts and provider status. Unknown counts are null. Failure finalization clears trace, ciphertext and key version. The current owner can view the record in the run list or at `GET /api/vantage/reviews/:id/status`. Provider-attempt metadata carries no prompt, excerpt or report content.
 
-Digest, exploration, Generation and Judge opt into a maximum of two transport retries. Retry eligibility is limited to HTTP 429, HTTP 503 and verified connection establishment failures. A response with generated output, a partially read response or an invalid HTTP 200 is terminal for that call. Each physical attempt is checked against the applicable input limits and authority, journaled before sending and settled with the available usage. Retry-After and cancellation apply within the existing stage deadlines and the 540-second sum of those deadlines.
+Digest, exploration, Generation and Judge opt into a maximum of two transport retries. This revision limited retry eligibility to HTTP 429, HTTP 503 and verified connection establishment failures. A response with generated output, a partially read response or an invalid HTTP 200 is terminal for that call. Each physical attempt is checked against the applicable input limits and authority, journaled before sending and settled with the available usage. Retry-After and cancellation apply within the existing stage deadlines and the 540-second sum of those deadlines.
 
 ### Live reruns
 
@@ -96,3 +96,59 @@ The two authorized live reruns preceded this correction. Live admission with the
 - The affected package suites passed 1,338 tests across 99 files, with one skip. Pipelines passed 1,146, LLM passed 180 and Store passed 12.
 - The affected web suites passed 590 tests across 53 suites, including three concurrency tests against disposable PostgreSQL. Injected fetch tests covered HTTP 429 with and without Retry-After, HTTP 503, retry exhaustion, cancellation during backoff, per-attempt byte checks and terminal HTTP 200 parse or validation failures.
 - The product and engine migrations applied on fresh disposable databases. The second run was a no-op, and the new product schema passed catalog parity and constraint checks.
+
+## Pinned live reruns and socket-reset verification
+
+Both first runs used `347a74591a84`, fresh disposable Harborlight workspaces, Luna for digest, exploration and Generation, and `callnotes-summary` at low reasoning effort for Judge. The app's owner status API supplied the journal. Each operation number below identifies a distinct logical model call within its run. A range lists every operation in that range. The attempt number resets for each operation.
+
+| Run | Stage | Operations | Attempt | Journal class | Retried | Reason |
+| --- | --- | ---: | ---: | --- | --- | --- |
+| 12 documents, first | Digest | 1–10 | 1 each | `success` | No | Each Azure response completed with HTTP 200 |
+| 12 documents, first | Exploration | 11–14 | 1 each | `success` | No | Each Azure response completed with HTTP 200 |
+| 12 documents, first | Generation | 15 | 1 | `success` | No | HTTP 200 is terminal for transport even when the candidate is rejected |
+| 12 documents, first | Judge | — | — | — | — | Generation did not produce a candidate eligible for Judge |
+| 14 units, first | Digest | 1 | 1 | `success` | No | HTTP 200 |
+| 14 units, first | Exploration | 2–5 | 1 each | `success` | No | Each Azure response completed with HTTP 200 |
+| 14 units, first | Generation | 6 | 1 | `success` | No | HTTP 200 |
+| 14 units, first | Judge | 7 | 1 | `rate_limited` | Yes | HTTP 429, `Retry-After: 30` |
+| 14 units, first | Judge | 7 | 2 | `rate_limited` | Yes | HTTP 429, `Retry-After: 30` |
+| 14 units, first | Judge | 7 | 3 | `rate_limited` | No | HTTP 429, two retries already used |
+
+- **12 documents, first run** `2388a1ec-9180-4245-a329-185ae7d6d5e5`. HTTP 409 `candidate_not_admitted` in 81.1 s. Generation returned HTTP 200 with finish reason `stop` and 11,395 bytes of output. The record shows stage `generation`, empty validator and Judge codes, and no citation counts. Failure preceded structured validation diagnostics and Judge. The precise first-run structured failure was not retained.
+- **14 units, first run** `f8ef88c1-1ade-499e-94fb-86ebac67636f`. HTTP 409 in 108.5 s after three Judge calls. Generation sent 193,041 bytes for 14 units and 74,256 evidence bytes. Judge sent 223,874 bytes per attempt. The failure record shows stage `judge`, code `judge_admission_failed`, and Judge codes `judge_admission_failed`, `provider-error`, `judge_status_unavailable` and `judge_verdict_needs_review`. Validator codes are empty and citation counts are null. Azure returned `rate_limit_exceeded` three times. The journal starts were 30.561 s and 30.655 s apart, consistent with the recorded 30 s Retry-After plus response time and setup. The evidence identifies exhausted Judge provider retries as the cause.
+
+The earlier `ECONNRESET` occurred before the relay received Azure headers or body bytes. There was no provider HTTP status in the failure event, which the relay sets before reading a body. The relay returned an empty HTTP 502 and no retry fired. The pinned app also treated a direct pre-body `ECONNRESET` as terminal. The fix tracks the first nonempty body chunk and retries that specific reset only before it, including when headers have arrived. The previous limits, attempt accounting and deadline still apply.
+
+Two regression cases failed before the fix and passed with it. The full LLM suite passed 182 tests in 13 files. A loopback test through the long-wait transport confirmed `connection_failed` followed by `success` for resets before headers and after headers with zero body bytes. A reset after 11 body bytes recorded one `unknown` outcome and ended the call. Workspace typecheck and lint of the two changed transport files passed.
+
+### Live reruns with the socket-reset fix
+
+The rebuilt app ran each fixture once more with the same profile. Build passed and generated 211 of 211 static pages. The owner status API and relay agreed on all physical sends in the four new runs.
+
+| Run | Stage | Operations | Attempt | Journal class | Retried | Reason |
+| --- | --- | ---: | ---: | --- | --- | --- |
+| 12 documents, second | Digest | 1 and 6 | 1 each | `connection_failed` | Yes | `ECONNRESET` before headers and zero body bytes |
+| 12 documents, second | Digest | 1 and 6 | 2 each | `success` | No | HTTP 200 |
+| 12 documents, second | Digest | 2–5 and 7–10 | 1 each | `success` | No | HTTP 200 |
+| 12 documents, second | Exploration | 11–14 | 1 each | `success` | No | HTTP 200 |
+| 12 documents, second | Generation | 15 | 1 | `success` | No | HTTP 200 |
+| 12 documents, second | Judge | 16 | 1 | `rate_limited` | Yes | HTTP 429, `Retry-After: 30` |
+| 12 documents, second | Judge | 16 | 2 | `rate_limited` | Yes | HTTP 429, `Retry-After: 30` |
+| 12 documents, second | Judge | 16 | 3 | `rate_limited` | No | HTTP 429, two retries already used |
+| Near-limit fixture, second | Digest | 1 | 1 | `success` | No | HTTP 200 |
+| Near-limit fixture, second | Exploration | 2–5 | 1 each | `success` | No | HTTP 200 |
+| Near-limit fixture, second | Generation | 6 | 1 | `success` | No | Complete HTTP 200, followed by citation validation failure |
+| Near-limit fixture, second | Judge | — | — | — | — | Citation validation stopped the run before dispatch |
+
+- **12 documents, second run** `b261bec5-da50-49bf-aa57-c5bc11d06368`. The two real Azure resets occurred after 137 ms and 63 ms. Both retries returned HTTP 200. Generation returned schema-valid JSON, then Judge rejected the 59,049-byte request with `rate_limit_exceeded` on all three sends. The run ended in HTTP 409 after 133.6 s. Its failure record shows `judge_admission_failed`, `provider-error`, `judge_status_unavailable` and `judge_verdict_needs_review`. The 12-document run was not admitted on either attempt. `review_concurrent_update` did not recur.
+- **Near-limit fixture, second run** `c243ced8-5467-4059-abb4-2faaf8e0aa20`. This run of the same fixture froze 15 units and 73,802 evidence bytes. Generation sent 193,453 bytes and returned HTTP 200 with finish reason `stop`. The 11,753-byte report passed the same structured schema on an isolated check. The failure record shows stage `generation_validation`, validator code `invalid_source_citation` and no Judge codes. The validator checks candidate reference occurrences against exact refs in the frozen source set. Two of the 17 checked references were absent, so the run returned HTTP 409 after 41.0 s. No Judge attempt was made. The owner API still showed the record after trace and ciphertext cleanup.
+
+| Fresh run | Azure sends | Usage rows | Input tokens | Output tokens | Estimated USD |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| 12 documents, first | 15 | 15 | 51,276 | 12,395 | 0.00922198 |
+| 14 units, first | 9 | 6 | 48,049 | 3,779 | 0.00590069 |
+| 12 documents, second | 20 | 15 | 55,328 | 11,940 | 0.00942533 |
+| Near-limit fixture, second | 6 | 6 | 47,249 | 3,928 | 0.00593029 |
+| **Total** | **50** | **42** | **201,902** | **32,042** | **0.03047829** |
+
+Six 429 responses reported no usage. Billing remained unresolved for the two reset sends, with a combined conservative estimate of USD 0.01256880. Using the same higher post-tracking rates listed above, reported usage plus both unresolved sends came to USD 0.10197720, below the USD 5 cap.

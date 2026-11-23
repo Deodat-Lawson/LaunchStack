@@ -38,13 +38,15 @@ const CONNECT_FAILURES = new Set([
     "UND_ERR_CONNECT_TIMEOUT",
 ]);
 
-/** These codes establish failure before a connection could send a request. */
-function isConnectFailure(error: unknown): boolean {
+/** Socket resets are retryable until the first body byte. Other codes must predate headers. */
+function isConnectFailure(error: unknown, beforeHeaders: boolean, receivedBody: boolean): boolean {
     const seen = new Set<unknown>();
     while (error && typeof error === "object" && !seen.has(error)) {
         seen.add(error);
         const value = error as { code?: unknown; cause?: unknown };
-        if (typeof value.code === "string" && CONNECT_FAILURES.has(value.code)) return true;
+        if (value.code === "ECONNRESET" && !receivedBody) return true;
+        if (beforeHeaders && typeof value.code === "string" && CONNECT_FAILURES.has(value.code))
+            return true;
         error = value.cause;
     }
     return false;
@@ -194,6 +196,8 @@ export async function fetchWithProviderRetry(
             let failed = false;
             let safeConnectionFailure = false;
             let generatedOutput = false;
+            let receivedBody = false;
+            let retryAfterMs: number | undefined;
             try {
                 check();
                 response = await withinDeadline(() => send(input, { ...init, signal }));
@@ -204,13 +208,22 @@ export async function fetchWithProviderRetry(
                       : response.status === 503
                         ? "unavailable"
                         : "rejected";
-                const retryAfterMs = retryAfter(response);
+                retryAfterMs = retryAfter(response);
                 let usage: ChatProviderAttemptOutcome["usage"];
                 // Vantage uses JSON completions. Never buffer a streaming consumer's body.
                 if (!response.headers.get("content-type")?.includes("text/event-stream")) {
-                    // A rejected response is retryable only after its entire body was read.
-                    // A stream/read failure can hide generated output, so it fails closed.
-                    const text = await withinDeadline(() => response!.clone().text());
+                    // Observe the first body byte without consuming the response returned to the SDK.
+                    const text = await withinDeadline(() => {
+                        const watched = response!.clone().body?.pipeThrough(
+                            new TransformStream<Uint8Array, Uint8Array>({
+                                transform(chunk, stream) {
+                                    if (chunk.byteLength > 0) receivedBody = true;
+                                    stream.enqueue(chunk);
+                                },
+                            })
+                        );
+                        return new Response(watched ?? null).text();
+                    });
                     try {
                         const value: unknown = JSON.parse(text);
                         usage = reportedUsage(value);
@@ -232,7 +245,7 @@ export async function fetchWithProviderRetry(
             } catch (error) {
                 failed = true;
                 failure = error;
-                safeConnectionFailure = !response && isConnectFailure(error);
+                safeConnectionFailure = isConnectFailure(error, !response, receivedBody);
                 outcome = {
                     statusClass: expired
                         ? "deadline"
@@ -242,6 +255,7 @@ export async function fetchWithProviderRetry(
                             ? "connection_failed"
                             : "unknown",
                     httpStatus: response?.status ?? null,
+                    ...(safeConnectionFailure && retryAfterMs !== undefined ? { retryAfterMs } : {}),
                 };
             }
             // Settlement failure must stop the logical call rather than repeat a possibly paid send.

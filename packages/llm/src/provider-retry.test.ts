@@ -23,6 +23,7 @@ const json = (status = 200, headers?: HeadersInit, content: unknown = {}) =>
         status,
         headers: { "content-type": "application/json", ...headers },
     });
+const socketReset = () => new TypeError("socket reset", { cause: { code: "ECONNRESET" } });
 
 function harness(base: typeof fetch, signal?: AbortSignal, deadlineMs = 20_000) {
     const outcomes: ChatProviderAttemptOutcome[] = [];
@@ -159,7 +160,70 @@ describe("opt-in journaled provider retries", () => {
         expect(base).toHaveBeenCalledTimes(2);
     });
 
-    it.each(["ECONNRESET", "ETIMEDOUT", "UND_ERR_SOCKET", undefined])(
+    it.each([null, 200])(
+        "retries a socket reset before body bytes (HTTP status %s)",
+        async status => {
+            vi.useFakeTimers();
+            const base = vi.fn(async () => {
+                if (base.mock.calls.length > 1) return json();
+                if (status === null) throw socketReset();
+                return new Response(
+                    new ReadableStream({
+                        start(controller) {
+                            controller.error(socketReset());
+                        },
+                    }),
+                    { status, headers: { "content-type": "application/json", "retry-after": "1" } }
+                );
+            });
+            const h = harness(base);
+            const first = h.settled();
+            const result = h.fetch(url, h.init);
+            void result.catch(() => undefined);
+            await first;
+            expect(h.outcomes[0]).toMatchObject({
+                statusClass: "connection_failed",
+                httpStatus: status,
+            });
+            await vi.advanceTimersByTimeAsync(999);
+            expect(base).toHaveBeenCalledTimes(1);
+            await vi.advanceTimersByTimeAsync(1);
+            expect((await result).status).toBe(200);
+            expect(h.attempts.map(attempt => attempt.attempt)).toEqual([1, 2]);
+            expect(h.outcomes.map(outcome => outcome.statusClass)).toEqual([
+                "connection_failed",
+                "success",
+            ]);
+        }
+    );
+
+    it("keeps a reset after a body chunk terminal even for HTTP 503", async () => {
+        const base = vi.fn(async () => {
+            if (base.mock.calls.length > 1) return json();
+            let sent = false;
+            return new Response(
+                new ReadableStream({
+                    async pull(controller) {
+                        if (!sent) {
+                            sent = true;
+                            controller.enqueue(new TextEncoder().encode('{"choices":['));
+                            return;
+                        }
+                        // The first chunk must be readable before the stream errors.
+                        await new Promise<void>(resolve => setImmediate(resolve));
+                        controller.error(socketReset());
+                    },
+                }),
+                { status: 503, headers: { "content-type": "application/json", "retry-after": "0" } }
+            );
+        });
+        const h = harness(base);
+        await expect(h.fetch(url, h.init)).rejects.toThrow("socket reset");
+        expect(base).toHaveBeenCalledTimes(1);
+        expect(h.outcomes).toEqual([{ statusClass: "unknown", httpStatus: 503 }]);
+    });
+
+    it.each(["ETIMEDOUT", "UND_ERR_SOCKET", undefined])(
         "does not retry ambiguous connection error %s",
         async code => {
             const base = vi.fn(async () => {

@@ -102,6 +102,7 @@ async function main() {
             "canary-only": { type: "boolean", default: false },
             execute: { type: "boolean", default: false },
             resume: { type: "boolean", default: false },
+            workers: { type: "string" },
             "recover-no-http": { type: "boolean", default: false },
             "rebind-empty-canary": { type: "boolean", default: false },
             "approved-spec-sha256": { type: "string" },
@@ -114,6 +115,12 @@ async function main() {
         specSha256 = sha256(specBytes);
     const spec = validateSpec(JSON.parse(specBytes.toString("utf8")));
     const profile = generationProfile(spec);
+    const workers = values.workers === undefined ? profile.concurrency : Number(values.workers);
+    if (
+        values.workers !== undefined &&
+        (!profile.dense || !/^[1-5]$/.test(values.workers) || workers > profile.concurrency)
+    )
+        throw Error("long_generation_worker_limit");
     const LIMIT_USD = profile.limitUsd;
     const MAX_OUTPUT_TOKENS = profile.maxOutputTokens;
     const projection = generationProjection(
@@ -215,8 +222,11 @@ async function main() {
             ? (JSON.parse(priorText) as BenchmarkMeterSnapshot)
             : undefined;
         const rebindAudit = await readOptional(rebindPath);
-        const inclusiveProjection = projection.worstCaseUsd + (rebindAudit ? Number(JSON.parse(rebindAudit).priorExposureUsd ?? 0) : 0);
-        if (inclusiveProjection > LIMIT_USD) throw Error("long_generation_objective_budget_exceeded");
+        const inclusiveProjection =
+            projection.worstCaseUsd +
+            (rebindAudit ? Number(JSON.parse(rebindAudit).priorExposureUsd ?? 0) : 0);
+        if (inclusiveProjection > LIMIT_USD)
+            throw Error("long_generation_objective_budget_exceeded");
         const orderedVersions = spec.documents.flatMap(document =>
             document.versions.map(version => ({ document, version }))
         );
@@ -445,7 +455,7 @@ async function main() {
                     recoveredNoHttpAttempts: audit.attempts.length,
                     reservedUsd: meter.snapshot().reservedUsd,
                     exposureUsd: meter.snapshot().projectedTotalUsd,
-                    concurrency: 2,
+                    concurrency: workers,
                 })
             );
         }
@@ -594,7 +604,7 @@ async function main() {
         try {
             await runCanaryThenPool(orderedVersions, generateVersion, {
                 canaryOnly: values["canary-only"],
-                concurrency: profile.concurrency,
+                concurrency: workers,
                 stop: () => {},
             });
         } finally {

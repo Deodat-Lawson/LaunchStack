@@ -1,5 +1,6 @@
 /** Run retrieval from the verified public corpus. This entry point has no evaluator import. */
 import { randomBytes, randomUUID } from "node:crypto";
+import { AsyncLocalStorage } from "node:async_hooks";
 import { mkdir, rename, writeFile, readFile, readdir, unlink } from "node:fs/promises";
 import { resolve } from "node:path";
 import { parseArgs } from "node:util";
@@ -579,6 +580,7 @@ async function main() {
             throw error;
         }
     };
+    const digestTransportAttempt = new AsyncLocalStorage<{ noHttpFailures: number }>();
     const diagnosedFetch: typeof fetch = async (input, init) => {
         try {
             return await originalFetch(input, init);
@@ -586,6 +588,9 @@ async function main() {
             const url = new URL(
                 typeof input === "string" ? input : input instanceof URL ? input.href : input.url
             );
+            const digestAttempt = digestTransportAttempt.getStore();
+            if (digestAttempt && url.pathname.endsWith("/chat/completions"))
+                digestAttempt.noHttpFailures++;
             await saveDiagnostic({
                 kind: "fetch_transport_failure",
                 route: url.pathname.endsWith("/responses") ? "exploration" : "digest",
@@ -977,6 +982,7 @@ async function main() {
                     meter.assertCanDispatch();
                     const before = meter.snapshot();
                     const providerErrors = new Map<string, "usage_unresolved" | "other">();
+                    const nativeNoHttpVersions = new Set<string>();
                     const outcomes = await Promise.allSettled(
                         pending.map(async versionId => {
                             // Separate service controllers keep one failed transport from aborting
@@ -988,14 +994,23 @@ async function main() {
                                 provider: async input => {
                                     if (completedWarmup)
                                         throw new Error("long_decisions_warmup_cache_missing");
+                                    const transport = { noHttpFailures: 0 };
                                     try {
-                                        return await digestProvider(input);
+                                        return await digestTransportAttempt.run(transport, () =>
+                                            digestProvider(input)
+                                        );
                                     } catch (error) {
+                                        // The SDK can replace the meter error. Native fetch attribution
+                                        // survives that wrapping without treating parse/DB failures as transport.
+                                        if (transport.noHttpFailures === 1)
+                                            nativeNoHttpVersions.add(versionId);
                                         const usageHold =
-                                            error instanceof Error &&
-                                            error.message.includes(
-                                                "benchmark_meter_hold:usage_unresolved"
-                                            );
+                                            transport.noHttpFailures === 1 ||
+                                            (transport.noHttpFailures === 0 &&
+                                                error instanceof Error &&
+                                                error.message.includes(
+                                                    "benchmark_meter_hold:usage_unresolved"
+                                                ));
                                         providerErrors.set(
                                             versionId,
                                             usageHold ? "usage_unresolved" : "other"
@@ -1005,6 +1020,7 @@ async function main() {
                                             ...stableVersion(versionId),
                                             causeCode: causeCode(error),
                                             syntaxError: error instanceof SyntaxError,
+                                            nativeNoHttpFailures: transport.noHttpFailures,
                                         });
                                         throw error;
                                     }
@@ -1075,6 +1091,7 @@ async function main() {
                         state.hold !== "usage_unresolved" ||
                         added.length > pending.length ||
                         unknown.length === 0 ||
+                        nativeNoHttpVersions.size !== unknown.length ||
                         unknown.some(
                             row =>
                                 row.httpStatus !== undefined ||

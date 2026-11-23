@@ -64,6 +64,7 @@ export interface MetricObservationDto {
 }
 
 export interface TopicDto {
+    contentVersion: number;
     id: string;
     agendaId: string;
     position: number;
@@ -113,6 +114,7 @@ export interface AgendaSummaryDto {
 }
 
 export interface CommitmentDto {
+    contentVersion: number;
     id: string;
     agendaId: string | null;
     topicId: string | null;

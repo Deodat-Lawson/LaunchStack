@@ -153,5 +153,6 @@ export async function deleteHistoryEntry(input: {
 }): Promise<boolean> {
     const loader = PIPELINE_LOADERS.find(candidate => candidate.kind === input.kind);
     if (!loader?.remove) return false;
+    if (loader.beta && !(await betaAppsOn(input.companyId))) return false;
     return loader.remove({ companyId: input.companyId, userId: input.userId }, input.refId);
 }

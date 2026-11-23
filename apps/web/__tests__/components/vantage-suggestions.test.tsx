@@ -1,12 +1,7 @@
 /** @jest-environment jsdom */
 
-/**
- * This week's suggestion cards, wired the way OverviewScreen wires them:
- * `weekSuggestions` builds the groups, `useOneClick` answers each card. A
- * suggestion is taken or left with one click on its face — no menu, no
- * expanding — the card leaves at once, and the toast carries an Undo that
- * really undoes it. A failure puts the card back and says why.
- */
+/** Suggestion responses preserve observed versions. Commitments require explicit
+ * human review and check-ins require human outcomes rather than inferred facts. */
 import React, { useCallback, useState } from "react";
 import { act, fireEvent, render, screen, within } from "@testing-library/react";
 import "@testing-library/jest-dom";
@@ -40,7 +35,7 @@ jest.mock("~/app/employer/tools/vantage/api", () => ({
 
 import { WeekSuggestions } from "~/app/employer/tools/vantage/_components/WeekSuggestions";
 import { useOneClick } from "~/app/employer/tools/vantage/_lib/actions";
-import { addDaysIso, fmtDate, todayIso } from "~/app/employer/tools/vantage/_lib/format";
+import { addDaysIso, todayIso } from "~/app/employer/tools/vantage/_lib/format";
 import { useHiddenSuggestions } from "~/app/employer/tools/vantage/_lib/hidden";
 import { weekSuggestions } from "~/app/employer/tools/vantage/_lib/suggestions";
 
@@ -126,7 +121,9 @@ const server = {
 };
 
 function setTopic(id: string, change: Partial<TopicDto>): TopicDto {
-    server.topics = server.topics.map(t => (t.id === id ? { ...t, ...change } : t));
+    server.topics = server.topics.map(t =>
+        t.id === id ? { ...t, ...change, contentVersion: t.contentVersion + 1 } : t
+    );
     return server.topics.find(t => t.id === id)!;
 }
 
@@ -290,7 +287,10 @@ describe("topic suggestions", () => {
         // Gone before the server has answered.
         expect(queryCard(pricing.title)).toBeNull();
         expect(mockApi.patchTopic).toHaveBeenCalledTimes(1);
-        expect(mockApi.patchTopic).toHaveBeenCalledWith(pricing.id, { status: "kept" });
+        expect(mockApi.patchTopic).toHaveBeenCalledWith(pricing.id, {
+            expectedContentVersion: pricing.contentVersion,
+            status: "kept",
+        });
 
         await act(async () => answer.resolve());
 
@@ -301,7 +301,10 @@ describe("topic suggestions", () => {
 
         await clickUndo();
 
-        expect(mockApi.patchTopic).toHaveBeenLastCalledWith(pricing.id, { status: "suggested" });
+        expect(mockApi.patchTopic).toHaveBeenLastCalledWith(pricing.id, {
+            expectedContentVersion: pricing.contentVersion + 1,
+            status: "suggested",
+        });
         expect(mockApi.patchTopic).toHaveBeenCalledTimes(2);
         expect(card(pricing.title)).toBeInTheDocument();
     });
@@ -313,13 +316,19 @@ describe("topic suggestions", () => {
         expect(queryCard(sso.title)).toBeNull();
         await act(async () => {});
 
-        expect(mockApi.patchTopic).toHaveBeenCalledWith(sso.id, { status: "dismissed" });
+        expect(mockApi.patchTopic).toHaveBeenCalledWith(sso.id, {
+            expectedContentVersion: sso.contentVersion,
+            status: "dismissed",
+        });
         expect(queryCard(sso.title)).toBeNull();
         expect(lastToast().message).toBe("Ignored");
 
         await clickUndo();
 
-        expect(mockApi.patchTopic).toHaveBeenLastCalledWith(sso.id, { status: "suggested" });
+        expect(mockApi.patchTopic).toHaveBeenLastCalledWith(sso.id, {
+            expectedContentVersion: sso.contentVersion + 1,
+            status: "suggested",
+        });
         expect(card(sso.title)).toBeInTheDocument();
     });
 
@@ -358,137 +367,115 @@ describe("topic suggestions", () => {
 describe("check-in suggestions", () => {
     const name = `Check in: ${update.title}`;
 
-    it("Done marks the promise done, and Undo reopens it with its old outcome", async () => {
+    it("records Done only after the human enters an outcome, using the observed version", async () => {
         renderCards();
-        expect(within(card(name)).getByText("2 days late")).toBeInTheDocument();
-
-        fireEvent.click(within(card(name)).getByRole("button", { name: "Done" }));
-        expect(queryCard(name)).toBeNull();
-        await act(async () => {});
-
-        expect(mockApi.patchCommitment).toHaveBeenCalledWith(update.id, { status: "done" });
-        expect(queryCard(name)).toBeNull();
-        expect(lastToast().message).toBe("Marked done");
-
-        await clickUndo();
-
-        expect(mockApi.patchCommitment).toHaveBeenLastCalledWith(update.id, {
-            status: "open",
-            outcome: "Half written",
+        expect(within(card(name)).getAllByText("2 days late")).toHaveLength(2);
+        fireEvent.click(within(card(name)).getByRole("button", { name: "Check in" }));
+        fireEvent.click(screen.getByRole("button", { name: "Done" }));
+        expect(mockApi.patchCommitment).not.toHaveBeenCalled();
+        fireEvent.change(screen.getByLabelText("What was learned"), {
+            target: { value: "Investors received the update" },
         });
+        await act(async () =>
+            fireEvent.click(screen.getByRole("button", { name: "Save check-in" }))
+        );
+        expect(mockApi.patchCommitment).toHaveBeenCalledTimes(1);
+        expect(mockApi.patchCommitment).toHaveBeenCalledWith(update.id, {
+            expectedContentVersion: update.contentVersion,
+            status: "done",
+            outcome: "Investors received the update",
+        });
+        expect(lastToast().options?.action).toBeUndefined();
+        await reload();
+        expect(queryCard(name)).toBeNull();
+    });
+
+    it("requires a nonblank outcome before recording Missed", async () => {
+        renderCards();
+        fireEvent.click(within(card(name)).getByRole("button", { name: "Check in" }));
+        fireEvent.click(screen.getByRole("button", { name: "Missed" }));
+        fireEvent.change(screen.getByLabelText("What was learned"), { target: { value: "   " } });
+        expect(screen.getByRole("button", { name: "Save check-in" })).toBeDisabled();
+        expect(mockApi.patchCommitment).not.toHaveBeenCalled();
+        fireEvent.change(screen.getByLabelText("What was learned"), {
+            target: { value: "Waiting on approved figures" },
+        });
+        await act(async () =>
+            fireEvent.click(screen.getByRole("button", { name: "Save check-in" }))
+        );
+        expect(mockApi.patchCommitment).toHaveBeenCalledWith(update.id, {
+            expectedContentVersion: update.contentVersion,
+            status: "missed",
+            outcome: "Waiting on approved figures",
+        });
+    });
+
+    it("opening and dismissing a check-in preserves its state without inventing an outcome", async () => {
+        renderCards();
+        fireEvent.click(within(card(name)).getByRole("button", { name: "Check in" }));
+        fireEvent.click(screen.getByRole("button", { name: "Dropped" }));
+        fireEvent.keyDown(screen.getByRole("dialog"), { key: "Escape" });
+        await settle();
         expect(card(name)).toBeInTheDocument();
-    });
-
-    it("Missed marks the promise missed", async () => {
-        renderCards();
-
-        await act(async () => {
-            fireEvent.click(within(card(name)).getByRole("button", { name: "Missed" }));
-        });
-
-        expect(mockApi.patchCommitment).toHaveBeenCalledWith(update.id, { status: "missed" });
-    });
-
-    it("Not yet sets it aside in this browser without asking the server", async () => {
-        renderCards();
-
-        fireEvent.click(within(card(name)).getByRole("button", { name: "Not yet" }));
-        expect(queryCard(name)).toBeNull();
-        await act(async () => {});
-
-        // Still away after the refresh: the browser's hidden set keeps it there.
-        expect(refreshed).toHaveBeenCalledTimes(1);
-        expect(queryCard(name)).toBeNull();
+        expect(server.commitments[0]).toEqual(update);
         for (const call of Object.values(mockApi)) expect(call).not.toHaveBeenCalled();
-        const stored = JSON.parse(window.localStorage.getItem("vantage:hidden:v1") ?? "{}");
-        expect(stored).toEqual({ [`check-in:${update.id}`]: addDaysIso(TODAY, 1) });
-        expect(lastToast().message).toBe("Asking again tomorrow");
-
-        await clickUndo();
-
-        expect(card(name)).toBeInTheDocument();
-        expect(JSON.parse(window.localStorage.getItem("vantage:hidden:v1") ?? "{}")).toEqual({});
+        expect(window.localStorage.getItem("vantage:hidden:v1")).toBeNull();
     });
 });
 
 describe("commit suggestions", () => {
-    it("Commit agrees to the proposed step with its owner and date, and Undo takes both back", async () => {
+    it("opens human review with the proposed owner and date without creating a commitment", () => {
         renderCards();
         const name = `Commit: ${ssoBeta.proposedNextStep}`;
-        const button = within(card(name)).getByRole("button", { name: "Commit" });
-
-        fireEvent.click(button);
-        expect(queryCard(name)).toBeNull();
-        await act(async () => {});
-
-        expect(mockApi.decide).toHaveBeenCalledTimes(1);
-        expect(mockApi.decide).toHaveBeenCalledWith(ssoBeta.id, {
-            decision: "Agreed: Ship the SSO beta to Acme",
-            commitment: {
-                title: "Ship the SSO beta to Acme",
-                owner: "Dana",
-                dueOn: ssoBeta.proposedDue,
-                test: null,
-                shared: true,
-            },
-        });
-        expect(queryCard(name)).toBeNull();
-        expect(onDecide).not.toHaveBeenCalled();
-        expect(lastToast().message).toBe(`Committed — Dana, due ${fmtDate(ssoBeta.proposedDue)}`);
-
-        await clickUndo();
-
-        expect(mockApi.undoDecision).toHaveBeenCalledWith(ssoBeta.id, "c-new");
+        fireEvent.click(within(card(name)).getByRole("button", { name: "Commit\u2026" }));
+        expect(onDecide).toHaveBeenCalledTimes(1);
+        expect(onDecide).toHaveBeenCalledWith(ssoBeta);
+        expect(mockApi.decide).not.toHaveBeenCalled();
+        expect(mockApi.undoDecision).not.toHaveBeenCalled();
         expect(card(name)).toBeInTheDocument();
+        expect(mockToast).not.toHaveBeenCalled();
     });
 
-    it("dates the commitment a week out when no date was proposed", async () => {
+    it("leaves an absent deadline absent for the human to supply", () => {
         renderCards();
+        fireEvent.click(
+            within(card(`Commit: ${interviews.proposedNextStep}`)).getByRole("button", {
+                name: "Commit\u2026",
+            })
+        );
+        expect(onDecide).toHaveBeenCalledWith(
+            expect.objectContaining({ id: interviews.id, proposedDue: null })
+        );
+        expect(mockApi.decide).not.toHaveBeenCalled();
+        expect(mockApi.undoDecision).not.toHaveBeenCalled();
+    });
 
-        await act(async () => {
+    it("offers Try again after a versioned topic Undo fails and retries that same observed version", async () => {
+        renderCards();
+        await act(async () =>
             fireEvent.click(
-                within(card(`Commit: ${interviews.proposedNextStep}`)).getByRole("button", {
-                    name: "Commit",
-                })
-            );
-        });
-
-        expect(mockApi.decide).toHaveBeenCalledWith(interviews.id, {
-            decision: "Agreed: Run five pricing interviews",
-            commitment: {
-                title: "Run five pricing interviews",
-                owner: "Sam",
-                dueOn: addDaysIso(TODAY, 7),
-                test: null,
-                shared: false,
-            },
-        });
-    });
-
-    it("offers Try again when the Undo fails, and the retry brings the card back", async () => {
-        mockApi.undoDecision.mockRejectedValueOnce(new Error("Network down"));
-        renderCards();
-        const name = `Commit: ${ssoBeta.proposedNextStep}`;
-
-        await act(async () => {
-            fireEvent.click(within(card(name)).getByRole("button", { name: "Commit" }));
-        });
+                within(card(pricing.title)).getByRole("button", { name: "Add to agenda" })
+            )
+        );
+        mockApi.patchTopic.mockRejectedValueOnce(new Error("Network down"));
         act(() => lastToast().options.action?.onClick());
         await settle();
-
-        expect(queryCard(name)).toBeNull();
+        expect(queryCard(pricing.title)).toBeNull();
         const failed = mockToast.error.mock.calls.at(-1) as unknown as [
             string,
             { action: { label: string; onClick: () => void } },
         ];
         expect(failed[0]).toBe("Network down");
         expect(failed[1].action.label).toBe("Try again");
-
         act(() => failed[1].action.onClick());
         await settle();
-
-        expect(mockApi.undoDecision).toHaveBeenCalledTimes(2);
-        expect(card(name)).toBeInTheDocument();
+        expect(mockApi.patchTopic).toHaveBeenCalledTimes(3);
+        expect(mockApi.patchTopic).toHaveBeenLastCalledWith(pricing.id, {
+            expectedContentVersion: pricing.contentVersion + 1,
+            status: "suggested",
+        });
+        expect(mockApi.undoDecision).not.toHaveBeenCalled();
+        expect(card(pricing.title)).toBeInTheDocument();
     });
 
     it("are not offered for a next step the founder wrote", () => {

@@ -14,11 +14,12 @@ import { usePermissions } from "~/lib/use-permissions";
 
 import { vantagePath } from "./_lib/paths";
 import { VANTAGE_ROOTS, vantageScreenFor, type VantageScreen } from "./_lib/screens";
-import { AgendaScreen } from "./_screens/AgendaScreen";
+import { ThisWeekScreen } from "./_screens/ThisWeekScreen";
+import { ContextScreen } from "./_screens/ContextScreen";
 import { CommitmentsScreen } from "./_screens/CommitmentsScreen";
 import { EvidenceScreen } from "./_screens/EvidenceScreen";
 import { MetricsScreen } from "./_screens/MetricsScreen";
-import { OverviewScreen } from "./_screens/OverviewScreen";
+
 import { TriageScreen } from "./_screens/TriageScreen";
 
 /**
@@ -50,7 +51,7 @@ function screenGroups(t: FrameT, admin: boolean): ToolNavGroup[] {
             label: t("groups.week"),
             items: [
                 { to: vantagePath(""), label: t("nav.thisWeek"), icon: CalendarCheck, exact: true },
-                { to: vantagePath("/agenda"), label: t("nav.agenda"), icon: ListChecks },
+                { to: vantagePath("/context"), label: t("nav.context"), icon: ListChecks },
                 { to: vantagePath("/commitments"), label: t("nav.commitments"), icon: Handshake },
             ],
         },
@@ -84,7 +85,16 @@ function VantageFrame() {
         admin ? "allowed" : loaded ? "denied" : "pending"
     );
     return (
-        <ToolFrame title="Vantage" mark={<VantageMark size={15} tile />} groups={groups}>
+        <ToolFrame
+            title="Vantage"
+            mark={<VantageMark size={15} tile />}
+            groups={groups}
+            contentClassName={
+                screen.kind === "this-week" || screen.kind === "context"
+                    ? "min-h-full !p-0"
+                    : undefined
+            }
+        >
             <Screen screen={screen} />
         </ToolFrame>
     );
@@ -93,10 +103,10 @@ function VantageFrame() {
 function Screen({ screen }: { screen: VantageScreen }) {
     const t = useTranslations("vantage.frame");
     switch (screen.kind) {
-        case "overview":
-            return <OverviewScreen />;
-        case "agenda":
-            return <AgendaScreen week={screen.week} />;
+        case "this-week":
+            return <ThisWeekScreen week={screen.week} />;
+        case "context":
+            return <ContextScreen week={screen.week} />;
         case "commitments":
             return <CommitmentsScreen />;
         case "evidence":

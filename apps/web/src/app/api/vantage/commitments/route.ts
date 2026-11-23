@@ -33,6 +33,8 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error("You cannot change this workspace content.", 403);
     try {
         const parsed = CommitmentSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
@@ -40,6 +42,7 @@ export async function POST(request: NextRequest) {
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,
             input: parsed.data,
+            idempotencyKey: request.headers.get("Idempotency-Key") ?? "",
         });
         return json({ commitment }, 201);
     } catch (err) {

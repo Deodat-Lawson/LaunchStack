@@ -1,3 +1,4 @@
+import { authorizeLegacyAgendaRead } from "~/server/vantage/legacy-read-authority";
 // GET  /api/vantage/agendas?week=YYYY-MM-DD — that week's agenda (null when none), plus the list
 // POST /api/vantage/agendas — prepare: { weekStart? } → draft for that week (default by the Thursday rule)
 import type { NextRequest } from "next/server";
@@ -11,12 +12,7 @@ import {
     parseIsoDate,
 } from "@launchstack/pipelines/vantage";
 
-import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../_http";
-import { PrepareSchema } from "../_schemas";
-import { prepareWeek } from "~/server/vantage/service";
-import { localeOfRequest } from "~/i18n/server";
-import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
-import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
+import { error, handleVantageError, json, vantageContext, say } from "../_http";
 
 export const maxDuration = 120;
 
@@ -33,6 +29,7 @@ export async function GET(request: NextRequest) {
             getAgendaByWeek({ companyId: auth.ctx.companyId, weekStart: week }),
             listAgendas({ companyId: auth.ctx.companyId }),
         ]);
+        await authorizeLegacyAgendaRead(auth.ctx, agenda);
         return json({ week, agenda, agendas });
     } catch (err) {
         return handleVantageError("GET agendas", err, request);
@@ -42,24 +39,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
-    try {
-        const parsed = PrepareSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
-        const weekStart = parsed.data.weekStart
-            ? weekStartOf(parseIsoDate(parsed.data.weekStart)!)
-            : defaultAgendaWeek(new Date());
-        const aiUse = { feature: "vantage", userId: auth.ctx.userId } as const;
-        const refused = await refuseAtAiAllowance(
-            auth.ctx.companyId,
-            aiUse.userId,
-            localeOfRequest(request)
-        );
-        if (refused) return refused;
-        const agenda = await withWorkspaceChatModels(auth.ctx.companyId, aiUse, () =>
-            prepareWeek({ companyId: auth.ctx.companyId, userId: auth.ctx.userId, weekStart })
-        );
-        return json({ agenda }, 201);
-    } catch (err) {
-        return handleVantageError("POST prepare", err, request);
-    }
+    return error(say(request, "canonicalWeeklyReviewRequired"), 410, {
+        code: "canonical_weekly_review_required",
+    });
 }

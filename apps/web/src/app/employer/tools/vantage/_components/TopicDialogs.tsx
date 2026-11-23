@@ -19,7 +19,6 @@ import { Textarea } from "~/components/ui/textarea";
 import { useErrorText } from "~/lib/tools/errorText";
 
 import { vantageApi, type TopicDto, type TopicInput, type VantageFact } from "../api";
-import { addDaysIso, todayIso } from "../_lib/format";
 import { Field, FormError } from "./Primitives";
 
 /**
@@ -99,7 +98,10 @@ export function TopicDialog({
                 shared,
             };
             const { topic } = initial
-                ? await vantageApi.patchTopic(initial.id, input)
+                ? await vantageApi.patchTopic(initial.id, {
+                      ...input,
+                      expectedContentVersion: initial.contentVersion,
+                  })
                 : await vantageApi.addTopic(agendaId, input);
             toast(initial ? t("saved") : t("added"));
             onSaved(topic);
@@ -258,7 +260,7 @@ export function DecisionDialog({
         setWithCommitment(!topic.commitmentId);
         setTitle(topic.proposedNextStep || topic.title);
         setOwner(topic.proposedOwner ?? "");
-        setDue(topic.proposedDue ?? addDaysIso(todayIso(), 7));
+        setDue(topic.proposedDue ?? "");
         setTest("");
         setShared(topic.shared);
         setError(null);
@@ -270,6 +272,7 @@ export function DecisionDialog({
         setError(null);
         try {
             const { topic: saved } = await vantageApi.decide(topic.id, {
+                expectedContentVersion: topic.contentVersion,
                 decision,
                 commitment: withCommitment
                     ? { title, owner, dueOn: due, test: test || null, shared }
@@ -376,7 +379,8 @@ export function DecisionDialog({
                         disabled={
                             busy ||
                             !decision.trim() ||
-                            (withCommitment && (!title.trim() || !owner.trim() || !due))
+                            (withCommitment &&
+                                (!title.trim() || !owner.trim() || !due || !test.trim()))
                         }
                     >
                         {t("submit")}

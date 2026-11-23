@@ -20,6 +20,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import {
     bigint,
     boolean,
+    check,
     date,
     doublePrecision,
     index,
@@ -251,10 +252,15 @@ export const vantageAgendaTopics = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        contentVersion: integer("content_version").notNull().default(1),
     },
     table => [
         index("vantage_agenda_topics_agenda_position_idx").on(table.agendaId, table.position),
         index("vantage_agenda_topics_company_shared_idx").on(table.companyId, table.shared),
+        check(
+            "pdr_ai_v2_vantage_agenda_topics_content_version_check",
+            sql`${table.contentVersion} > 0`
+        ),
     ]
 );
 
@@ -288,6 +294,7 @@ export const vantageCommitments = pgTable(
             .default(sql`CURRENT_TIMESTAMP`)
             .notNull(),
         updatedAt: timestamp("updated_at", { withTimezone: true }).$onUpdate(() => new Date()),
+        contentVersion: integer("content_version").notNull().default(1),
     },
     table => [
         index("vantage_commitments_company_status_due_idx").on(
@@ -296,6 +303,10 @@ export const vantageCommitments = pgTable(
             table.dueOn
         ),
         index("vantage_commitments_agenda_idx").on(table.agendaId),
+        check(
+            "pdr_ai_v2_vantage_commitments_content_version_check",
+            sql`${table.contentVersion} > 0`
+        ),
     ]
 );
 
@@ -324,3 +335,14 @@ export type VantageAgendaRow = InferSelectModel<typeof vantageAgendas>;
 export type VantageAgendaTopicRow = InferSelectModel<typeof vantageAgendaTopics>;
 export type VantageCommitmentRow = InferSelectModel<typeof vantageCommitments>;
 export type VantageProgramDeadlineRow = InferSelectModel<typeof vantageProgramDeadlines>;
+
+/** Durable operation receipts survive later edits; tenant and actor scoped. */
+export const vantageDecisionOperations = pgTable("vantage_decision_operations", {
+    id: text("id").primaryKey(),
+    companyId: bigint("company_id", { mode: "bigint" }).notNull(),
+    topicId: text("topic_id").notNull(),
+    actorId: text("actor_id").notNull(),
+    requestHash: text("request_hash").notNull(),
+    result: jsonb("result").notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});

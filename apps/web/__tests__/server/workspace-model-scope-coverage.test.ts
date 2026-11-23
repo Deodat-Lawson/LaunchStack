@@ -54,7 +54,7 @@ const SCANNED = [
  * entity extraction) from the same scope.
  */
 const CHAT_CALL =
-    /\b(resolveConfiguredChatModel|resolveConfiguredChatRoute|resolveChatModel|resolveChatRoute|generateStructured|invokeToolStructured|invokeStructured|getConfiguredPublicChatConfig|getPublicChatConfig|getChatModelsConfig|describeChatError|resolveAuxiliaryModel)\s*\(/;
+    /\b(resolveConfiguredChatModel|resolveConfiguredChatRoute|resolveChatModel|resolveChatRoute|generateStructured|invokeToolStructured|invokeStructured|getConfiguredPublicChatConfig|getPublicChatConfig|getChatModelsConfig|describeChatError|resolveAuxiliaryModel|resolver)\s*\(/;
 
 type Coverage =
     /** Runs only inside these entry points, each of which enters the workspace's scope. */
@@ -151,11 +151,22 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         "apps/web/src/server/company-profile/service.ts",
         "every build runs in after(); each callback enters the workspace itself"
     ),
+    self(
+        "apps/web/src/server/vantage/weekly-review-service.ts",
+        "all generation and Judge stages enter workspace scope"
+    ),
     [
-        "apps/web/src/server/vantage/service.ts",
+        "apps/web/src/server/vantage/weekly-review-topic-run.ts",
         {
-            scopedBy: [`${API}/vantage/agendas/route.ts`],
-            note: "POST prepareWeek; overview and triage resolve no model",
+            scopedBy: ["apps/web/src/server/vantage/weekly-review-service.ts"],
+            note: "digest and exploration providers resolve inside the canonical run scope",
+        },
+    ],
+    [
+        "apps/web/src/server/vantage/document-digest-provider.ts",
+        {
+            scopedBy: ["apps/web/src/server/vantage/weekly-review-service.ts"],
+            note: "the digest resolver is called within workspace scope",
         },
     ],
     [
@@ -473,10 +484,6 @@ const NO_MODEL_CALL: Record<string, string> = {
         "renders a finished explanation to markdown and uploads it with the repo-explainer barrel's pure helpers",
     [`${API}/repo-workspaces/route.ts`]:
         "parseGitHubUrl from the repo-explainer barrel; queues repo-workspace/sync.requested, which calls no model",
-    [`${API}/vantage/overview/route.ts`]:
-        "loadOverview reads rows; only prepareWeek (vantage/agendas) resolves a model",
-    [`${API}/vantage/triage/route.ts`]:
-        "loadTriage reads rows; only prepareWeek (vantage/agendas) resolves a model",
 };
 
 /**

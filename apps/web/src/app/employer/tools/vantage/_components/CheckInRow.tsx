@@ -54,9 +54,11 @@ export function CheckInRow({
     const [busy, setBusy] = useState(false);
 
     const resolve = async (status: VantageCommitmentStatus) => {
+        if (status !== "open" && !outcome.trim()) return;
         setBusy(true);
         try {
             await vantageApi.patchCommitment(commitment.id, {
+                expectedContentVersion: commitment.contentVersion,
                 status,
                 outcome: outcome.trim() || null,
             });
@@ -175,7 +177,7 @@ export function CheckInRow({
                                 <Button
                                     size="sm"
                                     onClick={() => void resolve(pending)}
-                                    disabled={busy}
+                                    disabled={busy || !outcome.trim()}
                                 >
                                     {t("save")}
                                 </Button>

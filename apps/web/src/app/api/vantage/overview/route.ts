@@ -1,3 +1,4 @@
+import { authorizeLegacyOverviewRead } from "~/server/vantage/legacy-read-authority";
 // GET /api/vantage/overview — the week at a glance: signals, the agenda in
 // progress, commitments to check in on, what was logged lately.
 import { handleVantageError, json, vantageContext } from "../_http";
@@ -7,7 +8,9 @@ export async function GET(request: Request) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     try {
-        return json(await loadOverview({ companyId: auth.ctx.companyId }));
+        const overview = await loadOverview({ companyId: auth.ctx.companyId });
+        await authorizeLegacyOverviewRead(auth.ctx, overview);
+        return json(overview);
     } catch (err) {
         return handleVantageError("GET overview", err, request);
     }

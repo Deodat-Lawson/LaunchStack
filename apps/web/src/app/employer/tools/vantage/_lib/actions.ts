@@ -5,14 +5,8 @@ import { toast } from "sonner";
 
 import { useErrorText } from "~/lib/tools/errorText";
 
-import {
-    vantageApi,
-    type AgendaDto,
-    type CommitmentDto,
-    type TopicDto,
-    type VantageCommitmentStatus,
-} from "../api";
-import { addDaysIso, todayIso, useVantageFormat, type VantageFormat } from "./format";
+import { vantageApi, type AgendaDto, type TopicDto } from "../api";
+import { useVantageFormat, type VantageFormat } from "./format";
 import { hideSuggestion, unhideSuggestion } from "./hidden";
 
 /**
@@ -127,36 +121,33 @@ export function useOneClick(refresh: () => Promise<unknown> | void) {
 }
 
 export async function keepTopic(fmt: VantageFormat, topic: TopicDto): Promise<Outcome> {
-    await vantageApi.patchTopic(topic.id, { status: "kept" });
+    const { topic: saved } = await vantageApi.patchTopic(topic.id, {
+        status: "kept",
+        expectedContentVersion: topic.contentVersion,
+    });
     return {
         message: fmt.t("actions.added"),
         description: topic.title,
-        undo: () => vantageApi.patchTopic(topic.id, { status: topic.status }),
+        undo: () =>
+            vantageApi.patchTopic(topic.id, {
+                status: topic.status,
+                expectedContentVersion: saved.contentVersion,
+            }),
     };
 }
 
 export async function ignoreTopic(fmt: VantageFormat, topic: TopicDto): Promise<Outcome> {
-    await vantageApi.patchTopic(topic.id, { status: "dismissed" });
+    const { topic: saved } = await vantageApi.patchTopic(topic.id, {
+        status: "dismissed",
+        expectedContentVersion: topic.contentVersion,
+    });
     return {
         message: fmt.t("actions.ignored"),
         description: topic.title,
-        undo: () => vantageApi.patchTopic(topic.id, { status: topic.status }),
-    };
-}
-
-export async function resolveCommitment(
-    fmt: VantageFormat,
-    commitment: CommitmentDto,
-    status: Exclude<VantageCommitmentStatus, "open">
-): Promise<Outcome> {
-    await vantageApi.patchCommitment(commitment.id, { status });
-    return {
-        message: fmt.t(`actions.resolved.${status}`),
-        description: commitment.title,
         undo: () =>
-            vantageApi.patchCommitment(commitment.id, {
-                status: commitment.status,
-                outcome: commitment.outcome,
+            vantageApi.patchTopic(topic.id, {
+                status: topic.status,
+                expectedContentVersion: saved.contentVersion,
             }),
     };
 }
@@ -174,39 +165,19 @@ export async function setAside(id: string, days: number, message: string): Promi
     return { message, undo: async () => unhideSuggestion(id) };
 }
 
-/** Whether a topic's proposed next step can be committed to without asking anything. */
-export function canCommitInOneClick(topic: TopicDto): boolean {
-    return topic.proposedNextStep.trim() !== "" && (topic.proposedOwner ?? "").trim() !== "";
-}
-
-/**
- * Take the proposed next step: the decision is recorded as agreeing to it,
- * and the commitment opens with the proposed owner and date (a week out
- * when none was proposed). Undo takes both back.
- */
-export async function commitToNextStep(
-    fmt: VantageFormat,
-    topic: TopicDto,
-    today = todayIso()
-): Promise<Outcome> {
-    const step = topic.proposedNextStep.trim();
-    const owner = (topic.proposedOwner ?? "").trim();
-    const dueOn = topic.proposedDue ?? addDaysIso(today, 7);
-    const { topic: saved } = await vantageApi.decide(topic.id, {
-        decision: fmt.t("actions.agreed", { step }),
-        commitment: { title: step, owner, dueOn, test: null, shared: topic.shared },
-    });
-    return {
-        message: fmt.t("actions.committed", { owner, date: fmt.date(dueOn) }),
-        description: step,
-        undo: () => vantageApi.undoDecision(topic.id, saved.commitmentId),
-    };
-}
-
 export async function markReady(fmt: VantageFormat, agenda: AgendaDto): Promise<Outcome> {
     await vantageApi.setAgendaStatus(agenda.id, "ready");
     return {
         message: fmt.t("actions.ready"),
         undo: () => vantageApi.setAgendaStatus(agenda.id, agenda.status),
     };
+}
+
+/** A generated suggestion cannot supply a human acceptance test. */
+export function canCommitInOneClick(_topic: TopicDto): boolean {
+    return false;
+}
+/** Compatibility for cards: all visible callers must open the decision dialog. */
+export async function commitToNextStep(_fmt: VantageFormat, _topic: TopicDto): Promise<Outcome> {
+    throw new Error("Use the decision dialog to supply an acceptance test.");
 }

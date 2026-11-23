@@ -4,7 +4,6 @@ import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 
-import { ToolLink } from "~/components/tool-app/ToolLink";
 import { EmptyState, InlineError } from "~/components/tools/EmptyState";
 import { PageHeader, SectionHeading } from "~/components/tools/PageHeader";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
@@ -27,7 +26,6 @@ import { vantageApi } from "../api";
 import { CommitmentStatus } from "../_components/CheckInRow";
 import { Field, FormError, StatusWord } from "../_components/Primitives";
 import { addDaysIso, todayIso, useVantageFormat } from "../_lib/format";
-import { vantagePath } from "../_lib/paths";
 
 /**
  * The administrator's side of the table. Four lists, all read from what
@@ -150,12 +148,9 @@ export function TriageScreen() {
                                 className="border-line-2 flex flex-col gap-1 border-t px-4 py-2.5 first:border-t-0"
                             >
                                 <div className="flex items-center gap-3">
-                                    <ToolLink
-                                        href={vantagePath(`/agenda?week=${weekStart}`)}
-                                        className="text-ink hover:text-brand-ink min-w-0 flex-1 truncate text-[13px] font-medium"
-                                    >
+                                    <span className="text-ink min-w-0 flex-1 truncate text-[13px] font-medium">
                                         {topic.title}
-                                    </ToolLink>
+                                    </span>
                                     <span className="text-ink-3 shrink-0 text-[11.5px]">
                                         {fmt.weekOf(weekStart)}
                                     </span>

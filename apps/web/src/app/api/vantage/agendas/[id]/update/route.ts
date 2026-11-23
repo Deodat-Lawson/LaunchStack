@@ -1,3 +1,7 @@
+import {
+    authorizeLegacyAgendaRead,
+    authorizeLegacyCommitmentRead,
+} from "~/server/vantage/legacy-read-authority";
 // GET /api/vantage/agendas/:id/update?private=1 — the weekly update as Markdown.
 // Shared topics and commitments only, unless the founder asks for their own copy.
 import type { NextRequest } from "next/server";
@@ -21,7 +25,12 @@ export async function GET(request: NextRequest, { params }: Params) {
         const { id } = await params;
         const agenda = await getAgenda({ companyId: auth.ctx.companyId, id });
         if (!agenda) return error(say(request, "agendaNotHere"), 404);
+        await authorizeLegacyAgendaRead(auth.ctx, agenda);
         const commitments = await listCommitments({ companyId: auth.ctx.companyId, agendaId: id });
+        await authorizeLegacyCommitmentRead(
+            auth.ctx,
+            commitments.map(item => item.id)
+        );
         const includePrivate = request.nextUrl.searchParams.get("private") === "1";
         // Which cited notes are private, so the shared copy can withhold them.
         const prefix = `${REF_PREFIX.evidence}:`;

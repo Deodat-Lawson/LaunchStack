@@ -19,11 +19,18 @@ type Params = { params: Promise<{ id: string }> };
 export async function POST(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error("You cannot change this workspace content.", 403);
     try {
         const { id } = await params;
         const parsed = ReorderSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
-        await reorderTopics({ companyId: auth.ctx.companyId, agendaId: id, ids: parsed.data.ids });
+        await reorderTopics({
+            companyId: auth.ctx.companyId,
+            agendaId: id,
+            ids: parsed.data.ids,
+            expectedVersions: parsed.data.expectedVersions,
+        });
         const agenda = await getAgenda({ companyId: auth.ctx.companyId, id });
         if (!agenda) return error(say(request, "agendaNotHere"), 404);
         return json({ agenda });

@@ -35,6 +35,7 @@ export function ref(id: string, label = `Source ${id}`): VantageEvidenceRef {
 
 export function topic(over: Partial<TopicDto> = {}): TopicDto {
     return {
+        contentVersion: 1,
         id: "t1",
         agendaId: "a1",
         position: 0,
@@ -78,6 +79,7 @@ export function agenda(over: Partial<AgendaDto> = {}): AgendaDto {
 
 export function commitment(over: Partial<CommitmentDto> = {}): CommitmentDto {
     return {
+        contentVersion: 1,
         id: "c1",
         agendaId: null,
         topicId: null,

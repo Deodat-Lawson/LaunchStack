@@ -1,7 +1,7 @@
 {
   "name": "@launchstack/pipelines",
   "version": "0.1.0",
-  "description": "The compositions \u2014 level two: chains of LaunchStack bricks toward business outcomes. Twelve verticals: marketing, email outreach, founder weekly review, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals, and Vantage (the weekly founder-meeting loop).",
+  "description": "The compositions — level two: chains of LaunchStack bricks toward business outcomes. Twelve verticals: marketing, email outreach, founder weekly review, company metadata, client prospector, trend search, knowledge connectors, repo workspaces, the repo explainer, the distribution pipeline, and proposals, and Vantage (the weekly founder-meeting loop).",
   "license": "Apache-2.0",
   "type": "module",
   "sideEffects": false,
@@ -76,7 +76,14 @@
     "./vantage": "./src/vantage/index.ts",
     "./vantage/schema": "./src/vantage/schema.ts",
     "./accelerators/schema": "./src/proposals/accelerators/schema.ts",
-    "./accelerators/types": "./src/proposals/accelerators/types.ts"
+    "./accelerators/types": "./src/proposals/accelerators/types.ts",
+    "./vantage/week": "./src/vantage/week.ts",
+    "./vantage/scoped-evidence": "./src/vantage/scoped-evidence.ts",
+    "./vantage/weekly-review-v21": "./src/vantage/weekly-review-v21.ts",
+    "./vantage/weekly-review-validation": "./src/vantage/weekly-review-validation.ts",
+    "./vantage/dynamic-retrieval-v3": "./src/vantage/dynamic-retrieval-v3.ts",
+    "./vantage/question-lexical-ranking": "./src/vantage/question-lexical-ranking.mjs",
+    "./vantage/topic-retrieval-v1": "./src/vantage/topic-retrieval-v1.ts"
   },
   "files": [
     "dist",
@@ -340,6 +347,34 @@
       "./accelerators/types": {
         "types": "./dist/proposals/accelerators/types.d.ts",
         "default": "./dist/proposals/accelerators/types.js"
+      },
+      "./vantage/week": {
+        "types": "./dist/vantage/week.d.ts",
+        "default": "./dist/vantage/week.js"
+      },
+      "./vantage/scoped-evidence": {
+        "types": "./dist/vantage/scoped-evidence.d.ts",
+        "default": "./dist/vantage/scoped-evidence.js"
+      },
+      "./vantage/weekly-review-v21": {
+        "types": "./dist/vantage/weekly-review-v21.d.ts",
+        "default": "./dist/vantage/weekly-review-v21.js"
+      },
+      "./vantage/weekly-review-validation": {
+        "types": "./dist/vantage/weekly-review-validation.d.ts",
+        "default": "./dist/vantage/weekly-review-validation.js"
+      },
+      "./vantage/dynamic-retrieval-v3": {
+        "types": "./dist/vantage/dynamic-retrieval-v3.d.ts",
+        "default": "./dist/vantage/dynamic-retrieval-v3.js"
+      },
+      "./vantage/question-lexical-ranking": {
+        "types": "./dist/vantage/question-lexical-ranking.d.mts",
+        "default": "./dist/vantage/question-lexical-ranking.mjs"
+      },
+      "./vantage/topic-retrieval-v1": {
+        "types": "./dist/vantage/topic-retrieval-v1.d.ts",
+        "default": "./dist/vantage/topic-retrieval-v1.js"
       }
     }
   },

@@ -211,7 +211,7 @@ function HistoryRow({
 
     return (
         <div
-            role="button"
+            role={openable ? "button" : undefined}
             tabIndex={openable ? 0 : -1}
             aria-current={active ? "true" : undefined}
             data-testid={`history-row-${entry.id}`}

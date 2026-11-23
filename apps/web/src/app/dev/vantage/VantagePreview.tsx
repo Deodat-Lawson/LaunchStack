@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
+import { useTranslations } from "next-intl";
 
 import { VantageTool } from "~/app/employer/tools/vantage/VantageTool";
 import type { ToolHost } from "~/components/tool-app/nav";
@@ -37,6 +38,7 @@ stubApi();
  * Program group to a tree React is still matching against the server's HTML.
  */
 export function VantagePreview({ at }: { at: string }) {
+    const t = useTranslations("vantage.weeklyReview.founder");
     const host = useMemo<ToolHost>(() => ({ active: true, request: { at, nonce: 1 } }), [at]);
     const [mounted, setMounted] = useState(false);
     useEffect(() => setMounted(true), []);
@@ -44,9 +46,7 @@ export function VantagePreview({ at }: { at: string }) {
     return (
         <div data-preview="vantage" className="flex h-dvh flex-col">
             <div className="bg-warn-soft text-warn-ink border-warn/40 shrink-0 border-b px-4 py-1.5 text-center text-xs">
-                Preview harness — no login, in-memory data; a reload starts over. Add{" "}
-                <span className="font-mono">?as=member</span> to see it without settings.manage,{" "}
-                <span className="font-mono">?fresh=1</span> to watch Vantage draft the week.
+                {t("previewDescription")}
             </div>
             <div className="min-h-0 flex-1">
                 <VantageTool host={host} />

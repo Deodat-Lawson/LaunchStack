@@ -5,6 +5,7 @@ import { renderWeeklyUpdate } from "./update";
 
 function topic(over: Partial<TopicDto>): TopicDto {
     return {
+        contentVersion: 1,
         id: "t",
         agendaId: "a",
         position: 0,
@@ -70,6 +71,7 @@ const agenda: AgendaDto = {
 const commitments: CommitmentDto[] = [
     {
         id: "c1",
+        contentVersion: 1,
         agendaId: "a",
         topicId: "shared",
         topicTitle: "Onboarding drop-off",
@@ -85,6 +87,7 @@ const commitments: CommitmentDto[] = [
     },
     {
         id: "c2",
+        contentVersion: 1,
         agendaId: "a",
         topicId: null,
         topicTitle: null,

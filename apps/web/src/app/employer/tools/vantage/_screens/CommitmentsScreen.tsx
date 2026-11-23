@@ -314,7 +314,7 @@ function AddCommitmentDialog({
                     </Button>
                     <Button
                         onClick={() => void save()}
-                        disabled={busy || !title.trim() || !owner.trim() || !dueOn}
+                        disabled={busy || !title.trim() || !owner.trim() || !dueOn || !test.trim()}
                     >
                         {tc("actions.add")}
                     </Button>

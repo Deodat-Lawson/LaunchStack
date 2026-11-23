@@ -96,17 +96,19 @@ export const TopicSchema = z.object({
 });
 
 export const TopicPatchSchema = TopicSchema.partial().extend({
+    expectedContentVersion: z.number().int().positive(),
     status: z.enum(["kept", "dismissed", "suggested"]).optional(),
 });
 
 export const DecisionSchema = z.object({
+    expectedContentVersion: z.number().int().positive(),
     decision: z.string().trim().min(1, V.writeDecision).max(2000),
     commitment: z
         .object({
             title: z.string().trim().min(1, V.nameAction).max(300),
             owner: z.string().trim().min(1, V.nameOwner).max(200),
             dueOn: isoDate,
-            test: optionalText(1000),
+            test: z.string().trim().min(1).max(1000),
             shared: z.boolean().optional(),
         })
         .nullable(),
@@ -116,7 +118,7 @@ export const CommitmentSchema = z.object({
     title: z.string().trim().min(1, V.nameAction).max(300),
     owner: z.string().trim().min(1, V.nameOwner).max(200),
     dueOn: isoDate,
-    test: optionalText(1000),
+    test: z.string().trim().min(1).max(1000),
     shared: z.boolean().optional(),
     agendaId: z.string().optional().nullable(),
     topicId: z.string().optional().nullable(),
@@ -125,6 +127,7 @@ export const CommitmentSchema = z.object({
 export const CommitmentPatchSchema = CommitmentSchema.omit({ agendaId: true, topicId: true })
     .partial()
     .extend({
+        expectedContentVersion: z.number().int().positive(),
         status: z.enum(VANTAGE_COMMITMENT_STATUSES).optional(),
         outcome: optionalText(2000),
     });
@@ -135,7 +138,10 @@ export const DeadlineSchema = z.object({
     note: optionalText(1000),
 });
 
-export const ReorderSchema = z.object({ ids: z.array(z.string().min(1)).max(50) });
+export const ReorderSchema = z.object({
+    ids: z.array(z.string().min(1)).max(50),
+    expectedVersions: z.record(z.number().int().positive()),
+});
 
 export const AgendaStatusSchema = z.object({
     status: z.enum(["draft", "ready", "held", "closed"]),

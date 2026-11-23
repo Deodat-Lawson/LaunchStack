@@ -1,4 +1,9 @@
-import { createLangchainAgentPort, isChatRoute, type AgentModelPort } from "@launchstack/llm";
+import {
+    createLangchainAgentPort,
+    isChatRoute,
+    type AgentModelPort,
+    type ChatProviderRetryPolicy,
+} from "@launchstack/llm";
 import {
     deterministicDigestProvider,
     getDigestsForVersions,
@@ -25,11 +30,20 @@ import { WeeklyReviewConflict, type WeeklyReviewQuery } from "./weekly-review-ty
 
 export type TopicSelectionProviders = {
     digest: DigestProvider;
-    exploration: (documents: readonly ExplorationDocument[]) => AgentModelPort;
+    exploration: (
+        documents: readonly ExplorationDocument[],
+        options?: { deadlineAt: number }
+    ) => AgentModelPort;
+};
+export type TopicSelectionRetry = {
+    digest: () => ChatProviderRetryPolicy;
+    exploration: (deadlineAt?: number) => ChatProviderRetryPolicy;
 };
 
 /** Resolve configured routes only when production or an explicitly approved runner needs them. */
-export async function configuredTopicSelectionProviders(): Promise<TopicSelectionProviders> {
+export async function configuredTopicSelectionProviders(
+    retry?: TopicSelectionRetry
+): Promise<TopicSelectionProviders> {
     const route = process.env.VANTAGE_TOPIC_FIRST_EXPLORATION_ROUTE ?? "reasoning";
     if (!isChatRoute(route))
         throw new WeeklyReviewConflict("topic_exploration_failed:model_unavailable");
@@ -38,14 +52,15 @@ export async function configuredTopicSelectionProviders(): Promise<TopicSelectio
         import("./document-digest-provider"),
     ]);
     return {
-        digest: resolveDocumentDigestProvider(),
-        exploration: () =>
+        digest: resolveDocumentDigestProvider(undefined, { providerRetry: retry?.digest }),
+        exploration: (_documents, options) =>
             createLangchainAgentPort(
                 resolveConfiguredChatModel({
                     route,
                     maxRetries: 0,
                     maxOutputTokens: 6000,
                     timeoutMs: TOPIC_FIRST_LIMITS.explorationMs,
+                    ...(retry ? { providerRetry: retry.exploration(options?.deadlineAt) } : {}),
                 })
             ),
     };
@@ -53,11 +68,12 @@ export async function configuredTopicSelectionProviders(): Promise<TopicSelectio
 
 export async function resolveTopicSelectionProviders(
     seed: TopicSeed,
-    override?: TopicSelectionProviders
+    override?: TopicSelectionProviders,
+    retry?: TopicSelectionRetry
 ): Promise<TopicSelectionProviders> {
     if (override) return override;
     return seed.manifest.configuration.provider === "configured"
-        ? configuredTopicSelectionProviders()
+        ? configuredTopicSelectionProviders(retry)
         : { digest: deterministicDigestProvider, exploration: createScriptedExplorationPort };
 }
 export type TopicDigestTiming = {
@@ -238,7 +254,7 @@ export async function prepareTopicSelection(options: {
                     ),
                 });
                 options.onStage?.("exploration");
-                const port = providers.exploration(documents);
+                const port = providers.exploration(documents, { deadlineAt: explorationDeadline });
                 const result = await runTopicExploration({
                     catalogue,
                     offered: documents,

@@ -31,6 +31,15 @@ import {
     topicManifestHash,
     type TopicManifest,
 } from "./weekly-review-topic-types";
+import {
+    PROVIDER_ATTEMPT_STAGES,
+    safeReviewCount,
+    safeWeeklyReviewProviderOutcome,
+    weeklyReviewFailureRecord,
+    weeklyReviewProviderAttempt,
+    type WeeklyReviewFailureInput,
+    type WeeklyReviewProviderAttemptInput,
+} from "./weekly-review-failure-record";
 
 const WeeklyReviewV21SchemaForCarryover = z.object({
     topics: z.array(
@@ -252,6 +261,28 @@ const requireRow = (rows: Record<string, unknown>[]) => {
     if (!rows[0]) throw new WeeklyReviewConflict("review_not_found", 404);
     return rows[0];
 };
+const storedJson = (value: unknown): unknown => {
+    if (typeof value !== "string") return value;
+    try {
+        return JSON.parse(value) as unknown;
+    } catch {
+        return null;
+    }
+};
+const failureOf = (row: Record<string, unknown>) =>
+    row.status === "failed"
+        ? weeklyReviewFailureRecord(row.failure_code, storedJson(row.failure_record))
+        : null;
+const runSummary = (row: Record<string, unknown>) => ({
+    id: scalarText(row.id),
+    week_start: scalarText(row.week_start).slice(0, 10),
+    status: ["reserved", "accepted", "failed"].includes(String(row.status))
+        ? String(row.status)
+        : "unknown",
+    review_version: safeReviewCount(row.review_version),
+    created_at: row.created_at == null ? null : scalarText(row.created_at),
+    failureRecord: failureOf(row),
+});
 export function createWeeklyReviewRepository(
     database: WeeklyReviewDatabase,
     authority: AssertWeeklyReviewAuthority
@@ -279,8 +310,42 @@ export function createWeeklyReviewRepository(
         }
         throw new WeeklyReviewConflict("review_concurrent_update");
     };
+    // A reserved run belongs to this repository instance. Parallel physical
+    // attempts otherwise compete for the same run row and can exhaust the
+    // bounded SERIALIZABLE retries before dispatch or terminal accounting.
+    // Queue only journal transactions, never provider work. Other instances
+    // remain fenced by the existing database isolation and row locks.
+    const journalTails = new Map<string, Promise<void>>();
+    const journalTransaction = async <T>(
+        id: string,
+        work: (query: WeeklyReviewQuery) => Promise<T>
+    ): Promise<T> => {
+        const previous = journalTails.get(id) ?? Promise.resolve();
+        let release!: () => void;
+        const tail = new Promise<void>(resolve => {
+            release = resolve;
+        });
+        journalTails.set(id, tail);
+        await previous;
+        try {
+            return await transact(work);
+        } finally {
+            release();
+            if (journalTails.get(id) === tail) journalTails.delete(id);
+        }
+    };
     // Failed-run trace retention is zero. Historical failures are swept on owner access.
     const redactFailedTraces = async (query: WeeklyReviewQuery, actor: WeeklyReviewActor) => {
+        // Backfill old terminal rows without consulting the removed source trace.
+        // Diagnostic uncertainty remains null; unknown is never reported as zero.
+        await query(
+            "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET failure_record=COALESCE(failure_record,$3::jsonb),ciphertext=NULL,key_version=NULL WHERE company_id=$1::bigint AND owner_id=$2 AND status='failed' AND (failure_record IS NULL OR ciphertext IS NOT NULL OR key_version IS NOT NULL)",
+            [
+                actor.companyId,
+                actor.userId,
+                JSON.stringify(weeklyReviewFailureRecord("candidate_not_admitted")),
+            ]
+        );
         await query(
             "UPDATE pdr_ai_v2_vantage_weekly_review_run_manifests m SET trace=NULL FROM pdr_ai_v2_vantage_weekly_review_runs r WHERE m.run_id=r.id AND r.company_id=$1::bigint AND r.owner_id=$2 AND r.status='failed' AND m.trace IS NOT NULL",
             [actor.companyId, actor.userId]
@@ -331,6 +396,57 @@ export function createWeeklyReviewRepository(
         if (row.input_hash !== topicInputHash(result.manifest))
             throw new WeeklyReviewConflict("candidate_admission_invalid");
         return result;
+    };
+    const attemptAccounting = async (
+        query: WeeklyReviewQuery,
+        actor: WeeklyReviewActor,
+        id: string
+    ) => {
+        const [totals] = await query(
+            "SELECT count(*)::int AS attempts,count(*) FILTER (WHERE outcome IS NOT NULL AND outcome->>'statusClass'<>'success')::int AS failures FROM pdr_ai_v2_vantage_weekly_review_provider_attempts WHERE company_id=$1::bigint AND owner_id=$2 AND run_id=$3::uuid",
+            [actor.companyId, actor.userId, id]
+        );
+        const [latest] = await query(
+            "SELECT outcome,stage,message_bytes FROM pdr_ai_v2_vantage_weekly_review_provider_attempts WHERE company_id=$1::bigint AND owner_id=$2 AND run_id=$3::uuid ORDER BY started_at DESC,id DESC LIMIT 1",
+            [actor.companyId, actor.userId, id]
+        );
+        return {
+            totals,
+            provider: safeWeeklyReviewProviderOutcome(storedJson(latest?.outcome)),
+            stage: PROVIDER_ATTEMPT_STAGES.find(stage => stage === latest?.stage),
+            messageBytes: safeReviewCount(latest?.message_bytes),
+        };
+    };
+    const checkedRetryDispatch = async (
+        query: WeeklyReviewQuery,
+        actor: WeeklyReviewActor,
+        id: string,
+        row: Record<string, unknown>,
+        kind: "generation" | "judge",
+        expectedActiveId?: string | null,
+        snapshotHash?: string
+    ) => {
+        if (row.status !== "reserved") throw new WeeklyReviewConflict("review_not_reserved");
+        if (
+            !row[kind + "_dispatched"] ||
+            !row.generation_dispatched ||
+            (kind === "generation" && row.judge_dispatched)
+        )
+            throw new WeeklyReviewConflict("dispatch_already_reserved_or_invalid_order");
+        if (
+            row.retrieval_mode === "topic_first" &&
+            (!row.snapshot_hash || row.snapshot_hash !== snapshotHash)
+        )
+            throw new WeeklyReviewConflict("candidate_admission_invalid");
+        await authority(query, actor, dependenciesOf(row), "dispatch");
+        if (kind === "generation" && expectedActiveId !== undefined) {
+            const active = await query(
+                "SELECT run_id FROM pdr_ai_v2_vantage_weekly_review_active WHERE company_id=$1::bigint AND owner_id=$2 AND week_start=$3::date",
+                [actor.companyId, actor.userId, row.week_start]
+            );
+            if ((active[0]?.run_id ?? null) !== expectedActiveId)
+                throw new WeeklyReviewConflict("active_review_changed");
+        }
     };
     return {
         findByKey(actor: WeeklyReviewActor, week: string, key: string) {
@@ -639,14 +755,32 @@ export function createWeeklyReviewRepository(
             return transact(async query => {
                 const row = await rowFor(query, actor, id, true);
                 await authority(query, actor, [], "recovery");
-                if (row.status !== "reserved")
+                if (row.status !== "reserved") {
+                    await redactFailedTraces(query, actor);
                     return { id, status: String(row.status), expired: false };
+                }
                 const changed = await query(
-                    "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET status='failed',failure_code='dispatch_uncertain_expired' WHERE id=$1::uuid AND status='reserved' AND retrieval_mode='topic_first' AND coalesce(last_dispatch_at,created_at)<=now()-($2::int*interval '1 second') RETURNING id",
-                    [id, TOPIC_FIRST_LIMITS.expirySeconds]
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET status='failed',failure_code='dispatch_uncertain_expired',failure_record=$3::jsonb,ciphertext=NULL,key_version=NULL WHERE id=$1::uuid AND status='reserved' AND retrieval_mode='topic_first' AND coalesce(last_dispatch_at,created_at)<=now()-($2::int*interval '1 second') RETURNING id",
+                    [
+                        id,
+                        TOPIC_FIRST_LIMITS.expirySeconds,
+                        JSON.stringify(weeklyReviewFailureRecord("dispatch_uncertain_expired")),
+                    ]
                 );
                 if (!changed.length)
                     throw new WeeklyReviewConflict("review_reservation_not_expired");
+                const accounting = await attemptAccounting(query, actor, id);
+                const failure = weeklyReviewFailureRecord("dispatch_uncertain_expired", {
+                    counts: {
+                        providerAttempts: safeReviewCount(accounting.totals?.attempts),
+                        providerFailures: safeReviewCount(accounting.totals?.failures),
+                    },
+                    provider: accounting.provider,
+                });
+                await query(
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET failure_record=$2::jsonb WHERE id=$1::uuid AND status='failed'",
+                    [id, JSON.stringify(failure)]
+                );
                 await redactFailedTraces(query, actor);
                 return { id, status: "failed", expired: true };
             });
@@ -796,12 +930,182 @@ export function createWeeklyReviewRepository(
                     );
             });
         },
-        fail(actor: WeeklyReviewActor, id: string, code: string) {
+        revalidateDispatch(
+            actor: WeeklyReviewActor,
+            id: string,
+            kind: "generation" | "judge",
+            expectedActiveId?: string | null,
+            snapshotHash?: string
+        ) {
             return transact(async query => {
-                await rowFor(query, actor, id, true);
+                const row = await rowFor(query, actor, id, true);
+                await checkedRetryDispatch(
+                    query,
+                    actor,
+                    id,
+                    row,
+                    kind,
+                    expectedActiveId,
+                    snapshotHash
+                );
+            });
+        },
+        beginProviderAttempt(
+            actor: WeeklyReviewActor,
+            id: string,
+            input: WeeklyReviewProviderAttemptInput
+        ): Promise<string> {
+            const attemptId = randomUUID();
+            return journalTransaction(id, async query => {
+                if (
+                    !(PROVIDER_ATTEMPT_STAGES as readonly string[]).includes(input.stage) ||
+                    !Number.isSafeInteger(input.attempt) ||
+                    input.attempt < 1 ||
+                    input.attempt > 2147483647 ||
+                    (input.messageBytes !== null &&
+                        (safeReviewCount(input.messageBytes) === null ||
+                            input.messageBytes > 2147483647))
+                )
+                    throw new WeeklyReviewConflict("invalid_provider_attempt", 400);
+                const deadline =
+                    typeof input.deadlineAt === "string"
+                        ? Date.parse(input.deadlineAt)
+                        : input.deadlineAt;
+                if (
+                    deadline !== undefined &&
+                    (!Number.isFinite(deadline) || Date.now() >= deadline)
+                )
+                    throw new WeeklyReviewConflict("provider_attempt_timeout", 503);
+                const row = await rowFor(query, actor, id, true);
+                if (row.status !== "reserved")
+                    throw new WeeklyReviewConflict("review_not_reserved");
+                if (input.stage === "generation" || input.stage === "judge") {
+                    await checkedRetryDispatch(
+                        query,
+                        actor,
+                        id,
+                        row,
+                        input.stage,
+                        input.expectedActiveId,
+                        input.snapshotHash
+                    );
+                } else {
+                    if (
+                        row.retrieval_mode !== "topic_first" ||
+                        row.snapshot_hash ||
+                        row.generation_dispatched ||
+                        (input.stage === "digest"
+                            ? row.exploration_dispatched
+                            : !row.exploration_dispatched)
+                    )
+                        throw new WeeklyReviewConflict(
+                            "dispatch_already_reserved_or_invalid_order"
+                        );
+                    if (
+                        input.stage === "exploration" &&
+                        Date.now() >= Date.parse(scalarText(row.exploration_deadline_at))
+                    )
+                        throw new WeeklyReviewConflict("topic_exploration_failed:timeout");
+                    await topicAuthority(query, actor, row);
+                    const { manifest } = await checkedManifest(query, id, row);
+                    await authority(query, actor, manifest.fixedDependencies, "dispatch");
+                }
+                if (deadline !== undefined && Date.now() >= deadline)
+                    throw new WeeklyReviewConflict("provider_attempt_timeout", 503);
                 await query(
-                    "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET status='failed',failure_code=$4 WHERE id=$1::uuid AND company_id=$2::bigint AND owner_id=$3 AND status='reserved'",
-                    [id, actor.companyId, actor.userId, code]
+                    "INSERT INTO pdr_ai_v2_vantage_weekly_review_provider_attempts(id,run_id,company_id,owner_id,stage,attempt_ordinal,message_bytes) VALUES($1::uuid,$2::uuid,$3::bigint,$4,$5,$6,$7)",
+                    [
+                        attemptId,
+                        id,
+                        actor.companyId,
+                        actor.userId,
+                        input.stage,
+                        input.attempt,
+                        input.messageBytes,
+                    ]
+                );
+                await query(
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET last_dispatch_at=clock_timestamp() WHERE id=$1::uuid",
+                    [id]
+                );
+                return attemptId;
+            });
+        },
+        /** Settlement cannot send content or resurrect a run. A revoked actor may
+         * settle an already-journaled attempt using only owner scope and safe metering. */
+        completeProviderAttempt(
+            actor: WeeklyReviewActor,
+            id: string,
+            attemptId: string,
+            outcome: unknown
+        ): Promise<void> {
+            return journalTransaction(id, async query => {
+                const row = await rowFor(query, actor, id, true);
+                const attempt = requireRow(
+                    await query(
+                        "SELECT outcome,settled_at FROM pdr_ai_v2_vantage_weekly_review_provider_attempts WHERE id=$1::uuid AND run_id=$2::uuid AND company_id=$3::bigint AND owner_id=$4 FOR UPDATE",
+                        [attemptId, id, actor.companyId, actor.userId]
+                    )
+                );
+                const safe = safeWeeklyReviewProviderOutcome(outcome);
+                if (attempt.settled_at != null) {
+                    if (
+                        hash(safeWeeklyReviewProviderOutcome(storedJson(attempt.outcome))) !==
+                        hash(safe)
+                    )
+                        throw new WeeklyReviewConflict("provider_attempt_already_settled");
+                    return;
+                }
+                await query(
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_provider_attempts SET outcome=$2::jsonb,settled_at=clock_timestamp() WHERE id=$1::uuid AND settled_at IS NULL",
+                    [attemptId, JSON.stringify(safe)]
+                );
+                if (row.status === "failed") {
+                    const previous = failureOf(row)!;
+                    const accounting = await attemptAccounting(query, actor, id);
+                    const failure = weeklyReviewFailureRecord(previous.code, {
+                        ...previous,
+                        provider: accounting.provider,
+                        counts: {
+                            ...previous.counts,
+                            providerAttempts: safeReviewCount(accounting.totals?.attempts),
+                            providerFailures: safeReviewCount(accounting.totals?.failures),
+                        },
+                    });
+                    await query(
+                        "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET failure_record=$2::jsonb WHERE id=$1::uuid AND status='failed'",
+                        [id, JSON.stringify(failure)]
+                    );
+                }
+            });
+        },
+        fail(
+            actor: WeeklyReviewActor,
+            id: string,
+            code: string,
+            diagnostic?: WeeklyReviewFailureInput
+        ) {
+            return journalTransaction(id, async query => {
+                const row = await rowFor(query, actor, id, true);
+                if (row.status !== "reserved") {
+                    await redactFailedTraces(query, actor);
+                    return;
+                }
+                const accounting = await attemptAccounting(query, actor, id);
+                const failure = weeklyReviewFailureRecord(code, {
+                    ...diagnostic,
+                    stage: diagnostic?.stage ?? accounting.stage,
+                    provider: accounting.provider,
+                    counts: {
+                        ...diagnostic?.counts,
+                        messageBytes: diagnostic?.counts?.messageBytes ?? accounting.messageBytes,
+                        providerAttempts: safeReviewCount(accounting.totals?.attempts),
+                        providerFailures: safeReviewCount(accounting.totals?.failures),
+                    },
+                });
+                await query(
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET status='failed',failure_code=$4,failure_record=$5::jsonb,ciphertext=NULL,key_version=NULL WHERE id=$1::uuid AND company_id=$2::bigint AND owner_id=$3 AND status='reserved'",
+                    [id, actor.companyId, actor.userId, failure.code, JSON.stringify(failure)]
                 );
                 await redactFailedTraces(query, actor);
             });
@@ -1196,10 +1500,26 @@ export function createWeeklyReviewRepository(
         list(actor: WeeklyReviewActor) {
             return transact(async query => {
                 await redactFailedTraces(query, actor);
-                return query(
-                    "SELECT id,week_start,status,review_version,created_at FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=$1::bigint AND owner_id=$2 ORDER BY created_at DESC LIMIT 52",
+                const rows = await query(
+                    "SELECT id,week_start,status,review_version,created_at,failure_code,failure_record FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=$1::bigint AND owner_id=$2 ORDER BY created_at DESC,id DESC LIMIT 52",
                     [actor.companyId, actor.userId]
                 );
+                return rows.map(runSummary);
+            });
+        },
+        status(actor: WeeklyReviewActor, id: string) {
+            return transact(async query => {
+                await redactFailedTraces(query, actor);
+                const row = await rowFor(query, actor, id);
+                const attempts = await query(
+                    "SELECT id,stage,attempt_ordinal,message_bytes,started_at,settled_at,outcome FROM pdr_ai_v2_vantage_weekly_review_provider_attempts WHERE company_id=$1::bigint AND owner_id=$2 AND run_id=$3::uuid ORDER BY started_at DESC,id DESC LIMIT 257",
+                    [actor.companyId, actor.userId, id]
+                );
+                return {
+                    ...runSummary(row),
+                    providerAttempts: attempts.slice(0, 256).map(weeklyReviewProviderAttempt),
+                    providerAttemptsTruncated: attempts.length > 256,
+                };
             });
         },
         decide(

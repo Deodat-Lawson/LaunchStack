@@ -1,3 +1,20 @@
+import {
+    WeeklyReviewDiagnosticError,
+    weeklyReviewRuleForError,
+    type WeeklyReviewDiagnosticStage,
+    type WeeklyReviewDiagnosticCounts,
+    type WeeklyReviewRuleCode,
+    type JudgeDiagnosticEvent,
+} from "./weekly-review-diagnostics";
+export {
+    WeeklyReviewDiagnosticError,
+    weeklyReviewDiagnosticSnapshot,
+    WEEKLY_REVIEW_DIAGNOSTIC_RULE_CODES,
+    type WeeklyReviewDiagnosticSnapshot,
+    type WeeklyReviewDiagnosticCounts,
+    type WeeklyReviewDiagnosticStage,
+    type WeeklyReviewRuleCode,
+} from "./weekly-review-diagnostics";
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
@@ -540,49 +557,155 @@ export async function runWeeklyReviewV21(
     } catch {
         // Progress observers cannot affect validation or model calls.
     }
-    const parsed = validateWeeklyReviewV21(answer.result, input);
+    const diagnosticCounts: WeeklyReviewDiagnosticCounts = {
+        sourceUnits: input.sources.length,
+        evidenceBytes: input.sources.reduce(
+            (sum, source) => sum + Buffer.byteLength(source.text),
+            0
+        ),
+        messageBytes: null,
+        citationsChecked: null,
+        citationsFailed: null,
+    };
+    const diagnostic = (
+        error: unknown,
+        stage: WeeklyReviewDiagnosticStage,
+        fallback: WeeklyReviewRuleCode
+    ) => {
+        if (!topic) throw error;
+        throw new WeeklyReviewDiagnosticError(error instanceof Error ? error.message : fallback, {
+            stage,
+            ruleCodes: [weeklyReviewRuleForError(error, fallback)],
+            counts: diagnosticCounts,
+        });
+    };
+    const validate = <T>(
+        stage: WeeklyReviewDiagnosticStage,
+        fallback: WeeklyReviewRuleCode,
+        fn: () => T
+    ): T => {
+        try {
+            return fn();
+        } catch (error) {
+            return diagnostic(error, stage, fallback);
+        }
+    };
+    if (topic) {
+        const candidate = WeeklyReviewV21Schema.safeParse(answer.result);
+        if (candidate.success) {
+            const refs = [
+                ...candidate.data.topics.flatMap(topic => [
+                    ...topic.facts.flatMap(item => item.refs),
+                    ...topic.conflicts.flatMap(item => item.refs),
+                    ...(topic.recommendation?.refs ?? []),
+                ]),
+                ...candidate.data.keyFigures.flatMap(figure => figure.refs),
+            ];
+            const sources = new Set(input.sources.map(source => source.ref));
+            diagnosticCounts.citationsChecked = refs.length;
+            diagnosticCounts.citationsFailed = refs.filter(ref => !sources.has(ref)).length;
+        }
+    }
+    const parsed = validate("generation_validation", "report_schema_invalid", () =>
+        validateWeeklyReviewV21(answer.result, input)
+    );
     if (Buffer.byteLength(JSON.stringify(parsed)) > maxReportBytes)
-        throw Error("report_budget_exceeded");
+        diagnostic(
+            Error("report_budget_exceeded"),
+            "generation_validation",
+            "report_budget_exceeded"
+        );
     const report = {
         ...parsed,
         topics: parsed.topics.map((topic, index) => ({ ...topic, id: "topic-" + index })),
     };
-    const evaluation = weeklyReviewEvaluation(report, input);
+    if (topic)
+        diagnosticCounts.messageBytes = Buffer.byteLength(
+            JSON.stringify(projectWeeklyReviewEvaluation(report, input))
+        );
+    const evaluation = validate("evaluation_input", "evaluation_input_invalid", () =>
+        weeklyReviewEvaluation(report, input)
+    );
     const evaluationInputBytes = Buffer.byteLength(JSON.stringify(evaluation));
     const judgeInputBytes = Buffer.byteLength(judgeInputPayload(evaluation));
+    diagnosticCounts.messageBytes = judgeInputBytes;
     if ((input.scopedEvidence || topic) && judgeInputBytes > limits.judgeInputBytes)
-        throw Error("judge_input_budget_exceeded");
+        diagnostic(
+            Error("judge_input_budget_exceeded"),
+            "evaluation_input",
+            "judge_input_budget_exceeded"
+        );
     if (!topic || ports.validationJudge) await ports.authorizeDispatch("judge");
-    parseEvaluationInput(evaluation, evaluationLimit(input));
-    if (!calculateWeeklyReviewBudget(input, ports.budgetProfile).feasible)
-        throw Error("context_budget_exceeded");
-    const judge =
-        ports.validationJudge ??
-        createModelValidationJudge(ports.judge, {
-            configurationId: input.scopedEvidence
-                ? "vantage-weekly-review/v2.1-scoped-v2"
-                : "vantage-weekly-review/v2.1",
-            evaluationVersion: input.scopedEvidence
-                ? SCOPED_EVALUATION_VERSION
-                : EVALUATION_VERSION,
-            timeoutMs: judgeTimeoutMs,
-            maxInputBytes: limits.judgeInputBytes,
-            ...(topic ? { maxPreparedInputBytes: limits.judgeInputBytes } : {}),
-            ...(topic ? { beforeDispatch: () => ports.authorizeDispatch("judge") } : {}),
-            maxOutputTokens: 6000,
-        });
+    validate("evaluation_input", "evaluation_input_invalid", () =>
+        parseEvaluationInput(evaluation, evaluationLimit(input))
+    );
+    if (
+        !validate("evaluation_input", "evaluation_input_invalid", () =>
+            calculateWeeklyReviewBudget(input, ports.budgetProfile)
+        ).feasible
+    )
+        diagnostic(Error("context_budget_exceeded"), "evaluation_input", "context_budget_exceeded");
+    const judge = validate(
+        "judge",
+        "judge_setup_invalid",
+        () =>
+            ports.validationJudge ??
+            createModelValidationJudge(ports.judge, {
+                configurationId: input.scopedEvidence
+                    ? "vantage-weekly-review/v2.1-scoped-v2"
+                    : "vantage-weekly-review/v2.1",
+                evaluationVersion: input.scopedEvidence
+                    ? SCOPED_EVALUATION_VERSION
+                    : EVALUATION_VERSION,
+                timeoutMs: judgeTimeoutMs,
+                maxInputBytes: limits.judgeInputBytes,
+                ...(topic ? { maxPreparedInputBytes: limits.judgeInputBytes } : {}),
+                ...(topic ? { beforeDispatch: () => ports.authorizeDispatch("judge") } : {}),
+                maxOutputTokens: 6000,
+            })
+    );
+    const judgeRules: WeeklyReviewRuleCode[] = [];
+    diagnosticCounts.citationsChecked = null;
+    diagnosticCounts.citationsFailed = null;
     const assessed = await evaluateVantage(evaluation, {
         judge,
         timeoutMs: topic ? judgeTimeoutMs + 1000 : 31000,
         maxInputBytes: limits.judgeInputBytes,
-    });
+        ...(topic
+            ? {
+                  onDiagnostic: (event: JudgeDiagnosticEvent) => {
+                      judgeRules.push(...event.ruleCodes);
+                      if (event.citationsChecked !== undefined)
+                          diagnosticCounts.citationsChecked = event.citationsChecked;
+                      if (event.citationsFailed !== undefined)
+                          diagnosticCounts.citationsFailed = event.citationsFailed;
+                  },
+              }
+            : {}),
+    }).catch(error => diagnostic(error, "judge", "judge_evaluation_failed"));
     if (
         assessed.verdict !== "pass" ||
         assessed.status !== "assessed" ||
         assessed.error ||
         assessed.integrityIssues.some(issue => issue.severity === "error")
-    )
+    ) {
+        if (topic) {
+            if (assessed.error) judgeRules.push(assessed.error);
+            if (assessed.status === "partial") judgeRules.push("judge_status_partial");
+            if (assessed.status === "unavailable") judgeRules.push("judge_status_unavailable");
+            if (assessed.verdict === "fail") judgeRules.push("judge_verdict_fail");
+            if (assessed.verdict === "needs-review") judgeRules.push("judge_verdict_needs_review");
+            for (const issue of assessed.integrityIssues)
+                if (issue.severity === "error" && issue.code !== "duplicate-task")
+                    judgeRules.push(issue.code);
+            throw new WeeklyReviewDiagnosticError("judge_admission_failed", {
+                stage: "judge",
+                ruleCodes: ["judge_admission_failed", ...judgeRules],
+                counts: diagnosticCounts,
+            });
+        }
         throw Error("judge_admission_failed");
+    }
     return {
         report,
         evidence: {

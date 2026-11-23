@@ -1,8 +1,13 @@
 import { describe, it, expect, vi } from "vitest";
 import type { ResolvedChatModel } from "@launchstack/llm";
-import { RATED_CRITERIA, type ValidationJudge } from "./validation/contracts";
+import { RATED_CRITERIA, type ValidationJudge, type Judgment } from "./validation/contracts";
+import { evaluateVantage } from "./validation/evaluate";
 import { outputUnits } from "./validation/input";
+import * as evaluationInputModule from "./validation/input";
 import {
+    WeeklyReviewDiagnosticError,
+    weeklyReviewDiagnosticSnapshot,
+    WEEKLY_REVIEW_DIAGNOSTIC_RULE_CODES,
     WeeklyReviewV21Schema,
     validateWeeklyReviewV21,
     weeklyReviewEvaluation,
@@ -388,5 +393,332 @@ describe("observational generation completion", () => {
         expect(result.report.headline).toBe(report().headline);
         expect(p.authorizeDispatch.mock.calls).toEqual([["generation"], ["judge"]]);
         expect(p.invoke).toHaveBeenCalledTimes(1);
+    });
+});
+
+describe("content-free topic-first failure diagnostics", () => {
+    const topicInput = () => ({
+        ...input(),
+        retrievalContext: {
+            schemaVersion: "vantage-topic-retrieval/v1" as const,
+            mode: "topic-first" as const,
+            guidanceLabel: "owner notes, not evidence" as const,
+            topics: [],
+            seedReasons: [],
+            lane: { outcome: "none_eligible" as const, candidates: 0, admitted: 0 },
+            traceHash: "a".repeat(64),
+        },
+    });
+    async function failure(p: ReturnType<typeof ports>) {
+        try {
+            await runWeeklyReviewV21(topicInput(), {
+                ...p,
+                invoke: p.invoke as never,
+                budgetProfile: "topic-first",
+            });
+            throw new Error("Expected rejection");
+        } catch (error) {
+            expect(error).toBeInstanceOf(WeeklyReviewDiagnosticError);
+            const snapshot = weeklyReviewDiagnosticSnapshot(error)!;
+            const serialized = JSON.stringify(snapshot);
+            for (const privateValue of [
+                ref,
+                "Revenue",
+                "Alice",
+                "Finance",
+                "PRIVATE_CANARY",
+                "Synthetic assessment",
+            ])
+                expect(serialized).not.toContain(privateValue);
+            expect(
+                snapshot.ruleCodes.every(code => WEEKLY_REVIEW_DIAGNOSTIC_RULE_CODES.includes(code))
+            ).toBe(true);
+            expect(Object.keys(snapshot.counts).sort()).toEqual(
+                [
+                    "sourceUnits",
+                    "evidenceBytes",
+                    "messageBytes",
+                    "citationsChecked",
+                    "citationsFailed",
+                ].sort()
+            );
+            return { error: error as Error, snapshot };
+        }
+    }
+    it.each([
+        [
+            "report_schema_invalid",
+            (r: WeeklyReviewV21) => {
+                r.headline = "PRIVATE_CANARY".repeat(10);
+            },
+        ],
+        [
+            "invalid_source_citation",
+            (r: WeeklyReviewV21) => {
+                r.topics[0]!.facts[0]!.refs = ["PRIVATE_CANARY"];
+            },
+        ],
+        [
+            "unsupported_proposal_detail",
+            (r: WeeklyReviewV21) => {
+                r.topics[0]!.proposedOwner = "PRIVATE_CANARY";
+            },
+        ],
+        [
+            "derivation_reference_mismatch",
+            (r: WeeklyReviewV21) => {
+                r.keyFigures[0]!.derivation!.inputs[0]!.ref = "PRIVATE_CANARY";
+            },
+        ],
+        [
+            "unsupported_derivation_input",
+            (r: WeeklyReviewV21) => {
+                r.keyFigures[0]!.derivation!.inputs[0]!.value = 123456789;
+            },
+        ],
+        [
+            "invalid_numeric_derivation",
+            (r: WeeklyReviewV21) => {
+                r.keyFigures[0]!.value = "123456789";
+            },
+        ],
+    ] as const)("identifies %s without field values", async (code, mutate) => {
+        const p = ports(),
+            r = report();
+        mutate(r);
+        p.invoke.mockResolvedValue({
+            result: r,
+            usage: { inputTokens: 10, outputTokens: 20, totalTokens: 30 },
+        });
+        const { snapshot } = await failure(p);
+        expect(snapshot.stage).toBe("generation_validation");
+        expect(snapshot.ruleCodes).toEqual([code]);
+        expect(p.authorizeDispatch).toHaveBeenCalledTimes(1);
+        if (code === "invalid_source_citation") expect(snapshot.counts.citationsFailed).toBe(1);
+    });
+    it("identifies a generic near-limit schema rejection", async () => {
+        const p = ports(),
+            r = report();
+        r.headline = "x".repeat(121);
+        p.invoke.mockResolvedValue({
+            result: r,
+            usage: { inputTokens: 10, outputTokens: 20, totalTokens: 30 },
+        });
+        expect((await failure(p)).snapshot.ruleCodes).toEqual(["report_schema_invalid"]);
+    });
+    it.each([
+        [
+            "Evaluation input exceeds 14000 bytes; explicitly prepare smaller scenario excerpts. Nothing was truncated.",
+            "evaluation_input_budget_exceeded",
+        ],
+        [
+            "Invalid evaluation input. Use the versioned scenario/expectation/output schema.",
+            "evaluation_input_schema_invalid",
+        ],
+        [
+            "Expectation evidence must quote an available source at the scenario cutoff.",
+            "expectation_source_citation_invalid",
+        ],
+        ["PRIVATE_CANARY", "evaluation_input_invalid"],
+    ])("identifies evaluation rejection using fixed rules (%s)", async (message, code) => {
+        const original = evaluationInputModule.parseEvaluationInput;
+        const spy = vi
+            .spyOn(evaluationInputModule, "parseEvaluationInput")
+            .mockImplementation((raw, limit) => {
+                if ((raw as { actual?: { summary?: string } }).actual?.summary === report().summary)
+                    throw new Error(message);
+                return original(raw, limit);
+            });
+        try {
+            const { snapshot } = await failure(ports());
+            expect(snapshot.stage).toBe("evaluation_input");
+            expect(snapshot.ruleCodes).toEqual([code]);
+            expect(snapshot.counts.messageBytes).toBeGreaterThan(0);
+        } finally {
+            spy.mockRestore();
+        }
+    });
+    it.each([
+        [
+            "judge_schema_invalid",
+            (j: Judgment) => {
+                j.ratings[0]!.score = 99 as never;
+            },
+        ],
+        [
+            "judge_coverage_invalid",
+            (j: Judgment) => {
+                j.expectations = [];
+            },
+        ],
+        [
+            "judge_evidence_quote_invalid",
+            (j: Judgment) => {
+                j.ratings[0]!.evidence = j.ratings[0]!.evidence.map((e, index) =>
+                    index === 0 ? { ...e, quote: "PRIVATE_CANARY" } : e
+                );
+            },
+        ],
+        [
+            "judge_expectation_verdict_invalid",
+            (j: Judgment) => {
+                j.expectations[0]!.verdict = "violated";
+            },
+        ],
+        [
+            "judge_source_evidence_missing",
+            (j: Judgment) => {
+                j.expectations[0]!.evidence = j.expectations[0]!.evidence.filter(
+                    e => e.kind === "output"
+                );
+            },
+        ],
+        [
+            "judge_output_evidence_missing",
+            (j: Judgment) => {
+                j.expectations[0]!.evidence = j.expectations[0]!.evidence.filter(
+                    e => e.kind === "source"
+                );
+            },
+        ],
+        [
+            "judge_rating_output_evidence_missing",
+            (j: Judgment) => {
+                j.ratings[0]!.evidence = j.ratings[0]!.evidence.filter(e => e.kind === "source");
+            },
+        ],
+        [
+            "judge_rating_source_evidence_missing",
+            (j: Judgment) => {
+                j.ratings[0]!.evidence = j.ratings[0]!.evidence.filter(e => e.kind === "output");
+            },
+        ],
+        [
+            "judge_critical_expectation_missed",
+            (j: Judgment) => {
+                j.expectations[0]!.verdict = "missed";
+            },
+        ],
+        [
+            "judge_status_partial",
+            (j: Judgment) => {
+                j.ratings[0]!.score = null;
+            },
+        ],
+        ...RATED_CRITERIA.map(
+            criterion =>
+                [
+                    `judge_metric_${criterion}_below_threshold`,
+                    (j: Judgment) => {
+                        j.ratings.find(r => r.criterion === criterion)!.score = 2;
+                    },
+                ] as const
+        ),
+    ] as const)("identifies %s without assessment content", async (code, mutate) => {
+        const p = ports(),
+            original = passingJudge();
+        p.validationJudge = {
+            ...original,
+            evaluate: async (request, signal) => {
+                const answer = await original.evaluate(request, signal);
+                mutate(answer.judgment as Judgment);
+                return answer;
+            },
+        };
+        const { error, snapshot } = await failure(p);
+        expect(error.message).toBe("judge_admission_failed");
+        expect(snapshot.stage).toBe("judge");
+        expect(snapshot.ruleCodes).toContain(code);
+        if (code === "judge_evidence_quote_invalid")
+            expect(snapshot.counts.citationsFailed).toBe(1);
+        if (code === "judge_schema_invalid") expect(snapshot.counts.citationsChecked).toBeNull();
+    });
+    it("keeps arbitrary provider text out of diagnostics", async () => {
+        const p = ports();
+        p.validationJudge = {
+            ...passingJudge(),
+            evaluate: async () => {
+                throw new Error("PRIVATE_CANARY");
+            },
+        };
+        const { snapshot } = await failure(p);
+        expect(snapshot.ruleCodes).toContain("provider-error");
+        expect(snapshot.counts.citationsChecked).toBeNull();
+    });
+    it("keeps observer failures from changing assessment", async () => {
+        const assessed = await evaluateVantage(weeklyReviewEvaluation(report(), input()), {
+            judge: passingJudge(),
+            onDiagnostic: () => {
+                throw new Error("PRIVATE_CANARY");
+            },
+        });
+        expect(assessed.verdict).toBe("pass");
+        expect(assessed.error).toBeNull();
+    });
+    it("identifies invalid Judge setup after Generation", async () => {
+        const p = ports();
+        try {
+            await runWeeklyReviewV21(topicInput(), {
+                ...p,
+                validationJudge: undefined,
+                invoke: p.invoke as never,
+                budgetProfile: "topic-first",
+                judgeTimeoutMs: NaN,
+            });
+            throw new Error("Expected setup failure");
+        } catch (error) {
+            expect((error as Error).message).toBe(
+                "Invalid validation judge limits or configuration identity."
+            );
+            expect(weeklyReviewDiagnosticSnapshot(error)?.ruleCodes).toEqual([
+                "judge_setup_invalid",
+            ]);
+        }
+    });
+    it("does not attach snapshots to legacy failures or forged objects", async () => {
+        const p = ports();
+        p.invoke.mockResolvedValue({
+            result: {} as never,
+            usage: { inputTokens: 10, outputTokens: 20, totalTokens: 30 },
+        });
+        try {
+            await run(p);
+        } catch (error) {
+            expect(weeklyReviewDiagnosticSnapshot(error)).toBeNull();
+        }
+        expect(
+            weeklyReviewDiagnosticSnapshot({ stage: "judge", ruleCodes: ["PRIVATE_CANARY"] })
+        ).toBeNull();
+    });
+    it("sanitizes numeric counts and returns independent snapshot copies", () => {
+        const error = new WeeklyReviewDiagnosticError("PRIVATE_CANARY", {
+            stage: "judge",
+            ruleCodes: ["judge_admission_failed", "PRIVATE_CANARY" as never],
+            counts: {
+                sourceUnits: 1,
+                evidenceBytes: NaN,
+                messageBytes: Infinity,
+                citationsChecked: -1,
+                citationsFailed: 1.2,
+            },
+        });
+        const snapshot = weeklyReviewDiagnosticSnapshot(error)!;
+        expect(snapshot).toEqual({
+            stage: "judge",
+            ruleCodes: ["judge_admission_failed"],
+            counts: {
+                sourceUnits: 1,
+                evidenceBytes: null,
+                messageBytes: null,
+                citationsChecked: null,
+                citationsFailed: null,
+            },
+        });
+        snapshot.ruleCodes.push("timeout");
+        snapshot.counts.sourceUnits = 999;
+        expect(weeklyReviewDiagnosticSnapshot(error)!.ruleCodes).toEqual([
+            "judge_admission_failed",
+        ]);
+        expect(weeklyReviewDiagnosticSnapshot(error)!.counts.sourceUnits).toBe(1);
     });
 });

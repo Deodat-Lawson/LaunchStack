@@ -1,19 +1,29 @@
 import { isChatRoute } from "@launchstack/llm";
 import { type DigestProvider } from "@launchstack/store/document-digests";
-import type { ResolveChatModelOptions, ResolvedChatModel } from "@launchstack/llm";
+import type {
+    ResolveChatModelOptions,
+    ResolvedChatModel,
+    ChatProviderRetryPolicy,
+} from "@launchstack/llm";
 
 export function resolveDocumentDigestProvider(
-    resolveModel?: (options: ResolveChatModelOptions) => ResolvedChatModel
+    resolveModel?: (options: ResolveChatModelOptions) => ResolvedChatModel,
+    options: { providerRetry?: () => ChatProviderRetryPolicy } = {}
 ): DigestProvider {
     const route = process.env.VANTAGE_TOPIC_FIRST_DIGEST_ROUTE ?? "default";
     if (!isChatRoute(route)) throw Error("digest_model_unavailable");
     return async ({ title, text, signal }) => {
         const resolver = resolveModel ?? (await import("~/lib/models")).resolveConfiguredChatModel;
+        const retry = options.providerRetry?.();
+        // Each digest call keeps its existing 60s segment inside the shared digest/run envelope.
+        if (retry) retry.deadlineAt = Math.min(retry.deadlineAt, Date.now() + 60000);
+        const providerRetry = retry;
         const model = resolver({
             route,
             maxRetries: 0,
             maxOutputTokens: 6000,
             timeoutMs: 60000,
+            ...(providerRetry ? { providerRetry } : {}),
         });
         const response = await model.chat.invoke(
             model.prepareMessages([

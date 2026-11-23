@@ -54,6 +54,7 @@ jest.mock("@launchstack/pipelines/vantage", () =>
     jest.requireActual("../../../../pipelines/src/vantage/week")
 );
 jest.mock("@launchstack/pipelines/vantage/weekly-review-v21", () => ({
+    ...jest.requireActual("../../../../pipelines/src/vantage/weekly-review-diagnostics"),
     runWeeklyReviewV21: jest.fn(),
     reviewFingerprint: () => "test-input-hash",
 }));
@@ -209,8 +210,24 @@ it.each(["digest", "exploring", "writing", "checking", "authority"])(
                 expect(repository.fail).toHaveBeenCalledWith(
                     actor,
                     "candidate",
-                    "topic_authority_revoked"
+                    "topic_authority_revoked",
+                    expect.objectContaining({ stage: "exploration", statusClass: "authority" })
                 );
+            const failure = repository.fail.mock.calls[0] as unknown as [
+                unknown,
+                unknown,
+                unknown,
+                { counts: Record<string, number | null> },
+            ];
+            expect(failure[3].counts).toMatchObject({
+                sourceUnits: 0,
+                evidenceBytes: 0,
+                messageBytes: null,
+                citationsChecked: null,
+                citationsFailed: null,
+                providerAttempts: 0,
+                providerFailures: 0,
+            });
             expect(repository.accept).not.toHaveBeenCalled();
             expect(state.active).toBe("previous");
         } finally {

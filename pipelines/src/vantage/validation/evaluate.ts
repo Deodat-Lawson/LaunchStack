@@ -1,4 +1,5 @@
-﻿import {
+import { weeklyReviewRuleForError, type JudgeDiagnosticEvent } from "../weekly-review-diagnostics";
+import {
     CRITERIA,
     EVALUATION_VERSION,
     RUBRIC_VERSION,
@@ -182,8 +183,17 @@ export async function evaluateVantage(
         signal?: AbortSignal;
         timeoutMs?: number;
         maxInputBytes?: number;
+        /** Content-free observation only; observer failures never affect assessment. */
+        onDiagnostic?: (event: JudgeDiagnosticEvent) => void;
     } = {}
 ): Promise<EvaluationReport> {
+    const observe = (event: JudgeDiagnosticEvent) => {
+        try {
+            options.onDiagnostic?.(event);
+        } catch {
+            /* Observational only. */
+        }
+    };
     const input = parseEvaluationInput(raw, options.maxInputBytes);
     const timeoutMs = options.timeoutMs ?? 25000;
     if (
@@ -283,7 +293,31 @@ export async function evaluateVantage(
         let judgment: Judgment;
         try {
             judgment = validateJudgment(answer.judgment, input);
-        } catch {
+        } catch (error) {
+            if (options.onDiagnostic) {
+                const parsed = JudgmentSchema.safeParse(answer.judgment);
+                const citations = parsed.success
+                    ? [...parsed.data.expectations, ...parsed.data.ratings].flatMap(
+                          item => item.evidence
+                      )
+                    : null;
+                const sources = new Map(input.scenario.documents.map(doc => [doc.id, doc.text]));
+                const outputs = new Map(outputUnits(input).map(unit => [unit.id, unit.text]));
+                observe({
+                    ruleCodes: [weeklyReviewRuleForError(error, "judge_schema_invalid")],
+                    ...(citations
+                        ? {
+                              citationsChecked: citations.length,
+                              citationsFailed: citations.filter(
+                                  citation =>
+                                      !(citation.kind === "source" ? sources : outputs)
+                                          .get(citation.id)
+                                          ?.includes(citation.quote)
+                              ).length,
+                          }
+                        : {}),
+                });
+            }
             report.error = "invalid-judgment";
             return report;
         }
@@ -304,14 +338,29 @@ export async function evaluateVantage(
                     judgment.expectations.find(item => item.expectationId === expected.id)!.verdict
                 )
         );
+        const lowMetrics = report.metrics.filter(
+            metric =>
+                metric.score !== null && metric.score < (metric.criterion === "coverage" ? 80 : 75)
+        );
         const failed =
             issues.some(issue => issue.severity === "error") ||
             criticalMiss ||
-            report.metrics.some(
-                metric =>
-                    metric.score !== null &&
-                    metric.score < (metric.criterion === "coverage" ? 80 : 75)
+            lowMetrics.length > 0;
+        if (options.onDiagnostic) {
+            const citations = [...judgment.expectations, ...judgment.ratings].flatMap(
+                item => item.evidence
             );
+            observe({
+                ruleCodes: [
+                    ...(criticalMiss ? ["judge_critical_expectation_missed" as const] : []),
+                    ...lowMetrics.map(
+                        metric => `judge_metric_${metric.criterion}_below_threshold` as const
+                    ),
+                ],
+                citationsChecked: citations.length,
+                citationsFailed: 0,
+            });
+        }
         report.verdict = failed
             ? "fail"
             : complete &&
@@ -321,6 +370,9 @@ export async function evaluateVantage(
               : "needs-review";
         return report;
     } catch (error) {
+        const code = weeklyReviewRuleForError(error, "provider-error");
+        if (["judge_configuration_mismatch", "judge_input_budget_exceeded"].includes(code))
+            observe({ ruleCodes: [code] });
         const name = error instanceof Error ? error.name : "";
         report.error = options.signal?.aborted
             ? "cancelled"

@@ -17,6 +17,7 @@ import { ChatOpenAI } from "@langchain/openai";
 import OpenAI, { type ClientOptions } from "openai";
 import { createEndpointFetch, guardEndpointFetch } from "./endpoint-fetch";
 import { longWaitFetch } from "./long-wait-fetch";
+import type { ChatProviderRetryPolicy } from "./provider-retry";
 import type { UsageMeterContext } from "./usage-meter";
 import {
     DEFAULT_MAX_OUTPUT_TOKENS_FIELD,
@@ -58,6 +59,8 @@ export interface CreateCompatibleChatOptions {
      * seconds, not after a minute and a half of backoff.
      */
     maxRetries?: number;
+    /** Opt-in journaled physical retries, with all SDK retries disabled. */
+    providerRetry?: ChatProviderRetryPolicy;
     /** Operator-declared reasoning fields, already resolved for this request. */
     requestPatch?: ChatRequestPatch;
     /** Route, price and recorder for the usage report; the model id is added here. */
@@ -106,7 +109,8 @@ function endpointFetch(
     endpoint: ChatEndpointConfig,
     behavior: ChatModelBehavior,
     meter?: UsageMeterContext,
-    longWait = false
+    longWait = false,
+    providerRetry?: ChatProviderRetryPolicy
 ) {
     const workspace = endpoint.owner === "workspace";
     const base = longWait
@@ -116,7 +120,7 @@ function endpointFetch(
         : workspace
           ? fetchWithoutRedirects
           : undefined;
-    return createEndpointFetch(endpoint, behavior, base, meter);
+    return createEndpointFetch(endpoint, behavior, base, meter, undefined, providerRetry);
 }
 
 function retriesFor(endpoint: ChatEndpointConfig, maxRetries: number | undefined) {
@@ -142,11 +146,12 @@ export function createOpenAiCompatibleChat(options: CreateCompatibleChatOptions)
                 endpoint,
                 behavior,
                 { ...options.usage, modelId },
-                options.longWait
+                options.longWait,
+                options.providerRetry
             ),
         },
         timeout: options.timeoutMs ?? DEFAULT_TIMEOUT_MS,
-        ...retriesFor(endpoint, options.maxRetries),
+        ...retriesFor(endpoint, options.providerRetry ? 0 : options.maxRetries),
         ...(parameters.temperature === "supported" && typeof options.temperature === "number"
             ? { temperature: options.temperature }
             : {}),

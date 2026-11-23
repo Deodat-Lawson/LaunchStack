@@ -22,6 +22,12 @@ import { createSlot } from "@launchstack/runtime";
 import type { ChatModelsConfig } from "./chat-config";
 import { getChatModelsScope, reportUnscopedChatResolution } from "./chat-scope";
 import { applyMessageBehavior } from "./messages";
+import type { ChatProviderRetryPolicy } from "./provider-retry";
+export type {
+    ChatProviderRetryPolicy,
+    ChatProviderAttemptOutcome,
+    ChatProviderStatusClass,
+} from "./provider-retry";
 import {
     createOpenAiCompatibleChat,
     describeChatEndpointError,
@@ -276,6 +282,8 @@ export interface ResolveChatModelOptions {
     timeoutMs?: number;
     /** Retries after a failed attempt; see the transport for the defaults. */
     maxRetries?: number;
+    /** Bounded, journaled physical retries; disables SDK retries when present. */
+    providerRetry?: ChatProviderRetryPolicy;
     /** Wait past Node's five-minute fetch limit when `timeoutMs` is longer (see long-wait-fetch.ts). */
     longWait?: boolean;
     config?: ChatModelsConfig;
@@ -339,6 +347,7 @@ export function resolveChatModel(options: ResolveChatModelOptions = {}): Resolve
             streaming: options.streaming,
             timeoutMs: options.timeoutMs,
             maxRetries: options.maxRetries,
+            providerRetry: options.providerRetry,
             longWait: options.longWait,
             requestPatch: reasoning.requestPatch,
             // Captured now, in the scope that chose this configuration, so the

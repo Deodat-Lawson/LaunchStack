@@ -3,6 +3,7 @@ import type {
     WeeklyReviewInput,
 } from "@launchstack/pipelines/vantage/weekly-review-v21";
 import type { ReadWeeklyReview } from "./weekly-review-repository";
+import type { WeeklyReviewFailureRecord } from "./weekly-review-failure-record";
 import type { BusinessRoleContext, BusinessRoleInput } from "./weekly-review-business-role";
 import type {
     WeeklyReviewSourceScope,
@@ -35,6 +36,7 @@ export interface WeeklyReviewListDto {
         status: string;
         review_version: number;
         created_at: string;
+        failureRecord: WeeklyReviewFailureRecord | null;
     }[];
 }
 export interface WeeklyReviewContextDto {

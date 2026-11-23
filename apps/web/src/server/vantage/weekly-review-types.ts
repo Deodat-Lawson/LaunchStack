@@ -5,6 +5,13 @@ import type {
 import type { TopicSeed } from "./weekly-review-topic-types";
 import type { SelectionDiagnostics } from "./weekly-review-internal-selection";
 import type { WeeklyReviewRetrievalContext } from "@launchstack/pipelines/vantage/dynamic-retrieval-v3";
+export type {
+    WeeklyReviewFailureInput,
+    WeeklyReviewFailureRecord,
+    WeeklyReviewFailureStage,
+    WeeklyReviewProviderAttemptInput,
+    WeeklyReviewProviderOutcome,
+} from "./weekly-review-failure-record";
 
 export interface WeeklyReviewActor {
     companyId: string;

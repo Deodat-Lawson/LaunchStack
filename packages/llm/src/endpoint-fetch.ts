@@ -20,6 +20,7 @@
 
 import type { ChatEndpointConfig, ChatModelBehavior } from "./types";
 import { prepareUsageMeter, type UsageMeterContext } from "./usage-meter";
+import { fetchWithProviderRetry, type ChatProviderRetryPolicy } from "./provider-retry";
 
 type Fetch = typeof globalThis.fetch;
 type PreparedRequestGuard = (body: string) => Promise<void>;
@@ -145,7 +146,8 @@ export function createEndpointFetch(
     behavior: ChatModelBehavior,
     baseFetch?: Fetch,
     meter?: UsageMeterContext,
-    guard?: PreparedRequestGuard
+    guard?: PreparedRequestGuard,
+    providerRetry?: ChatProviderRetryPolicy
 ): Fetch {
     const instructions = endpoint.systemInstructions?.trim();
     const systemRole = behavior.parameters.systemMessages === "supported";
@@ -157,19 +159,28 @@ export function createEndpointFetch(
                 ? { ...init, body: addSystemInstructions(init.body, instructions, systemRole) }
                 : init;
 
-        if (guard) {
+        if (guard && !providerRetry) {
             if (typeof send?.body !== "string")
                 throw new Error("Expected a prepared JSON request.");
             await guard(send.body);
         }
         const metered = prepareUsageMeter(input, { owner: endpoint.owner, ...meter });
-        const response = await (baseFetch ?? globalThis.fetch)(input, send);
+        const response = providerRetry
+            ? await fetchWithProviderRetry(
+                  input,
+                  send,
+                  baseFetch ?? globalThis.fetch,
+                  providerRetry,
+                  guard
+              )
+            : await (baseFetch ?? globalThis.fetch)(input, send);
         if (response.ok) return metered ? metered(response) : response;
 
         const raw = await response.text().catch(() => "");
-        console.error(
-            `[chat] ${hostOf(url)} answered ${response.status}: ${raw.slice(0, 1000) || "(empty body)"}`
-        );
+        if (!providerRetry)
+            console.error(
+                `[chat] ${hostOf(url)} answered ${response.status}: ${raw.slice(0, 1000) || "(empty body)"}`
+            );
         const { message, code } = neutralErrorMessage(response.status, raw);
         const headers = new Headers(response.headers);
         for (const name of ["content-length", "content-encoding", "transfer-encoding"]) {
@@ -183,7 +194,7 @@ export function createEndpointFetch(
         });
     };
     guardedFetchFactories.set(endpointFetch, guard =>
-        createEndpointFetch(endpoint, behavior, baseFetch, meter, guard)
+        createEndpointFetch(endpoint, behavior, baseFetch, meter, guard, providerRetry)
     );
     return endpointFetch;
 }

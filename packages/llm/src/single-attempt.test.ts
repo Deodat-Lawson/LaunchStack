@@ -88,4 +88,61 @@ describe("single attempt on main transport", () => {
             );
         }
     );
+
+    it("retains long-wait, redirect protection and metering during opt-in physical retries", async () => {
+        const behavior = getChatModelPreset("google/gemini-3.8-flash")!.behavior;
+        const record = vi.fn();
+        const settle = vi.fn(async () => undefined);
+        const journal = vi.fn(async () => settle);
+        vi.mocked(longWaitFetch)
+            .mockResolvedValueOnce(
+                new Response("temporarily unavailable", {
+                    status: 503,
+                    headers: { "retry-after": "0" },
+                })
+            )
+            .mockResolvedValueOnce(
+                new Response(
+                    JSON.stringify({
+                        id: "test",
+                        object: "chat.completion",
+                        created: 1,
+                        model: "injected",
+                        choices: [
+                            {
+                                index: 0,
+                                message: { role: "assistant", content: "hello" },
+                                finish_reason: "stop",
+                            },
+                        ],
+                        usage: { prompt_tokens: 12, completion_tokens: 4, total_tokens: 16 },
+                    }),
+                    { headers: { "content-type": "application/json" } }
+                )
+            );
+        const chat = createOpenAiCompatibleChat({
+            endpoint: {
+                owner: "workspace",
+                baseUrl: "https://injected.invalid/v1",
+                apiKey: "synthetic",
+            },
+            behavior,
+            modelId: "injected",
+            longWait: true,
+            maxRetries: 7,
+            providerRetry: { deadlineAt: Date.now() + 1000, beforeAttempt: journal },
+            usage: { route: "reasoning", recorder: { record } },
+        });
+        await singleAttemptChat(chat, behavior, { timeoutMs: 1000, maxOutputTokens: 100 }).invoke(
+            "hello"
+        );
+        expect(longWaitFetch).toHaveBeenCalledTimes(2);
+        for (const [, init] of vi.mocked(longWaitFetch).mock.calls)
+            expect(init?.redirect).toBe("error");
+        expect(journal).toHaveBeenCalledTimes(2);
+        expect(settle).toHaveBeenCalledTimes(2);
+        expect(record).toHaveBeenCalledExactlyOnceWith(
+            expect.objectContaining({ inputTokens: 12, outputTokens: 4, route: "reasoning" })
+        );
+    });
 });

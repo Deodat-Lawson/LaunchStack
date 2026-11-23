@@ -41,6 +41,7 @@ export const vantageWeeklyReviewRuns = pgTable(
         generationDispatched: boolean("generation_dispatched").notNull().default(false),
         judgeDispatched: boolean("judge_dispatched").notNull().default(false),
         failureCode: text("failure_code"),
+        failureRecord: jsonb("failure_record"),
         reviewVersion: integer("review_version").notNull().default(1),
         createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
         acceptedAt: timestamp("accepted_at", { withTimezone: true }),
@@ -67,6 +68,46 @@ export const vantageWeeklyReviewRuns = pgTable(
             t.companyId,
             t.ownerId,
             t.weekStart
+        ),
+    })
+);
+/** Content-free physical provider attempts, separate from ephemeral trace data.
+ * An unsettled row is intentionally unknown accounting, never a zero-cost result. */
+export const vantageWeeklyReviewProviderAttempts = pgTable(
+    "vantage_weekly_review_provider_attempts",
+    {
+        id: uuid("id").primaryKey(),
+        runId: uuid("run_id")
+            .notNull()
+            .references(() => vantageWeeklyReviewRuns.id, { onDelete: "cascade" }),
+        companyId: bigint("company_id", { mode: "bigint" }).notNull(),
+        ownerId: text("owner_id").notNull(),
+        stage: text("stage").notNull(),
+        attemptOrdinal: integer("attempt_ordinal").notNull(),
+        messageBytes: integer("message_bytes"),
+        outcome: jsonb("outcome"),
+        startedAt: timestamp("started_at", { withTimezone: true }).notNull().defaultNow(),
+        settledAt: timestamp("settled_at", { withTimezone: true }),
+    },
+    t => ({
+        history: index("vantage_review_provider_attempt_run").on(
+            t.companyId,
+            t.ownerId,
+            t.runId,
+            t.startedAt
+        ),
+        stageValid: check(
+            "vantage_review_provider_attempt_stage",
+            sql`${t.stage} IN ('digest','exploration','generation','judge')`
+        ),
+        ordinalValid: check("vantage_review_provider_attempt_ordinal", sql`${t.attemptOrdinal}>0`),
+        bytesValid: check(
+            "vantage_review_provider_attempt_bytes",
+            sql`${t.messageBytes} IS NULL OR ${t.messageBytes}>=0`
+        ),
+        outcomeValid: check(
+            "vantage_review_provider_attempt_settlement",
+            sql`(${t.settledAt} IS NULL) = (${t.outcome} IS NULL)`
         ),
     })
 );

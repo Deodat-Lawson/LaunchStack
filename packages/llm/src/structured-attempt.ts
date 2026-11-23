@@ -43,11 +43,15 @@ export async function invokeStructuredAttempt<T>(
     const maxInputBytes = options.maxInputBytes ?? 24000;
     if (!Number.isSafeInteger(maxInputBytes) || maxInputBytes < 1)
         throw new StructuredAttemptSetupError();
+    let authorized = false;
     const checkPrepared = async (messages: unknown) => {
         if (Buffer.byteLength(JSON.stringify(messages), "utf8") > maxInputBytes)
             throw new StructuredAttemptSetupError();
         options.signal.throwIfAborted();
-        await options.beforeDispatch?.();
+        if (!authorized) {
+            await options.beforeDispatch?.();
+            authorized = true;
+        }
         options.signal.throwIfAborted();
     };
     let preparationError: unknown;

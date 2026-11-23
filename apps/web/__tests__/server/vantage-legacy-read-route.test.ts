@@ -14,7 +14,7 @@ jest.mock("~/app/api/vantage/_http", () => ({
 }));
 jest.mock("~/app/api/vantage/_schemas", () => ({ AgendaStatusSchema: {} }));
 jest.mock("@launchstack/pipelines/vantage", () => ({ getAgenda: jest.fn() }));
-import { GET } from "~/app/api/vantage/agendas/[id]/route";
+import { GET, DELETE } from "~/app/api/vantage/agendas/[id]/route";
 import { getAgenda } from "@launchstack/pipelines/vantage";
 import { authorizeLegacyAgendaRead } from "~/server/vantage/legacy-read-authority";
 import { NextRequest } from "next/server";
@@ -26,6 +26,14 @@ describe("legacy agenda HTTP response authorization", () => {
             summary: "private report",
             topics: [],
         } as never);
+    });
+    it("retains an authorized agenda rather than deleting it", async () => {
+        jest.mocked(authorizeLegacyAgendaRead).mockResolvedValueOnce(undefined);
+        const response = await DELETE(new NextRequest("http://localhost/api/vantage/agendas/a"), {
+            params: Promise.resolve({ id: "a" }),
+        });
+        expect(response.status).toBe(409);
+        expect(authorizeLegacyAgendaRead).toHaveBeenCalled();
     });
     it("does not serialize a denied report", async () => {
         jest.mocked(authorizeLegacyAgendaRead).mockRejectedValueOnce(

@@ -476,16 +476,17 @@ export function HistoryRail({
                     });
                     items.push({ type: "separator", id: "sep" });
                 }
-                items.push({
-                    type: "item",
-                    id: "delete",
-                    // The ellipsis promises the confirm that follows, matching
-                    // how the source rail labels its own destructive items.
-                    label: t("menu.delete"),
-                    icon: "delete",
-                    danger: true,
-                    onSelect: () => setPendingDelete(entry),
-                });
+                if (entry.kind !== "vantage")
+                    items.push({
+                        type: "item",
+                        id: "delete",
+                        // The ellipsis promises the confirm that follows, matching
+                        // how the source rail labels its own destructive items.
+                        label: t("menu.delete"),
+                        icon: "delete",
+                        danger: true,
+                        onSelect: () => setPendingDelete(entry),
+                    });
                 return items;
             }
 

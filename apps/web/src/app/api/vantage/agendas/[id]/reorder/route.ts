@@ -1,40 +1,12 @@
-// POST /api/vantage/agendas/:id/reorder — { ids } in the wanted order
-import type { NextRequest } from "next/server";
+import { error, say, vantageContext } from "../../../_http";
 
-import { getAgenda, reorderTopics } from "@launchstack/pipelines/vantage";
-
-import {
-    error,
-    firstIssue,
-    handleVantageError,
-    json,
-    readBody,
-    vantageContext,
-    say,
-} from "../../../_http";
-import { ReorderSchema } from "../../../_schemas";
-
-type Params = { params: Promise<{ id: string }> };
-
-export async function POST(request: NextRequest, { params }: Params) {
+// Historical agendas are retained read-only. Canonical reviews own new decisions.
+export async function POST(request: Request, _context: { params: Promise<{ id: string }> }) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     if (!auth.ctx.can("documents.edit"))
-        return error("You cannot change this workspace content.", 403);
-    try {
-        const { id } = await params;
-        const parsed = ReorderSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
-        await reorderTopics({
-            companyId: auth.ctx.companyId,
-            agendaId: id,
-            ids: parsed.data.ids,
-            expectedVersions: parsed.data.expectedVersions,
-        });
-        const agenda = await getAgenda({ companyId: auth.ctx.companyId, id });
-        if (!agenda) return error(say(request, "agendaNotHere"), 404);
-        return json({ agenda });
-    } catch (err) {
-        return handleVantageError("POST reorder", err, request);
-    }
+        return error(say(request, "legacyMutationForbidden"), 403, { code: "forbidden" });
+    return error(say(request, "canonicalWeeklyReviewRequired"), 410, {
+        code: "canonical_weekly_review_required",
+    });
 }

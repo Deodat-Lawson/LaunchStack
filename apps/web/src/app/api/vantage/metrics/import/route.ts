@@ -15,12 +15,22 @@ import {
 import { localeOfRequest } from "~/i18n/server";
 import { wordEnglish } from "~/i18n/translate";
 
-import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
+import {
+    error,
+    firstIssue,
+    handleVantageError,
+    json,
+    readBody,
+    vantageContext,
+    say,
+} from "../../_http";
 import { ImportSchema } from "../../_schemas";
 
 export async function POST(request: NextRequest) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error(say(request, "legacyMutationForbidden"), 403, { code: "forbidden" });
     try {
         const parsed = ImportSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);

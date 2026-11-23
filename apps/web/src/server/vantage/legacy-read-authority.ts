@@ -8,6 +8,7 @@ import {
     vantageCommitments,
     type AgendaDto,
     type WeeklySignals,
+    type EvidenceDto,
 } from "@launchstack/pipelines/vantage";
 import type { VantageCtx } from "~/app/api/vantage/_http";
 import type { OverviewDto } from "./service";
@@ -21,7 +22,7 @@ export interface LegacyReadStore {
         companyId: bigint,
         kind: "ev" | "obs" | "cm",
         ids: string[]
-    ): Promise<{ id: string; createdByUserId: string; kind?: string }[]>;
+    ): Promise<{ id: string; createdByUserId: string; kind?: string; visibility?: string }[]>;
 }
 const productionStore: LegacyReadStore = {
     async agendaOwner(companyId, id) {
@@ -154,4 +155,44 @@ export async function authorizeLegacyCommitmentRead(
         ids.map(id => "cm:" + id),
         store
     );
+}
+
+/** Manual evidence is private unless its creator explicitly shared it. Legacy
+ * document captures have no immutable source registry and remain unavailable. */
+export async function filterLegacyEvidenceRead(
+    ctx: VantageCtx,
+    items: EvidenceDto[],
+    store: LegacyReadStore = productionStore
+): Promise<EvidenceDto[]> {
+    if (!ctx.can("documents.read")) denied();
+    const rows = await store.records(
+        ctx.companyId,
+        "ev",
+        items.map(item => item.id)
+    );
+    const allowed = new Set(
+        rows
+            .filter(
+                row =>
+                    row.kind !== "document" &&
+                    (row.createdByUserId === ctx.userId || row.visibility === "shared")
+            )
+            .map(row => row.id)
+    );
+    return items.filter(item => allowed.has(item.id));
+}
+
+export async function authorizeLegacyEvidenceMutation(
+    ctx: VantageCtx,
+    id: string,
+    store: LegacyReadStore = productionStore
+): Promise<void> {
+    if (!ctx.can("documents.edit")) denied();
+    const rows = await store.records(ctx.companyId, "ev", [id]);
+    if (
+        rows.length !== 1 ||
+        rows[0]!.createdByUserId !== ctx.userId ||
+        rows[0]!.kind === "document"
+    )
+        denied();
 }

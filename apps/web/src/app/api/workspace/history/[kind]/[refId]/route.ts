@@ -1,3 +1,4 @@
+import { DELETE as deleteLegacyAgenda } from "~/app/api/vantage/agendas/[id]/route";
 /**
  * DELETE /api/workspace/history/<kind>/<refId> — remove one history row.
  *
@@ -11,7 +12,7 @@
  * `~/server/history`; this file is auth, validation and status codes.
  */
 
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 import { isHistoryKind } from "~/lib/workspace-history";
 import { requireWorkspaceContext } from "~/lib/require-workspace-context";
@@ -41,6 +42,13 @@ export async function DELETE(
 
     const decoded = decodeURIComponent(refId);
     if (!decoded) return NextResponse.json({ error: t("missingId") }, { status: 400 });
+
+    // Retained agendas use precisely the same Beta, creator/source, capability
+    // and retention checks as their direct API. Never dispatch to a generic remover.
+    if (kind === "vantage")
+        return deleteLegacyAgenda(new NextRequest(request), {
+            params: Promise.resolve({ id: decoded }),
+        });
 
     try {
         const deleted = await deleteHistoryEntry({

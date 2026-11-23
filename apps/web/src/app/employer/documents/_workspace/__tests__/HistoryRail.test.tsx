@@ -117,6 +117,17 @@ describe("HistoryRail", () => {
             fireEvent.contextMenu(screen.getByTestId(testId));
         }
 
+        it("withholds deletion and unsupported opening for retained Vantage history", () => {
+            setup({
+                entries: [
+                    { ...RUN, id: "vantage:a", refId: "a", kind: "vantage", href: undefined },
+                ],
+            });
+            openMenuOn("history-row-vantage:a");
+            expect(screen.queryByText(/^Delete/)).not.toBeInTheDocument();
+            expect(screen.queryByText("Open")).not.toBeInTheDocument();
+        });
+
         it("offers a delete on a run", async () => {
             setup();
             openMenuOn("history-row-distribution:r1");

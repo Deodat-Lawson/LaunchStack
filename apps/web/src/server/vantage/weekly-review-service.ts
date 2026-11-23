@@ -11,7 +11,10 @@ import { getEngine } from "~/server/engine";
 import { requireBetaAppContext } from "~/server/beta-apps";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
-import { createWeeklyReviewAuthority } from "./weekly-review-authority";
+import {
+    createWeeklyReviewAuthority,
+    type TopicAuthorityCheckpoint,
+} from "./weekly-review-authority";
 import { createWeeklyReviewRepository } from "./weekly-review-repository";
 import {
     WeeklyReviewConflict,
@@ -173,6 +176,17 @@ export async function generateWeeklyReview(
                             return query(statement, parameters);
                         });
                     const needsDigests = seed.manifest.configuration.provider !== "seeds";
+                    // Each boundary renews Beta, actor, capabilities, epoch and exact pinned sources.
+                    const authorizeStep = (checkpoint: TopicAuthorityCheckpoint) =>
+                        weeklyReviewDatabase.transaction(async query => {
+                            await query("SET LOCAL statement_timeout='5000ms'");
+                            await authority.assertTopicStep(
+                                query,
+                                current,
+                                seed.manifest,
+                                checkpoint
+                            );
+                        });
                     if (needsDigests) await repository.beginDigestPreparation(current, reserved.id);
                     const digestStarted = Date.now();
                     let providers:
@@ -196,12 +210,7 @@ export async function generateWeeklyReview(
                                 query,
                                 provider: providers.digest,
                                 authorizeDocument: async () => {
-                                    const [epoch] = await query(
-                                        "SELECT version FROM pdr_ai_v2_vantage_weekly_review_epochs WHERE company_id=$1::bigint",
-                                        [actor.companyId]
-                                    );
-                                    if (String(epoch?.version) !== seed.manifest.epoch)
-                                        throw new WeeklyReviewConflict("source_authority_changed");
+                                    await authorizeStep("digest");
                                     return true;
                                 },
                             });
@@ -235,6 +244,7 @@ export async function generateWeeklyReview(
                             digests: prepared.digests,
                             providers,
                             query,
+                            authorizeStep,
                             record: values =>
                                 repository.recordExploration(current, reserved.id, values),
                         });

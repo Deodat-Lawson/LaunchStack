@@ -160,3 +160,44 @@ describe("scoped weekly review service acquisition (offline)", () => {
         );
     });
 });
+
+describe("topic-first configuration budget preview", () => {
+    const scopedFixture = (bytes: number, unitChars = 6000) => {
+        const f = setup("x".repeat(bytes));
+        f.scope.requiredUnits = Array.from({ length: Math.ceil(bytes / unitChars) }, (_, index) => {
+            const start = index * unitChars;
+            const end = Math.min(start + unitChars, bytes);
+            return {
+                id: "approved-" + index,
+                start,
+                end,
+                excerptHash: sourceHash(f.state.text.slice(start, end)),
+            };
+        });
+        return f;
+    };
+    it.each([
+        [73072, 6000, 13],
+        [80000, 5000, 16],
+    ])("accepts %i bytes with %i-character units (%i units)", async (bytes, chars, count) => {
+        const f = scopedFixture(bytes, chars);
+        const sources = await f
+            .authority()
+            .validateCompanySources(f.query, f.actor, "1", [], { "1": f.scope });
+        expect(sources).toHaveLength(count);
+        expect(sources.reduce((n, source) => n + Buffer.byteLength(source.text), 0)).toBe(bytes);
+    });
+    it("rejects fixed evidence beyond 80000 bytes", async () => {
+        const f = scopedFixture(80001);
+        await expect(
+            f.authority().validateCompanySources(f.query, f.actor, "1", [], { "1": f.scope })
+        ).rejects.toThrow("mandatory_context_budget_exceeded");
+    });
+    it("retains source access denial for a near-cap configuration", async () => {
+        const f = scopedFixture(73072);
+        f.state.denied = true;
+        await expect(
+            f.authority().validateCompanySources(f.query, f.actor, "1", [], { "1": f.scope })
+        ).rejects.toThrow("source_access_denied");
+    });
+});

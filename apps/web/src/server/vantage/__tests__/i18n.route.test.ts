@@ -23,7 +23,7 @@ jest.mock("~/lib/require-workspace-context", () =>
         .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
 );
 
-const mockRecordDecision = jest.fn();
+const mockCreateMetricDefinition = jest.fn();
 const mockParseMetricCsv = jest.fn();
 
 jest.mock("@launchstack/pipelines/vantage", () => ({
@@ -40,11 +40,9 @@ jest.mock("@launchstack/pipelines/vantage", () => ({
     VANTAGE_VISIBILITIES: ["private", "shared"],
     VANTAGE_COMMITMENT_STATUSES: ["open", "done", "missed", "dropped"],
     isIsoDate: (value: unknown) => typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value),
-    recordDecision: (...args: unknown[]) => mockRecordDecision(...args),
-    undoDecision: jest.fn(),
     parseMetricCsv: (...args: unknown[]) => mockParseMetricCsv(...args),
     ensureMetricDefinitions: jest.fn(async () => []),
-    createMetricDefinition: jest.fn(),
+    createMetricDefinition: (...args: unknown[]) => mockCreateMetricDefinition(...args),
     createObservations: jest.fn(async () => 0),
     slugKey: (s: string) => s.toLowerCase(),
 }));
@@ -55,7 +53,10 @@ import { NextRequest } from "next/server";
 
 import { VantageError } from "@launchstack/pipelines/vantage";
 
-import { POST as decide } from "~/app/api/vantage/topics/[id]/decide/route";
+import { POST as retiredDecide } from "~/app/api/vantage/topics/[id]/decide/route";
+import { POST as createMetric } from "~/app/api/vantage/metrics/route";
+import en from "~/i18n/messages/en/vantage.json";
+import zh from "~/i18n/messages/zh-CN/vantage.json";
 import { POST as importCsv } from "~/app/api/vantage/metrics/import/route";
 import { GET as triage } from "~/app/api/vantage/triage/route";
 
@@ -87,75 +88,80 @@ beforeEach(() => {
     signInAs("member");
 });
 
-describe("a form's field message", () => {
-    it("is the schema's own sentence in Chinese, with the field name as it is", async () => {
-        const response = await decide(
-            post(
-                "/api/vantage/topics/t1/decide",
-                { expectedContentVersion: 1, decision: "", commitment: null },
-                ZH
-            ),
-            params
+describe("a retained form's field message", () => {
+    it.each([
+        ["English", {}, en],
+        ["Chinese", ZH, zh],
+    ] as const)(
+        "uses the schema sentence and field name in %s",
+        async (_locale, headers, catalog) => {
+            const response = await createMetric(
+                post("/api/vantage/metrics", { name: "", definition: "Monthly revenue" }, headers)
+            );
+            expect(response.status).toBe(400);
+            expect(await response.json()).toEqual({
+                error: `name: ${catalog.server.validation.nameMetric}`,
+            });
+        }
+    );
+    it("rewords zod's own default when the schema gave none", async () => {
+        const response = await createMetric(
+            post("/api/vantage/metrics", { name: 5, definition: "Monthly revenue" }, ZH)
         );
         expect(response.status).toBe(400);
-        expect(await response.json()).toEqual({ error: "decision: 请写下决定" });
-    });
-
-    it("is unchanged in English", async () => {
-        const response = await decide(
-            post("/api/vantage/topics/t1/decide", {
-                expectedContentVersion: 1,
-                decision: "",
-                commitment: null,
-            }),
-            params
-        );
-        expect(await response.json()).toEqual({ error: "decision: write the decision" });
-    });
-
-    it("rewords zod's own default when the schema gave none", async () => {
-        const response = await decide(
-            post(
-                "/api/vantage/topics/t1/decide",
-                { expectedContentVersion: 1, decision: "Ship it", commitment: 5 },
-                ZH
-            ),
-            params
-        );
         const body = (await response.json()) as { error: string };
-        expect(body.error.startsWith("commitment: ")).toBe(true);
+        expect(body.error.startsWith("name: ")).toBe(true);
         expect(body.error).not.toMatch(/Expected|received/);
     });
 });
 
+describe("a retired legacy decision route", () => {
+    it.each([
+        ["English", {}, en],
+        ["Chinese", ZH, zh],
+    ] as const)(
+        "returns localized retirement in %s before field validation",
+        async (_locale, headers, catalog) => {
+            const response = await retiredDecide(
+                post("/api/vantage/topics/t1/decide", { decision: "" }, headers),
+                params
+            );
+            expect(response.status).toBe(410);
+            expect(await response.json()).toEqual({
+                error: catalog.server.errors.canonicalWeeklyReviewRequired,
+                code: "canonical_weekly_review_required",
+            });
+            expect(mockCreateMetricDefinition).not.toHaveBeenCalled();
+        }
+    );
+});
+
 describe("a VantageError", () => {
     it("says the pipeline's sentence in Chinese and keeps its code", async () => {
-        mockRecordDecision.mockRejectedValue(
+        mockCreateMetricDefinition.mockRejectedValue(
             new VantageError("That topic is not here.", 404, "not_found")
         );
-        const response = await decide(
+        const response = await createMetric(
             post(
-                "/api/vantage/topics/t1/decide",
-                { expectedContentVersion: 1, decision: "Ship it", commitment: null },
+                "/api/vantage/metrics",
+                { name: "MRR", definition: "Monthly recurring revenue" },
                 ZH
-            ),
-            params
+            )
         );
         expect(response.status).toBe(404);
         expect(await response.json()).toEqual({ error: "找不到这个议题。", code: "not_found" });
     });
 
     it("fills a template's value in", async () => {
-        mockRecordDecision.mockRejectedValue(
+        mockCreateMetricDefinition.mockRejectedValue(
             new VantageError('A metric with the key "mrr" already exists.', 409, "conflict")
         );
-        const response = await decide(
+        const response = await createMetric(
             post(
-                "/api/vantage/topics/t1/decide",
-                { expectedContentVersion: 1, decision: "Ship it", commitment: null },
+                "/api/vantage/metrics",
+                { name: "MRR", definition: "Monthly recurring revenue" },
                 ZH
-            ),
-            params
+            )
         );
         expect(await response.json()).toEqual({
             error: "键为“mrr”的指标已存在。",
@@ -164,14 +170,15 @@ describe("a VantageError", () => {
     });
 
     it("leaves a sentence the catalogue does not know as it came", async () => {
-        mockRecordDecision.mockRejectedValue(new VantageError("Something new.", 409, "conflict"));
-        const response = await decide(
+        mockCreateMetricDefinition.mockRejectedValue(
+            new VantageError("Something new.", 409, "conflict")
+        );
+        const response = await createMetric(
             post(
-                "/api/vantage/topics/t1/decide",
-                { expectedContentVersion: 1, decision: "Ship it", commitment: null },
+                "/api/vantage/metrics",
+                { name: "MRR", definition: "Monthly recurring revenue" },
                 ZH
-            ),
-            params
+            )
         );
         expect(await response.json()).toEqual({ error: "Something new.", code: "conflict" });
     });

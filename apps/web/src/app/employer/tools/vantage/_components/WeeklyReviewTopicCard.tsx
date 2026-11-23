@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useId, useState } from "react";
 import { useTranslations } from "next-intl";
-import { ArrowRight, CalendarDays, Check, ChevronDown, Sparkles, UserRound } from "lucide-react";
+import { ArrowRight, CalendarDays, ChevronDown, Sparkles, UserRound } from "lucide-react";
 import { Button } from "~/components/ui/button";
 import { Badge } from "~/components/ui/badge";
 import { Textarea } from "~/components/ui/textarea";
@@ -9,7 +9,6 @@ import { Label } from "~/components/ui/label";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "~/components/ui/collapsible";
 import { cn } from "~/lib/utils";
 import { ReviewCitationChips, type ReviewSource } from "./ReviewCitationChips";
-import { ReviewCommitmentDialog } from "./ReviewCommitmentDialog";
 import { useVantageFormat } from "../_lib/format";
 import type { WeeklyReviewContextDto, WeeklyReviewDto } from "../api";
 import s from "./review-layout.module.css";
@@ -31,8 +30,6 @@ export function WeeklyReviewTopicCard({
     sources,
     documents,
     onInspect,
-    added,
-    onAdded,
 }: {
     topic: Topic;
     number: number;
@@ -49,15 +46,12 @@ export function WeeklyReviewTopicCard({
     sources: ReviewSource[];
     documents?: WeeklyReviewContextDto["documents"];
     onInspect: (ref: string) => void;
-    added: boolean;
-    onAdded: () => void;
 }) {
     const t = useTranslations("vantage.weeklyReview");
     const fmt = useVantageFormat();
     const id = useId();
     const [editing, setEditing] = useState(false);
     const [evidenceOpen, setEvidenceOpen] = useState(false);
-    const [commitment, setCommitment] = useState(false);
     const versions = decisions
         .filter(item => item.topicId === topic.id)
         .sort((a, b) => b.version - a.version);
@@ -249,13 +243,6 @@ export function WeeklyReviewTopicCard({
                             </Button>
                         ) : null}
                         <Button
-                            variant="outline"
-                            disabled={disabled}
-                            onClick={() => setCommitment(true)}
-                        >
-                            {t("founder.addCommitment")}
-                        </Button>
-                        <Button
                             variant="ghost"
                             className={cn(s.evidenceToggle, "gap-2")}
                             aria-expanded={evidenceOpen}
@@ -280,12 +267,6 @@ export function WeeklyReviewTopicCard({
                             />
                         </Button>
                     </div>
-                    {added ? (
-                        <Badge variant="success" className={s.label}>
-                            <Check aria-hidden="true" />
-                            {t("founder.added")}
-                        </Badge>
-                    ) : null}
                     <Collapsible open={evidenceOpen}>
                         <CollapsibleContent id={id + "-evidence"} className={s.accordionContent}>
                             <div className="space-y-4">
@@ -383,13 +364,6 @@ export function WeeklyReviewTopicCard({
                                 </div>
                             </CollapsibleContent>
                         </Collapsible>
-                    ) : null}
-                    {commitment ? (
-                        <ReviewCommitmentDialog
-                            topic={topic}
-                            onClose={() => setCommitment(false)}
-                            onAdded={onAdded}
-                        />
                     ) : null}
                 </div>
             </CollapsibleContent>

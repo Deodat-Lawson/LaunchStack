@@ -1,11 +1,13 @@
 import { createHash } from "node:crypto";
 import { describe, expect, it, vi } from "vitest";
-import type { ResolvedChatModel } from "@launchstack/llm";
-import { RATED_CRITERIA, type ValidationJudge } from "./validation/contracts";
+import { getChatModelPreset, resolveChatModel, type ResolvedChatModel } from "@launchstack/llm";
+import { outputUnits } from "./validation/input";
+import { RATED_CRITERIA, RUBRIC_VERSION, type ValidationJudge } from "./validation/contracts";
 import {
     calculateWeeklyReviewBudget,
     WeeklyReviewV21Schema,
     runWeeklyReviewV21,
+    weeklyReviewEvaluation,
     type WeeklyReviewInput,
 } from "./weekly-review-v21";
 
@@ -500,4 +502,108 @@ it("topic-first Judge timeout fails cleanly after generation", async () => {
         "generation",
         "judge",
     ]);
+});
+
+// Exercise the production model factory, structured helper, SDK and endpoint
+// policy wrapper. Only the final fetch is injected; no network is reachable.
+it.each([
+    ["generation", 200000, 0],
+    ["generation", 200000, 1],
+    ["judge", 240000, 0],
+    ["judge", 240000, 1],
+] as const)("topic-first %s final transport boundary %i + %i", async (stage, maximum, overflow) => {
+    const input = topicTrial();
+    input.sources[0]!.text = '????"\\' + input.sources[0]!.text.slice(30);
+    const report = {
+        ...WeeklyReviewV21Schema.parse(capturedReport),
+        topics: capturedReport.topics.map((topic, index) => ({ ...topic, id: "topic-" + index })),
+    };
+    const evaluation = weeklyReviewEvaluation(report, input);
+    const replay = injectedPorts().validationJudge;
+    const answer = await replay.evaluate(
+        {
+            input: evaluation,
+            outputUnits: outputUnits(evaluation),
+            rubricVersion: RUBRIC_VERSION,
+        },
+        new AbortController().signal
+    );
+    const observed = new Map<string, number>();
+    const fetch = vi.fn(async (_url, init) => {
+        const request = JSON.parse(init.body);
+        observed.set(request.model, Buffer.byteLength(JSON.stringify(request.messages), "utf8"));
+        return new Response(
+            JSON.stringify({
+                id: "injected",
+                object: "chat.completion",
+                created: 1,
+                model: request.model,
+                choices: [
+                    {
+                        index: 0,
+                        message: {
+                            role: "assistant",
+                            content: JSON.stringify(
+                                request.model === "generation" ? capturedReport : answer.judgment
+                            ),
+                        },
+                        finish_reason: "stop",
+                    },
+                ],
+                usage: { prompt_tokens: 20, completion_tokens: 10, total_tokens: 30 },
+            }),
+            { headers: { "content-type": "application/json" } }
+        );
+    });
+    vi.stubGlobal("fetch", fetch);
+    const model = (name: string, policy: string) => {
+        const behavior = getChatModelPreset("google/gemini-3.8-flash")!.behavior;
+        return resolveChatModel({
+            config: {
+                version: 1,
+                endpoint: {
+                    owner: "workspace",
+                    baseUrl: "https://injected.invalid/v1",
+                    apiKey: "synthetic",
+                    systemInstructions: policy,
+                },
+                models: new Map([[name, { id: name, behavior }]]),
+                routes: { default: name, reasoning: undefined, fast: undefined, vision: undefined },
+            },
+        });
+    };
+    const marker = vi.fn(async (_kind: "generation" | "judge") => {});
+    const run = (policy: string) =>
+        runWeeklyReviewV21(input, {
+            generation: model("generation", stage === "generation" ? policy : "p"),
+            judge: model("judge", stage === "judge" ? policy : "p"),
+            budgetProfile: "topic-first",
+            authorizeDispatch: marker,
+        });
+    try {
+        await run("p");
+        const baseline = observed.get(stage)!;
+        expect(baseline).toBeGreaterThan(24000);
+        fetch.mockClear();
+        marker.mockClear();
+        observed.clear();
+        const pending = run("p".repeat(maximum - baseline + 1 + overflow));
+        if (overflow) {
+            await expect(pending).rejects.toThrow(
+                stage === "generation" ? "could not be prepared" : "judge_admission_failed"
+            );
+            expect(fetch).toHaveBeenCalledTimes(stage === "generation" ? 0 : 1);
+            expect(marker.mock.calls.map(([kind]) => kind)).toEqual(
+                stage === "generation" ? [] : ["generation"]
+            );
+        } else {
+            const result = await pending;
+            expect(result.evidence.evaluation.verdict).toBe("pass");
+            expect(observed.get(stage)).toBe(maximum);
+            expect(fetch).toHaveBeenCalledTimes(2);
+            expect(marker.mock.calls.map(([kind]) => kind)).toEqual(["generation", "judge"]);
+        }
+    } finally {
+        vi.unstubAllGlobals();
+    }
 });

@@ -1,5 +1,6 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
+import type { TopicAuthorityCheckpoint } from "./weekly-review-authority";
 import {
     AgentStepLimitError,
     runAgent,
@@ -18,6 +19,7 @@ export const TOPIC_EXPLORATION_LIMITS = Object.freeze({
 /** Only stable, source-free failure codes are suitable for run rows and traces. */
 export function topicExplorationFailureCode(error: unknown): string {
     const message = error instanceof Error ? error.message : "";
+    if (message === "topic_authority_revoked") return message;
     if (
         /^topic_exploration_failed:(timeout|call_limit|trace_limit|not_offered|range_invalid|transport_no_http|http_[45][0-9]{2}|provider_response_invalid|submission_invalid|submission_missing|provider)$/.test(
             message
@@ -50,6 +52,77 @@ export interface ExplorationTrace {
     version: 2;
     events: unknown[];
     bytes: number;
+}
+const traceKinds = new Set([
+    "tool",
+    "request",
+    "response",
+    "submission_only",
+    "budget_progress",
+    "tool_validation",
+    "terminal_non_submission",
+    "selection_footprint",
+    "degradation",
+    "failure",
+]);
+const toolNames = new Set([
+    "get_personal_topic",
+    "get_document_digest",
+    "read_document_excerpt",
+    "submit_result",
+]);
+const traceHash = z.string().regex(/^[a-f0-9]{64}$/);
+const excerptTraceMetadataSchema = z.object({
+    // PostgreSQL bigint IDs remain decimal strings to avoid losing integer precision.
+    documentVersionId: z.string().regex(/^[1-9][0-9]{0,18}$/),
+    documentHash: traceHash,
+    ranges: z
+        .array(
+            z
+                .object({
+                    start: z.number().int().safe().nonnegative(),
+                    end: z.number().int().safe().positive(),
+                    excerptHash: traceHash,
+                })
+                .refine(range => range.end - range.start >= 200 && range.end - range.start <= 6000)
+        )
+        .min(1)
+        .max(6),
+});
+/** Persistence allowlist. Never retain provider text, tool args, titles, refs or excerpts. */
+export function minimizeExplorationTrace(value: unknown): ExplorationTrace {
+    const raw =
+        value && typeof value === "object" && "events" in value && Array.isArray(value.events)
+            ? value.events
+            : [];
+    const events = raw.map((value: unknown) => {
+        const event = value && typeof value === "object" ? (value as Record<string, unknown>) : {};
+        const result: Record<string, unknown> = {
+            kind:
+                typeof event.kind === "string" && traceKinds.has(event.kind)
+                    ? event.kind
+                    : "unknown",
+            eventHash:
+                typeof event.eventHash === "string" && /^[a-f0-9]{64}$/.test(event.eventHash)
+                    ? event.eventHash
+                    : hash(event),
+        };
+        if (typeof event.name === "string" && toolNames.has(event.name)) result.name = event.name;
+        for (const key of ["turn", "remainingCalls", "documents", "excerpts"])
+            if (Number.isSafeInteger(event[key]) && Number(event[key]) >= 0)
+                result[key] = event[key];
+        for (const key of ["resultHash", "transcriptHash"])
+            if (typeof event[key] === "string" && /^[a-f0-9]{64}$/.test(event[key]))
+                result[key] = event[key];
+        if (event.kind === "tool" && event.name === "read_document_excerpt" && !event.errorCode) {
+            const metadata = excerptTraceMetadataSchema.safeParse(event);
+            if (metadata.success) Object.assign(result, metadata.data);
+        }
+        if (event.kind === "failure")
+            result.code = topicExplorationFailureCode(new Error(String(event.code)));
+        return result;
+    });
+    return { version: 2, events, bytes: Buffer.byteLength(JSON.stringify(events), "utf8") };
 }
 class TopicFinalNonSubmission extends Error {}
 class TopicSoftFinalNonSubmission extends TopicFinalNonSubmission {}
@@ -229,6 +302,7 @@ export async function runTopicExploration(input: {
     fixedDocuments?: readonly { ref: string; title: string }[];
     evidenceBudget?: TopicEvidenceBudget;
     port: AgentModelPort;
+    authorizeStep?: (checkpoint: TopicAuthorityCheckpoint) => Promise<void>;
     record(trace: ExplorationTrace): Promise<void>;
     deadlineAt: number;
     /** Authoritative expiry; required to recover an earlier soft final-response deadline. */
@@ -318,13 +392,57 @@ export async function runTopicExploration(input: {
         if (expired()) throw new Error("topic_exploration_failed:timeout");
         if (fatal) throw fatal;
     };
+    const authorize = async (checkpoint: TopicAuthorityCheckpoint) => {
+        check();
+        try {
+            await input.authorizeStep?.(checkpoint);
+        } catch {
+            fatal = new Error("topic_authority_revoked");
+            throw fatal;
+        }
+        check();
+    };
     const record = async (event: unknown) => {
-        const bytes = Buffer.byteLength(JSON.stringify(event), "utf8");
+        const safeEvent = minimizeExplorationTrace({ events: [event] }).events[0];
+        const bytes =
+            Buffer.byteLength(JSON.stringify(safeEvent), "utf8") + (trace.events.length ? 1 : 2);
         if (trace.bytes + bytes > TOPIC_EXPLORATION_LIMITS.traceBytes)
             throw new Error("topic_exploration_failed:trace_limit");
-        trace.events.push(event);
+        trace.events.push(safeEvent);
         trace.bytes += bytes;
         await input.record(structuredClone(trace));
+    };
+    const excerptMetadata = (name: string, resolved: unknown, errorCode?: string) => {
+        if (
+            name !== "read_document_excerpt" ||
+            errorCode ||
+            !resolved ||
+            typeof resolved !== "object" ||
+            !("ref" in resolved) ||
+            !("ranges" in resolved)
+        )
+            return {};
+        const document = typeof resolved.ref === "string" ? documents.get(resolved.ref) : undefined;
+        const documentVersionId =
+            document && /^doc:[1-9][0-9]*@([1-9][0-9]{0,18})$/.exec(document.ref)?.[1];
+        if (!document || !documentVersionId || !Array.isArray(resolved.ranges)) return {};
+        const ranges = resolved.ranges as { start: number; end: number }[];
+        if (
+            !ranges.length ||
+            ranges.length > 6 ||
+            !ranges.every(range => range && validTopicExcerptRange(document.text, range))
+        )
+            return {};
+        const textHash = (text: string) => createHash("sha256").update(text, "utf8").digest("hex");
+        return {
+            documentVersionId,
+            documentHash: textHash(document.text),
+            ranges: ranges.map(({ start, end }) => ({
+                start,
+                end,
+                excerptHash: textHash(document.text.slice(start, end)),
+            })),
+        };
     };
     const tool = <T>(
         name: string,
@@ -336,7 +454,7 @@ export async function runTopicExploration(input: {
         description,
         inputSchema: schema,
         async run(args) {
-            check();
+            await authorize("retained-tool");
             const resolved = submissionOnly
                 ? {
                       error: "submission_required",
@@ -366,6 +484,7 @@ export async function runTopicExploration(input: {
                     args,
                     resultHash: hash(content),
                     content,
+                    ...excerptMetadata(name, resolved, errorCode),
                     ...(errorCode ? { errorCode } : {}),
                 });
             } catch (error) {
@@ -546,7 +665,7 @@ export async function runTopicExploration(input: {
                     tools: request.tools.filter(tool => tool.name === "submit_result"),
                 };
             await record({ kind: "request", transcriptHash: hash(prepared.transcript) });
-            check();
+            await authorize("provider");
             let response: Awaited<ReturnType<AgentModelPort["respond"]>>;
             awaitingFinalResponse = submissionOnly;
             try {
@@ -839,7 +958,8 @@ export async function runTopicExploration(input: {
             }
         }
         const failure =
-            error instanceof AgentStepLimitError || error instanceof TopicFinalNonSubmission
+            fatal ??
+            (error instanceof AgentStepLimitError || error instanceof TopicFinalNonSubmission
                 ? new Error(
                       invalidSubmission
                           ? "topic_exploration_failed:submission_invalid"
@@ -847,7 +967,7 @@ export async function runTopicExploration(input: {
                   )
                 : error instanceof Error && error.message === "agent_tool_call_limit"
                   ? new Error("topic_exploration_failed:call_limit")
-                  : error;
+                  : error);
         await record({ kind: "failure", code: topicExplorationFailureCode(failure) });
         throw failure;
     } finally {

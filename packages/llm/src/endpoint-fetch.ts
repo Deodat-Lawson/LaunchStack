@@ -22,6 +22,16 @@ import type { ChatEndpointConfig, ChatModelBehavior } from "./types";
 import { prepareUsageMeter, type UsageMeterContext } from "./usage-meter";
 
 type Fetch = typeof globalThis.fetch;
+type PreparedRequestGuard = (body: string) => Promise<void>;
+const guardedFetchFactories = new WeakMap<Fetch, (guard: PreparedRequestGuard) => Fetch>();
+
+/** Preserve endpoint policy and metering while checking the final request before any I/O. */
+export function guardEndpointFetch(fetch: Fetch, guard: PreparedRequestGuard): Fetch {
+    const factory = guardedFetchFactories.get(fetch);
+    if (!factory)
+        throw new Error("A prepared-request guard requires the configured endpoint transport.");
+    return factory(guard);
+}
 
 interface WireMessage {
     role?: unknown;
@@ -134,18 +144,24 @@ export function createEndpointFetch(
     endpoint: ChatEndpointConfig,
     behavior: ChatModelBehavior,
     baseFetch?: Fetch,
-    meter?: UsageMeterContext
+    meter?: UsageMeterContext,
+    guard?: PreparedRequestGuard
 ): Fetch {
     const instructions = endpoint.systemInstructions?.trim();
     const systemRole = behavior.parameters.systemMessages === "supported";
 
-    return async (input, init) => {
+    const endpointFetch: Fetch = async (input, init) => {
         const url = urlOf(input);
         const send =
             instructions && typeof init?.body === "string" && /\/chat\/completions\/?$/.test(url)
                 ? { ...init, body: addSystemInstructions(init.body, instructions, systemRole) }
                 : init;
 
+        if (guard) {
+            if (typeof send?.body !== "string")
+                throw new Error("Expected a prepared JSON request.");
+            await guard(send.body);
+        }
         const metered = prepareUsageMeter(input, { owner: endpoint.owner, ...meter });
         const response = await (baseFetch ?? globalThis.fetch)(input, send);
         if (response.ok) return metered ? metered(response) : response;
@@ -166,4 +182,8 @@ export function createEndpointFetch(
             headers,
         });
     };
+    guardedFetchFactories.set(endpointFetch, guard =>
+        createEndpointFetch(endpoint, behavior, baseFetch, meter, guard)
+    );
+    return endpointFetch;
 }

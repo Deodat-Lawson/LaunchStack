@@ -424,8 +424,11 @@ export async function validateInternalConfiguration(
             scopedEvidence.push(result.descriptor);
         } else sources.push(await read(id, purpose, now));
     }
-    const budget = calculateWeeklyReviewBudget(
-        inputFor(
+    // Production internal selection creates topic-first runs. Configuration has no
+    // exploration result yet, so preview fixed evidence with a minimal valid context.
+    // Runtime freeze still checks its actual topics, backfill and prepared transport.
+    const preview: WeeklyReviewInput = {
+        ...inputFor(
             { candidateId: "00000000-0000-4000-8000-000000000000", asOf: now },
             now.slice(0, 10),
             actor.role,
@@ -433,8 +436,17 @@ export async function validateInternalConfiguration(
             mandatoryCount,
             scopedEvidence
         ),
-        scopedEvidence.length ? "scoped-v2" : "internal-v1"
-    );
+        retrievalContext: {
+            schemaVersion: "vantage-topic-retrieval/v1",
+            mode: "topic-first",
+            guidanceLabel: "owner notes, not evidence",
+            topics: [],
+            seedReasons: [],
+            lane: { outcome: "none_eligible", candidates: 0, admitted: 0 },
+            traceHash: "0".repeat(64),
+        },
+    };
+    const budget = calculateWeeklyReviewBudget(preview, "topic-first");
     if (!budget.feasible) throw new WeeklyReviewConflict("mandatory_context_budget_exceeded");
     return sources.filter(source =>
         company ? source.purpose !== "personal-star" : source.purpose === "personal-star"

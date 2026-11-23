@@ -3,12 +3,22 @@ import type { NextRequest } from "next/server";
 
 import { createObservations, listObservations } from "@launchstack/pipelines/vantage";
 
-import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
+import {
+    error,
+    firstIssue,
+    handleVantageError,
+    json,
+    readBody,
+    vantageContext,
+    say,
+} from "../../_http";
 import { ObservationSchema } from "../../_schemas";
 
 export async function POST(request: NextRequest) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error(say(request, "legacyMutationForbidden"), 403, { code: "forbidden" });
     try {
         const parsed = ObservationSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);

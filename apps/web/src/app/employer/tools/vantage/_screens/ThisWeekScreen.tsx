@@ -47,7 +47,6 @@ export function ThisWeekScreen({ week: initialWeek }: { week?: string | null }) 
     const [drafts, setDrafts] = useState<Record<string, Draft>>({});
     const [saving, setSaving] = useState<Record<string, boolean>>({});
     const [errors, setErrors] = useState<Record<string, string>>({});
-    const [added, setAdded] = useState<Record<string, boolean>>({});
     const [expanded, setExpanded] = useState<Record<string, string | null>>({});
     const [citation, setCitation] = useState<{ reportId: string; ref: string } | null>(null);
     const pending = useRef(new Set<string>());
@@ -58,26 +57,6 @@ export function ThisWeekScreen({ week: initialWeek }: { week?: string | null }) 
             mounted.current = false;
         };
     }, []);
-    const reviewId = review?.id;
-    useEffect(() => {
-        if (!reviewId) return;
-        try {
-            const saved: unknown = JSON.parse(
-                sessionStorage.getItem(`vantage-review-commitments:${reviewId}`) ?? "{}"
-            );
-            if (saved && typeof saved === "object")
-                setAdded(previous => ({
-                    ...previous,
-                    ...Object.fromEntries(
-                        Object.entries(saved)
-                            .filter(([, value]) => value === true)
-                            .map(([topicId]) => [`${reviewId}:${topicId}`, true])
-                    ),
-                }));
-        } catch {
-            /* The confirmed commitment does not depend on its optional session marker. */
-        }
-    }, [reviewId]);
     const sources = review ? reviewSources(review) : [];
     const decidedIds = new Set(review?.decisions.map(decision => decision.topicId));
     const firstUndecided =
@@ -135,24 +114,6 @@ export function ThisWeekScreen({ week: initialWeek }: { week?: string | null }) 
         } finally {
             pending.current.delete(key);
             if (mounted.current) setSaving(previous => ({ ...previous, [key]: false }));
-        }
-    }
-    function markAdded(topicId: string) {
-        if (!review) return;
-        setAdded(previous => ({ ...previous, [`${review.id}:${topicId}`]: true }));
-        try {
-            const saved: unknown = JSON.parse(
-                sessionStorage.getItem(`vantage-review-commitments:${review.id}`) ?? "{}"
-            );
-            sessionStorage.setItem(
-                `vantage-review-commitments:${review.id}`,
-                JSON.stringify({
-                    ...(saved && typeof saved === "object" ? saved : {}),
-                    [topicId]: true,
-                })
-            );
-        } catch {
-            /* Storage restrictions never undo a confirmed commitment. */
         }
     }
     return (
@@ -439,8 +400,6 @@ export function ThisWeekScreen({ week: initialWeek }: { week?: string | null }) 
                                                 sources={sources}
                                                 documents={context?.documents}
                                                 onInspect={inspect}
-                                                added={added[key] ?? false}
-                                                onAdded={() => markAdded(topic.id)}
                                             />
                                         );
                                     })}

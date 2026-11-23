@@ -6,7 +6,10 @@ import {
     type DigestProvider,
 } from "@launchstack/store/document-digests";
 import { scopeAllowsDocument } from "~/lib/authz/scope-types";
-import type { WeeklyReviewAuthorityActor } from "./weekly-review-authority";
+import type {
+    WeeklyReviewAuthorityActor,
+    TopicAuthorityCheckpoint,
+} from "./weekly-review-authority";
 import {
     createScriptedExplorationPort,
     explorationDocumentHandle,
@@ -152,6 +155,8 @@ export async function prepareTopicSelection(options: {
     digests: ReadonlyMap<string, DocumentDigest>;
     evidenceCapBytes?: number;
     providers?: TopicSelectionProviders;
+    /** Renew Beta, actor, capabilities and exact pinned source authority at each use. */
+    authorizeStep?: (checkpoint: TopicAuthorityCheckpoint) => Promise<void>;
     onStage?: (stage: "exploration") => void;
     record: (values: { trace?: ExplorationTrace; digestIds?: string[] }) => Promise<void>;
 }): Promise<PreparedTopicSelection | null> {
@@ -160,6 +165,8 @@ export async function prepareTopicSelection(options: {
     if (![8000, 16000, 32000, 80000].includes(evidenceCapBytes))
         throw new WeeklyReviewConflict("topic_exploration_failed:evidence_budget_invalid");
     if (seed.manifest.configuration.provider === "seeds") return null;
+    if (seed.manifest.configuration.provider === "configured" && !options.authorizeStep)
+        throw new WeeklyReviewConflict("topic_authority_revoked", 403);
     const controller = new AbortController();
     const expired = () => new WeeklyReviewConflict("topic_exploration_failed:timeout");
     const remainingMs = deadlineAt - Date.now();
@@ -257,6 +264,7 @@ export async function prepareTopicSelection(options: {
                         ]),
                     })),
                     port,
+                    authorizeStep: options.authorizeStep,
                     record: trace => record({ trace }),
                     deadlineAt: explorationDeadline,
                     hardDeadlineAt: deadlineAt,
@@ -271,7 +279,8 @@ export async function prepareTopicSelection(options: {
     } catch (error) {
         if (error instanceof WeeklyReviewConflict) throw error;
         if (controller.signal.aborted || Date.now() >= deadlineAt) throw expired();
-        throw new WeeklyReviewConflict(topicExplorationFailureCode(error));
+        const code = topicExplorationFailureCode(error);
+        throw new WeeklyReviewConflict(code, code === "topic_authority_revoked" ? 403 : 409);
     } finally {
         if (timer) clearTimeout(timer);
     }

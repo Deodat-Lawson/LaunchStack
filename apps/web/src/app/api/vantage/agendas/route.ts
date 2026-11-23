@@ -6,6 +6,8 @@ import type { NextRequest } from "next/server";
 import {
     defaultAgendaWeek,
     getAgendaByWeek,
+    getAgenda,
+    VantageError,
     isIsoDate,
     listAgendas,
     weekStartOf,
@@ -30,7 +32,18 @@ export async function GET(request: NextRequest) {
             listAgendas({ companyId: auth.ctx.companyId }),
         ]);
         await authorizeLegacyAgendaRead(auth.ctx, agenda);
-        return json({ week, agenda, agendas });
+        const visible = [];
+        for (const row of agendas) {
+            const body = await getAgenda({ companyId: auth.ctx.companyId, id: row.id });
+            if (!body) continue;
+            try {
+                await authorizeLegacyAgendaRead(auth.ctx, body);
+                visible.push(row);
+            } catch (error) {
+                if (!(error instanceof VantageError) || error.status !== 403) throw error;
+            }
+        }
+        return json({ week, agenda, agendas: visible });
     } catch (err) {
         return handleVantageError("GET agendas", err, request);
     }

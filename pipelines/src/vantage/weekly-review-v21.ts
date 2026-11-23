@@ -346,6 +346,8 @@ export const WEEKLY_REVIEW_BUDGET_LIMITS = Object.freeze({
     sourceCount: 16,
     sourceChars: 6000,
 });
+// Stage ceilings apply to final serialized transport messages. The deterministic
+// budget is preliminary; the real transport includes schema, policy and role overhead.
 export const TOPIC_FIRST_BUDGET_LIMITS = Object.freeze({
     generationInputBytes: 200000,
     judgeInputBytes: 240000,
@@ -485,7 +487,9 @@ export async function runWeeklyReviewV21(
         weeklyReviewEvaluation(preflightReport(input), input);
     const { maxReportBytes } = budget;
     if (!budget.feasible) throw Error("context_budget_exceeded");
-    await ports.authorizeDispatch("generation");
+    // Legacy profiles and injected invokers retain their authorization contract.
+    // Topic-first transport authorizes after final message shaping and byte admission.
+    if (!topic || ports.invoke) await ports.authorizeDispatch("generation");
     if (
         Buffer.byteLength(payload) > limits.generationInputBytes ||
         !calculateWeeklyReviewBudget(input, ports.budgetProfile).feasible
@@ -517,7 +521,15 @@ export async function runWeeklyReviewV21(
                 ),
                 new HumanMessage(payload),
             ],
-            { signal, timeoutMs, maxOutputTokens: 3600 }
+            {
+                signal,
+                timeoutMs,
+                maxOutputTokens: 3600,
+                ...(topic ? { maxInputBytes: limits.generationInputBytes } : {}),
+                ...(topic && !ports.invoke
+                    ? { beforeDispatch: () => ports.authorizeDispatch("generation") }
+                    : {}),
+            }
         ),
         deadline,
     ]).finally(() => {
@@ -540,7 +552,7 @@ export async function runWeeklyReviewV21(
     const judgeInputBytes = Buffer.byteLength(judgeInputPayload(evaluation));
     if ((input.scopedEvidence || topic) && judgeInputBytes > limits.judgeInputBytes)
         throw Error("judge_input_budget_exceeded");
-    await ports.authorizeDispatch("judge");
+    if (!topic || ports.validationJudge) await ports.authorizeDispatch("judge");
     parseEvaluationInput(evaluation, evaluationLimit(input));
     if (!calculateWeeklyReviewBudget(input, ports.budgetProfile).feasible)
         throw Error("context_budget_exceeded");
@@ -555,6 +567,8 @@ export async function runWeeklyReviewV21(
                 : EVALUATION_VERSION,
             timeoutMs: judgeTimeoutMs,
             maxInputBytes: limits.judgeInputBytes,
+            ...(topic ? { maxPreparedInputBytes: limits.judgeInputBytes } : {}),
+            ...(topic ? { beforeDispatch: () => ports.authorizeDispatch("judge") } : {}),
             maxOutputTokens: 6000,
         });
     const assessed = await evaluateVantage(evaluation, {

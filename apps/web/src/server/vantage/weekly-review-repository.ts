@@ -24,6 +24,7 @@ import {
 } from "./weekly-review-types";
 
 import { matchesOffer, type TopicFreeze } from "./weekly-review-topic-freeze";
+import { minimizeExplorationTrace } from "./weekly-review-topic-exploration";
 import {
     TOPIC_FIRST_LIMITS,
     topicInputHash,
@@ -278,6 +279,13 @@ export function createWeeklyReviewRepository(
         }
         throw new WeeklyReviewConflict("review_concurrent_update");
     };
+    // Failed-run trace retention is zero. Historical failures are swept on owner access.
+    const redactFailedTraces = async (query: WeeklyReviewQuery, actor: WeeklyReviewActor) => {
+        await query(
+            "UPDATE pdr_ai_v2_vantage_weekly_review_run_manifests m SET trace=NULL FROM pdr_ai_v2_vantage_weekly_review_runs r WHERE m.run_id=r.id AND r.company_id=$1::bigint AND r.owner_id=$2 AND r.status='failed' AND m.trace IS NOT NULL",
+            [actor.companyId, actor.userId]
+        );
+    };
     const rowFor = async (
         query: WeeklyReviewQuery,
         actor: WeeklyReviewActor,
@@ -327,6 +335,7 @@ export function createWeeklyReviewRepository(
     return {
         findByKey(actor: WeeklyReviewActor, week: string, key: string) {
             return transact(async query => {
+                await redactFailedTraces(query, actor);
                 const [row] = await query(
                     "SELECT id,week_start,status FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=$1::bigint AND owner_id=$2 AND idempotency_key=$3",
                     [actor.companyId, actor.userId, key]
@@ -531,7 +540,10 @@ export function createWeeklyReviewRepository(
                 const row = await rowFor(query, actor, id, true);
                 if (row.status !== "reserved" || !row.exploration_dispatched || row.snapshot_hash)
                     throw new WeeklyReviewConflict("review_not_reserved");
-                const trace = values.trace === undefined ? null : JSON.stringify(values.trace);
+                const trace =
+                    values.trace === undefined
+                        ? null
+                        : JSON.stringify(minimizeExplorationTrace(values.trace));
                 if (trace !== null && Buffer.byteLength(trace) > 510000)
                     throw new WeeklyReviewConflict("topic_exploration_failed:trace_limit");
                 await query(
@@ -635,6 +647,7 @@ export function createWeeklyReviewRepository(
                 );
                 if (!changed.length)
                     throw new WeeklyReviewConflict("review_reservation_not_expired");
+                await redactFailedTraces(query, actor);
                 return { id, status: "failed", expired: true };
             });
         },
@@ -790,6 +803,7 @@ export function createWeeklyReviewRepository(
                     "UPDATE pdr_ai_v2_vantage_weekly_review_runs SET status='failed',failure_code=$4 WHERE id=$1::uuid AND company_id=$2::bigint AND owner_id=$3 AND status='reserved'",
                     [id, actor.companyId, actor.userId, code]
                 );
+                await redactFailedTraces(query, actor);
             });
         },
         accept(
@@ -1180,12 +1194,13 @@ export function createWeeklyReviewRepository(
             });
         },
         list(actor: WeeklyReviewActor) {
-            return transact(query =>
-                query(
+            return transact(async query => {
+                await redactFailedTraces(query, actor);
+                return query(
                     "SELECT id,week_start,status,review_version,created_at FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=$1::bigint AND owner_id=$2 ORDER BY created_at DESC LIMIT 52",
                     [actor.companyId, actor.userId]
-                )
-            );
+                );
+            });
         },
         decide(
             actor: WeeklyReviewActor,

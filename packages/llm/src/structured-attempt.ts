@@ -5,7 +5,7 @@ import type { z } from "zod";
 import type { ResolvedChatModel } from "./chat-model-factory";
 import { systemMessageFor } from "./messages";
 import { normalizeModelContent } from "./normalize-content";
-import { singleAttemptChat } from "./openai-compatible-transport";
+import { hasPreparedRequestTransport, singleAttemptChat } from "./openai-compatible-transport";
 import { normalizeTokenUsage } from "./usage";
 
 export class InvalidStructuredAttemptError extends Error {
@@ -32,11 +32,50 @@ export async function invokeStructuredAttempt<T>(
         signal: AbortSignal;
         timeoutMs: number;
         maxOutputTokens: number;
+        /** Opt in to a final serialized UTF-8 message ceiling, including endpoint instructions
+         * and role structure. Omission preserves the legacy 24000-byte content-only check. */
+        maxInputBytes?: number;
+        /** Runs after preparation and limit checks, immediately before provider dispatch. */
+        beforeDispatch?: () => Promise<void>;
     }
 ) {
+    const exactPreparedLimit = options.maxInputBytes !== undefined;
+    const maxInputBytes = options.maxInputBytes ?? 24000;
+    if (!Number.isSafeInteger(maxInputBytes) || maxInputBytes < 1)
+        throw new StructuredAttemptSetupError();
+    const checkPrepared = async (messages: unknown) => {
+        if (Buffer.byteLength(JSON.stringify(messages), "utf8") > maxInputBytes)
+            throw new StructuredAttemptSetupError();
+        options.signal.throwIfAborted();
+        await options.beforeDispatch?.();
+        options.signal.throwIfAborted();
+    };
+    let preparationError: unknown;
     let chat;
     try {
-        chat = singleAttemptChat(resolved.chat, resolved.behavior, options);
+        chat = singleAttemptChat(resolved.chat, resolved.behavior, {
+            ...options,
+            ...(exactPreparedLimit && hasPreparedRequestTransport(resolved.chat)
+                ? {
+                      guardPreparedRequest: async body => {
+                          try {
+                              const request: unknown = JSON.parse(body);
+                              if (
+                                  !request ||
+                                  typeof request !== "object" ||
+                                  !("messages" in request) ||
+                                  !Array.isArray(request.messages)
+                              )
+                                  throw new StructuredAttemptSetupError();
+                              await checkPrepared(request.messages);
+                          } catch (error) {
+                              preparationError = error;
+                              throw error;
+                          }
+                      },
+                  }
+                : {}),
+        });
     } catch {
         throw new StructuredAttemptSetupError();
     }
@@ -44,10 +83,12 @@ export async function invokeStructuredAttempt<T>(
         ...systemMessageFor(resolved.behavior, structuredSchemaInstruction(schema)),
         ...messages,
     ]);
-    if (Buffer.byteLength(JSON.stringify(prompt.map(m => m.content)), "utf8") > 24000) {
-        throw new StructuredAttemptSetupError();
-    }
-    const response = await chat.invoke(prompt, { signal: options.signal });
+    if (!exactPreparedLimit) await checkPrepared(prompt.map(message => message.content));
+    else if (!hasPreparedRequestTransport(resolved.chat))
+        await checkPrepared(prompt.map(message => message.toDict()));
+    const response = await chat.invoke(prompt, { signal: options.signal }).catch(error => {
+        throw preparationError ?? error;
+    });
     const text = normalizeModelContent(response.content);
     try {
         if (Buffer.byteLength(text, "utf8") > 32000) throw new Error("oversized");

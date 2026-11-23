@@ -90,7 +90,9 @@ test("injected topic-first review across both workspace Beta and creation settin
                 await sql`SELECT count(*) FROM pdr_ai_v2_vantage_weekly_review_runs WHERE company_id=${companyId}`
             ).toEqual(before);
             await page.goto(toolPath);
-            await expect(page.getByText(headline, { exact: true })).toBeVisible({ timeout: 120_000 });
+            await expect(page.getByText(headline, { exact: true })).toBeVisible({
+                timeout: 120_000,
+            });
             const regenerate = page.getByRole("button", { name: "Regenerate", exact: true });
             await expect(regenerate.filter({ visible: true })).toBeDisabled();
             return;
@@ -233,7 +235,19 @@ test("injected topic-first review across both workspace Beta and creation settin
             .getByRole("textbox", { name: "Your decision", exact: true })
             .first()
             .fill(decision);
+        const decisionSaved = page.waitForResponse(
+            response =>
+                new URL(response.url()).pathname === `${reviewPath}/${id}/decisions` &&
+                response.request().method() === "POST"
+        );
         await page.getByRole("button", { name: "Record decision", exact: true }).first().click();
+        expect((await decisionSaved).status()).toBe(200);
+        expect(await ok(await request.get(`${reviewPath}/${id}`))).toMatchObject({
+            decisions: expect.arrayContaining([
+                expect.objectContaining({ topicId: saved.report.topics[0]!.id, decision }),
+            ]),
+        });
+        await expect(page.getByRole("region", { name: "1 of 1 topics decided" })).toBeVisible();
         await expect(page.getByText(decision, { exact: true }).first()).toBeVisible();
         await page.reload();
         await expect(page.getByText(headline, { exact: true })).toBeVisible();

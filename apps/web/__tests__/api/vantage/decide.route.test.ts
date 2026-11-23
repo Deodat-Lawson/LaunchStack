@@ -1,149 +1,46 @@
-/** Legacy destructive Undo must preserve audit history: the pipeline rejects it
- * with archive_required, and the route preserves workspace/version boundaries
- * and error statuses. */
-
-import type * as MockRequireWorkspaceContext from "../../helpers/mock-require-workspace-context";
-import type * as NextServer from "next/server";
-
-import type { WorkspaceContextResult } from "~/lib/require-workspace-context";
-
-import { makeWorkspaceContext } from "../../helpers/workspace-context";
-
-const mockRequireWorkspaceContext = jest.fn<Promise<WorkspaceContextResult>, []>();
-
-jest.mock("~/lib/require-workspace-context", () =>
-    jest
-        .requireActual<
-            typeof MockRequireWorkspaceContext
-        >("../../helpers/mock-require-workspace-context")
-        .workspaceContextModuleMock(() => mockRequireWorkspaceContext())
+jest.mock("~/app/api/vantage/_http", () => ({
+    vantageContext: jest.fn(),
+    error: (message: string, status: number, fields: object) =>
+        Response.json({ error: message, ...fields }, { status }),
+    say: (_request: Request, key: string) => key,
+}));
+import { vantageContext } from "~/app/api/vantage/_http";
+import { DELETE, POST } from "~/app/api/vantage/topics/[id]/decide/route";
+import { PATCH, DELETE as deleteTopic } from "~/app/api/vantage/topics/[id]/route";
+import { POST as addTopic } from "~/app/api/vantage/agendas/[id]/topics/route";
+import { POST as reorder } from "~/app/api/vantage/agendas/[id]/reorder/route";
+const context = { params: Promise.resolve({ id: "foreign-or-private" }) };
+describe.each([DELETE, POST, PATCH, deleteTopic, addTopic, reorder])(
+    "retired historical topic writer",
+    handler => {
+        it("returns 410 without inspecting or changing source-derived content", async () => {
+            jest.mocked(vantageContext).mockResolvedValue({
+                ok: true,
+                ctx: { companyId: 1n, userId: "u", can: () => true },
+            });
+            const response = await handler(new Request("http://localhost/retired"), context);
+            expect(response.status).toBe(410);
+            expect(await response.json()).toMatchObject({
+                code: "canonical_weekly_review_required",
+            });
+        });
+        it("requires edit capability", async () => {
+            jest.mocked(vantageContext).mockResolvedValue({
+                ok: true,
+                ctx: { companyId: 1n, userId: "u", can: () => false },
+            });
+            expect((await handler(new Request("http://localhost/retired"), context)).status).toBe(
+                403
+            );
+        });
+        it("preserves Beta and membership denial", async () => {
+            jest.mocked(vantageContext).mockResolvedValue({
+                ok: false,
+                response: Response.json({}, { status: 404 }) as never,
+            });
+            expect((await handler(new Request("http://localhost/retired"), context)).status).toBe(
+                404
+            );
+        });
+    }
 );
-
-jest.mock("~/server/beta-apps", () => ({
-    requireBetaAppContext: () => mockRequireWorkspaceContext(),
-}));
-
-const mockUndoDecision = jest.fn();
-const mockRecordDecision = jest.fn();
-
-// The real pipeline module pulls in the database. The route needs the two
-// calls and the error class; the request schemas it imports need the enums.
-jest.mock("@launchstack/pipelines/vantage", () => ({
-    VantageError: class VantageError extends Error {
-        readonly status: number;
-        readonly code: string;
-        constructor(message: string, status: number, code: string) {
-            super(message);
-            this.status = status;
-            this.code = code;
-        }
-    },
-    VANTAGE_EVIDENCE_KINDS: ["note", "interview", "link", "task", "claim", "document"],
-    VANTAGE_VISIBILITIES: ["private", "shared"],
-    VANTAGE_COMMITMENT_STATUSES: ["open", "done", "missed", "dropped"],
-    isIsoDate: (value: unknown) => typeof value === "string" && /^\d{4}-\d{2}-\d{2}$/.test(value),
-    undoDecision: (...args: unknown[]) => mockUndoDecision(...args),
-    recordDecision: (...args: unknown[]) => mockRecordDecision(...args),
-}));
-
-import { NextRequest } from "next/server";
-
-import { VantageError } from "@launchstack/pipelines/vantage";
-
-import { DELETE } from "~/app/api/vantage/topics/[id]/decide/route";
-
-function signIn() {
-    mockRequireWorkspaceContext.mockResolvedValue({
-        success: true,
-        data: makeWorkspaceContext({ role: "member", authUserId: "user-1", companyId: BigInt(42) }),
-    });
-}
-
-function undo(topicId: string, query = "") {
-    return DELETE(
-        new NextRequest(`http://localhost/api/vantage/topics/${topicId}/decide${query}`, {
-            method: "DELETE",
-        }),
-        { params: Promise.resolve({ id: topicId }) }
-    );
-}
-
-beforeEach(() => {
-    jest.clearAllMocks();
-    signIn();
-    mockUndoDecision.mockRejectedValue(
-        new VantageError("Archive this decision instead.", 409, "archive_required")
-    );
-});
-
-describe("DELETE /api/vantage/topics/:id/decide", () => {
-    it("preserves decision and commitment history by returning the archive-required conflict", async () => {
-        const response = await undo("t1", "?commitment=c9&version=7");
-
-        expect(response.status).toBe(409);
-        expect(await response.json()).toEqual({
-            error: "Archive this decision instead.",
-            code: "archive_required",
-        });
-        expect(mockUndoDecision).toHaveBeenCalledTimes(1);
-        expect(mockUndoDecision).toHaveBeenCalledWith({
-            companyId: BigInt(42),
-            topicId: "t1",
-            commitmentId: "c9",
-            expectedContentVersion: 7,
-        });
-        expect(mockRecordDecision).not.toHaveBeenCalled();
-    });
-
-    it("passes no commitment when the query has none", async () => {
-        const response = await undo("t2", "?version=9");
-
-        expect(response.status).toBe(409);
-        expect(mockUndoDecision).toHaveBeenCalledWith({
-            companyId: BigInt(42),
-            topicId: "t2",
-            commitmentId: null,
-            expectedContentVersion: 9,
-        });
-    });
-
-    it("maps a VantageError to its own status", async () => {
-        mockUndoDecision.mockRejectedValue(
-            new VantageError("That topic is not here.", 404, "not_found")
-        );
-
-        const response = await undo("missing", "?commitment=c9");
-
-        expect(response.status).toBe(404);
-        expect(await response.json()).toEqual({
-            error: "That topic is not here.",
-            code: "not_found",
-        });
-    });
-
-    it("answers anything else with a 500 and no details", async () => {
-        const log = jest.spyOn(console, "error").mockImplementation(() => undefined);
-        mockUndoDecision.mockRejectedValue(new Error("connection reset"));
-
-        const response = await undo("t1");
-
-        expect(response.status).toBe(500);
-        expect(await response.json()).toEqual({ error: "Internal server error" });
-        log.mockRestore();
-    });
-
-    it("passes an auth failure through untouched, without touching the topic", async () => {
-        mockRequireWorkspaceContext.mockResolvedValue({
-            success: false,
-            response: jest
-                .requireActual<typeof NextServer>("next/server")
-                .NextResponse.json({ error: "Unauthorized" }, { status: 401 }),
-        });
-
-        const response = await undo("t1", "?commitment=c9");
-
-        expect(response.status).toBe(401);
-        expect(await response.json()).toEqual({ error: "Unauthorized" });
-        expect(mockUndoDecision).not.toHaveBeenCalled();
-    });
-});

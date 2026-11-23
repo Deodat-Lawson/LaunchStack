@@ -76,6 +76,7 @@ export async function loadWorkspaceHistory(input: LoadHistoryInput): Promise<His
         userId: input.userId,
         limit,
         locale: input.locale,
+        can: permission => input.actor.permissions.has(permission),
     };
     let archivedCount: number | null = null;
 

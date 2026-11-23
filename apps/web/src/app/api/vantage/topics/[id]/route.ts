@@ -1,42 +1,21 @@
-// PATCH  /api/vantage/topics/:id — edit, reorder, dismiss, share
-// DELETE /api/vantage/topics/:id
-import type { NextRequest } from "next/server";
+import { error, say, vantageContext } from "../../_http";
 
-import { deleteTopic, updateTopic } from "@launchstack/pipelines/vantage";
-
-import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
-import { TopicPatchSchema } from "../../_schemas";
-
-type Params = { params: Promise<{ id: string }> };
-
-export async function PATCH(request: NextRequest, { params }: Params) {
+// Historical agendas are retained read-only. Canonical reviews own new decisions.
+export async function PATCH(request: Request, _context: { params: Promise<{ id: string }> }) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     if (!auth.ctx.can("documents.edit"))
-        return error("You cannot change this workspace content.", 403);
-    try {
-        const { id } = await params;
-        const parsed = TopicPatchSchema.safeParse(await readBody(request));
-        if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
-        const patch = { ...parsed.data };
-        if (patch.proposedDue === "") patch.proposedDue = null;
-        const topic = await updateTopic({ companyId: auth.ctx.companyId, id, patch });
-        return json({ topic });
-    } catch (err) {
-        return handleVantageError("PATCH topic", err, request);
-    }
+        return error(say(request, "legacyMutationForbidden"), 403, { code: "forbidden" });
+    return error(say(request, "canonicalWeeklyReviewRequired"), 410, {
+        code: "canonical_weekly_review_required",
+    });
 }
-
-export async function DELETE(request: NextRequest, { params }: Params) {
+export async function DELETE(request: Request, _context: { params: Promise<{ id: string }> }) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
     if (!auth.ctx.can("documents.edit"))
-        return error("You cannot change this workspace content.", 403);
-    try {
-        const { id } = await params;
-        await deleteTopic({ companyId: auth.ctx.companyId, id });
-        return json({ ok: true });
-    } catch (err) {
-        return handleVantageError("DELETE topic", err, request);
-    }
+        return error(say(request, "legacyMutationForbidden"), 403, { code: "forbidden" });
+    return error(say(request, "canonicalWeeklyReviewRequired"), 410, {
+        code: "canonical_weekly_review_required",
+    });
 }

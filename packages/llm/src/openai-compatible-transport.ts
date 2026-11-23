@@ -14,8 +14,8 @@
 
 import type { BaseChatModel } from "@langchain/core/language_models/chat_models";
 import { ChatOpenAI } from "@langchain/openai";
-import OpenAI from "openai";
-import { createEndpointFetch } from "./endpoint-fetch";
+import OpenAI, { type ClientOptions } from "openai";
+import { createEndpointFetch, guardEndpointFetch } from "./endpoint-fetch";
 import { longWaitFetch } from "./long-wait-fetch";
 import type { UsageMeterContext } from "./usage-meter";
 import {
@@ -307,6 +307,11 @@ export function describeChatEndpointError(
     return null;
 }
 
+/** Whether preparation reaches the OpenAI-compatible final request wrapper. */
+export function hasPreparedRequestTransport(chat: BaseChatModel): boolean {
+    return chat instanceof ChatOpenAI;
+}
+
 /** Isolate per-call limits without mutating a shared resolved model or its retry caller. */
 export function singleAttemptChat(
     chat: BaseChatModel,
@@ -314,6 +319,7 @@ export function singleAttemptChat(
     limits: {
         timeoutMs: number;
         maxOutputTokens: number;
+        guardPreparedRequest?: (body: string) => Promise<void>;
     }
 ): BaseChatModel {
     if (!(chat instanceof ChatOpenAI)) {
@@ -329,8 +335,21 @@ export function singleAttemptChat(
         typeof originalCap === "number" && originalCap > 0
             ? Math.min(originalCap, limits.maxOutputTokens)
             : limits.maxOutputTokens;
+    const configuration = chat.lc_kwargs.configuration as
+        | (ClientOptions & { fetch: typeof globalThis.fetch })
+        | undefined;
+    if (limits.guardPreparedRequest && !configuration?.fetch)
+        throw new Error("A prepared-request guard requires the configured endpoint transport.");
     return new ChatOpenAI({
         ...chat.lc_kwargs,
+        ...(limits.guardPreparedRequest
+            ? {
+                  configuration: {
+                      ...configuration,
+                      fetch: guardEndpointFetch(configuration!.fetch, limits.guardPreparedRequest),
+                  },
+              }
+            : {}),
         maxRetries: 0,
         timeout: Math.min(chat.timeout ?? limits.timeoutMs, limits.timeoutMs),
         streaming: false,

@@ -58,8 +58,8 @@ jest.mock("@launchstack/pipelines/vantage/weekly-review-v21", () => ({
     reviewFingerprint: () => "test-input-hash",
 }));
 
-it.each(["digest", "exploring", "writing", "checking"])(
-    "preserves the active report on a %s timeout",
+it.each(["digest", "exploring", "writing", "checking", "authority"])(
+    "preserves the active report on a %s failure",
     async segment => {
         jest.clearAllMocks();
         mockScopedStages.length = 0;
@@ -146,6 +146,8 @@ it.each(["digest", "exploring", "writing", "checking"])(
                 mockScopedStages.push("exploration");
                 if (segment === "exploring")
                     throw new WeeklyReviewConflict("topic_exploration_failed:timeout");
+                if (segment === "authority")
+                    throw new WeeklyReviewConflict("topic_authority_revoked", 403);
                 return null;
             });
             jest.mocked(runWeeklyReviewV21).mockImplementation(async (_input, ports) => {
@@ -175,10 +177,18 @@ it.each(["digest", "exploring", "writing", "checking"])(
                     ? "topic_digest_failed:timeout"
                     : segment === "exploring"
                       ? "topic_exploration_failed:timeout"
-                      : "candidate_not_admitted"
+                      : segment === "authority"
+                        ? "topic_authority_revoked"
+                        : "candidate_not_admitted"
             );
             expect(stages.at(-1)).toBe(
-                segment === "digest" ? "gathering" : segment === "seeds" ? "checking" : segment
+                segment === "digest"
+                    ? "gathering"
+                    : segment === "seeds"
+                      ? "checking"
+                      : segment === "authority"
+                        ? "exploring"
+                        : segment
             );
             if (segment === "digest") expect(repository.claimExploration).not.toHaveBeenCalled();
             else if (segment === "seeds") {
@@ -195,6 +205,12 @@ it.each(["digest", "exploring", "writing", "checking"])(
             if (segment === "checking")
                 expect(mockScopedStages).toEqual(["digest", "exploration", "generation", "judge"]);
             expect(repository.fail).toHaveBeenCalledTimes(1);
+            if (segment === "authority")
+                expect(repository.fail).toHaveBeenCalledWith(
+                    actor,
+                    "candidate",
+                    "topic_authority_revoked"
+                );
             expect(repository.accept).not.toHaveBeenCalled();
             expect(state.active).toBe("previous");
         } finally {

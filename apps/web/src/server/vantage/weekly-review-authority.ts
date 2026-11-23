@@ -3,6 +3,8 @@ import {
     type WeeklyReviewSourceScopes,
 } from "./weekly-review-scoped-selection";
 import { createHash } from "node:crypto";
+import { canonicalVersionHash } from "@launchstack/store/document-digests";
+import type { TopicManifest } from "./weekly-review-topic-types";
 import { scopeAllowsDocument, type DocumentScope } from "~/lib/authz/scope-types";
 import {
     boundedInternalQuery,
@@ -36,6 +38,7 @@ export type WeeklyReviewAuthorityActor = WeeklyReviewActor & {
     canConfigure?: boolean;
     documentScope: DocumentScope;
 };
+export type TopicAuthorityCheckpoint = "digest" | "retained-tool" | "provider";
 
 export function createWeeklyReviewAuthority(
     database: WeeklyReviewDatabase,
@@ -168,6 +171,58 @@ export function createWeeklyReviewAuthority(
     }
     return {
         withReadableDocuments,
+        /** Reusable fail-closed boundary guard; callers supply their originally pinned manifest. */
+        async assertTopicStep(
+            query: WeeklyReviewQuery,
+            expected: WeeklyReviewActor,
+            manifest: TopicManifest,
+            _checkpoint: TopicAuthorityCheckpoint
+        ): Promise<void> {
+            try {
+                await this.assertTopicOffers(query, expected, manifest);
+                await this.assertCurrentWeeklyReviewAuthority(
+                    query,
+                    expected,
+                    manifest.fixedDependencies,
+                    "dispatch"
+                );
+            } catch {
+                throw new WeeklyReviewConflict("topic_authority_revoked", 403);
+            }
+        },
+        /** Check every retained offered parent, including exact content and company audience. */
+        async assertTopicOffers(
+            query: WeeklyReviewQuery,
+            expected: WeeklyReviewActor,
+            manifest: TopicManifest
+        ) {
+            const { actor, epoch } = await fresh(query, expected);
+            if (!actor.canMutate || epoch !== manifest.epoch || expected.authorityEpoch !== epoch)
+                throw new WeeklyReviewConflict("topic_authority_revoked", 403);
+            for (const offer of manifest.offered) {
+                const [document] = await query(
+                    "SELECT d.id,d.category FROM pdr_ai_v2_document d JOIN pdr_ai_v2_document_versions v ON v.document_id=d.id WHERE d.company_id=$1::bigint AND d.id=$2::bigint AND v.id=$3::bigint AND v.created_at<=$4::timestamptz",
+                    [actor.companyId, offer.id, offer.version, manifest.cutoff]
+                );
+                if (
+                    !document ||
+                    !scopeAllowsDocument(actor.documentScope, {
+                        id: Number(document.id),
+                        category: String(document.category),
+                    })
+                )
+                    throw new WeeklyReviewConflict("topic_authority_revoked", 403);
+                const restrictions = await query(
+                    "SELECT 1 FROM pdr_ai_v2_document_settings WHERE document_id=$1::bigint AND restricted=true UNION ALL SELECT 1 FROM pdr_ai_v2_folder_settings f JOIN pdr_ai_v2_category c ON c.id=f.category_id WHERE f.company_id=$2::bigint AND f.visibility='restricted' AND ($3=c.name OR left($3,length(c.name)+1)=c.name||'/')",
+                    [offer.id, actor.companyId, document.category]
+                );
+                if (
+                    restrictions.length ||
+                    (await canonicalVersionHash(query, offer.version)) !== offer.hash
+                )
+                    throw new WeeklyReviewConflict("topic_authority_revoked", 403);
+            }
+        },
         async validateCompanySources(
             query: WeeklyReviewQuery,
             expected: WeeklyReviewActor,

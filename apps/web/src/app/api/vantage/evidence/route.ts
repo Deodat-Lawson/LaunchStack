@@ -1,3 +1,4 @@
+import { filterLegacyEvidenceRead } from "~/server/vantage/legacy-read-authority";
 // GET  /api/vantage/evidence?kind=&since= — the inbox
 // POST /api/vantage/evidence — add one item
 import type { NextRequest } from "next/server";
@@ -9,12 +10,22 @@ import {
     listEvidence,
 } from "@launchstack/pipelines/vantage";
 
-import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../_http";
+import {
+    error,
+    firstIssue,
+    handleVantageError,
+    json,
+    readBody,
+    vantageContext,
+    say,
+} from "../_http";
 import { EvidenceSchema } from "../_schemas";
 
 export async function GET(request: NextRequest) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.read"))
+        return error(say(request, "legacyMutationForbidden"), 403, { code: "forbidden" });
     try {
         const q = request.nextUrl.searchParams;
         const kindParam = q.get("kind");
@@ -28,7 +39,7 @@ export async function GET(request: NextRequest) {
             kind,
             since: since && isIsoDate(since) ? since : undefined,
         });
-        return json({ evidence: items });
+        return json({ evidence: await filterLegacyEvidenceRead(auth.ctx, items) });
     } catch (err) {
         return handleVantageError("GET evidence", err, request);
     }
@@ -37,9 +48,15 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error(say(request, "legacyMutationForbidden"), 403, { code: "forbidden" });
     try {
         const parsed = EvidenceSchema.safeParse(await readBody(request));
         if (!parsed.success) return error(firstIssue(parsed.error.issues, request), 400);
+        if (parsed.data.kind === "document")
+            return error(say(request, "legacyMutationForbidden"), 403, {
+                code: "legacy_report_forbidden",
+            });
         const item = await createEvidence({
             companyId: auth.ctx.companyId,
             userId: auth.ctx.userId,

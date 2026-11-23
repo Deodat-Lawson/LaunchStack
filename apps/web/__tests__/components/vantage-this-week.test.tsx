@@ -5,6 +5,7 @@ import "@testing-library/jest-dom";
 import { renderWithLocale } from "~/i18n/testing/render";
 import { ThisWeekScreen } from "~/app/employer/tools/vantage/_screens/ThisWeekScreen";
 import { useWeeklyReviewData } from "~/app/employer/tools/vantage/_lib/useWeeklyReviewData";
+import { vantageApi } from "~/app/employer/tools/vantage/api";
 jest.mock("~/components/tool-app/nav", () => ({ useOptionalToolNav: () => null }));
 jest.mock("~/app/employer/tools/vantage/_lib/useWeeklyReviewData", () => ({
     useWeeklyReviewData: jest.fn(),
@@ -284,4 +285,27 @@ test("progress exposes only server-observed phases", () => {
         "data-state",
         "active"
     );
+});
+
+test("review decisions expose no commitment bridge or persisted workflow markers", async () => {
+    sessionStorage.setItem("vantage-review-commitments:run-a", '{"topic-0":true}');
+    const readStorage = jest.spyOn(Storage.prototype, "getItem");
+    const writeStorage = jest.spyOn(Storage.prototype, "setItem");
+    try {
+        renderWithLocale(<ThisWeekScreen />, "en");
+        expect(
+            screen.queryByRole("button", { name: "Add to commitments" })
+        ).not.toBeInTheDocument();
+        expect(screen.queryByText("Added to commitments")).not.toBeInTheDocument();
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+        expect(field()).toHaveValue(proposal);
+        fireEvent.click(card().getByRole("button", { name: "Confirm and save" }));
+        await waitFor(() => expect(mockRecord).toHaveBeenCalledWith("topic-0", proposal));
+        expect(vantageApi.addCommitment).not.toHaveBeenCalled();
+        expect(readStorage).not.toHaveBeenCalledWith("vantage-review-commitments:run-a");
+        expect(writeStorage).not.toHaveBeenCalled();
+    } finally {
+        readStorage.mockRestore();
+        writeStorage.mockRestore();
+    }
 });

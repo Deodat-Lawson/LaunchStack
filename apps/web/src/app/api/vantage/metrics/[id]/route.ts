@@ -4,7 +4,15 @@ import type { NextRequest } from "next/server";
 
 import { deleteMetricDefinition, updateMetricDefinition } from "@launchstack/pipelines/vantage";
 
-import { error, firstIssue, handleVantageError, json, readBody, vantageContext } from "../../_http";
+import {
+    error,
+    firstIssue,
+    handleVantageError,
+    json,
+    readBody,
+    vantageContext,
+    say,
+} from "../../_http";
 import { MetricDefinitionSchema } from "../../_schemas";
 
 type Params = { params: Promise<{ id: string }> };
@@ -12,6 +20,8 @@ type Params = { params: Promise<{ id: string }> };
 export async function PATCH(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error(say(request, "legacyMutationForbidden"), 403, { code: "forbidden" });
     try {
         const { id } = await params;
         const parsed = MetricDefinitionSchema.omit({ key: true })
@@ -32,6 +42,8 @@ export async function PATCH(request: NextRequest, { params }: Params) {
 export async function DELETE(request: NextRequest, { params }: Params) {
     const auth = await vantageContext();
     if (!auth.ok) return auth.response;
+    if (!auth.ctx.can("documents.edit"))
+        return error(say(request, "legacyMutationForbidden"), 403, { code: "forbidden" });
     try {
         const { id } = await params;
         await deleteMetricDefinition({ companyId: auth.ctx.companyId, id });

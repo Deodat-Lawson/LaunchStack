@@ -40,6 +40,9 @@ export function createModelValidationJudge(
         configurationId: string;
         timeoutMs?: number;
         maxInputBytes?: number;
+        /** Independent final prepared-message ceiling; raw evaluation validation still applies. */
+        maxPreparedInputBytes?: number;
+        beforeDispatch?: () => Promise<void>;
         maxOutputTokens?: number;
         evaluationVersion?: EvaluationVersion;
     },
@@ -100,7 +103,17 @@ export function createModelValidationJudge(
                     ),
                     new HumanMessage(payload),
                 ],
-                { signal, timeoutMs, maxOutputTokens }
+                {
+                    signal,
+                    timeoutMs,
+                    maxOutputTokens,
+                    ...(options.maxPreparedInputBytes === undefined
+                        ? {}
+                        : {
+                              maxInputBytes: options.maxPreparedInputBytes,
+                          }),
+                    ...(options.beforeDispatch ? { beforeDispatch: options.beforeDispatch } : {}),
+                }
             );
             return { judgment: result.result, usage: result.usage };
         },

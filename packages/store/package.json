@@ -23,7 +23,8 @@
         "./backfills": "./src/db/backfills/index.ts",
         "./crypto": "./src/crypto/index.ts",
         "./credits": "./src/credits/index.ts",
-        "./package.json": "./package.json"
+        "./package.json": "./package.json",
+        "./document-digests": "./src/document-digests.ts"
     },
     "files": [
         "dist",
@@ -97,7 +98,11 @@
                 "types": "./dist/credits/index.d.ts",
                 "default": "./dist/credits/index.js"
             },
-            "./package.json": "./package.json"
+            "./package.json": "./package.json",
+            "./document-digests": {
+                "types": "./dist/document-digests.d.ts",
+                "default": "./dist/document-digests.js"
+            }
         }
     },
     "scripts": {

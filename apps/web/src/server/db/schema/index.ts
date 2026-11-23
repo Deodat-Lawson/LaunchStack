@@ -31,3 +31,6 @@ export * from "./storage";
 // Feature-vertical tables live in packages/features (a package cannot import
 // from an app). Same side of the boundary, same product migration set.
 export * from "@launchstack/pipelines/schema";
+
+export * from "./vantage-weekly-review";
+export * from "./vantage-personal-topics";

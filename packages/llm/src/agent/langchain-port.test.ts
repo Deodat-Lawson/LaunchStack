@@ -8,9 +8,13 @@ import type { AgentToolSpec, AgentTranscriptItem } from "./types";
 
 function fakeResolved(response: unknown): {
     resolved: ResolvedChatModel;
-    captured: { tools: unknown[] | null; messages: BaseMessage[] | null };
+    captured: { tools: unknown[] | null; messages: BaseMessage[] | null; signal?: AbortSignal };
 } {
-    const captured: { tools: unknown[] | null; messages: BaseMessage[] | null } = {
+    const captured: {
+        tools: unknown[] | null;
+        messages: BaseMessage[] | null;
+        signal?: AbortSignal;
+    } = {
         tools: null,
         messages: null,
     };
@@ -18,7 +22,8 @@ function fakeResolved(response: unknown): {
         bindTools(tools: unknown[]) {
             captured.tools = tools;
             return {
-                invoke(messages: BaseMessage[]) {
+                invoke(messages: BaseMessage[], options?: { signal?: AbortSignal }) {
+                    captured.signal = options?.signal;
                     captured.messages = messages;
                     return Promise.resolve(response);
                 },
@@ -63,6 +68,21 @@ describe("createLangchainAgentPort", () => {
         expect(messages[3]!.getType()).toBe("tool");
         const ai = messages[2] as AIMessage;
         expect(ai.tool_calls?.[0]).toMatchObject({ id: "c1", name: "lookup", args: { q: "x" } });
+    });
+
+    it("forwards cancellation and fences a response after abort", async () => {
+        const { resolved, captured } = fakeResolved(new AIMessage({ content: "late response" }));
+        const port = createLangchainAgentPort(resolved);
+        const controller = new AbortController();
+        const request = port.respond({
+            system: "sys",
+            transcript: [],
+            tools: TOOLS,
+            signal: controller.signal,
+        });
+        expect(captured.signal).toBe(controller.signal);
+        controller.abort();
+        await expect(request).rejects.toMatchObject({ name: "AbortError" });
     });
 
     it("binds tool specs in OpenAI function format", async () => {

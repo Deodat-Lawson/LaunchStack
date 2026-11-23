@@ -440,3 +440,84 @@ describe("toToolSpecs", () => {
         expect(JSON.stringify(specs[1]!.jsonSchema)).toContain("answer");
     });
 });
+
+it("opt-in overflow recovery retains call identities and reports every rejection", async () => {
+    const source = scriptedPort([
+        {
+            text: "",
+            toolCalls: Array.from({ length: 10 }, (_, index) => ({
+                id: `call-${index}`,
+                name: "echo",
+                arguments: { value: String(index) },
+            })),
+        },
+        submitCall({ answer: "done" }, "final"),
+    ]);
+    let executions = 0;
+    const events: string[] = [];
+    const result = await runAgent(source.port, {
+        system: "s",
+        user: "u",
+        tools: [
+            echoTool({
+                run: () => {
+                    executions++;
+                    return { content: "ok" };
+                },
+            }),
+        ],
+        finalSchema: FinalSchema,
+        maxTurns: 2,
+        overflowPolicy: "tool-error",
+        maxTotalToolCalls: 60,
+        onToolResult: event => {
+            events.push(event.reason);
+        },
+    });
+    expect(executions).toBe(8);
+    expect(result.output).toEqual({ answer: "done" });
+    expect(events.filter(value => value === "tool_overflow")).toHaveLength(2);
+    const transcript = source.calls[1]!.transcript as {
+        role: string;
+        callId?: string;
+        toolCalls?: unknown[];
+    }[];
+    expect(transcript.find(item => item.role === "assistant")?.toolCalls).toHaveLength(10);
+    expect(transcript.filter(item => item.role === "tool").map(item => item.callId)).toEqual(
+        Array.from({ length: 10 }, (_, index) => `call-${index}`)
+    );
+});
+it("recording failures stop opt-in execution before another tool or turn", async () => {
+    const source = scriptedPort([
+        {
+            text: "",
+            toolCalls: [
+                { id: "one", name: "echo", arguments: { value: "a" } },
+                { id: "two", name: "echo", arguments: { value: "b" } },
+            ],
+        },
+    ]);
+    let executions = 0;
+    await expect(
+        runAgent(source.port, {
+            system: "s",
+            user: "u",
+            tools: [
+                echoTool({
+                    run: () => {
+                        executions++;
+                        return { content: "ok" };
+                    },
+                }),
+            ],
+            finalSchema: FinalSchema,
+            maxTurns: 2,
+            overflowPolicy: "tool-error",
+            onToolResult: () => {
+                throw Error("recording unavailable");
+            },
+        })
+    ).rejects.toThrow("recording unavailable");
+    expect(executions).toBe(1);
+    expect(source.calls).toHaveLength(1);
+});

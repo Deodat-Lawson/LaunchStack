@@ -39,6 +39,7 @@ import {
     generationProfile,
     validateDenseSection,
     renderAdministrativeEntries,
+    administrativeRenderOptions,
     type Assembled,
 } from "./vantage-long-decisions-generate-core";
 
@@ -105,6 +106,7 @@ async function main() {
             workers: { type: "string" },
             "recover-no-http": { type: "boolean", default: false },
             "rebind-empty-canary": { type: "boolean", default: false },
+            "allow-scheduled-followups": { type: "boolean", default: false },
             "approved-spec-sha256": { type: "string" },
         },
     });
@@ -230,6 +232,110 @@ async function main() {
         const orderedVersions = spec.documents.flatMap(document =>
             document.versions.map(version => ({ document, version }))
         );
+        const renderPolicyPath = resolve(output, "generation-render-policy.json");
+        const renderPolicySchema = z
+            .object({
+                schemaVersion: z.literal("long-decisions-render-policy/1"),
+                specSha256: z.string().regex(/^[a-f0-9]{64}$/),
+                strictVersions: z.array(
+                    z
+                        .object({
+                            versionId: z.string(),
+                            sha256: z.string().regex(/^[a-f0-9]{64}$/),
+                        })
+                        .strict()
+                ),
+                strictPrefixes: z
+                    .array(
+                        z
+                            .object({
+                                versionId: z.string(),
+                                beforeSection: z.number().int().min(1).max(4),
+                            })
+                            .strict()
+                    )
+                    .default([]),
+                subsequentPolicy: z.literal("scheduled-followup-review/1"),
+            })
+            .strict();
+        let renderPolicyText = await readOptional(renderPolicyPath);
+        if (values["allow-scheduled-followups"] && (!profile.dense || !values.resume))
+            throw Error("long_generation_render_policy_resume_required");
+        if (values["allow-scheduled-followups"] && !renderPolicyText) {
+            const strictVersions = [];
+            for (const { version } of orderedVersions) {
+                const canonical = await readOptional(resolve(output, `${version.id}.md`));
+                if (canonical !== undefined)
+                    strictVersions.push({ versionId: version.id, sha256: sha256(canonical) });
+            }
+            const pinned = new Set(strictVersions.map(version => version.versionId));
+            const partial = new Map<string, number>();
+            for (const file of await readdir(output)) {
+                const match = /^([A-Za-z0-9_-]+)\.s([0-4])\.a[0-3]\.json\.started$/.exec(file);
+                if (!match || pinned.has(match[1]!)) continue;
+                if (!orderedVersions.some(({ version }) => version.id === match[1]))
+                    throw Error("long_generation_render_policy_invalid");
+                partial.set(match[1]!, Math.max(partial.get(match[1]!) ?? 0, Number(match[2])));
+            }
+            const strictPrefixes = [...partial]
+                .filter(([, beforeSection]) => beforeSection > 0)
+                .map(([versionId, beforeSection]) => ({ versionId, beforeSection }));
+            const policy = {
+                schemaVersion: "long-decisions-render-policy/1",
+                specSha256,
+                strictVersions,
+                strictPrefixes,
+                subsequentPolicy: "scheduled-followup-review/1",
+            };
+            await writeFile(renderPolicyPath, JSON.stringify(policy, null, 2) + "\n", {
+                flag: "wx",
+                flush: true,
+            });
+            renderPolicyText = JSON.stringify(policy);
+        }
+        const renderPolicy = renderPolicyText
+            ? renderPolicySchema.parse(JSON.parse(renderPolicyText))
+            : undefined;
+        const strictVersions = new Set(
+            renderPolicy?.strictVersions.map(version => version.versionId)
+        );
+        if (renderPolicy) {
+            if (
+                !profile.dense ||
+                renderPolicy.specSha256 !== specSha256 ||
+                strictVersions.size !== renderPolicy.strictVersions.length
+            )
+                throw Error("long_generation_render_policy_invalid");
+            if (
+                new Set(renderPolicy.strictPrefixes.map(prefix => prefix.versionId)).size !==
+                    renderPolicy.strictPrefixes.length ||
+                renderPolicy.strictPrefixes.some(
+                    prefix =>
+                        strictVersions.has(prefix.versionId) ||
+                        !orderedVersions.some(({ version }) => version.id === prefix.versionId)
+                )
+            )
+                throw Error("long_generation_render_policy_invalid");
+            for (const pinned of renderPolicy.strictVersions) {
+                const canonical = await readOptional(resolve(output, `${pinned.versionId}.md`));
+                if (
+                    !orderedVersions.some(({ version }) => version.id === pinned.versionId) ||
+                    canonical === undefined ||
+                    sha256(canonical) !== pinned.sha256
+                )
+                    throw Error("long_generation_render_policy_invalid");
+            }
+        }
+        const renderOptions = (versionId: string, section: number) =>
+            administrativeRenderOptions(renderPolicy, versionId, section);
+        if (renderPolicy)
+            console.log(
+                JSON.stringify({
+                    renderPolicy: renderPolicy.subsequentPolicy,
+                    pinnedStrictVersions: strictVersions.size,
+                    pinnedStrictPrefixes: renderPolicy.strictPrefixes.length,
+                })
+            );
         const recoveryPath = resolve(
             output,
             profile.dense
@@ -329,11 +435,13 @@ async function main() {
                                 profile.dense
                                     ? renderAdministrativeEntries(
                                           record.text,
-                                          pair.version.publishedAt
+                                          pair.version.publishedAt,
+                                          renderOptions(pair.version.id, earlier)
                                       )
                                     : record.text,
                                 sectionTarget(pair.document, pair.version, completed)
                             );
+                            if (profile.dense) validateDenseSection(accepted);
                             break;
                         } catch {
                             /* rejected response consumes its attempt */
@@ -546,7 +654,11 @@ async function main() {
                     try {
                         if (!responseComplete) throw Error("long_generation_response_invalid");
                         const prose = profile.dense
-                            ? renderAdministrativeEntries(text, version.publishedAt)
+                            ? renderAdministrativeEntries(
+                                  text,
+                                  version.publishedAt,
+                                  renderOptions(version.id, section)
+                              )
                             : text;
                         const fitted = fitSectionParagraphs(prose, targetSectionBytes);
                         if (profile.dense) validateDenseSection(fitted);
@@ -644,6 +756,14 @@ async function main() {
             const bytes = await readFile(rebindPath);
             files.push({
                 file: "empty-canary-rebind.json",
+                sha256: sha256(bytes),
+                bytes: bytes.length,
+            });
+        }
+        if (renderPolicy) {
+            const bytes = await readFile(renderPolicyPath);
+            files.push({
+                file: "generation-render-policy.json",
                 sha256: sha256(bytes),
                 bytes: bytes.length,
             });

@@ -311,13 +311,15 @@ const administrationEntry = z.tuple([
     z.string().trim().min(35).max(240),
 ]);
 /** Render only provider-created facts; sentence placement never invents a date or quantity. */
-export function renderAdministrativeEntries(raw: string, recordDate: string) {
+export function renderAdministrativeEntries(
+    raw: string,
+    recordDate: string,
+    options: { allowScheduledFollowups?: boolean } = {}
+) {
     const json = raw.trim().replace(/^```(?:json)?\s*([\s\S]*?)\s*```$/i, "$1");
     const entries = z.array(administrationEntry).length(15).parse(JSON.parse(json));
     const validDate = (date: string) =>
-        !Number.isNaN(Date.parse(date)) &&
-        new Date(date).toISOString().slice(0, 10) === date &&
-        date <= recordDate.slice(0, 10);
+        !Number.isNaN(Date.parse(date)) && new Date(date).toISOString().slice(0, 10) === date;
     return entries
         .map(
             (
@@ -340,7 +342,9 @@ export function renderAdministrativeEntries(raw: string, recordDate: string) {
                     followup = trimPunctuation(rawFollowup);
                 if (
                     !validDate(date) ||
+                    date > recordDate.slice(0, 10) ||
                     !validDate(followupDate) ||
+                    (!options.allowScheduledFollowups && followupDate > recordDate.slice(0, 10)) ||
                     followupDate < date ||
                     [detail, observation, followup].some(clause => /[.!?;]/.test(clause)) ||
                     /[.!?;\d]/.test(unit) ||
@@ -362,15 +366,38 @@ export function renderAdministrativeEntries(raw: string, recordDate: string) {
                           ? `${quantity} ${unit} formed the recorded allocation, while ${lower(observation)}.`
                           : `For the ${quantity} ${unit}, ${lower(observation)}.`;
                 const third =
-                    index % 3 === 2
-                        ? `${upper(followup)}.`
-                        : index % 2 === 0
-                          ? `At the follow-up dated ${followupDate}, ${lower(followup)}.`
-                          : `${upper(followup)} at the review on ${followupDate}.`;
+                    followupDate > recordDate.slice(0, 10)
+                        ? `A review scheduled for ${followupDate} will check whether ${lower(followup)}.`
+                        : index % 3 === 2
+                          ? `${upper(followup)}.`
+                          : index % 2 === 0
+                            ? `At the follow-up dated ${followupDate}, ${lower(followup)}.`
+                            : `${upper(followup)} at the review on ${followupDate}.`;
                 return [first, second, third].join(" ");
             }
         )
         .join("\n\n");
+}
+export function administrativeRenderOptions(
+    policy:
+        | {
+              strictVersions: readonly { versionId: string }[];
+              strictPrefixes?: readonly { versionId: string; beforeSection: number }[];
+          }
+        | undefined,
+    versionId: string,
+    section: number
+) {
+    if (!Number.isSafeInteger(section) || section < 0 || section >= SECTION_COUNT)
+        throw Error("long_generation_render_policy_invalid");
+    const beforeSection =
+        policy?.strictPrefixes?.find(prefix => prefix.versionId === versionId)?.beforeSection ?? 0;
+    return {
+        allowScheduledFollowups:
+            policy !== undefined &&
+            !policy.strictVersions.some(version => version.versionId === versionId) &&
+            section >= beforeSection,
+    };
 }
 export function sectionTarget(
     document: LongDocument,

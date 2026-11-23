@@ -25,7 +25,33 @@ import {
     proseSpecificity,
     validateDenseSection,
     renderAdministrativeEntries,
+    administrativeRenderOptions,
 } from "../../scripts/vantage-long-decisions-generate-core";
+
+it("pins accepted strict versions and partial prefixes across later resumes", () => {
+    const policy = {
+        strictVersions: [{ versionId: "V01" }],
+        strictPrefixes: [{ versionId: "V02", beforeSection: 4 }],
+    };
+    const persisted = JSON.stringify(policy);
+    for (let section = 0; section < 5; section++) {
+        expect(administrativeRenderOptions(policy, "V01", section).allowScheduledFollowups).toBe(
+            false
+        );
+        expect(administrativeRenderOptions(policy, "V02", section).allowScheduledFollowups).toBe(
+            section === 4
+        );
+        expect(administrativeRenderOptions(policy, "V03", section).allowScheduledFollowups).toBe(
+            true
+        );
+        expect(administrativeRenderOptions(JSON.parse(persisted), "V02", section)).toEqual(
+            administrativeRenderOptions(policy, "V02", section)
+        );
+    }
+    expect(JSON.stringify(policy)).toBe(persisted);
+    expect(administrativeRenderOptions(undefined, "V02", 4).allowScheduledFollowups).toBe(false);
+    expect(() => administrativeRenderOptions(policy, "V02", 5)).toThrow("render_policy_invalid");
+});
 
 it("prices the v2 corpus with a globally bounded retry allowance below its separate cap", () => {
     const frozen = validateSpec(
@@ -87,6 +113,27 @@ it("renders provider-created dated administrative tuples into coherent varied de
     expect(validateDenseSection(rendered).share).toBeGreaterThanOrEqual(0.85);
     expect(proseSpecificity(rendered).share).toBeLessThanOrEqual(0.9);
     expect(renderAdministrativeEntries("```json\n" + raw + "\n```", "2026-10-10")).toBe(rendered);
+    expect(renderAdministrativeEntries(raw, "2026-10-10", { allowScheduledFollowups: true })).toBe(
+        rendered
+    );
+    const planned = structuredClone(entries);
+    planned[0]![7] = "2026-10-15";
+    const plannedRaw = JSON.stringify(planned);
+    expect(() => renderAdministrativeEntries(plannedRaw, "2026-10-10")).toThrow(
+        "administration_invalid"
+    );
+    const prospective = renderAdministrativeEntries(plannedRaw, "2026-10-10", {
+        allowScheduledFollowups: true,
+    });
+    expect(prospective).toContain("A review scheduled for 2026-10-15 will check whether");
+    expect(prospective).not.toContain("At the follow-up dated 2026-10-15");
+    expect(plannedRaw).toBe(JSON.stringify(planned));
+    planned[0]![0] = "2026-10-12";
+    expect(() =>
+        renderAdministrativeEntries(JSON.stringify(planned), "2026-10-10", {
+            allowScheduledFollowups: true,
+        })
+    ).toThrow("administration_invalid");
     expect(proseSpecificity(rendered).quantitiesWithUnits).toBeGreaterThanOrEqual(15);
     expect(JSON.stringify(entries)).toBe(raw);
     expect(() => renderAdministrativeEntries(raw, "2026-10-03")).toThrow("administration_invalid");

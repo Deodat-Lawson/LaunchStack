@@ -11,6 +11,12 @@ const distractorTypes = Object.freeze([
     "similar_wrong_definition",
     "denied_document",
 ]);
+const v2DistractorTypes = Object.freeze([
+    "superseded_status",
+    "conflicting_metric_definition",
+    "similar_project",
+    "restricted_document",
+]);
 const declaredArms = Object.freeze([
     Object.freeze({ name: "seeds-only", kind: "deterministic" }),
     Object.freeze({ name: "seeds-windows", kind: "deterministic" }),
@@ -45,6 +51,19 @@ export const LONG_DECISIONS_SCORE_METHOD = Object.freeze({
 export const LONG_DECISIONS_SCORE_METHOD_SHA256 = createHash("sha256")
     .update(JSON.stringify(LONG_DECISIONS_SCORE_METHOD))
     .digest("hex");
+export const LONG_DECISIONS_SCORE_METHOD_V2 = Object.freeze({
+    ...LONG_DECISIONS_SCORE_METHOD,
+    schemaVersion: "long-decisions/scoring-method-v2",
+    distractorTypes: v2DistractorTypes,
+    cohorts:
+        "Each group uses its declared week cutoff; labels must reference the latest eligible version at that cutoff",
+    offered:
+        "Count unique labelled document IDs and document/version pairs in the recorded catalogue, including observations preceding a later run failure",
+    acquisition:
+        "Only an explicit acquired identity list establishes acquisition; missing diagnostics remain unobserved and are excluded from acquisition denominators",
+    twoDocumentCases:
+        "Count cases requiring exactly two distinct document IDs; both frozen requires both labelled versions, and strict evidence in both requires every labelled sentence in both documents",
+});
 const key = source => JSON.stringify([String(source.documentId), String(source.versionId)]);
 const success = run => ["completed", "degraded"].includes(run.status);
 const sum = values => values.reduce((a, b) => a + b, 0);
@@ -72,8 +91,9 @@ function distribution(values) {
     };
 }
 function specIndexes(spec) {
+    const v2 = spec.schemaVersion === "long-decisions/spec-v2";
     if (
-        spec.schemaVersion !== "long-decisions/spec-v1" ||
+        (!v2 && spec.schemaVersion !== "long-decisions/spec-v1") ||
         !Array.isArray(spec.documents) ||
         !Array.isArray(spec.cases) ||
         !Array.isArray(spec.groups)
@@ -84,6 +104,20 @@ function specIndexes(spec) {
         anchors = new Map(),
         cases = new Map(),
         groups = new Map();
+    const types = v2 ? v2DistractorTypes : distractorTypes;
+    const weeks = new Map(
+        (v2 && Array.isArray(spec.weeks) ? spec.weeks : []).map(week => [week.id, week])
+    );
+    if (
+        v2 &&
+        (weeks.size !== 3 ||
+            [...weeks.values()].some(
+                week =>
+                    !["w1", "w2", "w3"].includes(week.id) ||
+                    !Number.isFinite(Date.parse(week.cutoff))
+            ))
+    )
+        throw Error("long_score_weeks_invalid");
     for (const document of spec.documents) {
         if (
             documents.has(document.id) ||
@@ -124,7 +158,7 @@ function specIndexes(spec) {
         }
         for (const ref of item.distractors)
             if (
-                !distractorTypes.includes(ref.type) ||
+                !types.includes(ref.type) ||
                 !versions.has(key(ref)) ||
                 (ref.anchorId && key(anchors.get(ref.anchorId) ?? {}) !== key(ref))
             )
@@ -134,7 +168,7 @@ function specIndexes(spec) {
     for (const group of spec.groups) {
         if (
             groups.has(group.id) ||
-            group.weekId !== "w3" ||
+            (v2 ? !weeks.has(group.weekId) : group.weekId !== "w3") ||
             ![3, 5].includes(group.size) ||
             !Array.isArray(group.caseIds) ||
             group.caseIds.length !== group.size ||
@@ -142,11 +176,27 @@ function specIndexes(spec) {
             group.caseIds.some(id => !cases.has(id) || cases.get(id).split !== group.split)
         )
             throw Error("long_score_group_invalid");
+        if (v2) {
+            const cutoff = Date.parse(weeks.get(group.weekId).cutoff);
+            for (const id of group.caseIds) {
+                const item = cases.get(id);
+                if (item.originWeekId !== group.weekId)
+                    throw Error("long_score_case_cohort_invalid");
+                for (const ref of [...item.evidence, ...item.distractors]) {
+                    const document = documents.get(ref.documentId);
+                    const latest = document.versions
+                        .filter(version => Date.parse(version.publishedAt) <= cutoff)
+                        .sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt))[0];
+                    if (!latest || latest.id !== ref.versionId)
+                        throw Error("long_score_label_cutoff_invalid");
+                }
+            }
+        }
         groups.set(group.id, group);
     }
-    return { documents, versions, anchors, cases, groups };
+    return { documents, versions, anchors, cases, groups, weeks, types, v2 };
 }
-function evaluateTopic(item, indexes, selected, failed) {
+function evaluateTopic(item, indexes, selected, failed, offered = [], acquired) {
     const selectedVersions = new Set(selected.map(key));
     const expectedVersions = new Set(item.evidence.map(key));
     const expectedDocuments = new Set(item.evidence.map(ref => ref.documentId));
@@ -170,7 +220,7 @@ function evaluateTopic(item, indexes, selected, failed) {
         };
     });
     const distractors = Object.fromEntries(
-        distractorTypes.map(type => {
+        indexes.types.map(type => {
             const targets = new Set(item.distractors.filter(ref => ref.type === type).map(key));
             return [
                 type,
@@ -183,6 +233,17 @@ function evaluateTopic(item, indexes, selected, failed) {
     );
     const sentences = sum(evidence.map(row => row.sentences)),
         coveredSentences = sum(evidence.map(row => row.coveredSentences));
+    const observation = sources => {
+        const recorded = new Set(sources.map(key));
+        const matching = item.evidence.filter(ref => recorded.has(key(ref)));
+        return {
+            documents: new Set(matching.map(ref => ref.documentId)).size,
+            versions: new Set(matching.map(key)).size,
+        };
+    };
+    const catalogue = indexes.v2 ? observation(offered) : null;
+    const acquisition = indexes.v2 && acquired !== undefined ? observation(acquired) : null;
+    const twoDocuments = expectedDocuments.size === 2;
     return {
         caseId: item.id,
         expectedDocuments: expectedDocuments.size,
@@ -199,6 +260,21 @@ function evaluateTopic(item, indexes, selected, failed) {
         zeroEvidenceSentences: coveredSentences === 0,
         allEvidenceSentencesCovered: coveredSentences === sentences,
         distractors,
+        ...(indexes.v2
+            ? {
+                  offeredDocuments: catalogue.documents,
+                  offeredDocumentVersions: catalogue.versions,
+                  acquisitionObserved: acquisition !== null,
+                  acquiredDocuments: acquisition?.documents ?? null,
+                  acquiredDocumentVersions: acquisition?.versions ?? null,
+                  twoDocumentCase: twoDocuments,
+                  bothDocumentsOffered: twoDocuments ? catalogue.documents === 2 : null,
+                  bothDocumentsFrozen: twoDocuments ? supportedDocuments.size === 2 : null,
+                  bothDocumentsAcquired:
+                      twoDocuments && acquisition ? acquisition.documents === 2 : null,
+                  strictEvidenceInBoth: twoDocuments ? coveredSentences === sentences : null,
+              }
+            : {}),
     };
 }
 function auditBoundaries(run, indexes) {
@@ -223,10 +299,19 @@ function auditBoundaries(run, indexes) {
         reads: count(explored.filter(row => row.tool === "read" && row.disclosed)),
         frozen: count(run.selected ?? []),
         blockedRestrictedAttempts: explored.filter(row => !row.disclosed && denied(row)).length,
+        ...(indexes.v2
+            ? {
+                  acquisitionAuditAvailable: Array.isArray(run.acquired),
+                  acquired: Array.isArray(run.acquired) ? count(run.acquired) : null,
+              }
+            : {}),
     };
 }
-function aggregate(rows) {
+function aggregate(rows, indexes) {
     const topics = rows.flatMap(row => row.topics);
+    const observedAcquisition = topics.filter(topic => topic.acquisitionObserved);
+    const observedAcquisitionRuns = rows.filter(row => row.boundaries.acquisitionAuditAvailable);
+    const twoDocumentTopics = topics.filter(topic => topic.twoDocumentCase);
     const metric = (expected, selected, numerator = "selected") => ({
         expected: sum(topics.map(row => row[expected])),
         [numerator]: sum(topics.map(row => row[selected])),
@@ -249,7 +334,7 @@ function aggregate(rows) {
         topicsWithoutEvidenceSentences: topics.filter(row => row.zeroEvidenceSentences).length,
         fullyCoveredTopics: topics.filter(row => row.allEvidenceSentencesCovered).length,
         distractors: Object.fromEntries(
-            distractorTypes.map(type => [
+            indexes.types.map(type => [
                 type,
                 {
                     expectedOccurrences: sum(topics.map(row => row.distractors[type].expected)),
@@ -278,11 +363,78 @@ function aggregate(rows) {
                 rows.filter(row => row.failed && row.failureCode === code).length,
             ])
         ),
+        ...(indexes.v2
+            ? {
+                  supportingDocumentsOffered: metric(
+                      "expectedDocuments",
+                      "offeredDocuments",
+                      "offered"
+                  ),
+                  supportingDocumentVersionsOffered: metric(
+                      "expectedDocumentVersions",
+                      "offeredDocumentVersions",
+                      "offered"
+                  ),
+                  supportingDocumentsAcquired: {
+                      expected: sum(observedAcquisition.map(topic => topic.expectedDocuments)),
+                      acquired: sum(observedAcquisition.map(topic => topic.acquiredDocuments)),
+                      recall: sum(observedAcquisition.map(topic => topic.expectedDocuments))
+                          ? sum(observedAcquisition.map(topic => topic.acquiredDocuments)) /
+                            sum(observedAcquisition.map(topic => topic.expectedDocuments))
+                          : null,
+                  },
+                  supportingDocumentVersionsAcquired: {
+                      expected: sum(
+                          observedAcquisition.map(topic => topic.expectedDocumentVersions)
+                      ),
+                      acquired: sum(
+                          observedAcquisition.map(topic => topic.acquiredDocumentVersions)
+                      ),
+                      recall: sum(observedAcquisition.map(topic => topic.expectedDocumentVersions))
+                          ? sum(observedAcquisition.map(topic => topic.acquiredDocumentVersions)) /
+                            sum(observedAcquisition.map(topic => topic.expectedDocumentVersions))
+                          : null,
+                  },
+                  missingAcquisitionAuditRuns: rows.filter(
+                      row => !row.boundaries.acquisitionAuditAvailable
+                  ).length,
+                  twoDocumentCases: {
+                      expectedOccurrences: twoDocumentTopics.length,
+                      bothOffered: twoDocumentTopics.filter(topic => topic.bothDocumentsOffered)
+                          .length,
+                      bothFrozen: twoDocumentTopics.filter(topic => topic.bothDocumentsFrozen)
+                          .length,
+                      strictEvidenceInBoth: twoDocumentTopics.filter(
+                          topic => topic.strictEvidenceInBoth
+                      ).length,
+                      bothAcquired: twoDocumentTopics.some(topic => topic.acquisitionObserved)
+                          ? twoDocumentTopics.filter(topic => topic.bothDocumentsAcquired).length
+                          : null,
+                      acquisitionObservedOccurrences: twoDocumentTopics.filter(
+                          topic => topic.acquisitionObserved
+                      ).length,
+                  },
+                  restrictedAcquisitionLeaks: {
+                      events: observedAcquisitionRuns.length
+                          ? sum(observedAcquisitionRuns.map(row => row.boundaries.acquired.events))
+                          : null,
+                      documentVersionOccurrences: observedAcquisitionRuns.length
+                          ? sum(
+                                observedAcquisitionRuns.map(
+                                    row => row.boundaries.acquired.uniqueDocumentVersions
+                                )
+                            )
+                          : null,
+                  },
+              }
+            : {}),
     };
 }
 
 export function scoreLongDecisions(spec, runs, contract) {
     const indexes = specIndexes(spec);
+    const method = indexes.v2 ? LONG_DECISIONS_SCORE_METHOD_V2 : LONG_DECISIONS_SCORE_METHOD;
+    const methodSha256 = createHash("sha256").update(JSON.stringify(method)).digest("hex");
     if (
         !contract ||
         !Array.isArray(contract.caps) ||
@@ -315,7 +467,10 @@ export function scoreLongDecisions(spec, runs, contract) {
             !contract.caps.includes(run.capBytes) ||
             !arm ||
             run.provenance?.kind !== arm.kind ||
-            !LONG_DECISIONS_SCORE_METHOD.statuses.includes(run.status)
+            !method.statuses.includes(run.status) ||
+            (indexes.v2 &&
+                run.asOf !== undefined &&
+                Date.parse(run.asOf) !== Date.parse(indexes.weeks.get(group.weekId).cutoff))
         )
             throw Error("long_score_run_identity_invalid");
         if (arm.kind === "live") {
@@ -336,6 +491,7 @@ export function scoreLongDecisions(spec, runs, contract) {
             !Array.isArray(run.selected) ||
             !Array.isArray(run.offered) ||
             (run.explored !== undefined && !Array.isArray(run.explored)) ||
+            (run.acquired !== undefined && !Array.isArray(run.acquired)) ||
             run.selected.some(
                 source =>
                     typeof source.text !== "string" ||
@@ -349,6 +505,7 @@ export function scoreLongDecisions(spec, runs, contract) {
             [
                 ...run.selected,
                 ...run.offered,
+                ...(run.acquired ?? []),
                 ...(run.explored ?? []).filter(row => row.disclosed),
             ].some(source => !indexes.versions.has(key(source)))
         )
@@ -367,7 +524,14 @@ export function scoreLongDecisions(spec, runs, contract) {
         )
             throw Error("long_score_topic_mapping_invalid");
         const topics = group.caseIds.map(id => {
-            const topic = evaluateTopic(indexes.cases.get(id), indexes, run.selected, failed),
+            const topic = evaluateTopic(
+                    indexes.cases.get(id),
+                    indexes,
+                    run.selected,
+                    failed,
+                    run.offered,
+                    run.acquired
+                ),
                 topicId = topicMapping.get(id);
             const observable =
                 topicId !== undefined &&
@@ -379,7 +543,9 @@ export function scoreLongDecisions(spec, runs, contract) {
                           indexes.cases.get(id),
                           indexes,
                           run.selected.filter(source => source.topicIds?.includes(topicId)),
-                          failed
+                          failed,
+                          run.offered,
+                          run.acquired
                       )
                     : null,
             };
@@ -387,6 +553,7 @@ export function scoreLongDecisions(spec, runs, contract) {
         details.push({
             groupId: group.id,
             split: group.split,
+            ...(indexes.v2 ? { weekId: group.weekId } : {}),
             size: group.size,
             capBytes: run.capBytes,
             arm: run.arm,
@@ -425,12 +592,15 @@ export function scoreLongDecisions(spec, runs, contract) {
                         expectedGroups: expected.length,
                         observedGroups: observed.length,
                         missingGroups: expected.length - observed.length,
-                        failuresIncluded: aggregate(observed),
-                        failuresExcluded: aggregate(observed.filter(row => !row.failed)),
+                        failuresIncluded: aggregate(observed, indexes),
+                        failuresExcluded: aggregate(
+                            observed.filter(row => !row.failed),
+                            indexes
+                        ),
                     });
                 }
     const configurationSha256 = createHash("sha256")
-        .update(JSON.stringify({ method: LONG_DECISIONS_SCORE_METHOD, contract }))
+        .update(JSON.stringify({ method, contract }))
         .digest("hex");
     const triples = [];
     for (const group of spec.groups)
@@ -444,6 +614,7 @@ export function scoreLongDecisions(spec, runs, contract) {
             if (!variants.length) continue;
             triples.push({
                 split: group.split,
+                ...(indexes.v2 ? { weekId: group.weekId } : {}),
                 size: group.size,
                 capBytes: cap,
                 observedVariants: variants.length,
@@ -458,13 +629,13 @@ export function scoreLongDecisions(spec, runs, contract) {
             });
         }
     return {
-        method: LONG_DECISIONS_SCORE_METHOD,
-        methodSha256: LONG_DECISIONS_SCORE_METHOD_SHA256,
+        method,
+        methodSha256,
         configurationSha256,
         details,
         summary: {
-            schemaVersion: "long-decisions/scores-v1",
-            methodSha256: LONG_DECISIONS_SCORE_METHOD_SHA256,
+            schemaVersion: indexes.v2 ? "long-decisions/scores-v2" : "long-decisions/scores-v1",
+            methodSha256,
             configurationSha256,
             observedRuns: details.length,
             segmentationRuntime: { node: process.versions.node, icu: process.versions.icu },

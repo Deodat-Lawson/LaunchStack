@@ -499,6 +499,35 @@ it("acknowledges no-HTTP generation only when opt-in and checkpoint count match"
         )
     ).rejects.toThrow("transport_clear_denied");
 });
+it("keeps earlier scoped exploration reserves while recovering a later digest transport hold", async () => {
+    const recoveryConfig = { ...reliableConfig(), allowGenerationTransportRecovery: true };
+    const meter = createBenchmarkMeter(recoveryConfig);
+    const responseUrl = endpoint.replace("/chat/completions", "/responses");
+    await expect(
+        meter.withWork("sweep-001", () =>
+            meter.wrapFetch(async () => new Response("{}", { status: 400 }))(
+                responseUrl,
+                responseRequest()
+            )
+        )
+    ).rejects.toMatchObject({ code: "http_status", httpStatus: 400 });
+    await expect(
+        meter.wrapFetch(async () => {
+            throw Error("digest socket fixture");
+        })(endpoint, request())
+    ).rejects.toThrow("usage_unresolved");
+    await meter.drainPending();
+    const before = meter.snapshot();
+    await meter.clearGenerationTransportHold(1);
+    const after = meter.snapshot();
+    expect(after.hold).toBeNull();
+    expect(after.reservedUsd).toBe(before.reservedUsd);
+    expect(after.records[0]).toMatchObject({ route: "exploration", scopedTransportFailure: true });
+    expect(after.records[1]).toMatchObject({
+        route: "digest",
+        continuedAfterGenerationNoHttp: true,
+    });
+});
 it("denies HTTP failures, non-usage holds and exposure above the limit", async () => {
     const prior = await unresolvedSweepLedger();
     const http = structuredClone(prior);

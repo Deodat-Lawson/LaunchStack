@@ -387,7 +387,12 @@ export function createBenchmarkMeter(config: BenchmarkMeterConfig) {
     }
     async function clearGenerationTransportHold(expectedUnknownCount: number) {
         const unknown = records.filter(
-            row => row.status === "unknown" && !row.continuedAfterGenerationNoHttp
+            row =>
+                row.status === "unknown" &&
+                !row.continuedAfterGenerationNoHttp &&
+                !row.continuedAfterCaseDeadline &&
+                !row.continuedAfterTransportFailure &&
+                !row.scopedTransportFailure
         );
         if (
             !config.allowGenerationTransportRecovery ||

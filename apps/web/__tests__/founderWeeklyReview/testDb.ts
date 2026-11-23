@@ -1,6 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { readFile } from "node:fs/promises";
-import { join } from "node:path";
+import { basename, join } from "node:path";
 
 import postgres from "postgres";
 import { drizzle } from "drizzle-orm/postgres-js";
@@ -178,7 +178,7 @@ export async function createFounderWeeklyReviewTestDatabase(
     try {
         for (const dir of MIGRATION_SETS) {
             for (const file of await listMigrationFiles(dir)) {
-                const tag = file.slice(file.lastIndexOf("/") + 1, -".sql".length);
+                const tag = basename(file, ".sql");
                 if (options.holdBack?.includes(tag)) {
                     heldBack.set(tag, file);
                     continue;

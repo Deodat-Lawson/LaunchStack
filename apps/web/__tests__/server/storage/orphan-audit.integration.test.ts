@@ -644,10 +644,9 @@ describeDb("storage orphan audit (integration)", () => {
             );
             url.pathname = `/${test.databaseName}`;
             const cli = spawnSync(
-                "pnpm",
+                process.execPath,
                 [
-                    "exec",
-                    "tsx",
+                    require.resolve("tsx/cli"),
                     "scripts/storage-orphan-audit.ts",
                     "--enqueue",
                     "--actor",

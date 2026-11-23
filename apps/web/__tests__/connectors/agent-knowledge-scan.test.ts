@@ -5,7 +5,7 @@
  * readable fails here.
  */
 
-import { mkdtemp, mkdir, rm, symlink, writeFile } from "node:fs/promises";
+import { mkdtemp, mkdir, readdir, rm, symlink, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
 
@@ -208,11 +208,19 @@ describe("scanAgentKnowledge — what it refuses to read", () => {
         const outside = path.join(root, "outside");
         await write(path.join(outside, "private.md"), "not yours");
         await mkdir(path.join(home, ".claude", "agents"), { recursive: true });
+        const agents = path.join(home, ".claude", "agents");
+        if (process.platform !== "win32") {
+            await symlink(path.join(outside, "private.md"), path.join(agents, "link.md"));
+        }
         await symlink(
-            path.join(outside, "private.md"),
-            path.join(home, ".claude", "agents", "link.md")
+            outside,
+            path.join(agents, "escape"),
+            process.platform === "win32" ? "junction" : "dir"
         );
-        await symlink(outside, path.join(home, ".claude", "agents", "escape"));
+        const escape = (await readdir(agents, { withFileTypes: true })).find(
+            e => e.name === "escape"
+        );
+        expect(escape?.isSymbolicLink()).toBe(true);
 
         const scan = await scanAgentKnowledge({ homeDir: home, tools: ["claude-code"] });
 

@@ -1,3 +1,5 @@
+import { resolve } from "node:path";
+
 import { describe, expect, it } from "vitest";
 
 import { parseWorkerEnv, resolveChatModelsConfig } from "../src/env";
@@ -41,9 +43,9 @@ describe("parseWorkerEnv", () => {
 });
 
 describe("resolveChatModelsConfig", () => {
-    const workerDir = "/app/apps/worker";
-    const cwd = "/app/apps/worker";
-    const shared = "/app/apps/web/config/chat-models.yaml";
+    const workerDir = resolve("/app/apps/worker");
+    const cwd = workerDir;
+    const shared = resolve("/app/apps/web/config/chat-models.yaml");
 
     it("defaults to the shared web config when unset and the file exists", () => {
         const result = resolveChatModelsConfig({
@@ -82,14 +84,14 @@ describe("resolveChatModelsConfig", () => {
             configured: "config/chat-models.yaml",
             workerDir,
             cwd,
-            exists: p => p === "/app/apps/worker/config/chat-models.yaml",
+            exists: p => p === resolve(workerDir, "config/chat-models.yaml"),
         });
         expect(result).toBeUndefined();
     });
 
     it("never rewrites an absolute path, even a broken one", () => {
         const result = resolveChatModelsConfig({
-            configured: "/etc/launchstack/chat-models.yaml",
+            configured: resolve("/etc/launchstack/chat-models.yaml"),
             workerDir,
             cwd,
             exists: () => false,

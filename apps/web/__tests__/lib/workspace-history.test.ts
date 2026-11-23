@@ -169,10 +169,11 @@ describe("relativeTime", () => {
     });
 
     it("falls back to a day and month past a week, in the reader's own locale order", () => {
-        // The order of the parts is the locale's business, so assert the parts.
-        const rendered = relativeTime("2026-08-20T09:00:00.000Z", NOW);
-        expect(rendered).toContain("20");
-        expect(rendered).toContain("Aug");
+        const at = "2026-08-20T09:00:00.000Z";
+        const expected = new Intl.DateTimeFormat(undefined, { day: "numeric", month: "short" }).format(
+            new Date(at)
+        );
+        expect(relativeTime(at, NOW)).toBe(expected);
     });
 
     it("counts calendar days, so late last night reads as a day ago not hours", () => {

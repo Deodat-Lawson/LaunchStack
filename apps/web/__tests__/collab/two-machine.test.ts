@@ -23,7 +23,7 @@ import { HubClient, type ChannelMessage, type MeetingState } from "@launchstack/
 const SECRET = "two-machine-shared-secret";
 // Jest transpiles to CJS, so `__dirname` is the reliable anchor here.
 const APP_ROOT = resolve(__dirname, "../..");
-const TSX = resolve(APP_ROOT, "node_modules/.bin/tsx");
+const TSX = require.resolve("tsx/cli");
 
 /**
  * A non-loopback IPv4 address of this host. Dialing it proves the hub is
@@ -105,7 +105,7 @@ class Process {
 }
 
 function spawnNode(name: string, script: string, env: Record<string, string>): Process {
-    const child = spawn(TSX, [resolve(APP_ROOT, "scripts", script)], {
+    const child = spawn(process.execPath, [TSX, resolve(APP_ROOT, "scripts", script)], {
         cwd: APP_ROOT,
         env: { ...process.env, ...env },
         stdio: ["ignore", "pipe", "pipe"],

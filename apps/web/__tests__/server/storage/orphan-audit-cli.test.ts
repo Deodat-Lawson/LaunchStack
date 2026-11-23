@@ -7,8 +7,12 @@ describe("storage orphan audit CLI argument safety", () => {
         "rejects non-integer --grace-days %j before connecting",
         value => {
             const result = spawnSync(
-                "pnpm",
-                ["exec", "tsx", "scripts/storage-orphan-audit.ts", `--grace-days=${value}`],
+                process.execPath,
+                [
+                    require.resolve("tsx/cli"),
+                    "scripts/storage-orphan-audit.ts",
+                    `--grace-days=${value}`,
+                ],
                 {
                     cwd: join(__dirname, "../../.."),
                     encoding: "utf8",

@@ -1,7 +1,7 @@
 import { writeFileSync } from "node:fs";
 import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { ChatConfigurationError } from "@launchstack/llm";
 import { GEMINI_BASE_URL } from "@launchstack/llm/types";
 import {
@@ -200,22 +200,20 @@ describe("isChatEndpointConfigured", () => {
 
 describe("configuration file loading", () => {
     const endpoint = { CHAT_BASE_URL: "https://endpoint.example/v1", CHAT_API_KEY: "k" };
+    const cwd = resolve("/srv/app");
 
     beforeEach(resetAppChatModelsCache);
 
     it("defaults to config/chat-models.yaml relative to the working directory", () => {
-        expect(resolveChatModelsConfigPath({}, "/srv/app")).toBe(
-            "/srv/app/config/chat-models.yaml"
-        );
+        expect(resolveChatModelsConfigPath({}, cwd)).toBe(join(cwd, "config/chat-models.yaml"));
     });
 
     it("honours CHAT_MODELS_CONFIG, absolute or relative", () => {
-        expect(resolveChatModelsConfigPath({ CHAT_MODELS_CONFIG: "other.yaml" }, "/srv/app")).toBe(
-            "/srv/app/other.yaml"
+        expect(resolveChatModelsConfigPath({ CHAT_MODELS_CONFIG: "other.yaml" }, cwd)).toBe(
+            join(cwd, "other.yaml")
         );
-        expect(
-            resolveChatModelsConfigPath({ CHAT_MODELS_CONFIG: "/etc/models.yaml" }, "/srv/app")
-        ).toBe("/etc/models.yaml");
+        const absolute = resolve("/etc/models.yaml");
+        expect(resolveChatModelsConfigPath({ CHAT_MODELS_CONFIG: absolute }, cwd)).toBe(absolute);
     });
 
     it("loads and validates the shipped default configuration", () => {

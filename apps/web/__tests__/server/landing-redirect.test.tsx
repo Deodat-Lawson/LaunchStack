@@ -10,7 +10,7 @@
  */
 
 import { readdirSync, readFileSync, statSync } from "node:fs";
-import { join, relative } from "node:path";
+import { join, relative, sep } from "node:path";
 
 import { renderToStaticMarkup } from "react-dom/server";
 
@@ -126,10 +126,11 @@ describe("LANDING_URL stays on the server", () => {
     }
 
     it("is referenced only by the redirect helper", () => {
+        const relativePath = (path: string) => relative(SRC, path).split(sep).join("/");
         const offenders = files(SRC)
-            .filter(path => !ALLOWED.has(relative(SRC, path)))
+            .filter(path => !ALLOWED.has(relativePath(path)))
             .filter(path => /\bLANDING_URL\b/.test(readFileSync(path, "utf8")))
-            .map(path => relative(SRC, path));
+            .map(relativePath);
 
         expect(offenders).toEqual([]);
     });

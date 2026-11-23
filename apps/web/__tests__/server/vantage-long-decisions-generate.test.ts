@@ -21,7 +21,112 @@ import {
     sectionTarget,
     fitSectionParagraphs,
     validateNoHttpRecovery,
+    generationProfile,
+    proseSpecificity,
+    validateDenseSection,
+    renderAdministrativeEntries,
 } from "../../scripts/vantage-long-decisions-generate-core";
+
+it("prices the v2 corpus with a globally bounded retry allowance below its separate cap", () => {
+    const frozen = validateSpec(
+        JSON.parse(
+            readFileSync(
+                resolve(
+                    process.cwd(),
+                    "../../fixtures/vantage-benchmarks/long-decisions/spec-v2.json"
+                ),
+                "utf8"
+            )
+        )
+    );
+    expect(frozen.documents).toHaveLength(150);
+    const versionCount = frozen.documents.flatMap(item => item.versions).length;
+    const profile = generationProfile(frozen);
+    const projection = generationProjection(frozen, "gpt-6-luna", { input: 0.3, output: 0.9 });
+    expect(profile).toMatchObject({
+        limitUsd: 5,
+        maxOutputTokens: 2400,
+        retryLimit: 350,
+        concurrency: 5,
+    });
+    expect(projection.maximumRequests).toBe(versionCount * 5 + profile.retryLimit!);
+    expect(projection.worstCaseUsd).toBeLessThan(5);
+    expect(generationProfile(spec()).limitUsd).toBe(3);
+});
+
+it("keeps dense prompts limited to neutral fields and independently invented administrative facts", () => {
+    const prompt = genericPrompt({
+        opaqueId: "opaque",
+        title: "Neutral memorandum",
+        kind: "runbook",
+        brief: "Neighboring office activities.",
+        section: 1,
+        targetBytes: 6000,
+        attempt: 0,
+        dense: true,
+    });
+    expect(prompt.system).toContain("JSON array of exactly 15");
+    expect(prompt.system).toContain("Invent all facts independently");
+    expect(JSON.parse(prompt.user)).not.toHaveProperty("dense");
+    expect(JSON.stringify(prompt)).not.toContain(anchor.text);
+});
+it("renders provider-created dated administrative tuples into coherent varied dense prose", () => {
+    const entries = Array.from({ length: 15 }, (_, i) => [
+        `2026-10-${String((i % 5) + 1).padStart(2, "0")}`,
+        i % 2 ? "Nolan Bell" : "Amira Cross",
+        i % 2 ? "retained" : "approved",
+        "the separate records cupboard arrangement after the stores coordinator reconciled the local inventory",
+        String(i + 7),
+        "folders",
+        "the clerk kept the sealed inventory together while a colleague checked the cabinet allocation",
+        "2026-10-08",
+        "the coordinator kept the maintenance note beside the stock record for the next routine handover",
+    ]);
+    const raw = JSON.stringify(entries);
+    const rendered = renderAdministrativeEntries(raw, "2026-10-10T12:00:00Z");
+    expect(validateDenseSection(rendered).share).toBeGreaterThanOrEqual(0.85);
+    expect(proseSpecificity(rendered).share).toBeLessThanOrEqual(0.9);
+    expect(renderAdministrativeEntries("```json\n" + raw + "\n```", "2026-10-10")).toBe(rendered);
+    expect(proseSpecificity(rendered).quantitiesWithUnits).toBeGreaterThanOrEqual(15);
+    expect(JSON.stringify(entries)).toBe(raw);
+    expect(() => renderAdministrativeEntries(raw, "2026-10-03")).toThrow("administration_invalid");
+    entries[0]![8] =
+        "the clerk invented 20 other quantities to increase the numerical sentence count";
+    expect(() => renderAdministrativeEntries(JSON.stringify(entries), "2026-10-10")).toThrow(
+        "administration_invalid"
+    );
+});
+
+it("counts genuine ISO dates and quantities while excluding record identifier digits and headings", () => {
+    const data = proseSpecificity(
+        "# Heading 345\nOn 2026-10-05, Amira Cross approved 12 chairs.\n\nA 10-day inspection window was retained by Nolan Bell.\n\nRecord PF-8 refers to the same internal form.\n\nThe 2026-02-30 appointment was a transcription error."
+    );
+    expect(data).toMatchObject({
+        sentences: 4,
+        numericSentences: 2,
+        dateSentences: 1,
+        numericOrDateSentences: 2,
+        distinctDates: 1,
+        quantities: 2,
+    });
+});
+
+it("requires varied dates, quantities, names, decisions and distributed density after paragraph fitting", () => {
+    const dense =
+        Array.from(
+            { length: 30 },
+            (_, i) =>
+                `On 2026-10-${String((i % 25) + 1).padStart(2, "0")}, ${i % 2 ? "Nolan Bell" : "Amira Cross"} ${i % 2 ? "retained" : "approved"} ${i + 5} storage trays for a distinct local team.`
+        ).join("\n\n") +
+        "\n\nThe handover preserves the buyer's administrative discretion.\n\nStaff may request clarification through the usual office channel.\n\nThe separate local procedure continues to apply.";
+    expect(validateDenseSection(dense).share).toBeCloseTo(30 / 33);
+    expect(() =>
+        validateDenseSection(dense.replaceAll(/2026-10-\d\d/g, "the meeting day"))
+    ).toThrow("density_invalid");
+    expect(() => validateDenseSection(dense.replaceAll(/\d+/g, "several"))).toThrow(
+        "density_invalid"
+    );
+});
 
 const anchor = {
     id: "D01_V01_E01",

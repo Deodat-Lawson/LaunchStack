@@ -36,13 +36,13 @@ import {
     publicManifest,
     sha256,
     SECTION_COUNT,
-    MAX_ATTEMPTS,
-    MAX_OUTPUT_TOKENS,
+    generationProfile,
+    validateDenseSection,
+    renderAdministrativeEntries,
     type Assembled,
 } from "./vantage-long-decisions-generate-core";
 
 const repository = fileURLToPath(new URL("../../../", import.meta.url));
-const LIMIT_USD = 3;
 const completionSchema = z.object({
     choices: z
         .array(
@@ -80,7 +80,19 @@ async function readOptional(path: string) {
 async function atomic(path: string, value: unknown) {
     const temporary = path + "." + randomUUID() + ".tmp";
     await writeFile(temporary, JSON.stringify(value, null, 2) + "\n", { flag: "wx", flush: true });
-    await rename(temporary, path);
+    for (let attempt = 0; ; attempt++) {
+        try {
+            await rename(temporary, path);
+            return;
+        } catch (error) {
+            if (
+                attempt >= 5 ||
+                !["EPERM", "EACCES", "EBUSY"].includes((error as NodeJS.ErrnoException).code ?? "")
+            )
+                throw error;
+            await new Promise(resolve => setTimeout(resolve, 100 * (attempt + 1)));
+        }
+    }
 }
 async function main() {
     const { values } = parseArgs({
@@ -91,6 +103,7 @@ async function main() {
             execute: { type: "boolean", default: false },
             resume: { type: "boolean", default: false },
             "recover-no-http": { type: "boolean", default: false },
+            "rebind-empty-canary": { type: "boolean", default: false },
             "approved-spec-sha256": { type: "string" },
         },
     });
@@ -100,6 +113,9 @@ async function main() {
     const specBytes = await readFile(resolve(values.spec)),
         specSha256 = sha256(specBytes);
     const spec = validateSpec(JSON.parse(specBytes.toString("utf8")));
+    const profile = generationProfile(spec);
+    const LIMIT_USD = profile.limitUsd;
+    const MAX_OUTPUT_TOKENS = profile.maxOutputTokens;
     const projection = generationProjection(
         spec,
         AZURE_LUNA_DEPLOYMENT,
@@ -117,7 +133,7 @@ async function main() {
                 documents: spec.documents.length,
                 versions: totalVersions,
                 sections: totalVersions * SECTION_COUNT,
-                maxAttempts: MAX_ATTEMPTS,
+                maxAttempts: profile.maxAttempts,
                 maxOutputTokens: MAX_OUTPUT_TOKENS,
                 limitUsd: LIMIT_USD,
             })
@@ -140,11 +156,57 @@ async function main() {
             limitUsd: LIMIT_USD,
             model: AZURE_LUNA_DEPLOYMENT,
             sections: SECTION_COUNT,
-            maxAttempts: MAX_ATTEMPTS,
+            maxAttempts: profile.maxAttempts,
             maxOutputTokens: MAX_OUTPUT_TOKENS,
+            ...(profile.dense
+                ? {
+                      globalRetryLimit: profile.retryLimit,
+                      concurrency: profile.concurrency,
+                      promptVersion: "administration-tuples/1",
+                  }
+                : {}),
         };
         const priorBinding = await readOptional(resolve(output, "generation-config.json"));
-        if (priorBinding && JSON.stringify(JSON.parse(priorBinding)) !== JSON.stringify(binding))
+        const rebindPath = resolve(output, "empty-canary-rebind.json");
+        if (values["rebind-empty-canary"]) {
+            const old = priorBinding ? JSON.parse(priorBinding) : undefined;
+            const expectedOld = { ...binding } as Record<string, unknown>;
+            delete expectedOld.promptVersion;
+            const priorUsage = JSON.parse(
+                (await readOptional(resolve(output, "usage-ledger.json"))) ?? "null"
+            ) as BenchmarkMeterSnapshot | null;
+            if (
+                !values.resume ||
+                !profile.dense ||
+                !old ||
+                JSON.stringify(old) !== JSON.stringify(expectedOld) ||
+                (await readOptional(rebindPath)) ||
+                !priorUsage ||
+                priorUsage.hold !== null ||
+                priorUsage.records.length !== 4 ||
+                priorUsage.records.some(
+                    record => record.status !== "settled" || record.httpStatus !== 200
+                ) ||
+                (await readdir(output)).some(file =>
+                    /\.md$|\.s[0-4]\.a[0-3]\.json(?:\.started)?$|^validation-/.test(file)
+                )
+            )
+                throw Error("long_generation_canary_rebind_denied");
+            await atomic(rebindPath, {
+                schemaVersion: "long-decisions-canary-rebind/1",
+                previousBinding: old,
+                previousLedgerSha256: sha256(JSON.stringify(priorUsage)),
+                records: priorUsage.records.map(record => record.id),
+                consumedRetrySlots: 3,
+                priorExposureUsd: priorUsage.projectedTotalUsd,
+                newPromptVersion: "administration-tuples/1",
+                exposureUsd: priorUsage.projectedTotalUsd,
+            });
+            await atomic(resolve(output, "generation-config.json"), binding);
+        } else if (
+            priorBinding &&
+            JSON.stringify(JSON.parse(priorBinding)) !== JSON.stringify(binding)
+        )
             throw Error("long_generation_resume_binding_invalid");
         if (!priorBinding) await atomic(resolve(output, "generation-config.json"), binding);
         const priorText = await readOptional(resolve(output, "usage-ledger.json"));
@@ -152,10 +214,18 @@ async function main() {
         const priorLedger = priorText
             ? (JSON.parse(priorText) as BenchmarkMeterSnapshot)
             : undefined;
+        const rebindAudit = await readOptional(rebindPath);
+        const inclusiveProjection = projection.worstCaseUsd + (rebindAudit ? Number(JSON.parse(rebindAudit).priorExposureUsd ?? 0) : 0);
+        if (inclusiveProjection > LIMIT_USD) throw Error("long_generation_objective_budget_exceeded");
         const orderedVersions = spec.documents.flatMap(document =>
             document.versions.map(version => ({ document, version }))
         );
-        const recoveryPath = resolve(output, "generation-no-http-recovery.json");
+        const recoveryPath = resolve(
+            output,
+            profile.dense
+                ? "generation-no-http-recoveries.json"
+                : "generation-no-http-recovery.json"
+        );
         const receiptText = await readOptional(recoveryPath);
         const receiptSchema = z
             .object({
@@ -169,11 +239,16 @@ async function main() {
                 acknowledged: z.literal(true),
             })
             .strict();
-        const receipt = receiptText ? receiptSchema.parse(JSON.parse(receiptText)) : undefined;
-        if (receipt && values["recover-no-http"])
+        const receipts = receiptText
+            ? profile.dense
+                ? z.array(receiptSchema).parse(JSON.parse(receiptText))
+                : [receiptSchema.parse(JSON.parse(receiptText))]
+            : [];
+        const receipt = receipts.at(-1);
+        if (receipt && values["recover-no-http"] && !profile.dense)
             throw Error("long_generation_recovery_already_used");
         const consumed = new Map<string, string>();
-        if (receipt) {
+        for (const receipt of receipts) {
             if (
                 !priorLedger ||
                 receipt.specSha256 !== specSha256 ||
@@ -193,7 +268,7 @@ async function main() {
             )
                 throw Error("long_generation_recovery_receipt_invalid");
             for (const attempt of receipt.attempts) {
-                if (!/^[A-Za-z0-9_-]+\.s[0-4]\.a[01]\.json\.started$/.test(attempt.file))
+                if (!/^[A-Za-z0-9_-]+\.s[0-4]\.a[0-3]\.json\.started$/.test(attempt.file))
                     throw Error("long_generation_recovery_receipt_invalid");
                 const started = await readOptional(resolve(output, attempt.file));
                 if (
@@ -211,7 +286,8 @@ async function main() {
                 .filter(file => file.endsWith(".json.started"))
                 .sort()) {
                 if (await readOptional(resolve(output, file.slice(0, -8)))) continue;
-                const match = /^([A-Za-z0-9_-]+)\.s([0-4])\.a([01])\.json\.started$/.exec(file);
+                if (consumed.has(file)) continue;
+                const match = /^([A-Za-z0-9_-]+)\.s([0-4])\.a([0-3])\.json\.started$/.exec(file);
                 const pair = match && orderedVersions.find(item => item.version.id === match[1]);
                 if (!match || !pair) throw Error("long_generation_recovery_binding_invalid");
                 const section = Number(match[2]),
@@ -221,7 +297,7 @@ async function main() {
                     let accepted: string | undefined;
                     for (
                         let previousAttempt = 0;
-                        previousAttempt < MAX_ATTEMPTS;
+                        previousAttempt < profile.maxAttempts;
                         previousAttempt++
                     ) {
                         const checkpoint = await readOptional(
@@ -240,7 +316,12 @@ async function main() {
                             continue;
                         try {
                             accepted = fitSectionParagraphs(
-                                record.text,
+                                profile.dense
+                                    ? renderAdministrativeEntries(
+                                          record.text,
+                                          pair.version.publishedAt
+                                      )
+                                    : record.text,
                                 sectionTarget(pair.document, pair.version, completed)
                             );
                             break;
@@ -259,6 +340,8 @@ async function main() {
                     section,
                     targetBytes: sectionTarget(pair.document, pair.version, completed),
                     attempt,
+                    dense: profile.dense,
+                    recordDate: pair.version.publishedAt,
                 });
                 const started = JSON.parse((await readOptional(resolve(output, file)))!);
                 recoveryAttempts.push({
@@ -268,21 +351,65 @@ async function main() {
                 });
             }
             if (!priorLedger) throw Error("long_generation_recovery_denied");
-            validateNoHttpRecovery(priorLedger, recoveryAttempts);
+            validateNoHttpRecovery(priorLedger, recoveryAttempts, LIMIT_USD);
         }
         const live = planAzureLive();
+        const canaryRebind = JSON.parse((await readOptional(rebindPath)) ?? "null") as {
+            records: string[];
+            consumedRetrySlots: number;
+        } | null;
+        const reservedEnvelope =
+            priorLedger?.records
+                .filter(record => !canaryRebind?.records.includes(record.id))
+                .reduce((sum, record) => sum + record.projectedUsd, 0) ?? 0;
+        const remainingProjectionUsd =
+            Math.max(0, projection.worstCaseUsd - reservedEnvelope) +
+            (priorLedger?.projectedTotalUsd ?? 0);
+        if (remainingProjectionUsd > LIMIT_USD)
+            throw Error("long_generation_objective_budget_exceeded");
         console.log(
             JSON.stringify({
                 generationPreflight: true,
                 host: new URL(live.endpoint).hostname,
                 model: AZURE_LUNA_DEPLOYMENT,
                 projection,
+                inclusiveProjectionUsd: inclusiveProjection,
+                remainingProjectionUsd,
                 limitUsd: LIMIT_USD,
             })
         );
+        if (profile.dense) {
+            let reachable = false;
+            for (let attempt = 1; attempt <= 4; attempt++) {
+                try {
+                    const response = await globalThis.fetch(
+                        live.endpoint.replace(/\/$/, "") + "/models",
+                        {
+                            method: "HEAD",
+                            credentials: "omit",
+                            redirect: "error",
+                            signal: AbortSignal.timeout(5000),
+                        }
+                    );
+                    await response.body?.cancel();
+                    console.log(
+                        JSON.stringify({
+                            connectivityAttempt: attempt,
+                            httpStatus: response.status,
+                        })
+                    );
+                    reachable = true;
+                    break;
+                } catch {
+                    console.log(JSON.stringify({ connectivityAttempt: attempt, noHttp: true }));
+                }
+            }
+            if (!reachable) throw Error("long_generation_connectivity_failed");
+        }
         const endpoint = live.endpoint.replace(/\/$/, "") + "/chat/completions";
         const meter = createBenchmarkMeter({
-            allowGenerationTransportRecovery: Boolean(receipt) || values["recover-no-http"],
+            allowGenerationTransportRecovery:
+                profile.dense || Boolean(receipt) || values["recover-no-http"],
             limitUsd: LIMIT_USD,
             modelId: AZURE_LUNA_DEPLOYMENT,
             endpointUrl: endpoint,
@@ -302,15 +429,16 @@ async function main() {
         // Persist empty exposure before the first request too. The meter reserves/persists before dispatch.
         if (!priorText) await atomic(resolve(output, "usage-ledger.json"), meter.snapshot());
         if (values["recover-no-http"]) {
-            const audit = validateNoHttpRecovery(priorLedger!, recoveryAttempts);
+            const audit = validateNoHttpRecovery(priorLedger!, recoveryAttempts, LIMIT_USD);
             await meter.clearGenerationTransportHold(audit.unknownRecordIds.length);
-            await atomic(recoveryPath, {
+            const nextReceipt = {
                 schemaVersion: "long-decisions-no-http-recovery/1",
                 specSha256,
                 priorLedgerSha256: sha256(priorText!),
                 ...audit,
-                acknowledged: true,
-            });
+                acknowledged: true as const,
+            };
+            await atomic(recoveryPath, profile.dense ? [...receipts, nextReceipt] : nextReceipt);
             for (const attempt of audit.attempts) consumed.set(attempt.file, attempt.promptSha256);
             console.log(
                 JSON.stringify({
@@ -324,6 +452,11 @@ async function main() {
         meter.assertCanDispatch();
         const invoke = meter.wrapFetch(globalThis.fetch),
             versions = new Map<string, Assembled>();
+        let retriesUsed =
+            (canaryRebind?.consumedRetrySlots ?? 0) +
+            (await readdir(output)).filter(file => /\.a[1-3]\.json\.started$/.test(file)).length;
+        if (profile.retryLimit !== null && retriesUsed > profile.retryLimit)
+            throw Error("long_generation_retry_limit");
         const allAnchors = spec.documents.flatMap(d => d.versions.flatMap(v => v.anchors));
         const progress = new Map<string, unknown>();
         let progressWrites = Promise.resolve();
@@ -332,7 +465,7 @@ async function main() {
             for (let section = 0; section < SECTION_COUNT; section++) {
                 const targetSectionBytes = sectionTarget(document, version, sections);
                 let accepted: string | undefined;
-                for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+                for (let attempt = 0; attempt < profile.maxAttempts; attempt++) {
                     const prompt = genericPrompt({
                         opaqueId: sha256(version.id).slice(0, 16),
                         kind: document.kind,
@@ -341,6 +474,8 @@ async function main() {
                         section,
                         targetBytes: targetSectionBytes,
                         attempt,
+                        dense: profile.dense,
+                        recordDate: version.publishedAt,
                     });
                     const promptSha256 = sha256(JSON.stringify(prompt));
                     const checkpointPath = resolve(
@@ -371,6 +506,12 @@ async function main() {
                                 continue;
                             throw Error("long_generation_checkpoint_unresolved");
                         }
+                        if (attempt > 0 && profile.retryLimit !== null) {
+                            if (retriesUsed >= profile.retryLimit)
+                                throw Error("long_generation_retry_limit");
+                            retriesUsed++;
+                        }
+                        meter.assertCanDispatch();
                         await writeFile(startedPath, JSON.stringify({ promptSha256 }) + "\n", {
                             flag: "wx",
                             flush: true,
@@ -379,7 +520,7 @@ async function main() {
                         const response = await invoke(endpoint, {
                             method: "POST",
                             headers: { "Content-Type": "application/json", "api-key": live.apiKey },
-                            body: generationBody(prompt, AZURE_LUNA_DEPLOYMENT),
+                            body: generationBody(prompt, AZURE_LUNA_DEPLOYMENT, MAX_OUTPUT_TOKENS),
                         });
                         if (!response.ok) throw Error("long_generation_provider_failed");
                         const parsed = completionSchema.safeParse(await response.json());
@@ -394,19 +535,25 @@ async function main() {
                     }
                     try {
                         if (!responseComplete) throw Error("long_generation_response_invalid");
-                        const fitted = fitSectionParagraphs(text, targetSectionBytes);
+                        const prose = profile.dense
+                            ? renderAdministrativeEntries(text, version.publishedAt)
+                            : text;
+                        const fitted = fitSectionParagraphs(prose, targetSectionBytes);
+                        if (profile.dense) validateDenseSection(fitted);
                         if (allAnchors.some(a => text.includes(a.text) || text.includes(a.marker)))
                             throw Error("long_generation_prose_anchor_leak");
                         accepted = fitted;
                         break;
                     } catch (error) {
-                        if (attempt === MAX_ATTEMPTS - 1) throw error;
+                        if (attempt === profile.maxAttempts - 1) throw error;
                     }
                 }
                 if (!accepted) throw Error("long_generation_section_invalid");
                 sections.push(accepted);
             }
             const result = assembleVersion(document, version, sections, allAnchors);
+            if (profile.dense && result.bytes > 32000)
+                throw Error("long_generation_document_invalid");
             validateVersionLabels(spec, version.id, result.text);
             const versionPath = resolve(output, `${version.id}.md`),
                 old = await readOptional(versionPath);
@@ -447,7 +594,7 @@ async function main() {
         try {
             await runCanaryThenPool(orderedVersions, generateVersion, {
                 canaryOnly: values["canary-only"],
-                concurrency: 2,
+                concurrency: profile.concurrency,
                 stop: () => {},
             });
         } finally {
@@ -483,16 +630,26 @@ async function main() {
             const bytes = await readFile(resolve(output, name));
             files.push({ file: name, sha256: sha256(bytes), bytes: bytes.length });
         }
+        if (canaryRebind) {
+            const bytes = await readFile(rebindPath);
+            files.push({
+                file: "empty-canary-rebind.json",
+                sha256: sha256(bytes),
+                bytes: bytes.length,
+            });
+        }
         if (receipt || values["recover-no-http"]) {
             const bytes = await readFile(recoveryPath);
             files.push({
-                file: "generation-no-http-recovery.json",
+                file: profile.dense
+                    ? "generation-no-http-recoveries.json"
+                    : "generation-no-http-recovery.json",
                 sha256: sha256(bytes),
                 bytes: bytes.length,
             });
         }
         const lock = {
-            schemaVersion: "long-decisions-lock/1",
+            schemaVersion: profile.dense ? "long-decisions-lock/2" : "long-decisions-lock/1",
             specSha256,
             files,
             documents: spec.documents.length,

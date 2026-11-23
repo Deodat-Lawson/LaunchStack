@@ -38,7 +38,7 @@ const documentSchema = z
 // Cases remain local and are deliberately not part of the provider DTO.
 export const specSchema = z
     .object({
-        schemaVersion: z.literal("long-decisions/spec-v1"),
+        schemaVersion: z.enum(["long-decisions/spec-v1", "long-decisions/spec-v2"]),
         company: z
             .object({ id, name: z.string(), fictional: z.literal(true), domain: z.string() })
             .strict(),
@@ -69,7 +69,7 @@ export const specSchema = z
                 })
                 .strict()
         ),
-        documents: z.array(documentSchema).min(1).max(100),
+        documents: z.array(documentSchema).min(1).max(200),
         cases: z.array(
             z
                 .object({
@@ -100,24 +100,50 @@ export const SECTION_COUNT = 5;
 export const MAX_ATTEMPTS = 2;
 export const MAX_OUTPUT_TOKENS = 4000;
 export const REPETITION_LIMIT = 0.08;
+export function generationProfile(spec: Pick<LongSpec, "schemaVersion">) {
+    return spec.schemaVersion === "long-decisions/spec-v2"
+        ? {
+              limitUsd: 5,
+              maxOutputTokens: 2400,
+              maxAttempts: 4,
+              retryLimit: 350,
+              concurrency: 5,
+              dense: true,
+          }
+        : {
+              limitUsd: 3,
+              maxOutputTokens: MAX_OUTPUT_TOKENS,
+              maxAttempts: MAX_ATTEMPTS,
+              retryLimit: null,
+              concurrency: 2,
+              dense: false,
+          };
+}
 const count = (text: string, needle: string) => text.split(needle).length - 1;
 export type RecoveryAttempt = { file: string; promptSha256: string; expectedPromptSha256: string };
 export function validateNoHttpRecovery(
     ledger: BenchmarkMeterSnapshot,
-    attempts: RecoveryAttempt[]
+    attempts: RecoveryAttempt[],
+    limitUsd = 3
 ) {
-    const unknown = ledger.records.filter(row => row.status === "unknown");
+    const unknown = ledger.records.filter(
+        row => row.status === "unknown" && !row.continuedAfterGenerationNoHttp
+    );
     if (
         ledger.hold !== "usage_unresolved" ||
         !unknown.length ||
         unknown.length !== attempts.length ||
         new Set(attempts.map(a => a.file)).size !== attempts.length ||
-        ledger.projectedTotalUsd > 3 ||
-        ledger.limitUsd !== 3 ||
+        ledger.projectedTotalUsd > limitUsd ||
+        ledger.limitUsd !== limitUsd ||
         ledger.records.some(row => row.status === "sent" || row.status === "reserved") ||
         attempts.some(
             a =>
-                !/^[A-Za-z0-9_-]+\.s[0-4]\.a[01]\.json\.started$/.test(a.file) ||
+                !(
+                    limitUsd === 5
+                        ? /^[A-Za-z0-9_-]+\.s[0-4]\.a[0-3]\.json\.started$/
+                        : /^[A-Za-z0-9_-]+\.s[0-4]\.a[01]\.json\.started$/
+                ).test(a.file) ||
                 !/^[a-f0-9]{64}$/.test(a.promptSha256) ||
                 a.promptSha256 !== a.expectedPromptSha256
         ) ||
@@ -234,6 +260,8 @@ export function genericPrompt(input: {
     section: number;
     targetBytes: number;
     attempt: number;
+    dense?: boolean;
+    recordDate?: string;
 }) {
     const facets = [
         "operating workflow, responsibilities and coordination practices",
@@ -243,18 +271,106 @@ export function genericPrompt(input: {
         "validation practices, unresolved procedural questions and maintenance",
     ];
     return {
-        system: "Write original, plausible internal prose for a fictional business workspace. Generate substantive varied English paragraphs, not filler, repeated templates, lorem ipsum, summaries or a list of headings. Do not mention benchmarks, retrieval, questions, evidence, anchors or generation. No external tools. No numeric business results, measurements, dates, approval decisions or named customer claims; use qualitative process detail. Do not invent a final decision. Every paragraph must contribute a different concrete operational detail. Return only Markdown prose.",
+        system: input.dense
+            ? "Write substantive internal administrative records for a fictional freight company. Return only a JSON array of exactly 15 coherent, independent entries. Each entry is a 9-string tuple [eventDate, fullName, decisionVerb, decisionClause, numericQuantity, unit, quantityObservation, followupDate, followupObservation]. Dates must be real YYYY-MM-DD calendar dates on or before recordDate; vary dates across the available period. Use at least 3 distinct dates and 2 fictional full names. decisionVerb must be approved, rejected, retained, deferred, authorized, adopted, cancelled, accepted or denied. numericQuantity must use decimal digits and unit must be a concrete count or measurement, never an identifier. Each clause or observation must be original fluent prose of approximately 100 to 125 characters without sentence-ending punctuation. decisionClause is a direct object phrase after the decision verb. quantityObservation and followupObservation are full independent clauses. Each entry must describe one coherent supporting administrative event, its actual quantity and a meaningful follow-up. Invent all facts independently. Vary syntax, nouns, amounts and dates. Use support, maintenance, purchasing, training, recordkeeping and scheduling work around the named subject; do not decide the main project's outcome or determining metric. Do not mention benchmarks, labels, questions, anchors, retrieval or generation. No tools, headings or commentary."
+            : "Write original, plausible internal prose for a fictional business workspace. Generate substantive varied English paragraphs, not filler, repeated templates, lorem ipsum, summaries or a list of headings. Do not mention benchmarks, retrieval, questions, evidence, anchors or generation. No external tools. No numeric business results, measurements, dates, approval decisions or named customer claims; use qualitative process detail. Do not invent a final decision. Every paragraph must contribute a different concrete operational detail. Return only Markdown prose.",
         user: JSON.stringify({
             layoutId: input.opaqueId,
             kind: input.kind,
             title: input.title,
             genericBrief: input.brief,
+            ...(input.dense ? { recordDate: input.recordDate } : {}),
             section: input.section + 1,
             focus: facets[input.section],
             targetUtf8Bytes: input.targetBytes,
-            instruction: `Write approximately ${Math.round(input.targetBytes / 6)} words, with ${Math.round(input.targetBytes / 600)} substantial paragraphs. This is an independent section; avoid a global introduction or conclusion. ${input.attempt ? "Prior section failed mechanical length or variation checks; obey the requested length and use new varied prose." : ""}`,
+            instruction: input.dense
+                ? `Return exactly 15 JSON tuples and no other text. The three prose clauses in each tuple should average approximately ${Math.round((input.targetBytes / 15 - 100) / 3)} characters each so the rendered section is near ${input.targetBytes} UTF-8 bytes. Put quantitative facts only in numericQuantity and dates only in the date fields. Follow-up observations must be substantive verbal context without numbers. ${input.attempt ? "A prior mechanical length, schema or density check failed; obey all tuple and length constraints using varied new prose." : ""}`
+                : `Write approximately ${Math.round(input.targetBytes / 6)} words, with ${Math.round(input.targetBytes / 600)} substantial paragraphs. This is an independent section; avoid a global introduction or conclusion. ${input.attempt ? "Prior section failed mechanical length or variation checks; obey the requested length and use new varied prose." : ""}`,
         }),
     };
+}
+const administrationEntry = z.tuple([
+    z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    z.string().regex(/^[A-Z][a-z]+(?: [A-Z][a-z]+){1,2}$/),
+    z.enum([
+        "approved",
+        "rejected",
+        "retained",
+        "deferred",
+        "authorized",
+        "adopted",
+        "cancelled",
+        "accepted",
+        "denied",
+    ]),
+    z.string().trim().min(35).max(240),
+    z.string().regex(/^\d{1,5}(?:\.\d{1,2})?$/),
+    z.string().trim().min(2).max(40),
+    z.string().trim().min(35).max(240),
+    z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
+    z.string().trim().min(35).max(240),
+]);
+/** Render only provider-created facts; sentence placement never invents a date or quantity. */
+export function renderAdministrativeEntries(raw: string, recordDate: string) {
+    const json = raw.trim().replace(/^```(?:json)?\s*([\s\S]*?)\s*```$/i, "$1");
+    const entries = z.array(administrationEntry).length(15).parse(JSON.parse(json));
+    const validDate = (date: string) =>
+        !Number.isNaN(Date.parse(date)) &&
+        new Date(date).toISOString().slice(0, 10) === date &&
+        date <= recordDate.slice(0, 10);
+    return entries
+        .map(
+            (
+                [
+                    date,
+                    name,
+                    decision,
+                    rawDetail,
+                    quantity,
+                    unit,
+                    rawObservation,
+                    followupDate,
+                    rawFollowup,
+                ],
+                index
+            ) => {
+                const trimPunctuation = (clause: string) => clause.trim().replace(/[.!?]+$/, "");
+                const detail = trimPunctuation(rawDetail),
+                    observation = trimPunctuation(rawObservation),
+                    followup = trimPunctuation(rawFollowup);
+                if (
+                    !validDate(date) ||
+                    !validDate(followupDate) ||
+                    followupDate < date ||
+                    [detail, observation, followup].some(clause => /[.!?;]/.test(clause)) ||
+                    /[.!?;\d]/.test(unit) ||
+                    /\d/.test(followup)
+                )
+                    throw Error("long_generation_administration_invalid");
+                const lower = (value: string) => value[0]!.toLowerCase() + value.slice(1);
+                const upper = (value: string) => value[0]!.toUpperCase() + value.slice(1);
+                const first =
+                    index % 3 === 0
+                        ? `On ${date}, ${name} ${decision} ${detail}.`
+                        : index % 3 === 1
+                          ? `${name} ${decision} ${detail} on ${date}.`
+                          : `As recorded on ${date}, ${name} ${decision} ${detail}.`;
+                const second =
+                    index % 3 === 0
+                        ? `${upper(observation)}, covering ${quantity} ${unit}.`
+                        : index % 3 === 1
+                          ? `${quantity} ${unit} formed the recorded allocation, while ${lower(observation)}.`
+                          : `For the ${quantity} ${unit}, ${lower(observation)}.`;
+                const third =
+                    index % 3 === 2
+                        ? `${upper(followup)}.`
+                        : index % 2 === 0
+                          ? `At the follow-up dated ${followupDate}, ${lower(followup)}.`
+                          : `${upper(followup)} at the review on ${followupDate}.`;
+                return [first, second, third].join(" ");
+            }
+        )
+        .join("\n\n");
 }
 export function sectionTarget(
     document: LongDocument,
@@ -269,11 +385,15 @@ export function sectionTarget(
               2 * completed.length
         : Math.floor(available / SECTION_COUNT);
 }
-export function generationBody(prompt: ReturnType<typeof genericPrompt>, model: string) {
+export function generationBody(
+    prompt: ReturnType<typeof genericPrompt>,
+    model: string,
+    maxOutputTokens = MAX_OUTPUT_TOKENS
+) {
     return JSON.stringify({
         model,
         reasoning_effort: "none",
-        max_completion_tokens: MAX_OUTPUT_TOKENS,
+        max_completion_tokens: maxOutputTokens,
         store: false,
         messages: [
             { role: "system", content: prompt.system },
@@ -286,12 +406,14 @@ export function generationProjection(
     model: string,
     ratesPerMillion: { input: number; output: number }
 ) {
+    const profile = generationProfile(spec);
     let requests = 0,
-        inputTokenCeiling = 0;
+        inputTokenCeiling = 0,
+        largestRetryInput = 0;
     for (const document of spec.documents)
         for (const version of document.versions)
             for (let section = 0; section < SECTION_COUNT; section++)
-                for (let attempt = 0; attempt < MAX_ATTEMPTS; attempt++) {
+                for (let attempt = 0; attempt < (profile.dense ? 1 : MAX_ATTEMPTS); attempt++) {
                     const prompt = genericPrompt({
                         opaqueId: sha256(version.id).slice(0, 16),
                         kind: document.kind,
@@ -300,12 +422,23 @@ export function generationProjection(
                         section,
                         targetBytes: sectionTarget(document, version),
                         attempt,
+                        dense: profile.dense,
+                        recordDate: version.publishedAt,
                     });
-                    inputTokenCeiling +=
-                        Buffer.byteLength(generationBody(prompt, model)) + 1024 + 256 * 2 + 128;
+                    const ceiling =
+                        Buffer.byteLength(generationBody(prompt, model, profile.maxOutputTokens)) +
+                        1024 +
+                        256 * 2 +
+                        256;
+                    inputTokenCeiling += ceiling;
+                    largestRetryInput = Math.max(largestRetryInput, ceiling + 256);
                     requests++;
                 }
-    const outputTokenCeiling = requests * MAX_OUTPUT_TOKENS;
+    if (profile.retryLimit !== null) {
+        inputTokenCeiling += profile.retryLimit * largestRetryInput;
+        requests += profile.retryLimit;
+    }
+    const outputTokenCeiling = requests * profile.maxOutputTokens;
     return {
         maximumRequests: requests,
         inputTokenCeiling,
@@ -316,7 +449,9 @@ export function generationProjection(
                     outputTokenCeiling * ratesPerMillion.output) *
                     1000
             ) / 1e9,
-        basis: "Every section uses both attempts; serialized UTF-8 request bytes plus protocol framing upper-bound input tokens; every response uses 4000 output tokens; upper Azure list rates, no cache discount",
+        basis: profile.dense
+            ? "One request per section plus 350 globally bounded retries; request UTF-8 bytes plus protocol framing bound input tokens; all responses use the full 2400-token output allowance; upper Azure list rates without cache discounts"
+            : "Every section uses both attempts; serialized UTF-8 request bytes plus protocol framing upper-bound input tokens; every response uses 4000 output tokens; upper Azure list rates, no cache discount",
     };
 }
 
@@ -341,16 +476,76 @@ export function exactSentences(text: string) {
         .map(item => item.segment.trim())
         .filter(Boolean);
 }
+/** Numeric/date density is a declared lexical proxy, independent of answer labels. */
+export function proseSpecificity(text: string) {
+    const body = text
+        .split(/\r?\n/)
+        .filter(line => !/^\s*#|\[\[ANCHOR_/.test(line))
+        .join("\n");
+    const dates = (value: string) =>
+        [...value.matchAll(/\b\d{4}-\d{2}-\d{2}\b/g)]
+            .map(match => match[0])
+            .filter(
+                value =>
+                    !Number.isNaN(Date.parse(value)) &&
+                    new Date(value).toISOString().slice(0, 10) === value
+            );
+    const quantities = (value: string) =>
+        value
+            .replace(/\b\d{4}-\d{2}-\d{2}\b/g, " ")
+            .match(/(?<![\p{L}\p{N}_-])\d+(?:[.,]\d+)*(?![\p{L}\p{N}_])/gu) ?? [];
+    const sentences = exactSentences(body);
+    const numericSentences = sentences.filter(sentence => quantities(sentence).length > 0).length;
+    const dateSentences = sentences.filter(sentence => dates(sentence).length > 0).length;
+    const numericOrDateSentences = sentences.filter(
+        sentence => quantities(sentence).length || dates(sentence).length
+    ).length;
+    const unitQuantities =
+        body
+            .replace(/\b\d{4}-\d{2}-\d{2}\b/g, " ")
+            .match(
+                /(?<![\p{L}\p{N}_-])\d+(?:[.,]\d+)*(?:\s+|-)(?:[A-Za-z-]+\s+){0,2}(?:percent|dollars?|pounds?|euros?|hours?|days?|minutes?|seconds?|months?|years?|consignments?|pairs?|loads?|records?|facilities|units?|crates?|vehicles?|batches?|kilograms?|operators?|movements?|legs?|accounts?|depots?|appointments?|requests?|cycles?|positions?|identities|reviews?|windows?|riders?|checks?|timetables?|agreements?|notices?|drafts?|machines?|events?|cases?|journeys|proposals?|clauses?|schedules?|shifts?|carriers?|sites?|people|members|sensors?|certificates?|transfers?|invoices?|periods?|approvals?|teams?|jobs?|chairs?|trays?|cabinets?|desks?|devices?|sessions?|items?|boxes?|labels?|forms?|metres?|meters?|kilometres?|kilometers?|litres?|liters?|pages?|panels?|batteries|kits?|seats?|folders?|sheets?|deliveries|courses?|participants?)\b/giu
+            ) ?? [];
+    return {
+        sentences: sentences.length,
+        numericSentences,
+        dateSentences,
+        numericOrDateSentences,
+        share: sentences.length ? numericOrDateSentences / sentences.length : 0,
+        distinctDates: new Set(dates(body)).size,
+        quantities: quantities(body).length,
+        quantitiesWithUnits: unitQuantities.length,
+        namedPeople: new Set(body.match(/\b[A-Z][a-z]{1,}\s+[A-Z][a-z]{1,}\b/g) ?? []).size,
+        decisionSentences: sentences.filter(sentence =>
+            /\b(?:approved|rejected|retained|deferred|authorized|decided|declined|adopted|cancelled|accepted|denied|confirmed)\b/i.test(
+                sentence
+            )
+        ).length,
+    };
+}
+export function validateDenseSection(text: string) {
+    const density = proseSpecificity(text);
+    if (
+        density.share < 0.85 ||
+        density.distinctDates < 3 ||
+        density.quantitiesWithUnits < 4 ||
+        density.namedPeople < 2 ||
+        density.decisionSentences < 2
+    )
+        throw Error("long_generation_section_density_invalid");
+    return density;
+}
 export const normalizedWording = (text: string) =>
     text
         .normalize("NFKC")
         .toLowerCase()
         .replace(/[^\p{L}\p{N}]+/gu, " ")
         .trim();
-const normalizedCount = (text: string, needle: string) =>
-    count(" " + normalizedWording(text) + " ", " " + normalizedWording(needle) + " ");
 /** Private spec validation only; no source wording appears in the returned numeric summary. */
 export function validateVersionLabels(spec: LongSpec, versionId: string, text: string) {
+    const normalizedText = " " + normalizedWording(text) + " ";
+    const occurrences = (needle: string) =>
+        count(normalizedText, " " + normalizedWording(needle) + " ");
     const ownership = new Map<string, Set<string>>();
     const blocks = spec.documents.flatMap(d =>
         d.versions.flatMap(v => v.anchors.map(a => ({ versionId: v.id, text: a.text })))
@@ -363,14 +558,14 @@ export function validateVersionLabels(spec: LongSpec, versionId: string, text: s
         }
     for (const [sentence, owners] of ownership) {
         const expected = owners.has(versionId) ? 1 : 0;
-        if (count(text, sentence) !== expected || normalizedCount(text, sentence) !== expected)
+        if (count(text, sentence) !== expected || occurrences(sentence) !== expected)
             throw Error("long_generation_sentence_label_leak");
     }
     for (const block of blocks)
-        if (normalizedCount(text, block.text) !== (block.versionId === versionId ? 1 : 0))
+        if (occurrences(block.text) !== (block.versionId === versionId ? 1 : 0))
             throw Error("long_generation_normalized_answer_leak");
     for (const item of spec.cases)
-        if (count(text, item.question) || normalizedCount(text, item.question))
+        if (count(text, item.question) || occurrences(item.question))
             throw Error("long_generation_question_leak");
     return {
         checkedSentences: ownership.size,
@@ -390,8 +585,12 @@ export function corpusValidationSummary(spec: LongSpec, versions: Map<string, As
     const global = repetition(values.map(v => v.assembled!.text).join("\n\n"));
     if (global.repeatedSentenceRate > REPETITION_LIMIT)
         throw Error("long_generation_global_repetition_invalid");
+    let specificity: ReturnType<typeof corpusSpecificity> | undefined;
+    if (generationProfile(spec).dense) specificity = corpusSpecificity(spec, versions);
     return {
-        schemaVersion: "long-decisions-validation/1",
+        schemaVersion: generationProfile(spec).dense
+            ? "long-decisions-validation/2"
+            : "long-decisions-validation/1",
         documents: spec.documents.length,
         versions: values.length,
         anchorPositionUnit: "UTF-8 bytes",
@@ -405,6 +604,62 @@ export function corpusValidationSummary(spec: LongSpec, versions: Map<string, As
             ...values.map(v => v.assembled!.repeatedSentenceRate)
         ),
         repetitionLimit: REPETITION_LIMIT,
+        ...(specificity ? { specificity } : {}),
+    };
+}
+function corpusSpecificity(spec: LongSpec, versions: Map<string, Assembled>) {
+    const anchors = spec.documents.flatMap(document =>
+        document.versions.flatMap(version =>
+            version.anchors.map(anchor => ({
+                ...anchor,
+                kind: document.kind,
+                versionId: version.id,
+            }))
+        )
+    );
+    const aggregate = (texts: string[]) => proseSpecificity(texts.join("\n\n"));
+    const evidence = aggregate(
+        anchors.filter(anchor => anchor.role === "evidence").map(anchor => anchor.text)
+    );
+    const distractors = aggregate(
+        anchors.filter(anchor => anchor.role === "distractor").map(anchor => anchor.text)
+    );
+    const fillerTexts = [...versions.values()].map(version => version.fillerText);
+    const filler = aggregate(fillerTexts);
+    const maxGap = Number(
+        (spec.design.filler as { maxAbsoluteLabelFillerNumericDateShareGap?: number } | undefined)
+            ?.maxAbsoluteLabelFillerNumericDateShareGap ?? 0.15
+    );
+    if ([evidence, distractors].some(role => Math.abs(role.share - filler.share) > maxGap + 1e-12))
+        throw Error("long_generation_corpus_density_gap_invalid");
+    const byKind = [...new Set(spec.documents.map(document => document.kind))].map(kind => ({
+        kind,
+        filler: aggregate(
+            spec.documents
+                .filter(document => document.kind === kind)
+                .flatMap(document =>
+                    document.versions.map(version => versions.get(version.id)!.fillerText)
+                )
+        ),
+        evidence: aggregate(
+            anchors
+                .filter(anchor => anchor.kind === kind && anchor.role === "evidence")
+                .map(anchor => anchor.text)
+        ),
+        distractors: aggregate(
+            anchors
+                .filter(anchor => anchor.kind === kind && anchor.role === "distractor")
+                .map(anchor => anchor.text)
+        ),
+    }));
+    return {
+        evidence,
+        distractors,
+        filler,
+        maxAbsoluteGap: maxGap,
+        byKind,
+        proxyLimit:
+            "Sentence presence of numbers and dates measures one lexical cue; names and decisions use mechanical proxies requiring representative human review.",
     };
 }
 export function validateSection(text: string, targetBytes: number) {
@@ -507,7 +762,14 @@ export function assembleVersion(
             sha256: sha256(anchor.text),
         };
     });
-    return { text, bytes, sha256: sha256(text), anchors, ...metrics };
+    return {
+        text,
+        bytes,
+        sha256: sha256(text),
+        anchors,
+        fillerText: sections.join("\n\n"),
+        ...metrics,
+    };
 }
 
 export function publicManifest(
@@ -516,7 +778,9 @@ export function publicManifest(
     versions: Map<string, Assembled>
 ) {
     return {
-        schemaVersion: "vantage-long-decisions-input/1",
+        schemaVersion: generationProfile(spec).dense
+            ? "vantage-long-decisions-input/2"
+            : "vantage-long-decisions-input/1",
         specSha256,
         company: spec.company,
         weeks: spec.weeks,

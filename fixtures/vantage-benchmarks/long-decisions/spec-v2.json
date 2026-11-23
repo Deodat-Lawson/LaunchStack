@@ -8,9 +8,9 @@
   },
   "design": {
     "freezeBeforeGeneration": true,
-    "reviewGate": "Commit this specification and require explicit user approval before any corpus generation or evaluation. This phase authorizes no provider calls.",
+    "reviewGate": "User approved the amended specification and the separate generation and comparison budgets. Verify and commit these amendments before corpus generation or evaluation.",
     "originalDocuments": 150,
-    "additionalVersions": 24,
+    "additionalVersions": 62,
     "developmentCases": 15,
     "heldoutCases": 15,
     "twoDocumentCases": 12,
@@ -18,14 +18,14 @@
     "byteUnit": "UTF-8 bytes",
     "documentBytes": {
       "min": 25000,
-      "max": 35000
+      "max": 32000
     },
     "anchorPositionRange": [
       0.3,
       0.8
     ],
-    "titleLexicalIsolation": "For every title and all 30 questions, NFKC-normalize and lowercase, extract contiguous Unicode letter tokens of at least three characters, strip an ending ing, ed, es or s from tokens longer than five characters, and require an empty intersection. Numeric filing numbers are unrelated to case IDs, roles and projects.",
-    "generationBoundary": "The prose provider receives only an opaque document identifier, neutral title, document kind, generic brief and generic section instructions. Drafting receives no case questions, label text, expected dispositions, marker offsets, role, group or split. The local assembler inserts the separately declared anchor sentences. Retrieval receives only readable canonical source text, actor scope and the open questions. Case labels, expected answers, supporting-document lists, anchor offsets and distractor categories stay with the offline validator and scorer.",
+    "titleLexicalIsolation": "Use the associated project or site name followed by a plain document description. Include the same project name on supporting and distractor titles, without a cue to the expected disposition or document role. The restricted portfolio records name all five of their projects. Remove only the associated project name or names from each title. NFKC-normalize and lowercase the remaining title and all 30 questions, extract contiguous Unicode letter tokens of at least three characters, strip an ending ing, ed, es or s from tokens longer than five characters, and require an empty intersection. Filing numbers do not encode case, role or project.",
+    "generationBoundary": "The prose provider receives only an opaque document identifier, project and description as stated in the document title, document kind, generic brief and generic section instructions. Drafting receives no case questions, label text, expected dispositions, marker offsets, role, group or split. The local assembler inserts the separately declared anchor sentences. Retrieval receives only readable canonical source text, actor scope and the open questions. Case labels, expected answers, supporting-document lists, anchor offsets and distractor categories stay with the offline validator and scorer.",
     "filler": {
       "sectionsPerVersion": 5,
       "instructions": "Write substantive internal records around the document subject with fictional people, calendar dates, quantities and substantive decisions about neighboring administrative work. Derive those specifics independently of the case anchors. Use dates and quantities naturally in decisions, observations, exceptions and follow-ups. Avoid templated headers, padding, repeated sentences, standalone record identifiers as quantities, and definitive claims about the outcome of the main project or the metric that determines it.",
@@ -42,8 +42,8 @@
       "denominator": "Segment fitted prose bodies and exact anchor blocks with Intl.Segmenter en, excluding Markdown headings, marker lines and blanks. Count distinct real ISO calendar dates, such as 2026-10-06. Mask date spans before counting standalone written numerals, amounts, currency, percentages and units, including hyphenated quantities such as 10-day. Spelled numbers and digits embedded only in record, person or project IDs do not count. Report the number of sentences with a quantity, with a date and with either for supporting labels, distractor labels and filler. Apply the 15-point maximum absolute gap separately to support versus filler, distractors versus filler and all evaluation labels versus filler. The two fixed policy excerpts are outside these label denominators. Report the corpus breakdown and split or document-kind counts where defined.",
       "additionalValidation": "Retain v1 size, UTF-8 position, marker, canonical hash, exact/normalized sentence and label leakage and repetition checks. Apply section density floors after fitting paragraphs and before inserting anchors. Check the minimum counts against the neutral subject of the section and review representative documents from each kind for unrelated administrative specifics. Report this measurable lexical proxy and its limits, along with within-section variation."
     },
-    "temporalCoverage": "Every case is scored only at its own week cutoff. Every readable distractor remains the latest version of a separate eligible document at that cutoff. Four case files have earlier drafts and ten independent administrative records update in each later week. The earlier primary drafts are unlabeled. The restricted documents also exist by the applicable cutoff and are expressly excluded by ACL.",
-    "cataloguePressure": "Each cutoff features 54 newly published or updated actor-readable non-fixed candidates: 14 case-support sources, 30 readable distractors, and ten unrelated records. At 35,000 bytes each these fit within the production 2 MB parent acquisition budget while exceeding the 50-entry catalogue. The four independent secondary records each week are published earlier than the other 50 candidates. This makes them valid lexical ranking candidates outside a recency-only catalogue. Earlier cohorts and history provide additional tenant inventory. Measure acquisition, offered and frozen support independently. Availability and actual offer are distinct observations.",
+    "temporalCoverage": "Every case is scored only at its own week cutoff. Every readable distractor remains the latest version of a separate eligible document at that cutoff. Twenty-six later-cohort files have unlabeled preliminary versions before week one closes. Ten independent administrative records and eight earlier comparator records update in each later week. The restricted documents also exist by the applicable cutoff and are expressly excluded by ACL.",
+    "cataloguePressure": "There are 80, 111 and 142 readable non-fixed candidates at the three cutoffs. The newest 62 comprise 14 case-support sources, 30 readable distractors, ten unrelated administrative records and eight additional preliminary or refreshed records. At 32,000 bytes each this frontier fits in the production 2 MB parent-acquisition budget. Four earlier primary records and four independent secondary records per cutoff sit outside the newest 50, along with four readable stale records. Measure actual offered and frozen support separately from temporal eligibility. Report acquisition when directly observed.",
     "groupDeclaration": "For each split and cutoff, the five cases form one quintet and two triples. Each triple has one two-document case. The middle single-document case is repeated across the triples. Count unique cases and grouped occurrences separately.",
     "comparison": {
       "arms": [
@@ -62,14 +62,14 @@
       "liveExplorationsTotal": 54,
       "maxSourceUnits": 16,
       "catalogueCap": 50,
-      "reporting": "Retain v1 evidence and reliability metrics plus supporting document versions offered and selected. For cases with two required documents, report both present in acquisition, both offered, both frozen and strict passage coverage in both. Report the four distractor categories independently. Include failures and zero evidence counts. Treat a restricted disclosure as an error in every arm.",
+      "reporting": "Main metrics are supporting documents found in frozen evidence, strict passage recall and two-document cases with both supporting documents found. Score the exact labelled version. Report supporting document versions offered, both offered for two-document cases and acquisition when observed. Report distractors selected independently for each of the four types as descriptive counts without a retrieval penalty. Include failures and zero evidence counts. A restricted disclosure is an access-control violation in every arm.",
       "sequence": "Lock ingestion, retrieval and scoring settings before dev retrieval, complete dev before held-out, then run held-out retrieval once with the same settings. Use a single shared exploration per group and cap for the three authorized live snapshots. Use the held-out captures only for scoring and reporting."
     },
     "spending": {
       "generationUsd": 5,
       "comparisonUsd": 5,
       "provider": "Azure GPT-6 Luna on the configured Azure routes.",
-      "policy": "Approval is mandatory. Maintain separate durable spend ledgers and reserve every request before sending it. Recompute forecasts for the locked 174-version corpus and 54 explorations with explicit maximum tokens and retry bounds. Use v1 measured usage for comparable exploration costs. Bound cold digests for a split from its public ACL and version inventory before that split runs, then refine from the actual offered union returned by its deterministic arms. Stop before model calls if the forecast exceeds the relevant cap, and prevent every dispatch that would breach it. Adapt the v1 fixed-count schema and projection after review while preserving the locked roster and retrieval limits."
+      "policy": "Maintain separate durable spend ledgers and reserve every request before sending it. Recompute forecasts for the locked 212-version corpus and 54 explorations with explicit maximum tokens and retry bounds. Use v1 measured usage for comparable exploration costs. Bound cold digests for a split from its public ACL and version inventory before that split runs, then refine from the actual offered union returned by its deterministic arms. Stop before model calls if the forecast exceeds the relevant cap, and prevent every dispatch that would breach it."
     },
     "expectedMarkerBehavior": "Build every document version independently. Each anchor marker occurs once before insertion and zero times in canonical text. Matching uses exact source version and the UTF-16 range in its canonical text. Preserve the labelled sentence bytes and intended byte-position range."
   },
@@ -276,7 +276,7 @@
     {
       "id": "D001",
       "kind": "qa_review",
-      "title": "Nacre transcript 092",
+      "title": "Aster test memorandum 092",
       "brief": "Aster operational acceptance observations, replay procedures, and component handoffs in the river region. Surrounding sections discuss independent maintenance work with their own dates, counts, owners, and recorded decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -299,7 +299,7 @@
     {
       "id": "D002",
       "kind": "meeting_notes",
-      "title": "Yarrow ledger 165",
+      "title": "Aster worksheet 165",
       "brief": "Aster personnel coordination, skills tracking, and shift handovers in the river region. Surrounding sections cover independent staffing and training activities with specific dates, quantities, people, and decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -322,7 +322,7 @@
     {
       "id": "D003",
       "kind": "incident_review",
-      "title": "Indigo worksheet 238",
+      "title": "Aster investigation memorandum 238",
       "brief": "Earlier Aster operational observations and the context of an initial acceptance meeting, with dated independent maintenance and roster detail.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -345,7 +345,7 @@
     {
       "id": "D004",
       "kind": "finance_review",
-      "title": "Umber annotation 311",
+      "title": "Aster treasury worksheet 311",
       "brief": "Aster productivity accounting, shift labor categories, and management scorecard definitions with detailed unrelated accounting decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -368,7 +368,7 @@
     {
       "id": "D005",
       "kind": "runbook",
-      "title": "Garnet memorandum 384",
+      "title": "Aster operating memorandum 384",
       "brief": "The neighboring Briar operation and its distinct duty practices, routine exceptions, and approved changes with dated operational specifics.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -385,13 +385,18 @@
               "text": "On 2026-10-09, Briar supervisor Tess Lorne retained a staffed overnight desk because 2 pager checks lacked acknowledgements. Briar uses a separate roster for 2 duty teams, and its instruction covers only the hillside depot."
             }
           ]
+        },
+        {
+          "id": "D005_V02",
+          "publishedAt": "2026-10-18T22:00:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D006",
       "kind": "security_review",
-      "title": "Rowan briefing 457",
+      "title": "Harbor Gate inspection register 457",
       "brief": "Harbor Gate physical control observations, alarm responsibilities, and facility acceptance work with unrelated dated asset decisions and counts.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -414,7 +419,7 @@
     {
       "id": "D007",
       "kind": "customer_call",
-      "title": "Dogwood journal 530",
+      "title": "Harbor Gate commercial transcript 530",
       "brief": "Harbor Gate customer and insurer correspondence, custody boundaries, and account handoffs surrounded by independent dated commercial specifics.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -437,7 +442,7 @@
     {
       "id": "D008",
       "kind": "meeting_notes",
-      "title": "Ochre circular 603",
+      "title": "Harbor Gate journal 603",
       "brief": "Earlier Harbor Gate commercial workshop proceedings and proposed operating assumptions alongside specific unrelated agreements.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -460,7 +465,7 @@
     {
       "id": "D009",
       "kind": "qa_review",
-      "title": "Zephyr docket 676",
+      "title": "Harbor Gate test memorandum 676",
       "brief": "Harbor Gate intake scorecard definitions, equipment acceptance classifications, and unrelated dated quality observations.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -483,7 +488,7 @@
     {
       "id": "D010",
       "kind": "policy_review",
-      "title": "Mallow register 749",
+      "title": "Harbor Gate administrative guidance 749",
       "brief": "The distinct Quarry Annex custody arrangement, its own partners and equipment, and unrelated approval records with names and quantities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -500,20 +505,25 @@
               "text": "On 2026-10-08, Sana Bell retained accompanied Quarry Annex intake for 12 insured accounts because rider QA-12 had no unescorted-custody provision. Quarry Annex excludes Harbor Gate and uses a separately priced custody schedule."
             }
           ]
+        },
+        {
+          "id": "D010_V02",
+          "publishedAt": "2026-10-18T22:01:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D011",
       "kind": "customer_call",
-      "title": "Violet chronicle 822",
+      "title": "Elm corridor telephone log 822",
       "brief": "Elm corridor account correspondence and timetable administration, including independent customer amendments with dates, quantities, named owners, and recorded decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D011_V01",
-          "publishedAt": "2026-10-11T19:02:00.000Z",
+          "publishedAt": "2026-10-10T14:02:00.000Z",
           "anchors": [
             {
               "id": "D011_V01_A01",
@@ -529,14 +539,14 @@
     {
       "id": "D012",
       "kind": "roadmap",
-      "title": "Hawthorn folio 895",
+      "title": "Elm corridor transcript 895",
       "brief": "Earlier Elm corridor service planning, account rollout assumptions, and routine dated scheduling discussions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D012_V01",
-          "publishedAt": "2026-10-10T16:02:00.000Z",
+          "publishedAt": "2026-10-10T12:02:00.000Z",
           "anchors": [
             {
               "id": "D012_V01_A01",
@@ -552,7 +562,7 @@
     {
       "id": "D013",
       "kind": "finance_review",
-      "title": "Thistle transcript 968",
+      "title": "Elm corridor treasury worksheet 968",
       "brief": "Elm corridor revenue recognition and service scorecard definitions with detailed unrelated reconciliation actions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -575,7 +585,7 @@
     {
       "id": "D014",
       "kind": "meeting_notes",
-      "title": "Fallow ledger 044",
+      "title": "Elm corridor docket 044",
       "brief": "Ash corridor customer scheduling and its distinct contractual calendar, with routine named review decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -592,20 +602,25 @@
               "text": "On 2026-10-08, Anika Price retained Ash corridor's 11:45 vehicle collection commitment for 9 accounts. Ash maintains its own timetable for those 9 accounts and is absent from the Elm amendment."
             }
           ]
+        },
+        {
+          "id": "D014_V02",
+          "publishedAt": "2026-10-18T22:02:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D015",
       "kind": "qa_review",
-      "title": "Pumice worksheet 117",
+      "title": "Finch test memorandum 117",
       "brief": "Finch mechanical inspection observations, equipment custody, and workshop handoffs with independent dated maintenance decisions and measurements.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D015_V01",
-          "publishedAt": "2026-10-11T19:03:00.000Z",
+          "publishedAt": "2026-10-10T14:03:00.000Z",
           "anchors": [
             {
               "id": "D015_V01_A01",
@@ -621,14 +636,14 @@
     {
       "id": "D016",
       "kind": "runbook",
-      "title": "Briar docket 190",
+      "title": "Finch operating memorandum 190",
       "brief": "Earlier Finch workshop instructions, equipment operating history, and dated local servicing records.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D016_V01",
-          "publishedAt": "2026-10-10T16:03:00.000Z",
+          "publishedAt": "2026-10-10T12:03:00.000Z",
           "anchors": [
             {
               "id": "D016_V01_A01",
@@ -644,7 +659,7 @@
     {
       "id": "D017",
       "kind": "meeting_notes",
-      "title": "Nacre register 263",
+      "title": "Finch memorandum 263",
       "brief": "Finch equipment availability accounting, allocation conventions, and unrelated workshop planning decisions with concrete specifics.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -667,7 +682,7 @@
     {
       "id": "D018",
       "kind": "security_review",
-      "title": "Yarrow chronicle 336",
+      "title": "Finch assurance memorandum 336",
       "brief": "Siskin machinery safety administration and independent local operating instructions with named owners and quantities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -684,13 +699,18 @@
               "text": "On 2026-10-09, Oren Moss limited Siskin lift S-6 to 800 kilograms pending a second brake inspection. Siskin's release docket covers 1 machine at its own workshop and grants no permission for Finch equipment."
             }
           ]
+        },
+        {
+          "id": "D018_V02",
+          "publishedAt": "2026-10-18T22:03:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D019",
       "kind": "runbook",
-      "title": "Indigo folio 409",
+      "title": "Maple operating memorandum 409",
       "brief": "Maple field procedures, installation handovers, and exception administration with varied unrelated dates, quantities, names, and decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -713,7 +733,7 @@
     {
       "id": "D020",
       "kind": "customer_call",
-      "title": "Umber transcript 482",
+      "title": "Maple commercial transcript 482",
       "brief": "Earlier Maple customer coordination and temporary trial arrangements alongside dated independent field operations detail.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -736,7 +756,7 @@
     {
       "id": "D021",
       "kind": "finance_review",
-      "title": "Garnet ledger 555",
+      "title": "Maple financial ledger 555",
       "brief": "Maple field productivity categories and cost allocation definitions with specific unrelated budget decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -759,7 +779,7 @@
     {
       "id": "D022",
       "kind": "roadmap",
-      "title": "Rowan worksheet 628",
+      "title": "Maple docket 628",
       "brief": "Rowan field service planning and its independent rollout arrangements, with named approvals and dated quantities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -776,13 +796,18 @@
               "text": "On 2026-10-08, Suri Ames approved a permanent 1-visit process for Rowan's 6 preconfigured installations. Rowan's procedure adopted on 2026-10-08 applies to factory-sealed modules and has a distinct approval record."
             }
           ]
+        },
+        {
+          "id": "D022_V02",
+          "publishedAt": "2026-10-18T22:04:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D023",
       "kind": "qa_review",
-      "title": "Dogwood annotation 701",
+      "title": "Alder test memorandum 701",
       "brief": "Operational record for Alder and its Meridian Foods relationship, covering assurance workflow, handoffs, and surrounding work.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -805,7 +830,7 @@
     {
       "id": "D024",
       "kind": "customer_call",
-      "title": "Ochre memorandum 774",
+      "title": "Alder correspondence summary 774",
       "brief": "Commercial correspondence for Alder and Meridian Foods, covering routine coordination, obligations, and neighboring account work.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -828,7 +853,7 @@
     {
       "id": "D025",
       "kind": "meeting_notes",
-      "title": "Zephyr briefing 847",
+      "title": "Alder memorandum 847",
       "brief": "Earlier working record for Alder and Meridian Foods, including prior coordination and historical follow-up.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -851,7 +876,7 @@
     {
       "id": "D026",
       "kind": "qa_review",
-      "title": "Mallow journal 920",
+      "title": "Alder test memorandum 920",
       "brief": "Measurement conventions used around Alder, including observation units, exclusions, and reporting practice.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -874,7 +899,7 @@
     {
       "id": "D027",
       "kind": "customer_call",
-      "title": "Violet circular 993",
+      "title": "Alder telephone log 993",
       "brief": "Account activity for Rowan, a separate refrigerated-service project, including its customer correspondence.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -891,13 +916,18 @@
               "text": "On 2026-10-09, Dev Shah approved Rowan's 24-consignment cold-chain restart for Pinecrest Foods. Rowan's agreement dated 2026-09-24 applies only to Pinecrest Foods and does not govern Meridian Foods."
             }
           ]
+        },
+        {
+          "id": "D027_V02",
+          "publishedAt": "2026-10-18T22:05:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D028",
       "kind": "security_review",
-      "title": "Hawthorn docket 069",
+      "title": "Cobalt verification worksheet 069",
       "brief": "Control review for Cobalt partner integration, including the identity boundary and routine security coordination.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -920,7 +950,7 @@
     {
       "id": "D029",
       "kind": "meeting_notes",
-      "title": "Thistle register 142",
+      "title": "Cobalt briefing 142",
       "brief": "Partner coordination around Cobalt, including correspondence ownership and routine agreement administration.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -943,7 +973,7 @@
     {
       "id": "D030",
       "kind": "security_review",
-      "title": "Fallow chronicle 215",
+      "title": "Cobalt safeguards log 215",
       "brief": "Earlier Cobalt control observations and follow-up responsibilities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -966,7 +996,7 @@
     {
       "id": "D031",
       "kind": "qa_review",
-      "title": "Pumice folio 288",
+      "title": "Cobalt test memorandum 288",
       "brief": "Definitions supporting Cobalt reliability reporting, including populations and exclusion conventions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -989,7 +1019,7 @@
     {
       "id": "D032",
       "kind": "roadmap",
-      "title": "Briar briefing 361",
+      "title": "Cobalt journal 361",
       "brief": "Delivery activity for Silverline, an independent partner integration with its own stakeholders.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1006,20 +1036,25 @@
               "text": "On 2026-10-09, Niko Bell authorized Silverline's reconciliation endpoint for 35 production identities at Eastbridge. Eastbridge's agreement is independent of Westhaven's Cobalt agreement."
             }
           ]
+        },
+        {
+          "id": "D032_V02",
+          "publishedAt": "2026-10-18T22:06:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D033",
       "kind": "finance_review",
-      "title": "Nacre journal 434",
+      "title": "Brook treasury worksheet 434",
       "brief": "Account administration for Brook, with routine billing workflow, approvals, and supporting correspondence.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D033_V01",
-          "publishedAt": "2026-10-11T19:07:00.000Z",
+          "publishedAt": "2026-10-10T14:07:00.000Z",
           "anchors": [
             {
               "id": "D033_V01_A01",
@@ -1035,14 +1070,14 @@
     {
       "id": "D034",
       "kind": "meeting_notes",
-      "title": "Yarrow circular 507",
+      "title": "Brook register 507",
       "brief": "Earlier Brook billing discussion and follow-up history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D034_V01",
-          "publishedAt": "2026-10-10T16:07:00.000Z",
+          "publishedAt": "2026-10-10T12:07:00.000Z",
           "anchors": [
             {
               "id": "D034_V01_A01",
@@ -1058,7 +1093,7 @@
     {
       "id": "D035",
       "kind": "finance_review",
-      "title": "Indigo docket 580",
+      "title": "Brook treasury worksheet 580",
       "brief": "Brook reporting definitions for account charges and service cost classifications.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1081,7 +1116,7 @@
     {
       "id": "D036",
       "kind": "customer_call",
-      "title": "Umber register 653",
+      "title": "Brook commercial transcript 653",
       "brief": "Customer administration for Estuary, an independent account with separate billing terms.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1098,20 +1133,25 @@
               "text": "On 2026-10-09, Sera Holt accepted a 27600-dollar credit for Estuary because its agreement includes all recorded waiting time. Estuary's broader compensation clause does not amend Brook's agreement."
             }
           ]
+        },
+        {
+          "id": "D036_V02",
+          "publishedAt": "2026-10-18T22:07:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D037",
       "kind": "security_review",
-      "title": "Garnet chronicle 726",
+      "title": "Sable safeguards log 726",
       "brief": "Assurance administration for Sable's environmental reporting, including review boundaries and source handling.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D037_V01",
-          "publishedAt": "2026-10-11T19:08:00.000Z",
+          "publishedAt": "2026-10-10T14:08:00.000Z",
           "anchors": [
             {
               "id": "D037_V01_A01",
@@ -1127,14 +1167,14 @@
     {
       "id": "D038",
       "kind": "roadmap",
-      "title": "Rowan folio 799",
+      "title": "Sable docket 799",
       "brief": "Earlier Sable communication planning and account-review history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D038_V01",
-          "publishedAt": "2026-10-10T16:08:00.000Z",
+          "publishedAt": "2026-10-10T12:08:00.000Z",
           "anchors": [
             {
               "id": "D038_V01_A01",
@@ -1150,7 +1190,7 @@
     {
       "id": "D039",
       "kind": "finance_review",
-      "title": "Dogwood transcript 872",
+      "title": "Sable financial ledger 872",
       "brief": "Sable environmental measurement definitions, including units, boundary conventions, and supporting account practice.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1173,7 +1213,7 @@
     {
       "id": "D040",
       "kind": "customer_call",
-      "title": "Ochre ledger 945",
+      "title": "Sable correspondence summary 945",
       "brief": "Environmental communication activity for Moss, an independent customer service arrangement.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1196,7 +1236,7 @@
     {
       "id": "D041",
       "kind": "customer_call",
-      "title": "Zephyr worksheet 021",
+      "title": "Linden telephone log 021",
       "brief": "Commercial coordination for Linden, including quote administration, routine service choices, and account handoffs.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1219,7 +1259,7 @@
     {
       "id": "D042",
       "kind": "meeting_notes",
-      "title": "Mallow annotation 094",
+      "title": "Linden register 094",
       "brief": "Earlier Linden offer discussion and supplier coordination history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1242,7 +1282,7 @@
     {
       "id": "D043",
       "kind": "roadmap",
-      "title": "Violet memorandum 167",
+      "title": "Linden worksheet 167",
       "brief": "Linden commercial reporting conventions, including reservation and realized-capacity measures.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1265,7 +1305,7 @@
     {
       "id": "D044",
       "kind": "customer_call",
-      "title": "Hawthorn briefing 240",
+      "title": "Linden telephone log 240",
       "brief": "Commercial records for Laurel, a separate contingency-service project and supplier arrangement.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1288,14 +1328,14 @@
     {
       "id": "D045",
       "kind": "qa_review",
-      "title": "Thistle journal 313",
+      "title": "Kestrel inspection log 313",
       "brief": "Kestrel interchange acceptance, receiving coordination, and handoff timing observations with independent quantitative maintenance and planning specifics.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D045_V01",
-          "publishedAt": "2026-09-25T08:00:00.000Z",
+          "publishedAt": "2026-10-11T22:00:00.000Z",
           "anchors": []
         },
         {
@@ -1316,19 +1356,24 @@
     {
       "id": "D046",
       "kind": "customer_call",
-      "title": "Fallow circular 386",
+      "title": "Kestrel telephone log 386",
       "brief": "Kestrel sending-carrier correspondence, schedule administration, and account ownership with unrelated concrete commercial details.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D046_V01",
+          "publishedAt": "2026-10-11T22:01:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D046_V02",
           "publishedAt": "2026-10-12T21:00:00.000Z",
           "anchors": [
             {
-              "id": "D046_V01_A01",
+              "id": "D046_V02_A01",
               "role": "evidence",
-              "marker": "[[ANCHOR_D046_V01_A01]]",
+              "marker": "[[ANCHOR_D046_V02_A01]]",
               "positionFraction": 0.69,
               "text": "Carrier amendment KA-9 signed by Pavel Shore on 2026-10-12 permits Kestrel's 35 minute interval from Monday 2026-10-19 only when a separate receiving acceptance has been completed."
             }
@@ -1339,19 +1384,24 @@
     {
       "id": "D047",
       "kind": "meeting_notes",
-      "title": "Pumice docket 459",
+      "title": "Kestrel ledger 459",
       "brief": "Earlier Kestrel interchange planning discussions and expected timetable assumptions with dated independent coordination details.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D047_V01",
+          "publishedAt": "2026-10-11T22:02:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D047_V02",
           "publishedAt": "2026-10-17T16:00:00.000Z",
           "anchors": [
             {
-              "id": "D047_V01_A01",
+              "id": "D047_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D047_V01_A01]]",
+              "marker": "[[ANCHOR_D047_V02_A01]]",
               "positionFraction": 0.74,
               "text": "On 2026-10-07, Pavel Shore retained Kestrel's 55 minute interval because neither an effective carrier amendment nor a passed receiving acceptance was on file. The planning minutes issued on 2026-10-07 require both independent records before the interval can be shortened."
             }
@@ -1362,19 +1412,24 @@
     {
       "id": "D048",
       "kind": "finance_review",
-      "title": "Briar worksheet 532",
+      "title": "Kestrel financial ledger 532",
       "brief": "Kestrel interchange performance definitions and allocation methods with unrelated quantitative review decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D048_V01",
+          "publishedAt": "2026-10-11T22:03:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D048_V02",
           "publishedAt": "2026-10-18T20:00:00.000Z",
           "anchors": [
             {
-              "id": "D048_V01_A01",
+              "id": "D048_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D048_V01_A01]]",
+              "marker": "[[ANCHOR_D048_V02_A01]]",
               "positionFraction": 0.36,
               "text": "The Kestrel dashboard released on 2026-10-16 shows a 31 minute interchange by measuring gate scan to gate scan for 120 loads. It excludes the 14 minute carrier custody reconciliation that remains inside the contractual handover interval."
             }
@@ -1385,42 +1440,57 @@
     {
       "id": "D049",
       "kind": "roadmap",
-      "title": "Nacre annotation 605",
+      "title": "Kestrel memorandum 605",
       "brief": "Merlin carrier coordination and the separate scope of its timetable transition with dates, responsible people, and quantities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D049_V01",
+          "publishedAt": "2026-09-25T08:04:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D049_V02",
           "publishedAt": "2026-10-18T21:00:00.000Z",
           "anchors": [
             {
-              "id": "D049_V01_A01",
+              "id": "D049_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D049_V01_A01]]",
+              "marker": "[[ANCHOR_D049_V02_A01]]",
               "positionFraction": 0.42,
               "text": "On 2026-10-15, Yara Finn retained Merlin's 55 minute timetable from Monday 2026-10-19 for 2 depots because its carrier amendment remained unsigned. Merlin's schedule for those 2 depots belongs to its own sender and remains independent of Kestrel's carrier amendment."
             }
           ]
+        },
+        {
+          "id": "D049_V03",
+          "publishedAt": "2026-10-25T22:00:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D050",
       "kind": "qa_review",
-      "title": "Yarrow memorandum 678",
+      "title": "Cobalt test memorandum 678",
       "brief": "Cobalt visual inspection observations, verification workflow, and receiving quality coordination with dense independent dated decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D050_V01",
+          "publishedAt": "2026-09-24T08:05:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D050_V02",
           "publishedAt": "2026-10-18T19:01:00.000Z",
           "anchors": [
             {
-              "id": "D050_V01_A01",
+              "id": "D050_V02_A01",
               "role": "evidence",
-              "marker": "[[ANCHOR_D050_V01_A01]]",
+              "marker": "[[ANCHOR_D050_V02_A01]]",
               "positionFraction": 0.64,
               "text": "On 2026-10-14, Etta Sloan accepted Cobalt's image check after it identified all 16 planted seal defects across 320 receiving photographs. The acceptance requires a separate customer method waiver before replacing a physical inspector on a production batch."
             }
@@ -1431,19 +1501,24 @@
     {
       "id": "D051",
       "kind": "customer_call",
-      "title": "Indigo briefing 751",
+      "title": "Cobalt correspondence summary 751",
       "brief": "Cobalt customer correspondence, method governance, and intake coordination with independently dated commercial and workflow specifics.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D051_V01",
+          "publishedAt": "2026-09-25T08:06:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D051_V02",
           "publishedAt": "2026-10-12T21:01:00.000Z",
           "anchors": [
             {
-              "id": "D051_V01_A01",
+              "id": "D051_V02_A01",
               "role": "evidence",
-              "marker": "[[ANCHOR_D051_V01_A01]]",
+              "marker": "[[ANCHOR_D051_V02_A01]]",
               "positionFraction": 0.69,
               "text": "Customer waiver CB-17 signed by Tomas Reed on 2026-10-12 permits camera-only seal checks for Cobalt batch 381 of 240 crates arriving on 2026-10-20."
             }
@@ -1454,19 +1529,24 @@
     {
       "id": "D052",
       "kind": "security_review",
-      "title": "Umber journal 824",
+      "title": "Cobalt safeguards log 824",
       "brief": "Earlier Cobalt custody requirements and inspection workshop records with specific local actions and dates.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D052_V01",
+          "publishedAt": "2026-09-24T08:07:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D052_V02",
           "publishedAt": "2026-10-17T16:01:00.000Z",
           "anchors": [
             {
-              "id": "D052_V01_A01",
+              "id": "D052_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D052_V01_A01]]",
+              "marker": "[[ANCHOR_D052_V02_A01]]",
               "positionFraction": 0.74,
               "text": "On 2026-10-06, Tomas Reed required a physical inspector for Cobalt batch 381 because no method waiver had been issued. The workshop record dated 2026-10-06 leaves the inspection requirement open to a subsequent signed customer waiver."
             }
@@ -1477,19 +1557,24 @@
     {
       "id": "D053",
       "kind": "finance_review",
-      "title": "Garnet circular 897",
+      "title": "Cobalt treasury worksheet 897",
       "brief": "Cobalt receiving scorecard classifications and service labor accounting with numerical unrelated decisions and named owners.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D053_V01",
+          "publishedAt": "2026-09-25T08:08:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D053_V02",
           "publishedAt": "2026-10-18T20:01:00.000Z",
           "anchors": [
             {
-              "id": "D053_V01_A01",
+              "id": "D053_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D053_V01_A01]]",
+              "marker": "[[ANCHOR_D053_V02_A01]]",
               "positionFraction": 0.36,
               "text": "The Cobalt account report dated 2026-10-17 calls 99 percent of 1800 crates visually checked when any intake photograph is attached. Across those 1800 crates, it counts record presence and establishes neither defect-recognition coverage nor permission to remove the inspector."
             }
@@ -1500,42 +1585,57 @@
     {
       "id": "D054",
       "kind": "meeting_notes",
-      "title": "Rowan docket 970",
+      "title": "Cobalt docket 970",
       "brief": "Indigo intake meetings and its separate customer inspection arrangements with dated decisions and quantitative context.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D054_V01",
+          "publishedAt": "2026-09-24T08:09:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D054_V02",
           "publishedAt": "2026-10-18T21:01:00.000Z",
           "anchors": [
             {
-              "id": "D054_V01_A01",
+              "id": "D054_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D054_V01_A01]]",
+              "marker": "[[ANCHOR_D054_V02_A01]]",
               "positionFraction": 0.42,
               "text": "On 2026-10-15, Rina Sol denied Indigo's camera-only request for a batch of 190 crates. Indigo's waiver register covers those 190 crates for another customer and has no scope over Cobalt's batch."
             }
           ]
+        },
+        {
+          "id": "D054_V03",
+          "publishedAt": "2026-10-25T22:01:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D055",
       "kind": "runbook",
-      "title": "Dogwood register 046",
+      "title": "Larch operating memorandum 046",
       "brief": "Larch road operations, route exception administration, and local service coordination with unrelated dated operational decisions and quantities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D055_V01",
-          "publishedAt": "2026-10-18T19:02:00.000Z",
+          "publishedAt": "2026-09-25T08:10:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D055_V02",
+          "publishedAt": "2026-10-17T14:02:00.000Z",
           "anchors": [
             {
-              "id": "D055_V01_A01",
+              "id": "D055_V02_A01",
               "role": "evidence",
-              "marker": "[[ANCHOR_D055_V01_A01]]",
+              "marker": "[[ANCHOR_D055_V02_A01]]",
               "positionFraction": 0.64,
               "text": "In Larch instruction LI-32 dated 2026-10-16, Alba Kent retained a 22 minute planning allowance while the south access bridge remains limited to alternating traffic. The allowance may be removed only after a municipal unrestricted-access notice, and no such notice had been received at the 2026-10-17 review."
             }
@@ -1546,19 +1646,24 @@
     {
       "id": "D056",
       "kind": "roadmap",
-      "title": "Ochre chronicle 119",
+      "title": "Larch journal 119",
       "brief": "Earlier Larch access planning, expected civil works milestones, and independent timetable discussions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D056_V01",
-          "publishedAt": "2026-10-17T16:02:00.000Z",
+          "publishedAt": "2026-09-24T08:11:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D056_V02",
+          "publishedAt": "2026-10-17T12:02:00.000Z",
           "anchors": [
             {
-              "id": "D056_V01_A01",
+              "id": "D056_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D056_V01_A01]]",
+              "marker": "[[ANCHOR_D056_V02_A01]]",
               "positionFraction": 0.69,
               "text": "On 2026-10-05, Alba Kent's Larch plan expected the 22 minute allowance to end on 2026-10-14. That date assumed the contractor's inspection scheduled for 2026-10-12 would lead to unrestricted reopening of the south bridge."
             }
@@ -1569,19 +1674,24 @@
     {
       "id": "D057",
       "kind": "meeting_notes",
-      "title": "Zephyr folio 192",
+      "title": "Larch memorandum 192",
       "brief": "Larch dispatch performance definitions and local scheduling review with dense dated procedural specifics.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D057_V01",
+          "publishedAt": "2026-09-25T08:12:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D057_V02",
           "publishedAt": "2026-10-18T20:02:00.000Z",
           "anchors": [
             {
-              "id": "D057_V01_A01",
+              "id": "D057_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D057_V01_A01]]",
+              "marker": "[[ANCHOR_D057_V02_A01]]",
               "positionFraction": 0.74,
               "text": "The 2026-10-17 Larch dashboard shows only 4 minutes of route delay because its clock begins after the bridge queue. The separate 22-minute scheduled allowance includes the queue before that starting point and therefore uses a different interval."
             }
@@ -1592,7 +1702,7 @@
     {
       "id": "D058",
       "kind": "incident_review",
-      "title": "Mallow transcript 265",
+      "title": "Larch incident journal 265",
       "brief": "Hazel road operations and its separate civil access arrangement with named decisions and quantities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1609,13 +1719,18 @@
               "text": "On 2026-10-16, Miro Bell removed Hazel's 22 minute diversion allowance after the east tunnel reopened. Hazel's tunnel access notice issued on 2026-10-16 does not describe the south bridge used by Larch."
             }
           ]
+        },
+        {
+          "id": "D058_V02",
+          "publishedAt": "2026-10-25T22:02:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D059",
       "kind": "policy_review",
-      "title": "Violet ledger 338",
+      "title": "Juniper administrative guidance 338",
       "brief": "Juniper field acceptance records, customer handover governance, and artifact custody with varied independent dated decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1638,7 +1753,7 @@
     {
       "id": "D060",
       "kind": "customer_call",
-      "title": "Hawthorn worksheet 411",
+      "title": "Juniper telephone log 411",
       "brief": "Earlier Juniper customer handover conversations and initial artifact expectations with specific unrelated account details.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1661,7 +1776,7 @@
     {
       "id": "D061",
       "kind": "finance_review",
-      "title": "Thistle annotation 484",
+      "title": "Juniper financial ledger 484",
       "brief": "Juniper billing completion definitions and job allocation accounting with dated named decisions and quantities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1684,7 +1799,7 @@
     {
       "id": "D062",
       "kind": "runbook",
-      "title": "Fallow memorandum 557",
+      "title": "Juniper procedures worksheet 557",
       "brief": "Hawthorn field procedures and its separate equipment classes with specific review actions, owners, and dates.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1701,20 +1816,25 @@
               "text": "On 2026-10-16, Noel Finch permitted signature-only closure for Hawthorn's 14 passive cabinet inspections. Hawthorn's instruction for those 14 passive cabinet inspections has no scope over Juniper's powered cabinet acceptance class."
             }
           ]
+        },
+        {
+          "id": "D062_V02",
+          "publishedAt": "2026-10-25T22:03:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D063",
       "kind": "security_review",
-      "title": "Pumice briefing 630",
+      "title": "Osprey inspection register 630",
       "brief": "Osprey carrier assurance, damage exception administration, and allocation controls with unrelated concrete decisions and quantities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D063_V01",
-          "publishedAt": "2026-10-18T19:04:00.000Z",
+          "publishedAt": "2026-10-17T14:04:00.000Z",
           "anchors": [
             {
               "id": "D063_V01_A01",
@@ -1730,14 +1850,14 @@
     {
       "id": "D064",
       "kind": "meeting_notes",
-      "title": "Briar folio 703",
+      "title": "Osprey journal 703",
       "brief": "Earlier Osprey carrier review minutes, routine performance discussions, and independent dated allocation detail.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D064_V01",
-          "publishedAt": "2026-10-17T16:04:00.000Z",
+          "publishedAt": "2026-10-17T12:04:00.000Z",
           "anchors": [
             {
               "id": "D064_V01_A01",
@@ -1753,7 +1873,7 @@
     {
       "id": "D065",
       "kind": "finance_review",
-      "title": "Nacre transcript 776",
+      "title": "Osprey treasury worksheet 776",
       "brief": "Osprey insurance loss definitions and carrier account accounting with concrete unrelated dated review decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1776,7 +1896,7 @@
     {
       "id": "D066",
       "kind": "roadmap",
-      "title": "Yarrow ledger 849",
+      "title": "Osprey register 849",
       "brief": "Harrier carrier planning and a separately governed capacity arrangement with dated named decisions and counts.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1793,30 +1913,30 @@
               "text": "On 2026-10-16, Elin Ross restored Harrier to normal allocation after accepting 4 completed corrective actions. Harrier's restoration signed on 2026-10-16 concerns a different carrier and does not close Osprey restriction OR-11."
             }
           ]
+        },
+        {
+          "id": "D066_V02",
+          "publishedAt": "2026-10-25T22:04:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D067",
       "kind": "finance_review",
-      "title": "Indigo worksheet 922",
+      "title": "Drift treasury worksheet 922",
       "brief": "Revenue administration for Drift, including acceptance records, routine financial controls, and account handoffs.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D067_V01",
-          "publishedAt": "2026-09-24T08:00:00.000Z",
-          "anchors": []
-        },
-        {
-          "id": "D067_V02",
           "publishedAt": "2026-10-18T19:05:00.000Z",
           "anchors": [
             {
-              "id": "D067_V02_A01",
+              "id": "D067_V01_A01",
               "role": "evidence",
-              "marker": "[[ANCHOR_D067_V02_A01]]",
+              "marker": "[[ANCHOR_D067_V01_A01]]",
               "positionFraction": 0.47,
               "text": "On 2026-10-14, controller Sera Holt confirmed that all 86 Drift deliveries met the signed acceptance requirement for the 148000-dollar balance. The collection policy also requires a separately documented withdrawal of any active rate dispute."
             }
@@ -1827,7 +1947,7 @@
     {
       "id": "D068",
       "kind": "customer_call",
-      "title": "Umber annotation 995",
+      "title": "Drift telephone log 995",
       "brief": "Customer correspondence for Drift, including commercial questions and account-resolution workflow.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1850,7 +1970,7 @@
     {
       "id": "D069",
       "kind": "meeting_notes",
-      "title": "Garnet memorandum 071",
+      "title": "Drift transcript 071",
       "brief": "Earlier Drift collection planning and customer correspondence history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1873,7 +1993,7 @@
     {
       "id": "D070",
       "kind": "finance_review",
-      "title": "Rowan briefing 144",
+      "title": "Drift financial ledger 144",
       "brief": "Drift measurement conventions for billing, acceptance, and collection reporting.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1896,7 +2016,7 @@
     {
       "id": "D071",
       "kind": "customer_call",
-      "title": "Dogwood journal 217",
+      "title": "Drift telephone log 217",
       "brief": "Collection activity for Dune, a separate account with its own payment correspondence.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1913,13 +2033,18 @@
               "text": "On 2026-10-16, Dev Shah closed Dune's 6 percent accessorial challenge after its customer signed a withdrawal. Dune's 148000-dollar balance belongs to a separate agreement and ledger."
             }
           ]
+        },
+        {
+          "id": "D071_V02",
+          "publishedAt": "2026-10-25T22:05:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D072",
       "kind": "security_review",
-      "title": "Ochre circular 290",
+      "title": "Quartz assurance memorandum 290",
       "brief": "Supplier assurance for Quartz, including technical safeguard reviews and routine service dependencies.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1942,7 +2067,7 @@
     {
       "id": "D073",
       "kind": "meeting_notes",
-      "title": "Zephyr docket 363",
+      "title": "Quartz memorandum 363",
       "brief": "Supplier coordination for Quartz, including records of administrative permissions and operating locations.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1965,7 +2090,7 @@
     {
       "id": "D074",
       "kind": "security_review",
-      "title": "Mallow register 436",
+      "title": "Quartz inspection register 436",
       "brief": "Earlier Quartz supplier-assurance discussion and control follow-up.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -1988,7 +2113,7 @@
     {
       "id": "D075",
       "kind": "qa_review",
-      "title": "Violet chronicle 509",
+      "title": "Quartz inspection log 509",
       "brief": "Quartz data-handling measurements, including control definitions and reporting populations.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2011,7 +2136,7 @@
     {
       "id": "D076",
       "kind": "meeting_notes",
-      "title": "Hawthorn folio 582",
+      "title": "Quartz circular 582",
       "brief": "Supplier administration for Granite, an independent data-processing project.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2028,20 +2153,25 @@
               "text": "On 2026-10-16, Elin Price authorized Granite's 2-node Canadian recovery site. Granite's agreement dated 2026-09-21 separately permits processing in both Ireland and Canada."
             }
           ]
+        },
+        {
+          "id": "D076_V02",
+          "publishedAt": "2026-10-25T22:06:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D077",
       "kind": "security_review",
-      "title": "Thistle transcript 655",
+      "title": "Forge safeguards log 655",
       "brief": "Record-management coordination for Forge, including exception handling, source classification, and review ownership.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D077_V01",
-          "publishedAt": "2026-10-18T19:07:00.000Z",
+          "publishedAt": "2026-10-17T14:07:00.000Z",
           "anchors": [
             {
               "id": "D077_V01_A01",
@@ -2057,14 +2187,14 @@
     {
       "id": "D078",
       "kind": "runbook",
-      "title": "Fallow ledger 728",
+      "title": "Forge procedures worksheet 728",
       "brief": "Earlier Forge operating guidance and record-handling history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D078_V01",
-          "publishedAt": "2026-10-17T16:07:00.000Z",
+          "publishedAt": "2026-10-17T12:07:00.000Z",
           "anchors": [
             {
               "id": "D078_V01_A01",
@@ -2080,7 +2210,7 @@
     {
       "id": "D079",
       "kind": "qa_review",
-      "title": "Pumice worksheet 801",
+      "title": "Forge validation worksheet 801",
       "brief": "Forge information-lifecycle definitions, including restoration and operational retention conventions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2103,7 +2233,7 @@
     {
       "id": "D080",
       "kind": "security_review",
-      "title": "Briar docket 874",
+      "title": "Forge assurance memorandum 874",
       "brief": "Record-management administration for Anvil, an independent service with its own retention basis.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2120,20 +2250,25 @@
               "text": "On 2026-10-16, Elin Price approved 180-day location-record retention for Anvil under its specific statutory basis. That basis identifies Anvil alone and grants no extension to Forge."
             }
           ]
+        },
+        {
+          "id": "D080_V02",
+          "publishedAt": "2026-10-25T22:07:00.000Z",
+          "anchors": []
         }
       ]
     },
     {
       "id": "D081",
       "kind": "finance_review",
-      "title": "Nacre register 947",
+      "title": "Aspen treasury worksheet 947",
       "brief": "Pricing administration for Aspen, including account-volume classification and review responsibilities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D081_V01",
-          "publishedAt": "2026-10-18T19:08:00.000Z",
+          "publishedAt": "2026-10-17T14:08:00.000Z",
           "anchors": [
             {
               "id": "D081_V01_A01",
@@ -2149,14 +2284,14 @@
     {
       "id": "D082",
       "kind": "roadmap",
-      "title": "Yarrow chronicle 023",
+      "title": "Aspen register 023",
       "brief": "Earlier Aspen account planning and proposal history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D082_V01",
-          "publishedAt": "2026-10-17T16:08:00.000Z",
+          "publishedAt": "2026-10-17T12:08:00.000Z",
           "anchors": [
             {
               "id": "D082_V01_A01",
@@ -2172,7 +2307,7 @@
     {
       "id": "D083",
       "kind": "finance_review",
-      "title": "Indigo folio 096",
+      "title": "Aspen treasury worksheet 096",
       "brief": "Aspen commercial measurement definitions, including demand and contractual commitment conventions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2195,7 +2330,7 @@
     {
       "id": "D084",
       "kind": "customer_call",
-      "title": "Umber transcript 169",
+      "title": "Aspen telephone log 169",
       "brief": "Account-volume administration for Birch, a separate pricing agreement.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2218,7 +2353,7 @@
     {
       "id": "D085",
       "kind": "finance_review",
-      "title": "Garnet ledger 242",
+      "title": "Juniper treasury worksheet 242",
       "brief": "Value-reporting coordination for Juniper, including review boundaries, account materials, and source administration.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2241,7 +2376,7 @@
     {
       "id": "D086",
       "kind": "customer_call",
-      "title": "Rowan worksheet 315",
+      "title": "Juniper correspondence summary 315",
       "brief": "Earlier Juniper renewal discussion and evidence-collection history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2264,7 +2399,7 @@
     {
       "id": "D087",
       "kind": "finance_review",
-      "title": "Dogwood annotation 388",
+      "title": "Juniper treasury worksheet 388",
       "brief": "Juniper cost-reporting conventions, including movement classes and comparison units.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2287,7 +2422,7 @@
     {
       "id": "D088",
       "kind": "customer_call",
-      "title": "Ochre memorandum 461",
+      "title": "Juniper commercial transcript 461",
       "brief": "Renewal preparation for Cypress, a separate customer relationship.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2310,14 +2445,14 @@
     {
       "id": "D089",
       "kind": "qa_review",
-      "title": "Zephyr briefing 534",
+      "title": "Willow inspection log 534",
       "brief": "Willow handling trials, equipment coverage, and crew coordination with unrelated dated work orders and recorded operational decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D089_V01",
-          "publishedAt": "2026-09-25T08:00:00.000Z",
+          "publishedAt": "2026-10-11T23:00:00.000Z",
           "anchors": []
         },
         {
@@ -2338,19 +2473,24 @@
     {
       "id": "D090",
       "kind": "meeting_notes",
-      "title": "Mallow journal 607",
+      "title": "Willow register 607",
       "brief": "Willow labor coordination, agreement administration, and roster governance alongside independent named dated staffing details.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D090_V01",
+          "publishedAt": "2026-10-11T23:01:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D090_V02",
           "publishedAt": "2026-10-19T21:00:00.000Z",
           "anchors": [
             {
-              "id": "D090_V01_A01",
+              "id": "D090_V02_A01",
               "role": "evidence",
-              "marker": "[[ANCHOR_D090_V01_A01]]",
+              "marker": "[[ANCHOR_D090_V02_A01]]",
               "positionFraction": 0.47,
               "text": "The Willow agreement amendment signed by Ben Quill on 2026-10-19 permits a minimum of 3 weekend operators from 2026-10-24 through 2026-10-31 only after a separate engineering coverage acceptance."
             }
@@ -2361,19 +2501,24 @@
     {
       "id": "D091",
       "kind": "roadmap",
-      "title": "Violet circular 680",
+      "title": "Willow worksheet 680",
       "brief": "Earlier Willow staffing plans, proposed implementation milestones, and independent quantitative work allocation details.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D091_V01",
+          "publishedAt": "2026-10-11T23:02:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D091_V02",
           "publishedAt": "2026-10-24T16:00:00.000Z",
           "anchors": [
             {
-              "id": "D091_V01_A01",
+              "id": "D091_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D091_V01_A01]]",
+              "marker": "[[ANCHOR_D091_V02_A01]]",
               "positionFraction": 0.52,
               "text": "On 2026-10-13, Ben Quill retained a minimum of 4 Willow weekend operators because neither an effective labor amendment nor a passed coverage trial was on file. The planning note approved on 2026-10-13 requires both records before Willow can adopt a smaller crew."
             }
@@ -2384,19 +2529,24 @@
     {
       "id": "D092",
       "kind": "finance_review",
-      "title": "Hawthorn docket 753",
+      "title": "Willow treasury worksheet 753",
       "brief": "Willow labor efficiency definitions and allocation accounting with concrete independent budget dates and decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D092_V01",
+          "publishedAt": "2026-10-11T23:03:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D092_V02",
           "publishedAt": "2026-10-25T20:00:00.000Z",
           "anchors": [
             {
-              "id": "D092_V01_A01",
+              "id": "D092_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D092_V01_A01]]",
+              "marker": "[[ANCHOR_D092_V02_A01]]",
               "positionFraction": 0.58,
               "text": "The Willow productivity sheet dated 2026-10-24 reports 3 direct workers by excluding the fourth person's rotating safety assignment. The direct-labor figure counts 3 operators while the agreement counts every operator present, including the rotating safety assignment."
             }
@@ -2407,19 +2557,24 @@
     {
       "id": "D093",
       "kind": "security_review",
-      "title": "Thistle register 826",
+      "title": "Willow verification worksheet 826",
       "brief": "Poplar staffing governance and independent handling arrangements with concrete dates, owners, counts, and decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D093_V01",
+          "publishedAt": "2026-09-25T08:04:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D093_V02",
           "publishedAt": "2026-10-25T21:00:00.000Z",
           "anchors": [
             {
-              "id": "D093_V01_A01",
+              "id": "D093_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D093_V01_A01]]",
+              "marker": "[[ANCHOR_D093_V02_A01]]",
               "positionFraction": 0.64,
               "text": "On 2026-10-22, Mina Kerr retained Poplar's 4-person weekend team because its local labor amendment remained unsigned. Poplar's local agreement keeps those 4 operators in scope and is distinct from the Willow roster covered by Ben Quill's amendment."
             }
@@ -2430,19 +2585,24 @@
     {
       "id": "D094",
       "kind": "qa_review",
-      "title": "Fallow chronicle 899",
+      "title": "Peregrine inspection log 899",
       "brief": "Peregrine feed reconciliation, route planning interfaces, and acceptance observations with dense unrelated dated technical decisions and quantities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D094_V01",
+          "publishedAt": "2026-09-24T08:05:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D094_V02",
           "publishedAt": "2026-10-25T19:01:00.000Z",
           "anchors": [
             {
-              "id": "D094_V01_A01",
+              "id": "D094_V02_A01",
               "role": "evidence",
-              "marker": "[[ANCHOR_D094_V01_A01]]",
+              "marker": "[[ANCHOR_D094_V02_A01]]",
               "positionFraction": 0.42,
               "text": "On 2026-10-21, Daria Cole reconciled all 126 Peregrine route records against release PF-8 with no differences in stop order or vehicle limits. Ending the human comparison process also requires an accepted restoration exercise for that same release."
             }
@@ -2453,19 +2613,24 @@
     {
       "id": "D095",
       "kind": "runbook",
-      "title": "Pumice folio 972",
+      "title": "Peregrine operating memorandum 972",
       "brief": "Peregrine restoration operations, release custody, and change procedure exercises with unrelated dated technical decisions and counts.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D095_V01",
+          "publishedAt": "2026-09-25T08:06:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D095_V02",
           "publishedAt": "2026-10-19T21:01:00.000Z",
           "anchors": [
             {
-              "id": "D095_V01_A01",
+              "id": "D095_V02_A01",
               "role": "evidence",
-              "marker": "[[ANCHOR_D095_V01_A01]]",
+              "marker": "[[ANCHOR_D095_V02_A01]]",
               "positionFraction": 0.47,
               "text": "On 2026-10-19, Jon Vale accepted the PF-8 restoration exercise after 3 simulated corrupted updates each restored the prior Peregrine routing state within 90 seconds."
             }
@@ -2476,19 +2641,24 @@
     {
       "id": "D096",
       "kind": "incident_review",
-      "title": "Briar briefing 048",
+      "title": "Peregrine incident journal 048",
       "brief": "Earlier Peregrine feed incidents and initial release observations with named owners and independent dated technical context.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D096_V01",
+          "publishedAt": "2026-09-24T08:07:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D096_V02",
           "publishedAt": "2026-10-24T16:01:00.000Z",
           "anchors": [
             {
-              "id": "D096_V01_A01",
+              "id": "D096_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D096_V01_A01]]",
+              "marker": "[[ANCHOR_D096_V02_A01]]",
               "positionFraction": 0.52,
               "text": "On 2026-10-14, Daria Cole required continued human comparisons after 6 Peregrine route records differed under release PF-7. The incident instruction filed on 2026-10-14 applies to PF-7 and precedes the PF-8 acceptance work."
             }
@@ -2499,19 +2669,24 @@
     {
       "id": "D097",
       "kind": "meeting_notes",
-      "title": "Nacre journal 121",
+      "title": "Peregrine journal 121",
       "brief": "Peregrine interface availability definitions and routine technical review with independent numerical observations and decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D097_V01",
+          "publishedAt": "2026-09-25T08:08:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D097_V02",
           "publishedAt": "2026-10-25T20:01:00.000Z",
           "anchors": [
             {
-              "id": "D097_V01_A01",
+              "id": "D097_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D097_V01_A01]]",
+              "marker": "[[ANCHOR_D097_V02_A01]]",
               "positionFraction": 0.58,
               "text": "The Peregrine service dashboard dated 2026-10-24 shows 100 percent feed success because all 144 HTTP requests received a successful status. Successful delivery of those 144 requests does not measure route correctness or restoration of prior routing state."
             }
@@ -2522,19 +2697,24 @@
     {
       "id": "D098",
       "kind": "roadmap",
-      "title": "Yarrow circular 194",
+      "title": "Peregrine memorandum 194",
       "brief": "Goshawk integration planning and its independent release decision with dated quantitative implementation context.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D098_V01",
+          "publishedAt": "2026-09-24T08:09:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D098_V02",
           "publishedAt": "2026-10-25T21:01:00.000Z",
           "anchors": [
             {
-              "id": "D098_V01_A01",
+              "id": "D098_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D098_V01_A01]]",
+              "marker": "[[ANCHOR_D098_V02_A01]]",
               "positionFraction": 0.64,
               "text": "On 2026-10-22, Arlo Penn retained manual route comparisons for Goshawk release GF-8 after 2 restoration exercises exceeded its limit. Goshawk's exercise docket signed on 2026-10-22 covers a separate feed and does not assess PF-8."
             }
@@ -2545,19 +2725,24 @@
     {
       "id": "D099",
       "kind": "runbook",
-      "title": "Indigo docket 267",
+      "title": "Cedar procedures worksheet 267",
       "brief": "Cedar handling procedures, sequence trials, and operational sign-off with dense unrelated dated adjustments, quantities, people, and decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D099_V01",
-          "publishedAt": "2026-10-25T19:02:00.000Z",
+          "publishedAt": "2026-09-25T08:10:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D099_V02",
+          "publishedAt": "2026-10-24T14:02:00.000Z",
           "anchors": [
             {
-              "id": "D099_V01_A01",
+              "id": "D099_V02_A01",
               "role": "evidence",
-              "marker": "[[ANCHOR_D099_V01_A01]]",
+              "marker": "[[ANCHOR_D099_V02_A01]]",
               "positionFraction": 0.42,
               "text": "On 2026-10-22, Nia Brooke withdrew Cedar sequence CS-3 after 4 unstable stack observations in 60 trial loads. Instruction CI-61 restores the standard rear-to-front sequence for all Cedar loads from 2026-10-23."
             }
@@ -2568,19 +2753,24 @@
     {
       "id": "D100",
       "kind": "meeting_notes",
-      "title": "Umber register 340",
+      "title": "Cedar circular 340",
       "brief": "Earlier Cedar trial discussions and temporary handling arrangements with concrete dated local work decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D100_V01",
-          "publishedAt": "2026-10-24T16:02:00.000Z",
+          "publishedAt": "2026-09-24T08:11:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D100_V02",
+          "publishedAt": "2026-10-24T12:02:00.000Z",
           "anchors": [
             {
-              "id": "D100_V01_A01",
+              "id": "D100_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D100_V01_A01]]",
+              "marker": "[[ANCHOR_D100_V02_A01]]",
               "positionFraction": 0.47,
               "text": "On 2026-10-12, Nia Brooke authorized Cedar sequence CS-3 for a trial of 60 loads. The 2026-10-12 meeting record leaves the temporary sequence active only until the signed trial review."
             }
@@ -2591,19 +2781,24 @@
     {
       "id": "D101",
       "kind": "qa_review",
-      "title": "Garnet chronicle 413",
+      "title": "Cedar test memorandum 413",
       "brief": "Cedar throughput scorecard definitions and handling observations with independent named quantitative review actions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D101_V01",
+          "publishedAt": "2026-09-25T08:12:00.000Z",
+          "anchors": []
+        },
+        {
+          "id": "D101_V02",
           "publishedAt": "2026-10-25T20:02:00.000Z",
           "anchors": [
             {
-              "id": "D101_V01_A01",
+              "id": "D101_V02_A01",
               "role": "distractor",
-              "marker": "[[ANCHOR_D101_V01_A01]]",
+              "marker": "[[ANCHOR_D101_V02_A01]]",
               "positionFraction": 0.52,
               "text": "The Cedar scorecard dated 2026-10-24 reports zero sequence defects by counting only loads that required physical restacking. Its definition excludes the 4 observed instability events that triggered withdrawal even though no load was restacked."
             }
@@ -2614,7 +2809,7 @@
     {
       "id": "D102",
       "kind": "roadmap",
-      "title": "Rowan folio 486",
+      "title": "Cedar briefing 486",
       "brief": "Spruce handling planning and its independently governed local method with named owners, dates, and quantities.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2637,14 +2832,14 @@
     {
       "id": "D103",
       "kind": "policy_review",
-      "title": "Dogwood transcript 559",
+      "title": "Wren governance memorandum 559",
       "brief": "Wren vehicle governance, departure administration, and staffed-service arrangements with unrelated dated quantitative approvals and named responsibility.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D103_V01",
-          "publishedAt": "2026-10-25T19:03:00.000Z",
+          "publishedAt": "2026-10-24T14:03:00.000Z",
           "anchors": [
             {
               "id": "D103_V01_A01",
@@ -2660,14 +2855,14 @@
     {
       "id": "D104",
       "kind": "runbook",
-      "title": "Ochre ledger 632",
+      "title": "Wren operating memorandum 632",
       "brief": "Earlier Wren vehicle departure procedures and desk service coverage with dated independent operational details.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D104_V01",
-          "publishedAt": "2026-10-24T16:03:00.000Z",
+          "publishedAt": "2026-10-24T12:03:00.000Z",
           "anchors": [
             {
               "id": "D104_V01_A01",
@@ -2683,7 +2878,7 @@
     {
       "id": "D105",
       "kind": "finance_review",
-      "title": "Zephyr worksheet 705",
+      "title": "Wren treasury worksheet 705",
       "brief": "Wren vehicle utilization definitions and fleet accounting with detailed unrelated dated resource decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2706,7 +2901,7 @@
     {
       "id": "D106",
       "kind": "security_review",
-      "title": "Mallow annotation 778",
+      "title": "Wren safeguards log 778",
       "brief": "Swift vehicle operations and its distinct local departure authorization with dates, named owners, quantities, and decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2729,7 +2924,7 @@
     {
       "id": "D107",
       "kind": "incident_review",
-      "title": "Violet memorandum 851",
+      "title": "Alder incident journal 851",
       "brief": "Alder service interventions, recurring issue governance, and corrective action observations with unrelated dated technical quantities and decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2752,7 +2947,7 @@
     {
       "id": "D108",
       "kind": "meeting_notes",
-      "title": "Hawthorn briefing 924",
+      "title": "Alder circular 924",
       "brief": "Earlier Alder incident meetings and initial service recovery expectations with specific unrelated follow-up decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2775,7 +2970,7 @@
     {
       "id": "D109",
       "kind": "finance_review",
-      "title": "Thistle journal 000",
+      "title": "Alder financial ledger 000",
       "brief": "Alder service completion accounting and intervention cost definitions with unrelated named dated numerical review decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2798,7 +2993,7 @@
     {
       "id": "D110",
       "kind": "qa_review",
-      "title": "Fallow circular 073",
+      "title": "Alder inspection log 073",
       "brief": "Birch response quality and independently tracked problem closure records with concrete dates, counts, names, and decisions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2821,24 +3016,19 @@
     {
       "id": "D111",
       "kind": "qa_review",
-      "title": "Pumice docket 146",
+      "title": "Ember validation worksheet 146",
       "brief": "Programme administration for Ember, including resilience observations, review handoffs, and routine release coordination.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D111_V01",
-          "publishedAt": "2026-09-24T08:00:00.000Z",
-          "anchors": []
-        },
-        {
-          "id": "D111_V02",
           "publishedAt": "2026-10-25T19:05:00.000Z",
           "anchors": [
             {
-              "id": "D111_V02_A01",
+              "id": "D111_V01_A01",
               "role": "evidence",
-              "marker": "[[ANCHOR_D111_V02_A01]]",
+              "marker": "[[ANCHOR_D111_V01_A01]]",
               "positionFraction": 0.69,
               "text": "On 2026-10-21, Mara Ellison cleared Ember's recovery rehearsal after all 36 sampled shipment records were restored within the agreed interval. The migration procedure starts the binding 10-day notice only after a separately signed customer window acceptance is on file."
             }
@@ -2849,7 +3039,7 @@
     {
       "id": "D112",
       "kind": "customer_call",
-      "title": "Briar worksheet 219",
+      "title": "Ember commercial transcript 219",
       "brief": "Customer coordination for Ember, including scheduling correspondence and routine account obligations.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2872,7 +3062,7 @@
     {
       "id": "D113",
       "kind": "meeting_notes",
-      "title": "Nacre annotation 292",
+      "title": "Ember journal 292",
       "brief": "Earlier Ember coordination and migration-planning history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2895,7 +3085,7 @@
     {
       "id": "D114",
       "kind": "qa_review",
-      "title": "Yarrow memorandum 365",
+      "title": "Ember validation worksheet 365",
       "brief": "Ember service-measurement definitions, including backup and recovery observations.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2918,7 +3108,7 @@
     {
       "id": "D115",
       "kind": "customer_call",
-      "title": "Indigo briefing 438",
+      "title": "Ember commercial transcript 438",
       "brief": "Migration correspondence for Flint, an independent customer programme.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2941,7 +3131,7 @@
     {
       "id": "D116",
       "kind": "runbook",
-      "title": "Umber journal 511",
+      "title": "Vale procedures worksheet 511",
       "brief": "Guarantee administration for Vale, including release workflow, operational closeout, and routine review handoffs.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2964,7 +3154,7 @@
     {
       "id": "D117",
       "kind": "finance_review",
-      "title": "Garnet circular 584",
+      "title": "Vale treasury worksheet 584",
       "brief": "Treasury administration for Vale, including cash classification and routine account reconciliation.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -2987,7 +3177,7 @@
     {
       "id": "D118",
       "kind": "meeting_notes",
-      "title": "Rowan docket 657",
+      "title": "Vale briefing 657",
       "brief": "Earlier Vale guarantee discussion and account-reconciliation history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3010,7 +3200,7 @@
     {
       "id": "D119",
       "kind": "finance_review",
-      "title": "Dogwood register 730",
+      "title": "Vale treasury worksheet 730",
       "brief": "Vale balance definitions, including ledger, available, and cleared cash conventions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3033,7 +3223,7 @@
     {
       "id": "D120",
       "kind": "finance_review",
-      "title": "Ochre chronicle 803",
+      "title": "Vale financial ledger 803",
       "brief": "Security-fund administration for Glen, a separate guarantee arrangement.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3056,14 +3246,14 @@
     {
       "id": "D121",
       "kind": "finance_review",
-      "title": "Zephyr folio 876",
+      "title": "Harbor treasury worksheet 876",
       "brief": "Commercial pricing administration for Harbor, including tariff components and routine customer correspondence.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D121_V01",
-          "publishedAt": "2026-10-25T19:07:00.000Z",
+          "publishedAt": "2026-10-24T14:07:00.000Z",
           "anchors": [
             {
               "id": "D121_V01_A01",
@@ -3079,14 +3269,14 @@
     {
       "id": "D122",
       "kind": "customer_call",
-      "title": "Mallow transcript 949",
+      "title": "Harbor telephone log 949",
       "brief": "Earlier Harbor renewal discussions and quote-development history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D122_V01",
-          "publishedAt": "2026-10-24T16:07:00.000Z",
+          "publishedAt": "2026-10-24T12:07:00.000Z",
           "anchors": [
             {
               "id": "D122_V01_A01",
@@ -3102,7 +3292,7 @@
     {
       "id": "D123",
       "kind": "finance_review",
-      "title": "Violet ledger 025",
+      "title": "Harbor treasury worksheet 025",
       "brief": "Harbor tariff-reporting definitions, including standard and realized invoice measures.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3125,7 +3315,7 @@
     {
       "id": "D124",
       "kind": "customer_call",
-      "title": "Hawthorn worksheet 098",
+      "title": "Harbor correspondence summary 098",
       "brief": "Pricing correspondence for Haven, a separate renewal agreement.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3148,14 +3338,14 @@
     {
       "id": "D125",
       "kind": "finance_review",
-      "title": "Thistle annotation 171",
+      "title": "Elm treasury worksheet 171",
       "brief": "Supplier-commercial administration for Elm, including rebate workflow, activity classification, and routine reconciliation.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D125_V01",
-          "publishedAt": "2026-10-25T19:08:00.000Z",
+          "publishedAt": "2026-10-24T14:08:00.000Z",
           "anchors": [
             {
               "id": "D125_V01_A01",
@@ -3171,14 +3361,14 @@
     {
       "id": "D126",
       "kind": "meeting_notes",
-      "title": "Fallow memorandum 244",
+      "title": "Elm briefing 244",
       "brief": "Earlier Elm supplier discussion and volume-estimate history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D126_V01",
-          "publishedAt": "2026-10-24T16:08:00.000Z",
+          "publishedAt": "2026-10-24T12:08:00.000Z",
           "anchors": [
             {
               "id": "D126_V01_A01",
@@ -3194,7 +3384,7 @@
     {
       "id": "D127",
       "kind": "roadmap",
-      "title": "Pumice briefing 317",
+      "title": "Elm docket 317",
       "brief": "Elm supplier-volume reporting definitions, including movement populations and completion conventions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3217,7 +3407,7 @@
     {
       "id": "D128",
       "kind": "finance_review",
-      "title": "Briar folio 390",
+      "title": "Elm treasury worksheet 390",
       "brief": "Supplier rebate administration for Oak, an independent commercial agreement.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3240,7 +3430,7 @@
     {
       "id": "D129",
       "kind": "security_review",
-      "title": "Nacre transcript 463",
+      "title": "Aster verification worksheet 463",
       "brief": "Environmental-assurance coordination for Aster, including facility populations, certification administration, and communication review.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3263,7 +3453,7 @@
     {
       "id": "D130",
       "kind": "roadmap",
-      "title": "Yarrow ledger 536",
+      "title": "Aster memorandum 536",
       "brief": "Earlier Aster communication planning and facility-rollout history.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3286,7 +3476,7 @@
     {
       "id": "D131",
       "kind": "qa_review",
-      "title": "Indigo worksheet 609",
+      "title": "Aster test memorandum 609",
       "brief": "Aster environmental reporting definitions, including audit-progress and certificate coverage conventions.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3309,7 +3499,7 @@
     {
       "id": "D132",
       "kind": "customer_call",
-      "title": "Umber annotation 682",
+      "title": "Aster correspondence summary 682",
       "brief": "Environmental communication for Iris, a separate certified facility network.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3332,7 +3522,7 @@
     {
       "id": "D133",
       "kind": "restricted_review",
-      "title": "Garnet memorandum 755",
+      "title": "Aster, Harbor Gate, Elm corridor, Finch, Maple administrative memorandum 755",
       "brief": "Fictional confidential cross-team administrative review. Cover closed scheduling and documentation housekeeping in operations, billing, facilities and internal controls. Use unrelated people, dates, quantities and decisions.",
       "targetBytes": 30000,
       "visibility": "denied",
@@ -3383,7 +3573,7 @@
     {
       "id": "D134",
       "kind": "restricted_review",
-      "title": "Rowan briefing 828",
+      "title": "Alder, Cobalt, Brook, Sable, Linden governance briefing 828",
       "brief": "Fictional confidential cross-team administrative review. Cover closed scheduling and documentation housekeeping in operations, billing, facilities and internal controls. Use unrelated people, dates, quantities and decisions.",
       "targetBytes": 30000,
       "visibility": "denied",
@@ -3434,7 +3624,7 @@
     {
       "id": "D135",
       "kind": "restricted_review",
-      "title": "Dogwood journal 901",
+      "title": "Kestrel, Cobalt, Larch, Juniper, Osprey governance briefing 901",
       "brief": "Fictional confidential cross-team administrative review. Cover closed scheduling and documentation housekeeping in operations, billing, facilities and internal controls. Use unrelated people, dates, quantities and decisions.",
       "targetBytes": 30000,
       "visibility": "denied",
@@ -3485,7 +3675,7 @@
     {
       "id": "D136",
       "kind": "restricted_review",
-      "title": "Ochre circular 974",
+      "title": "Drift, Quartz, Forge, Aspen, Juniper administrative memorandum 974",
       "brief": "Fictional confidential cross-team administrative review. Cover closed scheduling and documentation housekeeping in operations, billing, facilities and internal controls. Use unrelated people, dates, quantities and decisions.",
       "targetBytes": 30000,
       "visibility": "denied",
@@ -3536,7 +3726,7 @@
     {
       "id": "D137",
       "kind": "restricted_review",
-      "title": "Zephyr docket 050",
+      "title": "Willow, Peregrine, Cedar, Wren, Alder governance briefing 050",
       "brief": "Fictional confidential cross-team administrative review. Cover closed scheduling and documentation housekeeping in operations, billing, facilities and internal controls. Use unrelated people, dates, quantities and decisions.",
       "targetBytes": 30000,
       "visibility": "denied",
@@ -3587,7 +3777,7 @@
     {
       "id": "D138",
       "kind": "restricted_review",
-      "title": "Mallow register 123",
+      "title": "Ember, Vale, Harbor, Elm, Aster administrative memorandum 123",
       "brief": "Fictional confidential cross-team administrative review. Cover closed scheduling and documentation housekeeping in operations, billing, facilities and internal controls. Use unrelated people, dates, quantities and decisions.",
       "targetBytes": 30000,
       "visibility": "denied",
@@ -3638,7 +3828,7 @@
     {
       "id": "D139",
       "kind": "architecture_charter",
-      "title": "Violet chronicle 196",
+      "title": "Northstar systems charter 196",
       "brief": "Internal system overview for a fictional freight operator. Cover directory structure, contact-roster stewardship, equipment catalogue maintenance and documentation conventions. Give independent, local administrative specifics.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3661,7 +3851,7 @@
     {
       "id": "D140",
       "kind": "operating_charter",
-      "title": "Hawthorn folio 269",
+      "title": "Northstar governance charter 269",
       "brief": "Internal coordination and recordkeeping primer for a fictional enterprise. Cover office support, routine clerical escalations and stewardship schedules. Give independent, local administrative specifics.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
@@ -3684,24 +3874,24 @@
     {
       "id": "D141",
       "kind": "office_runbook",
-      "title": "Thistle transcript 342",
+      "title": "facilities handbook 342",
       "brief": "Building maintenance and supplies: service-desk rota, janitorial deliveries, lamp stock counts, key cabinet audits and room signage. Include standalone administrative decisions on these subjects.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D141_V01",
-          "publishedAt": "2026-10-08T13:00:00.000Z",
+          "publishedAt": "2026-10-11T18:00:00.000Z",
           "anchors": []
         },
         {
           "id": "D141_V02",
-          "publishedAt": "2026-10-15T13:00:00.000Z",
+          "publishedAt": "2026-10-18T18:00:00.000Z",
           "anchors": []
         },
         {
           "id": "D141_V03",
-          "publishedAt": "2026-10-22T13:00:00.000Z",
+          "publishedAt": "2026-10-25T18:00:00.000Z",
           "anchors": []
         }
       ]
@@ -3709,24 +3899,24 @@
     {
       "id": "D142",
       "kind": "meeting_minutes",
-      "title": "Fallow ledger 415",
+      "title": "committee minutes 415",
       "brief": "Internal cultural committee: event setup times, refreshments, accessibility arrangements, decoration inventory and seating allocations. Include standalone administrative decisions on these subjects.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D142_V01",
-          "publishedAt": "2026-10-08T13:01:00.000Z",
+          "publishedAt": "2026-10-11T18:01:00.000Z",
           "anchors": []
         },
         {
           "id": "D142_V02",
-          "publishedAt": "2026-10-15T13:01:00.000Z",
+          "publishedAt": "2026-10-18T18:01:00.000Z",
           "anchors": []
         },
         {
           "id": "D142_V03",
-          "publishedAt": "2026-10-22T13:01:00.000Z",
+          "publishedAt": "2026-10-25T18:01:00.000Z",
           "anchors": []
         }
       ]
@@ -3734,24 +3924,24 @@
     {
       "id": "D143",
       "kind": "qa_checklist",
-      "title": "Pumice worksheet 488",
+      "title": "verification checklist 488",
       "brief": "Shared print room and training-device checks: asset counts, replacement schedules, consumables quality controls and escalation routing. Include standalone administrative decisions on these subjects.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D143_V01",
-          "publishedAt": "2026-10-08T13:02:00.000Z",
+          "publishedAt": "2026-10-11T18:02:00.000Z",
           "anchors": []
         },
         {
           "id": "D143_V02",
-          "publishedAt": "2026-10-15T13:02:00.000Z",
+          "publishedAt": "2026-10-18T18:02:00.000Z",
           "anchors": []
         },
         {
           "id": "D143_V03",
-          "publishedAt": "2026-10-22T13:02:00.000Z",
+          "publishedAt": "2026-10-25T18:02:00.000Z",
           "anchors": []
         }
       ]
@@ -3759,24 +3949,24 @@
     {
       "id": "D144",
       "kind": "finance_workpaper",
-      "title": "Briar docket 561",
+      "title": "ledger 561",
       "brief": "Office services accruals, stationery reimbursements, small cash handling, janitorial invoices and clerical reconciliations. Include standalone administrative decisions on these subjects.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D144_V01",
-          "publishedAt": "2026-10-08T13:03:00.000Z",
+          "publishedAt": "2026-10-11T18:03:00.000Z",
           "anchors": []
         },
         {
           "id": "D144_V02",
-          "publishedAt": "2026-10-15T13:03:00.000Z",
+          "publishedAt": "2026-10-18T18:03:00.000Z",
           "anchors": []
         },
         {
           "id": "D144_V03",
-          "publishedAt": "2026-10-22T13:03:00.000Z",
+          "publishedAt": "2026-10-25T18:03:00.000Z",
           "anchors": []
         }
       ]
@@ -3784,24 +3974,24 @@
     {
       "id": "D145",
       "kind": "security_review",
-      "title": "Nacre register 634",
+      "title": "safeguards log 634",
       "brief": "Municipal office visitor badges, charging stations, key rotation, hallway camera inspection schedules and training-room access control. Include standalone administrative decisions on these subjects.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D145_V01",
-          "publishedAt": "2026-10-08T13:04:00.000Z",
+          "publishedAt": "2026-10-11T18:04:00.000Z",
           "anchors": []
         },
         {
           "id": "D145_V02",
-          "publishedAt": "2026-10-15T13:04:00.000Z",
+          "publishedAt": "2026-10-18T18:04:00.000Z",
           "anchors": []
         },
         {
           "id": "D145_V03",
-          "publishedAt": "2026-10-22T13:04:00.000Z",
+          "publishedAt": "2026-10-25T18:04:00.000Z",
           "anchors": []
         }
       ]
@@ -3809,24 +3999,24 @@
     {
       "id": "D146",
       "kind": "customer_call",
-      "title": "Yarrow chronicle 707",
+      "title": "telephone log 707",
       "brief": "Feedback from a fictional café tenant about indoor signage, room availability, power outlets, delivery windows and meeting-room inventory. Include standalone administrative decisions on these subjects.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D146_V01",
-          "publishedAt": "2026-10-08T13:05:00.000Z",
+          "publishedAt": "2026-10-11T18:05:00.000Z",
           "anchors": []
         },
         {
           "id": "D146_V02",
-          "publishedAt": "2026-10-15T13:05:00.000Z",
+          "publishedAt": "2026-10-18T18:05:00.000Z",
           "anchors": []
         },
         {
           "id": "D146_V03",
-          "publishedAt": "2026-10-22T13:05:00.000Z",
+          "publishedAt": "2026-10-25T18:05:00.000Z",
           "anchors": []
         }
       ]
@@ -3834,24 +4024,24 @@
     {
       "id": "D147",
       "kind": "internal_roadmap",
-      "title": "Indigo folio 780",
+      "title": "program memorandum 780",
       "brief": "A multi-quarter internal archive reorganization plan: annotation policy, storage sleeves, shelf movement, indexing work and staffing coverage. Include standalone administrative decisions on these subjects.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D147_V01",
-          "publishedAt": "2026-10-08T13:06:00.000Z",
+          "publishedAt": "2026-10-11T18:06:00.000Z",
           "anchors": []
         },
         {
           "id": "D147_V02",
-          "publishedAt": "2026-10-15T13:06:00.000Z",
+          "publishedAt": "2026-10-18T18:06:00.000Z",
           "anchors": []
         },
         {
           "id": "D147_V03",
-          "publishedAt": "2026-10-22T13:06:00.000Z",
+          "publishedAt": "2026-10-25T18:06:00.000Z",
           "anchors": []
         }
       ]
@@ -3859,24 +4049,24 @@
     {
       "id": "D148",
       "kind": "people_operations",
-      "title": "Umber transcript 853",
+      "title": "personnel memorandum 853",
       "brief": "General recruiting coordination: interview-room schedules, applicant welcome packets, recruiter rotations and equipment loan windows. Include standalone administrative decisions on these subjects.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D148_V01",
-          "publishedAt": "2026-10-08T13:07:00.000Z",
+          "publishedAt": "2026-10-11T18:07:00.000Z",
           "anchors": []
         },
         {
           "id": "D148_V02",
-          "publishedAt": "2026-10-15T13:07:00.000Z",
+          "publishedAt": "2026-10-18T18:07:00.000Z",
           "anchors": []
         },
         {
           "id": "D148_V03",
-          "publishedAt": "2026-10-22T13:07:00.000Z",
+          "publishedAt": "2026-10-25T18:07:00.000Z",
           "anchors": []
         }
       ]
@@ -3884,24 +4074,24 @@
     {
       "id": "D149",
       "kind": "procedure_spec",
-      "title": "Garnet ledger 926",
+      "title": "procedures circular 926",
       "brief": "Building amenities and lost-property process: locker quantities, cleaning frequency, correspondence, custodial notices and retention periods. Include standalone administrative decisions on these subjects.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D149_V01",
-          "publishedAt": "2026-10-08T13:08:00.000Z",
+          "publishedAt": "2026-10-11T18:08:00.000Z",
           "anchors": []
         },
         {
           "id": "D149_V02",
-          "publishedAt": "2026-10-15T13:08:00.000Z",
+          "publishedAt": "2026-10-18T18:08:00.000Z",
           "anchors": []
         },
         {
           "id": "D149_V03",
-          "publishedAt": "2026-10-22T13:08:00.000Z",
+          "publishedAt": "2026-10-25T18:08:00.000Z",
           "anchors": []
         }
       ]
@@ -3909,24 +4099,24 @@
     {
       "id": "D150",
       "kind": "operations_review",
-      "title": "Rowan worksheet 002",
+      "title": "coordination summary 002",
       "brief": "Internal charity and facilities programme: volunteer slots, donation carton counts, kitchenette equipment, shared bulletin boards and member correspondence. Include standalone administrative decisions on these subjects.",
       "targetBytes": 30000,
       "visibility": "actor_readable",
       "versions": [
         {
           "id": "D150_V01",
-          "publishedAt": "2026-10-08T13:09:00.000Z",
+          "publishedAt": "2026-10-11T18:09:00.000Z",
           "anchors": []
         },
         {
           "id": "D150_V02",
-          "publishedAt": "2026-10-15T13:09:00.000Z",
+          "publishedAt": "2026-10-18T18:09:00.000Z",
           "anchors": []
         },
         {
           "id": "D150_V03",
-          "publishedAt": "2026-10-22T13:09:00.000Z",
+          "publishedAt": "2026-10-25T18:09:00.000Z",
           "anchors": []
         }
       ]
@@ -3937,6 +4127,7 @@
       "id": "C01",
       "split": "dev",
       "originWeekId": "w1",
+      "projectName": "Aster",
       "question": "Can the Aster team move the river depot onto unattended night departures this week?",
       "intentParaphrase": "Determine whether technical recovery readiness and independent staffing authorization jointly permit removal of the overnight dispatcher.",
       "expectedDisposition": "Proceed for the defined Aster roster because both the recovery drill and the duty qualification are complete.",
@@ -3988,6 +4179,7 @@
       "id": "C02",
       "split": "dev",
       "originWeekId": "w1",
+      "projectName": "Harbor Gate",
       "question": "May Harbor Gate start taking the high-value arrivals without an escort?",
       "intentParaphrase": "Check whether an unattended intake arrangement satisfies both physical containment and the insurer's current permission.",
       "expectedDisposition": "Permit unescorted intake within the rider's October operating window because the enclosure passed acceptance and the insurer separately authorized that method.",
@@ -4039,6 +4231,7 @@
       "id": "C03",
       "split": "dev",
       "originWeekId": "w1",
+      "projectName": "Elm corridor",
       "question": "Should Elm corridor customers still be promised collection before lunch?",
       "intentParaphrase": "Use the current customer-specific commitment to determine the collection promise after a timetable revision.",
       "expectedDisposition": "Remove the before-lunch promise and use the revised 14:30 commitment for the specified Elm accounts.",
@@ -4085,6 +4278,7 @@
       "id": "C04",
       "split": "dev",
       "originWeekId": "w1",
+      "projectName": "Finch",
       "question": "Can the Finch lifting equipment return to ordinary use?",
       "intentParaphrase": "Determine whether the repaired equipment has current permission for normal handling after its temporary restriction.",
       "expectedDisposition": "Permit normal use of Finch lift F-6 under the signed engineering release.",
@@ -4131,6 +4325,7 @@
       "id": "C05",
       "split": "dev",
       "originWeekId": "w1",
+      "projectName": "Maple",
       "question": "Should the Maple field crew stop visiting every installation twice?",
       "intentParaphrase": "Check whether a current operating rule permits replacing the second physical visit with remote confirmation.",
       "expectedDisposition": "Retain two physical visits because the exception has expired and has not been renewed.",
@@ -4177,6 +4372,7 @@
       "id": "C06",
       "split": "dev",
       "originWeekId": "w2",
+      "projectName": "Kestrel",
       "question": "Can the Kestrel transfer begin using the faster handover window on Monday?",
       "intentParaphrase": "Check whether the accelerated interchange satisfies both receiving capacity and the sending carrier's amended cutover permission.",
       "expectedDisposition": "Begin the accelerated cutover on Monday 2026-10-19 because the receiving trial passed and the carrier's independent permission is effective that day.",
@@ -4189,30 +4385,30 @@
         },
         {
           "documentId": "D046",
-          "versionId": "D046_V01",
-          "anchorId": "D046_V01_A01"
+          "versionId": "D046_V02",
+          "anchorId": "D046_V02_A01"
         }
       ],
       "distractors": [
         {
           "type": "superseded_status",
           "documentId": "D047",
-          "versionId": "D047_V01",
-          "anchorId": "D047_V01_A01",
+          "versionId": "D047_V02",
+          "anchorId": "D047_V02_A01",
           "explanation": "The separately published older record concerns the same decision. Its stated position is superseded by the current support at this cutoff."
         },
         {
           "type": "conflicting_metric_definition",
           "documentId": "D048",
-          "versionId": "D048_V01",
-          "anchorId": "D048_V01_A01",
+          "versionId": "D048_V02",
+          "anchorId": "D048_V02_A01",
           "explanation": "The document is current and actor-readable. Its reported quantity uses a different definition from the one needed by the question."
         },
         {
           "type": "similar_project",
           "documentId": "D049",
-          "versionId": "D049_V01",
-          "anchorId": "D049_V01_A01",
+          "versionId": "D049_V02",
+          "anchorId": "D049_V02_A01",
           "explanation": "The document is current and actor-readable. It gives a plausible disposition about a separate project."
         },
         {
@@ -4228,6 +4424,7 @@
       "id": "C07",
       "split": "dev",
       "originWeekId": "w2",
+      "projectName": "Cobalt",
       "question": "May Cobalt replace its arrival inspector with camera checks for the next intake batch?",
       "intentParaphrase": "Establish whether a change in inspection method has both demonstrated coverage and the customer's current permission.",
       "expectedDisposition": "Proceed only for the named Cobalt batch because both coverage acceptance and customer permission exist.",
@@ -4235,35 +4432,35 @@
       "evidence": [
         {
           "documentId": "D050",
-          "versionId": "D050_V01",
-          "anchorId": "D050_V01_A01"
+          "versionId": "D050_V02",
+          "anchorId": "D050_V02_A01"
         },
         {
           "documentId": "D051",
-          "versionId": "D051_V01",
-          "anchorId": "D051_V01_A01"
+          "versionId": "D051_V02",
+          "anchorId": "D051_V02_A01"
         }
       ],
       "distractors": [
         {
           "type": "superseded_status",
           "documentId": "D052",
-          "versionId": "D052_V01",
-          "anchorId": "D052_V01_A01",
+          "versionId": "D052_V02",
+          "anchorId": "D052_V02_A01",
           "explanation": "The separately published older record concerns the same decision. Its stated position is superseded by the current support at this cutoff."
         },
         {
           "type": "conflicting_metric_definition",
           "documentId": "D053",
-          "versionId": "D053_V01",
-          "anchorId": "D053_V01_A01",
+          "versionId": "D053_V02",
+          "anchorId": "D053_V02_A01",
           "explanation": "The document is current and actor-readable. Its reported quantity uses a different definition from the one needed by the question."
         },
         {
           "type": "similar_project",
           "documentId": "D054",
-          "versionId": "D054_V01",
-          "anchorId": "D054_V01_A01",
+          "versionId": "D054_V02",
+          "anchorId": "D054_V02_A01",
           "explanation": "The document is current and actor-readable. It gives a plausible disposition about a separate project."
         },
         {
@@ -4279,6 +4476,7 @@
       "id": "C08",
       "split": "dev",
       "originWeekId": "w2",
+      "projectName": "Larch",
       "question": "Should the Larch operators remove the extra buffer from the local route plan?",
       "intentParaphrase": "Determine whether the current operating instruction has retired a temporary timetable allowance.",
       "expectedDisposition": "Retain the additional buffer until the specified road access condition is cleared.",
@@ -4286,23 +4484,23 @@
       "evidence": [
         {
           "documentId": "D055",
-          "versionId": "D055_V01",
-          "anchorId": "D055_V01_A01"
+          "versionId": "D055_V02",
+          "anchorId": "D055_V02_A01"
         }
       ],
       "distractors": [
         {
           "type": "superseded_status",
           "documentId": "D056",
-          "versionId": "D056_V01",
-          "anchorId": "D056_V01_A01",
+          "versionId": "D056_V02",
+          "anchorId": "D056_V02_A01",
           "explanation": "The separately published older record concerns the same decision. Its stated position is superseded by the current support at this cutoff."
         },
         {
           "type": "conflicting_metric_definition",
           "documentId": "D057",
-          "versionId": "D057_V01",
-          "anchorId": "D057_V01_A01",
+          "versionId": "D057_V02",
+          "anchorId": "D057_V02_A01",
           "explanation": "The document is current and actor-readable. Its reported quantity uses a different definition from the one needed by the question."
         },
         {
@@ -4325,6 +4523,7 @@
       "id": "C09",
       "split": "dev",
       "originWeekId": "w2",
+      "projectName": "Juniper",
       "question": "Can the Juniper crews treat a digital signature as sufficient for finishing the job?",
       "intentParaphrase": "Determine the current completion requirement for field service after a customer acceptance policy change.",
       "expectedDisposition": "Require the digital signature plus the specified equipment photograph for the affected Juniper jobs.",
@@ -4371,6 +4570,7 @@
       "id": "C10",
       "split": "dev",
       "originWeekId": "w2",
+      "projectName": "Osprey",
       "question": "Should the Osprey carrier stay on the normal allocation list after the recent damage reports?",
       "intentParaphrase": "Use the current carrier governance decision to determine whether ordinary allocation is permitted.",
       "expectedDisposition": "Suspend ordinary allocation and use the manual exception route until the signed corrective action is accepted.",
@@ -4417,6 +4617,7 @@
       "id": "C11",
       "split": "dev",
       "originWeekId": "w3",
+      "projectName": "Willow",
       "question": "Can the Willow loading area run with the smaller weekend team?",
       "intentParaphrase": "Determine whether a reduced crew meets both safe equipment coverage and the labor agreement's effective staffing floor.",
       "expectedDisposition": "Permit the three-person weekend team from 2026-10-24 because the engineering trial passed and the separately executed labor amendment is effective that day.",
@@ -4429,30 +4630,30 @@
         },
         {
           "documentId": "D090",
-          "versionId": "D090_V01",
-          "anchorId": "D090_V01_A01"
+          "versionId": "D090_V02",
+          "anchorId": "D090_V02_A01"
         }
       ],
       "distractors": [
         {
           "type": "superseded_status",
           "documentId": "D091",
-          "versionId": "D091_V01",
-          "anchorId": "D091_V01_A01",
+          "versionId": "D091_V02",
+          "anchorId": "D091_V02_A01",
           "explanation": "The separately published older record concerns the same decision. Its stated position is superseded by the current support at this cutoff."
         },
         {
           "type": "conflicting_metric_definition",
           "documentId": "D092",
-          "versionId": "D092_V01",
-          "anchorId": "D092_V01_A01",
+          "versionId": "D092_V02",
+          "anchorId": "D092_V02_A01",
           "explanation": "The document is current and actor-readable. Its reported quantity uses a different definition from the one needed by the question."
         },
         {
           "type": "similar_project",
           "documentId": "D093",
-          "versionId": "D093_V01",
-          "anchorId": "D093_V01_A01",
+          "versionId": "D093_V02",
+          "anchorId": "D093_V02_A01",
           "explanation": "The document is current and actor-readable. It gives a plausible disposition about a separate project."
         },
         {
@@ -4468,6 +4669,7 @@
       "id": "C12",
       "split": "dev",
       "originWeekId": "w3",
+      "projectName": "Peregrine",
       "question": "May the Peregrine team retire the manual route checks after the new feed goes live?",
       "intentParaphrase": "Check whether feed correctness and an accepted rollback capability together permit ending the human comparison process.",
       "expectedDisposition": "Proceed with retiring manual checks because the reconciliation and rollback requirements both passed for the defined feed release.",
@@ -4475,35 +4677,35 @@
       "evidence": [
         {
           "documentId": "D094",
-          "versionId": "D094_V01",
-          "anchorId": "D094_V01_A01"
+          "versionId": "D094_V02",
+          "anchorId": "D094_V02_A01"
         },
         {
           "documentId": "D095",
-          "versionId": "D095_V01",
-          "anchorId": "D095_V01_A01"
+          "versionId": "D095_V02",
+          "anchorId": "D095_V02_A01"
         }
       ],
       "distractors": [
         {
           "type": "superseded_status",
           "documentId": "D096",
-          "versionId": "D096_V01",
-          "anchorId": "D096_V01_A01",
+          "versionId": "D096_V02",
+          "anchorId": "D096_V02_A01",
           "explanation": "The separately published older record concerns the same decision. Its stated position is superseded by the current support at this cutoff."
         },
         {
           "type": "conflicting_metric_definition",
           "documentId": "D097",
-          "versionId": "D097_V01",
-          "anchorId": "D097_V01_A01",
+          "versionId": "D097_V02",
+          "anchorId": "D097_V02_A01",
           "explanation": "The document is current and actor-readable. Its reported quantity uses a different definition from the one needed by the question."
         },
         {
           "type": "similar_project",
           "documentId": "D098",
-          "versionId": "D098_V01",
-          "anchorId": "D098_V01_A01",
+          "versionId": "D098_V02",
+          "anchorId": "D098_V02_A01",
           "explanation": "The document is current and actor-readable. It gives a plausible disposition about a separate project."
         },
         {
@@ -4519,6 +4721,7 @@
       "id": "C13",
       "split": "dev",
       "originWeekId": "w3",
+      "projectName": "Cedar",
       "question": "Should the Cedar crew keep using the temporary loading sequence?",
       "intentParaphrase": "Determine which current handling sequence governs after a trial was either accepted or withdrawn.",
       "expectedDisposition": "Return to the standard sequence because the temporary method was explicitly withdrawn.",
@@ -4526,23 +4729,23 @@
       "evidence": [
         {
           "documentId": "D099",
-          "versionId": "D099_V01",
-          "anchorId": "D099_V01_A01"
+          "versionId": "D099_V02",
+          "anchorId": "D099_V02_A01"
         }
       ],
       "distractors": [
         {
           "type": "superseded_status",
           "documentId": "D100",
-          "versionId": "D100_V01",
-          "anchorId": "D100_V01_A01",
+          "versionId": "D100_V02",
+          "anchorId": "D100_V02_A01",
           "explanation": "The separately published older record concerns the same decision. Its stated position is superseded by the current support at this cutoff."
         },
         {
           "type": "conflicting_metric_definition",
           "documentId": "D101",
-          "versionId": "D101_V01",
-          "anchorId": "D101_V01_A01",
+          "versionId": "D101_V02",
+          "anchorId": "D101_V02_A01",
           "explanation": "The document is current and actor-readable. Its reported quantity uses a different definition from the one needed by the question."
         },
         {
@@ -4565,6 +4768,7 @@
       "id": "C14",
       "split": "dev",
       "originWeekId": "w3",
+      "projectName": "Wren",
       "question": "Can the Wren vehicles be sent out before the morning desk opens?",
       "intentParaphrase": "Determine whether the latest vehicle operation authorization permits departure outside the staffed desk period.",
       "expectedDisposition": "Permit early dispatch for only the named electric vehicles under the current specific authorization.",
@@ -4611,6 +4815,7 @@
       "id": "C15",
       "split": "dev",
       "originWeekId": "w3",
+      "projectName": "Alder",
       "question": "Should the Alder response team close the recurring callout problem?",
       "intentParaphrase": "Determine whether the operational closure criterion for repeated field interventions has actually been met.",
       "expectedDisposition": "Keep the problem open because the required observation period is incomplete despite a currently quiet interval.",
@@ -4657,6 +4862,7 @@
       "id": "C16",
       "split": "heldout",
       "originWeekId": "w1",
+      "projectName": "Alder",
       "question": "May Alder resume its promised cold-chain service for Meridian Foods?",
       "intentParaphrase": "Decide whether both the product-integrity prerequisite and the customer's contractual waiver have been satisfied.",
       "expectedDisposition": "Approve resumption after both prerequisites are confirmed. Integrity clearance alone does not lift the customer-specific suspension.",
@@ -4708,6 +4914,7 @@
       "id": "C17",
       "split": "heldout",
       "originWeekId": "w1",
+      "projectName": "Cobalt",
       "question": "Can Cobalt expose the partner reconciliation endpoint beyond the private preview?",
       "intentParaphrase": "Check that both the technical control test and the independent third-party data permission permit a public partner release.",
       "expectedDisposition": "Keep the endpoint in preview because the partner's permission covers test identities only, despite a successful security check.",
@@ -4759,6 +4966,7 @@
       "id": "C18",
       "split": "heldout",
       "originWeekId": "w1",
+      "projectName": "Brook",
       "question": "Should finance settle the Brook credit memo at its requested amount?",
       "intentParaphrase": "Compare the requested customer compensation with the evidenced eligible cap under the applicable rule.",
       "expectedDisposition": "Approve a credit of 18400 dollars instead of the requested 27600 dollars, because the verified eligible charge cap is 18400 dollars.",
@@ -4805,6 +5013,7 @@
       "id": "C19",
       "split": "heldout",
       "originWeekId": "w1",
+      "projectName": "Sable",
       "question": "Is the Sable account ready for the promised emissions statement?",
       "intentParaphrase": "Determine whether the claim's assurance coverage includes all movements within its stated boundary.",
       "expectedDisposition": "Withhold the statement because the intended door-to-door claim includes 42 subcontracted legs excluded by the assurance.",
@@ -4851,6 +5060,7 @@
       "id": "C20",
       "split": "heldout",
       "originWeekId": "w1",
+      "projectName": "Linden",
       "question": "May the sales team quote the Linden contingency package as guaranteed?",
       "intentParaphrase": "Check whether the documented capacity commitment supports the stronger customer promise.",
       "expectedDisposition": "Permit a best-effort quote only. The record reserves 60 pallets on a cancellable basis and expressly excludes a guaranteed commitment.",
@@ -4897,6 +5107,7 @@
       "id": "C21",
       "split": "heldout",
       "originWeekId": "w2",
+      "projectName": "Drift",
       "question": "Can the Drift customer balance be recognized as collectible this week?",
       "intentParaphrase": "Require both completed acceptance and removal of the independently documented billing dispute before treating the balance as collectible.",
       "expectedDisposition": "Keep the balance disputed because delivery acceptance is complete but the customer has not withdrawn its separate rate challenge.",
@@ -4904,8 +5115,8 @@
       "evidence": [
         {
           "documentId": "D067",
-          "versionId": "D067_V02",
-          "anchorId": "D067_V02_A01"
+          "versionId": "D067_V01",
+          "anchorId": "D067_V01_A01"
         },
         {
           "documentId": "D068",
@@ -4948,6 +5159,7 @@
       "id": "C22",
       "split": "heldout",
       "originWeekId": "w2",
+      "projectName": "Quartz",
       "question": "May the Quartz vendor handle live shipment records after the trial?",
       "intentParaphrase": "Check both the technical safeguard and the separately controlled cross-border processing permission.",
       "expectedDisposition": "Withhold live-data access because the encryption test passed but the approved processing region excludes the vendor's proposed recovery site.",
@@ -4999,6 +5211,7 @@
       "id": "C23",
       "split": "heldout",
       "originWeekId": "w2",
+      "projectName": "Forge",
       "question": "Should the Forge retention request be granted for the full proposed period?",
       "intentParaphrase": "Apply the source-specific retention rule to the requested operational exception.",
       "expectedDisposition": "Reject the proposed 180-day extension and limit retention to 45 days unless a new approved legal basis is recorded.",
@@ -5045,6 +5258,7 @@
       "id": "C24",
       "split": "heldout",
       "originWeekId": "w2",
+      "projectName": "Aspen",
       "question": "Can Aspen use the proposed revenue outlook to lock the customer discount?",
       "intentParaphrase": "Determine whether the discount eligibility measure includes the forecasted volume rather than only committed volume.",
       "expectedDisposition": "Withhold the 8 percent tier. Only 940 committed loads count against its 1200-load threshold.",
@@ -5091,6 +5305,7 @@
       "id": "C25",
       "split": "heldout",
       "originWeekId": "w2",
+      "projectName": "Juniper",
       "question": "Is the Juniper savings claim ready for the buyer's renewal pack?",
       "intentParaphrase": "Check whether the published saving is measured on the same operating perimeter promised to the buyer.",
       "expectedDisposition": "Withhold the 14 percent claim because it excludes 310 returned loads that the renewal pack's all-movement perimeter includes.",
@@ -5137,6 +5352,7 @@
       "id": "C26",
       "split": "heldout",
       "originWeekId": "w3",
+      "projectName": "Ember",
       "question": "Should the Ember customer migration enter its binding notice period now?",
       "intentParaphrase": "Require both the resilience checkpoint and the customer's independent acceptance of the migration window.",
       "expectedDisposition": "Start the notice period because both the resilience checkpoint and the customer's signed window acceptance are complete.",
@@ -5144,8 +5360,8 @@
       "evidence": [
         {
           "documentId": "D111",
-          "versionId": "D111_V02",
-          "anchorId": "D111_V02_A01"
+          "versionId": "D111_V01",
+          "anchorId": "D111_V01_A01"
         },
         {
           "documentId": "D112",
@@ -5188,6 +5404,7 @@
       "id": "C27",
       "split": "heldout",
       "originWeekId": "w3",
+      "projectName": "Vale",
       "question": "May the Vale guarantee be removed from the next customer invoice cycle?",
       "intentParaphrase": "Require both expiry of the operational claim period and satisfaction of an independently defined financial-release condition.",
       "expectedDisposition": "Retain the guarantee because the operational claims period expired but the security account is below its required cleared balance.",
@@ -5239,6 +5456,7 @@
       "id": "C28",
       "split": "heldout",
       "originWeekId": "w3",
+      "projectName": "Harbor",
       "question": "Can the Harbor offer promise a fixed monthly charge at renewal?",
       "intentParaphrase": "Determine whether the approved price protection also absorbs the indexed component included in the customer's fixed-price request.",
       "expectedDisposition": "Offer the fixed base fee only, because the signed approval leaves the 0.07-dollar-per-kilometre energy adjustment indexed.",
@@ -5285,6 +5503,7 @@
       "id": "C29",
       "split": "heldout",
       "originWeekId": "w3",
+      "projectName": "Elm",
       "question": "Should the Elm supplier rebate enter the next cash forecast as earned?",
       "intentParaphrase": "Apply the earning definition to the verified volume rather than the broader operational activity count.",
       "expectedDisposition": "Keep the 22000-dollar rebate unearned because only 1780 qualifying completed loads count against the 2000-load requirement.",
@@ -5331,6 +5550,7 @@
       "id": "C30",
       "split": "heldout",
       "originWeekId": "w3",
+      "projectName": "Aster",
       "question": "Is the Aster environmental badge defensible for the whole customer network?",
       "intentParaphrase": "Determine whether the certification population matches the promised network-wide applicability.",
       "expectedDisposition": "Limit the badge to the 8 certified facilities and withhold the network-wide wording that would include 5 uncertified facilities.",

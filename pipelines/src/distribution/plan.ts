@@ -33,6 +33,23 @@ function territoryLabel(t: Territory): string {
     return t.region ? `${t.region}, ${t.country}` : t.country;
 }
 
+/** A `companies` segment: the description and places, nothing about the seller. */
+export function buildCompaniesPlanPrompt(input: PlanInput): string {
+    const { program, territories, partnerKinds, sources } = input;
+    return [
+        `LIST: ${program.name}`,
+        `Companies wanted: ${program.offering}`,
+        `Industries or kinds: ${program.categories.join(", ") || "(none given)"}`,
+        `Places: ${territories.map(territoryLabel).join("; ")}`,
+        `Not wanted: ${program.constraints ?? "(none given)"}`,
+        `Partner kind to put on every query: ${partnerKinds[0] ?? "distributor"}`,
+        "",
+        `SOURCES AVAILABLE IN THIS RUN: ${sources.web ? "web search (kind: web)" : "none"}`,
+        "",
+        "Produce the plan. Every query's `territory` must be one of the places above.",
+    ].join("\n");
+}
+
 export function buildPlanPrompt(input: PlanInput): string {
     const { program, profile, territories, partnerKinds, sources } = input;
     const available = [
@@ -68,12 +85,16 @@ export function buildPlanPrompt(input: PlanInput): string {
 export async function planDiscovery(
     input: PlanInput
 ): Promise<{ plan: DiscoveryPlan; modelId?: string; playbookHash: string }> {
-    const playbook = loadPlaybook("plan");
+    const companies = input.program.intent === "companies";
+    const playbook = loadPlaybook(companies ? "plan-companies" : "plan");
     const resolved = resolveChatModel({ route: "fast", temperature: 0.2 });
     const raw = await invokeStructured(
         resolved,
         DiscoveryPlanSchema,
-        [new SystemMessage(playbook.content), new HumanMessage(buildPlanPrompt(input))],
+        [
+            new SystemMessage(playbook.content),
+            new HumanMessage(companies ? buildCompaniesPlanPrompt(input) : buildPlanPrompt(input)),
+        ],
         { name: "discovery_plan" }
     );
     return {
@@ -93,6 +114,9 @@ export function sanitizePlan(plan: DiscoveryPlan, input: PlanInput): DiscoveryPl
     const countries = new Set(input.territories.map(t => t.country));
     const kinds = new Set(input.partnerKinds);
     const sellerName = input.profile.companyName.trim().toLowerCase();
+    // A `companies` list has no partner role, and map or customs searches do
+    // not find companies by industry or size: web queries only, kind ignored.
+    const companies = input.program.intent === "companies";
     // Snap a country-only territory onto the program's matching territory so
     // place queries inherit region and radius before the region check below.
     const byCountry = new Map(input.territories.map(t => [t.country, t]));
@@ -105,12 +129,22 @@ export function sanitizePlan(plan: DiscoveryPlan, input: PlanInput): DiscoveryPl
         if (query.kind === "web" && !input.sources.web) return false;
         if (query.kind === "place" && !input.sources.place) return false;
         if (query.kind === "trade" && !input.sources.trade) return false;
-        if (!kinds.has(query.partnerKind)) return false;
+        if (companies && query.kind !== "web") return false;
+        if (!companies && !kinds.has(query.partnerKind)) return false;
         const key = `${query.territory.country}|${query.territory.region ?? ""}`;
         if (!territoryKeys.has(key) && !countries.has(query.territory.country)) return false;
         if (query.kind === "place" && !query.territory.region) return false;
         if (sellerName.length >= 4 && query.query.toLowerCase().includes(sellerName)) return false;
         return true;
     });
-    return { ...plan, queries };
+    const fallbackKind = input.partnerKinds[0];
+    return {
+        ...plan,
+        queries:
+            companies && fallbackKind
+                ? queries.map(q =>
+                      kinds.has(q.partnerKind) ? q : { ...q, partnerKind: fallbackKind }
+                  )
+                : queries,
+    };
 }

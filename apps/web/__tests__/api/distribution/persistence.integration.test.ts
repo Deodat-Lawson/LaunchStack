@@ -106,6 +106,7 @@ describeDb("distribution persistence", () => {
                 hsCodes: ["0901"],
                 targetTerritories: [{ country: "DE" }, { country: "NL" }],
                 partnerKinds: ["importer", "distributor"],
+                intent: "partners",
                 constraints: null,
                 knownPartnerDomains: ["existing-importer.de"],
                 customerDomains: [],

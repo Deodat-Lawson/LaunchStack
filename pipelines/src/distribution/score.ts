@@ -224,11 +224,17 @@ export function computeFit(input: ScoreInput): FitBreakdown {
 
     // Role: dossier roles (agent-established) beat mention-guessed roles.
     const roles = new Set<string>([...(input.dossier?.roles ?? []), ...input.org.roles]);
-    const roleMatch = input.dossier?.roles.includes(input.kind)
-        ? WEIGHTS.roleMatch
-        : roles.has(input.kind)
-          ? Math.round(WEIGHTS.roleMatch * 0.5)
-          : 0;
+    // A `companies` list has no partner role: a company still here has passed
+    // the match check (a no zeroes the score above), so the role points go
+    // to that.
+    const roleMatch =
+        input.program.intent === "companies"
+            ? WEIGHTS.roleMatch
+            : input.dossier?.roles.includes(input.kind)
+              ? WEIGHTS.roleMatch
+              : roles.has(input.kind)
+                ? Math.round(WEIGHTS.roleMatch * 0.5)
+                : 0;
 
     // Evidence depth: saturates at 12 items.
     const evidenceDepth = Math.round(WEIGHTS.evidenceDepth * Math.min(1, input.evidenceCount / 12));

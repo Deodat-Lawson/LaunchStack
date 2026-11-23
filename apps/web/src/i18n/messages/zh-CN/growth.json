@@ -305,7 +305,18 @@
       "shortcuts": "<k>j</k> <k>k</k> 移动 · <k>x</k> 选择 · <k>Enter</k> 打开 · <k>o</k> 加入外联 · <k>/</k> 搜索",
       "moveToQualified": "移至“已确认”",
       "newBadge": "新",
-      "foundInLastRun": "在上次运行中发现"
+      "simulate": "模拟这个细分市场",
+      "simulateSelected": "模拟 {count} 家公司",
+      "simulateHint": "打开情景模拟，基于这个细分市场的潜在客户，或你选定的公司。",
+      "simulateSubject": "这个细分市场中的企业会如何回应我们的产品？",
+      "layout": {
+        "cards": "卡片",
+        "table": "表格",
+        "aria": "公司的显示方式"
+      },
+      "foundInLastRun": "在上次运行中发现",
+      "ruledOut": "已排除",
+      "ruledOutWhy": "已排除：{reason}"
     },
     "company": {
       "updateDealFailed": "无法更新商机",
@@ -318,6 +329,9 @@
       "staff": "{size} 名员工",
       "noPeopleYet": "尚未找到联系人",
       "addPeople": "将联系人加入外联",
+      "simulate": "模拟买家",
+      "simulateHint": "打开情景模拟，以这家公司作为模拟人物的潜在客户来源。",
+      "simulateSubject": "{name} 以及类似的企业会如何回应我们的产品？",
       "excludedNote": "已排除。它不会出现在后续运行中，也无法加入外联。",
       "excludedNoteReason": "已排除：{reason}。它不会出现在后续运行中，也无法加入外联。",
       "notProfiled": "尚未生成画像",
@@ -376,7 +390,16 @@
       "offeringFromProfile": "根据你的公司资料起草。可按这群客户修改。",
       "submit": "查找公司",
       "failed": "无法开始查找",
-      "defaultName": "{buyers} · {where}"
+      "defaultName": "{buyers} · {where}",
+      "intent": {
+        "aria": "要查找什么",
+        "partners": "查找买家",
+        "companies": "查找类似的公司"
+      },
+      "describe": "描述你要找的公司",
+      "describePlaceholder": "市值 30 亿美元以上的科技公司，消费类或企业类均可",
+      "describeHint": "行业、规模、阶段，以及其他重要条件。找到的每家公司都会按此核对。",
+      "whereHintCompanies": "城市、州或国家。多个地点用“;”分隔。同一地区的周边城市也算在内。"
     }
   },
   "brand": {

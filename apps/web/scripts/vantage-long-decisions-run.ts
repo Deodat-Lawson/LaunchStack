@@ -103,6 +103,8 @@ async function main() {
         options: {
             cache: { type: "string" },
             "approve-live": { type: "boolean" },
+            "spec-version": { type: "string", default: "v1" },
+            resume: { type: "boolean" },
             "resume-warmup": { type: "boolean" },
             "preflight-live": { type: "boolean" },
             "ingest-only": { type: "boolean" },
@@ -112,6 +114,20 @@ async function main() {
     });
     if (!values.cache) throw new Error("long_decisions_cache_required");
     const cache = resolve(values.cache);
+    const revision = values["spec-version"];
+    if (revision !== "v1" && revision !== "v2") throw new Error("long_decisions_revision_invalid");
+    const resumeRun = values.resume === true;
+    if (
+        resumeRun &&
+        (revision !== "v2" ||
+            !values["approve-live"] ||
+            values["resume-warmup"] ||
+            values["preflight-live"] ||
+            values["ingest-only"] ||
+            values["injected-smoke"] ||
+            values["local-fixture-lock"])
+    )
+        throw new Error("long_decisions_resume_denied");
     const lockPath = values["local-fixture-lock"];
     const smoke = values["injected-smoke"] === true;
     const resumeWarmup = values["resume-warmup"] === true;
@@ -127,18 +143,52 @@ async function main() {
     if (lockPath && (values["approve-live"] || values["preflight-live"]))
         throw new Error("long_decisions_live_requires_committed_lock");
     if (smoke && !lockPath) throw new Error("long_decisions_smoke_requires_local_fixture");
-    const fixture = { cache, ...(lockPath ? { lockPath } : {}) };
+    const fixture: Parameters<typeof loadLongDecisionsWorkspace>[0] = {
+        cache,
+        revision,
+        ...(lockPath ? { lockPath } : {}),
+    };
     const { publicManifest: manifest } = await loadLongDecisionsWorkspace(fixture);
     const schedule = SPLITS.flatMap(split =>
         manifest.groups
             .filter(group => group.split === split)
             .flatMap(group => CAP_BYTES.map(capBytes => ({ split, group, capBytes })))
     );
+    if (
+        revision === "v2" &&
+        (schedule.length !== 54 ||
+            manifest.groups.length !== 18 ||
+            [...manifest.weeks.map(week => Date.parse(week.cutoff))]
+                .sort((a, b) => a - b)
+                .join(",") !==
+                ["2026-10-12T00:00:00Z", "2026-10-19T00:00:00Z", "2026-10-26T00:00:00Z"]
+                    .map(Date.parse)
+                    .join(","))
+    )
+        throw new Error("long_decisions_revision_schedule_invalid");
     const mayCallLive = values["approve-live"] === true;
     const azure = mayCallLive || values["preflight-live"] ? planAzureLive() : undefined;
     const rate = AZURE_LUNA_RESERVATION_PER_MILLION;
-    // Cold digests reserve at least one input token per byte plus framing and full output.
-    // Exploration starts at 1.5 times the p90 exposure of the earlier pilot.
+    // v1 preserves its original full-reserve forecast; v2 uses the completed v1
+    // native-usage ledger's nearest-rank p90 across24 explorers/44 long digests.
+    // Forecasts use observed list-rate expense; dispatch still reserves full byte ceilings.
+    const reference = {
+        explorationP90Usd: 0.0262098,
+        explorationSamples: 24,
+        digestP90Usd: 0.0029991,
+        digestSamples: 44,
+        padding: 1.5,
+        catalogueScale: 50 / 44,
+        maxBodyBytes: 30700,
+    };
+    const bodyScale = Math.max(
+        1,
+        ...manifest.documents.flatMap(document =>
+            document.versions.map(version => version.bytes / reference.maxBodyBytes)
+        )
+    );
+    const digestForecast = (bytes: number) =>
+        reference.digestP90Usd * reference.padding * Math.max(1, bytes / reference.maxBodyBytes);
     const coldDigestExposure = manifest.documents
         .filter(
             document =>
@@ -149,10 +199,17 @@ async function main() {
         .reduce(
             (sum, version) =>
                 sum +
-                ((version.bytes + 4096) * rate.input + AZURE_LUNA_OUTPUT_LIMIT * rate.output) / 1e6,
+                (revision === "v2"
+                    ? digestForecast(version.bytes)
+                    : ((version.bytes + 4096) * rate.input +
+                          AZURE_LUNA_OUTPUT_LIMIT * rate.output) /
+                      1e6),
             0
         );
-    const explorationUnitUsd = 0.0521793 * 1.5;
+    const explorationUnitUsd =
+        revision === "v2"
+            ? reference.explorationP90Usd * reference.padding * reference.catalogueScale * bodyScale
+            : 0.0521793 * 1.5;
     const projectedUsd = coldDigestExposure + schedule.length * explorationUnitUsd;
     if (azure) {
         console.log(
@@ -179,10 +236,25 @@ async function main() {
     }
     const capture = resolve(
         cache,
-        mayCallLive ? "comparison" : smoke ? "injected-smoke" : "free-check"
+        (mayCallLive ? "comparison" : smoke ? "injected-smoke" : "free-check") +
+            (revision === "v2" ? "-v2" : "")
     );
-    if (!resumeWarmup) await mkdir(capture);
+    if (!resumeWarmup && !resumeRun) await mkdir(capture);
     const method = {
+        ...(revision === "v2"
+            ? {
+                  revision,
+                  liveConcurrency: 1,
+                  warmup: "actual_free_catalogue_union_per_split",
+                  cutoffs: manifest.weeks.map(week => ({ id: week.id, asOf: week.cutoff })),
+                  forecastReference: {
+                      ...reference,
+                      bodyScale,
+                      explorationUnitUsd,
+                      coldDigestExposure,
+                  },
+              }
+            : {}),
         specSha256: manifest.specSha256,
         caps: CAP_BYTES,
         arms: [...FREE_ARMS, ...LIVE_ARMS],
@@ -195,6 +267,96 @@ async function main() {
     };
     let priorLedger: BenchmarkMeterSnapshot | undefined;
     let priorDevRows: unknown[] = [];
+    const resumedCaptures = new Map<
+        string,
+        { rows: { status: string }[]; result: { offered?: { versionId: string }[] } }
+    >();
+    const jobFile = (job: (typeof schedule)[number], arm: string) =>
+        [job.group.id, job.capBytes, arm].join("-") + ".json";
+    if (resumeRun) {
+        const savedMethod = JSON.parse(await readFile(resolve(capture, "method.json"), "utf8"));
+        if (JSON.stringify(savedMethod) !== JSON.stringify(method))
+            throw new Error("long_decisions_warmup_method_mismatch");
+        const names = new Set(await readdir(capture));
+        const allowed = new Set([
+            "method.json",
+            "usage-ledger.json",
+            "dev-rows.json",
+            "heldout-rows.json",
+            "warmup-diagnostics.json",
+            "digest-warmup-dev.json",
+            "digest-warmup-heldout.json",
+            "progress.json",
+        ]);
+        const completedWork = new Set<string>();
+        let missing = false;
+        for (const split of SPLITS) {
+            const jobs = schedule.filter(job => job.split === split);
+            const expected: {
+                job: (typeof jobs)[number];
+                arm: (typeof FREE_ARMS)[number] | "live";
+            }[] = [
+                ...jobs.flatMap(job => FREE_ARMS.map(arm => ({ job, arm }))),
+                ...jobs.map(job => ({ job, arm: "live" as const })),
+            ];
+            for (const { job, arm } of expected) {
+                const name = jobFile(job, arm);
+                allowed.add(name);
+                if (!names.has(name)) {
+                    missing = true;
+                    continue;
+                }
+                if (missing) throw new Error("long_decisions_resume_prefix_invalid");
+                const saved = JSON.parse(await readFile(resolve(capture, name), "utf8"));
+                const week = manifest.weeks.find(week => week.id === job.group.weekId)!;
+                const arms = arm === "live" ? LIVE_ARMS : [arm];
+                if (
+                    !Array.isArray(saved.rows) ||
+                    saved.rows.length !== arms.length ||
+                    saved.rows.some(
+                        (row: Record<string, unknown>, i: number) =>
+                            row.groupId !== job.group.id ||
+                            row.split !== split ||
+                            row.weekId !== job.group.weekId ||
+                            row.asOf !== week.cutoff ||
+                            row.capBytes !== job.capBytes ||
+                            row.arm !== arms[i] ||
+                            !["completed", "degraded", "failed"].includes(String(row.status)) ||
+                            !Array.isArray(row.selected)
+                    ) ||
+                    !saved.result
+                )
+                    throw new Error("long_decisions_resume_capture_invalid");
+                resumedCaptures.set(name, saved);
+                if (arm === "live")
+                    completedWork.add(
+                        "sweep-" + String(schedule.indexOf(job) + 1).padStart(3, "0")
+                    );
+            }
+        }
+        if ([...names].some(name => !allowed.has(name)))
+            throw new Error("long_decisions_resume_capture_invalid");
+        priorLedger = JSON.parse(await readFile(resolve(capture, "usage-ledger.json"), "utf8"));
+        if (
+            !priorLedger ||
+            !Array.isArray(priorLedger.records) ||
+            priorLedger.records.some(
+                row =>
+                    ["sent", "reserved"].includes(row.status) ||
+                    (row.workId !== undefined && !completedWork.has(row.workId)) ||
+                    (row.route === "exploration" && row.workId === undefined)
+            ) ||
+            !([null, "usage_unresolved"] as unknown[]).includes(priorLedger.hold)
+        )
+            throw new Error("long_decisions_resume_uncaptured_dispatch");
+        if (
+            coldDigestExposure +
+                (schedule.length - completedWork.size) * explorationUnitUsd +
+                priorLedger.projectedTotalUsd >
+            LIMIT_USD
+        )
+            throw new Error("long_decisions_projected_budget_exceeded");
+    }
     if (resumeWarmup) {
         const savedMethod = JSON.parse(await readFile(resolve(capture, "method.json"), "utf8"));
         if (JSON.stringify(savedMethod) !== JSON.stringify(method))
@@ -231,7 +393,7 @@ async function main() {
                 expectedRows.push(row);
             }
         if (
-            expectedRows.length !== 24 ||
+            expectedRows.length !== (revision === "v2" ? jobs.length * FREE_ARMS.length : 24) ||
             !Array.isArray(rows) ||
             JSON.stringify(rows) !== JSON.stringify(expectedRows) ||
             (await readdir(capture)).some(name => !allowedFiles.has(name))
@@ -253,13 +415,23 @@ async function main() {
             (priorLedger.hold !== null && priorLedger.hold !== "usage_unresolved") ||
             (priorLedger.hold === null &&
                 priorLedger.records.some(
-                    row => row.status === "unknown" && !row.continuedAfterGenerationNoHttp
+                    row =>
+                        row.status === "unknown" &&
+                        !row.continuedAfterGenerationNoHttp &&
+                        !row.continuedAfterCaseDeadline &&
+                        !row.continuedAfterTransportFailure &&
+                        !row.scopedTransportFailure
                 ))
         )
             throw new Error("long_decisions_warmup_ledger_invalid");
         if (projectedUsd + priorLedger.projectedTotalUsd > LIMIT_USD)
             throw new Error("long_decisions_projected_budget_exceeded");
     }
+    const completedLiveKeys = new Set(
+        schedule
+            .filter(job => resumedCaptures.has(jobFile(job, "live")))
+            .map(job => jobFile(job, "live"))
+    );
     const byRef = new Map<string, StableId>();
     const byHandle = new Map<string, StableId>();
     const byVersion = new Map<string, StableId>();
@@ -278,6 +450,63 @@ async function main() {
         if (!stable) throw new Error("long_decisions_unknown_result_source");
         return stable;
     };
+    const numericVersionByStable = new Map(
+        [...byVersion].map(([id, stable]) => [stable.versionId, id])
+    );
+    const cacheCoveredVersions = new Set<string>();
+    const observedSplitCatalogues = new Set<string>();
+    const futureInventory = new Map<string, Set<string>>();
+    for (const split of SPLITS) {
+        const needed = new Set<string>();
+        for (const job of schedule.filter(job => job.split === split)) {
+            const cutoff = manifest.weeks.find(week => week.id === job.group.weekId)!.cutoff;
+            for (const document of manifest.documents) {
+                if (
+                    document.visibility !== "actor_readable" ||
+                    manifest.fixedSources.some(fixed => fixed.documentId === document.id)
+                )
+                    continue;
+                const latest = document.versions
+                    .filter(version => Date.parse(version.publishedAt) <= Date.parse(cutoff))
+                    .at(-1);
+                if (latest) {
+                    const numeric = numericVersionByStable.get(latest.id);
+                    if (!numeric) throw new Error("long_decisions_digest_inventory_invalid");
+                    needed.add(numeric);
+                }
+            }
+        }
+        futureInventory.set(split, needed);
+    }
+    if (revision === "v2" && resumeRun)
+        for (const split of SPLITS) {
+            try {
+                const audit = JSON.parse(
+                    await readFile(resolve(capture, `digest-warmup-${split}.json`), "utf8")
+                );
+                if (
+                    audit.schemaVersion !== "long-decisions-warmup/2" ||
+                    audit.specSha256 !== manifest.specSha256 ||
+                    audit.split !== split ||
+                    !Array.isArray(audit.versions) ||
+                    !Array.isArray(audit.digestIds) ||
+                    audit.digestIds.length !== audit.versions.length
+                )
+                    throw new Error("long_decisions_warmup_binding_invalid");
+                for (const version of audit.versions) {
+                    const numeric = numericVersionByStable.get(version.versionId);
+                    if (
+                        !numeric ||
+                        byVersion.get(numeric)!.documentId !== version.documentId ||
+                        !allowed(version)
+                    )
+                        throw new Error("long_decisions_warmup_binding_invalid");
+                    cacheCoveredVersions.add(numeric);
+                }
+            } catch (error) {
+                if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+            }
+        }
     const originalFetch = globalThis.fetch;
     const causeCode = (error: unknown): string => {
         const candidate = error as {
@@ -304,7 +533,7 @@ async function main() {
             : "transport_failure";
     };
     const diagnostics: unknown[] = [];
-    if (resumeWarmup) {
+    if (resumeWarmup || resumeRun) {
         try {
             const saved = JSON.parse(
                 await readFile(resolve(capture, "warmup-diagnostics.json"), "utf8")
@@ -438,7 +667,64 @@ async function main() {
             };
         };
     };
-    const warmOfferedDigests = async () => {
+    const freeCatalogueVersions = new Map<string, Set<string>>(
+        SPLITS.map(split => [split, new Set<string>()])
+    );
+    const recordFreeCatalogue = (split: string, result: { offered?: { versionId: string }[] }) => {
+        for (const offered of result.offered ?? []) {
+            if (!byVersion.has(offered.versionId))
+                throw new Error("long_decisions_unknown_result_source");
+            freeCatalogueVersions.get(split)!.add(offered.versionId);
+        }
+    };
+    const remainingProjection = (additionalColdUsd = 0) => {
+        const state = meter?.snapshot();
+        const byWork = new Map<string, number>();
+        for (const row of state?.records ?? [])
+            if (row.workId && row.status !== "released")
+                byWork.set(
+                    row.workId,
+                    (byWork.get(row.workId) ?? 0) + (row.settledListRateUsd ?? row.projectedUsd)
+                );
+        const observed = schedule
+            .flatMap((job, index) =>
+                completedLiveKeys.has(jobFile(job, "live"))
+                    ? [byWork.get("sweep-" + String(index + 1).padStart(3, "0")) ?? 0]
+                    : []
+            )
+            .sort((a, b) => a - b);
+        const observedUnit =
+            observed.length >= 3
+                ? observed[Math.ceil(observed.length * 0.9) - 1]! * reference.padding
+                : 0;
+        const coldVersions = new Set<string>();
+        for (const split of SPLITS) {
+            if (
+                schedule
+                    .filter(job => job.split === split)
+                    .every(job => completedLiveKeys.has(jobFile(job, "live")))
+            )
+                continue;
+            const inventory = observedSplitCatalogues.has(split)
+                ? freeCatalogueVersions.get(split)!
+                : futureInventory.get(split)!;
+            for (const version of inventory)
+                if (!cacheCoveredVersions.has(version)) coldVersions.add(version);
+        }
+        const inventoryColdUsd = [...coldVersions].reduce((sum, id) => {
+            const stable = stableVersion(id);
+            const version = manifest.documents
+                .flatMap(document => document.versions)
+                .find(version => version.id === stable.versionId)!;
+            return sum + digestForecast(version.bytes);
+        }, 0);
+        return (
+            (state?.projectedTotalUsd ?? 0) +
+            Math.max(inventoryColdUsd, additionalColdUsd) +
+            (schedule.length - completedLiveKeys.size) * Math.max(explorationUnitUsd, observedUnit)
+        );
+    };
+    const warmOfferedDigests = async (split: (typeof SPLITS)[number]) => {
         if (!digestProvider || !meter) throw new Error("long_decisions_live_provider_missing");
         // This unauthenticated HEAD warms the same process's connection path; never a model call.
         let connected = false;
@@ -478,7 +764,12 @@ async function main() {
             await meter.drainPending();
             const state = meter.snapshot();
             const unknown = state.records.filter(
-                row => row.status === "unknown" && !row.continuedAfterGenerationNoHttp
+                row =>
+                    row.status === "unknown" &&
+                    !row.continuedAfterGenerationNoHttp &&
+                    !row.continuedAfterCaseDeadline &&
+                    !row.continuedAfterTransportFailure &&
+                    !row.scopedTransportFailure
             );
             if (
                 state.hold !== "usage_unresolved" ||
@@ -504,10 +795,11 @@ async function main() {
                 heldExposureUsd: meter.snapshot().reservedUsd,
             });
         };
-        if (resumeWarmup && meter.snapshot().hold === "usage_unresolved") await recoverNoHttp();
+        if ((resumeWarmup || resumeRun) && meter.snapshot().hold === "usage_unresolved")
+            await recoverNoHttp();
         const fixedIds = new Set(manifest.fixedSources.map(source => source.documentId));
         const eligible = new Set<string>();
-        for (const { group } of schedule) {
+        for (const { group } of revision === "v2" ? [] : schedule) {
             const cutoff = manifest.weeks.find(week => week.id === group.weekId)?.cutoff;
             if (!cutoff) throw new Error("long_decisions_unknown_reporting_week");
             for (const document of manifest.documents) {
@@ -518,11 +810,35 @@ async function main() {
                 if (version) eligible.add(version.id);
             }
         }
-        const versionIds = [...byVersion]
-            .filter(([, stable]) => eligible.has(stable.versionId))
-            .map(([id]) => id);
-        if (versionIds.length !== eligible.size)
+        const versionIds =
+            revision === "v2"
+                ? [...freeCatalogueVersions.get(split)!]
+                : [...byVersion]
+                      .filter(([, stable]) => eligible.has(stable.versionId))
+                      .map(([id]) => id);
+        if (
+            (revision !== "v2" && versionIds.length !== eligible.size) ||
+            (revision === "v2" && versionIds.length === 0)
+        )
             throw new Error("long_decisions_digest_inventory_invalid");
+        let completedWarmup = false;
+        if (revision === "v2" && resumeRun) {
+            try {
+                const saved = JSON.parse(
+                    await readFile(resolve(capture, `digest-warmup-${split}.json`), "utf8")
+                );
+                if (
+                    JSON.stringify(saved.versions) !==
+                        JSON.stringify(versionIds.map(stableVersion)) ||
+                    !Array.isArray(saved.digestIds) ||
+                    saved.digestIds.length !== versionIds.length
+                )
+                    throw new Error("long_decisions_warmup_binding_invalid");
+                completedWarmup = true;
+            } catch (error) {
+                if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+            }
+        }
         const loadActor = await createActor();
         const actor = await loadActor();
         const canReadIds = new Set(workspace.readableDocumentIds);
@@ -549,7 +865,19 @@ async function main() {
         const startedAt = Date.now();
         const digestIds: string[] = [];
         // Serial batches warm the initial connection and isolate every paid retry.
-        for (const versionId of versionIds) {
+        for (const [versionIndex, versionId] of versionIds.entries()) {
+            if (revision === "v2") {
+                const coldRemaining = versionIds.slice(versionIndex).reduce((sum, id) => {
+                    const stable = stableVersion(id);
+                    const version = manifest.documents
+                        .flatMap(document => document.versions)
+                        .find(v => v.id === stable.versionId);
+                    if (!version) throw new Error("long_decisions_unknown_result_source");
+                    return sum + digestForecast(version.bytes);
+                }, 0);
+                if (remainingProjection(completedWarmup ? 0 : coldRemaining) > LIMIT_USD)
+                    throw new Error("long_decisions_projected_budget_exceeded");
+            }
             const batch = [versionId];
             for (let attempt = 0; attempt < 2; attempt++) {
                 meter.assertCanDispatch();
@@ -560,6 +888,8 @@ async function main() {
                         versionIds: batch,
                         query,
                         provider: async input => {
+                            if (completedWarmup)
+                                throw new Error("long_decisions_warmup_cache_missing");
                             try {
                                 return await digestProvider(input);
                             } catch (error) {
@@ -579,6 +909,19 @@ async function main() {
                     if (ready.digests.size !== batch.length)
                         throw new Error("benchmark_digest_warm_up_incomplete");
                     digestIds.push(...ready.digestIds);
+                    cacheCoveredVersions.add(versionId);
+                    if (
+                        revision === "v2" &&
+                        ((versionIndex + 1) % 10 === 0 || versionIndex + 1 === versionIds.length)
+                    )
+                        await saveDiagnostic({
+                            kind: "digest_progress",
+                            split,
+                            checkedVersions: versionIndex + 1,
+                            requiredVersions: versionIds.length,
+                            requests: meter.snapshot().records.length,
+                            exposureUsd: meter.snapshot().projectedTotalUsd,
+                        });
                     break;
                 } catch (error) {
                     await saveDiagnostic({
@@ -615,12 +958,26 @@ async function main() {
         }
         await meter.drainPending();
         const audit = {
+            ...(revision === "v2"
+                ? {
+                      schemaVersion: "long-decisions-warmup/2",
+                      specSha256: manifest.specSha256,
+                      split,
+                      source: "actual_free_catalogue_union",
+                  }
+                : {}),
             versions: versionIds.map(stableVersion),
             digestIds,
             elapsedMs: Date.now() - startedAt,
             exposureUsd: meter.snapshot().projectedTotalUsd,
         };
-        await writeJson(resolve(capture, "digest-warmup.json"), audit);
+        await writeJson(
+            resolve(
+                capture,
+                revision === "v2" ? `digest-warmup-${split}.json` : "digest-warmup.json"
+            ),
+            audit
+        );
         console.log(
             JSON.stringify({
                 digestWarmup: digestIds.length,
@@ -631,17 +988,18 @@ async function main() {
         return audit.exposureUsd;
     };
     const resumeLock = resolve(capture, "resume-warmup.lock");
-    if (resumeWarmup) await writeFile(resumeLock, "", { flag: "wx" });
+    if (resumeWarmup || resumeRun || (revision === "v2" && mayCallLive))
+        await writeFile(resumeLock, "", { flag: "wx" });
     try {
         if (
-            resumeWarmup &&
+            (resumeWarmup || resumeRun) &&
             JSON.stringify(priorLedger) !==
                 JSON.stringify(
                     JSON.parse(await readFile(resolve(capture, "usage-ledger.json"), "utf8"))
                 )
         )
             throw new Error("long_decisions_warmup_ledger_changed");
-        if (!resumeWarmup) await writeJson(resolve(capture, "method.json"), method);
+        if (!resumeWarmup && !resumeRun) await writeJson(resolve(capture, "method.json"), method);
         if (meter && meteredFetch) {
             await writeJson(resolve(capture, "usage-ledger.json"), meter.snapshot());
             globalThis.fetch = meteredFetch;
@@ -654,6 +1012,14 @@ async function main() {
             arm: (typeof FREE_ARMS)[number] | "live"
         ) => {
             const { split, group, capBytes } = job;
+            const saved = resumedCaptures.get(jobFile(job, arm));
+            if (saved) {
+                if (arm !== "live") recordFreeCatalogue(split, saved.result);
+                if (arm !== "live" && saved.rows.some(row => row.status === "failed"))
+                    throw new Error("long_decisions_free_control_failed");
+                completed++;
+                return saved.rows;
+            }
             const week = manifest.weeks.find(week => week.id === group.weekId);
             if (!week) throw new Error("long_decisions_unknown_reporting_week");
             const loadActor = await createActor();
@@ -698,6 +1064,7 @@ async function main() {
                 : [];
             const explored = projectToolAccess(record?.trace, byRef, byHandle);
             const offered = (result.offered ?? []).map(item => stableVersion(item.versionId));
+            if (arm !== "live") recordFreeCatalogue(split, result);
             const digestIds: string[] = record?.digest_ids ?? [];
             const storedDigestIds = digestIds.filter(id => /^\d+$/.test(id));
             const digests = storedDigestIds.length
@@ -721,6 +1088,7 @@ async function main() {
                 groupId: group.id,
                 split,
                 weekId: group.weekId,
+                ...(revision === "v2" ? { asOf: week.cutoff } : {}),
                 capBytes,
                 offered,
                 explored: [...digestAccess, ...explored],
@@ -767,7 +1135,7 @@ async function main() {
                           })),
                       };
                   });
-            await writeJson(resolve(capture, [group.id, capBytes, arm].join("-") + ".json"), {
+            await writeJson(resolve(capture, jobFile(job, arm)), {
                 rows,
                 result,
                 trace: record?.trace ?? null,
@@ -783,6 +1151,19 @@ async function main() {
             )
                 throw new Error("long_decisions_restricted_source_disclosed");
             completed++;
+            if (arm === "live") completedLiveKeys.add(jobFile(job, arm));
+            if (revision === "v2")
+                await writeJson(resolve(capture, "progress.json"), {
+                    revision,
+                    completed,
+                    expectedJobs: schedule.length * (mayCallLive ? 3 : 2),
+                    expectedRows: schedule.length * (mayCallLive ? 5 : 2),
+                    split,
+                    groupId: group.id,
+                    capBytes,
+                    arm,
+                    exposureUsd: meter?.snapshot().projectedTotalUsd,
+                });
             console.log(
                 JSON.stringify({
                     completed,
@@ -795,6 +1176,8 @@ async function main() {
                     exposureUsd: meter?.snapshot().projectedTotalUsd,
                 })
             );
+            if (revision === "v2" && arm !== "live" && rows.some(row => row.status === "failed"))
+                throw new Error("long_decisions_free_control_failed");
             return rows;
         };
         if (smoke) {
@@ -812,16 +1195,23 @@ async function main() {
                     for (const arm of FREE_ARMS) rows.push(...(await runJob(job, arm)));
                 await writeJson(resolve(capture, split + "-rows.json"), rows);
             }
+            observedSplitCatalogues.add(split);
             if (!meter) continue;
-            if (split === "dev") exposureAfterWarmup = await warmOfferedDigests();
+            if (
+                (revision === "v2" || split === "dev") &&
+                jobs.some(job => !completedLiveKeys.has(jobFile(job, "live")))
+            )
+                exposureAfterWarmup = await warmOfferedDigests(split);
             for (const job of jobs) {
                 meter.assertCanDispatch();
                 const exposure = meter.snapshot().projectedTotalUsd;
                 const observedUsd =
                     liveCases > 3 ? ((exposure - exposureAfterWarmup) / liveCases) * 1.5 : 0;
                 const predicted =
-                    exposure +
-                    (schedule.length - liveCases) * Math.max(explorationUnitUsd, observedUsd);
+                    revision === "v2"
+                        ? remainingProjection()
+                        : exposure +
+                          (schedule.length - liveCases) * Math.max(explorationUnitUsd, observedUsd);
                 if (predicted > LIMIT_USD)
                     throw new Error("long_decisions_projected_budget_exceeded");
                 rows.push(...(await runJob(job, "live")));
@@ -834,7 +1224,8 @@ async function main() {
         globalThis.fetch = originalFetch;
         await meter?.drainPending();
         await sql.end();
-        if (resumeWarmup) await unlink(resumeLock);
+        if (resumeWarmup || resumeRun || (revision === "v2" && mayCallLive))
+            await unlink(resumeLock);
     }
 }
 

@@ -58,8 +58,9 @@ paid model is called anywhere.
 
 How the recorder behaves towards those sources:
 
-- one request at a time per host with a gap (1 s by default, more for Photon,
-  the OSM API and Nominatim);
+- one request at a time per host with a gap: 1 s by default, more for Photon,
+  the OSM API and Nominatim, and less for the Norwegian register (0.35 s in
+  E2, 0.7 s in E4), which is built for bulk reads;
 - a generic User-Agent (`company-search-bench/0.1`), never the product's name;
 - failures are recorded and replayed as failures, so a flaky source is part
   of the measured world;
@@ -91,14 +92,14 @@ known, and E2 also with companies of the wrong kind.
 
 Policies (`lib/bandits.ts`, `lib/discovery.ts`):
 
-| Policy                                            | What it knows                                                                                                                                                         | Kind                                  |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `plan-static`                                     | The planned words, in order, then their deeper requests level by level                                                                                                | Fixed order, nothing learned          |
-| `letters-static`, `letters-random`                | The planned words, then a to z (E1 only: Photon matches the start of a word)                                                                                          | Fixed order                           |
-| `egreedy`, `ucb1`, `thompson`                     | The same arms; how many new targets each returned so far                                                                                                              | Bandits over a fixed set of arms      |
-| `mined-greedy`, `mined-egreedy`, `mined-thompson` | Also the names of what was found: words that recur in target names become new arms, and every unasked word gets an expected yield                                     | Bandits whose arms grow from feedback |
-| `mined-greedy-plan`                               | As `mined-greedy`, but a planned word it has read nothing about keeps the plan's own prior. Added after the frozen design was scored (`postHoc: true` in the results) | Feedback bandit, exploratory          |
-| `oracle`                                          | Every recorded answer in advance; always sends the request with the most new targets                                                                                  | Upper bound                           |
+| Policy                                            | What it knows                                                                                                                                                         | Kind                                                            |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| `plan-static`                                     | The planned words, in order, then their deeper requests level by level                                                                                                | Fixed order, nothing learned                                    |
+| `letters-static`, `letters-random`                | The planned words, then a to z (E1 only: Photon matches the start of a word)                                                                                          | Fixed order                                                     |
+| `egreedy`, `ucb1`, `thompson`                     | The same arms; how many new targets each returned so far                                                                                                              | Bandits over a fixed set of arms                                |
+| `mined-greedy`, `mined-egreedy`, `mined-thompson` | Also the names of what was found: words that recur in target names become new arms, and every unasked word gets an expected yield                                     | Bandits whose arms grow from feedback                           |
+| `mined-greedy-plan`                               | As `mined-greedy`, but a planned word it has read nothing about keeps the plan's own prior. Added after the frozen design was scored (`postHoc: true` in the results) | Feedback bandit, exploratory                                    |
+| `oracle`                                          | Every recorded answer in advance; always sends the request with the most new targets right now                                                                        | Reference point: greedy with full knowledge, not a strict bound |
 
 The feedback policies estimate a word's first request as (results expected) ×
 (share that are targets) × (share of those that are new). The counts come

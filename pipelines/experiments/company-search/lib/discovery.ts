@@ -300,10 +300,12 @@ export function simulate(env: DiscoveryEnv, policy: Policy, options: SimulateOpt
 }
 
 /**
- * Upper bound: every recorded word is available from the first request and
- * each step sends the request that truly returns the most new targets.
- * Greedy, so not the exact optimum, but no policy that learns as it goes
- * should beat it by much.
+ * A reference point, not a strict upper bound: every recorded word is
+ * available from the first request and each step sends the request that
+ * truly returns the most new targets. It is greedy one step ahead, so a
+ * policy can beat it now and then (a request that pays a little less now can
+ * open more later), but no policy that learns as it goes should beat it by
+ * much.
  */
 export function simulateOracle(env: DiscoveryEnv, budget: number): Trace {
     const cursors = env.allTerms().map(term => env.open(term));

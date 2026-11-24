@@ -167,7 +167,7 @@ export function evaluatePolicies(
     const oracle = simulateOracle(env, options.longBudget);
     const bound: PolicyResult = {
         id: "oracle",
-        label: "Oracle (knows every answer in advance)",
+        label: "Greedy oracle (sees every answer, always takes the best next request)",
         family: "bound",
         postHoc: false,
         seeds: 1,

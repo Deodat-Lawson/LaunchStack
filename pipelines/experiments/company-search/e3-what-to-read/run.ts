@@ -834,7 +834,7 @@ async function main(): Promise<void> {
     findings.push(
         `today spends ${all.meanRequests!.toFixed(1)} requests per site on average (median ${all.medianRequests}, max ${all.maxRequests}); ` +
             `${percent(all.wastedShare!)} of them return nothing readable (${percent(all.wastedShareOfGuessedPaths!)} of the guessed paths), ` +
-            `and ${all.sitesUsingAll14} of ${all.sites} sites use all 14 without reaching 4 readable pages.`
+            `${all.sitesUsingAll14} of ${all.sites} sites use all 14 requests and ${all.sites! - all.sitesReachingFourPages!} never reach 4 readable pages.`
     );
     findings.push(
         `The guessed paths add a fact type to what the homepage already gave on ${all.sitesWhereGuessedPathsAddedAFactType} of ${all.sites} sites; ` +

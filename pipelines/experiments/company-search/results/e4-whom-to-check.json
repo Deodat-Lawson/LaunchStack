@@ -258,7 +258,7 @@
         "DevOps and infrastructure software"
       ],
       "brief": "Businesses that would buy, stock or resell what this seller offers: Technical writing and developer-relations services for companies whose product is used by software engineers: APIs, SDKs, databases, cloud infrastructure, and testing, deployment and monitoring tools. Buyer types or categories: developer tools, API and SDK platforms, DevOps and infrastructure software.",
-      "fingerprint": "9d7f11b2f1fd35c1",
+      "fingerprint": "9d7f11b2",
       "leftOut": {
         "no one-liner": 161
       },
@@ -296,7 +296,7 @@
         "biotech and therapeutics"
       ],
       "brief": "Businesses that would buy, stock or resell what this seller offers: Regulatory and clinical-compliance consulting for companies building products or services for patients, clinicians, hospitals and insurers: digital health, medical devices, diagnostics, and biotech and drug developers. Buyer types or categories: healthcare companies, digital health, medical devices, biotech and therapeutics.",
-      "fingerprint": "9d7f11b2f1fd35c1",
+      "fingerprint": "9d7f11b2",
       "leftOut": {
         "no one-liner": 161
       },
@@ -334,7 +334,7 @@
         "energy storage"
       ],
       "brief": "Businesses that would buy, stock or resell what this seller offers: Carbon accounting and life-cycle assessment for companies whose business is cutting emissions or producing clean energy: solar, batteries and energy storage, electric vehicles, carbon removal and energy efficiency. Buyer types or categories: climate tech, clean energy, carbon removal, energy storage.",
-      "fingerprint": "9d7f11b2f1fd35c1",
+      "fingerprint": "9d7f11b2",
       "leftOut": {
         "no one-liner": 161
       },
@@ -372,7 +372,7 @@
         "warehousing"
       ],
       "brief": "Businesses that would buy, stock or resell what this seller offers: Cargo insurance and claims handling for companies that move, store or track physical goods: freight forwarders, trucking and delivery fleets, warehouses, and the software that runs supply chains. Buyer types or categories: logistics, freight and shipping, supply chain software, warehousing.",
-      "fingerprint": "9d7f11b2f1fd35c1",
+      "fingerprint": "9d7f11b2",
       "leftOut": {
         "no one-liner": 161
       },
@@ -408,7 +408,7 @@
         "tea blenders and packers"
       ],
       "brief": "Businesses that would buy, stock or resell what this seller offers: Green coffee beans and bulk loose-leaf tea, sold by the pallet to businesses that roast coffee or blend and pack tea under their own label. Buyer types or categories: coffee roasters, tea blenders and packers.",
-      "fingerprint": "759b104acfb574d1",
+      "fingerprint": "759b104a",
       "leftOut": {
         "primary code outside the pool": 90,
         "no activity text": 0,
@@ -446,7 +446,7 @@
         "craft beer producers"
       ],
       "brief": "Businesses that would buy, stock or resell what this seller offers: Brewing malt, hops and yeast in bulk, with recipe support, for companies that brew their own beer: craft breweries, microbreweries and brewpubs. Buyer types or categories: breweries, craft beer producers.",
-      "fingerprint": "cdc9763223622205",
+      "fingerprint": "cdc97632",
       "leftOut": {
         "primary code outside the pool": 22,
         "no activity text": 0,
@@ -485,7 +485,7 @@
         "dental clinics"
       ],
       "brief": "Businesses that would buy, stock or resell what this seller offers: Dental consumables, instruments and sterilisation equipment, delivered weekly to dental practices and clinics: general dentists, orthodontists and oral surgeons. Buyer types or categories: dental practices, dentists, dental clinics.",
-      "fingerprint": "395131ababeb35ca",
+      "fingerprint": "395131ab",
       "leftOut": {
         "primary code outside the pool": 2,
         "no activity text": 0,

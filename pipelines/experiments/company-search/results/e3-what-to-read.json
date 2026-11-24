@@ -15871,7 +15871,7 @@
   "findings": [
     "Sample: 180 sites with a readable homepage (no 60, nlde 60, en 60); 5956 requests recorded on them (6694 HTTP exchanges with redirect hops), 33.1 per site on average and at most 45.",
     "The replayed today policy asks for the same URLs in the same order as the real profileFromPages on 180 of 180 sites, and the dossier it returns holds the same fact types on 180 of the 180 sites where production's gate let a dossier through.",
-    "today spends 13.3 requests per site on average (median 14, max 14); 83% of them return nothing readable (90% of the guessed paths), and 154 of 180 sites use all 14 without reaching 4 readable pages.",
+    "today spends 13.3 requests per site on average (median 14, max 14); 83% of them return nothing readable (90% of the guessed paths), 154 of 180 sites use all 14 requests and 150 never reach 4 readable pages.",
     "The guessed paths add a fact type to what the homepage already gave on 46 of 180 sites; of the 229 guessed pages today counts as readable, 14 repeat the text of a page it already had.",
     "Guessed paths, readable when asked: /about 43/180, /about-us 13/180, /over-ons 17/180, /ueber-uns 7/175, /unternehmen 1/174, /contact 49/173, /contact-us 2/172, /kontakt 40/172, /impressum 16/170, /careers 23/168, /jobs 4/160, /vacatures 7/158, /karriere 7/155.",
     "At 4 requests per site, today finds 1.89 of 5 fact types on average and link-keyword 2.51 (+0.62, 95% interval +0.51 to +0.73, paired over 180 sites; better on 47% of sites, equal on 51%, worse on 2%); random links find 2.37 and the oracle 3.04.",

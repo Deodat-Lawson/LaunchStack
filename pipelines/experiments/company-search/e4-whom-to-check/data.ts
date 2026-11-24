@@ -93,7 +93,7 @@ function finish(spec: PoolSpec, companies: Company[], leftOut: Record<string, nu
             return out;
         },
         leftOut,
-        fingerprint: hash.digest("hex").slice(0, 16),
+        fingerprint: hash.digest("hex").slice(0, 8),
     };
 }
 

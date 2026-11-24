@@ -1,4 +1,4 @@
-import { addNextStep, commitNodeText, insertShape } from "../model/commands";
+import { addNextStep, applySwatch, commitNodeText, insertShape } from "../model/commands";
 import { activePage, nodeById } from "../model/doc";
 import { flowchartLook, flowLookOf, KINDS, TEXT_SIZE } from "../model/flowchart/look";
 import { EditorStore } from "../model/store";
@@ -51,7 +51,7 @@ describe.each(["light", "dark"] as const)("the flowchart look on a %s board", bo
         const box = node(store, id);
         const look = flowchartLook.boxLook(shape, board);
         expect(box.style).toMatchObject(look.style);
-        expect(box.style.stroke).toBe("none");
+        expect(box.style.strokeWidth).toBe(0); // no outline
         expect(box.textStyle).toMatchObject({ size: TEXT_SIZE, bold: false });
         expect({ w: box.w, h: box.h }).toEqual(look.size);
     });
@@ -116,9 +116,11 @@ describe("a box whose words change its kind", () => {
         });
     });
 
-    it("with colours of its own (a template's), is reshaped but never repainted", () => {
-        const store = new EditorStore(buildTemplate("flowchart", "Doc", "light"));
-        const step = page(store).nodes.find(n => n.text === "Do the thing")!;
+    it("with colours of its own (picked by someone), is reshaped but never repainted", () => {
+        const store = storeOf("flowchart");
+        const id = insertShape(store, "process", { x: 0, y: 0 });
+        applySwatch(store, "pink");
+        const step = node(store, id);
         commitNodeText(store, step, "Done the thing?");
         const after = node(store, step.id);
         expect(after.shape).toBe("decision");

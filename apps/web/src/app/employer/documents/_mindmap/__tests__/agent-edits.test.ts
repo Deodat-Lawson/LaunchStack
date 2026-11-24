@@ -175,7 +175,7 @@ describe("rewriting a flowchart from steps", () => {
         const weigh = nodeById(next, idOf(next, "Weigh the parcel"))!;
         expect(result.added).toEqual([weigh.id]);
         expect(weigh.style.fill).toBe(flowchartLook.boxLook("process", "dark").style.fill);
-        expect(weigh.style.stroke).toBe("none");
+        expect(weigh.style.strokeWidth).toBe(0); // no outline
         expect(weigh.textStyle.size).toBe(15);
         expect(flowchartToSteps(next).text).toBe(REWRITE);
         expect(result.applied[0]).toMatch(
@@ -287,7 +287,7 @@ describe("id edits on a flowchart", () => {
         expect(q.shape).toBe("decision");
         expect(q.style.fill).toBe(flowchartLook.boxLook("decision", "light").style.fill);
         const close = nodeById(next, idOf(next, "Close the order"))!;
-        expect(close.style.stroke).toBe("none");
+        expect(close.style.strokeWidth).toBe(0); // no outline
         expect(close.textStyle.size).toBe(15);
         const arrow = next.edges.find(e => e.to.nodeId === close.id)!;
         expect(arrow.labels[0]!.text).toBe("Yes");

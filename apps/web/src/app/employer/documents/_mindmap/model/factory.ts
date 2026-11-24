@@ -8,6 +8,7 @@
 import {
     branchSwatch,
     FRAME_PAPER,
+    LANE_PAPER,
     neutralsFor,
     PAPER,
     stickyColors,
@@ -214,12 +215,7 @@ function presetFor(
         case "swimlane-h":
         case "swimlane-v":
             return {
-                style: {
-                    fill: mode === "dark" ? "oklch(0.22 0.015 285)" : "oklch(0.99 0.003 280)",
-                    stroke: mode === "dark" ? "oklch(0.38 0.02 285)" : "oklch(0.78 0.012 280)",
-                    strokeWidth: 1.2,
-                    radius: 4,
-                },
+                style: { ...LANE_PAPER[mode], strokeWidth: 1.2, radius: 4 },
                 text: { align: "left", valign: "middle", size: 13, bold: true, color: n.ink },
             };
         case "uml-class":

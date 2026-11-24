@@ -11,7 +11,7 @@ import { nudgeRoutes } from "../model/tidy";
 import { routeEdge, routeOptionsFor } from "../model/routing";
 import { shapeDef, shapeGeometry, shapeTextBox } from "../model/shapes";
 import { buildTemplate } from "../model/templates";
-import type { ThemeMode } from "../model/palette";
+import { lineInk, type ThemeMode } from "../model/palette";
 import type { DiagramNode, MindmapDoc } from "../model/types";
 
 /**
@@ -104,6 +104,10 @@ export function DocThumbnail({ doc, detail = false }: { doc: MindmapDoc; detail?
             ? `translate(${node.x} ${node.y}) rotate(${node.rotation} ${node.w / 2} ${node.h / 2})`
             : `translate(${node.x} ${node.y})`;
         const stroke = node.style.stroke === "none" ? "none" : node.style.stroke;
+        // As on the canvas (`ShapeView`): a box with no outline keeps its own
+        // lines, in the deeper tone of its colour.
+        const outlined = stroke !== "none" && node.style.strokeWidth > 0;
+        const line = lineInk(node.style, node.textStyle.color);
         return (
             <g key={node.id} transform={transform} opacity={node.style.opacity}>
                 {geometry.backing?.map((d, i) => (
@@ -111,8 +115,8 @@ export function DocThumbnail({ doc, detail = false }: { doc: MindmapDoc; detail?
                         key={`b${i}`}
                         d={d}
                         fill={node.style.fill}
-                        stroke={stroke}
-                        strokeWidth={node.style.strokeWidth}
+                        stroke={outlined ? stroke : line}
+                        strokeWidth={outlined ? node.style.strokeWidth : 1}
                     />
                 ))}
                 {geometry.path ? (
@@ -129,8 +133,8 @@ export function DocThumbnail({ doc, detail = false }: { doc: MindmapDoc; detail?
                         key={`d${i}`}
                         d={d}
                         fill="none"
-                        stroke={stroke === "none" ? node.style.fill : stroke}
-                        strokeWidth={node.style.strokeWidth || 1}
+                        stroke={line}
+                        strokeWidth={outlined ? node.style.strokeWidth : 1}
                         strokeLinecap="round"
                     />
                 ))}

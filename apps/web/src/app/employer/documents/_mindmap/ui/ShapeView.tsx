@@ -3,6 +3,7 @@
 import React, { memo, useId, useMemo } from "react";
 import { useTranslations } from "next-intl";
 
+import { lineInk } from "../model/palette";
 import { shapeGeometry, shapeTextBox } from "../model/shapes";
 import { firstBaseline, fontFamilyCss, layoutText } from "../model/text";
 import type { DiagramNode, StrokeStyle, TextStyle } from "../model/types";
@@ -128,6 +129,15 @@ export const ShapeView = memo(function ShapeView({
     const stroke = style.stroke === "none" ? "none" : style.stroke;
     const strokeWidth = style.stroke === "none" ? 0 : style.strokeWidth;
     const fill = style.fill === "none" ? "none" : style.fill;
+    // A box with no outline (every flowchart box) still draws its own lines —
+    // the lid of a database, the sheets behind a document stack — in the
+    // deeper tone of its colour, at a hairline, exactly as it looks once a
+    // colour has been picked for it.
+    const outlined = stroke !== "none" && strokeWidth > 0;
+    const lines = {
+        stroke: lineInk(style, textStyle.color),
+        strokeWidth: outlined ? strokeWidth : 1.2,
+    };
 
     const common = {
         fill,
@@ -149,7 +159,7 @@ export const ShapeView = memo(function ShapeView({
             filter={style.shadow ? `url(#${shadowFilterId(idScope)})` : undefined}
         >
             {geometry.backing?.map((d, i) => (
-                <path key={`b${i}`} d={d} {...common} />
+                <path key={`b${i}`} d={d} {...common} {...(outlined ? {} : lines)} />
             ))}
             {geometry.path ? <path d={geometry.path} {...common} /> : null}
 
@@ -161,8 +171,8 @@ export const ShapeView = memo(function ShapeView({
                     key={`d${i}`}
                     d={d}
                     fill="none"
-                    stroke={stroke === "none" ? style.fill : stroke}
-                    strokeWidth={strokeWidth || 1.2}
+                    stroke={lines.stroke}
+                    strokeWidth={lines.strokeWidth}
                     strokeDasharray={dash}
                     strokeLinejoin="round"
                     strokeLinecap="round"

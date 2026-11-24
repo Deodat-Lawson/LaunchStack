@@ -192,7 +192,7 @@ describe("flowcharts from steps", () => {
             for (const n of page.nodes) {
                 const look = flowchartLook.boxLook(n.shape, mode);
                 expect(n.style.fill).toBe(look.style.fill);
-                expect(n.style.stroke).toBe("none");
+                expect(n.style.strokeWidth).toBe(0); // no outline
                 expect(n.textStyle.size).toBe(15);
                 expect(n.textStyle.bold).toBe(false);
             }
@@ -274,7 +274,7 @@ describe("flowcharts from steps", () => {
         expect(page.nodes.find(n => n.shape === "frame")!.style.fill).toBe(FRAME_PAPER.dark.fill);
         for (const n of page.nodes.filter(n => n.shape !== "frame")) {
             expect(n.style.fill).toBe(flowchartLook.boxLook(n.shape, "dark").style.fill);
-            expect(n.style.stroke).toBe("none");
+            expect(n.style.strokeWidth).toBe(0); // no outline
             expect(n.textStyle.size).toBe(15);
         }
         expect(page.edges[0]!.style.stroke).toBe(flowchartLook.edgeLook("dark").style.stroke);

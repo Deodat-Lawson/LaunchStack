@@ -205,7 +205,7 @@ it("creates, reads, rewrites and edits a flowchart through Ask's tools, in step 
     expect(made.settings.flowLayout).toBe("auto");
     for (const n of activePage(made).nodes) {
         expect(n.style.fill).toBe(flowchartLook.boxLook(n.shape, "light").style.fill);
-        expect(n.style.stroke).toBe("none");
+        expect(n.style.strokeWidth).toBe(0); // no outline
         expect(n.textStyle.size).toBe(15);
     }
 

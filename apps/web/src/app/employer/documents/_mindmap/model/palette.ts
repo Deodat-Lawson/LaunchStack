@@ -289,6 +289,22 @@ export function swatchIdOf(color: string): string | null {
     return null;
 }
 
+/**
+ * The colour a shape draws its inner lines in — a database's lid, a class's
+ * dividers, the edges of a document stack's back sheets: its outline colour
+ * when it has one, else the deeper tone of the swatch its fill came from
+ * (a flowchart box has no outline but keeps its lines), else its label's ink.
+ * Never the fill itself: lines drawn in the box's own colour vanished into
+ * it, and only came back when someone picked a colour (2026-11-23).
+ */
+export function lineInk(style: { fill: string; stroke: string }, ink?: string): string {
+    if (style.stroke !== "none") return style.stroke;
+    for (const sw of [...SWATCHES, ...DARK_SWATCHES]) {
+        if (sw.fill === style.fill) return sw.stroke;
+    }
+    return ink ?? INK_SOFT;
+}
+
 /** Neutral document defaults: white fill, mid-grey stroke, near-black ink. */
 export const PAPER = "oklch(1 0 0)";
 export const INK = "oklch(0.22 0.015 280)";
@@ -310,6 +326,16 @@ export const HAIRLINE_DARK = "oklch(0.52 0.02 280)";
 export const FRAME_PAPER: Record<ThemeMode, { fill: string; stroke: string }> = {
     light: { fill: "oklch(0.972 0.005 280)", stroke: "oklch(0.74 0.012 280)" },
     dark: { fill: "oklch(0.245 0.018 285)", stroke: "oklch(0.42 0.02 285)" },
+};
+
+/**
+ * A swimlane's surface, one per lighting: paper with a hairline, so the
+ * coloured steps in it are what reads. Shared by the factory (a lane placed
+ * from the palette) and a template's lanes and Kanban columns.
+ */
+export const LANE_PAPER: Record<ThemeMode, { fill: string; stroke: string }> = {
+    light: { fill: "oklch(0.99 0.003 280)", stroke: "oklch(0.78 0.012 280)" },
+    dark: { fill: "oklch(0.22 0.015 285)", stroke: "oklch(0.38 0.02 285)" },
 };
 
 /** Is this fill one of the paper-frame surfaces (in either lighting)? */

@@ -13,7 +13,10 @@
 
 import type { useTranslations } from "next-intl";
 
+import { worksAsFlow } from "./doc";
 import { createDoc, createEdge, createNode, createPage } from "./factory";
+import { tidyAll } from "./flowchart/arrange";
+import { dressStarters, type StarterOptions } from "./flowchart/starters";
 import { runAutoLayout } from "./template-helpers";
 import {
     branchSwatch,
@@ -374,14 +377,17 @@ function swimlane(title = "Swimlane process", say: Say = ENGLISH): MindmapDoc {
 }
 
 function erd(title = "Entity relationship", say: Say = ENGLISH): MindmapDoc {
+    // The table's name sits above the entity's divider and its fields below:
+    // the blank line steps them over it (written straight after the name, the
+    // first field was struck through by the line).
     const entity = (x: number, y: number, name: string, fields: string[]) =>
         createNode({
             shape: "erd-entity",
             x,
             y,
             w: 220,
-            h: 46 + fields.length * 22,
-            text: `${name}\n${fields.join("\n")}`,
+            h: 24 + (fields.length + 2) * 21,
+            text: `${name}\n\n${fields.join("\n")}`,
             textStyle: { align: "left", valign: "top", size: 13 },
         });
 
@@ -823,7 +829,9 @@ export function buildersMissingMetadata(): string[] {
  * code path the Theme picker uses, so a seeded board and a switched board
  * cannot drift apart. `mode` is the viewer's app theme at creation time: a
  * choice made once and then stored, not a per-viewer render, so the board
- * looks the same to whoever it is shared with afterwards.
+ * looks the same to whoever it is shared with afterwards. On a flowchart or
+ * a board the starters then wear the flowchart look (`dressStarters`), so a
+ * box added next to them looks like them.
  */
 export function buildTemplate(
     id: string,
@@ -834,24 +842,46 @@ export function buildTemplate(
 ): MindmapDoc {
     const t = TEMPLATE_BY_ID[id] ?? TEMPLATE_BY_ID.blank!;
     const doc = t.build(title, sayWith(text));
+    const kind = kindForTemplate(t.id, TEMPLATE_META_BY_ID[t.id]?.category);
+    const flows = ARRANGES_ITSELF.has(t.id);
     const settings = {
         ...doc.settings,
-        kind: kindForTemplate(t.id, TEMPLATE_META_BY_ID[t.id]?.category),
+        kind,
         autoLayout: AUTO_ARRANGED.has(t.id) ? ({ kind: "mindmap" } as const) : null,
-        // A blank flowchart arranges itself as steps are added; a template's
-        // sample was laid out by hand and keeps its places.
-        flowLayout: t.id === "blank" ? ("auto" as const) : ("manual" as const),
+        flowLayout: flows ? ("auto" as const) : ("manual" as const),
     };
-    return applyThemeToDoc({ ...doc, settings }, defaultThemeFor(mode));
+    const themed = applyThemeToDoc({ ...doc, settings }, defaultThemeFor(mode));
+    if (!worksAsFlow(kind)) return themed;
+    // On a flowchart or a board the starters wear the look a box added there
+    // gets, so the first step someone adds matches the ones already there.
+    const dressed = dressStarters(themed, mode, STARTERS[t.id]);
+    // A chart that arranges itself starts arranged: the first step added
+    // would otherwise move every sample box at once.
+    return flows ? { ...dressed, pages: dressed.pages.map(tidyAll) } : dressed;
 }
 
 /**
  * Templates whose whole point is a tree that grows as you type. The concept
  * map is a graph with cross-links and the brainstorm board is columns of
  * stickies — a tidy-tree pass would wreck both, so they stay off. A blank
- * canvas is a flowchart (below), laid out by hand.
+ * canvas is a flowchart (below), arranged as one (`ARRANGES_ITSELF`).
  */
 const AUTO_ARRANGED: ReadonlySet<string> = new Set(["mindmap"]);
+
+/**
+ * Flowcharts that arrange themselves top to bottom as steps are added, until
+ * someone moves a box by hand (`DocSettings.flowLayout`): every chart that
+ * is one chain of steps. Templates whose layout is the point — lanes,
+ * columns, quadrants, a timeline's spine, a fishbone, an org chart, an
+ * architecture or an ERD — keep the places they are drawn in.
+ */
+const ARRANGES_ITSELF: ReadonlySet<string> = new Set(["blank", "flowchart", "user-flow"]);
+
+/** Templates whose boxes are coloured by the stage they stand under. */
+const STARTERS: Partial<Record<string, StarterOptions>> = {
+    timeline: { stageShape: "rounded-rectangle" },
+    "customer-journey": { stageShape: "chevron" },
+};
 
 /** The gallery's category, folded to the kinds the editor distinguishes. */
 export function kindForTemplate(id: string, category: TemplateCategory | undefined): DiagramKind {

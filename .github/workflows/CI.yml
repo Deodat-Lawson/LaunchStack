@@ -85,14 +85,12 @@ jobs:
 
       # Blocking (ADR-006). The legacy `continue-on-error` here hid a fully
       # red lint state on main for months.
+      # The type-aware lint builds a program over every package and both
+      # apps, and outgrows the default Node heap (exit 134 on the stock
+      # runner). The `lint` script in package.json sets the heap itself
+      # (10240 MB; the peak is about 7.7 GB) so a local run and this step
+      # behave the same. The runner has 16GB.
       - name: Lint
-        env:
-            # The type-aware lint builds a program over every package and
-            # both apps, and outgrows the default Node heap (exit 134 on the
-            # stock runner). 6144 was enough until the distribution,
-            # repo-workspace and workspace-access bricks landed; the runner
-            # has 16GB, so this leaves ample headroom above the peak.
-            NODE_OPTIONS: --max-old-space-size=10240
         run: pnpm lint
 
       - name: Typecheck (all workspace packages, worker included)

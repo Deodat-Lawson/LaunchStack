@@ -6,6 +6,32 @@ This experiment asks: **if the ranking learned from each verdict, would the same
 
 It simulates the checking on pools of real companies whose "good" label is known but hidden, and compares today's fixed ranking with seven policies that learn. Results: `../results/e4-whom-to-check.json` (aggregates only; the `findings` array says it in sentences).
 
+## Headline result
+
+The headline condition gives every pool a brief in its companies' own language: the four Y Combinator pools keep their English briefs, the three Norwegian register pools use Norwegian briefs. Mean over the seven pools, recording of 2026-11-24, differences paired by seed with 95% intervals over pools and seeds:
+
+| Good companies found after                               | 25 checks           | 50 checks             | 100 checks             | 200 checks             |
+| -------------------------------------------------------- | ------------------- | --------------------- | ---------------------- | ---------------------- |
+| Today's fixed ranking                                    | 18.8                | 33.7                  | 59.2                   | 96.4                   |
+| `linucb`, the learner picked on the development segments | 20.8                | 42.0                  | 80.9                   | 139.2                  |
+| `linucb` minus today                                     | +2.0 (−0.5 to +4.8) | +8.3 (+2.5 to +15.3)  | +21.7 (+11.4 to +33.0) | +42.8 (+31.5 to +53.6) |
+| `cal-logreg`, the best learner in hindsight              | 21.8                | 43.7                  | 83.2                   | 140.4                  |
+| `cal-logreg` minus today                                 | +3.0 (+0.6 to +5.9) | +10.0 (+4.8 to +16.5) | +24.0 (+14.4 to +34.6) | +44.0 (+33.0 to +54.6) |
+
+- **Shortlist of 25.** Today's ranking fills it in 28.8 checks in the median pool and 67.9 in the worst. `linucb` needs 28.6 and 45.9, `cal-logreg` 26.8 and 41.3.
+- **Where the gain comes from.** At 100 checks `linucb` gains +15.4 on the four English-language pools and +30.1 on the three Norwegian ones.
+- **Early checks.** At 25 checks the gain is small and its interval includes zero for `linucb`; the learners pay off from about 50 checks on.
+
+These figures are `results.sameLanguageBriefs` in the results file, and `run.ts` prints them first. No extra simulation stands behind them: each Norwegian pool contributes its Norwegian-brief run, each Y Combinator pool the run it has.
+
+### The first run
+
+The first run gave all seven pools an English brief. It is still in the results file (`results.overall`, `results.perPool`, and the findings marked `[First run]`), with every number unchanged.
+
+An English brief handicaps today's ranking on Norwegian text. On the three register pools it finds 11.5 / 16.6 / 25.0 good companies after 25 / 50 / 100 checks, against 20.0 / 34.3 / 58.5 with a Norwegian brief, and on Bergen dentists it needs 338 checks to fill the shortlist against 29. That makes the learners look better than they would for a seller who writes in the buyers' language: over seven pools `linucb` gains +34.7 at 100 checks in the first run and +21.7 under the headline condition.
+
+The headline condition was chosen after the first run was reviewed. Its Norwegian-brief runs were planned as a sensitivity check, their briefs were written before any policy ran, and nothing was re-tuned for it. Of the two conditions it is the less favourable one for the learners.
+
 ## How to run it
 
 All commands from `pipelines/`.
@@ -62,6 +88,8 @@ The two fixed rankings and the brief are computed by the production functions th
 
 Per pool and overall: good companies found after 25, 50, 100 and 200 checks; precision of the first 25 checks; checks needed to find 25 good companies (production's shortlist size); and each of these as a paired difference to `today-semantic`. Average precision of the two fixed rankings shows how good the starting point is.
 
+The overall figures exist twice in the results file, computed the same way: `results.sameLanguageBriefs.overall` for the headline condition and `results.overall` for the first run. The headline block adds, for checks to 25, the median pool and the worst pool, and splits every figure by brief language (`byBriefLanguage`).
+
 Intervals are 95% percentile bootstraps (2,000 resamples, `../lib/stats.ts`). Within a pool they resample seeds. The overall figures average the pools and resample pools first, then seeds inside each drawn pool: seeds of one pool share most of their companies, so treating all (pool, seed) pairs as independent would make the intervals too narrow.
 
 ## The pools
@@ -89,7 +117,7 @@ Each segment is what a seller would type into the segment form: what it offers a
 
 The word-overlap baseline reads the same `categories`, which is how the form holds them.
 
-### Y Combinator directory (reported)
+### Y Combinator directory (English briefs; the same in the headline and in the first run)
 
 | Segment             | Offering                                                                                                                                                                                                                   | Categories                                                                      | A company is good when                                                                     | Good        |
 | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------ | ----------- |
@@ -98,7 +126,7 @@ The word-overlap baseline reads the same `categories`, which is how the form hol
 | `yc-climate-energy` | Carbon accounting and life-cycle assessment for companies whose business is cutting emissions or producing clean energy: solar, batteries and energy storage, electric vehicles, carbon removal and energy efficiency.     | climate tech; clean energy; carbon removal; energy storage                      | its sub-industry is Energy or Climate, or it carries one of eleven climate and energy tags | 238 (3.8%)  |
 | `yc-logistics`      | Cargo insurance and claims handling for companies that move, store or track physical goods: freight forwarders, trucking and delivery fleets, warehouses, and the software that runs supply chains.                        | logistics; freight and shipping; supply chain software; warehousing             | its sub-industry is Supply Chain and Logistics, or it carries one of six logistics tags    | 245 (3.9%)  |
 
-### Norwegian register (reported; briefs in English, company texts in Norwegian)
+### Norwegian register, English briefs (the first run; company texts are Norwegian)
 
 | Segment               | Pool                  | Offering                                                                                                                                                          | Categories                                 | A company is good when          | Good        |
 | --------------------- | --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ------------------------------- | ----------- |
@@ -106,7 +134,9 @@ The word-overlap baseline reads the same `categories`, which is how the form hol
 | `brreg-breweries`     | `brreg-drinks`        | Brewing malt, hops and yeast in bulk, with recipe support, for companies that brew their own beer: craft breweries, microbreweries and brewpubs.                  | breweries; craft beer producers            | its primary NACE code is 11.050 | 233 (16.4%) |
 | `brreg-dental-bergen` | `brreg-health-bergen` | Dental consumables, instruments and sterilisation equipment, delivered weekly to dental practices and clinics: general dentists, orthodontists and oral surgeons. | dental practices; dentists; dental clinics | its primary NACE code is 86.230 | 421 (11.4%) |
 
-### The same three in Norwegian (sensitivity run)
+### Norwegian register, Norwegian briefs (the headline condition)
+
+The same three segments as a Norwegian seller would type them. These runs were planned as a sensitivity check and now carry the headline for the register pools.
 
 | Segment               | Offering                                                                                                                                                                         | Categories                                 |
 | --------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ |
@@ -140,7 +170,7 @@ The rest were searched by `tune.ts` on `yc-education` and `yc-fintech` only, wit
 
 The first search had a narrower grid for the bonus (0.5 to 2) and the weight (0.5 to 4); both optima sat on an edge, so the grids were widened once, still on the development segments. `tuning.json` holds the full table. The same search also names the learner one would ship from the development segments alone (`linucb`, a whisker ahead of `cal-logreg`); the results file reports it next to the learner that came out best on the reported pools, since a best-of-seven picked after the fact leans optimistic.
 
-No reported segment was run before these choices were written into `config.ts`.
+No reported segment was run before these choices were written into `config.ts`. The one choice made after results were seen is which set of briefs carries the headline (see "The first run" above); it changed no run and no hyper-parameter.
 
 ## Files
 
@@ -164,11 +194,12 @@ No reported segment was run before these choices were written into `config.ts`.
 - **Labels are directory tags and register codes, not buying decisions.** A company can be a real prospect without the tag, and a register code can disagree with what the company says it does (some units coded as coffee processors describe themselves as holding companies). Every policy is scored against the same labels.
 - **These labels are the easy kind to learn.** They follow from what a company's text is about (its industry, its registered activity), and that is what an embedding captures best. A real verdict also turns on things the text does not say (size, timing, an existing supplier). Expect smaller gains in production than here.
 - **A check here always tells the truth.** In production the verdict comes from a chat model and then a person, and both are sometimes wrong. No label noise is simulated; a learner fed wrong verdicts would learn less.
-- **No pool starts almost empty.** In every pool today's first 25 checks hold more than 8 good companies on average, so the experiment does not show how a learner fares when the first batches bring back no positive at all.
+- **The headline condition was chosen after the first run was reviewed.** It is the less favourable one for the learners and nothing was re-tuned for it, but it was not the plan: the Norwegian-brief runs were made as a sensitivity check.
+- **No pool starts almost empty.** In every pool, under either set of briefs, today's first 25 checks hold more than 8 good companies on average, so the experiment does not show how a learner fares when the first batches bring back no positive at all.
 - **The embedding model is the local nomic-embed-text**, weaker than a paid model, most of all on Norwegian text read against an English brief. A stronger model would lift today's ranking and leave the learners less to add.
 - **The briefs carry no seller profile and no partner kind.** Production appends both ("As: retailer." and "Seller: ..."); a real brief is longer and sits further from the buyers' own words.
-- **Production's gate is ignored.** Production drops every company whose relevance is not above zero before any check; the simulation lets a policy reach them. The results file says what share of good companies the gate would have removed.
+- **Production's gate is ignored.** Production drops every company whose relevance is not above zero before any check; the simulation lets a policy reach them. With every brief in the buyers' language the gate would keep 98% of the good companies; with English briefs on the Norwegian pools it would keep 79% over the seven pools and 11% of Bergen's dentists.
 - **Seven pools from two sources.** Hyper-parameters were picked on two other segments of the Y Combinator directory, so the four reported YC segments share that pool's companies (not its labels); the three register pools were never seen before the reported run. The overall intervals resample pools as well as seeds, but seven pools cannot stand for every segment a customer will write.
 - **Checks to 25 is capped.** A run that has not found 25 good companies within 500 checks counts as 500, which understates how much slower it is. For the fixed rankings the uncapped figure is reported too.
-- **Batch-size runs cover six policies.** The runs with batches of 1 and 10 leave out the two variants of `cal-logreg` and the policies a batch size cannot change.
+- **Batch-size runs cover six policies and the first run only.** The runs with batches of 1 and 10 leave out the two variants of `cal-logreg` and the policies a batch size cannot change, and they use the English briefs.
 - **Cost is counted in checks only.** A learner's own computation (a small model refit per batch) is ignored; it is milliseconds against a check that costs a model call and a website read.

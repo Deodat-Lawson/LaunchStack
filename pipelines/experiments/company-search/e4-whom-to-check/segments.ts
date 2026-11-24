@@ -103,7 +103,11 @@ export interface Segment extends SegmentText {
     /** The label rule in words, for the report. */
     target: string;
     label: LabelRule;
-    /** The same segment as a Norwegian seller would type it (sensitivity run). */
+    /**
+     * The same segment as a Norwegian seller would type it. Present when the
+     * pool's companies write Norwegian: the headline result uses this brief,
+     * the first run used the English one above.
+     */
     norwegian?: SegmentText;
 }
 
@@ -193,7 +197,8 @@ export const SEGMENTS: Segment[] = [
         categories: ["logistics", "freight and shipping", "supply chain software", "warehousing"],
     },
 
-    // ── Reported: Norwegian register (briefs in English, texts in Norwegian) ──
+    // ── Reported: Norwegian register (texts in Norwegian) ───────────────────
+    // Each has two briefs: English (the first run) and Norwegian (the headline).
     {
         id: "brreg-coffee-tea",
         pool: "brreg-food",

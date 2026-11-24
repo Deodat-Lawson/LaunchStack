@@ -7053,6 +7053,2434 @@
           }
         }
       }
+    },
+    "sameLanguageBriefs": {
+      "what": "Every pool run with a brief in its companies' language: yc-devtools, yc-healthcare, yc-climate-energy and yc-logistics with their English briefs (the runs in results.perPool), brreg-coffee-tea, brreg-breweries and brreg-dental-bergen with their Norwegian briefs (the runs in sensitivity.norwegianBriefs.perPool).",
+      "note": "Made the headline after the first run (English briefs for all pools, results.overall) was reviewed: an English brief handicaps today's ranking on Norwegian text. The Norwegian-brief runs were planned as a sensitivity check and their briefs were written before any policy ran; nothing was re-tuned. Of the two conditions this is the less favourable one for the learners.",
+      "briefLanguage": {
+        "yc-devtools": "en",
+        "yc-healthcare": "en",
+        "yc-climate-energy": "en",
+        "yc-logistics": "en",
+        "brreg-coffee-tea": "no",
+        "brreg-breweries": "no",
+        "brreg-dental-bergen": "no"
+      },
+      "bestLearner": {
+        "at100Checks": "cal-logreg",
+        "pickedOnDevelopmentSegments": "linucb",
+        "bestMinusPicked": {
+          "25": {
+            "mean": 1.02,
+            "lo": 0.52,
+            "hi": 1.64,
+            "poolsBetter": 4,
+            "poolsWorse": 0
+          },
+          "50": {
+            "mean": 1.64,
+            "lo": 0.31,
+            "hi": 3.26,
+            "poolsBetter": 4,
+            "poolsWorse": 0
+          },
+          "100": {
+            "mean": 2.29,
+            "lo": 0.63,
+            "hi": 4.22,
+            "poolsBetter": 4,
+            "poolsWorse": 0
+          },
+          "200": {
+            "mean": 1.19,
+            "lo": 0.29,
+            "hi": 2.12,
+            "poolsBetter": 4,
+            "poolsWorse": 0
+          }
+        }
+      },
+      "overall": {
+        "today-semantic": {
+          "found": {
+            "25": {
+              "mean": 18.81,
+              "lo": 15.09,
+              "hi": 22.13
+            },
+            "50": {
+              "mean": 33.7,
+              "lo": 26.59,
+              "hi": 40.26
+            },
+            "100": {
+              "mean": 59.18,
+              "lo": 44.61,
+              "hi": 73.56
+            },
+            "200": {
+              "mean": 96.38,
+              "lo": 68.34,
+              "hi": 126.16
+            }
+          },
+          "precisionAt25": {
+            "mean": 0.753,
+            "lo": 0.603,
+            "hi": 0.885
+          },
+          "checksTo25": {
+            "mean": 40.1,
+            "lo": 30.5,
+            "hi": 51.7,
+            "reached": 1,
+            "medianPool": 28.8,
+            "worstPool": 67.9,
+            "worstPoolIs": "brreg-coffee-tea"
+          }
+        },
+        "today-lexical": {
+          "found": {
+            "25": {
+              "mean": 12.63,
+              "lo": 6.09,
+              "hi": 19.39
+            },
+            "50": {
+              "mean": 22.91,
+              "lo": 10.94,
+              "hi": 34.98
+            },
+            "100": {
+              "mean": 39.19,
+              "lo": 19.22,
+              "hi": 59.87
+            },
+            "200": {
+              "mean": 64.26,
+              "lo": 33.84,
+              "hi": 97.46
+            }
+          },
+          "precisionAt25": {
+            "mean": 0.505,
+            "lo": 0.244,
+            "hi": 0.776
+          },
+          "checksTo25": {
+            "mean": 138.6,
+            "lo": 45.9,
+            "hi": 269.6,
+            "reached": 0.86,
+            "medianPool": 50.1,
+            "worstPool": 500,
+            "worstPoolIs": "brreg-coffee-tea"
+          },
+          "vsToday": {
+            "found": {
+              "25": {
+                "mean": -6.19,
+                "lo": -13.31,
+                "hi": 1.16,
+                "poolsBetter": 2,
+                "poolsWorse": 4
+              },
+              "50": {
+                "mean": -10.79,
+                "lo": -22.97,
+                "hi": 1.89,
+                "poolsBetter": 2,
+                "poolsWorse": 4
+              },
+              "100": {
+                "mean": -19.99,
+                "lo": -40.31,
+                "hi": 1.08,
+                "poolsBetter": 1,
+                "poolsWorse": 6
+              },
+              "200": {
+                "mean": -32.12,
+                "lo": -62.77,
+                "hi": -1.35,
+                "poolsBetter": 1,
+                "poolsWorse": 6
+              }
+            },
+            "checksTo25": {
+              "mean": 98.5,
+              "lo": 8.3,
+              "hi": 220.9,
+              "poolsBetter": 1,
+              "poolsWorse": 4
+            }
+          }
+        },
+        "rocchio": {
+          "found": {
+            "25": {
+              "mean": 21.27,
+              "lo": 17.76,
+              "hi": 23.94
+            },
+            "50": {
+              "mean": 39.62,
+              "lo": 33.37,
+              "hi": 45.36
+            },
+            "100": {
+              "mean": 69.64,
+              "lo": 55.15,
+              "hi": 84.67
+            },
+            "200": {
+              "mean": 113.85,
+              "lo": 79.49,
+              "hi": 150.1
+            }
+          },
+          "precisionAt25": {
+            "mean": 0.851,
+            "lo": 0.711,
+            "hi": 0.958
+          },
+          "checksTo25": {
+            "mean": 31.5,
+            "lo": 26.2,
+            "hi": 38.2,
+            "reached": 1,
+            "medianPool": 26.7,
+            "worstPool": 47.4,
+            "worstPoolIs": "yc-devtools"
+          },
+          "vsToday": {
+            "found": {
+              "25": {
+                "mean": 2.46,
+                "lo": 0.77,
+                "hi": 4.74,
+                "poolsBetter": 6,
+                "poolsWorse": 0
+              },
+              "50": {
+                "mean": 5.92,
+                "lo": 3.11,
+                "hi": 9.43,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              },
+              "100": {
+                "mean": 10.46,
+                "lo": 5.06,
+                "hi": 16.56,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              },
+              "200": {
+                "mean": 17.47,
+                "lo": 9.06,
+                "hi": 30.41,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              }
+            },
+            "checksTo25": {
+              "mean": -8.6,
+              "lo": -19.2,
+              "hi": -1.8,
+              "poolsBetter": 7,
+              "poolsWorse": 0
+            }
+          }
+        },
+        "cal-logreg": {
+          "found": {
+            "25": {
+              "mean": 21.82,
+              "lo": 18.73,
+              "hi": 23.72
+            },
+            "50": {
+              "mean": 43.67,
+              "lo": 39.14,
+              "hi": 47.24
+            },
+            "100": {
+              "mean": 83.19,
+              "lo": 74.65,
+              "hi": 91.24
+            },
+            "200": {
+              "mean": 140.39,
+              "lo": 112.13,
+              "hi": 169.51
+            }
+          },
+          "precisionAt25": {
+            "mean": 0.873,
+            "lo": 0.749,
+            "hi": 0.949
+          },
+          "checksTo25": {
+            "mean": 28.9,
+            "lo": 26.3,
+            "hi": 33.2,
+            "reached": 1,
+            "medianPool": 26.8,
+            "worstPool": 41.3,
+            "worstPoolIs": "yc-devtools"
+          },
+          "vsToday": {
+            "found": {
+              "25": {
+                "mean": 3.01,
+                "lo": 0.56,
+                "hi": 5.86,
+                "poolsBetter": 6,
+                "poolsWorse": 0
+              },
+              "50": {
+                "mean": 9.97,
+                "lo": 4.8,
+                "hi": 16.54,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              },
+              "100": {
+                "mean": 24.01,
+                "lo": 14.39,
+                "hi": 34.59,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              },
+              "200": {
+                "mean": 44.01,
+                "lo": 33,
+                "hi": 54.57,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              }
+            },
+            "checksTo25": {
+              "mean": -11.1,
+              "lo": -22.5,
+              "hi": -2,
+              "poolsBetter": 6,
+              "poolsWorse": 0
+            }
+          }
+        },
+        "cal-uncertainty": {
+          "found": {
+            "25": {
+              "mean": 20.49,
+              "lo": 17.72,
+              "hi": 22.55
+            },
+            "50": {
+              "mean": 39.73,
+              "lo": 36.02,
+              "hi": 43.23
+            },
+            "100": {
+              "mean": 70.11,
+              "lo": 61.17,
+              "hi": 78.81
+            },
+            "200": {
+              "mean": 109.79,
+              "lo": 92.42,
+              "hi": 124.77
+            }
+          },
+          "precisionAt25": {
+            "mean": 0.82,
+            "lo": 0.709,
+            "hi": 0.902
+          },
+          "checksTo25": {
+            "mean": 30.9,
+            "lo": 27.8,
+            "hi": 34.9,
+            "reached": 1,
+            "medianPool": 28.7,
+            "worstPool": 42,
+            "worstPoolIs": "yc-devtools"
+          },
+          "vsToday": {
+            "found": {
+              "25": {
+                "mean": 1.68,
+                "lo": -0.48,
+                "hi": 4.29,
+                "poolsBetter": 3,
+                "poolsWorse": 2
+              },
+              "50": {
+                "mean": 6.03,
+                "lo": 1.35,
+                "hi": 11.3,
+                "poolsBetter": 5,
+                "poolsWorse": 1
+              },
+              "100": {
+                "mean": 10.93,
+                "lo": 2.6,
+                "hi": 18.71,
+                "poolsBetter": 5,
+                "poolsWorse": 1
+              },
+              "200": {
+                "mean": 13.41,
+                "lo": -3.48,
+                "hi": 28.18,
+                "poolsBetter": 5,
+                "poolsWorse": 2
+              }
+            },
+            "checksTo25": {
+              "mean": -9.2,
+              "lo": -20.2,
+              "hi": -0.4,
+              "poolsBetter": 4,
+              "poolsWorse": 2
+            }
+          }
+        },
+        "cal-logreg-egreedy": {
+          "found": {
+            "25": {
+              "mean": 19.82,
+              "lo": 16.84,
+              "hi": 21.75
+            },
+            "50": {
+              "mean": 40.01,
+              "lo": 35.69,
+              "hi": 43.37
+            },
+            "100": {
+              "mean": 76.99,
+              "lo": 69.3,
+              "hi": 83.89
+            },
+            "200": {
+              "mean": 132.25,
+              "lo": 107.48,
+              "hi": 157.35
+            }
+          },
+          "precisionAt25": {
+            "mean": 0.793,
+            "lo": 0.674,
+            "hi": 0.87
+          },
+          "checksTo25": {
+            "mean": 31.6,
+            "lo": 28.7,
+            "hi": 36.2,
+            "reached": 1,
+            "medianPool": 29.6,
+            "worstPool": 44.7,
+            "worstPoolIs": "yc-devtools"
+          },
+          "vsToday": {
+            "found": {
+              "25": {
+                "mean": 1.01,
+                "lo": -1.48,
+                "hi": 3.83,
+                "poolsBetter": 2,
+                "poolsWorse": 3
+              },
+              "50": {
+                "mean": 6.31,
+                "lo": 1.1,
+                "hi": 12.69,
+                "poolsBetter": 5,
+                "poolsWorse": 1
+              },
+              "100": {
+                "mean": 17.81,
+                "lo": 7.21,
+                "hi": 29.93,
+                "poolsBetter": 6,
+                "poolsWorse": 1
+              },
+              "200": {
+                "mean": 35.87,
+                "lo": 23.46,
+                "hi": 46.62,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              }
+            },
+            "checksTo25": {
+              "mean": -8.5,
+              "lo": -19.9,
+              "hi": 0.6,
+              "poolsBetter": 3,
+              "poolsWorse": 3
+            }
+          }
+        },
+        "thompson": {
+          "found": {
+            "25": {
+              "mean": 15.39,
+              "lo": 12.18,
+              "hi": 18.41
+            },
+            "50": {
+              "mean": 32.71,
+              "lo": 26.7,
+              "hi": 38.29
+            },
+            "100": {
+              "mean": 67.62,
+              "lo": 56.47,
+              "hi": 78.81
+            },
+            "200": {
+              "mean": 123.8,
+              "lo": 97.75,
+              "hi": 152.51
+            }
+          },
+          "precisionAt25": {
+            "mean": 0.615,
+            "lo": 0.487,
+            "hi": 0.736
+          },
+          "checksTo25": {
+            "mean": 41.1,
+            "lo": 34.1,
+            "hi": 49.2,
+            "reached": 1,
+            "medianPool": 33.2,
+            "worstPool": 59.5,
+            "worstPoolIs": "yc-devtools"
+          },
+          "vsToday": {
+            "found": {
+              "25": {
+                "mean": -3.43,
+                "lo": -4.21,
+                "hi": -2.54,
+                "poolsBetter": 0,
+                "poolsWorse": 7
+              },
+              "50": {
+                "mean": -0.99,
+                "lo": -2.89,
+                "hi": 1.52,
+                "poolsBetter": 1,
+                "poolsWorse": 4
+              },
+              "100": {
+                "mean": 8.44,
+                "lo": 0.96,
+                "hi": 17.46,
+                "poolsBetter": 4,
+                "poolsWorse": 2
+              },
+              "200": {
+                "mean": 27.42,
+                "lo": 17.3,
+                "hi": 37.24,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              }
+            },
+            "checksTo25": {
+              "mean": 1,
+              "lo": -6.1,
+              "hi": 5.7,
+              "poolsBetter": 1,
+              "poolsWorse": 5
+            }
+          }
+        },
+        "linucb": {
+          "found": {
+            "25": {
+              "mean": 20.8,
+              "lo": 17.59,
+              "hi": 22.93
+            },
+            "50": {
+              "mean": 42.04,
+              "lo": 36.56,
+              "hi": 46.3
+            },
+            "100": {
+              "mean": 80.9,
+              "lo": 71.23,
+              "hi": 89.93
+            },
+            "200": {
+              "mean": 139.19,
+              "lo": 111.29,
+              "hi": 168
+            }
+          },
+          "precisionAt25": {
+            "mean": 0.832,
+            "lo": 0.703,
+            "hi": 0.917
+          },
+          "checksTo25": {
+            "mean": 30.7,
+            "lo": 27.3,
+            "hi": 36,
+            "reached": 1,
+            "medianPool": 28.6,
+            "worstPool": 45.9,
+            "worstPoolIs": "yc-devtools"
+          },
+          "vsToday": {
+            "found": {
+              "25": {
+                "mean": 1.99,
+                "lo": -0.51,
+                "hi": 4.81,
+                "poolsBetter": 3,
+                "poolsWorse": 1
+              },
+              "50": {
+                "mean": 8.34,
+                "lo": 2.53,
+                "hi": 15.34,
+                "poolsBetter": 5,
+                "poolsWorse": 0
+              },
+              "100": {
+                "mean": 21.72,
+                "lo": 11.44,
+                "hi": 33.01,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              },
+              "200": {
+                "mean": 42.81,
+                "lo": 31.54,
+                "hi": 53.64,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              }
+            },
+            "checksTo25": {
+              "mean": -9.4,
+              "lo": -20.8,
+              "hi": -0.2,
+              "poolsBetter": 4,
+              "poolsWorse": 2
+            }
+          }
+        },
+        "knn-feedback": {
+          "found": {
+            "25": {
+              "mean": 21.63,
+              "lo": 17.86,
+              "hi": 24.08
+            },
+            "50": {
+              "mean": 43.01,
+              "lo": 37.21,
+              "hi": 47.09
+            },
+            "100": {
+              "mean": 80.18,
+              "lo": 69.78,
+              "hi": 90.05
+            },
+            "200": {
+              "mean": 132.49,
+              "lo": 104,
+              "hi": 163.05
+            }
+          },
+          "precisionAt25": {
+            "mean": 0.865,
+            "lo": 0.715,
+            "hi": 0.963
+          },
+          "checksTo25": {
+            "mean": 29.6,
+            "lo": 26,
+            "hi": 35.5,
+            "reached": 1,
+            "medianPool": 27.8,
+            "worstPool": 46.8,
+            "worstPoolIs": "yc-devtools"
+          },
+          "vsToday": {
+            "found": {
+              "25": {
+                "mean": 2.81,
+                "lo": 0.39,
+                "hi": 5.5,
+                "poolsBetter": 5,
+                "poolsWorse": 1
+              },
+              "50": {
+                "mean": 9.31,
+                "lo": 3.55,
+                "hi": 16.04,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              },
+              "100": {
+                "mean": 21,
+                "lo": 12.63,
+                "hi": 31.06,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              },
+              "200": {
+                "mean": 36.11,
+                "lo": 26.2,
+                "hi": 46.29,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              }
+            },
+            "checksTo25": {
+              "mean": -10.5,
+              "lo": -21.8,
+              "hi": -1.7,
+              "poolsBetter": 6,
+              "poolsWorse": 0
+            }
+          }
+        },
+        "random": {
+          "found": {
+            "25": {
+              "mean": 2.26,
+              "lo": 1.31,
+              "hi": 3.27
+            },
+            "50": {
+              "mean": 4.47,
+              "lo": 2.62,
+              "hi": 6.35
+            },
+            "100": {
+              "mean": 8.74,
+              "lo": 5.03,
+              "hi": 12.59
+            },
+            "200": {
+              "mean": 16.86,
+              "lo": 9.83,
+              "hi": 24.16
+            }
+          },
+          "precisionAt25": {
+            "mean": 0.09,
+            "lo": 0.052,
+            "hi": 0.131
+          },
+          "checksTo25": {
+            "mean": 331.9,
+            "lo": 231.8,
+            "hi": 449.7,
+            "reached": 0.59,
+            "medianPool": 241.3,
+            "worstPool": 500,
+            "worstPoolIs": "brreg-coffee-tea"
+          },
+          "vsToday": {
+            "found": {
+              "25": {
+                "mean": -16.56,
+                "lo": -19.67,
+                "hi": -13.21,
+                "poolsBetter": 0,
+                "poolsWorse": 7
+              },
+              "50": {
+                "mean": -29.23,
+                "lo": -34.91,
+                "hi": -23.18,
+                "poolsBetter": 0,
+                "poolsWorse": 7
+              },
+              "100": {
+                "mean": -50.44,
+                "lo": -62.58,
+                "hi": -38.33,
+                "poolsBetter": 0,
+                "poolsWorse": 7
+              },
+              "200": {
+                "mean": -79.52,
+                "lo": -104.65,
+                "hi": -56.77,
+                "poolsBetter": 0,
+                "poolsWorse": 7
+              }
+            },
+            "checksTo25": {
+              "mean": 291.8,
+              "lo": 198.7,
+              "hi": 403,
+              "poolsBetter": 0,
+              "poolsWorse": 7
+            }
+          }
+        },
+        "oracle": {
+          "found": {
+            "25": {
+              "mean": 25,
+              "lo": 25,
+              "hi": 25
+            },
+            "50": {
+              "mean": 50,
+              "lo": 50,
+              "hi": 50
+            },
+            "100": {
+              "mean": 98.16,
+              "lo": 94.39,
+              "hi": 100
+            },
+            "200": {
+              "mean": 179.94,
+              "lo": 148.16,
+              "hi": 198.19
+            }
+          },
+          "precisionAt25": {
+            "mean": 1,
+            "lo": 1,
+            "hi": 1
+          },
+          "checksTo25": {
+            "mean": 25,
+            "lo": 25,
+            "hi": 25,
+            "reached": 1,
+            "medianPool": 25,
+            "worstPool": 25,
+            "worstPoolIs": "yc-devtools"
+          },
+          "vsToday": {
+            "found": {
+              "25": {
+                "mean": 6.19,
+                "lo": 2.87,
+                "hi": 9.91,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              },
+              "50": {
+                "mean": 16.3,
+                "lo": 9.74,
+                "hi": 23.41,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              },
+              "100": {
+                "mean": 38.99,
+                "lo": 26.08,
+                "hi": 51.46,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              },
+              "200": {
+                "mean": 83.56,
+                "lo": 58.26,
+                "hi": 110.32,
+                "poolsBetter": 7,
+                "poolsWorse": 0
+              }
+            },
+            "checksTo25": {
+              "mean": -15.1,
+              "lo": -26.7,
+              "hi": -5.5,
+              "poolsBetter": 7,
+              "poolsWorse": 0
+            }
+          }
+        }
+      },
+      "byBriefLanguage": {
+        "english": {
+          "pools": [
+            "yc-devtools",
+            "yc-healthcare",
+            "yc-climate-energy",
+            "yc-logistics"
+          ],
+          "overall": {
+            "today-semantic": {
+              "found": {
+                "25": {
+                  "mean": 17.94,
+                  "lo": 12.91,
+                  "hi": 22.84
+                },
+                "50": {
+                  "mean": 33.23,
+                  "lo": 24.25,
+                  "hi": 42.25
+                },
+                "100": {
+                  "mean": 59.7,
+                  "lo": 41.89,
+                  "hi": 77.5
+                },
+                "200": {
+                  "mean": 99.81,
+                  "lo": 64.32,
+                  "hi": 145.21
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.718,
+                "lo": 0.516,
+                "hi": 0.914
+              },
+              "checksTo25": {
+                "mean": 39.4,
+                "lo": 27.4,
+                "hi": 51.7,
+                "reached": 1
+              }
+            },
+            "today-lexical": {
+              "found": {
+                "25": {
+                  "mean": 19.54,
+                  "lo": 14.75,
+                  "hi": 22.3
+                },
+                "50": {
+                  "mean": 35.98,
+                  "lo": 28.46,
+                  "hi": 41.68
+                },
+                "100": {
+                  "mean": 60.51,
+                  "lo": 45.66,
+                  "hi": 73.44
+                },
+                "200": {
+                  "mean": 96.07,
+                  "lo": 77.23,
+                  "hi": 122.99
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.782,
+                "lo": 0.59,
+                "hi": 0.892
+              },
+              "checksTo25": {
+                "mean": 34.3,
+                "lo": 28.3,
+                "hi": 44.8,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 1.6,
+                    "lo": -1.21,
+                    "hi": 5.58,
+                    "poolsBetter": 2,
+                    "poolsWorse": 1
+                  },
+                  "50": {
+                    "mean": 2.75,
+                    "lo": -1.6,
+                    "hi": 9.45,
+                    "poolsBetter": 2,
+                    "poolsWorse": 1
+                  },
+                  "100": {
+                    "mean": 0.81,
+                    "lo": -8.45,
+                    "hi": 15.66,
+                    "poolsBetter": 1,
+                    "poolsWorse": 3
+                  },
+                  "200": {
+                    "mean": -3.74,
+                    "lo": -22.39,
+                    "hi": 23.49,
+                    "poolsBetter": 1,
+                    "poolsWorse": 3
+                  }
+                },
+                "checksTo25": {
+                  "mean": -5.1,
+                  "lo": -16.6,
+                  "hi": 2.4,
+                  "poolsBetter": 1,
+                  "poolsWorse": 1
+                }
+              }
+            },
+            "rocchio": {
+              "found": {
+                "25": {
+                  "mean": 19.39,
+                  "lo": 14.35,
+                  "hi": 23.61
+                },
+                "50": {
+                  "mean": 36.55,
+                  "lo": 28.15,
+                  "hi": 44.73
+                },
+                "100": {
+                  "mean": 64.11,
+                  "lo": 47.02,
+                  "hi": 81.61
+                },
+                "200": {
+                  "mean": 109.46,
+                  "lo": 71.55,
+                  "hi": 158.24
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.776,
+                "lo": 0.574,
+                "hi": 0.945
+              },
+              "checksTo25": {
+                "mean": 35.3,
+                "lo": 26.6,
+                "hi": 44.5,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 1.45,
+                    "lo": 0.32,
+                    "hi": 3.05,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "50": {
+                    "mean": 3.33,
+                    "lo": 1.68,
+                    "hi": 5.01,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 4.41,
+                    "lo": 3.28,
+                    "hi": 5.44,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 9.65,
+                    "lo": 7.15,
+                    "hi": 12.74,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -4.1,
+                  "lo": -7.9,
+                  "hi": -0.8,
+                  "poolsBetter": 4,
+                  "poolsWorse": 0
+                }
+              }
+            },
+            "cal-logreg": {
+              "found": {
+                "25": {
+                  "mean": 20.29,
+                  "lo": 15.36,
+                  "hi": 23.14
+                },
+                "50": {
+                  "mean": 40.59,
+                  "lo": 34.47,
+                  "hi": 45.51
+                },
+                "100": {
+                  "mean": 79.07,
+                  "lo": 67.5,
+                  "hi": 90
+                },
+                "200": {
+                  "mean": 137.94,
+                  "lo": 117.47,
+                  "hi": 170.36
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.812,
+                "lo": 0.614,
+                "hi": 0.926
+              },
+              "checksTo25": {
+                "mean": 31,
+                "lo": 27.1,
+                "hi": 38,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 2.35,
+                    "lo": 0.11,
+                    "hi": 5.69,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "50": {
+                    "mean": 7.36,
+                    "lo": 2.62,
+                    "hi": 13.05,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 19.38,
+                    "lo": 8.85,
+                    "hi": 34.4,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 38.13,
+                    "lo": 26.2,
+                    "hi": 52.61,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -8.4,
+                  "lo": -17.1,
+                  "hi": -0.2,
+                  "poolsBetter": 3,
+                  "poolsWorse": 0
+                }
+              }
+            },
+            "cal-uncertainty": {
+              "found": {
+                "25": {
+                  "mean": 18.88,
+                  "lo": 14.95,
+                  "hi": 22
+                },
+                "50": {
+                  "mean": 37,
+                  "lo": 32.6,
+                  "hi": 41.15
+                },
+                "100": {
+                  "mean": 67.93,
+                  "lo": 62.71,
+                  "hi": 75.91
+                },
+                "200": {
+                  "mean": 113.64,
+                  "lo": 101.31,
+                  "hi": 130.78
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.755,
+                "lo": 0.598,
+                "hi": 0.88
+              },
+              "checksTo25": {
+                "mean": 33.4,
+                "lo": 28.9,
+                "hi": 39.1,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 0.94,
+                    "lo": -1.13,
+                    "hi": 3.05,
+                    "poolsBetter": 2,
+                    "poolsWorse": 1
+                  },
+                  "50": {
+                    "mean": 3.78,
+                    "lo": -1.99,
+                    "hi": 9.59,
+                    "poolsBetter": 2,
+                    "poolsWorse": 1
+                  },
+                  "100": {
+                    "mean": 8.23,
+                    "lo": -4.94,
+                    "hi": 21.1,
+                    "poolsBetter": 2,
+                    "poolsWorse": 1
+                  },
+                  "200": {
+                    "mean": 13.83,
+                    "lo": -13.41,
+                    "hi": 35.5,
+                    "poolsBetter": 3,
+                    "poolsWorse": 1
+                  }
+                },
+                "checksTo25": {
+                  "mean": -6,
+                  "lo": -14.1,
+                  "hi": 1.7,
+                  "poolsBetter": 2,
+                  "poolsWorse": 1
+                }
+              }
+            },
+            "cal-logreg-egreedy": {
+              "found": {
+                "25": {
+                  "mean": 18.24,
+                  "lo": 13.59,
+                  "hi": 20.93
+                },
+                "50": {
+                  "mean": 36.97,
+                  "lo": 31.09,
+                  "hi": 41.28
+                },
+                "100": {
+                  "mean": 72.29,
+                  "lo": 62.09,
+                  "hi": 81.96
+                },
+                "200": {
+                  "mean": 129.31,
+                  "lo": 111.26,
+                  "hi": 156.86
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.73,
+                "lo": 0.544,
+                "hi": 0.837
+              },
+              "checksTo25": {
+                "mean": 34,
+                "lo": 30,
+                "hi": 41.3,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 0.3,
+                    "lo": -2.25,
+                    "hi": 3.78,
+                    "poolsBetter": 1,
+                    "poolsWorse": 2
+                  },
+                  "50": {
+                    "mean": 3.75,
+                    "lo": -1.4,
+                    "hi": 9.81,
+                    "poolsBetter": 2,
+                    "poolsWorse": 1
+                  },
+                  "100": {
+                    "mean": 12.59,
+                    "lo": 1.22,
+                    "hi": 27.49,
+                    "poolsBetter": 3,
+                    "poolsWorse": 1
+                  },
+                  "200": {
+                    "mean": 29.5,
+                    "lo": 12.77,
+                    "hi": 47.51,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -5.4,
+                  "lo": -14.4,
+                  "hi": 2.8,
+                  "poolsBetter": 2,
+                  "poolsWorse": 2
+                }
+              }
+            },
+            "thompson": {
+              "found": {
+                "25": {
+                  "mean": 14.95,
+                  "lo": 10.19,
+                  "hi": 19.67
+                },
+                "50": {
+                  "mean": 30.83,
+                  "lo": 22.31,
+                  "hi": 39.01
+                },
+                "100": {
+                  "mean": 61.45,
+                  "lo": 47.82,
+                  "hi": 76.4
+                },
+                "200": {
+                  "mean": 118.5,
+                  "lo": 95.21,
+                  "hi": 153.82
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.598,
+                "lo": 0.407,
+                "hi": 0.787
+              },
+              "checksTo25": {
+                "mean": 43.5,
+                "lo": 32,
+                "hi": 55.8,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": -2.99,
+                    "lo": -4.07,
+                    "hi": -1.75,
+                    "poolsBetter": 0,
+                    "poolsWorse": 4
+                  },
+                  "50": {
+                    "mean": -2.4,
+                    "lo": -3.87,
+                    "hi": -0.67,
+                    "poolsBetter": 0,
+                    "poolsWorse": 3
+                  },
+                  "100": {
+                    "mean": 1.75,
+                    "lo": -2.74,
+                    "hi": 9.14,
+                    "poolsBetter": 1,
+                    "poolsWorse": 2
+                  },
+                  "200": {
+                    "mean": 18.69,
+                    "lo": 9.19,
+                    "hi": 30.35,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": 4.1,
+                  "lo": 1.1,
+                  "hi": 6.8,
+                  "poolsBetter": 0,
+                  "poolsWorse": 3
+                }
+              }
+            },
+            "linucb": {
+              "found": {
+                "25": {
+                  "mean": 19.06,
+                  "lo": 14.09,
+                  "hi": 21.93
+                },
+                "50": {
+                  "mean": 37.94,
+                  "lo": 30.77,
+                  "hi": 43.53
+                },
+                "100": {
+                  "mean": 75.11,
+                  "lo": 63.59,
+                  "hi": 87.51
+                },
+                "200": {
+                  "mean": 136.33,
+                  "lo": 116.59,
+                  "hi": 168.09
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.763,
+                "lo": 0.563,
+                "hi": 0.877
+              },
+              "checksTo25": {
+                "mean": 33.5,
+                "lo": 28.9,
+                "hi": 41.8,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 1.13,
+                    "lo": -1.39,
+                    "hi": 4.78,
+                    "poolsBetter": 1,
+                    "poolsWorse": 1
+                  },
+                  "50": {
+                    "mean": 4.71,
+                    "lo": -0.14,
+                    "hi": 11.94,
+                    "poolsBetter": 2,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 15.41,
+                    "lo": 5.55,
+                    "hi": 29.85,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 36.51,
+                    "lo": 24.01,
+                    "hi": 52.39,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -5.9,
+                  "lo": -15.6,
+                  "hi": 1.8,
+                  "poolsBetter": 2,
+                  "poolsWorse": 2
+                }
+              }
+            },
+            "knn-feedback": {
+              "found": {
+                "25": {
+                  "mean": 19.86,
+                  "lo": 13.84,
+                  "hi": 23.43
+                },
+                "50": {
+                  "mean": 39.75,
+                  "lo": 30.86,
+                  "hi": 45.83
+                },
+                "100": {
+                  "mean": 74.6,
+                  "lo": 61.16,
+                  "hi": 87.66
+                },
+                "200": {
+                  "mean": 127.96,
+                  "lo": 104.1,
+                  "hi": 164.66
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.795,
+                "lo": 0.553,
+                "hi": 0.937
+              },
+              "checksTo25": {
+                "mean": 32.3,
+                "lo": 26.8,
+                "hi": 41.9,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 1.93,
+                    "lo": -0.62,
+                    "hi": 5.6,
+                    "poolsBetter": 2,
+                    "poolsWorse": 1
+                  },
+                  "50": {
+                    "mean": 6.53,
+                    "lo": 1.98,
+                    "hi": 13.79,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 14.9,
+                    "lo": 7.9,
+                    "hi": 25.08,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 28.15,
+                    "lo": 20.05,
+                    "hi": 38.93,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -7.1,
+                  "lo": -17.3,
+                  "hi": -0.3,
+                  "poolsBetter": 3,
+                  "poolsWorse": 0
+                }
+              }
+            },
+            "random": {
+              "found": {
+                "25": {
+                  "mean": 1.94,
+                  "lo": 0.91,
+                  "hi": 3.06
+                },
+                "50": {
+                  "mean": 3.95,
+                  "lo": 1.94,
+                  "hi": 6.03
+                },
+                "100": {
+                  "mean": 7.53,
+                  "lo": 3.74,
+                  "hi": 11.54
+                },
+                "200": {
+                  "mean": 14.45,
+                  "lo": 6.95,
+                  "hi": 22.21
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.078,
+                "lo": 0.036,
+                "hi": 0.123
+              },
+              "checksTo25": {
+                "mean": 362.7,
+                "lo": 225.4,
+                "hi": 498,
+                "reached": 0.54
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": -16,
+                    "lo": -20.56,
+                    "hi": -11.15,
+                    "poolsBetter": 0,
+                    "poolsWorse": 4
+                  },
+                  "50": {
+                    "mean": -29.27,
+                    "lo": -37.95,
+                    "hi": -20.39,
+                    "poolsBetter": 0,
+                    "poolsWorse": 4
+                  },
+                  "100": {
+                    "mean": -52.17,
+                    "lo": -69.15,
+                    "hi": -35.12,
+                    "poolsBetter": 0,
+                    "poolsWorse": 4
+                  },
+                  "200": {
+                    "mean": -85.36,
+                    "lo": -122.53,
+                    "hi": -57.26,
+                    "poolsBetter": 0,
+                    "poolsWorse": 4
+                  }
+                },
+                "checksTo25": {
+                  "mean": 323.3,
+                  "lo": 187.2,
+                  "hi": 458.6,
+                  "poolsBetter": 0,
+                  "poolsWorse": 4
+                }
+              }
+            },
+            "oracle": {
+              "found": {
+                "25": {
+                  "mean": 25,
+                  "lo": 25,
+                  "hi": 25
+                },
+                "50": {
+                  "mean": 50,
+                  "lo": 50,
+                  "hi": 50
+                },
+                "100": {
+                  "mean": 100,
+                  "lo": 100,
+                  "hi": 100
+                },
+                "200": {
+                  "mean": 196.48,
+                  "lo": 192.25,
+                  "hi": 200
+                }
+              },
+              "precisionAt25": {
+                "mean": 1,
+                "lo": 1,
+                "hi": 1
+              },
+              "checksTo25": {
+                "mean": 25,
+                "lo": 25,
+                "hi": 25,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 7.06,
+                    "lo": 2.16,
+                    "hi": 12.09,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  },
+                  "50": {
+                    "mean": 16.77,
+                    "lo": 7.75,
+                    "hi": 25.75,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 40.3,
+                    "lo": 22.5,
+                    "hi": 58.11,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 96.66,
+                    "lo": 54.79,
+                    "hi": 130,
+                    "poolsBetter": 4,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -14.4,
+                  "lo": -26.7,
+                  "hi": -2.4,
+                  "poolsBetter": 4,
+                  "poolsWorse": 0
+                }
+              }
+            }
+          }
+        },
+        "norwegian": {
+          "pools": [
+            "brreg-coffee-tea",
+            "brreg-breweries",
+            "brreg-dental-bergen"
+          ],
+          "overall": {
+            "today-semantic": {
+              "found": {
+                "25": {
+                  "mean": 19.98,
+                  "lo": 13.23,
+                  "hi": 23.92
+                },
+                "50": {
+                  "mean": 34.33,
+                  "lo": 20.25,
+                  "hi": 42.42
+                },
+                "100": {
+                  "mean": 58.48,
+                  "lo": 28.73,
+                  "hi": 75.08
+                },
+                "200": {
+                  "mean": 91.8,
+                  "lo": 42.03,
+                  "hi": 131.73
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.799,
+                "lo": 0.529,
+                "hi": 0.957
+              },
+              "checksTo25": {
+                "mean": 41,
+                "lo": 26.2,
+                "hi": 67.4,
+                "reached": 1
+              }
+            },
+            "today-lexical": {
+              "found": {
+                "25": {
+                  "mean": 3.42,
+                  "lo": 0.42,
+                  "hi": 5.22
+                },
+                "50": {
+                  "mean": 5.5,
+                  "lo": 0.93,
+                  "hi": 8.17
+                },
+                "100": {
+                  "mean": 10.77,
+                  "lo": 2.27,
+                  "hi": 16.45
+                },
+                "200": {
+                  "mean": 21.83,
+                  "lo": 5.32,
+                  "hi": 33.83
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.137,
+                "lo": 0.017,
+                "hi": 0.209
+              },
+              "checksTo25": {
+                "mean": 277.6,
+                "lo": 147.1,
+                "hi": 500,
+                "reached": 0.67
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": -16.57,
+                    "lo": -19.02,
+                    "hi": -12.83,
+                    "poolsBetter": 0,
+                    "poolsWorse": 3
+                  },
+                  "50": {
+                    "mean": -28.83,
+                    "lo": -34.43,
+                    "hi": -19.42,
+                    "poolsBetter": 0,
+                    "poolsWorse": 3
+                  },
+                  "100": {
+                    "mean": -47.72,
+                    "lo": -61.33,
+                    "hi": -26.58,
+                    "poolsBetter": 0,
+                    "poolsWorse": 3
+                  },
+                  "200": {
+                    "mean": -69.97,
+                    "lo": -105.47,
+                    "hi": -36.9,
+                    "poolsBetter": 0,
+                    "poolsWorse": 3
+                  }
+                },
+                "checksTo25": {
+                  "mean": 236.6,
+                  "lo": 121,
+                  "hi": 431.7,
+                  "poolsBetter": 0,
+                  "poolsWorse": 3
+                }
+              }
+            },
+            "rocchio": {
+              "found": {
+                "25": {
+                  "mean": 23.78,
+                  "lo": 22.15,
+                  "hi": 24.93
+                },
+                "50": {
+                  "mean": 43.72,
+                  "lo": 35.58,
+                  "hi": 48.45
+                },
+                "100": {
+                  "mean": 77,
+                  "lo": 51.37,
+                  "hi": 96.65
+                },
+                "200": {
+                  "mean": 119.7,
+                  "lo": 60.28,
+                  "hi": 186.68
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.951,
+                "lo": 0.886,
+                "hi": 0.997
+              },
+              "checksTo25": {
+                "mean": 26.4,
+                "lo": 25.1,
+                "hi": 28.4,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 3.8,
+                    "lo": 1.02,
+                    "hi": 8.88,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "50": {
+                    "mean": 9.38,
+                    "lo": 4.72,
+                    "hi": 15.22,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 18.52,
+                    "lo": 11.5,
+                    "hi": 22.62,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 27.9,
+                    "lo": 10.77,
+                    "hi": 54.65,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -14.5,
+                  "lo": -39,
+                  "hi": -1.1,
+                  "poolsBetter": 3,
+                  "poolsWorse": 0
+                }
+              }
+            },
+            "cal-logreg": {
+              "found": {
+                "25": {
+                  "mean": 23.87,
+                  "lo": 23.28,
+                  "hi": 24.4
+                },
+                "50": {
+                  "mean": 47.78,
+                  "lo": 47.28,
+                  "hi": 48.2
+                },
+                "100": {
+                  "mean": 88.68,
+                  "lo": 76.9,
+                  "hi": 97.82
+                },
+                "200": {
+                  "mean": 143.65,
+                  "lo": 77.93,
+                  "hi": 196.12
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.955,
+                "lo": 0.931,
+                "hi": 0.976
+              },
+              "checksTo25": {
+                "mean": 26.2,
+                "lo": 25.6,
+                "hi": 26.8,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 3.88,
+                    "lo": 0.45,
+                    "hi": 10.02,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "50": {
+                    "mean": 13.45,
+                    "lo": 4.93,
+                    "hi": 27.53,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 30.2,
+                    "lo": 19.97,
+                    "hi": 47.93,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 51.85,
+                    "lo": 35.92,
+                    "hi": 64.03,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -14.8,
+                  "lo": -40.7,
+                  "hi": -0.6,
+                  "poolsBetter": 3,
+                  "poolsWorse": 0
+                }
+              }
+            },
+            "cal-uncertainty": {
+              "found": {
+                "25": {
+                  "mean": 22.65,
+                  "lo": 21.72,
+                  "hi": 23.3
+                },
+                "50": {
+                  "mean": 43.37,
+                  "lo": 39.73,
+                  "hi": 45.98
+                },
+                "100": {
+                  "mean": 73.02,
+                  "lo": 50.47,
+                  "hi": 85.3
+                },
+                "200": {
+                  "mean": 104.67,
+                  "lo": 64.87,
+                  "hi": 126.83
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.906,
+                "lo": 0.869,
+                "hi": 0.932
+              },
+              "checksTo25": {
+                "mean": 27.6,
+                "lo": 26.8,
+                "hi": 28.7,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 2.67,
+                    "lo": -0.7,
+                    "hi": 8.4,
+                    "poolsBetter": 1,
+                    "poolsWorse": 1
+                  },
+                  "50": {
+                    "mean": 9.03,
+                    "lo": 2.07,
+                    "hi": 19.1,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 14.53,
+                    "lo": 10,
+                    "hi": 21.37,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 12.87,
+                    "lo": -8.03,
+                    "hi": 25.27,
+                    "poolsBetter": 2,
+                    "poolsWorse": 1
+                  }
+                },
+                "checksTo25": {
+                  "mean": -13.4,
+                  "lo": -38.8,
+                  "hi": 0.7,
+                  "poolsBetter": 2,
+                  "poolsWorse": 1
+                }
+              }
+            },
+            "cal-logreg-egreedy": {
+              "found": {
+                "25": {
+                  "mean": 21.93,
+                  "lo": 20.98,
+                  "hi": 22.6
+                },
+                "50": {
+                  "mean": 44.07,
+                  "lo": 43.08,
+                  "hi": 44.83
+                },
+                "100": {
+                  "mean": 83.27,
+                  "lo": 76.15,
+                  "hi": 89.18
+                },
+                "200": {
+                  "mean": 136.17,
+                  "lo": 77.72,
+                  "hi": 179.63
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.877,
+                "lo": 0.839,
+                "hi": 0.904
+              },
+              "checksTo25": {
+                "mean": 28.4,
+                "lo": 27.6,
+                "hi": 29.5,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 1.95,
+                    "lo": -1.47,
+                    "hi": 7.67,
+                    "poolsBetter": 1,
+                    "poolsWorse": 1
+                  },
+                  "50": {
+                    "mean": 9.73,
+                    "lo": 1.95,
+                    "hi": 22.73,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 24.78,
+                    "lo": 12.72,
+                    "hi": 47.18,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 44.37,
+                    "lo": 35.7,
+                    "hi": 49.72,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -12.6,
+                  "lo": -37.9,
+                  "hi": 1.5,
+                  "poolsBetter": 1,
+                  "poolsWorse": 1
+                }
+              }
+            },
+            "thompson": {
+              "found": {
+                "25": {
+                  "mean": 15.97,
+                  "lo": 9.93,
+                  "hi": 19.68
+                },
+                "50": {
+                  "mean": 35.23,
+                  "lo": 26.08,
+                  "hi": 40.28
+                },
+                "100": {
+                  "mean": 75.85,
+                  "lo": 61.35,
+                  "hi": 86.17
+                },
+                "200": {
+                  "mean": 130.87,
+                  "lo": 77.52,
+                  "hi": 180.03
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.639,
+                "lo": 0.397,
+                "hi": 0.787
+              },
+              "checksTo25": {
+                "mean": 37.8,
+                "lo": 31.3,
+                "hi": 48.7,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": -4.02,
+                    "lo": -4.72,
+                    "hi": -3.25,
+                    "poolsBetter": 0,
+                    "poolsWorse": 3
+                  },
+                  "50": {
+                    "mean": 0.9,
+                    "lo": -2.28,
+                    "hi": 5.43,
+                    "poolsBetter": 1,
+                    "poolsWorse": 1
+                  },
+                  "100": {
+                    "mean": 17.37,
+                    "lo": 8.63,
+                    "hi": 32.28,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 39.07,
+                    "lo": 33.5,
+                    "hi": 48.02,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -3.2,
+                  "lo": -18.3,
+                  "hi": 5.2,
+                  "poolsBetter": 1,
+                  "poolsWorse": 2
+                }
+              }
+            },
+            "linucb": {
+              "found": {
+                "25": {
+                  "mean": 23.12,
+                  "lo": 21.97,
+                  "hi": 24
+                },
+                "50": {
+                  "mean": 47.5,
+                  "lo": 46.95,
+                  "hi": 48.13
+                },
+                "100": {
+                  "mean": 88.62,
+                  "lo": 76.62,
+                  "hi": 97.85
+                },
+                "200": {
+                  "mean": 143.02,
+                  "lo": 78.23,
+                  "hi": 195.68
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.925,
+                "lo": 0.879,
+                "hi": 0.96
+              },
+              "checksTo25": {
+                "mean": 26.9,
+                "lo": 26,
+                "hi": 28,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 3.13,
+                    "lo": 0.05,
+                    "hi": 8.75,
+                    "poolsBetter": 2,
+                    "poolsWorse": 0
+                  },
+                  "50": {
+                    "mean": 13.17,
+                    "lo": 4.98,
+                    "hi": 26.68,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 30.13,
+                    "lo": 20.03,
+                    "hi": 47.7,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 51.22,
+                    "lo": 36.23,
+                    "hi": 63.47,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -14.1,
+                  "lo": -39.4,
+                  "hi": -0.2,
+                  "poolsBetter": 2,
+                  "poolsWorse": 0
+                }
+              }
+            },
+            "knn-feedback": {
+              "found": {
+                "25": {
+                  "mean": 23.98,
+                  "lo": 22.3,
+                  "hi": 24.92
+                },
+                "50": {
+                  "mean": 47.35,
+                  "lo": 45.93,
+                  "hi": 49.22
+                },
+                "100": {
+                  "mean": 87.62,
+                  "lo": 75.72,
+                  "hi": 97.92
+                },
+                "200": {
+                  "mean": 138.52,
+                  "lo": 77.72,
+                  "hi": 194.15
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.959,
+                "lo": 0.892,
+                "hi": 0.997
+              },
+              "checksTo25": {
+                "mean": 26.1,
+                "lo": 25.1,
+                "hi": 27.7,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 4,
+                    "lo": 0.9,
+                    "hi": 9.05,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "50": {
+                    "mean": 13.02,
+                    "lo": 3.48,
+                    "hi": 26.65,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 29.13,
+                    "lo": 17.77,
+                    "hi": 46.75,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 46.72,
+                    "lo": 35.7,
+                    "hi": 61.97,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -14.9,
+                  "lo": -39.7,
+                  "hi": -0.9,
+                  "poolsBetter": 3,
+                  "poolsWorse": 0
+                }
+              }
+            },
+            "random": {
+              "found": {
+                "25": {
+                  "mean": 2.68,
+                  "lo": 0.85,
+                  "hi": 4.28
+                },
+                "50": {
+                  "mean": 5.17,
+                  "lo": 1.47,
+                  "hi": 8.13
+                },
+                "100": {
+                  "mean": 10.35,
+                  "lo": 2.55,
+                  "hi": 16
+                },
+                "200": {
+                  "mean": 20.07,
+                  "lo": 4.8,
+                  "hi": 31.97
+                }
+              },
+              "precisionAt25": {
+                "mean": 0.107,
+                "lo": 0.034,
+                "hi": 0.171
+              },
+              "checksTo25": {
+                "mean": 290.9,
+                "lo": 158.2,
+                "hi": 500,
+                "reached": 0.67
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": -17.3,
+                    "lo": -20.1,
+                    "hi": -12.42,
+                    "poolsBetter": 0,
+                    "poolsWorse": 3
+                  },
+                  "50": {
+                    "mean": -29.17,
+                    "lo": -34.85,
+                    "hi": -18.87,
+                    "poolsBetter": 0,
+                    "poolsWorse": 3
+                  },
+                  "100": {
+                    "mean": -48.13,
+                    "lo": -62.67,
+                    "hi": -26.32,
+                    "poolsBetter": 0,
+                    "poolsWorse": 3
+                  },
+                  "200": {
+                    "mean": -71.73,
+                    "lo": -108.37,
+                    "hi": -37.33,
+                    "poolsBetter": 0,
+                    "poolsWorse": 3
+                  }
+                },
+                "checksTo25": {
+                  "mean": 249.9,
+                  "lo": 132,
+                  "hi": 431.7,
+                  "poolsBetter": 0,
+                  "poolsWorse": 3
+                }
+              }
+            },
+            "oracle": {
+              "found": {
+                "25": {
+                  "mean": 25,
+                  "lo": 25,
+                  "hi": 25
+                },
+                "50": {
+                  "mean": 50,
+                  "lo": 50,
+                  "hi": 50
+                },
+                "100": {
+                  "mean": 95.72,
+                  "lo": 87.27,
+                  "hi": 100
+                },
+                "200": {
+                  "mean": 157.9,
+                  "lo": 87.27,
+                  "hi": 200
+                }
+              },
+              "precisionAt25": {
+                "mean": 1,
+                "lo": 1,
+                "hi": 1
+              },
+              "checksTo25": {
+                "mean": 25,
+                "lo": 25,
+                "hi": 25,
+                "reached": 1
+              },
+              "vsToday": {
+                "found": {
+                  "25": {
+                    "mean": 5.02,
+                    "lo": 1.08,
+                    "hi": 11.77,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "50": {
+                    "mean": 15.67,
+                    "lo": 7.58,
+                    "hi": 29.75,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "100": {
+                    "mean": 37.23,
+                    "lo": 24.92,
+                    "hi": 58.23,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  },
+                  "200": {
+                    "mean": 66.1,
+                    "lo": 45.25,
+                    "hi": 84.68,
+                    "poolsBetter": 3,
+                    "poolsWorse": 0
+                  }
+                },
+                "checksTo25": {
+                  "mean": -15.9,
+                  "lo": -42.4,
+                  "hi": -1.2,
+                  "poolsBetter": 3,
+                  "poolsWorse": 0
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "regimes": [
@@ -13665,23 +16093,28 @@
     }
   },
   "findings": [
-    "Starting point: across the 7 pools today's semantic ranking has a mean average precision of 0.337 (the word-overlap fallback: 0.271; a random order would score about the prevalence, 0.084). Of its first 25 checks 15.2 are good on average, from 8.7 on brreg-breweries to 23.1 on yc-climate-energy.",
-    "Same checks, more good companies: after 25 / 50 / 100 / 200 checks today's fixed ranking has found 15.2 / 26.1 / 44.8 / 75.4 good companies and the best learner, cal-logreg, has found 19.4 / 40.8 / 80.8 / 139.1 (the oracle: 25.0 / 50.0 / 98.2 / 179.9). Paired difference to today: +4.2 (95% interval +1.7 to +6.5) at 25; +14.7 (95% interval +7.7 to +21.9) at 50; +36.0 (95% interval +19.6 to +52.8) at 100; +63.7 (95% interval +33.0 to +102.7) at 200. The intervals resample pools and seeds. Pool by pool (intervals over seeds), cal-logreg is ahead in 6 of 7 pools at 25 checks and behind in 0; ahead in 7 at 100 and behind in 0.",
-    "Filling a shortlist of 25: today's ranking needs 90.9 checks on average (27 to 338 by pool, median pool 52) and cal-logreg 32.0 (27 to 41, median 29), a difference of -58.9 (95% interval -141.7 to -9.4) checks. The mean leans on the slowest pool; pool by pool cal-logreg needs fewer checks in 6 of 7 and more in 0. Runs that did not fill the shortlist within 500 checks count as 500 (today filled it in 100% of runs, cal-logreg in 100%).",
-    "All learners at 100 checks, as good companies gained over today's ranking: cal-logreg +36.0 (+19.6 to +52.8); linucb +34.7 (+16.1 to +54.1); knn-feedback +34.1 (+16.4 to +53.2); cal-logreg-egreedy +29.9 (+12.8 to +46.7); cal-uncertainty +23.6 (+6.4 to +41.6); rocchio +17.9 (+5.0 to +35.8); thompson +14.5 (+2.6 to +27.1). At 25 checks: cal-logreg +4.2; linucb +3.9; knn-feedback +5.3; cal-logreg-egreedy +2.2; cal-uncertainty +3.1; rocchio +3.9; thompson -2.1.",
-    "The best learner is not clearly best: at 100 checks cal-logreg minus linucb is +1.3 (95% interval -1.6 to +4.0), minus knn-feedback is +1.9 (95% interval -2.2 to +6.1). linucb and knn-feedback cannot be told apart from cal-logreg on these pools; the remaining learners are behind it.",
-    "Where today's ranking is already near the oracle (at least 20 good in today's first 25 checks: yc-healthcare with 22.6 and yc-climate-energy with 23.1), learning adds little early and does no harm: cal-logreg versus today after 25 / 50 / 100 checks is yc-healthcare -0.1 / +1.1 / +6.7; yc-climate-energy +0.5 / +5.4 / +12.9. The gain comes later, once today's ranking has used up its obvious matches.",
-    "Where today's ranking leaves room (between 5 and 20 good in today's first 25 checks: yc-devtools with 11.3, yc-logistics with 14.8, brreg-coffee-tea with 14.4, brreg-breweries with 8.7 and brreg-dental-bergen with 11.6), learning pays from the first batches: cal-logreg versus today after 25 / 50 / 100 checks is yc-devtools +1.6 / +7.2 / +16.5; yc-logistics +7.4 / +15.8 / +41.5; brreg-coffee-tea +8.5 / +29.1 / +47.1; brreg-breweries +6.9 / +17.6 / +54.3; brreg-dental-bergen +4.5 / +26.6 / +73.2.",
-    "No pool starts almost empty (5 or fewer good in today's first 25 checks); the lowest is brreg-breweries with 8.7. So this experiment does not show how a learner fares when the first batches bring back no positive at all.",
-    "Today's ranking can run dry: on brreg-dental-bergen it finds 11.6 good companies in its first 25 checks and 2.9 in the next 75, no better than a random order (9.2). cal-logreg finds 87.5 by 100 checks there and fills the shortlist in 36 checks instead of 338.",
-    "The word-overlap fallback finds 14.6 / 25.0 / 41.2 good companies after 25 / 50 / 100 checks, -3.6 (95% interval -11.8 to +6.8) against the semantic ranking at 100. It is ahead on yc-logistics and brreg-dental-bergen and behind on yc-devtools, yc-healthcare, yc-climate-energy, brreg-coffee-tea and brreg-breweries.",
-    "Exploring costs checks at these budgets: against cal-logreg's 80.8 good companies after 100 checks, spending 10% of checks at random finds 74.7, checking the most uncertain company finds 68.4 and Thompson sampling finds 59.3 (today: 44.8).",
-    "The development segments alone, before any reported pool was run, would have picked linucb, not cal-logreg. On the reported pools linucb gains +3.9 (95% interval +0.8 to +6.7) at 25 checks, +14.3 (95% interval +5.1 to +23.4) at 50 and +34.7 (95% interval +16.1 to +54.1) at 100, and needs 32.4 checks for the shortlist. Those are the figures free of hindsight; the ones for cal-logreg are a best-of-7 picked on these same pools and lean optimistic.",
-    "Batch size 1 instead of 5: cal-logreg finds 20.1 / 41.6 / 81.7 good companies after 25 / 50 / 100 checks (batches of 5: 19.4 / 40.8 / 80.8); its gain over today at 100 checks is +36.9 (95% interval +20.0 to +54.1).",
-    "Batch size 10 instead of 5: cal-logreg finds 18.8 / 39.7 / 80.1 good companies after 25 / 50 / 100 checks (batches of 5: 19.4 / 40.8 / 80.8); its gain over today at 100 checks is +35.3 (95% interval +19.7 to +50.7).",
+    "Headline, with every brief in the buyers' own language (4 pools with English briefs, 3 Norwegian register pools with Norwegian briefs): after 25 / 50 / 100 / 200 checks today's fixed ranking has found 18.8 / 33.7 / 59.2 / 96.4 good companies and linucb, the learner picked on the development segments before any reported pool was run, has found 20.8 / 42.0 / 80.9 / 139.2 (the oracle: 25.0 / 50.0 / 98.2 / 179.9). Paired difference to today: +2.0 (95% interval -0.5 to +4.8) at 25; +8.3 (95% interval +2.5 to +15.3) at 50; +21.7 (95% interval +11.4 to +33.0) at 100; +42.8 (95% interval +31.5 to +53.6) at 200. The intervals resample pools and seeds. Pool by pool (intervals over seeds), linucb is ahead in 3 of 7 pools and behind in 1 at 25 checks, and ahead in 7 of 7 pools and behind in 0 at 100.",
+    "Best in hindsight under the same condition: cal-logreg has found 21.8 / 43.7 / 83.2 / 140.4 good companies after 25 / 50 / 100 / 200 checks. Paired difference to today: +3.0 (95% interval +0.6 to +5.9) at 25; +10.0 (95% interval +4.8 to +16.5) at 50; +24.0 (95% interval +14.4 to +34.6) at 100; +44.0 (95% interval +33.0 to +54.6) at 200. It was picked on these same pools, so its figures lean optimistic. At 100 checks cal-logreg minus linucb is +2.3 (95% interval +0.6 to +4.2).",
+    "Filling a shortlist of 25 under the same condition: today's ranking needs 28.8 checks in the median pool and 67.9 in the worst (brreg-coffee-tea); linucb needs 28.6 checks in the median pool and 45.9 in the worst (yc-devtools); cal-logreg needs 26.8 checks in the median pool and 41.3 in the worst (yc-devtools). Averaged over the pools today needs 40.1 checks and linucb 30.7, a difference of -9.4 (95% interval -20.8 to -0.2) checks; pool by pool linucb needs fewer checks in 4 of 7 and more in 2.",
+    "Where the gain at 100 checks comes from: on the 4 English-language pools (yc-devtools, yc-healthcare, yc-climate-energy and yc-logistics) linucb gains +15.4 (95% interval +5.5 to +29.9) over today and cal-logreg +19.4 (95% interval +8.8 to +34.4); on the 3 Norwegian pools with Norwegian briefs (brreg-coffee-tea, brreg-breweries and brreg-dental-bergen) linucb gains +30.1 (95% interval +20.0 to +47.7) and cal-logreg +30.2 (95% interval +20.0 to +47.9). Each of these two intervals rests on few pools.",
+    "The findings marked [First run] describe the first run, which gave all 7 pools an English brief (results.overall and results.perPool); the 4 English-language pools are the same in both. An English brief handicaps today's ranking on the 3 Norwegian pools: there it finds 11.5 / 16.6 / 25.0 good companies after 25 / 50 / 100 checks against 20.0 / 34.3 / 58.5 with a Norwegian brief, and on brreg-dental-bergen it needs 338 checks to fill the shortlist against 29. The first run therefore overstates what learning adds for a seller who writes in the buyers' language: linucb gains +34.7 good companies at 100 checks in the first run and +21.7 under the headline condition.",
+    "[First run] Starting point: across the 7 pools today's semantic ranking has a mean average precision of 0.337 (the word-overlap fallback: 0.271; a random order would score about the prevalence, 0.084). Of its first 25 checks 15.2 are good on average, from 8.7 on brreg-breweries to 23.1 on yc-climate-energy.",
+    "[First run] Same checks, more good companies: after 25 / 50 / 100 / 200 checks today's fixed ranking has found 15.2 / 26.1 / 44.8 / 75.4 good companies and the best learner, cal-logreg, has found 19.4 / 40.8 / 80.8 / 139.1 (the oracle: 25.0 / 50.0 / 98.2 / 179.9). Paired difference to today: +4.2 (95% interval +1.7 to +6.5) at 25; +14.7 (95% interval +7.7 to +21.9) at 50; +36.0 (95% interval +19.6 to +52.8) at 100; +63.7 (95% interval +33.0 to +102.7) at 200. The intervals resample pools and seeds. Pool by pool (intervals over seeds), cal-logreg is ahead in 6 of 7 pools at 25 checks and behind in 0; ahead in 7 at 100 and behind in 0.",
+    "[First run] Filling a shortlist of 25: today's ranking needs 90.9 checks on average (27 to 338 by pool, median pool 52) and cal-logreg 32.0 (27 to 41, median 29), a difference of -58.9 (95% interval -141.7 to -9.4) checks. The mean leans on the slowest pool; pool by pool cal-logreg needs fewer checks in 6 of 7 and more in 0. Runs that did not fill the shortlist within 500 checks count as 500 (today filled it in 100% of runs, cal-logreg in 100%).",
+    "[First run] All learners at 100 checks, as good companies gained over today's ranking: cal-logreg +36.0 (+19.6 to +52.8); linucb +34.7 (+16.1 to +54.1); knn-feedback +34.1 (+16.4 to +53.2); cal-logreg-egreedy +29.9 (+12.8 to +46.7); cal-uncertainty +23.6 (+6.4 to +41.6); rocchio +17.9 (+5.0 to +35.8); thompson +14.5 (+2.6 to +27.1). At 25 checks: cal-logreg +4.2; linucb +3.9; knn-feedback +5.3; cal-logreg-egreedy +2.2; cal-uncertainty +3.1; rocchio +3.9; thompson -2.1.",
+    "[First run] The best learner is not clearly best: at 100 checks cal-logreg minus linucb is +1.3 (95% interval -1.6 to +4.0), minus knn-feedback is +1.9 (95% interval -2.2 to +6.1). linucb and knn-feedback cannot be told apart from cal-logreg on these pools; the remaining learners are behind it.",
+    "[First run] Where today's ranking is already near the oracle (at least 20 good in today's first 25 checks: yc-healthcare with 22.6 and yc-climate-energy with 23.1), learning adds little early and does no harm: cal-logreg versus today after 25 / 50 / 100 checks is yc-healthcare -0.1 / +1.1 / +6.7; yc-climate-energy +0.5 / +5.4 / +12.9. The gain comes later, once today's ranking has used up its obvious matches.",
+    "[First run] Where today's ranking leaves room (between 5 and 20 good in today's first 25 checks: yc-devtools with 11.3, yc-logistics with 14.8, brreg-coffee-tea with 14.4, brreg-breweries with 8.7 and brreg-dental-bergen with 11.6), learning pays from the first batches: cal-logreg versus today after 25 / 50 / 100 checks is yc-devtools +1.6 / +7.2 / +16.5; yc-logistics +7.4 / +15.8 / +41.5; brreg-coffee-tea +8.5 / +29.1 / +47.1; brreg-breweries +6.9 / +17.6 / +54.3; brreg-dental-bergen +4.5 / +26.6 / +73.2.",
+    "[First run] No pool starts almost empty (5 or fewer good in today's first 25 checks); the lowest is brreg-breweries with 8.7 (with every brief in the buyers' language, yc-devtools with 11.3). So this experiment does not show how a learner fares when the first batches bring back no positive at all.",
+    "[First run] Today's ranking can run dry: on brreg-dental-bergen it finds 11.6 good companies in its first 25 checks and 2.9 in the next 75, no better than a random order (9.2). cal-logreg finds 87.5 by 100 checks there and fills the shortlist in 36 checks instead of 338. With the Norwegian brief today's ranking does not run dry there: 22.9 good companies in its first 25 checks and 52.4 in the next 75.",
+    "[First run] The word-overlap fallback finds 14.6 / 25.0 / 41.2 good companies after 25 / 50 / 100 checks, -3.6 (95% interval -11.8 to +6.8) against the semantic ranking at 100. It is ahead on yc-logistics and brreg-dental-bergen and behind on yc-devtools, yc-healthcare, yc-climate-energy, brreg-coffee-tea and brreg-breweries.",
+    "[First run] Exploring costs checks at these budgets: against cal-logreg's 80.8 good companies after 100 checks, spending 10% of checks at random finds 74.7, checking the most uncertain company finds 68.4 and Thompson sampling finds 59.3 (today: 44.8).",
+    "[First run] The development segments alone, before any reported pool was run, would have picked linucb, not cal-logreg. On the reported pools linucb gains +3.9 (95% interval +0.8 to +6.7) at 25 checks, +14.3 (95% interval +5.1 to +23.4) at 50 and +34.7 (95% interval +16.1 to +54.1) at 100, and needs 32.4 checks for the shortlist. Those are the figures free of hindsight; the ones for cal-logreg are a best-of-7 picked on these same pools and lean optimistic.",
+    "[First run] Batch size 1 instead of 5: cal-logreg finds 20.1 / 41.6 / 81.7 good companies after 25 / 50 / 100 checks (batches of 5: 19.4 / 40.8 / 80.8); its gain over today at 100 checks is +36.9 (95% interval +20.0 to +54.1).",
+    "[First run] Batch size 10 instead of 5: cal-logreg finds 18.8 / 39.7 / 80.1 good companies after 25 / 50 / 100 checks (batches of 5: 19.4 / 40.8 / 80.8); its gain over today at 100 checks is +35.3 (95% interval +19.7 to +50.7).",
     "Norwegian briefs on the 3 register pools: today's ranking finds 20.0 / 34.3 / 58.5 good companies after 25 / 50 / 100 checks with a Norwegian brief against 11.5 / 16.6 / 25.0 with the English one; cal-logreg finds 23.9 / 47.8 / 88.7 against 18.1 / 41.0 / 83.2. With the Norwegian brief cal-logreg's gain over today at 100 checks is +30.2 (95% interval +20.0 to +47.9): a brief in the companies' own language lifts today's ranking and narrows the gap, and the learner still adds to it. Of the good companies, production's relevance gate keeps 100% on brreg-coffee-tea, 99% on brreg-breweries and 100% on brreg-dental-bergen with the Norwegian brief, against 93% on brreg-coffee-tea, 60% on brreg-breweries and 11% on brreg-dental-bergen with the English one.",
     "Task prefixes: on the development segments today's ranking has a mean average precision of 0.3883 without nomic-embed-text's search_query/search_document prefixes and 0.3659 with them, so every policy uses the plain vectors. On the reported pools the plain vectors give today's ranking the higher average precision in 6 of 7 (the other way round on brreg-dental-bergen, 0.124 against 0.139).",
-    "Production drops companies whose relevance is not above zero before any check. That gate keeps 61% of a pool on average and 79% of its good companies (lowest: 11% on brreg-dental-bergen); the simulation ignores the gate, so a learner here may reach good companies that production never checks."
+    "Production drops companies whose relevance is not above zero before any check. In the first run, with English briefs for all pools, that gate keeps 61% of a pool on average and 79% of its good companies (lowest: 11% on brreg-dental-bergen). With Norwegian briefs it keeps, of the good companies, 100% on brreg-coffee-tea, 99% on brreg-breweries and 100% on brreg-dental-bergen; over the 7 pools with every brief in the buyers' language that makes 86% of a pool on average and 98% of its good companies. The simulation ignores the gate, so a learner here may reach good companies that production never checks."
   ],
   "limits": [
     "Labels are directory tags and register codes, not buying decisions: a company can be a real prospect without the tag, and a register code can disagree with what the company's text says. Every policy is scored against the same labels.",
@@ -13693,6 +16126,7 @@
     "Seven pools from two sources. The overall intervals resample pools and seeds, but seven pools cannot stand for every segment a customer will write.",
     "Runs that did not fill the shortlist within 500 checks count as 500, which understates how much slower they are.",
     "The simulation ignores production's relevance-above-zero gate and counts cost in checks only; a learner's own computation (a small model refit per batch) is not counted.",
-    "The batch-size runs cover 6 policies: the two variants of cal-logreg and the policies a batch size cannot change are left out."
+    "The batch-size runs cover 6 policies: the two variants of cal-logreg and the policies a batch size cannot change are left out.",
+    "The headline condition (every brief in the buyers' language) was chosen after the first run was reviewed. Its Norwegian-brief runs were planned as a sensitivity check, their briefs were written before any policy ran, and nothing was re-tuned for it; of the two conditions it is the less favourable one for the learners. The batch-size runs exist for the first run only."
   ]
 }

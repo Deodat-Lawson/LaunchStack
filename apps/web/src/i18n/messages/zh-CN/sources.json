@@ -18,6 +18,7 @@
     },
     "privateEmptyHint": "你添加的文件会先放在这里，准备好后再共享。",
     "onlyPeopleWithAccess": "仅有权限的人可见",
+    "publicLinkOn": "公开链接已开启",
     "you": "你",
     "addedBy": "由 {name} 添加",
     "addedByWhen": "由 {name} 添加 · {added}",

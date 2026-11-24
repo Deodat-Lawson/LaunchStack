@@ -407,6 +407,7 @@
     "indexHint": "Index this map so answers can cite it",
     "askAbout": "Ask about this",
     "shareHint": "Share · {audience}",
+    "anyoneWithLink": "Anyone with the link",
     "deleteDocument": "Delete document",
     "editLinkedHint": "Edit it here. Saving writes into the Google Doc.",
     "previewingBanner": "Previewing v{number}. Search still uses the current version.",

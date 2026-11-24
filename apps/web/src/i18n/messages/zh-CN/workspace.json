@@ -407,6 +407,7 @@
     "indexHint": "为此思维导图建立索引，以便回答引用它",
     "askAbout": "就此提问",
     "shareHint": "共享 · {audience}",
+    "anyoneWithLink": "获得链接的任何人",
     "deleteDocument": "删除文档",
     "editLinkedHint": "在这里编辑。保存时会写入该 Google 文档。",
     "previewingBanner": "正在预览 v{number}。搜索仍使用当前版本。",

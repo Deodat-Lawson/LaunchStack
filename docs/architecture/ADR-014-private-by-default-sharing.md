@@ -196,7 +196,7 @@ parent's stays inside the parent and shows a badge.
   them.
 - Not in this change:
   - Contributing to someone else's chat
-  - Public links
+  - Public links (since added: ADR-016)
   - Email notifications
   - Chat folders or projects
   - A per-viewer "unshare from me"

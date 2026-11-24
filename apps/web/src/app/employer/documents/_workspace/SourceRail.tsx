@@ -16,6 +16,7 @@ import { useTranslations } from "next-intl";
 import {
     Folder,
     FolderOpen,
+    Globe,
     Lock,
     Plus,
     ChevronLeft as IconChevronLeft,
@@ -105,6 +106,24 @@ function AudienceGlyph({ glyph, className }: { glyph: Glyph; className?: string 
             className={cn("text-ink-3 inline-flex shrink-0 items-center", className)}
         >
             <Icon className="size-2.5" aria-hidden />
+        </span>
+    );
+}
+
+/**
+ * The file opens for anyone with its public link (ADR-016): a globe beside
+ * the audience glyph, worded for screen readers and on hover.
+ */
+function PublicLinkGlyph({ label }: { label: string }) {
+    return (
+        <span
+            role="img"
+            aria-label={label}
+            title={label}
+            data-public-link
+            className="text-ink-3 inline-flex shrink-0 items-center"
+        >
+            <Globe className="size-2.5" aria-hidden />
         </span>
     );
 }
@@ -294,6 +313,7 @@ function SourceRow({
                             {source.title}
                         </span>
                         {glyph && <AudienceGlyph glyph={glyph} />}
+                        {source.publicLink && <PublicLinkGlyph label={t("publicLinkOn")} />}
                     </div>
                     {(visibleTags.length > 0 || failed || (source.gaps?.length ?? 0) > 0) && (
                         <div className="text-ink-3 mt-px flex items-center gap-1 overflow-hidden whitespace-nowrap text-[11px]">

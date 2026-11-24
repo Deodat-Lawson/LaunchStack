@@ -124,7 +124,9 @@
     "download": "Download presentation",
     "loading": "Loading presentation...",
     "loadFailed": "Office Online viewer failed to load",
-    "loadFailedDetail": "The file may not be accessible. Try downloading it instead."
+    "loadFailedDetail": "The file may not be accessible. Try downloading it instead.",
+    "publicPreviewOff": "Presentations can't be previewed on a shared link",
+    "publicPreviewOffDetail": "The text from its slides is shown on this page instead."
   },
   "website": {
     "checkAgain": "Check again",
@@ -140,6 +142,7 @@
     "savedOn": "· Saved {date}",
     "openSite": "Open site",
     "textNote": "Below is the text LaunchStack read from this page. Ask and the company profile quote it.",
+    "textNotePublic": "Below is the text read from this page when it was saved.",
     "tabText": "Page text",
     "previewLoading": "Taking a picture of the page…",
     "previewLoadingHint": "The first time takes a few seconds.",

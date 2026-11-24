@@ -107,6 +107,8 @@
       "limited": "<person>{actor}</person> 限制了 <target>{name}</target> 的可见范围",
       "removedFrom": "<person>{actor}</person> 将 {names} 从 <target>{name}</target> 中移除",
       "changedAudience": "<person>{actor}</person> 更改了 <target>{name}</target> 的可见范围",
+      "publicLinkOn": "<person>{actor}</person> 为 <target>{name}</target> 创建了公开链接",
+      "publicLinkOff": "<person>{actor}</person> 关闭了 <target>{name}</target> 的公开链接",
       "forked": "<person>{actor}</person> 在新对话中继续了 <target>{name}</target>",
       "other": "<person>{actor}</person> {verb} <target>{name}</target>"
     },
@@ -316,7 +318,45 @@
       "noOne": "还没有添加任何人。",
       "general": "常规访问权限",
       "restrictedOption": "仅限有访问权限的人",
-      "addedBy": "由 {name} 添加"
+      "addedBy": "由 {name} 添加",
+      "publicLink": {
+        "title": "公开链接",
+        "explainer": "任何拿到链接的人无需登录即可查看此文件，AI 智能体也能读取。",
+        "appliesNow": "对链接的更改会立即生效。",
+        "loading": "正在加载公开链接…",
+        "loadError": "无法加载公开链接。",
+        "create": "创建公开链接",
+        "creating": "正在创建…",
+        "urlLabel": "公开链接地址",
+        "copy": "复制链接",
+        "copyForAi": "复制给 AI",
+        "copyForAiHint": "复制此链接的纯文本（Markdown）版本，供 AI 智能体读取。",
+        "copied": "链接已复制",
+        "copiedForAi": "已复制供 AI 智能体读取的纯文本链接",
+        "copyError": "无法复制。请选中地址后手动复制。",
+        "expires": "过期时间",
+        "expiryNever": "永不过期",
+        "expiry7": "7 天后",
+        "expiry30": "30 天后",
+        "expiryOn": "{date}",
+        "expiresOn": "将于 {date} 过期。",
+        "allowDownload": "允许下载",
+        "turnOff": "关闭链接",
+        "turningOff": "正在关闭…",
+        "confirmTitle": "关闭公开链接？",
+        "confirmDescription": "链接会立即失效，所有拿到它的人都将无法再打开。之后新建的链接会是不同的地址。",
+        "created": "已创建“{name}”的公开链接",
+        "turnedOff": "已关闭“{name}”的公开链接",
+        "expiryUpdated": "链接将于 {date} 过期",
+        "expiryRemoved": "链接不再过期",
+        "downloadOn": "拿到链接的人可以下载“{name}”",
+        "downloadOff": "拿到链接的人不能再下载“{name}”",
+        "changeError": "公开链接未能更改。",
+        "readOnly": "只有能管理此文件的人才能更改它的公开链接。",
+        "noLinkReadOnly": "只有能管理此文件的人才能创建公开链接。",
+        "off": "此工作区已关闭公开链接。所有者或管理员可以在<link>工作区 › 成员与权限</link>中开启。",
+        "offWithLink": "此工作区已关闭公开链接，因此这个链接目前无法打开。所有者或管理员可以在<link>工作区 › 成员与权限</link>中开启。"
+      }
     },
     "picker": {
       "searchError": "搜索失败。",
@@ -478,7 +518,10 @@
       "roleNameTaken": "已存在同名的角色。",
       "roleHoldsPermissionsYouLack": "这个角色含有你没有的权限。",
       "roleStillHeld": "仍有 {count, plural, other {# 名成员}}持有这个角色。请选择要把他们移到哪个角色。",
-      "chooseDifferentRole": "请选择另一个角色来安置这些成员。"
+      "chooseDifferentRole": "请选择另一个角色来安置这些成员。",
+      "publicLinksOff": "此工作区已关闭公开链接。管理工作区的人可以在“工作区 › 成员与权限”中开启。",
+      "cannotChangePublicLink": "只有能管理此文件的人才能生成或更改它的公开链接。",
+      "noPublicLink": "此文件没有公开链接。"
     }
   }
 }

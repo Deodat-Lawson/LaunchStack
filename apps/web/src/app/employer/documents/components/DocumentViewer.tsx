@@ -24,6 +24,7 @@ import {
 import { useTranslations } from "next-intl";
 import type { DocumentType } from "../types";
 import type { ViewerHighlight } from "~/lib/find-text-range";
+import { useViewerEndpoints } from "~/lib/viewer-endpoints";
 import { getDocumentDisplayType, type DocumentDisplayType } from "../types/document";
 import { DocxViewer } from "./DocxViewer";
 
@@ -90,6 +91,12 @@ interface DocumentViewerProps {
      * three-dot menu in the sidebar is the secondary path.
      */
     onOpenVersionHistory?: () => void;
+    /**
+     * How to show the file, when the caller already knows better than the
+     * document's own fields: a public link's server works it out from the
+     * stored file, which the browser never sees.
+     */
+    displayType?: DocumentDisplayType;
 }
 
 export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> = {
@@ -118,8 +125,11 @@ export const DISPLAY_TYPE_ICONS: Record<DocumentDisplayType, React.ElementType> 
  * runs, so it can be read but cannot act. `allow-downloads` keeps archives and
  * CSVs, which the browser downloads rather than displays, working as before.
  * PDFs are framed bare: Chrome will not open its PDF viewer in a sandbox.
+ * A public link's frames may not download at all: opening the page must not
+ * save a file the link's owner may have turned downloads off for.
  */
 const UNTRUSTED_FRAME_SANDBOX = "allow-downloads";
+const PUBLIC_FRAME_SANDBOX = "";
 
 /** Wrapper that shows a loading spinner and error state around an iframe */
 function IframeWithState({
@@ -196,15 +206,18 @@ export function DocumentViewer({
     isCollapsed = false,
     highlight = null,
     onOpenVersionHistory,
+    displayType: knownDisplayType,
 }: DocumentViewerProps) {
     const t = useTranslations("viewers.document");
     const tTypes = useTranslations("viewers.displayTypes");
+    const endpoints = useViewerEndpoints();
+    const trackViewUrl = endpoints.trackView;
     // Track document view
     useEffect(() => {
-        if (document?.id && !isCollapsed) {
+        if (trackViewUrl && document?.id && !isCollapsed) {
             const trackView = async () => {
                 try {
-                    await fetch("/api/documents/track-view", {
+                    await fetch(trackViewUrl, {
                         method: "POST",
                         headers: { "Content-Type": "application/json" },
                         body: JSON.stringify({ documentId: document.id }),
@@ -216,7 +229,7 @@ export function DocumentViewer({
 
             void trackView();
         }
-    }, [document?.id, isCollapsed]);
+    }, [trackViewUrl, document?.id, isCollapsed]);
 
     if (isCollapsed) {
         return (
@@ -243,7 +256,8 @@ export function DocumentViewer({
         );
     }
 
-    const displayType = getDocumentDisplayType(document);
+    const displayType = knownDisplayType ?? getDocumentDisplayType(document);
+    const frameSandbox = endpoints.isPublic ? PUBLIC_FRAME_SANDBOX : UNTRUSTED_FRAME_SANDBOX;
     const DisplayIcon = DISPLAY_TYPE_ICONS[displayType];
     const getPdfSrcWithPage = (url: string, page: number) => `${url}#page=${page}`;
 
@@ -262,8 +276,9 @@ export function DocumentViewer({
             case "docx":
                 // The full editor needs a document id to scope its requests
                 // and to write edits back. Without one — a preview of
-                // something not yet persisted — fall back to read-only HTML.
-                return typeof document.id === "number" && !minimal ? (
+                // something not yet persisted, or a public link, which never
+                // writes — fall back to read-only HTML.
+                return typeof document.id === "number" && !minimal && !endpoints.isPublic ? (
                     <DocxEditor documentId={document.id} title={document.title} />
                 ) : (
                     <DocxViewer url={document.url} title={document.title} />
@@ -307,7 +322,7 @@ export function DocumentViewer({
                         iframeKey={document.id}
                         src={document.url}
                         title={document.title}
-                        sandbox={UNTRUSTED_FRAME_SANDBOX}
+                        sandbox={frameSandbox}
                     />
                 );
             case "unknown":
@@ -319,7 +334,7 @@ export function DocumentViewer({
                         iframeKey={document.id}
                         src={document.url}
                         title={document.title}
-                        sandbox={UNTRUSTED_FRAME_SANDBOX}
+                        sandbox={frameSandbox}
                     />
                 );
         }

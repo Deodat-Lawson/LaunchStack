@@ -204,6 +204,8 @@ export interface WorkspaceSource {
     pending?: boolean;
     /** Limited to people with an explicit grant, not the whole workspace. */
     restricted?: boolean;
+    /** It has a live public link anyone can open without signing in (ADR-016). */
+    publicLink?: boolean;
     /** The caller's access; absent for rows the server has not described (staged uploads, older servers). */
     access?: ItemAccessView;
     /** Who added it, when a person did. */

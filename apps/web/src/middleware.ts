@@ -6,6 +6,14 @@ import { eq, count } from "drizzle-orm";
 import { users, userCompanyMemberships } from "~/server/db/schema";
 import { getSessionFromHeaders } from "~/server/auth";
 import { isAddAccountMode } from "~/lib/auth/device-accounts";
+import { clientIpKey, createRateLimiter } from "~/lib/rate-limiter";
+import { localeOfRequest } from "~/i18n/server";
+import { translatorFor } from "~/i18n/translate";
+import {
+    PUBLIC_LINK_PAGE_HEADERS,
+    isPublicLinkPath,
+    publicLinkMarkdownRewrite,
+} from "~/lib/public-link-paths";
 
 // Same matching semantics as the Clerk helper this file used to import:
 // a literal path, or a "(.*)"-suffixed prefix (which, like path-to-regexp,
@@ -87,6 +95,10 @@ const isPublicApiRoute = createRouteMatcher([
     "/api/collab/hub(.*)",
     // Slack Events API verifies the signing secret on the raw body.
     "/api/collab/slack/events",
+    // Public links (ADR-016): anyone holding the token reads that one file.
+    // The token is the credential; every route resolves it through
+    // resolvePublicLink and answers the same 404 for a dead one.
+    "/api/s/(.*)",
     // Clicked from a mail client, which has no session — the route's own
     // docblock says so. Without this entry the /api/* default-deny below
     // answered every unsubscribe click with a JSON 401, which is also an
@@ -99,6 +111,13 @@ const isPublicApiRoute = createRouteMatcher([
 const isAuthRedirectRoute = createRouteMatcher(["/", "/signup", "/signin"]);
 
 const isEmployeePath = (pathname: string) => pathname.startsWith("/employee");
+
+/** A public link's page, per visitor: the same budget as its read routes (ADR-016). */
+const publicLinkPageLimit = createRateLimiter({
+    maxRequests: 300,
+    windowMs: 15 * 60 * 1000,
+    keyGenerator: clientIpKey,
+});
 
 // The employee area is gone: one app, and what a person can do is decided by
 // their membership's permissions, not by which URL prefix they were sent to.
@@ -196,6 +215,35 @@ export default async function middleware(req: NextRequest) {
         // Static assets: no redirect logic.
         if (pathname.startsWith("/_next/")) {
             return;
+        }
+
+        // A public link as Markdown, for an agent; the page itself needs no session.
+        const markdown = publicLinkMarkdownRewrite(pathname, req.headers.get("accept"));
+        if (markdown) {
+            return NextResponse.rewrite(new URL(markdown, req.url));
+        }
+        // The page itself: no sign-in, and the same never-indexed, never-cached,
+        // never-a-Referer headers as its API routes.
+        if (isPublicLinkPath(pathname)) {
+            // Each visitor's own budget, as for the link's API routes: a page
+            // view reads the file and renders its text.
+            const budget = await publicLinkPageLimit(req);
+            if (!budget.allowed) {
+                const t = translatorFor(localeOfRequest(req), "publicShare.server");
+                return new NextResponse(t("tooMany"), {
+                    status: 429,
+                    headers: {
+                        ...PUBLIC_LINK_PAGE_HEADERS,
+                        "Content-Type": "text/plain; charset=utf-8",
+                        "Retry-After": String(budget.retryAfter ?? 60),
+                    },
+                });
+            }
+            const page = NextResponse.next();
+            for (const [key, value] of Object.entries(PUBLIC_LINK_PAGE_HEADERS)) {
+                page.headers.set(key, value);
+            }
+            return page;
         }
 
         // Join links used to be `/signup?code=…`; links already shared still

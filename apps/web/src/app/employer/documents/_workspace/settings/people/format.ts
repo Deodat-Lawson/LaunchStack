@@ -369,6 +369,12 @@ export function auditSentence(
             return t("restrictionLifted", { actor, target });
         case "document.deleted":
             return t("documentDeleted", { actor, target });
+        case "document.public_link_created":
+            return t("publicLinkCreated", { actor, target });
+        case "document.public_link_updated":
+            return t("publicLinkUpdated", { actor, target });
+        case "document.public_link_revoked":
+            return t("publicLinkRevoked", { actor, target });
         case "connector.connected": {
             const provider = pick(detail, "provider") ?? target;
             return t("connectorConnected", { actor, provider });

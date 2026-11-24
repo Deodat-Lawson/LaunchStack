@@ -75,6 +75,14 @@ export interface SettingDefinition<T = unknown> {
  */
 export const BETA_APPS_SETTING = "labs.betaApps";
 
+/**
+ * The workspace's switch for public links (Workspace › People and access,
+ * ADR-016). Off, every public link stops opening and none can be made; on
+ * again, the links that were live open again. Read by
+ * `~/server/workspace/public-links`.
+ */
+export const PUBLIC_LINKS_SETTING = "sharing.publicLinks";
+
 const RETENTION_DAYS_OPTIONS = [
     { value: null, key: "forever", label: "Keep forever" },
     { value: 30, key: "days30", label: "30 days" },
@@ -271,6 +279,28 @@ export const SETTINGS: readonly SettingDefinition[] = [
         default: null,
         control: { kind: "select", options: RETENTION_DAYS_OPTIONS },
         bound: true,
+    },
+    {
+        key: PUBLIC_LINKS_SETTING,
+        section: "people",
+        label: "Public links",
+        description:
+            "Lets people who manage a file make a link anyone can open without signing in, to send to someone outside the workspace or to an AI agent.",
+        consequence:
+            "Turning it off stops every public link from opening at once. Turning it back on makes the links that were live open again.",
+        aliases: [
+            "public link",
+            "share link",
+            "anyone with the link",
+            "external sharing",
+            "publish",
+            "公开链接",
+        ],
+        scopes: ["workspace"],
+        permission: "settings.manage",
+        schema: z.boolean(),
+        default: true,
+        control: { kind: "switch" },
     },
     {
         key: "agents.defaultAutonomy",

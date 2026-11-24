@@ -71,6 +71,14 @@ jest.mock("~/server/workspace/source-external-links", () => ({
     loadExternalLinkResolver: (...args: unknown[]) => mockLoadExternalLinkResolver(...args),
 }));
 
+// Which rows anyone can open through a public link (ADR-016). The query and
+// the workspace switch live in public-links.test; the route asks once for
+// the list and marks each row.
+const mockDocumentIdsWithPublicLinks = jest.fn();
+jest.mock("~/server/workspace/public-links", () => ({
+    documentIdsWithPublicLinks: (...args: unknown[]) => mockDocumentIdsWithPublicLinks(...args),
+}));
+
 import { POST } from "~/app/api/fetchDocument/route";
 import {
     mapDocument as mapDocumentWith,
@@ -139,6 +147,29 @@ describe("POST /api/fetchDocument", () => {
         mockDescribe.mockResolvedValue({ access: new Map(), addedBy: new Map() });
         mockLinkFor.mockReturnValue(null);
         mockLoadExternalLinkResolver.mockResolvedValue({ linkFor: mockLinkFor });
+        mockDocumentIdsWithPublicLinks.mockResolvedValue(new Set());
+    });
+
+    it("marks the documents anyone can open through a public link, asking once for the list", async () => {
+        mockAuthenticated(BigInt(1));
+        mockDocumentQuery([docRow(1), docRow(2), docRow(3)]);
+        mockDocumentIdsWithPublicLinks.mockResolvedValue(new Set([2]));
+
+        const response = await POST(
+            new Request("http://localhost/api/fetchDocument", { method: "POST" })
+        );
+        const json = await response.json();
+
+        expect(mockDocumentIdsWithPublicLinks).toHaveBeenCalledTimes(1);
+        expect(mockDocumentIdsWithPublicLinks).toHaveBeenCalledWith(BigInt(1), [1, 2, 3]);
+        expect(json.map((doc: { publicLink: boolean }) => doc.publicLink)).toEqual([
+            false,
+            true,
+            false,
+        ]);
+        // And the rail's row carries it, for the globe.
+        expect(mapDocument(json[1] as Parameters<typeof mapDocument>[0]).publicLink).toBe(true);
+        expect(mapDocument(json[0] as Parameters<typeof mapDocument>[0]).publicLink).toBe(false);
     });
 
     it("says where each document opens outside LaunchStack", async () => {

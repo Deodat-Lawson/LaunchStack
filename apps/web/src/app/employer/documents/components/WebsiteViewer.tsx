@@ -7,6 +7,7 @@ import { useFormatter, useTranslations } from "next-intl";
 import { Button } from "~/components/ui/button";
 import { ToggleGroup, ToggleGroupItem } from "~/components/ui/toggle-group";
 import type { ViewerHighlight } from "~/lib/find-text-range";
+import { useViewerEndpoints } from "~/lib/viewer-endpoints";
 import {
     MIN_READABLE_WORDS,
     websiteHost,
@@ -26,8 +27,12 @@ type PageText =
 type PagePicture =
     | { status: "loading" }
     | { status: "ready"; src: string; truncated: boolean }
-    /** `unavailable`: this server has no rendering service, so trying again won't help. */
-    | { status: "failed"; unavailable: boolean; message: string };
+    /**
+     * `unavailable`: this server has no rendering service. `retryable`: trying
+     * again could help — not then, and not on a public link, which only ever
+     * shows a picture already taken.
+     */
+    | { status: "failed"; unavailable: boolean; retryable: boolean; message: string };
 
 /**
  * A site's decorative images (empty alt text, by the web's own convention:
@@ -69,6 +74,9 @@ function Notice({
  */
 function usePagePicture(documentId: number, attempt: number): PagePicture {
     const [picture, setPicture] = useState<PagePicture>({ status: "loading" });
+    const endpoints = useViewerEndpoints();
+    const pictureUrl = endpoints.websitePreview(documentId);
+    const isPublic = endpoints.isPublic;
 
     useEffect(() => {
         let cancelled = false;
@@ -77,17 +85,20 @@ function usePagePicture(documentId: number, attempt: number): PagePicture {
 
         void (async () => {
             try {
-                const response = await fetch(`/api/documents/${documentId}/website-preview`);
+                const response = await fetch(pictureUrl);
                 if (!response.ok) {
                     const body = (await response.json().catch(() => ({}))) as {
                         error?: string;
                         message?: string;
                     };
                     if (cancelled) return;
+                    const unavailable = body.error === "service_not_configured";
                     setPicture({
                         status: "failed",
-                        unavailable: body.error === "service_not_configured",
-                        message: body.message ?? "",
+                        unavailable,
+                        retryable: !unavailable && !isPublic,
+                        // A public link's `error` is already a sentence in the reader's language.
+                        message: body.message ?? (isPublic ? body.error : undefined) ?? "",
                     });
                     return;
                 }
@@ -104,6 +115,7 @@ function usePagePicture(documentId: number, attempt: number): PagePicture {
                 setPicture({
                     status: "failed",
                     unavailable: false,
+                    retryable: true,
                     message: cause instanceof Error ? cause.message : "",
                 });
             }
@@ -113,7 +125,7 @@ function usePagePicture(documentId: number, attempt: number): PagePicture {
             cancelled = true;
             if (objectUrl) URL.revokeObjectURL(objectUrl);
         };
-    }, [documentId, attempt]);
+    }, [pictureUrl, isPublic, attempt]);
 
     return picture;
 }
@@ -131,6 +143,14 @@ function PreviewPane({
     const t = useTranslations("viewers.website");
     const [attempt, setAttempt] = useState(0);
     const picture = usePagePicture(document.id, attempt);
+    const isPublic = useViewerEndpoints().isPublic;
+
+    // A public link never takes a new picture; without a stored one the
+    // visitor goes straight to the page's words instead of a failure.
+    const failed = picture.status === "failed";
+    useEffect(() => {
+        if (isPublic && failed) onShowText();
+    }, [isPublic, failed, onShowText]);
 
     if (picture.status === "loading") {
         return (
@@ -158,7 +178,7 @@ function PreviewPane({
             <Notice
                 title={picture.unavailable ? t("previewUnavailableTitle") : t("previewFailedTitle")}
                 action={
-                    picture.unavailable ? (
+                    !picture.retryable ? (
                         showText
                     ) : (
                         <>
@@ -216,17 +236,24 @@ function PageTextPane({
 }) {
     const t = useTranslations("viewers.website");
     const [text, setText] = useState<PageText>({ status: "loading" });
+    const endpoints = useViewerEndpoints();
+    const textUrl = endpoints.websiteText(document.id);
 
     const load = useCallback(async () => {
         setText({ status: "loading" });
         try {
-            const response = await fetch(`/api/documents/${document.id}/text?format=markdown`);
+            const response = await fetch(textUrl);
             if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
-            const body = (await response.json()) as { markdown?: string; chunkCount?: number };
+            const body = (await response.json()) as {
+                markdown?: string;
+                chunkCount?: number;
+                /** A public link's text route says whether there is any, not how many chunks. */
+                available?: boolean;
+            };
             setText({
                 status: "loaded",
                 markdown: body.markdown ?? "",
-                chunkCount: body.chunkCount ?? 0,
+                chunkCount: body.chunkCount ?? (body.available ? 1 : 0),
             });
         } catch (cause) {
             setText({
@@ -234,7 +261,7 @@ function PageTextPane({
                 message: cause instanceof Error ? cause.message : "",
             });
         }
-    }, [document.id]);
+    }, [textUrl]);
 
     useEffect(() => {
         void load();
@@ -283,7 +310,7 @@ function PageTextPane({
     return (
         <div className="flex h-full min-h-0 flex-col">
             <p className="text-ink-3 border-line shrink-0 border-b px-4 py-2 text-xs">
-                {t("textNote")}
+                {endpoints.isPublic ? t("textNotePublic") : t("textNote")}
             </p>
             {/* A site's hero shots run thousands of pixels tall; keep them to a glance. */}
             <div className="min-h-0 flex-1 [&_.md-doc_img]:max-h-64 [&_.md-doc_img]:w-auto [&_.md-doc_img]:object-contain">
@@ -331,6 +358,7 @@ export function WebsiteViewer({
         setView(next);
         setOpened(prev => (prev.has(next) ? prev : new Set([...prev, next])));
     }, []);
+    const showText = useCallback(() => show("text"), [show]);
 
     // The passage the text pane locates. It changes in the same render that
     // reveals the pane: handed over while the pane is still hidden, the text
@@ -387,11 +415,7 @@ export function WebsiteViewer({
             <div className="relative min-h-0 flex-1">
                 {opened.has("preview") && (
                     <div className="h-full" hidden={view !== "preview"}>
-                        <PreviewPane
-                            document={document}
-                            host={host}
-                            onShowText={() => show("text")}
-                        />
+                        <PreviewPane document={document} host={host} onShowText={showText} />
                     </div>
                 )}
                 {opened.has("text") && (

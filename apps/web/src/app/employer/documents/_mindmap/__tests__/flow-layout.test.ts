@@ -58,9 +58,13 @@ function chain(store: EditorStore, labels = ["A", "B", "C"]): string[] {
 }
 
 describe("which documents arrange themselves", () => {
-    it("a blank flowchart does; a template's sample and an older document do not", () => {
-        expect(buildTemplate("blank", "F").settings.flowLayout).toBe("auto");
-        expect(buildTemplate("flowchart", "F").settings.flowLayout).toBe("manual");
+    it("a chain of steps does (blank, Flowchart, User flow); a layout template and an older document do not", () => {
+        for (const id of ["blank", "flowchart", "user-flow"]) {
+            expect(buildTemplate(id, "F").settings.flowLayout).toBe("auto");
+        }
+        for (const id of ["swimlane", "fishbone", "org-chart", "architecture", "erd", "kanban"]) {
+            expect(buildTemplate(id, "F").settings.flowLayout).toBe("manual");
+        }
         const old = createDoc("Old", [createPage()]) as unknown as Record<string, unknown>;
         const settings = { ...(old.settings as Record<string, unknown>) };
         delete settings.flowLayout;

@@ -157,7 +157,7 @@ describe("Steps: text → chart", () => {
                 expect(nd.textStyle.bold).toBe(false);
                 expect(nd.textStyle.color).toBe(look.text.color);
                 expect(nd.style.fill).toBe(look.style.fill);
-                expect(nd.style.stroke).toBe("none");
+                expect(nd.style.strokeWidth).toBe(0); // no outline
                 expect(nd.style.strokeWidth).toBe(0);
             }
             for (const e of page(store).edges) {

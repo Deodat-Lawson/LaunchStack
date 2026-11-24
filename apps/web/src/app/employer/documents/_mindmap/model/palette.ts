@@ -289,6 +289,22 @@ export function swatchIdOf(color: string): string | null {
     return null;
 }
 
+/**
+ * The colour a shape draws its inner lines in — a database's lid, a class's
+ * dividers, the edges of a document stack's back sheets: its outline colour
+ * when it has one, else the deeper tone of the swatch its fill came from
+ * (a flowchart box has no outline but keeps its lines), else its label's ink.
+ * Never the fill itself: lines drawn in the box's own colour vanished into
+ * it, and only came back when someone picked a colour (2026-11-23).
+ */
+export function lineInk(style: { fill: string; stroke: string }, ink?: string): string {
+    if (style.stroke !== "none") return style.stroke;
+    for (const sw of [...SWATCHES, ...DARK_SWATCHES]) {
+        if (sw.fill === style.fill) return sw.stroke;
+    }
+    return ink ?? INK_SOFT;
+}
+
 /** Neutral document defaults: white fill, mid-grey stroke, near-black ink. */
 export const PAPER = "oklch(1 0 0)";
 export const INK = "oklch(0.22 0.015 280)";
@@ -310,6 +326,16 @@ export const HAIRLINE_DARK = "oklch(0.52 0.02 280)";
 export const FRAME_PAPER: Record<ThemeMode, { fill: string; stroke: string }> = {
     light: { fill: "oklch(0.972 0.005 280)", stroke: "oklch(0.74 0.012 280)" },
     dark: { fill: "oklch(0.245 0.018 285)", stroke: "oklch(0.42 0.02 285)" },
+};
+
+/**
+ * A swimlane's surface, one per lighting: paper with a hairline, so the
+ * coloured steps in it are what reads. Shared by the factory (a lane placed
+ * from the palette) and a template's lanes and Kanban columns.
+ */
+export const LANE_PAPER: Record<ThemeMode, { fill: string; stroke: string }> = {
+    light: { fill: "oklch(0.99 0.003 280)", stroke: "oklch(0.78 0.012 280)" },
+    dark: { fill: "oklch(0.22 0.015 285)", stroke: "oklch(0.38 0.02 285)" },
 };
 
 /** Is this fill one of the paper-frame surfaces (in either lighting)? */
@@ -709,4 +735,61 @@ export function defaultThemeFor(mode: ThemeMode): string {
 export function themeMode(themeId: string | null | undefined): ThemeMode {
     if (!themeId) return "light";
     return THEME_BY_ID[themeId]?.mode ?? "light";
+}
+
+// ---------------------------------------------------------------------------
+// Relighting
+// ---------------------------------------------------------------------------
+
+/**
+ * The same colour in the other lighting — a swatch's fill, line or ink, a
+ * neutral, a frame's or a lane's paper, a sticky note, a theme's arrows or
+ * ink — as its twin in `mode` (itself when it is already lit for `mode`).
+ * Null for a colour that is none of those, one someone typed in, which a
+ * relit board leaves as it is.
+ */
+export function relight(color: string, mode: ThemeMode): string | null {
+    return relightTable(mode).get(color) ?? null;
+}
+
+const RELIGHT_TABLES = new Map<ThemeMode, ReadonlyMap<string, string>>();
+
+function relightTable(mode: ThemeMode): ReadonlyMap<string, string> {
+    const cached = RELIGHT_TABLES.get(mode);
+    if (cached) return cached;
+    // Twins as [light, dark]. A colour that serves two roles keeps the first
+    // one listed: a box's colours before a neutral's.
+    const twins: [string, string][] = [];
+    for (const light of SWATCHES) {
+        const dark = DARK_SWATCH_BY_ID[light.id];
+        if (!dark) continue;
+        twins.push([light.fill, dark.fill], [light.stroke, dark.stroke], [light.ink, dark.ink]);
+    }
+    twins.push(
+        [PAPER, PAPER_DARK],
+        [INK, INK_DARK],
+        [INK_SOFT, INK_SOFT_DARK],
+        [HAIRLINE, HAIRLINE_DARK],
+        [FRAME_PAPER.light.fill, FRAME_PAPER.dark.fill],
+        [FRAME_PAPER.light.stroke, FRAME_PAPER.dark.stroke],
+        [LANE_PAPER.light.fill, LANE_PAPER.dark.fill],
+        [LANE_PAPER.light.stroke, LANE_PAPER.dark.stroke]
+    );
+    STICKY_COLORS.forEach((light, i) => {
+        const dark = STICKY_COLORS_DARK[i];
+        if (dark) twins.push([light, dark]);
+    });
+    for (const theme of THEMES) {
+        const twin = THEME_BY_ID[counterpartTheme(theme.id)];
+        if (theme.mode !== "light" || !twin || twin.mode !== "dark") continue;
+        twins.push([theme.edgeStroke, twin.edgeStroke], [theme.ink, twin.ink]);
+    }
+    const table = new Map<string, string>();
+    for (const [light, dark] of twins) {
+        const lit = mode === "dark" ? dark : light;
+        if (!table.has(light)) table.set(light, lit);
+        if (!table.has(dark)) table.set(dark, lit);
+    }
+    RELIGHT_TABLES.set(mode, table);
+    return table;
 }

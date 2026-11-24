@@ -91,7 +91,7 @@ import {
     type BranchWords,
     type FlowStep,
 } from "./flowchart/arrange";
-import { dressBox, edgeOptions, flowLookOf } from "./flowchart/look";
+import { dressBox, edgeOptions, flowLookOf, lookForNewBox } from "./flowchart/look";
 import type {
     ArrowId,
     DiagramEdge,
@@ -158,8 +158,9 @@ export function insertShape(
               ? null
               : (containerAt(activePage(store.getState().doc), at)?.id ?? null);
     const made = createNodeAt(shape, at, { ...opts, parentId, mode: docMode(store) });
-    // On a flowchart every new box wears the flowchart look, whatever made it.
-    const look = flowLookOf(store.getState().doc);
+    // On a flowchart every new box wears the flowchart look, whatever made it;
+    // on a mindmap, every box that is not a topic (`lookForNewBox`).
+    const look = lookForNewBox(store.getState().doc, shape);
     const node = look
         ? dressBox(look, made, docMode(store), {
               keepSize: opts.w !== undefined || opts.h !== undefined,
@@ -892,29 +893,42 @@ export function styleEdgeSelection(
     );
 }
 
-/** Apply a whole swatch (fill + stroke + ink) to the node selection. */
 /**
  * Colour the selection with a swatch, in the tone for this document's paper —
  * the light table on a dark board painted pale pastel boxes. Only the boxes
- * picked change: a topic keeps its depth's weight (`recolourTopics`), anything
- * else takes the swatch as is, and nothing below or around them is touched.
+ * picked change: a mindmap's topic keeps its depth's weight
+ * (`recolourTopics`), anything else takes the swatch as is, and nothing
+ * below or around them is touched.
+ *
+ * Only the colour changes, never the kind of drawing: a box keeps its
+ * outline or its lack of one (the swatch's stroke only tints its inner
+ * lines), and a shape with no fill — a rule, a caption, a picture — gets
+ * none. On a flowchart a topic-shaped box is a box like any other: painted
+ * as a topic it gained an outline, or the centre's solid fill.
  */
 export function applySwatch(store: EditorStore, swatchId: string): void {
     if (!SWATCH_BY_ID[swatchId]) return;
     const ids = styledNodeIds(store);
     if (ids.length === 0) return;
     const { paletteId } = store.getState().doc.settings;
+    const flow = flowLookOf(store.getState().doc) !== null;
     const sw = swatchFor(swatchId, docMode(store));
     store.updatePage(
         page => {
-            const topics = ids.filter(id => nodeById(page, id)?.shape.startsWith("mind-"));
+            const topics = flow
+                ? []
+                : ids.filter(id => nodeById(page, id)?.shape.startsWith("mind-"));
             const others = ids.filter(id => !topics.includes(id));
             const recoloured = topics.length
                 ? recolourTopics(page, topics, swatchId, paletteId)
                 : page;
             return mapNodes(recoloured, others, nd => ({
                 ...nd,
-                style: { ...nd.style, fill: sw.fill, stroke: sw.stroke },
+                style: {
+                    ...nd.style,
+                    fill: nd.style.fill === "none" ? "none" : sw.fill,
+                    stroke: sw.stroke,
+                },
                 textStyle: { ...nd.textStyle, color: sw.ink },
             }));
         },

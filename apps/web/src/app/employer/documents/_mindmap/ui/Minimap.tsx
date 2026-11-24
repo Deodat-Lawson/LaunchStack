@@ -110,7 +110,11 @@ export function Minimap({ canvasSize }: { canvasSize: { w: number; h: number } }
                         height={Math.max(b.h * scale, 1.5)}
                         rx={1}
                         fill={node.style.fill === "none" ? "var(--line)" : node.style.fill}
-                        stroke={node.style.stroke === "none" ? "none" : node.style.stroke}
+                        stroke={
+                            node.style.stroke === "none" || node.style.strokeWidth === 0
+                                ? "none"
+                                : node.style.stroke
+                        }
                         strokeWidth={0.5}
                         opacity={0.9}
                     />

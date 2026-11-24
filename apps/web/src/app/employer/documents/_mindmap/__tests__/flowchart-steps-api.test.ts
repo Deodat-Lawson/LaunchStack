@@ -45,7 +45,7 @@ describe("stepsToFlowchart", () => {
         for (const n of page.nodes) {
             expect(n.textStyle.bold).toBe(false);
             expect(n.textStyle.size).toBe(15);
-            expect(n.style.stroke).toBe("none");
+            expect(n.style.strokeWidth).toBe(0); // no outline
         }
         const labels = page.edges.map(e => e.labels[0]?.text).filter(Boolean);
         expect(labels).toEqual(expect.arrayContaining(["Yes", "No"]));
@@ -120,9 +120,10 @@ describe("the flowchart look", () => {
 });
 
 describe("flowLayout", () => {
-    it("starts a blank flowchart on auto and every template on manual", () => {
+    it("starts a chain of steps on auto and a layout template on manual", () => {
         expect(buildTemplate("blank", "Flow", "light").settings.flowLayout).toBe("auto");
-        expect(buildTemplate("flowchart", "Flow", "light").settings.flowLayout).toBe("manual");
+        expect(buildTemplate("flowchart", "Flow", "light").settings.flowLayout).toBe("auto");
+        expect(buildTemplate("swimlane", "Flow", "light").settings.flowLayout).toBe("manual");
     });
 
     it("reads a document saved before the setting existed as manual", () => {

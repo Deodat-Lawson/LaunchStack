@@ -10,12 +10,16 @@
  * | Data      | data       | 184 × 64  | violet swatch | none    | 15px regular, swatch ink   |
  * | Note      | sticky     | 168 × 112 | sticky yellow | none    | 15px regular, left and top |
  *
- * Every box: radius 12 where the shape rounds, a soft shadow, nothing bold.
+ * Every box: radius 12 where the shape rounds, a soft shadow, nothing bold,
+ * no outline — but a shape's own lines (a database's lid, a class's
+ * dividers, the sheets of a document stack) are drawn in the deeper tone of
+ * its colour, so a new box looks exactly as it does after a colour is picked.
  * Plain boxes from the toolbar or the library (rectangles, topic boxes) are
  * steps in all but name, so they get a step's size and colour; other library
- * shapes keep their own proportions and take the step colour. Frames and
- * text marks keep their own look. Arrows: right-angled, 1.5px, the board's
- * soft ink, an arrowhead, 12px regular labels.
+ * shapes keep their own proportions and take the step colour. Frames, text
+ * marks and shapes drawn in lines (a rule, brackets, a stick figure) keep
+ * their own look. Arrows: right-angled, 1.5px, the board's soft ink, an
+ * arrowhead, 12px regular labels.
  *
  * A plain step's words can make it another kind (the same rule as the step
  * language in `./syntax.ts`): a label ending in "?" makes a decision,
@@ -30,7 +34,7 @@
  * Board colours are document data, not theme tokens (see the README).
  */
 
-import { worksAsFlow } from "../doc";
+import { isTopicShape, worksAsFlow } from "../doc";
 import type { CreateEdgeOptions } from "../factory";
 import { sizeForText } from "../grow";
 import {
@@ -76,25 +80,60 @@ const STEP_LIKE: ReadonlySet<ShapeId> = new Set<ShapeId>([
     "mind-branch",
 ]);
 
-/** A kind's fill and the ink its label is set in, for one lighting. */
-export function kindColours(shape: ShapeId, mode: ThemeMode): { fill: string; ink: string } {
+/**
+ * A kind's fill, the ink its label is set in, and the deeper tone its own
+ * lines are drawn in (a database's lid, a class's dividers), for one
+ * lighting. A note has no lines of its own.
+ */
+export function kindColours(
+    shape: ShapeId,
+    mode: ThemeMode
+): { fill: string; ink: string; line: string } {
     const hue = KINDS[shape]?.hue ?? STEP_HUE;
-    if (hue === "sticky") return { fill: stickyColors(mode)[0]!, ink: stickyInk(mode) };
+    if (hue === "sticky") {
+        return { fill: stickyColors(mode)[0]!, ink: stickyInk(mode), line: "none" };
+    }
     const sw = swatchFor(hue, mode);
-    return { fill: sw.fill, ink: sw.ink };
+    return { fill: sw.fill, ink: sw.ink, line: sw.stroke };
+}
+
+/**
+ * Shapes that are their lines rather than a filled box: a rule, a pen
+ * stroke, a pair of brackets, a stick figure, a subtopic's underline. Dressed
+ * as a box they were filled and lost their lines — nothing showed at all.
+ * They keep their own drawing on every board.
+ */
+export function drawnInLines(shape: ShapeId): boolean {
+    return shape === "mind-leaf" || (shapeDef(shape).chromeless === true && shape !== "text");
+}
+
+/**
+ * Whether a box wears the flowchart look as it was given: no outline and
+ * the fill of its kind. A box with colours of its own (a template's, an
+ * older document's) is never repainted. Boxes dressed before 2026-11-23
+ * stored no outline as `stroke: "none"`; since then they carry the line
+ * tone their inner lines are drawn in, at no width.
+ */
+function wearsKindColour(node: DiagramNode, mode: ThemeMode): boolean {
+    const noOutline = node.style.stroke === "none" || node.style.strokeWidth === 0;
+    return noOutline && node.style.fill === kindColours(node.shape, mode).fill;
 }
 
 function boxLook(shape: ShapeId, mode: ThemeMode): BoxLook {
     // Frames, lanes and groups are sized by what they hold and painted as
-    // paper; a free text mark has no box. Both keep their own colours.
-    if (shapeDef(shape).container || shape === "text") {
+    // paper; a free text mark has no box; a rule, a stick figure or a pen
+    // stroke is drawn in lines. All keep their own colours.
+    if (shapeDef(shape).container || shape === "text" || drawnInLines(shape)) {
         return { style: {}, text: { size: TEXT_SIZE, bold: false } };
     }
     const kind = KINDS[shape];
-    const { fill, ink } = kindColours(shape, mode);
+    const { fill, ink, line } = kindColours(shape, mode);
     const note = shape === "sticky";
     return {
-        style: { fill, stroke: "none", strokeWidth: 0, radius: 12, shadow: true, opacity: 1 },
+        // No outline: the stroke is the tone the box's own lines are drawn
+        // in, at no width — the state picking a colour leaves it in, so a new
+        // box and a recoloured one look the same.
+        style: { fill, stroke: line, strokeWidth: 0, radius: 12, shadow: true, opacity: 1 },
         text: {
             color: ink,
             size: TEXT_SIZE,
@@ -141,8 +180,7 @@ function afterText(
     if (kind === "step") return null;
     const shape = shapeForKind(kind, node.shape, "process");
     if (shape === node.shape) return null;
-    const dressed =
-        node.style.stroke === "none" && node.style.fill === kindColours(node.shape, mode).fill;
+    const dressed = wearsKindColour(node, mode);
     const look = boxLook(shape, mode);
     const base = (dressed ? look.size : undefined) ?? { w: node.w, h: node.h };
     const fresh: DiagramNode = {
@@ -200,6 +238,28 @@ export const flowchartLook: FlowLook = {
  */
 export function flowLookOf(doc: MindmapDoc): FlowLook | null {
     return worksAsFlow(doc.settings.kind) ? flowchartLook : null;
+}
+
+/**
+ * The look a box placed from the library or the rail gets: the flowchart
+ * look on a flowchart, and on a mindmap too for a box that is not a topic —
+ * a process box or a database looks the same on every board. A mindmap's
+ * topics are painted by their branch, and its notes, frames, text and
+ * line-drawn marks keep their own presets; a freeform drawing is left as it
+ * was. Only how the box is *dressed*: Tab, layout and the rest still ask
+ * `flowLookOf`.
+ */
+export function lookForNewBox(doc: MindmapDoc, shape: ShapeId): FlowLook | null {
+    const look = flowLookOf(doc);
+    if (look) return look;
+    if (doc.settings.kind !== "mindmap") return null;
+    const own =
+        isTopicShape(shape) ||
+        shape === "sticky" ||
+        shape === "text" ||
+        shapeDef(shape).container === true ||
+        drawnInLines(shape);
+    return own ? null : flowchartLook;
 }
 
 /** The board's lighting, for picking a look's colours. */

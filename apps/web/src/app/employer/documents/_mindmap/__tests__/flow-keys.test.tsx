@@ -147,7 +147,7 @@ describe("one look for every box", () => {
     it("a step is a 168 × 64 box with 15px regular text and no outline", () => {
         const look = flowchartLook.boxLook("process", "light");
         expect(look.size).toEqual({ w: 168, h: 64 });
-        expect(look.style).toMatchObject({ stroke: "none", strokeWidth: 0, radius: 12 });
+        expect(look.style).toMatchObject({ strokeWidth: 0, radius: 12 });
         expect(look.text).toMatchObject({ size: 15, bold: false, italic: false });
         expect(flowchartLook.boxLook("decision", "light").size).toEqual({ w: 168, h: 104 });
     });

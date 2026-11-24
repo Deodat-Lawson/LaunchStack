@@ -238,6 +238,40 @@ box's own words alone), and keeps a pill a pill whatever its line says,
 except one its own typing just made. Boxes keep their width and grow down.
 Boxes already on a document are never repainted.
 
+**No outline, but every line of its own.** "No outline" is stored as the
+kind's deeper tone at `strokeWidth: 0`, and the canvas draws a shape's own
+lines — a database's lid, a class's dividers, an Or junction's cross, the
+sheets behind a document stack — in that tone at a hairline (`lineInk` in
+`palette.ts`, used by `ShapeView` and the thumbnails). Until 2026-11-23 the
+look stored `stroke: "none"`, those lines were drawn in the box's own fill
+and vanished, and only appeared once someone picked a colour; boxes saved
+that way still draw their lines (`lineInk` reads the tone off the fill).
+Shapes that _are_ their lines — a rule, brackets, a stick figure, a
+subtopic's underline (`drawnInLines`) — keep their own drawing rather than
+being dressed as a filled box. Picking a colour (`applySwatch`) changes the
+colour and nothing else: a box keeps its outline or its lack of one, a
+shape with no fill gets none, and on a flowchart a topic-shaped box is
+recoloured as a box, not as a topic. `__tests__/shape-lines.test.tsx`
+places every library shape on every kind of board, in both lightings, and
+checks all its lines show and that picking the colour it already has
+changes nothing.
+
+**Templates start in the look.** On a flowchart or a board a template's
+starter boxes and arrows are dressed exactly as new ones are
+(`dressStarters` in `model/flowchart/starters.ts`, called by
+`buildTemplate`): coloured by kind, no outline, 15px regular, arrows in
+the soft ink. A template keeps its layout, how a box's words are aligned,
+the colour that marks a _stage_ (Timeline, Customer journey), a sticky's
+colour, frames (a SWOT quadrant), text and line-drawn marks, and its
+arrows' ends; lanes and Kanban columns are paper (`LANE_PAPER`).
+`__tests__/template-starters.test.ts` adds each starter's shape to the same
+board and checks they match.
+
+**Library shapes on a mindmap** wear the same look (`lookForNewBox`): a
+process box or a database looks the same on every board. A mindmap's
+topics are still painted by their branch, and its notes, frames, text and
+line-drawn marks keep their presets.
+
 ### Keys (`flow/keys`)
 
 | Key                | While typing a label        | One step selected                  | Several selected | Empty board     |
@@ -302,9 +336,12 @@ them again changes nothing.
 | `auto`       | After every structural change the chart is laid out top to bottom (`tidyChart`, `arrangeIfAuto`) |
 | `manual`     | Nothing already placed moves; a new box goes below the box it follows, beside its other steps    |
 
-A blank flowchart is `auto`; a template's sample and anything saved before
-the setting existed is `manual`, so **opening a document never moves
-anything**. Structural changes are Tab, ⇧Tab, a menu pick, a Steps edit,
+A blank flowchart and the Flowchart and User flow templates — the chains of
+steps — are `auto`, and open already arranged (`buildTemplate` runs
+`tidyAll`), so the first step added moves nothing else. Templates whose
+layout is the point (lanes, columns, quadrants, a timeline, a fishbone, an
+org chart, an architecture, an ERD) and anything saved before the setting
+existed are `manual`, so **opening a document never moves anything**. Structural changes are Tab, ⇧Tab, a menu pick, a Steps edit,
 Delete joining the line, and a finished label that reshapes or grows a box;
 the arrangement lands in the same undo step. Moving a box by hand — a drag,
 a group drag, a nudge, an align — turns the chart `manual` in that move's
@@ -659,7 +696,19 @@ Enter, the Topic tool, a port drag, a palette drop, an outline import and the
 Theme picker all end in `paintTopics` / `applyThemeToPage`. Adding to a map
 follows the branch as it is (recolour a branch red and its new details are
 red); switching theme replaces every colour by branch position. The colour
-dots recolour a whole branch, in the tone for the board's lighting.
+dots recolour just the boxes picked, in the tone for the board's lighting.
+
+**On a flowchart or a board a theme relights; it does not repaint.**
+`applyThemeToDoc` runs `relightPage` there instead: the theme's paper, and
+every colour that comes from the palette (a kind's colour, one someone
+picked, a stage's, a lane's paper, the soft-ink arrows) as its twin in the
+theme's lighting (`relight` in `palette.ts`); outlines stay as they are,
+and a colour typed in is left alone. So a flowchart's colours keep meaning
+kinds in every theme: the light themes differ only in paper, and the dark
+twin is the same chart lit for dark. Repainting by branch used to turn a
+Start pill teal and a decision violet (2026-11-23). On a flowchart the
+Theme picker's tiles show this — a Start pill, a step and a decision in
+each theme's lighting on its paper.
 
 ## Saving
 

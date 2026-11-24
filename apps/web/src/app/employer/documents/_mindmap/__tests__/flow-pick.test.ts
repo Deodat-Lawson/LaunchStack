@@ -64,7 +64,7 @@ describe("the flowchart look", () => {
                 const look = flowchartLook.boxLook(shape, mode);
                 expect(look.text.size).toBe(TEXT_SIZE);
                 expect(look.text.bold).toBe(false);
-                expect(look.style.stroke).toBe("none");
+                expect(look.style.strokeWidth).toBe(0); // no outline
                 expect(look.style.shadow).toBe(true);
                 expect(contrastRatio(look.text.color!, look.style.fill!)).toBeGreaterThanOrEqual(
                     4.5

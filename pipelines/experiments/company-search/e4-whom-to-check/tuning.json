@@ -1,0 +1,1149 @@
+{
+  "rule": "per learner, the grid setting with the most good companies after 100 checks, averaged over the development segments and seeds; the first value wins a tie",
+  "segments": [
+    "yc-education",
+    "yc-fintech"
+  ],
+  "seeds": "101-110",
+  "batchSize": 5,
+  "budgets": [
+    25,
+    50,
+    100,
+    200
+  ],
+  "vectors": "plain",
+  "grid": [
+    {
+      "policy": "today-semantic",
+      "setting": {},
+      "found": [
+        13.7,
+        29.3,
+        53.4,
+        80.45
+      ],
+      "perSegment": {
+        "yc-education": [
+          22,
+          42.4,
+          72.2,
+          89.7
+        ],
+        "yc-fintech": [
+          5.4,
+          16.2,
+          34.6,
+          71.2
+        ]
+      }
+    },
+    {
+      "policy": "rocchio",
+      "setting": {
+        "alpha": 1,
+        "beta": 0.75,
+        "gamma": 0.15
+      },
+      "found": [
+        16.4,
+        32.85,
+        61.15,
+        99
+      ],
+      "perSegment": {
+        "yc-education": [
+          24,
+          46.3,
+          80.5,
+          100.2
+        ],
+        "yc-fintech": [
+          8.8,
+          19.4,
+          41.8,
+          97.8
+        ]
+      }
+    },
+    {
+      "policy": "cal-logreg",
+      "setting": {
+        "c": 1
+      },
+      "found": [
+        16.8,
+        39.9,
+        83.75,
+        151.85
+      ],
+      "perSegment": {
+        "yc-education": [
+          23.4,
+          47.3,
+          87.6,
+          128.8
+        ],
+        "yc-fintech": [
+          10.2,
+          32.5,
+          79.9,
+          174.9
+        ]
+      }
+    },
+    {
+      "policy": "cal-logreg",
+      "setting": {
+        "c": 10
+      },
+      "found": [
+        18.45,
+        42.3,
+        86.2,
+        151.1
+      ],
+      "perSegment": {
+        "yc-education": [
+          23.7,
+          48,
+          88.8,
+          128.7
+        ],
+        "yc-fintech": [
+          13.2,
+          36.6,
+          83.6,
+          173.5
+        ]
+      }
+    },
+    {
+      "policy": "cal-logreg",
+      "setting": {
+        "c": 100
+      },
+      "found": [
+        19,
+        42.15,
+        85.05,
+        148.05
+      ],
+      "perSegment": {
+        "yc-education": [
+          23.8,
+          47.9,
+          88.9,
+          126.9
+        ],
+        "yc-fintech": [
+          14.2,
+          36.4,
+          81.2,
+          169.2
+        ]
+      }
+    },
+    {
+      "policy": "cal-logreg",
+      "setting": {
+        "c": 1000
+      },
+      "found": [
+        19,
+        42.05,
+        84.65,
+        147.25
+      ],
+      "perSegment": {
+        "yc-education": [
+          23.9,
+          47.9,
+          89,
+          126.2
+        ],
+        "yc-fintech": [
+          14.1,
+          36.2,
+          80.3,
+          168.3
+        ]
+      }
+    },
+    {
+      "policy": "thompson",
+      "setting": {
+        "priorSdProjection": 0.05
+      },
+      "found": [
+        14.15,
+        28.8,
+        59,
+        109.1
+      ],
+      "perSegment": {
+        "yc-education": [
+          21.3,
+          40.9,
+          75.1,
+          107
+        ],
+        "yc-fintech": [
+          7,
+          16.7,
+          42.9,
+          111.2
+        ]
+      }
+    },
+    {
+      "policy": "thompson",
+      "setting": {
+        "priorSdProjection": 0.1
+      },
+      "found": [
+        12.95,
+        29.3,
+        65.7,
+        127.3
+      ],
+      "perSegment": {
+        "yc-education": [
+          18.2,
+          38.2,
+          76.8,
+          117.2
+        ],
+        "yc-fintech": [
+          7.7,
+          20.4,
+          54.6,
+          137.4
+        ]
+      }
+    },
+    {
+      "policy": "thompson",
+      "setting": {
+        "priorSdProjection": 0.2
+      },
+      "found": [
+        10.3,
+        26.45,
+        64.9,
+        131.15
+      ],
+      "perSegment": {
+        "yc-education": [
+          13,
+          32.6,
+          72.8,
+          119.6
+        ],
+        "yc-fintech": [
+          7.6,
+          20.3,
+          57,
+          142.7
+        ]
+      }
+    },
+    {
+      "policy": "thompson",
+      "setting": {
+        "priorSdProjection": 0.4
+      },
+      "found": [
+        7,
+        20.1,
+        56.4,
+        123.95
+      ],
+      "perSegment": {
+        "yc-education": [
+          7.4,
+          21.3,
+          58.5,
+          113.2
+        ],
+        "yc-fintech": [
+          6.6,
+          18.9,
+          54.3,
+          134.7
+        ]
+      }
+    },
+    {
+      "policy": "thompson",
+      "setting": {
+        "priorSdProjection": 0.8
+      },
+      "found": [
+        4.6,
+        13,
+        40.5,
+        108.65
+      ],
+      "perSegment": {
+        "yc-education": [
+          4.1,
+          12.4,
+          37.9,
+          98.4
+        ],
+        "yc-fintech": [
+          5.1,
+          13.6,
+          43.1,
+          118.9
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.05,
+        "bonus": 0.1
+      },
+      "found": [
+        13.9,
+        33.55,
+        69.15,
+        129.7
+      ],
+      "perSegment": {
+        "yc-education": [
+          22,
+          44.6,
+          81.6,
+          110.1
+        ],
+        "yc-fintech": [
+          5.8,
+          22.5,
+          56.7,
+          149.3
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.05,
+        "bonus": 0.25
+      },
+      "found": [
+        13.9,
+        33.4,
+        69,
+        129.15
+      ],
+      "perSegment": {
+        "yc-education": [
+          22,
+          44.5,
+          81.1,
+          110.1
+        ],
+        "yc-fintech": [
+          5.8,
+          22.3,
+          56.9,
+          148.2
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.05,
+        "bonus": 0.5
+      },
+      "found": [
+        13.9,
+        33.2,
+        68.6,
+        128.45
+      ],
+      "perSegment": {
+        "yc-education": [
+          22,
+          44.3,
+          80.8,
+          109.9
+        ],
+        "yc-fintech": [
+          5.8,
+          22.1,
+          56.4,
+          147
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.05,
+        "bonus": 1
+      },
+      "found": [
+        13.95,
+        33.05,
+        68,
+        127.7
+      ],
+      "perSegment": {
+        "yc-education": [
+          22,
+          44.1,
+          80.4,
+          109.9
+        ],
+        "yc-fintech": [
+          5.9,
+          22,
+          55.6,
+          145.5
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.05,
+        "bonus": 2
+      },
+      "found": [
+        14.05,
+        32.95,
+        67.75,
+        126.5
+      ],
+      "perSegment": {
+        "yc-education": [
+          22,
+          44,
+          79.8,
+          110.2
+        ],
+        "yc-fintech": [
+          6.1,
+          21.9,
+          55.7,
+          142.8
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.1,
+        "bonus": 0.1
+      },
+      "found": [
+        15.6,
+        38.1,
+        82,
+        146
+      ],
+      "perSegment": {
+        "yc-education": [
+          22.9,
+          46.9,
+          87.1,
+          125.9
+        ],
+        "yc-fintech": [
+          8.3,
+          29.3,
+          76.9,
+          166.1
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.1,
+        "bonus": 0.25
+      },
+      "found": [
+        15.45,
+        37.9,
+        82,
+        146.25
+      ],
+      "perSegment": {
+        "yc-education": [
+          22.5,
+          46.9,
+          87.2,
+          126
+        ],
+        "yc-fintech": [
+          8.4,
+          28.9,
+          76.8,
+          166.5
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.1,
+        "bonus": 0.5
+      },
+      "found": [
+        15.2,
+        37.75,
+        81.6,
+        145.7
+      ],
+      "perSegment": {
+        "yc-education": [
+          22,
+          46.8,
+          86.8,
+          125.9
+        ],
+        "yc-fintech": [
+          8.4,
+          28.7,
+          76.4,
+          165.5
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.1,
+        "bonus": 1
+      },
+      "found": [
+        15.4,
+        37.15,
+        80.75,
+        145.5
+      ],
+      "perSegment": {
+        "yc-education": [
+          22,
+          46.1,
+          85.9,
+          125.9
+        ],
+        "yc-fintech": [
+          8.8,
+          28.2,
+          75.6,
+          165.1
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.1,
+        "bonus": 2
+      },
+      "found": [
+        15.5,
+        36.45,
+        79,
+        143.85
+      ],
+      "perSegment": {
+        "yc-education": [
+          22,
+          45,
+          84.2,
+          126.1
+        ],
+        "yc-fintech": [
+          9,
+          27.9,
+          73.8,
+          161.6
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.2,
+        "bonus": 0.1
+      },
+      "found": [
+        17.85,
+        40.8,
+        85.9,
+        151.15
+      ],
+      "perSegment": {
+        "yc-education": [
+          23.6,
+          47.2,
+          90.4,
+          130.5
+        ],
+        "yc-fintech": [
+          12.1,
+          34.4,
+          81.4,
+          171.8
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.2,
+        "bonus": 0.25
+      },
+      "found": [
+        17.85,
+        40.8,
+        86.15,
+        151.25
+      ],
+      "perSegment": {
+        "yc-education": [
+          23.3,
+          46.8,
+          90.6,
+          130.7
+        ],
+        "yc-fintech": [
+          12.4,
+          34.8,
+          81.7,
+          171.8
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.2,
+        "bonus": 0.5
+      },
+      "found": [
+        18.35,
+        41.55,
+        86.55,
+        151.55
+      ],
+      "perSegment": {
+        "yc-education": [
+          23,
+          47,
+          90,
+          129.8
+        ],
+        "yc-fintech": [
+          13.7,
+          36.1,
+          83.1,
+          173.3
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.2,
+        "bonus": 1
+      },
+      "found": [
+        17.75,
+        41.3,
+        85.85,
+        151.25
+      ],
+      "perSegment": {
+        "yc-education": [
+          22.1,
+          46.8,
+          89.4,
+          130.1
+        ],
+        "yc-fintech": [
+          13.4,
+          35.8,
+          82.3,
+          172.4
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.2,
+        "bonus": 2
+      },
+      "found": [
+        17.45,
+        40.2,
+        83.1,
+        149.1
+      ],
+      "perSegment": {
+        "yc-education": [
+          21.1,
+          45.6,
+          85.9,
+          127.7
+        ],
+        "yc-fintech": [
+          13.8,
+          34.8,
+          80.3,
+          170.5
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.4,
+        "bonus": 0.1
+      },
+      "found": [
+        19.4,
+        42.6,
+        87.2,
+        151.3
+      ],
+      "perSegment": {
+        "yc-education": [
+          23.8,
+          47.7,
+          90,
+          130.4
+        ],
+        "yc-fintech": [
+          15,
+          37.5,
+          84.4,
+          172.2
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.4,
+        "bonus": 0.25
+      },
+      "found": [
+        19.85,
+        42.7,
+        86.15,
+        151.5
+      ],
+      "perSegment": {
+        "yc-education": [
+          24,
+          47.5,
+          89,
+          131.1
+        ],
+        "yc-fintech": [
+          15.7,
+          37.9,
+          83.3,
+          171.9
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.4,
+        "bonus": 0.5
+      },
+      "found": [
+        20.45,
+        43.4,
+        87.45,
+        151.4
+      ],
+      "perSegment": {
+        "yc-education": [
+          23.2,
+          47,
+          88.8,
+          129.6
+        ],
+        "yc-fintech": [
+          17.7,
+          39.8,
+          86.1,
+          173.2
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.4,
+        "bonus": 1
+      },
+      "found": [
+        20,
+        42.85,
+        85.55,
+        150.6
+      ],
+      "perSegment": {
+        "yc-education": [
+          22.3,
+          46.7,
+          87.4,
+          129
+        ],
+        "yc-fintech": [
+          17.7,
+          39,
+          83.7,
+          172.2
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.4,
+        "bonus": 2
+      },
+      "found": [
+        16.65,
+        37.65,
+        78.65,
+        144.4
+      ],
+      "perSegment": {
+        "yc-education": [
+          19.6,
+          42.9,
+          83.9,
+          126.5
+        ],
+        "yc-fintech": [
+          13.7,
+          32.4,
+          73.4,
+          162.3
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.8,
+        "bonus": 0.1
+      },
+      "found": [
+        19.65,
+        42.35,
+        84.2,
+        148.3
+      ],
+      "perSegment": {
+        "yc-education": [
+          24,
+          47.3,
+          87.1,
+          128.3
+        ],
+        "yc-fintech": [
+          15.3,
+          37.4,
+          81.3,
+          168.3
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.8,
+        "bonus": 0.25
+      },
+      "found": [
+        19.55,
+        42.15,
+        85.35,
+        148.35
+      ],
+      "perSegment": {
+        "yc-education": [
+          22.9,
+          46.3,
+          86.9,
+          127.8
+        ],
+        "yc-fintech": [
+          16.2,
+          38,
+          83.8,
+          168.9
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.8,
+        "bonus": 0.5
+      },
+      "found": [
+        19.25,
+        41.25,
+        83.3,
+        147.3
+      ],
+      "perSegment": {
+        "yc-education": [
+          21.9,
+          45,
+          85.8,
+          127.6
+        ],
+        "yc-fintech": [
+          16.6,
+          37.5,
+          80.8,
+          167
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.8,
+        "bonus": 1
+      },
+      "found": [
+        17.95,
+        38.85,
+        79.6,
+        144.45
+      ],
+      "perSegment": {
+        "yc-education": [
+          20.8,
+          41.8,
+          82.8,
+          125.4
+        ],
+        "yc-fintech": [
+          15.1,
+          35.9,
+          76.4,
+          163.5
+        ]
+      }
+    },
+    {
+      "policy": "linucb",
+      "setting": {
+        "priorSdProjection": 0.8,
+        "bonus": 2
+      },
+      "found": [
+        11.65,
+        30.9,
+        71.1,
+        136.8
+      ],
+      "perSegment": {
+        "yc-education": [
+          13.7,
+          33.4,
+          73.1,
+          121.3
+        ],
+        "yc-fintech": [
+          9.6,
+          28.4,
+          69.1,
+          152.3
+        ]
+      }
+    },
+    {
+      "policy": "knn-feedback",
+      "setting": {
+        "weight": 0.5
+      },
+      "found": [
+        16.05,
+        34.6,
+        63.8,
+        100.65
+      ],
+      "perSegment": {
+        "yc-education": [
+          24,
+          46.9,
+          83.2,
+          102.8
+        ],
+        "yc-fintech": [
+          8.1,
+          22.3,
+          44.4,
+          98.5
+        ]
+      }
+    },
+    {
+      "policy": "knn-feedback",
+      "setting": {
+        "weight": 1
+      },
+      "found": [
+        18.05,
+        38.85,
+        74.2,
+        114.2
+      ],
+      "perSegment": {
+        "yc-education": [
+          24.1,
+          48.5,
+          87.6,
+          110.2
+        ],
+        "yc-fintech": [
+          12,
+          29.2,
+          60.8,
+          118.2
+        ]
+      }
+    },
+    {
+      "policy": "knn-feedback",
+      "setting": {
+        "weight": 2
+      },
+      "found": [
+        19.5,
+        43.35,
+        83.2,
+        130.85
+      ],
+      "perSegment": {
+        "yc-education": [
+          25,
+          49,
+          89.6,
+          119.3
+        ],
+        "yc-fintech": [
+          14,
+          37.7,
+          76.8,
+          142.4
+        ]
+      }
+    },
+    {
+      "policy": "knn-feedback",
+      "setting": {
+        "weight": 4
+      },
+      "found": [
+        18.25,
+        40.25,
+        83.75,
+        139.75
+      ],
+      "perSegment": {
+        "yc-education": [
+          25,
+          45.5,
+          88.2,
+          122.9
+        ],
+        "yc-fintech": [
+          11.5,
+          35,
+          79.3,
+          156.6
+        ]
+      }
+    },
+    {
+      "policy": "knn-feedback",
+      "setting": {
+        "weight": 8
+      },
+      "found": [
+        15.85,
+        34.35,
+        77.25,
+        137.75
+      ],
+      "perSegment": {
+        "yc-education": [
+          24.5,
+          43.4,
+          84.4,
+          123.4
+        ],
+        "yc-fintech": [
+          7.2,
+          25.3,
+          70.1,
+          152.1
+        ]
+      }
+    },
+    {
+      "policy": "knn-feedback",
+      "setting": {
+        "weight": 16
+      },
+      "found": [
+        16.2,
+        33.15,
+        74.55,
+        136.3
+      ],
+      "perSegment": {
+        "yc-education": [
+          24.3,
+          42.3,
+          80.7,
+          124.1
+        ],
+        "yc-fintech": [
+          8.1,
+          24,
+          68.4,
+          148.5
+        ]
+      }
+    }
+  ],
+  "egreedy": [
+    16.6,
+    38.15,
+    78.4,
+    141.15
+  ],
+  "chosen": {
+    "logregC": 10,
+    "thompsonPriorSd": 0.1,
+    "linucbPriorSd": 0.4,
+    "linucbBonus": 0.5,
+    "knnWeight": 4
+  },
+  "devChoice": "linucb"
+}

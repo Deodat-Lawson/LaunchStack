@@ -12,6 +12,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { evaluatePolicies, printPolicyTable } from "../lib/discovery-report";
+import { stringifyResults } from "../lib/json";
 import { mean, round } from "../lib/stats";
 import { createEnv } from "./env";
 import { SEGMENTS } from "./segments";
@@ -214,10 +215,7 @@ function main(): void {
     const here = path.dirname(fileURLToPath(import.meta.url));
     const outDir = path.resolve(here, "..", "results");
     mkdirSync(outDir, { recursive: true });
-    writeFileSync(
-        path.join(outDir, "e1-where-to-look.json"),
-        `${JSON.stringify(output, null, 2)}\n`
-    );
+    writeFileSync(path.join(outDir, "e1-where-to-look.json"), stringifyResults(output));
 
     for (const s of segments) {
         console.log(

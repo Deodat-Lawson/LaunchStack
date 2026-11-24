@@ -91,13 +91,14 @@ known, and E2 also with companies of the wrong kind.
 
 Policies (`lib/bandits.ts`, `lib/discovery.ts`):
 
-| Policy                                            | What it knows                                                                                                                     | Kind                                  |
-| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
-| `plan-static`                                     | The planned words, in order, then their deeper requests level by level                                                            | Fixed order, nothing learned          |
-| `letters-static`, `letters-random`                | The planned words, then a to z (E1 only: Photon matches the start of a word)                                                      | Fixed order                           |
-| `egreedy`, `ucb1`, `thompson`                     | The same arms; how many new targets each returned so far                                                                          | Bandits over a fixed set of arms      |
-| `mined-greedy`, `mined-egreedy`, `mined-thompson` | Also the names of what was found: words that recur in target names become new arms, and every unasked word gets an expected yield | Bandits whose arms grow from feedback |
-| `oracle`                                          | Every recorded answer in advance; always sends the request with the most new targets                                              | Upper bound                           |
+| Policy                                            | What it knows                                                                                                                                                         | Kind                                  |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `plan-static`                                     | The planned words, in order, then their deeper requests level by level                                                                                                | Fixed order, nothing learned          |
+| `letters-static`, `letters-random`                | The planned words, then a to z (E1 only: Photon matches the start of a word)                                                                                          | Fixed order                           |
+| `egreedy`, `ucb1`, `thompson`                     | The same arms; how many new targets each returned so far                                                                                                              | Bandits over a fixed set of arms      |
+| `mined-greedy`, `mined-egreedy`, `mined-thompson` | Also the names of what was found: words that recur in target names become new arms, and every unasked word gets an expected yield                                     | Bandits whose arms grow from feedback |
+| `mined-greedy-plan`                               | As `mined-greedy`, but a planned word it has read nothing about keeps the plan's own prior. Added after the frozen design was scored (`postHoc: true` in the results) | Feedback bandit, exploratory          |
+| `oracle`                                          | Every recorded answer in advance; always sends the request with the most new targets                                                                                  | Upper bound                           |
 
 The feedback policies estimate a word's first request as (results expected) ×
 (share that are targets) × (share of those that are new). The counts come
@@ -129,7 +130,9 @@ bootstrap interval over seeds.
   was changed three times after reading traces of `dk-bicycle` and
   `be-chocolate` (E1) and the first E2 table. The segments `nl-bicycle`,
   `dk-dentist` (E1) and `no-dentist` (E2) were recorded and scored only after
-  the design was frozen. The plain bandits were never changed.
+  the design was frozen. The plain bandits were never changed. One variant,
+  `mined-greedy-plan`, was added after every E2 segment had been scored; its
+  numbers are exploratory.
 - **Recording limits bound the replay.** A policy can only ask words that
   were recorded: the planned words, the letters, and the most frequent words
   in found names (fewer for a very large population, to spare the public

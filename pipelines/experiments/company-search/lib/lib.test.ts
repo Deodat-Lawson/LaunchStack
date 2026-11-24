@@ -256,3 +256,20 @@ describe("recorder", () => {
         expect(await replayed.text()).toBe("nope");
     });
 });
+
+describe("result files", () => {
+    it("keeps lists of plain values on one line and stays valid JSON", async () => {
+        const { stringifyResults } = await import("./json");
+        const value = {
+            curve: [1, 2.5, 3],
+            words: ["a", 'b "c"'],
+            nested: [{ x: [1, 2] }],
+            empty: [],
+        };
+        const text = stringifyResults(value);
+        expect(JSON.parse(text)).toEqual(value);
+        expect(text).toContain('"curve": [1, 2.5, 3]');
+        expect(text).toContain('"words": ["a", "b \\"c\\""]');
+        expect(text.endsWith("\n")).toBe(true);
+    });
+});

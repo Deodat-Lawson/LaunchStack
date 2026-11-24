@@ -17,6 +17,7 @@ import { fileURLToPath } from "node:url";
 
 import type { DiscoveryEnv, ResultItem, TermCursor } from "../lib/discovery";
 import { evaluatePolicies, printPolicyTable } from "../lib/discovery-report";
+import { stringifyResults } from "../lib/json";
 import { mean, round } from "../lib/stats";
 import { SEGMENTS } from "./segments";
 import { PAGE_SIZE, loadWorld, nameTokens, type RegisterWorld } from "./world";
@@ -160,7 +161,7 @@ function main(): void {
     const here = path.dirname(fileURLToPath(import.meta.url));
     const outDir = path.resolve(here, "..", "results");
     mkdirSync(outDir, { recursive: true });
-    writeFileSync(path.join(outDir, "e2-what-to-ask.json"), `${JSON.stringify(output, null, 2)}\n`);
+    writeFileSync(path.join(outDir, "e2-what-to-ask.json"), stringifyResults(output));
 
     for (const s of segments) {
         console.log(

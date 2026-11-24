@@ -7,12 +7,10 @@ RUN apk add --no-cache graphicsmagick ghostscript
 WORKDIR /app
 
 # npm ci against the committed lockfile — reproducible builds (the old
-# ocr-router ran `npm install` with no lockfile).
-# onnxruntime-node's install script downloads CUDA binaries on linux/x64 from
-# a GitHub release; that asset now 404s, and this CPU-only service never uses
-# them, so skip the download.
-COPY package.json package-lock.json ./
-RUN ONNXRUNTIME_NODE_INSTALL_CUDA=skip npm ci
+# ocr-router ran `npm install` with no lockfile). .npmrc skips onnxruntime-node's
+# CUDA download (CPU-only service; see the file).
+COPY package.json package-lock.json .npmrc ./
+RUN npm ci
 
 COPY tsconfig.json tsconfig.build.json ./
 COPY src ./src

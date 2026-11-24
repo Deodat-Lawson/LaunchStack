@@ -190,9 +190,6 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
       - name: Install (locked)
-        # onnxruntime-node's CUDA download 404s upstream and the converter is CPU-only.
-        env:
-          ONNXRUNTIME_NODE_INSTALL_CUDA: skip
         run: npm ci
       - name: Typecheck
         run: npx tsc --noEmit

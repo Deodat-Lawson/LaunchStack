@@ -194,6 +194,11 @@ const eslintConfig = [
             "**/.next/**",
             "**/node_modules/**",
             "**/dist/**",
+            // Agent worktrees are full checkouts of this repository. ESLint
+            // does not skip dot-directories, so without this a local run
+            // type-checks every copy and dies of heap exhaustion (exit 134)
+            // however large the heap is. CI never sees them.
+            ".claude/**",
             // Generated migration SQL + drizzle journal/snapshots.
             "**/drizzle/**",
             "**/next-env.d.ts",

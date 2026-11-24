@@ -11,7 +11,7 @@
         "db:migrate": "pnpm --filter @launchstack/web db:migrate",
         "deploy:check": "node apps/web/scripts/deploy-check.mjs",
         "check": "pnpm lint && pnpm -r typecheck",
-        "lint": "node --max-old-space-size=10240 node_modules/eslint/bin/eslint.js .",
+        "lint": "NODE_OPTIONS=--max-old-space-size=10240 eslint .",
         "lint:fix": "pnpm lint --fix",
         "typecheck": "pnpm -r typecheck",
         "format:write": "prettier --write \"**/*.{ts,tsx,js,jsx,mdx}\" --cache",

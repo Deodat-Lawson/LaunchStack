@@ -61,7 +61,7 @@ import {
     toggleLock,
     ungroupSelection,
 } from "../model/commands";
-import { activePage, mapNodes, nodeById } from "../model/doc";
+import { activePage, mapNodes, nodeById, worksAsFlow } from "../model/doc";
 import { SHAPES } from "../model/shapes";
 import { ThemePicker } from "./ThemePicker";
 import type { EditorState } from "../model/store";
@@ -740,6 +740,7 @@ export function PageSettings() {
                 <ThemePicker
                     activeId={doc.settings.paletteId}
                     onPick={id => applyTheme(store, id)}
+                    flow={worksAsFlow(doc.settings.kind)}
                 />
             </Section>
 

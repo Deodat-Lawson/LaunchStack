@@ -6,8 +6,10 @@ import { Check, MoonStar, Sun } from "lucide-react";
 
 import { cn } from "~/lib/utils";
 
+import { kindColours } from "../model/flowchart/look";
 import {
     counterpartTheme,
+    neutralsFor,
     swatchFor,
     THEME_BY_ID,
     THEMES,
@@ -36,9 +38,15 @@ export interface ThemePickerProps {
     /** Currently applied theme id, from `doc.settings.paletteId`. */
     activeId: string | null | undefined;
     onPick: (themeId: string) => void;
+    /**
+     * The board is worked as a flowchart (`worksAsFlow`): a theme keeps its
+     * boxes' colours and changes the paper and the lighting (`relightPage`),
+     * so the tiles show that rather than a mindmap's branch colours.
+     */
+    flow?: boolean;
 }
 
-export function ThemePicker({ activeId, onPick }: ThemePickerProps) {
+export function ThemePicker({ activeId, onPick, flow = false }: ThemePickerProps) {
     const t = useTranslations("mindmap.themePicker");
     const groups: { mode: ThemeMode; label: string; themes: DocTheme[] }[] = [
         { mode: "light", label: t("light"), themes: THEMES.filter(th => th.mode === "light") },
@@ -59,6 +67,7 @@ export function ThemePicker({ activeId, onPick }: ThemePickerProps) {
                                 key={theme.id}
                                 theme={theme}
                                 active={theme.id === activeId}
+                                flow={flow}
                                 onPick={() => onPick(theme.id)}
                             />
                         ))}
@@ -72,10 +81,12 @@ export function ThemePicker({ activeId, onPick }: ThemePickerProps) {
 function ThemeTile({
     theme,
     active,
+    flow,
     onPick,
 }: {
     theme: DocTheme;
     active: boolean;
+    flow: boolean;
     onPick: () => void;
 }) {
     const t = useTranslations("mindmap");
@@ -84,6 +95,13 @@ function ThemeTile({
     // two branch hues as the tinted boxes they become, on its own paper.
     const root = swatchFor(theme.root, theme.mode);
     const branches = theme.cycle.slice(0, 2).map(id => swatchFor(id, theme.mode));
+    // On a flowchart: a Start pill, a step and a decision in their kinds'
+    // colours for this lighting, joined by the soft-ink arrows.
+    const kinds = (["terminator", "process", "decision"] as const).map(shape => ({
+        shape,
+        fill: kindColours(shape, theme.mode).fill,
+    }));
+    const arrow = neutralsFor(theme.mode).inkSoft;
 
     return (
         <button
@@ -106,24 +124,52 @@ function ThemeTile({
                 className="relative flex h-9 w-full items-center justify-center gap-1 overflow-hidden rounded-[4px]"
                 style={{ background: theme.background }}
             >
-                <span
-                    className="relative h-3.5 w-5 rounded-full"
-                    style={{ background: root.stroke }}
-                />
-                {branches.map((sw, i) => (
-                    <span key={`${theme.id}-${i}`} className="relative flex items-center">
-                        {/* The branch's own connector, in its hue, as the canvas paints it. */}
+                {flow ? (
+                    kinds.map((k, i) => (
+                        <span key={`${theme.id}-${k.shape}`} className="relative flex items-center">
+                            {i > 0 && (
+                                <span
+                                    aria-hidden
+                                    className="h-px w-1.5"
+                                    style={{ background: arrow }}
+                                />
+                            )}
+                            <span
+                                className={cn(
+                                    "h-3.5 w-5",
+                                    k.shape === "terminator" ? "rounded-full" : "rounded-[3px]",
+                                    k.shape === "decision" && "w-3.5 rotate-45 scale-75"
+                                )}
+                                // Diagram colours are document data, not tokens (README).
+                                style={{ background: k.fill }}
+                            />
+                        </span>
+                    ))
+                ) : (
+                    <>
                         <span
-                            aria-hidden
-                            className="h-0.5 w-1.5"
-                            style={{ background: sw.stroke }}
+                            className="relative h-3.5 w-5 rounded-full"
+                            style={{ background: root.stroke }}
                         />
-                        <span
-                            className="h-3.5 w-5 rounded-[3px]"
-                            style={{ background: sw.fill, border: `1.5px solid ${sw.stroke}` }}
-                        />
-                    </span>
-                ))}
+                        {branches.map((sw, i) => (
+                            <span key={`${theme.id}-${i}`} className="relative flex items-center">
+                                {/* The branch's own connector, in its hue, as the canvas paints it. */}
+                                <span
+                                    aria-hidden
+                                    className="h-0.5 w-1.5"
+                                    style={{ background: sw.stroke }}
+                                />
+                                <span
+                                    className="h-3.5 w-5 rounded-[3px]"
+                                    style={{
+                                        background: sw.fill,
+                                        border: `1.5px solid ${sw.stroke}`,
+                                    }}
+                                />
+                            </span>
+                        ))}
+                    </>
+                )}
             </span>
             <span className="flex items-center gap-1 px-0.5">
                 <span

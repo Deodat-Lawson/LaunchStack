@@ -698,6 +698,18 @@ follows the branch as it is (recolour a branch red and its new details are
 red); switching theme replaces every colour by branch position. The colour
 dots recolour just the boxes picked, in the tone for the board's lighting.
 
+**On a flowchart or a board a theme relights; it does not repaint.**
+`applyThemeToDoc` runs `relightPage` there instead: the theme's paper, and
+every colour that comes from the palette (a kind's colour, one someone
+picked, a stage's, a lane's paper, the soft-ink arrows) as its twin in the
+theme's lighting (`relight` in `palette.ts`); outlines stay as they are,
+and a colour typed in is left alone. So a flowchart's colours keep meaning
+kinds in every theme: the light themes differ only in paper, and the dark
+twin is the same chart lit for dark. Repainting by branch used to turn a
+Start pill teal and a decision violet (2026-11-23). On a flowchart the
+Theme picker's tiles show this — a Start pill, a step and a decision in
+each theme's lighting on its paper.
+
 ## Saving
 
 The whole document is written as one `jsonb` value. Saves carry `baseRevision`;

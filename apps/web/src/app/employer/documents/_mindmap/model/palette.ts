@@ -736,3 +736,60 @@ export function themeMode(themeId: string | null | undefined): ThemeMode {
     if (!themeId) return "light";
     return THEME_BY_ID[themeId]?.mode ?? "light";
 }
+
+// ---------------------------------------------------------------------------
+// Relighting
+// ---------------------------------------------------------------------------
+
+/**
+ * The same colour in the other lighting — a swatch's fill, line or ink, a
+ * neutral, a frame's or a lane's paper, a sticky note, a theme's arrows or
+ * ink — as its twin in `mode` (itself when it is already lit for `mode`).
+ * Null for a colour that is none of those, one someone typed in, which a
+ * relit board leaves as it is.
+ */
+export function relight(color: string, mode: ThemeMode): string | null {
+    return relightTable(mode).get(color) ?? null;
+}
+
+const RELIGHT_TABLES = new Map<ThemeMode, ReadonlyMap<string, string>>();
+
+function relightTable(mode: ThemeMode): ReadonlyMap<string, string> {
+    const cached = RELIGHT_TABLES.get(mode);
+    if (cached) return cached;
+    // Twins as [light, dark]. A colour that serves two roles keeps the first
+    // one listed: a box's colours before a neutral's.
+    const twins: [string, string][] = [];
+    for (const light of SWATCHES) {
+        const dark = DARK_SWATCH_BY_ID[light.id];
+        if (!dark) continue;
+        twins.push([light.fill, dark.fill], [light.stroke, dark.stroke], [light.ink, dark.ink]);
+    }
+    twins.push(
+        [PAPER, PAPER_DARK],
+        [INK, INK_DARK],
+        [INK_SOFT, INK_SOFT_DARK],
+        [HAIRLINE, HAIRLINE_DARK],
+        [FRAME_PAPER.light.fill, FRAME_PAPER.dark.fill],
+        [FRAME_PAPER.light.stroke, FRAME_PAPER.dark.stroke],
+        [LANE_PAPER.light.fill, LANE_PAPER.dark.fill],
+        [LANE_PAPER.light.stroke, LANE_PAPER.dark.stroke]
+    );
+    STICKY_COLORS.forEach((light, i) => {
+        const dark = STICKY_COLORS_DARK[i];
+        if (dark) twins.push([light, dark]);
+    });
+    for (const theme of THEMES) {
+        const twin = THEME_BY_ID[counterpartTheme(theme.id)];
+        if (theme.mode !== "light" || !twin || twin.mode !== "dark") continue;
+        twins.push([theme.edgeStroke, twin.edgeStroke], [theme.ink, twin.ink]);
+    }
+    const table = new Map<string, string>();
+    for (const [light, dark] of twins) {
+        const lit = mode === "dark" ? dark : light;
+        if (!table.has(light)) table.set(light, lit);
+        if (!table.has(dark)) table.set(dark, lit);
+    }
+    RELIGHT_TABLES.set(mode, table);
+    return table;
+}

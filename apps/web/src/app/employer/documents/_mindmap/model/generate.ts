@@ -459,8 +459,8 @@ function mermaidFlowchart(
             `That flowchart has ${count} nodes; keep it to ${DIAGRAM_LIMITS.nodes} or fewer.`
         );
     }
-    // The theme lays the paper and keeps the frames as paper frames
-    // (`applyThemeToPage`); the boxes and arrows keep the look they were made in.
+    // The theme lays the paper and relights the frames (`relightPage`); the
+    // boxes and arrows keep the look they were made in.
     const rawPage = raw.pages[0]!;
     const madeNode = new Map(rawPage.nodes.map(nd => [nd.id, nd]));
     const madeEdge = new Map(rawPage.edges.map(e => [e.id, e]));

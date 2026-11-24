@@ -1,4 +1,4 @@
-import { graphIndex, nodeById } from "./doc";
+import { graphIndex, nodeById, worksAsFlow } from "./doc";
 import {
     counterpartTheme,
     type DocTheme,
@@ -6,6 +6,7 @@ import {
     isFramePaper,
     neutralsFor,
     readableInkOn,
+    relight,
     stickyColors,
     stickyInk,
     swatchFor,
@@ -457,15 +458,77 @@ export function applyThemeToPage(page: DiagramPage, themeId: string): DiagramPag
 }
 
 /**
+ * A flowchart or a board in a theme: the theme's paper and lighting, and
+ * every colour keeping what it means — a step stays a step's blue, a
+ * decision amber, a box someone painted pink stays pink, a lane stays paper —
+ * in the theme's lighting (`relight`). Whether a box has an outline is not a
+ * colour and does not change. A colour that is no palette colour (one typed
+ * in) stays as it is; a line or a caption with none falls back to the
+ * lighting's hairline and ink, as on any board.
+ *
+ * Repainting a flowchart in the theme's branch colours (`applyThemeToPage`)
+ * undid colour-by-kind: picking Ocean turned a Start pill teal and a decision
+ * violet, and switching to the dark twin did the same (2026-11-23).
+ */
+export function relightPage(page: DiagramPage, themeId: string): DiagramPage {
+    const theme = THEME_BY_ID[themeId];
+    if (!theme) return page;
+    const mode = theme.mode;
+    const n = neutralsFor(mode);
+    const lit = (color: string): string | null => relight(color, mode);
+    const nodes = page.nodes.map((nd): DiagramNode => {
+        // A group is a bracket round other shapes and an image its own picture.
+        if (nd.shape === "group" || nd.shape === "image") return nd;
+        if (nd.shape === "sticky") {
+            return {
+                ...nd,
+                style: { ...nd.style, fill: lit(nd.style.fill) ?? nd.style.fill },
+                textStyle: { ...nd.textStyle, color: stickyInk(mode) },
+            };
+        }
+        const unfilled = nd.style.fill === "none";
+        const stroke =
+            nd.style.stroke === "none"
+                ? "none"
+                : (lit(nd.style.stroke) ?? (unfilled ? n.hairline : nd.style.stroke));
+        return {
+            ...nd,
+            style: {
+                ...nd.style,
+                fill: unfilled ? "none" : (lit(nd.style.fill) ?? nd.style.fill),
+                stroke,
+            },
+            textStyle: {
+                ...nd.textStyle,
+                color: lit(nd.textStyle.color) ?? (unfilled ? n.ink : nd.textStyle.color),
+            },
+        };
+    });
+    const edges = page.edges.map(
+        (e): DiagramEdge => ({
+            ...e,
+            style: { ...e.style, stroke: lit(e.style.stroke) ?? e.style.stroke },
+            textStyle: { ...e.textStyle, color: lit(e.textStyle.color) ?? n.inkSoft },
+        })
+    );
+    return { ...page, nodes, edges, background: { ...page.background, color: theme.background } };
+}
+
+/**
  * Repaint the whole document. Every page, not just the active one — a theme is
  * a property of the document, and leaving page 2 on the old palette is not a
  * choice anyone makes on purpose; it stays invisible until they switch pages.
+ * A document worked as a flowchart or a board is relit rather than repainted
+ * (`relightPage`): its colours mean kinds, not branches.
  */
 export function applyThemeToDoc(doc: MindmapDoc, themeId: string): MindmapDoc {
     if (!THEME_BY_ID[themeId]) return doc;
+    const flow = worksAsFlow(doc.settings.kind);
     return {
         ...doc,
-        pages: doc.pages.map(page => applyThemeToPage(page, themeId)),
+        pages: doc.pages.map(page =>
+            flow ? relightPage(page, themeId) : applyThemeToPage(page, themeId)
+        ),
         settings: { ...doc.settings, paletteId: themeId },
     };
 }

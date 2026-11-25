@@ -216,11 +216,9 @@ export async function resolveDocumentScope(subject: ScopeSubject): Promise<Docum
         };
     }
 
-    if (
-        deniedCategories.length === 0 &&
-        deniedDocumentIds.length === 0 &&
-        allowedDocumentIds.length === 0
-    ) {
+    // Nothing denied means nothing hidden: explicit grants only re-allow what a denial
+    // would hide, so a person granted every restricted file or folder sees everything.
+    if (deniedCategories.length === 0 && deniedDocumentIds.length === 0) {
         return SCOPE_EVERYTHING;
     }
 

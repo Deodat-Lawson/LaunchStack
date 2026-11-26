@@ -2,6 +2,7 @@ import { invokeStructured, resolveChatModel } from "@launchstack/llm";
 import { HumanMessage, SystemMessage } from "@langchain/core/messages";
 import { z } from "zod";
 import type { RawSearchResult, SearchCategory, SearchResult } from "./types";
+import { ResultSubjectEnum } from "./types";
 
 // ─── Output schema for LLM (validate SearchResult[]) ──────────────────────────
 
@@ -11,6 +12,9 @@ const SearchResultSchema = z.object({
         .describe("URL of the source (must be one of the provided raw result URLs)"),
     summary: z.string().describe("Short summary of the result"),
     description: z.string().describe("Longer description of relevance to the query and company"),
+    subject: ResultSubjectEnum.describe(
+        'Who the result is about. "market": the wider market, a trend, a platform, or other companies. "company": the company in COMPANY CONTEXT itself (the same business, not just the same name). "namesake": a different company or product that only shares a name with the company or one of its products.'
+    ),
 });
 
 const SynthesizerOutputSchema = z.object({
@@ -36,8 +40,14 @@ Given a list of raw search results (URL, title, content, score), the user's quer
 2. Rank them by relevance to the company context and the user's query.
 3. For each selected result, output:
    - sourceUrl: exactly one of the URLs from the input raw results (do not invent URLs).
-   - summary: a short summary (1-2 sentences).
+   - summary: a short summary (1-2 sentences) of what the result itself says.
    - description: a longer description of why this result is relevant to the query and company context.
+   - subject: who the result is about. "market" for the wider market, a trend, a platform, or other companies (most results). "company" for the company in COMPANY CONTEXT itself. "namesake" for a different company or product that only shares a name with the company or one of its products.
+
+WHO A RESULT IS ABOUT
+COMPANY CONTEXT describes one specific company. The web is full of unrelated companies and products with the same name. A matching name is not enough: a result is about this company only when the business it describes is the one in COMPANY CONTEXT. If the names match and the business differs, or you cannot tell, it is a namesake.
+- Do not select a namesake when another result will do. If you do select one, mark it "namesake".
+- Never write, in summary or description, that something a result describes belongs to the company (a product, feature, technology, customer, funding or result) unless COMPANY CONTEXT says so. The description explains why a result matters to the company's market; it does not add facts about the company.
 
 You must only use sourceUrl values that appear in the raw results list. Do not add or invent URLs.`;
 
@@ -68,7 +78,7 @@ ${categoryBlock}
 RAW SEARCH RESULTS (use only these URLs as sourceUrl):
 ${resultsBlock}
 
-Select up to 5 most relevant results, rank by relevance to company context, and provide sourceUrl (from the list above), summary, and description for each.`;
+Select up to 5 most relevant results, rank by relevance to company context, and provide sourceUrl (from the list above), summary, description, and subject for each.`;
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
@@ -76,6 +86,12 @@ Select up to 5 most relevant results, rank by relevance to company context, and 
 /**
  * Synthesizes raw search results into up to 5 SearchResults (summary + description).
  * If fewer than 5 raw results exist or LLM returns fewer, pads with placeholder entries.
+ *
+ * A result the model judges to be about a namesake (a different company or
+ * product that only shares the company's name) is dropped here, for every
+ * caller: nothing in it is true of the company the search was run for. The
+ * rest carry `subject`, so a caller that wants only the outside world (the
+ * campaign generator) can leave out results about the company too.
  */
 export async function synthesizeResults(
     rawResults: RawSearchResult[],
@@ -105,8 +121,20 @@ export async function synthesizeResults(
         throw new Error(`Synthesizer output validation failed: ${parsed.error.message}`);
     }
 
-    const synthesized = parsed.data.results as SearchResult[];
-    const padded: SearchResult[] = [...synthesized];
+    const padded: SearchResult[] = [];
+    let namesakes = 0;
+    for (const result of parsed.data.results) {
+        if (result.subject === "namesake") {
+            namesakes += 1;
+            continue;
+        }
+        padded.push({ ...result, subject: result.subject });
+    }
+    if (namesakes > 0) {
+        console.log(
+            `[trend-search] dropped ${namesakes} result${namesakes !== 1 ? "s" : ""} about a same-name company or product`
+        );
+    }
 
     while (padded.length < TARGET_COUNT) {
         padded.push({ ...PLACEHOLDER_RESULT });

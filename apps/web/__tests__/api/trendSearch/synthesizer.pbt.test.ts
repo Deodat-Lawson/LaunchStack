@@ -81,6 +81,8 @@ function buildMockResults(rawResults: RawSearchResult[], count: number) {
         sourceUrl: urls[i] ?? "",
         summary: `Summary for result ${i + 1}`,
         description: `Description for result ${i + 1} relevant to query and company.`,
+        // The model says who each result is about; these are ordinary market results.
+        subject: "market" as const,
     }));
 }
 
@@ -192,8 +194,18 @@ describe("Unit: fewer than 5 raw results triggers placeholder padding", () => {
 
         mockInvoke.mockResolvedValue({
             results: [
-                { sourceUrl: "https://a.com/1", summary: "Sum A", description: "Desc A" },
-                { sourceUrl: "https://b.com/2", summary: "Sum B", description: "Desc B" },
+                {
+                    sourceUrl: "https://a.com/1",
+                    summary: "Sum A",
+                    description: "Desc A",
+                    subject: "market",
+                },
+                {
+                    sourceUrl: "https://b.com/2",
+                    summary: "Sum B",
+                    description: "Desc B",
+                    subject: "market",
+                },
             ],
         });
 

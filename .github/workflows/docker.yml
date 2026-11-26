@@ -342,6 +342,12 @@ jobs:
           # better-auth throws on the default secret during `next build`, and
           # SKIP_ENV_VALIDATION only bypasses the zod schema, not that check.
           BETTER_AUTH_SECRET: ci-better-auth-secret-placeholder
+          # `next build` of apps/web peaks above Node's default ~2GB heap and
+          # aborts with "heap out of memory" (exit 134) on some runs and not
+          # others. The same heap as the two other places this build runs:
+          # CI.yml's build job and the Dockerfile's builder stage. The runner
+          # has 16GB.
+          NODE_OPTIONS: --max-old-space-size=8192
         run: pnpm --filter @launchstack/web build
 
       - name: Set up Docker Buildx

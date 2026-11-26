@@ -58,7 +58,7 @@ export async function researchPlatformTrends(args: {
             setCachedTrendSearch(prompt, companyContext, trendOutput);
         }
 
-        const top = trendOutput.results.slice(0, maxResults);
+        const top = trendOutput.results.filter(isOutsideWorld).slice(0, maxResults);
 
         return top.map<MarketingResearchResult>(item => ({
             title: item.summary?.trim() || "Untitled",
@@ -72,4 +72,19 @@ export async function researchPlatformTrends(args: {
         console.warn("[marketing-pipeline] trend search failed:", error);
         return [];
     }
+}
+
+type TrendResult = Awaited<ReturnType<typeof runTrendSearch>>["results"][number];
+
+/**
+ * Trend research is the outside world: hooks and framing for a post, never
+ * facts about us. The synthesizer says who each result is about (and has
+ * already dropped same-name companies and products); only the market's are
+ * kept. A result it took to be about our own company goes too: what is true
+ * of us comes from the workspace's documents, and a result that looks like us
+ * is as likely a namesake the model fell for. A result with no subject (an
+ * older cached search) is kept.
+ */
+function isOutsideWorld(result: TrendResult): boolean {
+    return result.subject === undefined || result.subject === "market";
 }

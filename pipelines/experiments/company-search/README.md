@@ -32,6 +32,10 @@ One experiment: `pnpm exec tsx experiments/company-search/run.ts e1`. Each
 writes `results/<experiment>.json` and prints a table. Two replays of the
 same recording give byte-identical result files.
 
+`e1-production` is not an experiment but a check of what was built from E1:
+it runs the app's own keyless place search against the recorded servers and
+writes `results/e1-production-sweep.json` (see "E1 against production").
+
 The recordings are not in git, so a fresh checkout has none. A replay then
 stops with an error that names what is missing and leaves `results/` as it
 is: no experiment writes a partial result, and none goes to the network. The
@@ -140,6 +144,39 @@ often each target was returned (`populationEstimates`).
 Stochastic policies run with 30 seeds; a result is the mean with a 95%
 bootstrap interval over seeds.
 
+## E1 against production
+
+E1's finding was built into the keyless place search
+(`src/distribution/keyless/pool.ts`, `sweep.ts`): Overpass first, a letter
+sweep of Photon with box splitting when Overpass does not answer, and a
+stored pool so a second run carries on. `e1-where-to-look/production.ts`
+replays that code, called the way the app calls it
+(`createKeylessPorts().searchPlaces`), for each recorded segment:
+
+- **Photon is replayed by URL.** The sweep has to send requests the recording
+  holds, byte for byte; any other request is an error. So the box, the page
+  size and the request shape are checked along with the numbers.
+- **The OSM API is replayed by place.** The recording read the same places'
+  tags in other groups of 100, so a request gets the recorded tags of the ids
+  it names.
+- **Overpass is the recorded answer to the same statement** (every named
+  place with the tag in the country), served only to a query that holds that
+  statement; or it is down, which is what makes the sweep run.
+
+`production-sweep.test.ts` asserts the outcome and prints it beside today's
+first step (`searchPhoton`, unchanged, replayed) and the one live sample of
+the old whole search. On the recordings of 2026-11-24, mean over the six
+segments: one answered Overpass request knows 100% of the named places; the
+sweep knows 45% after 16 Photon requests, 72% after 32, 90% after 64 and 94%
+after 96; runs of 64 complete five of the six segments in one or two runs
+and the largest (2,637 places) in five, and no answered request is sent
+twice. The old first step kept 0 to 17 on-target places with a website for 6
+to 12 requests.
+
+What the replay does not show: how the live servers answer today, how long
+they take, and a country too large for one Overpass request (those are asked
+city by city; the benchmark has small countries only).
+
 ## Honest limits
 
 - **The paid company index was not tested.** No Exa call was made. E2 is a
@@ -163,7 +200,10 @@ bootstrap interval over seeds.
   server). In E2 planned words are recorded 40 pages deep and mined words 10.
 - **One live sample of production's whole place search per segment.** Its
   Overpass step depends on how busy the public servers were that minute; the
-  attempts are in the results file.
+  attempts are in the results file. The sample is of the search as it was on
+  2026-11-24 (Photon, then Overpass, then Nominatim, 40 places kept). The
+  search has since changed (see "E1 against production"), so recording a
+  segment again samples the new one.
 - **One segment was completed two days after the rest.** When `be-brewery`
   was first recorded (24 November 2026), one of its 58 sweep requests got no
   answer: the letter "s" over all of Belgium, HTTP 503. It was asked again on

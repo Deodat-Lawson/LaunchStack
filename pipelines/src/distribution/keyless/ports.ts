@@ -32,7 +32,7 @@ import type { EmbedTexts, JudgeFit } from "../semantic";
 import { nativeTermsFor, overpassAreas } from "./geo";
 import { searchNominatim } from "./nominatim";
 import { rolesForOsmCategories, KEYLESS_USER_AGENT, type OsmPlace } from "./osm";
-import { searchPhoton } from "./photon";
+import { PHOTON_URL, searchPhoton } from "./photon";
 import { buildKeylessPlan, KEYLESS_MODEL_ID, KEYLESS_PLAYBOOK_HASH, keywordsFor } from "./plan";
 import {
     createMemoryPlacePoolStore,
@@ -44,21 +44,24 @@ import {
 } from "./pool";
 import { profileFromPages } from "./profile";
 import { osmVocabulary } from "./taginfo";
-import { sharedHostThrottle, throttledFetch, type HostThrottle } from "./throttle";
+import { requestHost, sharedHostThrottle, throttledFetch, type HostThrottle } from "./throttle";
 
 /** Places handed to ranking per territory unless told otherwise. */
 export const DEFAULT_PLACES_PER_TERRITORY = 2_000;
 /**
- * Photon requests one run may send when it has to sweep. In the benchmark a
- * letter sweep knew about 90% of a country's places of one kind after 64.
+ * Photon requests one run may send, over all its territories: the sweep, the
+ * lookup that places a region on the map, and the name search for a
+ * territory where nothing carries the tags. In the benchmark a letter sweep
+ * knew about 90% of a country's places of one kind after 64.
  */
 export const DEFAULT_SWEEP_REQUESTS_PER_RUN = 64;
 const MAX_SWEEP_REQUESTS_PER_RUN = 500;
+const PHOTON_HOST = new URL(PHOTON_URL).hostname;
 
 /**
- * The sweep's request cap from the environment: PROSPECTS_PLACE_SWEEP_REQUESTS,
- * a whole number from 0 (never sweep; Overpass only) to 500. Anything else
- * means the default.
+ * The run's Photon request cap from the environment:
+ * PROSPECTS_PLACE_SWEEP_REQUESTS, a whole number from 0 (Photon is asked
+ * nothing; Overpass only) to 500. Anything else means the default.
  */
 export function readSweepRequestsPerRun(
     env: Record<string, string | undefined> = process.env
@@ -84,8 +87,8 @@ export interface KeylessPortsOptions {
     /** Where place pools are kept between runs; this process's memory when absent. */
     placePools?: PlacePoolStore;
     /**
-     * Photon requests one run may send over all its territories when it has
-     * to sweep (default: PROSPECTS_PLACE_SWEEP_REQUESTS, else 64).
+     * Photon requests one run may send over all its territories (default:
+     * PROSPECTS_PLACE_SWEEP_REQUESTS, else 64).
      */
     sweepRequestsPerRun?: number;
     /** Per-host pauses for the map servers; the process-wide throttle when absent. */
@@ -188,21 +191,37 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
                             places.push(p);
                     }
                 };
-                try {
-                    add(
-                        await searchPhoton(
-                            {
-                                country: territory.country,
-                                region,
-                                keywords,
-                                selectors: [],
-                                limit: Math.min(max, 40),
-                            },
-                            { fetchImpl: politeFetch }
-                        )
-                    );
-                } catch (error) {
-                    errors.push(error instanceof Error ? error : new Error(String(error)));
+                // The name search asks Photon as well (a lookup and two searches
+                // per city): those requests come out of the run's same cap.
+                let nameRequests = 0;
+                const withinCap: typeof fetch = (input, init) => {
+                    if (requestHost(input) === PHOTON_HOST) {
+                        if (nameRequests >= sweepRequestsLeft)
+                            return Promise.reject(
+                                new Error("The run's Photon request cap is reached")
+                            );
+                        nameRequests += 1;
+                    }
+                    return politeFetch(input, init);
+                };
+                if (sweepRequestsLeft > 0) {
+                    try {
+                        add(
+                            await searchPhoton(
+                                {
+                                    country: territory.country,
+                                    region,
+                                    keywords,
+                                    selectors: [],
+                                    limit: Math.min(max, 40),
+                                },
+                                { fetchImpl: withinCap }
+                            )
+                        );
+                    } catch (error) {
+                        errors.push(error instanceof Error ? error : new Error(String(error)));
+                    }
+                    sweepRequestsLeft = Math.max(0, sweepRequestsLeft - nameRequests);
                 }
                 // Nominatim by name, in the local languages ("koffiebranderij", "Bäckerei").
                 const terms = [

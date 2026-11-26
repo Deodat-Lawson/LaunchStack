@@ -381,9 +381,14 @@ async function fillPool(
 
     // 2. The sweep: Photon, letter by letter, for what this call may send.
     if (tags.length > 0 && deps.sweepRequests > 0 && !deps.signal?.aborted) {
+        // Placing a region on the map is a Photon request too: it comes out of the cap.
+        let located = 0;
         if (!state.sweep) {
-            const box = await sweepBox(country, request.region ?? null, deps);
-            if (box) state.sweep = newSweep(box, tags);
+            const found = await sweepBox(country, request.region ?? null, deps);
+            located = found.photonRequests;
+            report.requests.photon += located;
+            state.requests.photon += located;
+            if (found.box) state.sweep = newSweep(found.box, tags);
         }
         if (state.sweep) {
             report.asked.push("sweep");
@@ -391,7 +396,7 @@ async function fillPool(
             for (const hit of state.unread) known.add(hit.id);
             const result = await runSweep(state.sweep, {
                 country,
-                maxRequests: deps.sweepRequests,
+                maxRequests: deps.sweepRequests - located,
                 fetchImpl: deps.fetchImpl,
                 throttle: deps.throttle,
                 signal: deps.signal,
@@ -443,18 +448,30 @@ async function fillPool(
     return finish();
 }
 
-/** The box the sweep covers: around the region's centre, or the whole country. */
+/**
+ * The box the sweep covers: around the region's centre (one Photon request
+ * to place it), or the whole country (from the table, no request).
+ */
 async function sweepBox(
     country: string,
     region: string | null,
     deps: PlacePoolDeps
-): Promise<Bbox | null> {
-    if (!region) return countryBox(country);
+): Promise<{ box: Bbox | null; photonRequests: number }> {
+    if (!region) return { box: countryBox(country), photonRequests: 0 };
     const fetchImpl = deps.fetchImpl ?? fetch;
     const centre = await locateCity(region, country, {
         fetchImpl: deps.throttle ? throttledFetch(fetchImpl, deps.throttle) : fetchImpl,
         signal: deps.signal,
     }).catch(() => null);
-    if (!centre) return null;
-    return [centre.lon - BOX_LON, centre.lat - BOX_LAT, centre.lon + BOX_LON, centre.lat + BOX_LAT];
+    return {
+        box: centre
+            ? [
+                  centre.lon - BOX_LON,
+                  centre.lat - BOX_LAT,
+                  centre.lon + BOX_LON,
+                  centre.lat + BOX_LAT,
+              ]
+            : null,
+        photonRequests: 1,
+    };
 }

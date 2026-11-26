@@ -65,7 +65,8 @@ export function createHostThrottle(options: HostThrottleOptions = {}): HostThrot
 /** The process-wide throttle: every keyless run in this process shares the hosts' queues. */
 export const sharedHostThrottle: HostThrottle = createHostThrottle();
 
-function hostOf(input: Parameters<typeof fetch>[0]): string | null {
+/** The host a fetch call is for; null when its URL cannot be read. */
+export function requestHost(input: Parameters<typeof fetch>[0]): string | null {
     const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
     try {
         return new URL(url).hostname;
@@ -77,7 +78,7 @@ function hostOf(input: Parameters<typeof fetch>[0]): string | null {
 /** A `fetch` whose requests wait their host's turn. */
 export function throttledFetch(fetchImpl: typeof fetch, throttle: HostThrottle): typeof fetch {
     return (input, init) => {
-        const host = hostOf(input);
+        const host = requestHost(input);
         return host === null
             ? fetchImpl(input, init)
             : throttle(host, () => fetchImpl(input, init));

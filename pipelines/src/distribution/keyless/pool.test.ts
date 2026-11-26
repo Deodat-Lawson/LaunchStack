@@ -391,6 +391,21 @@ describe("the sweep, when Overpass does not answer", () => {
         expect(new URL(map.sweepUrls()[0]!).searchParams.get("bbox")).toBe(
             "9.6500,53.3000,10.3500,53.8000"
         );
+        // Placing the region on the map is one more Photon request, and it is counted.
+        expect(map.count("photon")).toBe(map.sweepUrls().length + 1);
+        expect(report.requests.photon).toBe(map.count("photon"));
+
+        // …inside the cap: a cap of 10 is the lookup and nine boxes.
+        const capped = createFakeMap(hamburg, {
+            overpass: 504,
+            cities: { Hamburg: { lon: 10.0, lat: 53.55, country: "DE" } },
+        });
+        const tight = await gatherPlacePool(
+            { ...request, country: "DE", region: "Hamburg" },
+            { store: createMemoryPlacePoolStore(), sweepRequests: 10, fetchImpl: capped.fetchImpl }
+        );
+        expect(capped.count("photon")).toBe(10);
+        expect(tight.report.requests.photon).toBe(10);
     });
 
     it("reads a failed tag request once more on the next run, then finishes without those places", async () => {

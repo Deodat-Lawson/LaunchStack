@@ -1099,18 +1099,20 @@ describe("keyless place search", () => {
         await quiet(() => ports.searchPlaces!({ ...bicycles, territory: { country: "BE" } }));
         // 30 each: the cap is the run's, whatever the number of territories.
         expect(map.sweepUrls()).toHaveLength(60);
-        // A third query in the same run has nothing left to send.
+        // A third query in the same run has nothing left to send: not a sweep
+        // request, and not the name search's Photon requests either.
         await quiet(() =>
             ports.searchPlaces!({ ...bicycles, categoryIds: ['["shop"="sports"]'] }).catch(() => [])
         );
         expect(map.sweepUrls()).toHaveLength(60);
+        expect(map.count("photon")).toBe(60);
     });
 
     it("reads the request cap from the environment", () => {
         expect(DEFAULT_SWEEP_REQUESTS_PER_RUN).toBe(64);
         expect(readSweepRequestsPerRun({})).toBe(64);
         expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: " 120 " })).toBe(120);
-        // Zero turns the sweep off: Overpass only.
+        // Zero: Photon is asked nothing; Overpass only.
         expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "0" })).toBe(0);
         expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "100000" })).toBe(500);
         expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "many" })).toBe(64);
@@ -1118,50 +1120,66 @@ describe("keyless place search", () => {
     });
 
     it("looks for the segment's words in place names when nothing carries its tags", async () => {
-        const calls: string[] = [];
-        const fetchImpl: typeof fetch = async url => {
-            const u = urlOf(url);
-            calls.push(new URL(u).hostname);
-            if (u.includes("overpass")) return new Response(JSON.stringify({ elements: [] }));
-            if (u.includes("photon")) return new Response(JSON.stringify({ features: [] }));
-            if (u.includes("nominatim"))
-                return new Response(
-                    JSON.stringify([
-                        {
-                            osm_type: "node",
-                            osm_id: 7,
-                            name: "Koffiebranderij Blanche Dael",
-                            lat: "50.85",
-                            lon: "5.69",
-                            category: "shop",
-                            type: "coffee",
-                            extratags: { website: "https://blanchedael.example" },
-                            address: { city: "Maastricht" },
-                        },
-                    ])
-                );
-            return new Response("not found", { status: 404 });
+        const nameSearch = (sweepRequestsPerRun?: number) => {
+            const calls: string[] = [];
+            const fetchImpl: typeof fetch = async url => {
+                const u = urlOf(url);
+                calls.push(new URL(u).hostname);
+                if (u.includes("overpass")) return new Response(JSON.stringify({ elements: [] }));
+                if (u.includes("photon")) return new Response(JSON.stringify({ features: [] }));
+                if (u.includes("nominatim"))
+                    return new Response(
+                        JSON.stringify([
+                            {
+                                osm_type: "node",
+                                osm_id: 7,
+                                name: "Koffiebranderij Blanche Dael",
+                                lat: "50.85",
+                                lon: "5.69",
+                                category: "shop",
+                                type: "coffee",
+                                extratags: { website: "https://blanchedael.example" },
+                                address: { city: "Maastricht" },
+                            },
+                        ])
+                    );
+                return new Response("not found", { status: 404 });
+            };
+            const ports = createKeylessPorts({
+                fetchImpl,
+                placePools: createMemoryPlacePoolStore(),
+                throttle: noWait,
+                sweepRequestsPerRun,
+            });
+            const found = quiet(() =>
+                ports.searchPlaces!({
+                    query: "specialty coffee",
+                    categoryIds: ['["shop"="coffee"]'],
+                    territory: { country: "NL" },
+                })
+            );
+            return { calls, found };
         };
-        const ports = createKeylessPorts({
-            fetchImpl,
-            placePools: createMemoryPlacePoolStore(),
-            throttle: noWait,
-            sweepRequestsPerRun: 0,
-        });
-        const found = await quiet(() =>
-            ports.searchPlaces!({
-                query: "specialty coffee",
-                categoryIds: ['["shop"="coffee"]'],
-                territory: { country: "NL" },
-            })
-        );
-        expect(found.map(p => p.name)).toEqual(["Koffiebranderij Blanche Dael"]);
-        // Overpass first, then names: Photon, then Nominatim.
+
+        const { calls, found } = nameSearch();
+        expect((await found).map(p => p.name)).toEqual(["Koffiebranderij Blanche Dael"]);
+        // Overpass first; then Photon (the sweep finds nothing, then the name
+        // search); Nominatim last.
         expect(calls[0]).toBe("overpass-api.de");
-        expect(calls.indexOf("photon.komoot.io")).toBeGreaterThan(0);
+        const photon = calls.filter(host => host === "photon.komoot.io").length;
+        // 26 letters, then a city lookup for each of the three largest cities.
+        expect(photon).toBe(26 + 3);
         expect(calls.lastIndexOf("nominatim.openstreetmap.org")).toBeGreaterThan(
             calls.lastIndexOf("photon.komoot.io")
         );
+
+        // The cap holds for the name search too: with a cap of 27, one lookup; with 0, none.
+        const tight = nameSearch(27);
+        await tight.found;
+        expect(tight.calls.filter(host => host === "photon.komoot.io")).toHaveLength(27);
+        const none = nameSearch(0);
+        expect((await none.found).map(p => p.name)).toEqual(["Koffiebranderij Blanche Dael"]);
+        expect(none.calls).not.toContain("photon.komoot.io");
     });
 
     it("fails the source, with the reason, when no server answers and nothing is found", async () => {

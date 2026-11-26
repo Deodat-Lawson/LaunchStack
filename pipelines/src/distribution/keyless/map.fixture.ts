@@ -34,8 +34,11 @@ export interface FakeMapOptions {
     overpassByHost?: Record<string, OverpassMode>;
     /** Photon requests (by full URL) that fail with a 503. */
     photonFails?: (url: string) => boolean;
-    /** OSM API requests that fail. */
-    osmApiFails?: (url: string) => boolean;
+    /**
+     * OSM API requests that fail: `true` for a 404 (the API refuses this
+     * request), or the status to fail with (503 for an API that is down).
+     */
+    osmApiFails?: (url: string) => boolean | number;
     /** Where Photon places a city asked for by name: "Hamburg" → its centre. */
     cities?: Record<string, { lon: number; lat: number; country: string }>;
 }
@@ -139,8 +142,11 @@ export function createFakeMap(places: readonly FakePlace[], options: FakeMapOpti
         }
         if (host === "api.openstreetmap.org") {
             calls.push(`osmapi ${url.href}`);
-            if (options.osmApiFails?.(url.href))
-                return Promise.resolve(new Response("gone", { status: 404 }));
+            const fails = options.osmApiFails?.(url.href);
+            if (fails)
+                return Promise.resolve(
+                    new Response("no", { status: typeof fails === "number" ? fails : 404 })
+                );
             const type = url.pathname.includes("/nodes") ? "N" : "W";
             const ids = (url.searchParams.get(type === "N" ? "nodes" : "ways") ?? "")
                 .split(",")

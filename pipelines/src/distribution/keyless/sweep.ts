@@ -34,7 +34,11 @@ export const PHOTON_PAGE = 50;
 export const SWEEP_MAX_DEPTH = 8;
 /** The name prefixes asked. Photon folds accents, so "e" also finds "É". */
 export const SWEEP_LETTERS: readonly string[] = "abcdefghijklmnopqrstuvwxyz".split("");
-/** This many failures in a row end the run's sweep: the server is not answering. */
+/**
+ * This many failures in a row end the run's sweep: the server is not
+ * answering. Those boxes go back in their queues with nothing held against
+ * them, so an outage, however long, loses no part of the map.
+ */
 const MAX_FAILURES_IN_A_ROW = 3;
 /** Places per OSM API request. */
 const TAGS_PER_REQUEST = 100;
@@ -62,11 +66,13 @@ export interface SweepState {
     answered: number;
     /** Boxes still full at the depth limit: places there may stay hidden. */
     cutOff: number;
-    /** Boxes given up on after failing on two runs. */
+    /** Boxes given up on: their request failed on two runs while Photon answered others. */
     dropped: number;
     /**
-     * Boxes whose request failed: each is asked once more, at the start of
-     * the next run, not seconds later while the server is still struggling.
+     * Boxes whose request failed while Photon was answering others: each is
+     * asked once more, at the start of the next run, not seconds later. A
+     * box that fails while nothing is answered (an outage) is not here: it
+     * simply goes back in its queue.
      */
     deferred: Array<{ arm: number; node: string }>;
 }
@@ -183,6 +189,21 @@ export interface SweepClientOptions {
     throttle?: HostThrottle;
 }
 
+/** A response that was not a success, with its status. */
+class HttpStatusError extends Error {
+    constructor(
+        host: string,
+        readonly status: number
+    ) {
+        super(`${host} ${status}`);
+        this.name = "HttpStatusError";
+    }
+    /** The server understood and refused this request: asking again will not help. */
+    get requestsOwnFault(): boolean {
+        return this.status >= 400 && this.status < 500 && this.status !== 429;
+    }
+}
+
 async function getJson<T>(url: string, options: SweepClientOptions): Promise<T> {
     const host = new URL(url).hostname;
     const send = async (): Promise<T> => {
@@ -195,7 +216,7 @@ async function getJson<T>(url: string, options: SweepClientOptions): Promise<T> 
                 },
                 signal: timed.signal,
             });
-            if (!response.ok) throw new Error(`${host} ${response.status}`);
+            if (!response.ok) throw new HttpStatusError(host, response.status);
             return (await response.json()) as T;
         } finally {
             timed.clear();
@@ -236,6 +257,10 @@ export async function runSweep(
     const maxDepth = options.maxDepth ?? SWEEP_MAX_DEPTH;
     const country = options.country.toUpperCase();
     const result: SweepRunResult = { sent: 0, answered: 0, failed: 0, stopped: "cap" };
+    if (options.maxRequests <= 0) {
+        if (sweepPending(state) === 0) result.stopped = "complete";
+        return result;
+    }
     // Boxes that failed on an earlier run get their second and last try first.
     const secondTry = new Set<string>();
     for (const { arm, node } of state.deferred.splice(0)) {
@@ -244,16 +269,36 @@ export async function runSweep(
         owner.queue.unshift(node);
         secondTry.add(`${arm} ${node}`);
     }
-    let failuresInARow = 0;
+    // Failures since the last answer. Whether they count against their boxes
+    // is only known later: an answer after them says the server was up and
+    // the box was the trouble; a run of failures says the server was down.
+    let unsettled: Array<{ arm: SweepArm; index: number; node: string }> = [];
+    const settle = (serverWasUp: boolean) => {
+        for (const { arm, index, node } of unsettled) {
+            const second = secondTry.has(`${index} ${node}`);
+            if (serverWasUp) {
+                if (second) state.dropped += 1;
+                else state.deferred.push({ arm: index, node });
+            } else if (second) {
+                // Still owed its second try.
+                state.deferred.push({ arm: index, node });
+            } else {
+                // As if it had not been asked.
+                arm.queue.unshift(node);
+                arm.turns -= 1;
+            }
+        }
+        unsettled = [];
+    };
     while (result.sent < options.maxRequests) {
         if (options.signal?.aborted) {
+            settle(true);
             result.stopped = "aborted";
             return result;
         }
         const arm = nextArm(state);
         if (!arm) break;
         const node = arm.queue.shift()!;
-        const failureKey = `${state.arms.indexOf(arm)} ${node}`;
         arm.turns += 1;
         result.sent += 1;
         let features: PhotonFeature[];
@@ -265,16 +310,16 @@ export async function runSweep(
             features = json.features ?? [];
         } catch {
             result.failed += 1;
-            failuresInARow += 1;
-            if (secondTry.has(failureKey)) state.dropped += 1;
-            else state.deferred.push({ arm: state.arms.indexOf(arm), node });
-            if (failuresInARow >= MAX_FAILURES_IN_A_ROW) {
+            unsettled.push({ arm, index: state.arms.indexOf(arm), node });
+            if (unsettled.length >= MAX_FAILURES_IN_A_ROW) {
+                // Photon is not answering: nothing is held against these boxes.
+                settle(false);
                 result.stopped = "failing";
                 return result;
             }
             continue;
         }
-        failuresInARow = 0;
+        settle(true);
         state.answered += 1;
         result.answered += 1;
 
@@ -306,6 +351,8 @@ export async function runSweep(
             else state.cutOff += 1;
         }
     }
+    // A failure or two at the very end of a run is taken as the box's own.
+    settle(true);
     if (sweepPending(state) === 0) result.stopped = "complete";
     else if (!nextArm(state)) result.stopped = "deferred";
     return result;
@@ -324,9 +371,17 @@ export interface TagReadResult {
     places: OsmPlace[];
     /** Ids read that carry no website (or are gone): never read again. */
     without: string[];
-    /** Hits whose request failed: still unread. */
+    /** Hits not read: their request failed, or the reads stopped before reaching them. */
     unread: SweepHit[];
+    /**
+     * Of `unread`, the ids whose failure looks like their own request's, not
+     * an outage: the API refused the request outright, or it answered other
+     * requests in the same read.
+     */
+    struck: string[];
+    /** Requests sent, and how many of them were answered. */
     requests: number;
+    answered: number;
 }
 
 /**
@@ -340,7 +395,17 @@ export async function readPlaceTags(
     options: SweepClientOptions = {}
 ): Promise<TagReadResult> {
     const base = options.osmApiUrl ?? OSM_API_URL;
-    const result: TagReadResult = { places: [], without: [], unread: [], requests: 0 };
+    const result: TagReadResult = {
+        places: [],
+        without: [],
+        unread: [],
+        struck: [],
+        requests: 0,
+        answered: 0,
+    };
+    const failed: string[] = [];
+    const refused: string[] = [];
+    let failuresInARow = 0;
     const byType: Record<OsmElement["type"], SweepHit[]> = { node: [], way: [], relation: [] };
     for (const hit of hits) {
         const type = /^osm:(node|way|relation)\//.exec(hit.id)?.[1] as
@@ -352,7 +417,8 @@ export async function readPlaceTags(
         const list = byType[type];
         for (let i = 0; i < list.length; i += TAGS_PER_REQUEST) {
             const chunk = list.slice(i, i + TAGS_PER_REQUEST);
-            if (options.signal?.aborted) {
+            // Aborted, or the API is not answering: the rest waits for the next run.
+            if (options.signal?.aborted || failuresInARow >= MAX_FAILURES_IN_A_ROW) {
                 result.unread.push(...chunk);
                 continue;
             }
@@ -365,10 +431,19 @@ export async function readPlaceTags(
                     options
                 );
                 elements = json.elements ?? [];
-            } catch {
+            } catch (error) {
                 result.unread.push(...chunk);
+                if (error instanceof HttpStatusError && error.requestsOwnFault) {
+                    // The API is answering; it will not answer this.
+                    refused.push(...chunk.map(hit => hit.id));
+                } else {
+                    failuresInARow += 1;
+                    failed.push(...chunk.map(hit => hit.id));
+                }
                 continue;
             }
+            failuresInARow = 0;
+            result.answered += 1;
             const byId = new Map(elements.map(el => [`osm:${el.type}/${el.id}`, el]));
             for (const hit of chunk) {
                 const place = placeFromTags(hit, byId.get(hit.id), country);
@@ -377,6 +452,8 @@ export async function readPlaceTags(
             }
         }
     }
+    // A failure with no answer around it is an outage, held against no place.
+    result.struck = result.answered > 0 ? [...refused, ...failed] : refused;
     return result;
 }
 

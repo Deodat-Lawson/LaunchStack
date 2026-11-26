@@ -40,7 +40,7 @@ import { throttledFetch, type HostThrottle } from "./throttle";
 export const PLACE_POOL_VERSION = 1;
 /** Tags swept per pool: each one is a population of its own, 26 requests to start. */
 const MAX_SWEEP_TAGS = 3;
-/** Runs on which a found place's tags are asked for before it is given up. */
+/** Failed reads of a found place's tags, with the API otherwise answering, before it is given up. */
 const MAX_TAG_READS = 2;
 
 export interface PlacePoolRequest {
@@ -65,6 +65,8 @@ export interface PlacePoolState {
     /** Overpass areas that answered ("NL", "DE/Berlin"). */
     overpassAreas: string[];
     sweep: SweepState | null;
+    /** How the last sweep run ended; "failing" means Photon was not answering. */
+    sweepStopped?: SweepRunResult["stopped"];
     /** True once every place in scope is known. */
     complete: boolean;
     completedBy: "overpass" | "sweep" | null;
@@ -323,10 +325,14 @@ async function fillPool(
     const waiting = areas.filter(area => !state.overpassAreas.includes(areaKey(area)));
     // A sweep that can end within this call's cap is finished rather than
     // set aside for another wait on Overpass.
+    const boxesWaiting = state.sweep ? sweepPending(state.sweep) : 0;
     const sweepNearlyDone =
         state.sweep !== null &&
         state.sweep.answered > 0 &&
-        sweepPending(state.sweep) <= deps.sweepRequests;
+        boxesWaiting > 0 &&
+        boxesWaiting <= deps.sweepRequests &&
+        // Photon was not answering last time: Overpass may be the way through.
+        state.sweepStopped !== "failing";
 
     // 1. Overpass: everything in one answer per area.
     if (waiting.length > 0 && !sweepNearlyDone && !deps.signal?.aborted) {
@@ -398,6 +404,7 @@ async function fillPool(
                 },
             });
             report.sweepStopped = result.stopped;
+            state.sweepStopped = result.stopped;
             report.requests.photon += result.sent;
             state.requests.photon += result.sent;
             // Stored before the tags are read, so a crash there loses no sweep.
@@ -411,13 +418,17 @@ async function fillPool(
                 });
                 for (const place of read.places) state.places[place.id] = place;
                 for (const id of read.without) without.add(id);
-                // A place whose tags could not be read is tried on one more run,
-                // then counted as having no website, so a pool can always finish.
+                // A place whose tags could not be read while the API answered
+                // for others is tried on one more run, then counted as having
+                // no website. When the API answered nothing, nothing is held
+                // against it: the read waits, and Overpass can still complete
+                // the pool on a later run.
+                const struck = new Set(read.struck);
                 state.unread = [];
                 for (const hit of read.unread) {
-                    const tries = (hit.tries ?? 0) + 1;
+                    const tries = (hit.tries ?? 0) + (struck.has(hit.id) ? 1 : 0);
                     if (tries >= MAX_TAG_READS) without.add(hit.id);
-                    else state.unread.push({ ...hit, tries });
+                    else state.unread.push(tries > 0 ? { ...hit, tries } : hit);
                 }
                 report.requests.osmApi += read.requests;
                 state.requests.osmApi += read.requests;

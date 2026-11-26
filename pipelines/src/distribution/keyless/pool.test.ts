@@ -427,6 +427,60 @@ describe("the sweep, when Overpass does not answer", () => {
         expect(Object.keys(second.state.places).every(id => id.startsWith("osm:node/"))).toBe(true);
     });
 
+    it("loses no website when the OSM API is down for several runs", async () => {
+        const places = fakePopulation(120);
+        const map = createFakeMap(places, { overpass: 504, osmApiFails: () => 503 });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, sweepRequests: 500, fetchImpl: map.fetchImpl };
+        for (let run = 1; run <= 3; run++) {
+            const { state, report } = await gatherPlacePool(request, deps);
+            expect(report).toMatchObject({ complete: false, known: 120, withWebsite: 0 });
+            expect(state.unread).toHaveLength(120);
+            expect(state.unread.some(hit => hit.tries)).toBe(false);
+            expect(state.without).toEqual([]);
+            // With the sweep done and reads failing, Overpass is asked again each run.
+            expect(map.count("overpass")).toBe(3 * run);
+        }
+        // Every box was asked in the first run and never again.
+        expect(new Set(map.sweepUrls()).size).toBe(map.sweepUrls().length);
+        map.options.osmApiFails = undefined;
+        const healed = await gatherPlacePool(request, deps);
+        expect(healed.report).toMatchObject({ complete: true, completedBy: "sweep", known: 120 });
+        expect(Object.keys(healed.state.places)).toHaveLength(withSite(places).length);
+    });
+
+    it("turns to Overpass again after Photon stopped answering, even with few boxes left", async () => {
+        const places = fakePopulation(700);
+        const scratch = createFakeMap(places, { overpass: 504 });
+        await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            sweepRequests: 10_000,
+            fetchImpl: scratch.fetchImpl,
+        });
+        const whole = scratch.sweepUrls().length;
+
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const run = (sweepRequests: number) =>
+            gatherPlacePool(request, { store, sweepRequests, fetchImpl: map.fetchImpl });
+        await run(whole - 12);
+        // Photon goes down. The few boxes left fit in a run, so Overpass is not asked first…
+        map.options.photonFails = () => true;
+        const overpassBefore = map.count("overpass");
+        const failing = await run(64);
+        expect(map.count("overpass")).toBe(overpassBefore);
+        expect(failing.report).toMatchObject({ sweepStopped: "failing", complete: false });
+        // …but once Photon has failed a run, the next one asks Overpass, which now answers.
+        map.options.overpass = "answers";
+        const through = await run(64);
+        expect(through.report).toMatchObject({
+            asked: ["overpass"],
+            complete: true,
+            completedBy: "overpass",
+            known: 700,
+        });
+    });
+
     it("does not sweep without a tag to filter by, or when the cap is zero", async () => {
         const map = createFakeMap(fakePopulation(50), { overpass: 504 });
         const noTags = await gatherPlacePool(

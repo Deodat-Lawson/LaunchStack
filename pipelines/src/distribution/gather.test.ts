@@ -11,6 +11,8 @@ import {
     lookalikeQuery,
     lookalikeSeeds,
     mentionFromWebResult,
+    moreOnNextRun,
+    MORE_PLACES_DETAIL,
     type CompanySearchPortOptions,
 } from "./gather";
 import type { PlannedSourceQuery } from "./types";
@@ -159,6 +161,43 @@ describe("gather", () => {
         expect(result.mentions.find(m => m.name === "Acme Import GmbH")!.roles).toEqual([
             "importer",
         ]);
+    });
+
+    it("says so when a place search knows it has not seen everything yet", async () => {
+        const place = (name: string) => ({
+            fsqId: name,
+            name,
+            formattedAddress: "Amsterdam",
+            location: { lat: 52.3, lng: 4.9 },
+            categories: [{ id: "1", name: "Coffee Shop" }],
+            website: `https://${name}.example`,
+        });
+        const run = (unfinished: boolean) =>
+            gather([placeQuery], {
+                searchWeb: null,
+                searchPlaces: async () => {
+                    const found = [place("a"), place("b")];
+                    return unfinished ? moreOnNextRun(found) : found;
+                },
+                tradeData: null,
+                hsCodes: [],
+            });
+        const partial = await run(true);
+        const source = partial.sources.find(s => s.source === "place")!;
+        // The places it has are used; the run is told the list is not the whole of it.
+        expect(source).toMatchObject({
+            status: "degraded",
+            results: 2,
+            detail: MORE_PLACES_DETAIL,
+        });
+        expect(MORE_PLACES_DETAIL).toBe("more places on the next run");
+        expect(partial.mentions).toHaveLength(2);
+        // The mark does not travel with the data: mentions are plain.
+        expect(JSON.parse(JSON.stringify(partial.mentions))).toEqual(partial.mentions);
+
+        const whole = await run(false);
+        expect(whole.sources.find(s => s.source === "place")).toMatchObject({ status: "ok" });
+        expect(whole.sources.find(s => s.source === "place")!.detail).toBeUndefined();
     });
 
     it("reports skipped sources with a reason when not configured", async () => {

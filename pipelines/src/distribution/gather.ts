@@ -90,6 +90,25 @@ export interface GatherPorts {
     signal?: AbortSignal;
 }
 
+/** The place source's detail when a search knows it has not seen everything yet. */
+export const MORE_PLACES_DETAIL = "more places on the next run";
+
+const MORE_ON_NEXT_RUN = Symbol.for("launchstack.distribution.morePlacesOnNextRun");
+
+/**
+ * Marks a place search's results as known to be incomplete: the search keeps
+ * what it has asked and the next run will find more. The mark rides on the
+ * list without changing it, so a search that never sets it needs no change.
+ */
+export function moreOnNextRun<T>(places: T[]): T[] {
+    Object.defineProperty(places, MORE_ON_NEXT_RUN, { value: true });
+    return places;
+}
+
+function hasMoreOnNextRun(places: readonly unknown[]): boolean {
+    return (places as { [MORE_ON_NEXT_RUN]?: boolean })[MORE_ON_NEXT_RUN] === true;
+}
+
 export interface GatherResult {
     mentions: OrgMention[];
     sources: SourceCount[];
@@ -412,11 +431,13 @@ export async function gather(
             }
             let total = 0;
             let failures = 0;
+            let unfinished = 0;
             for (const query of placeQueries) {
                 if (ports.signal?.aborted) break;
                 try {
                     const places = await ports.searchPlaces(query);
                     total += places.length;
+                    if (hasMoreOnNextRun(places)) unfinished += 1;
                     for (const place of places) {
                         mentions.push({
                             name: place.name,
@@ -440,7 +461,7 @@ export async function gather(
             const status =
                 failures === placeQueries.length
                     ? "failed"
-                    : failures > 0 || total === 0
+                    : failures > 0 || total === 0 || unfinished > 0
                       ? "degraded"
                       : "ok";
             sources.push({
@@ -448,7 +469,12 @@ export async function gather(
                 queries: placeQueries.length,
                 results: total,
                 status,
-                detail: failures > 0 ? `${failures} queries failed` : undefined,
+                detail:
+                    failures > 0
+                        ? `${failures} queries failed`
+                        : unfinished > 0
+                          ? MORE_PLACES_DETAIL
+                          : undefined,
             });
         })()
     );

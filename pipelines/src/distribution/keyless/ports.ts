@@ -27,12 +27,10 @@
 import type { AgentModelPort } from "@launchstack/llm";
 import { fetchReadable } from "@launchstack/tools/web-research";
 
+import { moreOnNextRun } from "../gather";
 import type { DistributionPorts, PublishDossierInput } from "../run";
 import type { EmbedTexts, JudgeFit } from "../semantic";
-import { nativeTermsFor, overpassAreas } from "./geo";
-import { searchNominatim } from "./nominatim";
-import { rolesForOsmCategories, KEYLESS_USER_AGENT, type OsmPlace } from "./osm";
-import { PHOTON_URL, searchPhoton } from "./photon";
+import { rolesForOsmCategories, KEYLESS_USER_AGENT } from "./osm";
 import { buildKeylessPlan, KEYLESS_MODEL_ID, KEYLESS_PLAYBOOK_HASH, keywordsFor } from "./plan";
 import {
     createMemoryPlacePoolStore,
@@ -44,7 +42,7 @@ import {
 } from "./pool";
 import { profileFromPages } from "./profile";
 import { osmVocabulary } from "./taginfo";
-import { requestHost, sharedHostThrottle, throttledFetch, type HostThrottle } from "./throttle";
+import { sharedHostThrottle, type HostThrottle } from "./throttle";
 
 /** Places handed to ranking per territory unless told otherwise. */
 export const DEFAULT_PLACES_PER_TERRITORY = 2_000;
@@ -56,7 +54,6 @@ export const DEFAULT_PLACES_PER_TERRITORY = 2_000;
  */
 export const DEFAULT_SWEEP_REQUESTS_PER_RUN = 64;
 const MAX_SWEEP_REQUESTS_PER_RUN = 500;
-const PHOTON_HOST = new URL(PHOTON_URL).hostname;
 
 /**
  * The run's Photon request cap from the environment:
@@ -117,12 +114,18 @@ const selectorLabel = (selectors: readonly string[]) =>
 
 function describePool(where: string, selectors: readonly string[], report: PlacePoolReport) {
     const sent = report.requests;
+    const waiting = [
+        report.waiting.overpass ? "Overpass to ask again" : "",
+        report.pendingBoxes > 0 ? `${report.pendingBoxes} boxes to ask` : "",
+        report.unread > 0 ? `${report.unread} places to read` : "",
+    ].filter(Boolean);
     const state = report.complete
         ? `complete (${report.completedBy})`
-        : report.pendingBoxes > 0
-          ? `${report.pendingBoxes} boxes left for the next run`
+        : waiting.length > 0
+          ? `not complete: ${waiting.join(", ")} on the next run`
           : "not complete";
-    return `place pool ${where} ${selectorLabel(selectors)}: ${report.withWebsite} places with a website of ${report.known} known, ${state}; requests this run: overpass ${sent.overpass}, photon ${sent.photon}, osm api ${sent.osmApi}`;
+    const cutOff = report.boxesCutOff > 0 ? `; ${report.boxesCutOff} boxes too dense to split` : "";
+    return `place pool ${where} ${selectorLabel(selectors)}: ${report.withWebsite} places with a website of ${report.known} known, ${state}${cutOff}; requests this run: overpass ${sent.overpass}, photon ${sent.photon}, osm api ${sent.osmApi}, nominatim ${sent.nominatim}`;
 }
 
 export function createKeylessPorts(options: KeylessPortsOptions = {}): DistributionPorts {
@@ -130,10 +133,10 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
     // Photon, the OSM API and Nominatim are asked one request at a time per
     // host, with a pause.
     const throttle = options.throttle ?? sharedHostThrottle;
-    const politeFetch = throttledFetch(fetchImpl, throttle);
     const placePools = options.placePools ?? processPlacePools;
-    // The run's sweep cap, shared fairly by the place queries still to come.
-    let sweepRequestsLeft = options.sweepRequestsPerRun ?? readSweepRequestsPerRun();
+    // The run's Photon cap, shared fairly by the place queries still to come.
+    const photonCap = options.sweepRequestsPerRun ?? readSweepRequestsPerRun();
+    let photonRequestsLeft = photonCap;
     let placeQueriesToCome = 0;
     return {
         model: noModel,
@@ -153,100 +156,28 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
             const selectors = categoryIds ?? [];
             const region = territory.region ?? null;
             const where = region ? `${region}, ${territory.country}` : territory.country;
-            const errors: Error[] = [];
 
-            const share = Math.ceil(sweepRequestsLeft / Math.max(1, placeQueriesToCome));
+            const share = Math.ceil(photonRequestsLeft / Math.max(1, placeQueriesToCome));
             placeQueriesToCome = Math.max(0, placeQueriesToCome - 1);
             const { state, report } = await gatherPlacePool(
                 { country: territory.country, region, keywords, selectors },
                 {
                     store: placePools,
-                    sweepRequests: share,
+                    photonRequests: share,
                     fetchImpl,
                     throttle,
                     limits: options.placeLimits,
                     overpassUrls: options.overpassUrls,
                 }
             );
-            sweepRequestsLeft = Math.max(0, sweepRequestsLeft - report.requests.photon);
+            photonRequestsLeft = Math.max(0, photonRequestsLeft - report.requests.photon);
             console.info(`[distribution] ${describePool(where, selectors, report)}`);
-            const unanswered = report.overpassAttempts.filter(a => !a.ok);
-            if (report.asked.includes("overpass") && unanswered.length > 0 && !report.complete)
-                errors.push(
-                    new Error(
-                        `Overpass did not answer (${unanswered.map(a => `${a.host}: ${a.detail}`).join("; ")})`
-                    )
-                );
-            if (report.sweepStopped === "failing")
-                errors.push(new Error("Photon stopped answering during the place sweep"));
 
-            const places: OsmPlace[] = poolPlaces(state, max);
-            // Nothing carries the segment's tags here (or none was chosen and
-            // Overpass was silent): look for its words in place names instead.
-            if (places.length === 0) {
-                const add = (batch: OsmPlace[]) => {
-                    for (const p of batch) {
-                        if (places.length >= max) break;
-                        if (!places.some(x => x.website === p.website || x.id === p.id))
-                            places.push(p);
-                    }
-                };
-                // The name search asks Photon as well (a lookup and two searches
-                // per city): those requests come out of the run's same cap.
-                let nameRequests = 0;
-                const withinCap: typeof fetch = (input, init) => {
-                    if (requestHost(input) === PHOTON_HOST) {
-                        if (nameRequests >= sweepRequestsLeft)
-                            return Promise.reject(
-                                new Error("The run's Photon request cap is reached")
-                            );
-                        nameRequests += 1;
-                    }
-                    return politeFetch(input, init);
-                };
-                if (sweepRequestsLeft > 0) {
-                    try {
-                        add(
-                            await searchPhoton(
-                                {
-                                    country: territory.country,
-                                    region,
-                                    keywords,
-                                    selectors: [],
-                                    limit: Math.min(max, 40),
-                                },
-                                { fetchImpl: withinCap }
-                            )
-                        );
-                    } catch (error) {
-                        errors.push(error instanceof Error ? error : new Error(String(error)));
-                    }
-                    sweepRequestsLeft = Math.max(0, sweepRequestsLeft - nameRequests);
-                }
-                // Nominatim by name, in the local languages ("koffiebranderij", "Bäckerei").
-                const terms = [
-                    ...new Set([...nativeTermsFor(keywords), ...keywords.slice(0, 1)]),
-                ].slice(0, 4);
-                try {
-                    add(
-                        await searchNominatim(
-                            {
-                                country: territory.country,
-                                areas: overpassAreas(territory.country, region),
-                                terms,
-                                limit: Math.min(max, 40),
-                            },
-                            // The throttle already spaces requests to Nominatim.
-                            { fetchImpl: politeFetch, pauseMs: 0 }
-                        )
-                    );
-                } catch (error) {
-                    errors.push(error instanceof Error ? error : new Error(String(error)));
-                }
-            }
-            const firstError = errors[0];
-            if (places.length === 0 && firstError) throw firstError;
-            return places.map(p => ({
+            const places = poolPlaces(state, max);
+            // Nothing found and something did not answer: the source failed.
+            const problem = report.problems[0];
+            if (places.length === 0 && problem) throw new Error(problem);
+            const found = places.map(p => ({
                 fsqId: p.id,
                 name: p.name,
                 website: p.website ?? undefined,
@@ -255,6 +186,12 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
                 categories: p.categories.map(c => ({ id: c, name: c.split("=")[1] ?? c })),
                 roles: rolesForOsmCategories(p.categories),
             }));
+            // Not everything in the territory is known yet, and a later run
+            // has something left to ask (a sweep only when Photon may be
+            // asked at all): say so, so the run can.
+            const { waiting } = report;
+            const more = waiting.overpass || waiting.tags || (waiting.boxes && photonCap > 0);
+            return more && found.length > 0 ? moreOnNextRun(found) : found;
         },
         tradeData: null,
         compliance: null,

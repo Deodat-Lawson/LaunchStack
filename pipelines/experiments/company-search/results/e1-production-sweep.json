@@ -99,22 +99,21 @@
         },
         "resume": {
           "capPerRun": 64,
-          "runsToComplete": 2,
+          "runs": 2,
           "knownAfterRun": [729, 730],
-          "photonRequests": 66,
-          "osmApiRequests": 10,
-          "repeatedPhotonRequests": 0,
-          "failedPhotonRequests": 0,
-          "photonRequestsInOneRun": 66,
-          "requestsAfterComplete": 0,
           "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 66,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 66,
+          "osmApiRequests": 10,
+          "requestsAfterComplete": 0,
           "known": 730,
           "knownShare": 0.997,
           "withWebsite": 396,
           "withWebsiteShare": 0.997,
           "placesReturned": 361,
-          "boxesCutOffAtDepthLimit": 0,
-          "boxesGivenUp": 0
+          "boxesCutOffAtDepthLimit": 0
         }
       }
     },
@@ -213,22 +212,21 @@
         },
         "resume": {
           "capPerRun": 64,
-          "runsToComplete": 1,
+          "runs": 1,
           "knownAfterRun": [615],
-          "photonRequests": 58,
-          "osmApiRequests": 7,
-          "repeatedPhotonRequests": 0,
-          "failedPhotonRequests": 0,
-          "photonRequestsInOneRun": 58,
-          "requestsAfterComplete": 0,
           "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 58,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 58,
+          "osmApiRequests": 7,
+          "requestsAfterComplete": 0,
           "known": 615,
           "knownShare": 1,
           "withWebsite": 323,
           "withWebsiteShare": 1,
           "placesReturned": 264,
-          "boxesCutOffAtDepthLimit": 0,
-          "boxesGivenUp": 0
+          "boxesCutOffAtDepthLimit": 0
         }
       }
     },
@@ -327,22 +325,21 @@
         },
         "resume": {
           "capPerRun": 64,
-          "runsToComplete": 1,
+          "runs": 1,
           "knownAfterRun": [522],
-          "photonRequests": 46,
-          "osmApiRequests": 6,
-          "repeatedPhotonRequests": 0,
-          "failedPhotonRequests": 0,
-          "photonRequestsInOneRun": 46,
-          "requestsAfterComplete": 0,
           "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 46,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 46,
+          "osmApiRequests": 6,
+          "requestsAfterComplete": 0,
           "known": 522,
           "knownShare": 0.994,
           "withWebsite": 218,
           "withWebsiteShare": 1,
           "placesReturned": 210,
-          "boxesCutOffAtDepthLimit": 0,
-          "boxesGivenUp": 0
+          "boxesCutOffAtDepthLimit": 0
         }
       }
     },
@@ -441,22 +438,21 @@
         },
         "resume": {
           "capPerRun": 64,
-          "runsToComplete": 2,
-          "knownAfterRun": [240, 240],
-          "photonRequests": 35,
-          "osmApiRequests": 5,
+          "runs": 1,
+          "knownAfterRun": [240],
+          "complete": false,
+          "boxesUnanswered": 1,
+          "photonAnswered": 33,
           "repeatedPhotonRequests": 0,
-          "failedPhotonRequests": 2,
-          "photonRequestsInOneRun": 35,
-          "requestsAfterComplete": 0,
-          "complete": true,
+          "photonAnsweredInOneSweep": 33,
+          "osmApiRequests": 5,
+          "requestsAfterComplete": null,
           "known": 240,
           "knownShare": 0.972,
           "withWebsite": 153,
           "withWebsiteShare": 0.956,
           "placesReturned": 150,
-          "boxesCutOffAtDepthLimit": 0,
-          "boxesGivenUp": 1
+          "boxesCutOffAtDepthLimit": 0
         }
       }
     },
@@ -555,22 +551,21 @@
         },
         "resume": {
           "capPerRun": 64,
-          "runsToComplete": 5,
+          "runs": 5,
           "knownAfterRun": [1193, 1975, 2358, 2532, 2608],
-          "photonRequests": 282,
-          "osmApiRequests": 31,
-          "repeatedPhotonRequests": 0,
-          "failedPhotonRequests": 0,
-          "photonRequestsInOneRun": 282,
-          "requestsAfterComplete": 0,
           "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 282,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 282,
+          "osmApiRequests": 31,
+          "requestsAfterComplete": 0,
           "known": 2608,
           "knownShare": 0.989,
           "withWebsite": 1707,
           "withWebsiteShare": 0.991,
           "placesReturned": 1615,
-          "boxesCutOffAtDepthLimit": 0,
-          "boxesGivenUp": 0
+          "boxesCutOffAtDepthLimit": 0
         }
       }
     },
@@ -669,22 +664,21 @@
         },
         "resume": {
           "capPerRun": 64,
-          "runsToComplete": 1,
+          "runs": 1,
           "knownAfterRun": [317],
-          "photonRequests": 54,
-          "osmApiRequests": 4,
-          "repeatedPhotonRequests": 0,
-          "failedPhotonRequests": 0,
-          "photonRequestsInOneRun": 54,
-          "requestsAfterComplete": 0,
           "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 54,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 54,
+          "osmApiRequests": 4,
+          "requestsAfterComplete": 0,
           "known": 317,
           "knownShare": 1,
           "withWebsite": 142,
           "withWebsiteShare": 1,
           "placesReturned": 136,
-          "boxesCutOffAtDepthLimit": 0,
-          "boxesGivenUp": 0
+          "boxesCutOffAtDepthLimit": 0
         }
       }
     }

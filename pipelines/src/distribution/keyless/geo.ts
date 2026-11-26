@@ -246,6 +246,17 @@ export function overpassAreas(
     return info.cities.slice(0, 4).map(city => ({ country: cc, city }));
 }
 
+/**
+ * Can one OpenStreetMap area stand for the whole territory? True for a named
+ * region and for a country small enough to ask as one; false for a large
+ * country, where `overpassAreas` names its largest cities only.
+ */
+export function oneAreaCoversTerritory(country: string, region?: string | null): boolean {
+    if (region) return true;
+    const info = COUNTRIES[country.toUpperCase()];
+    return !info || info.small;
+}
+
 /** Country mentions in free text, as ISO codes; the territory's own country counts once. */
 export function countriesMentioned(text: string): string[] {
     const lower = text.toLowerCase();

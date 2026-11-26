@@ -270,16 +270,20 @@ their switches are locked.
   dev setup): OpenStreetMap gives every real place with a website in each
   territory — of the OpenStreetMap kinds closest in meaning to who the
   segment sells to, chosen with the workspace's embedding model. Overpass is
-  asked first (one answered request returns every place of a kind; it took 37
-  to 90 s when measured). When it does not answer, Photon is swept letter by
-  letter instead, at about one request a second and at most
-  `PROSPECTS_PLACE_SWEEP_REQUESTS` (default 64) per run, and the websites of
-  what it found are read from the OSM API. What was asked is kept in
-  `distribution_place_pools`, so a second run for the same kinds and territory
-  asks the servers nothing when the pool is complete, and carries on with the
-  sweep when it is not. The run ranks the whole pool and shortlists from it;
-  the server log has one line per territory ("place pool NL shop=bicycle:
-  1722 places with a website of 2637 known, complete (overpass) …"). Each
+  asked first where one request covers the territory: a region, or a country
+  marked `small` in `keyless/geo.ts` (one answered request returns every
+  place of a kind; it took 37 to 90 s when measured). When it does not
+  answer, and always for the large countries (Germany, France, the United
+  States …), Photon is swept letter by letter instead, at about one request a
+  second and at most `PROSPECTS_PLACE_SWEEP_REQUESTS` (default 64) Photon
+  requests per run, and the websites of what it found are read from the OSM
+  API. What was asked is kept in `distribution_place_pools`, so a second run
+  for the same kinds and territory asks the servers nothing when the pool is
+  complete, and carries on with the sweep when it is not: until then the run
+  sheet and the Runs table read "OpenStreetMap · more places on the next
+  run". The run ranks the whole pool and shortlists from it; the server log
+  has one line per territory ("place pool NL shop=bicycle: 1722 places with a
+  website of 2637 known, complete (overpass) …"). Each
   shortlisted site is read by the page profiler
   (home plus about/contact/careers pages) which records what the pages
   literally say as evidence — description, headcount, roles, countries,

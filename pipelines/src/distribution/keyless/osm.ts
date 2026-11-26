@@ -22,7 +22,8 @@ export const KEYLESS_USER_AGENT =
 
 // A plain key filter; a regex over keys is what makes a country-wide query time out.
 const WEBSITE_FILTER = '["website"]';
-const MAX_SELECTORS = 4;
+/** Tag selectors one segment is searched by, best first. */
+export const MAX_SELECTORS = 4;
 
 let categoryVectors: { key: string; vectors: number[][] } | null = null;
 

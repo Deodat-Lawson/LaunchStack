@@ -147,11 +147,11 @@ bootstrap interval over seeds.
 ## E1 against production
 
 E1's finding was built into the keyless place search
-(`src/distribution/keyless/pool.ts`, `sweep.ts`): Overpass first, a letter
-sweep of Photon with box splitting when Overpass does not answer, and a
-stored pool so a second run carries on. `e1-where-to-look/production.ts`
-replays that code, called the way the app calls it
-(`createKeylessPorts().searchPlaces`), for each recorded segment:
+(`src/distribution/keyless/pool.ts`, `sweep.ts`): Overpass first where one
+request covers the territory, a letter sweep of Photon with box splitting
+when Overpass does not answer, and a stored pool so a second run carries on.
+`e1-where-to-look/production.ts` replays that code, called the way the app
+calls it (`createKeylessPorts().searchPlaces`), for each recorded segment:
 
 - **Photon is replayed by URL.** The sweep has to send requests the recording
   holds, byte for byte; any other request is an error. So the box, the page
@@ -165,17 +165,26 @@ replays that code, called the way the app calls it
 
 `production-sweep.test.ts` asserts the outcome and prints it beside today's
 first step (`searchPhoton`, unchanged, replayed) and the one live sample of
-the old whole search. On the recordings of 2026-11-24, mean over the six
-segments: one answered Overpass request knows 100% of the named places; the
-sweep knows 45% after 16 Photon requests, 72% after 32, 90% after 64 and 94%
-after 96; runs of 64 complete five of the six segments in one or two runs
-and the largest (2,637 places) in five, and no answered request is sent
-twice. The old first step kept 0 to 17 on-target places with a website for 6
-to 12 requests.
+the old whole search. On the recordings of 2026-11-24:
+
+- One answered Overpass request knows 100% of the named places in every
+  segment. That is true by construction: the same answer is the benchmark's
+  count of what exists.
+- The sweep knows 45% after 16 Photon requests, 72% after 32, 90% after 64
+  and 94% after 96, as a mean over the six segments. Counted over all 5,069
+  places together it is 34%, 53%, 71% and 84%, because the largest segment
+  (2,637 Dutch bicycle shops) is at 45% after 64.
+- In runs of 64, three segments complete in one run, one in two and the
+  largest in five (282 requests), and no answered request is sent twice. The
+  sixth, Belgian breweries, stops one box short at 240 of 246 places: the
+  recording holds a failed answer for that box, and the sweep keeps an
+  unanswered box to ask again on the next run instead of giving it up.
+- The old first step kept 0 to 17 on-target places with a website for 6 to
+  12 requests.
 
 What the replay does not show: how the live servers answer today, how long
-they take, and a country too large for one Overpass request (those are asked
-city by city; the benchmark has small countries only).
+they take, and a large country (those are swept whole and not asked on
+Overpass; the benchmark has small countries only).
 
 ## Honest limits
 

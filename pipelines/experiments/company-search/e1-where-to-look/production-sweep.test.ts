@@ -106,17 +106,13 @@ describe.skipIf(!recorded)("production's place search on the recorded segments",
         }
     });
 
-    it("carries on over runs of 64 until the pool is complete, never sending an answered request again", () => {
+    it("carries on over runs of 64 until every box is answered, never sending an answered request again", () => {
         for (const s of replay.segments) {
             const r = s.sweep.resume;
-            expect(r.complete, s.id).toBe(true);
             expect(r.repeatedPhotonRequests, s.id).toBe(0);
-            expect(r.requestsAfterComplete, s.id).toBe(0);
-            // Stopping at the cap and resuming costs the same as one long sweep.
-            expect(r.photonRequests, s.id).toBe(r.photonRequestsInOneRun);
-            expect(r.runsToComplete, s.id).toBeGreaterThanOrEqual(
-                Math.ceil(r.photonRequests / r.capPerRun)
-            );
+            // Stopping at the cap and resuming costs the same as one sweep with no cap.
+            expect(r.photonAnswered, s.id).toBe(r.photonAnsweredInOneSweep);
+            expect(r.runs, s.id).toBeGreaterThanOrEqual(Math.ceil(r.photonAnswered / r.capPerRun));
             // Each run knows at least what the one before knew.
             expect(
                 [...r.knownAfterRun].sort((a, b) => a - b),
@@ -124,9 +120,23 @@ describe.skipIf(!recorded)("production's place search on the recorded segments",
             ).toEqual(r.knownAfterRun);
             expect(r.knownShare, s.id).toBeGreaterThan(0.97);
             expect(r.boxesCutOffAtDepthLimit, s.id).toBe(0);
+            if (r.complete) {
+                expect(r.boxesUnanswered, s.id).toBe(0);
+                // A complete pool is not asked about again.
+                expect(r.requestsAfterComplete, s.id).toBe(0);
+            } else {
+                // Never "complete" with a box missing: it stays open and says so.
+                expect(r.boxesUnanswered, s.id).toBeGreaterThan(0);
+                expect(r.requestsAfterComplete, s.id).toBeNull();
+            }
         }
         const largest = replay.segments.find(s => s.id === "nl-bicycle")!.sweep.resume;
-        expect(largest.runsToComplete).toBeGreaterThan(3);
+        expect(largest.runs).toBeGreaterThan(3);
+        // One recorded Photon request is a 503 (in the breweries sweep): that
+        // pool waits for it; the other five finish.
+        expect(replay.segments.filter(s => !s.sweep.resume.complete).map(s => s.id)).toEqual([
+            "be-brewery",
+        ]);
     });
 
     it("matches the committed result file", () => {

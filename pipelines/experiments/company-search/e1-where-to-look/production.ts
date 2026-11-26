@@ -29,7 +29,12 @@ import {
     type PlacePoolStore,
 } from "../../../src/distribution/keyless/pool";
 import { createKeylessPorts } from "../../../src/distribution/keyless/ports";
-import { newSweep, runSweep, type SweepHit } from "../../../src/distribution/keyless/sweep";
+import {
+    newSweep,
+    runSweep,
+    sweepPending,
+    type SweepHit,
+} from "../../../src/distribution/keyless/sweep";
 import { createHostThrottle } from "../../../src/distribution/keyless/throttle";
 import { Recorder, type RecordedExchange } from "../lib/recorder";
 import { round } from "../lib/stats";
@@ -276,7 +281,7 @@ async function sweepCurve(segment: PlaceSegment, world: World, server: ReplaySer
         started += 1;
         return server.fetchImpl(input, init);
     };
-    for (let run = 0; run < 10; run++) {
+    for (;;) {
         const result = await runSweep(state, {
             country: segment.country,
             maxRequests: Number.MAX_SAFE_INTEGER,
@@ -288,8 +293,9 @@ async function sweepCurve(segment: PlaceSegment, world: World, server: ReplaySer
                 }
             },
         });
-        // "deferred": a box failed and is asked once more on the next run.
-        if (result.stopped !== "deferred") break;
+        // "deferred": a box failed and is asked again on the next run. A run
+        // that is answered nothing has reached what the recording cannot answer.
+        if (result.stopped !== "deferred" || result.answered === 0) break;
     }
     curve.push(known.size);
     const requestsTo = Object.fromEntries(
@@ -298,7 +304,12 @@ async function sweepCurve(segment: PlaceSegment, world: World, server: ReplaySer
             return [`${Math.round(mark * 100)}%`, at === -1 ? null : at + 1];
         })
     );
-    return { requests: curve.length, requestsTo, cutOff: state.cutOff, dropped: state.dropped };
+    return {
+        answered: state.answered,
+        requestsTo,
+        cutOff: state.cutOff,
+        waiting: sweepPending(state),
+    };
 }
 
 async function replaySegment(segment: PlaceSegment, world: World, recorder: Recorder) {
@@ -347,18 +358,30 @@ async function replaySegment(segment: PlaceSegment, world: World, recorder: Reco
         };
     }
 
-    // Run after run at the default cap until nothing is left to ask.
+    // Run after run at the default cap, until the pool is complete or a run
+    // is answered nothing new (the recording holds a failed request for what
+    // is left, and a failed request is asked again, never given up).
     const resuming = createReplayServer(segment, recorder, elements, "down");
     const store = createMemoryPlacePoolStore();
     const knownAfterRun: number[] = [];
     let last = await searchOnce(segment, resuming, store, RESUME_CAP);
     knownAfterRun.push(shares(last.state, world).known);
-    while (!last.state.complete && knownAfterRun.length < 50) {
+    let runs = 1;
+    while (!last.state.complete) {
+        const answeredBefore = resuming.answeredPhotonUrls.length;
         last = await searchOnce(segment, resuming, store, RESUME_CAP);
+        if (resuming.answeredPhotonUrls.length === answeredBefore && !last.state.complete) break;
         knownAfterRun.push(shares(last.state, world).known);
+        runs += 1;
+        if (runs > 50) throw new Error(`${segment.id}: the sweep did not settle in 50 runs`);
     }
-    const sentBeforeExtraRun = { ...resuming.sent };
-    await searchOnce(segment, resuming, store, RESUME_CAP);
+    let requestsAfterComplete: number | null = null;
+    if (last.state.complete) {
+        const before = resuming.sent.photon + resuming.sent.osmApi + resuming.sent.overpass;
+        await searchOnce(segment, resuming, store, RESUME_CAP);
+        requestsAfterComplete =
+            resuming.sent.photon + resuming.sent.osmApi + resuming.sent.overpass - before;
+    }
     const curve = await sweepCurve(
         segment,
         world,
@@ -366,28 +389,25 @@ async function replaySegment(segment: PlaceSegment, world: World, recorder: Reco
     );
     const resume = {
         capPerRun: RESUME_CAP,
-        runsToComplete: knownAfterRun.length,
+        /** Runs in which Photon answered something new. */
+        runs,
         knownAfterRun,
-        photonRequests: sentBeforeExtraRun.photon,
-        osmApiRequests: sentBeforeExtraRun.osmApi,
+        /** True when every box was answered and every found place's tags were read. */
+        complete: last.state.complete,
+        /** Boxes still waiting when the runs stopped: the recording holds a failed request for each. */
+        boxesUnanswered: last.state.sweep ? sweepPending(last.state.sweep) : 0,
+        photonAnswered: resuming.answeredPhotonUrls.length,
         /** Answered requests that were sent again on a later run: must be 0. */
         repeatedPhotonRequests:
             resuming.answeredPhotonUrls.length - new Set(resuming.answeredPhotonUrls).size,
-        /** Requests the recorded server failed; each is asked once more on the next run. */
-        failedPhotonRequests: resuming.failedPhotonRequests,
-        /** One uninterrupted sweep sends this many: stopping and resuming must cost the same. */
-        photonRequestsInOneRun: curve.requests,
-        /** Requests a run sends once the pool is complete: must be 0. */
-        requestsAfterComplete:
-            resuming.sent.photon +
-            resuming.sent.osmApi +
-            resuming.sent.overpass -
-            (sentBeforeExtraRun.photon + sentBeforeExtraRun.osmApi + sentBeforeExtraRun.overpass),
-        complete: last.state.complete,
+        /** One sweep with no cap is answered this many: stopping and resuming must cost the same. */
+        photonAnsweredInOneSweep: curve.answered,
+        osmApiRequests: resuming.sent.osmApi,
+        /** Requests a run sends once the pool is complete: must be 0 (null for a pool that is not). */
+        requestsAfterComplete,
         ...shares(last.state, world),
         placesReturned: last.returned,
         boxesCutOffAtDepthLimit: curve.cutOff,
-        boxesGivenUp: curve.dropped,
     };
 
     return {
@@ -506,7 +526,7 @@ export function printReplay(replay: ProductionReplay): void {
             );
         const r = s.sweep.resume;
         console.log(
-            `     runs of ${r.capPerRun}: complete after ${r.runsToComplete} runs and ${r.photonRequests} requests (${r.failedPhotonRequests} failed); answered requests sent again ${r.repeatedPhotonRequests}; known per run ${r.knownAfterRun.join(", ")}; requests to know 95%: ${s.sweep.requestsToKnow["95%"] ?? "not reached"}`
+            `     runs of ${r.capPerRun}: ${r.complete ? "complete" : `not complete (${r.boxesUnanswered} box unanswered in the recording)`} after ${r.runs} runs and ${r.photonAnswered} answered requests; answered requests sent again ${r.repeatedPhotonRequests}; known per run ${r.knownAfterRun.join(", ")}; requests to know 95%: ${s.sweep.requestsToKnow["95%"] ?? "not reached"}`
         );
     }
     console.log("\nmean over segments, share of all places known when sweeping:");

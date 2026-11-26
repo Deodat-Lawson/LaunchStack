@@ -219,53 +219,59 @@ describe("sweeping", () => {
         expect(result.sent).toBe(1 + 4 + 4 + 4);
     });
 
-    it("asks a failed box once more on the next run, then gives it up", async () => {
+    it("asks a failed box again on the next run, once per run, and never gives it up", async () => {
         const places = fakePopulation(120);
-        // One letter's box fails for good; everything else answers.
+        // One letter's box fails; everything else answers.
         const map = createFakeMap(places, {
             photonFails: url => new URL(url).searchParams.get("q") === "b",
         });
-        const state = newSweep(NL, [TAG]);
-        const first = await sweepAll(state, map.fetchImpl);
-        // Not retried seconds later: it waits, and the sweep is not complete.
-        expect(first.result).toMatchObject({ stopped: "deferred", failed: 1 });
+        const asksForB = () => map.sweepUrls().filter(u => u.includes("q=b&")).length;
+        let state = newSweep(NL, [TAG]);
+        const found = new Map<string, SweepHit>();
+        const run = async () => {
+            const { found: hits, result } = await sweepAll(state, map.fetchImpl);
+            hits.forEach((hit, id) => found.set(id, hit));
+            // Between runs the sweep is stored as JSON.
+            state = JSON.parse(JSON.stringify(state)) as SweepState;
+            return result;
+        };
+
+        // Not retried seconds later: it waits, and the sweep is not over.
+        expect(await run()).toMatchObject({ stopped: "deferred", failed: 1 });
         expect(state.deferred).toEqual([{ arm: 1, node: "r" }]);
         expect(sweepPending(state)).toBe(1);
-        expect(map.sweepUrls().filter(u => u.includes("q=b&"))).toHaveLength(1);
+        expect(asksForB()).toBe(1);
 
-        const second = await sweepAll(
-            JSON.parse(JSON.stringify(state)) as SweepState,
-            map.fetchImpl
-        );
-        expect(second.result).toMatchObject({ stopped: "complete", sent: 1, failed: 1 });
-        expect(map.sweepUrls().filter(u => u.includes("q=b&"))).toHaveLength(2);
+        // Each later run asks it once more, and it is still waiting after each.
+        for (const asks of [2, 3]) {
+            expect(await run()).toMatchObject({ stopped: "deferred", sent: 1, failed: 1 });
+            expect(asksForB()).toBe(asks);
+            expect(sweepPending(state)).toBe(1);
+        }
+
+        // Once Photon answers it, the sweep is over and nothing was lost.
+        map.options.photonFails = undefined;
+        expect((await run()).stopped).toBe("complete");
+        expect(sweepPending(state)).toBe(0);
+        expect(found.size).toBe(120);
     });
 
-    it("counts the box it gave up, and takes a box back once the server answers again", async () => {
-        const places = fakePopulation(120);
-        const map = createFakeMap(places, {
+    it("tells its caller after each answered request", async () => {
+        const map = createFakeMap(fakePopulation(120), {
             photonFails: url => new URL(url).searchParams.get("q") === "b",
         });
-        const gaveUp = newSweep(NL, [TAG]);
-        await sweepAll(gaveUp, map.fetchImpl);
-        await sweepAll(gaveUp, map.fetchImpl);
-        expect(gaveUp).toMatchObject({ dropped: 1, deferred: [] });
-        expect(sweepPending(gaveUp)).toBe(0);
-
-        // The same failure, but the server is back for the second run: nothing is lost.
-        const recovering = createFakeMap(places, {
-            photonFails: url => new URL(url).searchParams.get("q") === "b",
+        const progress: number[] = [];
+        await runSweep(newSweep(NL, [TAG]), {
+            country: "NL",
+            maxRequests: 5,
+            fetchImpl: map.fetchImpl,
+            onHits: () => undefined,
+            onAnswered: ({ sent }) => {
+                progress.push(sent);
+            },
         });
-        const state = newSweep(NL, [TAG]);
-        const found = new Map<string, SweepHit>();
-        const first = await sweepAll(state, recovering.fetchImpl);
-        first.found.forEach((hit, id) => found.set(id, hit));
-        recovering.options.photonFails = undefined;
-        const second = await sweepAll(state, recovering.fetchImpl);
-        second.found.forEach((hit, id) => found.set(id, hit));
-        expect(second.result.stopped).toBe("complete");
-        expect(state.dropped).toBe(0);
-        expect(found.size).toBe(120);
+        // "b" (the second request) failed: no call for it.
+        expect(progress).toEqual([1, 3, 4, 5]);
     });
 
     it("stops the run when Photon stops answering, and holds nothing against the boxes it asked", async () => {
@@ -276,7 +282,6 @@ describe("sweeping", () => {
         // As if nothing had been asked: every letter still has its whole box to ask.
         expect(sweepPending(stuck)).toBe(26);
         expect(stuck.deferred).toEqual([]);
-        expect(stuck.dropped).toBe(0);
         expect(stuck.arms.slice(0, 3).map(arm => [arm.queue, arm.turns])).toEqual([
             [["r"], 0],
             [["r"], 0],
@@ -300,11 +305,11 @@ describe("sweeping", () => {
         const answeredBefore = state.answered;
         map.options.photonFails = () => true;
         for (let i = 0; i < 4; i++) expect((await run(40)).stopped).toBe("failing");
-        expect(state).toMatchObject({ answered: answeredBefore, dropped: 0, deferred: [] });
+        expect(state).toMatchObject({ answered: answeredBefore, deferred: [] });
         map.options.photonFails = undefined;
         expect((await run(10_000)).stopped).toBe("complete");
         expect(found.size).toBe(700);
-        expect(state.dropped).toBe(0);
+        expect(sweepPending(state)).toBe(0);
         // The outage cost twelve failed requests and nothing else: no box was asked twice once answered.
         const answered = map.sweepUrls().filter((_, i) => i < 40 || i >= 40 + 12);
         expect(new Set(answered).size).toBe(answered.length);
@@ -348,28 +353,27 @@ describe("reading tags of what was found", () => {
         expect(JSON.stringify(read.places)).not.toContain("a-mapper");
     });
 
-    it("leaves a failed request's places unread for the next run", async () => {
+    it("leaves a failed request's places unread, whatever the failure", async () => {
         const places = fakePopulation(30);
-        const map = createFakeMap(places, { osmApiFails: url => url.includes("/ways.json") });
         const hits = places.map(p => hit(p.type === "N" ? "node" : "way", p.id));
-        const read = await readPlaceTags(hits, "NL", { fetchImpl: map.fetchImpl });
         const ways = places.filter(p => p.type === "W").map(idOf);
-        expect(read.unread.map(h => h.id)).toEqual(ways);
-        expect(read.places.length + read.without.length).toBe(
-            places.filter(p => p.type === "N").length
-        );
-        // The API refused the request for the ways (a 404): that is held against them.
-        expect(read).toMatchObject({ requests: 2, answered: 1, struck: ways });
-
-        // A server error for the ways while the nodes are answered counts the same.
-        const flaky = createFakeMap(places, {
-            osmApiFails: url => (url.includes("/ways.json") ? 503 : false),
-        });
-        const again = await readPlaceTags(hits, "NL", { fetchImpl: flaky.fetchImpl });
-        expect(again.struck).toEqual(ways);
+        // A 404 (the API refuses the request) and a 503 (the API is in trouble) alike.
+        for (const status of [404, 503]) {
+            const map = createFakeMap(places, {
+                osmApiFails: url => (url.includes("/ways.json") ? status : false),
+            });
+            const read = await readPlaceTags(hits, "NL", { fetchImpl: map.fetchImpl });
+            expect(read.unread.map(h => h.id)).toEqual(ways);
+            // Read places are settled either way; unread ones are in neither list.
+            expect(read.places.length + read.without.length).toBe(
+                places.filter(p => p.type === "N").length
+            );
+            expect(read.without.some(id => ways.includes(id))).toBe(false);
+            expect(read).toMatchObject({ requests: 2, answered: 1 });
+        }
     });
 
-    it("stops asking when the API is down, and holds that against no place", async () => {
+    it("stops asking when the API is down, and takes that to mean nothing about any place", async () => {
         const places = fakePopulation(700);
         const map = createFakeMap(places, { osmApiFails: () => 503 });
         const hits = places.map(p => hit(p.type === "N" ? "node" : "way", p.id));
@@ -378,7 +382,6 @@ describe("reading tags of what was found", () => {
         expect(read).toMatchObject({
             requests: 3,
             answered: 0,
-            struck: [],
             places: [],
             without: [],
         });

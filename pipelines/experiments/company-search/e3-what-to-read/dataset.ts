@@ -156,6 +156,22 @@ async function screenGroup(
     };
 }
 
+/**
+ * Thrown when a directory request still has no answer after the back-offs.
+ * The sample is drawn from the directories, so a partial list would give a
+ * different sample and a result that looks whole: the run stops instead.
+ */
+export class IncompleteDirectoriesError extends Error {
+    constructor(failed: number) {
+        super(
+            `${failed} request(s) to the company directories got no answer, so the list to sample from is incomplete. ` +
+                "Nothing was written. Record again when the sources answer:\n" +
+                "  COMPANY_SEARCH_BENCH_MODE=record pnpm exec tsx experiments/company-search/e3-what-to-read/record.ts"
+        );
+        this.name = "IncompleteDirectoriesError";
+    }
+}
+
 export interface BuildOptions {
     /** Forced mode; by default COMPANY_SEARCH_BENCH_MODE decides (replay unless "record"). */
     mode?: RecorderMode;
@@ -209,6 +225,7 @@ export async function buildDataset(options: BuildOptions = {}): Promise<Dataset>
         }
     }
     if (loaded === null) throw new Error("The directories could not be read.");
+    if (loaded.report.failed > 0) throw new IncompleteDirectoriesError(loaded.report.failed);
     const { candidates, report } = loaded;
     log(
         `directories: ${GROUPS.map(g => `${g.id} ${report.usable[g.id]} candidates`).join(", ")}; failed requests ${report.failed}`

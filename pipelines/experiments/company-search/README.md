@@ -28,11 +28,13 @@ One experiment: `pnpm exec tsx experiments/company-search/run.ts e1`. Each
 writes `results/<experiment>.json` and prints a table. Two replays of the
 same recording give byte-identical result files.
 
-Unit tests for the shared library run with the package's tests:
-
-```bash
-pnpm exec vitest run experiments/company-search
-```
+The recordings are not in git, so a fresh checkout has none. A replay then
+stops with an error that names what is missing and leaves `results/` as it
+is: no experiment writes a partial result, and none goes to the network. The
+same holds for a recording that is only partly there, and for a world that
+an older version of the recorder wrote: the replay names it and gives the
+command that rebuilds it from the recorded requests, offline. To replay from
+a copy kept elsewhere, point `COMPANY_SEARCH_BENCH_CACHE` at it.
 
 ## Record it (the only step that touches the network)
 
@@ -47,8 +49,14 @@ COMPANY_SEARCH_BENCH_MODE=record pnpm exec tsx experiments/company-search/e4-who
 ```
 
 A request that is already recorded is never sent again, so a recorder can be
-stopped and restarted. Live data moves, so a fresh recording gives slightly
-different numbers than the ones in `results/`.
+stopped and restarted. One exception: a request whose answer the world is
+built from (an E1 sweep box or tag look-up, an E2 page) that got no answer
+(no response, 429 or 5xx) is sent again whenever its segment is recorded
+again, because no answer is not the same as an empty one. Run without
+`COMPANY_SEARCH_BENCH_MODE=record`, the E1 and E2 recorders send nothing and
+rebuild their worlds from the requests already recorded. Live data moves, so
+a fresh recording gives slightly different numbers than the ones in
+`results/`.
 
 Sources, all free and keyless: Photon and the OpenStreetMap API, Overpass,
 the Norwegian company register (Brønnøysundregistrene), the YC company
@@ -64,6 +72,17 @@ How the recorder behaves towards those sources:
 - a generic User-Agent (`company-search-bench/0.1`), never the product's name;
 - failures are recorded and replayed as failures, so a flaky source is part
   of the measured world;
+- where the simulated world is built from the answers themselves (the E1
+  sweeps, the E2 pages), a request that got no answer is tried up to three
+  times while recording and, if it still has none, kept as a hole and never
+  as an empty answer. In E1 the simulation spends the request, learns nothing
+  from it and does not treat the word as exhausted; in E2 the word's
+  recording ends at that page and the word is never complete. `results/`
+  lists every hole (`unansweredSweepRequests` in E1, `wordsCutShort` in E2);
+  the recordings behind the committed results have none;
+- E3 draws its sample from company directories, so a directory request that
+  still has no answer after three back-offs stops the run rather than leave
+  a shorter list to sample from;
 - E3 reads `robots.txt` first and never fetches a disallowed path;
 - Nominatim is only reached through production's own place search, once per
   E1 segment: its usage policy forbids systematic querying.
@@ -141,3 +160,8 @@ bootstrap interval over seeds.
 - **One live sample of production's whole place search per segment.** Its
   Overpass step depends on how busy the public servers were that minute; the
   attempts are in the results file.
+- **One segment was completed two days after the rest.** When `be-brewery`
+  was first recorded (24 November 2026), one of its 58 sweep requests got no
+  answer: the letter "s" over all of Belgium, HTTP 503. It was asked again on
+  26 November, which added two places. The rest of that world, and the five
+  other worlds, are as recorded on the 24th.

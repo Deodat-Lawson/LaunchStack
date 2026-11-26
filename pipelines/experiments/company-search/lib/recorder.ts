@@ -9,7 +9,10 @@
  * exactly the same world.
  *
  * Failures are part of the world: a 404, a timeout or a refused connection
- * is recorded and replays as the same failure.
+ * is recorded and replays as the same failure. A caller that needs the answer
+ * rather than the failure (a sweep that must not read "no reply" as "nothing
+ * here") can ask, while recording, for a failure that carried no answer to be
+ * sent again: see `ExchangeOptions.retryFailure`.
  *
  * The cache holds public register records and page text that can include
  * contact details, so it is never committed (see ../.gitignore).
@@ -33,6 +36,20 @@ export interface RecordedExchange {
     error?: string;
     ms: number;
     at: string;
+}
+
+export interface ExchangeOptions {
+    /**
+     * Record mode only: when the recording holds a failure that carried no
+     * answer (no response, 429 or 5xx), send the request again and replace
+     * the recording. Replay never retries: it returns the recorded failure.
+     */
+    retryFailure?: boolean;
+}
+
+/** True for a recorded exchange that says nothing about the question asked: no response, 429 or 5xx. */
+export function carriedNoAnswer(exchange: Pick<RecordedExchange, "status">): boolean {
+    return exchange.status === 0 || exchange.status === 429 || exchange.status >= 500;
 }
 
 export interface RecorderOptions {
@@ -206,7 +223,11 @@ export class Recorder {
     }
 
     /** The exchange for a request: from the cache, or live when recording. */
-    async exchange(url: string, init?: RequestInit): Promise<RecordedExchange> {
+    async exchange(
+        url: string,
+        init?: RequestInit,
+        options: ExchangeOptions = {}
+    ): Promise<RecordedExchange> {
         const method = (init?.method ?? "GET").toUpperCase();
         const body =
             init?.body === undefined || init.body === null
@@ -217,7 +238,12 @@ export class Recorder {
                     ? init.body.toString()
                     : String(init.body as unknown);
         const cached = this.lookup(url, method, body);
-        if (cached) {
+        const sendAgain =
+            cached !== null &&
+            options.retryFailure === true &&
+            this.mode === "record" &&
+            carriedNoAnswer(cached);
+        if (cached && !sendAgain) {
             this.replayed += 1;
             return cached;
         }
@@ -239,11 +265,91 @@ export class Recorder {
     };
 
     /** GET a JSON document; throws on a non-2xx status. */
-    async getJson<T>(url: string): Promise<T> {
-        const exchange = await this.exchange(url, { headers: { Accept: "application/json" } });
+    async getJson<T>(url: string, options: ExchangeOptions = {}): Promise<T> {
+        const exchange = await this.exchange(
+            url,
+            { headers: { Accept: "application/json" } },
+            options
+        );
         if (exchange.status === 0) throw new Error(exchange.error ?? "request failed");
         if (exchange.status < 200 || exchange.status >= 300)
             throw new Error(`${new URL(url).hostname} ${exchange.status}`);
         return JSON.parse(exchange.body) as T;
     }
+}
+
+/** What a sweep or page recorder needs of a recorder; a test can stand in for it. */
+export type ExchangeSource = Pick<Recorder, "exchange" | "mode">;
+
+/** True for an exchange that answered the question: a 2xx. */
+export function answered(exchange: Pick<RecordedExchange, "status">): boolean {
+    return exchange.status >= 200 && exchange.status < 300;
+}
+
+/** Why an exchange is not an answer, in a few words. */
+export function failureDetail(exchange: Pick<RecordedExchange, "status" | "error">): string {
+    return exchange.status === 0 ? (exchange.error ?? "no response") : `HTTP ${exchange.status}`;
+}
+
+export interface RetryOptions {
+    /** Tries while recording (default 3). Replay always makes one: it returns what was recorded. */
+    attempts?: number;
+    /** Pause between tries (default 5 s). */
+    pauseMs?: number;
+    /** Called for every try that was not an answer. */
+    onFailure?: (exchange: RecordedExchange, attempt: number, attempts: number) => void;
+}
+
+/**
+ * A GET whose answer the caller needs, not just its outcome. While recording,
+ * a request that carried no answer is sent again, also when that failure is
+ * already in the recording; replay returns what was recorded. A request that
+ * was never recorded throws `NotRecordedError`. The caller checks `answered`
+ * on what comes back: no answer is not an empty answer.
+ */
+export async function exchangeWithRetries(
+    source: ExchangeSource,
+    url: string,
+    options: RetryOptions = {}
+): Promise<RecordedExchange> {
+    const attempts = source.mode === "record" ? (options.attempts ?? 3) : 1;
+    for (let attempt = 1; ; attempt++) {
+        const exchange = await source.exchange(
+            url,
+            { headers: { Accept: "application/json" } },
+            { retryFailure: true }
+        );
+        if (answered(exchange)) return exchange;
+        options.onFailure?.(exchange, attempt, attempts);
+        // A refusal that will not change (a 400, say) is not worth asking again.
+        if (attempt >= attempts || !carriedNoAnswer(exchange)) return exchange;
+        await sleep(options.pauseMs ?? 5_000);
+    }
+}
+
+/**
+ * Production's clients catch fetch errors and carry on with what they have.
+ * In a replay that would turn "this request was never recorded" into "the
+ * server had nothing", and an incomplete recording into a quietly different
+ * result. Give production `fetchImpl` from here and call `assertAllRecorded`
+ * when it returns: an unrecorded request then stops the run after all.
+ */
+export function failOnUnrecorded(fetchImpl: typeof fetch): {
+    fetchImpl: typeof fetch;
+    assertAllRecorded(): void;
+} {
+    let unrecorded: NotRecordedError | null = null;
+    return {
+        fetchImpl: async (input, init) => {
+            try {
+                return await fetchImpl(input, init);
+            } catch (error) {
+                if (error instanceof NotRecordedError) unrecorded ??= error;
+                throw error;
+            }
+        },
+        assertAllRecorded() {
+            if (unrecorded) throw unrecorded;
+        },
+    };
 }

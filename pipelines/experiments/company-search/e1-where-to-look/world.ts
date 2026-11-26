@@ -20,6 +20,13 @@ import type { Bbox, PlaceSegment } from "./segments";
 
 export const PHOTON_URL = "https://photon.komoot.io/api/";
 export const PHOTON_CAP = 50;
+/**
+ * The format the recorder writes. 2: a box whose request got no answer is
+ * stored with `failed`. Before that it was stored as an empty, complete box,
+ * with nothing to tell it from a box that holds no places, so a replay does
+ * not accept a world of an earlier format (see ../lib/worlds.ts).
+ */
+export const WORLD_FORMAT = 2;
 
 export interface Place {
     /** "N123", "W45", "R6": OSM type initial + id. */
@@ -38,6 +45,13 @@ export interface NodeAnswer {
     places: string[];
     /** True when Photon returned a full page, so the box may hide more. */
     capped: boolean;
+    /**
+     * True when the request for this box got no answer (no response or an
+     * HTTP error). Nothing is known about the box: `places` is empty because
+     * nothing came back, not because nothing is there, and the word is not
+     * complete. Absent on a box that was answered.
+     */
+    failed?: true;
 }
 
 /** Where a search word comes from: what a policy may ask without having learned it. */
@@ -51,6 +65,8 @@ export interface TermGroups {
 }
 
 export interface World {
+    /** `WORLD_FORMAT` of the recorder that wrote this world; absent before format 2. */
+    format?: number;
     segment: PlaceSegment;
     /** Per search word, every recorded quadtree node by id. */
     sweeps: Record<string, Record<string, NodeAnswer>>;
@@ -140,11 +156,25 @@ export function loadWorld(segmentId: string): World | null {
     return JSON.parse(gunzipSync(readFileSync(file)).toString("utf8")) as World;
 }
 
+/** True when the world was written by the current recorder. */
+export function isCurrentWorld(world: World): boolean {
+    return world.format === WORLD_FORMAT;
+}
+
+/** Every box whose request got no answer while recording: the holes in this world. */
+export function unansweredBoxes(world: World): Array<{ word: string; box: string }> {
+    const holes: Array<{ word: string; box: string }> = [];
+    for (const [word, nodes] of Object.entries(world.sweeps))
+        for (const node of Object.values(nodes))
+            if (node.failed) holes.push({ word, box: node.id });
+    return holes;
+}
+
 /**
  * The answer for any quadtree node, recorded or not: a recorded node answers
- * for itself; a node under a complete (uncapped) ancestor is that ancestor's
- * places filtered by coordinates. Returns null for a node that was never
- * reachable (its parent was never asked).
+ * for itself; a node under a complete (uncapped, answered) ancestor is that
+ * ancestor's places filtered by coordinates. Returns null for a node that was
+ * never reachable (its parent was never asked, or got no answer).
  */
 export function answerFor(world: World, term: string, id: string, bbox: Bbox): NodeAnswer | null {
     const nodes = world.sweeps[term];
@@ -155,7 +185,7 @@ export function answerFor(world: World, term: string, id: string, bbox: Bbox): N
     for (let cut = parts.length - 1; cut >= 1; cut--) {
         const ancestor = nodes[parts.slice(0, cut).join(".")];
         if (!ancestor) continue;
-        if (ancestor.capped) return null;
+        if (ancestor.capped || ancestor.failed) return null;
         return {
             id,
             bbox,

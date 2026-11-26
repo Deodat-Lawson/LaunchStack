@@ -38,7 +38,12 @@ for (const id of ids) {
         // Replay only: a missing recording is an error, never a live request.
         env: { ...process.env, COMPANY_SEARCH_BENCH_MODE: "replay" },
     });
-    console.log(`######## ${id} finished in ${Math.round((Date.now() - started) / 1000)} s`);
-    if (result.status !== 0) failed += 1;
+    const seconds = Math.round((Date.now() - started) / 1000);
+    if (result.status === 0) {
+        console.log(`######## ${id} finished in ${seconds} s`);
+    } else {
+        console.log(`######## ${id} FAILED after ${seconds} s (exit ${result.status ?? "none"})`);
+        failed += 1;
+    }
 }
 process.exit(failed === 0 ? 0 : 1);

@@ -18,7 +18,8 @@ export function createEnv(world: World, onRequest?: (line: string) => void): Dis
         const queue: Array<{ id: string; bbox: Bbox; depth: number }> = [
             { id: "r", bbox: world.segment.bbox, depth: 0 },
         ];
-        // A full box at the depth limit may hide places for good.
+        // A full box at the depth limit may hide places for good, and so may a
+        // box whose request got no answer when it was recorded.
         let cutOff = false;
         return {
             pending: () => queue.length,
@@ -32,6 +33,13 @@ export function createEnv(world: World, onRequest?: (line: string) => void): Dis
                 const node = queue.shift()!;
                 const answer = answerFor(world, term, node.id, node.bbox);
                 if (!answer) return [];
+                if (answer.failed) {
+                    // The request is spent and nothing came back: null, not an
+                    // empty list, so nothing learns from it as from an answer.
+                    cutOff = true;
+                    onRequest?.(`${term}@${node.id}:no answer`);
+                    return null;
+                }
                 if (answer.capped) {
                     if (node.depth < MAX_DEPTH) {
                         for (const [i, bbox] of childBboxes(node.bbox).entries())

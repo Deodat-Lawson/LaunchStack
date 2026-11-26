@@ -15,51 +15,19 @@ import { mkdirSync, writeFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import type { DiscoveryEnv, ResultItem, TermCursor } from "../lib/discovery";
 import { evaluatePolicies, printPolicyTable } from "../lib/discovery-report";
 import { stringifyResults } from "../lib/json";
 import { mean, round } from "../lib/stats";
+import { requireWorlds, runReplay } from "../lib/worlds";
+import { createEnv } from "./env";
 import { SEGMENTS } from "./segments";
-import { PAGE_SIZE, loadWorld, nameTokens, type RegisterWorld } from "./world";
+import { isCurrentWorld, loadWorld, type RegisterWorld } from "./world";
 
 const BUDGETS = [6, 12, 24, 48, 96];
 const MAX_BUDGET = 96;
 const LONG_BUDGET = 400;
 const SEEDS = 30;
 const COVERAGE_MARKS = [0.5, 0.8, 0.95];
-
-function createEnv(world: RegisterWorld): DiscoveryEnv {
-    const open = (term: string): TermCursor => {
-        const pages = world.pages[term] ?? [];
-        let next = 0;
-        const items = (page: number): ResultItem[] =>
-            (pages[page] ?? []).map(company => ({
-                id: company.id,
-                name: company.name,
-                target: company.code === world.segment.code,
-            }));
-        return {
-            pending: () => pages.length - next,
-            peek: () => (next < pages.length ? items(next) : null),
-            next: () => items(next++),
-            // Complete only when the recording holds every match of the word.
-            complete: () =>
-                next >= pages.length && (world.totals[term] ?? 0) <= pages.length * PAGE_SIZE,
-        };
-    };
-    return {
-        cap: PAGE_SIZE,
-        planTerms: world.terms.plan,
-        letterTerms: [],
-        allTerms: () => Object.keys(world.pages),
-        hasTerm: term => world.pages[term] !== undefined,
-        open,
-        tokens: nameTokens,
-        // The register's name search matches whole words.
-        wordMatches: (nameWord, queryWord) => nameWord === queryWord,
-        keysOf: nameWord => [nameWord],
-    };
-}
 
 function runSegment(world: RegisterWorld) {
     const env = createEnv(world);
@@ -105,6 +73,8 @@ function runSegment(world: RegisterWorld) {
         },
         recordedWords: { plan: world.terms.plan, mined: world.terms.mined.length },
         recordingRequests: world.requests,
+        /** Words whose recording stopped at a request that got no answer; empty when the recording is whole. */
+        wordsCutShort: world.cutShort ?? [],
         /** Every planned word once, first page only. */
         today: {
             requests: planSize,
@@ -119,14 +89,17 @@ function runSegment(world: RegisterWorld) {
 }
 
 function main(): void {
-    const segments: Array<ReturnType<typeof runSegment>> = [];
-    for (const segment of SEGMENTS) {
-        const world = loadWorld(segment.id);
-        if (!world) {
-            console.warn(`no recording for ${segment.id}; run record.ts first`);
-            continue;
-        }
-        segments.push(runSegment(world));
+    // Every world first: a missing recording stops the run before anything is written.
+    const worlds = requireWorlds("e2-what-to-ask", SEGMENTS, loadWorld, {
+        isCurrent: isCurrentWorld,
+        rebuild: "pnpm exec tsx experiments/company-search/e2-what-to-ask/record.ts",
+    });
+    const segments = worlds.map(runSegment);
+    for (const s of segments) {
+        if (s.wordsCutShort.length === 0) continue;
+        console.warn(
+            `${s.id}: ${s.wordsCutShort.length} word(s) were cut short by a request that got no answer when this world was recorded (${s.wordsCutShort.join(", ")}); record that segment again before relying on its numbers`
+        );
     }
     const policyIds = segments[0]?.policies.map(p => p.id) ?? [];
     // Per budget: targets found relative to the fixed-order plan (1 = same), averaged over segments.
@@ -176,4 +149,6 @@ function main(): void {
     for (const row of overall) console.log("  ", JSON.stringify(row));
 }
 
-main();
+// A missing or outdated recording is an everyday condition on a fresh
+// checkout: say what is wrong and stop. Anything else keeps its trace.
+runReplay(main);

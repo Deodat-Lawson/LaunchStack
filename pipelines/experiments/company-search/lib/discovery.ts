@@ -22,8 +22,12 @@ export interface TermCursor {
     pending(): number;
     /** The next request's answer, without sending it (the oracle's view). */
     peek(): readonly ResultItem[] | null;
-    /** Send the next request. */
-    next(): readonly ResultItem[];
+    /**
+     * Send the next request. Null when the recording holds no answer for it
+     * (the request failed when it was recorded): the request is spent, and
+     * nothing is known about what it would have returned.
+     */
+    next(): readonly ResultItem[] | null;
     /** True once every match of the word has been returned: nothing was cut off. */
     complete(): boolean;
 }
@@ -236,7 +240,11 @@ export function simulate(env: DiscoveryEnv, policy: Policy, options: SimulateOpt
         const { arm, cursor, words } = open.get(chosen.term)!;
         const sideBefore = least(words, sideSeen);
         const precisionBefore = sidePrecision(words);
-        const items = cursor.next();
+        const answer = cursor.next();
+        // No answer is not an empty answer: the request is spent, but it says
+        // nothing about the word, so no estimate may learn from it.
+        const unanswered = answer === null;
+        const items = answer ?? [];
 
         let reward = 0;
         let targets = 0;
@@ -269,14 +277,16 @@ export function simulate(env: DiscoveryEnv, policy: Policy, options: SimulateOpt
             reward += 1;
             if (env.isBonus?.(item.id)) bonus += 1;
         }
-        if (arm.pulls === 0) {
-            firstPulls[arm.group].sum += reward;
-            firstPulls[arm.group].n += 1;
-            scale.add(items.length, sideBefore + SMOOTHING);
-            if (items.length > 0) calibration.add(targets, items.length * precisionBefore);
-            if (targets > 0) novelty.add(reward, targets);
+        if (!unanswered) {
+            if (arm.pulls === 0) {
+                firstPulls[arm.group].sum += reward;
+                firstPulls[arm.group].n += 1;
+                scale.add(items.length, sideBefore + SMOOTHING);
+                if (items.length > 0) calibration.add(targets, items.length * precisionBefore);
+                if (targets > 0) novelty.add(reward, targets);
+            }
+            recordPull(arm, reward);
         }
-        recordPull(arm, reward);
         arm.pending = cursor.pending();
         if (arm.pending === 0 && cursor.complete() && words.length === 1) completed.push(words[0]!);
 
@@ -335,7 +345,7 @@ export function simulateOracle(env: DiscoveryEnv, budget: number): Trace {
             }
         }
         if (!best) break;
-        for (const item of best.next()) {
+        for (const item of best.next() ?? []) {
             if (!item.target || found.has(item.id)) continue;
             found.add(item.id);
             if (env.isBonus?.(item.id)) bonus += 1;

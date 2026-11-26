@@ -12,6 +12,13 @@ import type { RegisterSegment } from "./segments";
 
 export const REGISTER_URL = "https://data.brreg.no/enhetsregisteret/api/enheter";
 export const PAGE_SIZE = 20;
+/**
+ * The format the recorder writes. 2: a word whose recording stopped at a
+ * request that got no answer is listed in `cutShort`. Before that such a word
+ * could not be told from one with no matches, so a replay does not accept a
+ * world of an earlier format (see ../lib/worlds.ts).
+ */
+export const WORLD_FORMAT = 2;
 
 export interface Company {
     /** Organisation number. */
@@ -22,6 +29,8 @@ export interface Company {
 }
 
 export interface RegisterWorld {
+    /** `WORLD_FORMAT` of the recorder that wrote this world; absent before format 2. */
+    format?: number;
     segment: RegisterSegment;
     /** pages[word][n] = the n-th page of the name search for that word. */
     pages: Record<string, Company[][]>;
@@ -35,6 +44,12 @@ export interface RegisterWorld {
     /** Organisation numbers of every company in the target class. */
     truth: string[];
     requests: number;
+    /**
+     * Words whose recording stopped at a request that got no answer (no
+     * response or an HTTP error). Their recorded pages are not the whole
+     * answer, so such a word is never complete. Absent in a whole recording.
+     */
+    cutShort?: string[];
 }
 
 export function searchUrl(term: string, page: number): string {
@@ -69,4 +84,9 @@ export function loadWorld(segmentId: string): RegisterWorld | null {
     const file = worldFile(segmentId);
     if (!existsSync(file)) return null;
     return JSON.parse(gunzipSync(readFileSync(file)).toString("utf8")) as RegisterWorld;
+}
+
+/** True when the world was written by the current recorder. */
+export function isCurrentWorld(world: RegisterWorld): boolean {
+    return world.format === WORLD_FORMAT;
 }

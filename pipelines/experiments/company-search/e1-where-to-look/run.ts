@@ -14,9 +14,10 @@ import { fileURLToPath } from "node:url";
 import { evaluatePolicies, printPolicyTable } from "../lib/discovery-report";
 import { stringifyResults } from "../lib/json";
 import { mean, round } from "../lib/stats";
+import { requireWorlds, runReplay } from "../lib/worlds";
 import { createEnv } from "./env";
 import { SEGMENTS } from "./segments";
-import { loadWorld, type World } from "./world";
+import { isCurrentWorld, loadWorld, unansweredBoxes, type World } from "./world";
 
 const BUDGETS = [8, 16, 32, 64, 96];
 const MAX_BUDGET = 96;
@@ -33,7 +34,8 @@ const COVERAGE_MARKS = [0.5, 0.8, 0.95];
  */
 function bestCaseWords(world: World, reachable: number) {
     const sweeps = Object.entries(world.sweeps)
-        .filter(([term]) => term.length >= 3)
+        // A word with an unanswered box has an unknown total: it cannot be a "best case".
+        .filter(([term, nodes]) => term.length >= 3 && !Object.values(nodes).some(n => n.failed))
         .map(([term, nodes]) => {
             const places = new Set<string>();
             for (const node of Object.values(nodes)) for (const id of node.places) places.add(id);
@@ -110,6 +112,13 @@ function runSegment(world: World) {
             mined: world.terms.mined.length,
         },
         recordingRequests: world.photonRequests,
+        /**
+         * Sweep requests that got no answer while recording (a timeout or an
+         * HTTP error). Each is a hole: the simulation charges the request,
+         * returns nothing and never treats the word as exhausted. Empty when
+         * the recording is whole.
+         */
+        unansweredSweepRequests: unansweredBoxes(world),
         /** Production's own keyless search for this segment, run unchanged. */
         today: {
             photonRequests: world.production.photonRequests,
@@ -138,14 +147,17 @@ function runSegment(world: World) {
 }
 
 function main(): void {
-    const segments: Array<ReturnType<typeof runSegment>> = [];
-    for (const segment of SEGMENTS) {
-        const world = loadWorld(segment.id);
-        if (!world) {
-            console.warn(`no recording for ${segment.id}; run record.ts first`);
-            continue;
-        }
-        segments.push(runSegment(world));
+    // Every world first: a missing recording stops the run before anything is written.
+    const worlds = requireWorlds("e1-where-to-look", SEGMENTS, loadWorld, {
+        isCurrent: isCurrentWorld,
+        rebuild: "pnpm exec tsx experiments/company-search/e1-where-to-look/record.ts",
+    });
+    const segments = worlds.map(runSegment);
+    for (const s of segments) {
+        if (s.unansweredSweepRequests.length === 0) continue;
+        console.warn(
+            `${s.id}: ${s.unansweredSweepRequests.length} sweep request(s) got no answer when this world was recorded (${s.unansweredSweepRequests.map(h => `"${h.word}" ${h.box}`).join(", ")}); what those boxes hold is unknown, so record that segment again before relying on its numbers`
+        );
     }
 
     // Across segments: the share of the reachable population each policy knows at each budget.
@@ -231,4 +243,6 @@ function main(): void {
     console.log("\noverpass:", JSON.stringify(overpass));
 }
 
-main();
+// A missing or outdated recording is an everyday condition on a fresh
+// checkout: say what is wrong and stop. Anything else keeps its trace.
+runReplay(main);

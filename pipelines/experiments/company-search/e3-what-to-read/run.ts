@@ -14,7 +14,12 @@ import { fileURLToPath } from "node:url";
 import { NotRecordedError } from "../lib/recorder";
 import { createRng, hashSeed } from "../lib/rng";
 import { bootstrapMean, mean, pairedDifference, quantile, round } from "../lib/stats";
-import { buildDataset, HOSTS_IN_PARALLEL, type Dataset } from "./dataset";
+import {
+    buildDataset,
+    HOSTS_IN_PARALLEL,
+    IncompleteDirectoriesError,
+    type Dataset,
+} from "./dataset";
 import {
     bestPossibleScore,
     BUDGETS,
@@ -514,8 +519,12 @@ async function main(): Promise<void> {
     } catch (error) {
         if (error instanceof NotRecordedError) {
             console.error(
-                `${error.message}\nThe recording is missing or incomplete. Record first:\n  COMPANY_SEARCH_BENCH_MODE=record pnpm exec tsx experiments/company-search/e3-what-to-read/record.ts`
+                `${error.message}\nThe recording is missing or incomplete, and nothing was written. Record first:\n  COMPANY_SEARCH_BENCH_MODE=record pnpm exec tsx experiments/company-search/e3-what-to-read/record.ts`
             );
+            process.exit(1);
+        }
+        if (error instanceof IncompleteDirectoriesError) {
+            console.error(error.message);
             process.exit(1);
         }
         throw error;

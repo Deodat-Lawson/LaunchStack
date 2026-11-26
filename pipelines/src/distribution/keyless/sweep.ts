@@ -26,6 +26,7 @@ import {
     type OsmPlace,
 } from "./osm";
 import { OSM_API_URL, PHOTON_URL } from "./photon";
+import type { HostThrottle } from "./throttle";
 
 /** Photon's page size: a box that returns this many may hide more. */
 export const PHOTON_PAGE = 50;
@@ -173,25 +174,34 @@ export interface SweepClientOptions {
     photonUrl?: string;
     osmApiUrl?: string;
     userAgent?: string;
-    /** Give up on one request after this long (default 15 s). */
+    /**
+     * Give up on one request after this long (default 15 s), counted from the
+     * moment it is sent, not from when it joined its host's queue.
+     */
     requestTimeoutMs?: number;
+    /** Per-host pauses; each request waits its host's turn. None when absent. */
+    throttle?: HostThrottle;
 }
 
 async function getJson<T>(url: string, options: SweepClientOptions): Promise<T> {
-    const timed = withTimeout(options.signal, options.requestTimeoutMs ?? 15_000);
-    try {
-        const response = await (options.fetchImpl ?? fetch)(url, {
-            headers: {
-                "User-Agent": options.userAgent ?? KEYLESS_USER_AGENT,
-                Accept: "application/json",
-            },
-            signal: timed.signal,
-        });
-        if (!response.ok) throw new Error(`${new URL(url).host} ${response.status}`);
-        return (await response.json()) as T;
-    } finally {
-        timed.clear();
-    }
+    const host = new URL(url).hostname;
+    const send = async (): Promise<T> => {
+        const timed = withTimeout(options.signal, options.requestTimeoutMs ?? 15_000);
+        try {
+            const response = await (options.fetchImpl ?? fetch)(url, {
+                headers: {
+                    "User-Agent": options.userAgent ?? KEYLESS_USER_AGENT,
+                    Accept: "application/json",
+                },
+                signal: timed.signal,
+            });
+            if (!response.ok) throw new Error(`${host} ${response.status}`);
+            return (await response.json()) as T;
+        } finally {
+            timed.clear();
+        }
+    };
+    return options.throttle ? options.throttle(host, send) : send();
 }
 
 export interface SweepRunOptions extends SweepClientOptions {

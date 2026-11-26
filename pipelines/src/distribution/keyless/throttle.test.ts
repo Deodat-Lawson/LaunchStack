@@ -26,6 +26,8 @@ describe("host throttle", () => {
         expect(DEFAULT_HOST_GAPS_MS["photon.komoot.io"]).toBeGreaterThanOrEqual(1_000);
         expect(DEFAULT_HOST_GAPS_MS["api.openstreetmap.org"]).toBeGreaterThanOrEqual(1_000);
         expect(DEFAULT_HOST_GAPS_MS["nominatim.openstreetmap.org"]).toBeGreaterThanOrEqual(1_000);
+        // Overpass is not queued: one request per area per run, each up to a minute or two.
+        expect(DEFAULT_HOST_GAPS_MS["overpass-api.de"]).toBeUndefined();
     });
 
     it("starts each request to a host only after the pause since the last one ended", async () => {

@@ -124,8 +124,10 @@ function describePool(where: string, selectors: readonly string[], report: Place
 
 export function createKeylessPorts(options: KeylessPortsOptions = {}): DistributionPorts {
     const fetchImpl = options.fetchImpl ?? fetch;
-    // The map servers are asked one request at a time per host, with a pause.
-    const politeFetch = throttledFetch(fetchImpl, options.throttle ?? sharedHostThrottle);
+    // Photon, the OSM API and Nominatim are asked one request at a time per
+    // host, with a pause.
+    const throttle = options.throttle ?? sharedHostThrottle;
+    const politeFetch = throttledFetch(fetchImpl, throttle);
     const placePools = options.placePools ?? processPlacePools;
     // The run's sweep cap, shared fairly by the place queries still to come.
     let sweepRequestsLeft = options.sweepRequestsPerRun ?? readSweepRequestsPerRun();
@@ -157,7 +159,8 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
                 {
                     store: placePools,
                     sweepRequests: share,
-                    fetchImpl: politeFetch,
+                    fetchImpl,
+                    throttle,
                     limits: options.placeLimits,
                     overpassUrls: options.overpassUrls,
                 }

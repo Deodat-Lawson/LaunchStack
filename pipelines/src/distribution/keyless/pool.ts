@@ -35,6 +35,7 @@ import {
     type SweepRunResult,
     type SweepState,
 } from "./sweep";
+import { throttledFetch, type HostThrottle } from "./throttle";
 
 export const PLACE_POOL_VERSION = 1;
 /** Tags swept per pool: each one is a population of its own, 26 requests to start. */
@@ -120,6 +121,11 @@ export interface PlacePoolDeps {
     /** Photon requests this call may send. */
     sweepRequests: number;
     fetchImpl?: typeof fetch;
+    /**
+     * Per-host pauses for Photon and the OSM API: one request at a time per
+     * host. Overpass is not queued (see ./throttle). None when absent.
+     */
+    throttle?: HostThrottle;
     signal?: AbortSignal;
     now?: () => number;
     /** Overpass instances to try in order. */
@@ -381,6 +387,7 @@ async function fillPool(
                 country,
                 maxRequests: deps.sweepRequests,
                 fetchImpl: deps.fetchImpl,
+                throttle: deps.throttle,
                 signal: deps.signal,
                 onHits: hits => {
                     for (const hit of hits) {
@@ -399,6 +406,7 @@ async function fillPool(
             if (state.unread.length > 0) {
                 const read = await readPlaceTags(state.unread, country, {
                     fetchImpl: deps.fetchImpl,
+                    throttle: deps.throttle,
                     signal: deps.signal,
                 });
                 for (const place of read.places) state.places[place.id] = place;
@@ -431,8 +439,9 @@ async function sweepBox(
     deps: PlacePoolDeps
 ): Promise<Bbox | null> {
     if (!region) return countryBox(country);
+    const fetchImpl = deps.fetchImpl ?? fetch;
     const centre = await locateCity(region, country, {
-        fetchImpl: deps.fetchImpl,
+        fetchImpl: deps.throttle ? throttledFetch(fetchImpl, deps.throttle) : fetchImpl,
         signal: deps.signal,
     }).catch(() => null);
     if (!centre) return null;

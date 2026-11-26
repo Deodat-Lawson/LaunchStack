@@ -6,14 +6,16 @@
  * here, for every caller in the process, instead of being left to each loop.
  */
 
-/** Pause after a request to a host, in milliseconds. A host not listed is not held back. */
+/**
+ * Pause after a request to a host, in milliseconds. A host not listed is not
+ * held back. Overpass is left out on purpose: a run sends it one request per
+ * area and each can take a minute, so queueing them behind one another would
+ * spend a request's time limit on waiting for someone else's.
+ */
 export const DEFAULT_HOST_GAPS_MS: Readonly<Record<string, number>> = {
     "photon.komoot.io": 1_100,
     "api.openstreetmap.org": 1_500,
     "nominatim.openstreetmap.org": 1_100,
-    "overpass-api.de": 1_000,
-    "maps.mail.ru": 1_000,
-    "overpass.kumi.systems": 1_000,
 };
 
 export interface HostThrottleOptions {

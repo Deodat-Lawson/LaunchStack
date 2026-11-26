@@ -20,6 +20,7 @@ import {
     type SweepHit,
     type SweepState,
 } from "./sweep";
+import type { HostThrottle } from "./throttle";
 
 const NL = [3.3, 50.7, 7.25, 53.6] as const;
 const TAG = "shop:bicycle";
@@ -133,6 +134,40 @@ describe("sweeping", () => {
         // Stopping and resuming costs nothing: the same requests as one long run.
         expect(urls).toEqual(whole.sweepUrls());
         expect(found.size).toBe(oneGo.found.size);
+    });
+
+    it("counts a request's time limit from when it is sent, not from when it joined the queue", async () => {
+        const map = createFakeMap(fakePopulation(60));
+        // Every request waits 80 ms for its host's turn; the limit for the request itself is 40 ms.
+        const slowQueue: HostThrottle = async (_host, task) => {
+            await new Promise(resolve => setTimeout(resolve, 80));
+            return task();
+        };
+        const state = newSweep(NL, [TAG], ["a", "b", "c"]);
+        const result = await runSweep(state, {
+            country: "NL",
+            maxRequests: 3,
+            fetchImpl: map.fetchImpl,
+            throttle: slowQueue,
+            requestTimeoutMs: 40,
+            onHits: () => undefined,
+        });
+        expect(result).toMatchObject({ sent: 3, answered: 3, failed: 0 });
+
+        // A request that itself takes longer than the limit still fails.
+        const slowServer: typeof fetch = async (input, init) => {
+            await new Promise(resolve => setTimeout(resolve, 120));
+            if (init?.signal?.aborted) throw new Error("aborted");
+            return map.fetchImpl(input, init);
+        };
+        const timedOut = await runSweep(newSweep(NL, [TAG], ["a"]), {
+            country: "NL",
+            maxRequests: 1,
+            fetchImpl: slowServer,
+            requestTimeoutMs: 40,
+            onHits: () => undefined,
+        });
+        expect(timedOut).toMatchObject({ answered: 0, failed: 1 });
     });
 
     it("keeps places of the asked country only", async () => {

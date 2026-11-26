@@ -21,11 +21,17 @@ export interface FakePlace {
     city?: string;
 }
 
+export type OverpassMode = "answers" | 504 | 429 | "empty" | "cut";
+
 export interface FakeMapOptions {
-    /** What an Overpass instance does: answer with every place, or fail with this status. */
-    overpass?: "answers" | 504 | 429 | "empty";
+    /**
+     * What an Overpass instance does: answer with every place, fail with this
+     * status, answer with nothing, or ("cut") run out of time and return half
+     * the places with a remark saying so.
+     */
+    overpass?: OverpassMode;
     /** Per instance host, overriding `overpass`. */
-    overpassByHost?: Record<string, "answers" | 504 | 429 | "empty">;
+    overpassByHost?: Record<string, OverpassMode>;
     /** Photon requests (by full URL) that fail with a 503. */
     photonFails?: (url: string) => boolean;
     /** OSM API requests that fail. */
@@ -165,33 +171,39 @@ export function createFakeMap(places: readonly FakePlace[], options: FakeMapOpti
             overpassQueries.push(body);
             const mode = options.overpassByHost?.[host] ?? options.overpass ?? "answers";
             if (mode === "empty") return Promise.resolve(json({ elements: [] }));
-            if (mode !== "answers")
+            if (mode !== "answers" && mode !== "cut")
                 return Promise.resolve(new Response("<html>busy</html>", { status: mode }));
             const country = /"ISO3166-1"="([A-Z]{2})"/.exec(body)?.[1];
             const selectors = [...body.matchAll(/\["([a-z_]+)"="([a-z_]+)"\]\["name"\]/g)].map(
                 m => `${m[1]}:${m[2]}`
             );
+            const elements = places
+                .filter(p => p.country === country && selectors.includes(p.tag))
+                .map(p =>
+                    p.type === "N"
+                        ? {
+                              type: "node",
+                              id: p.id,
+                              lat: p.lat,
+                              lon: p.lon,
+                              tags: tagsOf(p),
+                          }
+                        : {
+                              type: "way",
+                              id: p.id,
+                              center: { lat: p.lat, lon: p.lon },
+                              tags: tagsOf(p),
+                          }
+                );
             return Promise.resolve(
-                json({
-                    elements: places
-                        .filter(p => p.country === country && selectors.includes(p.tag))
-                        .map(p =>
-                            p.type === "N"
-                                ? {
-                                      type: "node",
-                                      id: p.id,
-                                      lat: p.lat,
-                                      lon: p.lon,
-                                      tags: tagsOf(p),
-                                  }
-                                : {
-                                      type: "way",
-                                      id: p.id,
-                                      center: { lat: p.lat, lon: p.lon },
-                                      tags: tagsOf(p),
-                                  }
-                        ),
-                })
+                json(
+                    mode === "cut"
+                        ? {
+                              elements: elements.slice(0, Math.ceil(elements.length / 2)),
+                              remark: 'runtime error: Query timed out in "query" at line 4 after 90 seconds.',
+                          }
+                        : { elements }
+                )
             );
         }
         calls.push(`other ${url.href}`);

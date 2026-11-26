@@ -18,6 +18,7 @@ import {
     type PlacePoolStore,
 } from "./pool";
 import { sweepPending } from "./sweep";
+import type { HostThrottle } from "./throttle";
 
 const request: PlacePoolRequest = {
     country: "NL",
@@ -135,6 +136,37 @@ describe("Overpass first", () => {
         expect(report.complete).toBe(true);
     });
 
+    it("does not take an answer the server cut short for the whole population", async () => {
+        const places = fakePopulation(200);
+        // Two instances run out of time and return half; the third answers in full.
+        const map = createFakeMap(places, {
+            overpassByHost: { "overpass-api.de": "cut", "maps.mail.ru": "cut" },
+        });
+        const { report } = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            sweepRequests: 0,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(report.overpassAttempts.map(a => a.ok)).toEqual([false, false, true]);
+        expect(report.overpassAttempts[0]!.detail).toMatch(/^Overpass remark: runtime error/);
+        expect(report).toMatchObject({ complete: true, known: 200 });
+
+        // Every instance cut short: the pool is not complete, and the sweep takes over.
+        const allCut = createFakeMap(fakePopulation(700), { overpass: "cut" });
+        const swept = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            sweepRequests: 26,
+            fetchImpl: allCut.fetchImpl,
+        });
+        expect(swept.report).toMatchObject({
+            asked: ["overpass", "sweep"],
+            complete: false,
+            completedBy: null,
+            requests: { overpass: 3, photon: 26 },
+        });
+        expect(swept.state.overpassAreas).toEqual([]);
+    });
+
     it("asks a large country city by city and remembers the cities that answered", async () => {
         const berlin: FakePlace[] = fakePopulation(30, {
             country: "DE",
@@ -209,6 +241,29 @@ describe("the sweep, when Overpass does not answer", () => {
         // What the store holds is what the next run starts from.
         const stored = await store.load(placePoolKey(request));
         expect(stored && sweepPending(stored.sweep!)).toBe(report.pendingBoxes);
+    });
+
+    it("sends every Photon and OSM API request through its host's queue, and Overpass through none", async () => {
+        const map = createFakeMap(fakePopulation(300), { overpass: 504 });
+        const queued: string[] = [];
+        const throttle: HostThrottle = (host, task) => {
+            queued.push(host);
+            return task();
+        };
+        await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            sweepRequests: 30,
+            fetchImpl: map.fetchImpl,
+            throttle,
+        });
+        expect(map.count("overpass")).toBe(3);
+        expect(queued.filter(host => host === "photon.komoot.io")).toHaveLength(30);
+        expect(queued.filter(host => host === "api.openstreetmap.org")).toHaveLength(
+            map.count("osmapi")
+        );
+        expect(map.count("osmapi")).toBeGreaterThan(0);
+        // An Overpass request can take a minute: runs do not wait in line for each other's.
+        expect(new Set(queued)).toEqual(new Set(["photon.komoot.io", "api.openstreetmap.org"]));
     });
 
     it("carries on from the stored sweep on later runs, never repeating a request, until every place is known", async () => {

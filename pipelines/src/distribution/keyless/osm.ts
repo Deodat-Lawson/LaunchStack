@@ -262,6 +262,8 @@ export interface OverpassClientOptions {
     userAgent?: string;
     /** Give up on one instance after this long; none by default. */
     timeoutMs?: number;
+    /** Refuse an answer the server says it cut short, even when it holds elements. */
+    wholeAnswer?: boolean;
 }
 
 interface OverpassResponse {
@@ -337,7 +339,13 @@ async function readArea(
     }
     const json = (await response.json()) as OverpassResponse;
     const elements = json.elements ?? [];
-    if (elements.length === 0 && json.remark && /timed out|error/i.test(json.remark))
+    // A remark with some elements is an answer cut short by the server's
+    // time or memory limit: fine for a sample, not for "every place".
+    if (
+        json.remark &&
+        /timed out|out of memory|error/i.test(json.remark) &&
+        (elements.length === 0 || options.wholeAnswer)
+    )
         throw new Error(`Overpass remark: ${json.remark.slice(0, 120)}`);
     return elements;
 }
@@ -421,7 +429,11 @@ export async function fetchOverpassArea(
         const host = hostOfUrl(url);
         const started = now();
         try {
-            const elements = await requestArea(url, query, { ...options, timeoutMs });
+            const elements = await requestArea(url, query, {
+                ...options,
+                timeoutMs,
+                wholeAnswer: true,
+            });
             attempts.push({
                 host,
                 ok: true,

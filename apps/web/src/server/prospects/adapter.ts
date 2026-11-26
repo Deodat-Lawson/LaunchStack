@@ -33,6 +33,7 @@ import {
     type RelationshipRecord,
     type RelationshipStage,
     type RunRecord,
+    type RunSummary,
     type SourceCount,
 } from "@launchstack/pipelines/distribution/types";
 import { normalizeDomain } from "@launchstack/tools/org-resolver";
@@ -1188,6 +1189,40 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
     const sourcesOk = summary?.sources.filter(s => s.status === "ok").length ?? 0;
     const sourcesRun = summary?.sources.filter(s => s.status !== "skipped").length ?? 0;
     const profileTotal = run.candidateOrgIds?.length ?? run.options.maxCandidates;
+    // What filling the shortlist cost: the companies the fit check read, and
+    // the verdicts the ranking already knew when it started. A check that broke
+    // off says so instead of showing a tick. Every text stays short: the run
+    // sheet is 460px wide and a row is one line.
+    const fitCheckStep = (fit: NonNullable<RunSummary["fitCheck"]>): RunStep => {
+        const stopped = fit.incomplete === true;
+        return {
+            id: "fit-check",
+            label: "Fit check",
+            detail: !stopped
+                ? `${fit.checked} read, ${fit.rejected} turned away`
+                : fit.checked > 0
+                  ? `stopped after ${fit.checked} read`
+                  : "could not run",
+            status: stopped ? "failed" : "done",
+            right:
+                fit.startedFrom > 0
+                    ? `${fit.startedFrom} earlier verdict${fit.startedFrom === 1 ? "" : "s"}`
+                    : null,
+            labelCopy: stepLabel("fitCheck"),
+            detailCopy: !stopped
+                ? copy("growth.server.runs.fitRead", {
+                      checked: n(fit.checked),
+                      rejected: n(fit.rejected),
+                  })
+                : fit.checked > 0
+                  ? copy("growth.server.runs.fitStopped", { checked: n(fit.checked) })
+                  : copy("growth.server.runs.fitNotRun"),
+            rightCopy:
+                fit.startedFrom > 0
+                    ? copy("growth.server.runs.fitStartedFrom", { count: fit.startedFrom })
+                    : null,
+        };
+    };
     const steps: RunStep[] = [
         {
             id: "segment",
@@ -1231,6 +1266,7 @@ export function toRunDto(run: RunRecord, progress: RunProgress | null = null): R
             rightCopy: summary?.excluded
                 ? copy("growth.server.runs.excluded", { count: n(summary.excluded) })
                 : null,
+            ...(summary?.fitCheck ? { children: [fitCheckStep(summary.fitCheck)] } : {}),
         },
         {
             id: "profiles",

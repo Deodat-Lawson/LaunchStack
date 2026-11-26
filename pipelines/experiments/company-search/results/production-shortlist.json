@@ -1,0 +1,1376 @@
+{
+  "experiment": "production-replay: the shortlist learns from each verdict",
+  "question": "Does production's own ranking code find more good companies per fit check than today's fixed ranking, on E4's pools?",
+  "design": {
+    "code": "src/distribution/shortlist.ts (fillShortlist) and src/distribution/learn.ts (createShortlistLearner), as production runs them",
+    "pools": "E4's seven reported segments, each with a brief in its companies' own language (E4's headline condition)",
+    "check": "one check reveals one company's hidden label (directory tag or register code) and costs 1",
+    "candidates": "a seed's 80% draw of the pool, in today's order: relevance, ties in the draw's order",
+    "arms": {
+      "today": "the fixed ranking through production's loop: 2 companies per open shortlist place each round",
+      "today-in-rounds": "the fixed ranking asked 10 at a time, so the effect of the round size alone is visible",
+      "learner": "production's learner picks every round of 10"
+    },
+    "metrics": {
+      "found": "good companies among the first 25, 50, 100, 200 checks, with no shortlist to fill",
+      "checksTo25": "checks until the 25th good company was checked, capped at 500",
+      "spent": "checks production's loop makes before a 25-place shortlist is full, in whole rounds",
+      "rounds": "rounds of that run. The fit check makes one model call per twenty companies of a round: three for today's first round of fifty, one for a round of ten"
+    },
+    "learner": {
+      "dims": 48,
+      "noiseSd": 0.5,
+      "priorSdScore": 0.25,
+      "priorSdBias": 1,
+      "priorSdProjection": 0.4,
+      "bonus": 0.5,
+      "rounds": 6
+    },
+    "embeddingModels": {
+      "nomic-embed-text": "nomic-embed-text (local, the benchmark's model)",
+      "gemini-embedding-001@768": "gemini-embedding-001 at 768 dimensions (index gemini-embedding-768, the one the registry recommends)",
+      "text-embedding-3-large@1536": "text-embedding-3-large at 1536 dimensions (index legacy-openai-1536, the default)"
+    },
+    "intervals": "95% percentile bootstrap, 2,000 resamples: over pools and then seeds, as in E4"
+  },
+  "byEmbedding": {
+    "nomic-embed-text": {
+      "seeds": 20,
+      "perSegment": [
+        {
+          "segment": "yc-devtools",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 615,
+          "arms": {
+            "today": {
+              "found25": 11.3,
+              "found50": 24.1,
+              "found100": 46.7,
+              "found200": 88.25,
+              "checksTo25": 52.2,
+              "spent": 53.1,
+              "rounds": 2
+            },
+            "today-in-rounds": {
+              "found25": 11.3,
+              "found50": 24.1,
+              "found100": 46.7,
+              "found200": 88.25,
+              "checksTo25": 52.2,
+              "spent": 52.8,
+              "rounds": 6.05
+            },
+            "learner": {
+              "found25": 12.9,
+              "found50": 29.05,
+              "found100": 61.8,
+              "found200": 119.45,
+              "checksTo25": 43.65,
+              "spent": 45.1,
+              "rounds": 4.9
+            }
+          }
+        },
+        {
+          "segment": "yc-healthcare",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 702,
+          "arms": {
+            "today": {
+              "found25": 22.55,
+              "found50": 45.3,
+              "found100": 87.05,
+              "found200": 163.95,
+              "checksTo25": 27.65,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 22.55,
+              "found50": 45.3,
+              "found100": 87.05,
+              "found200": 163.95,
+              "checksTo25": 27.65,
+              "spent": 30,
+              "rounds": 3
+            },
+            "learner": {
+              "found25": 21.95,
+              "found50": 44.85,
+              "found100": 91.55,
+              "found200": 183.7,
+              "checksTo25": 28.3,
+              "spent": 30.2,
+              "rounds": 3.1
+            }
+          }
+        },
+        {
+          "segment": "yc-climate-energy",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 238,
+          "arms": {
+            "today": {
+              "found25": 23.1,
+              "found50": 39,
+              "found100": 67.65,
+              "found200": 91.95,
+              "checksTo25": 27.15,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 23.1,
+              "found50": 39,
+              "found100": 67.65,
+              "found200": 91.95,
+              "checksTo25": 27.15,
+              "spent": 30,
+              "rounds": 3
+            },
+            "learner": {
+              "found25": 21,
+              "found50": 39.2,
+              "found100": 74.5,
+              "found200": 125.95,
+              "checksTo25": 30.1,
+              "spent": 31.1,
+              "rounds": 3.35
+            }
+          }
+        },
+        {
+          "segment": "yc-logistics",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 245,
+          "arms": {
+            "today": {
+              "found25": 14.8,
+              "found50": 24.5,
+              "found100": 37.4,
+              "found200": 55.1,
+              "checksTo25": 50.75,
+              "spent": 51.9,
+              "rounds": 1.6
+            },
+            "today-in-rounds": {
+              "found25": 14.8,
+              "found50": 24.5,
+              "found100": 37.4,
+              "found200": 55.1,
+              "checksTo25": 50.75,
+              "spent": 51.4,
+              "rounds": 5.7
+            },
+            "learner": {
+              "found25": 19.3,
+              "found50": 39.35,
+              "found100": 72.3,
+              "found200": 113.15,
+              "checksTo25": 31.35,
+              "spent": 32.7,
+              "rounds": 3.7
+            }
+          }
+        },
+        {
+          "segment": "brreg-coffee-tea",
+          "pool": "brreg-food",
+          "briefLanguage": "no",
+          "candidates": 3484,
+          "good": 109,
+          "arms": {
+            "today": {
+              "found25": 13.15,
+              "found50": 20.2,
+              "found100": 28.65,
+              "found200": 41.95,
+              "checksTo25": 67.9,
+              "spent": 68.5,
+              "rounds": 4.45
+            },
+            "today-in-rounds": {
+              "found25": 13.15,
+              "found50": 20.2,
+              "found100": 28.65,
+              "found200": 41.95,
+              "checksTo25": 67.9,
+              "spent": 68.5,
+              "rounds": 8.55
+            },
+            "learner": {
+              "found25": 19.5,
+              "found50": 44.5,
+              "found100": 76.1,
+              "found200": 77.55,
+              "checksTo25": 30.5,
+              "spent": 31.1,
+              "rounds": 3.55
+            }
+          }
+        },
+        {
+          "segment": "brreg-breweries",
+          "pool": "brreg-drinks",
+          "briefLanguage": "no",
+          "candidates": 1138,
+          "good": 233,
+          "arms": {
+            "today": {
+              "found25": 23.95,
+              "found50": 42.5,
+              "found100": 71.6,
+              "found200": 101.45,
+              "checksTo25": 26.15,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 23.95,
+              "found50": 42.5,
+              "found100": 71.6,
+              "found200": 101.45,
+              "checksTo25": 26.15,
+              "spent": 30,
+              "rounds": 3
+            },
+            "learner": {
+              "found25": 23.75,
+              "found50": 47.4,
+              "found100": 91.5,
+              "found200": 154.6,
+              "checksTo25": 26.25,
+              "spent": 30,
+              "rounds": 3
+            }
+          }
+        },
+        {
+          "segment": "brreg-dental-bergen",
+          "pool": "brreg-health-bergen",
+          "briefLanguage": "no",
+          "candidates": 2954,
+          "good": 421,
+          "arms": {
+            "today": {
+              "found25": 22.85,
+              "found50": 40.3,
+              "found100": 75.2,
+              "found200": 132,
+              "checksTo25": 28.8,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 22.85,
+              "found50": 40.3,
+              "found100": 75.2,
+              "found200": 132,
+              "checksTo25": 28.8,
+              "spent": 30.7,
+              "rounds": 3.3
+            },
+            "learner": {
+              "found25": 22.9,
+              "found50": 47.45,
+              "found100": 96.85,
+              "found200": 195,
+              "checksTo25": 27.4,
+              "spent": 30,
+              "rounds": 3
+            }
+          }
+        }
+      ],
+      "overall": {
+        "today": {
+          "found25": {
+            "mean": 18.81,
+            "lo": 15.09,
+            "hi": 22.13
+          },
+          "found50": {
+            "mean": 33.7,
+            "lo": 26.59,
+            "hi": 40.26
+          },
+          "found100": {
+            "mean": 59.18,
+            "lo": 44.61,
+            "hi": 73.56
+          },
+          "found200": {
+            "mean": 96.38,
+            "lo": 68.34,
+            "hi": 126.16
+          },
+          "checksTo25": {
+            "mean": 40.09,
+            "lo": 30.48,
+            "hi": 51.7
+          },
+          "spent": {
+            "mean": 53.36,
+            "lo": 50.16,
+            "hi": 58.71
+          },
+          "rounds": {
+            "mean": 1.7,
+            "lo": 1.1,
+            "hi": 2.7
+          }
+        },
+        "today-in-rounds": {
+          "found25": {
+            "mean": 18.81,
+            "lo": 15.09,
+            "hi": 22.13
+          },
+          "found50": {
+            "mean": 33.7,
+            "lo": 26.59,
+            "hi": 40.26
+          },
+          "found100": {
+            "mean": 59.18,
+            "lo": 44.61,
+            "hi": 73.56
+          },
+          "found200": {
+            "mean": 96.38,
+            "lo": 68.34,
+            "hi": 126.16
+          },
+          "checksTo25": {
+            "mean": 40.09,
+            "lo": 30.48,
+            "hi": 51.7
+          },
+          "spent": {
+            "mean": 41.91,
+            "lo": 33.06,
+            "hi": 53.01
+          },
+          "rounds": {
+            "mean": 4.7,
+            "lo": 3.4,
+            "hi": 6.2
+          }
+        },
+        "learner": {
+          "found25": {
+            "mean": 20.19,
+            "lo": 17.55,
+            "hi": 22.34
+          },
+          "found50": {
+            "mean": 41.69,
+            "lo": 36.97,
+            "hi": 45.58
+          },
+          "found100": {
+            "mean": 80.66,
+            "lo": 71.81,
+            "hi": 89.56
+          },
+          "found200": {
+            "mean": 138.49,
+            "lo": 110.45,
+            "hi": 167.53
+          },
+          "checksTo25": {
+            "mean": 31.08,
+            "lo": 27.93,
+            "hi": 35.59
+          },
+          "spent": {
+            "mean": 32.89,
+            "lo": 30.34,
+            "hi": 37.16
+          },
+          "rounds": {
+            "mean": 3.5,
+            "lo": 3.1,
+            "hi": 4
+          }
+        }
+      },
+      "vsToday": {
+        "today-in-rounds": {
+          "found25": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "found50": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "found100": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "found200": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "checksTo25": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "spent": {
+            "mean": -11.44,
+            "lo": -17.19,
+            "hi": -5.43
+          },
+          "rounds": {
+            "mean": 2.9,
+            "lo": 2.3,
+            "hi": 3.6
+          }
+        },
+        "learner": {
+          "found25": {
+            "mean": 1.37,
+            "lo": -0.54,
+            "hi": 3.45
+          },
+          "found50": {
+            "mean": 7.99,
+            "lo": 2.65,
+            "hi": 14.29
+          },
+          "found100": {
+            "mean": 21.48,
+            "lo": 11.91,
+            "hi": 32.11
+          },
+          "found200": {
+            "mean": 42.11,
+            "lo": 31.01,
+            "hi": 52.85
+          },
+          "checksTo25": {
+            "mean": -9.01,
+            "lo": -19.7,
+            "hi": -0.28
+          },
+          "spent": {
+            "mean": -20.47,
+            "lo": -27.01,
+            "hi": -14.76
+          },
+          "rounds": {
+            "mean": 1.8,
+            "lo": 0.8,
+            "hi": 2.4
+          }
+        }
+      }
+    },
+    "gemini-embedding-001@768": {
+      "seeds": 20,
+      "perSegment": [
+        {
+          "segment": "yc-devtools",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 615,
+          "arms": {
+            "today": {
+              "found25": 15.05,
+              "found50": 31.65,
+              "found100": 56.95,
+              "found200": 101.95,
+              "checksTo25": 39.15,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 15.05,
+              "found50": 31.65,
+              "found100": 56.95,
+              "found200": 101.95,
+              "checksTo25": 39.15,
+              "spent": 40.6,
+              "rounds": 4.2
+            },
+            "learner": {
+              "found25": 12.55,
+              "found50": 27.55,
+              "found100": 63.35,
+              "found200": 131.85,
+              "checksTo25": 46.55,
+              "spent": 48,
+              "rounds": 5.3
+            }
+          }
+        },
+        {
+          "segment": "yc-healthcare",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 702,
+          "arms": {
+            "today": {
+              "found25": 15.95,
+              "found50": 27.55,
+              "found100": 58.15,
+              "found200": 106.15,
+              "checksTo25": 44.1,
+              "spent": 50.1,
+              "rounds": 1.05
+            },
+            "today-in-rounds": {
+              "found25": 15.95,
+              "found50": 27.55,
+              "found100": 58.15,
+              "found200": 106.15,
+              "checksTo25": 44.1,
+              "spent": 44.9,
+              "rounds": 5.2
+            },
+            "learner": {
+              "found25": 20.45,
+              "found50": 44.3,
+              "found100": 91.9,
+              "found200": 185.4,
+              "checksTo25": 29.65,
+              "spent": 30.7,
+              "rounds": 3.15
+            }
+          }
+        },
+        {
+          "segment": "yc-climate-energy",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 238,
+          "arms": {
+            "today": {
+              "found25": 20.55,
+              "found50": 35.3,
+              "found100": 53.3,
+              "found200": 74.55,
+              "checksTo25": 31.35,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 20.55,
+              "found50": 35.3,
+              "found100": 53.3,
+              "found200": 74.55,
+              "checksTo25": 31.35,
+              "spent": 32.4,
+              "rounds": 3.6
+            },
+            "learner": {
+              "found25": 21.4,
+              "found50": 41.65,
+              "found100": 80.25,
+              "found200": 134.8,
+              "checksTo25": 29.5,
+              "spent": 30.5,
+              "rounds": 3.2
+            }
+          }
+        },
+        {
+          "segment": "yc-logistics",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 245,
+          "arms": {
+            "today": {
+              "found25": 18.45,
+              "found50": 34.1,
+              "found100": 54.05,
+              "found200": 74.7,
+              "checksTo25": 34.6,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 18.45,
+              "found50": 34.1,
+              "found100": 54.05,
+              "found200": 74.7,
+              "checksTo25": 34.6,
+              "spent": 36.3,
+              "rounds": 4.1
+            },
+            "learner": {
+              "found25": 21.2,
+              "found50": 40.7,
+              "found100": 81.6,
+              "found200": 124.75,
+              "checksTo25": 30.1,
+              "spent": 31.5,
+              "rounds": 3.3
+            }
+          }
+        },
+        {
+          "segment": "brreg-coffee-tea",
+          "pool": "brreg-food",
+          "briefLanguage": "no",
+          "candidates": 3484,
+          "good": 109,
+          "arms": {
+            "today": {
+              "found25": 25,
+              "found50": 49.2,
+              "found100": 70.5,
+              "found200": 76.6,
+              "checksTo25": 25,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 25,
+              "found50": 49.2,
+              "found100": 70.5,
+              "found200": 76.6,
+              "checksTo25": 25,
+              "spent": 30,
+              "rounds": 3
+            },
+            "learner": {
+              "found25": 24.5,
+              "found50": 48.85,
+              "found100": 81.2,
+              "found200": 81.6,
+              "checksTo25": 25.5,
+              "spent": 30,
+              "rounds": 3
+            }
+          }
+        },
+        {
+          "segment": "brreg-breweries",
+          "pool": "brreg-drinks",
+          "briefLanguage": "no",
+          "candidates": 1138,
+          "good": 233,
+          "arms": {
+            "today": {
+              "found25": 24.25,
+              "found50": 48.4,
+              "found100": 96.5,
+              "found200": 156.15,
+              "checksTo25": 25.75,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 24.25,
+              "found50": 48.4,
+              "found100": 96.5,
+              "found200": 156.15,
+              "checksTo25": 25.75,
+              "spent": 30,
+              "rounds": 3
+            },
+            "learner": {
+              "found25": 23.4,
+              "found50": 47.6,
+              "found100": 95.6,
+              "found200": 169.45,
+              "checksTo25": 26.65,
+              "spent": 30,
+              "rounds": 3
+            }
+          }
+        },
+        {
+          "segment": "brreg-dental-bergen",
+          "pool": "brreg-health-bergen",
+          "briefLanguage": "no",
+          "candidates": 2954,
+          "good": 421,
+          "arms": {
+            "today": {
+              "found25": 25,
+              "found50": 49.25,
+              "found100": 98.35,
+              "found200": 193.7,
+              "checksTo25": 25,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 25,
+              "found50": 49.25,
+              "found100": 98.35,
+              "found200": 193.7,
+              "checksTo25": 25,
+              "spent": 30,
+              "rounds": 3
+            },
+            "learner": {
+              "found25": 24.95,
+              "found50": 48.9,
+              "found100": 97.9,
+              "found200": 197.7,
+              "checksTo25": 25.05,
+              "spent": 30,
+              "rounds": 3
+            }
+          }
+        }
+      ],
+      "overall": {
+        "today": {
+          "found25": {
+            "mean": 20.61,
+            "lo": 17.73,
+            "hi": 23.44
+          },
+          "found50": {
+            "mean": 39.35,
+            "lo": 33.08,
+            "hi": 45.89
+          },
+          "found100": {
+            "mean": 69.69,
+            "lo": 57.02,
+            "hi": 84.24
+          },
+          "found200": {
+            "mean": 111.97,
+            "lo": 83.41,
+            "hi": 145.74
+          },
+          "checksTo25": {
+            "mean": 32.14,
+            "lo": 27.23,
+            "hi": 37.41
+          },
+          "spent": {
+            "mean": 50.01,
+            "lo": 50,
+            "hi": 50.06
+          },
+          "rounds": {
+            "mean": 1,
+            "lo": 1,
+            "hi": 1
+          }
+        },
+        "today-in-rounds": {
+          "found25": {
+            "mean": 20.61,
+            "lo": 17.73,
+            "hi": 23.44
+          },
+          "found50": {
+            "mean": 39.35,
+            "lo": 33.08,
+            "hi": 45.89
+          },
+          "found100": {
+            "mean": 69.69,
+            "lo": 57.02,
+            "hi": 84.24
+          },
+          "found200": {
+            "mean": 111.97,
+            "lo": 83.41,
+            "hi": 145.74
+          },
+          "checksTo25": {
+            "mean": 32.14,
+            "lo": 27.23,
+            "hi": 37.41
+          },
+          "spent": {
+            "mean": 34.89,
+            "lo": 31.16,
+            "hi": 39.14
+          },
+          "rounds": {
+            "mean": 3.7,
+            "lo": 3.2,
+            "hi": 4.3
+          }
+        },
+        "learner": {
+          "found25": {
+            "mean": 21.21,
+            "lo": 18.09,
+            "hi": 23.61
+          },
+          "found50": {
+            "mean": 42.79,
+            "lo": 37.29,
+            "hi": 47.24
+          },
+          "found100": {
+            "mean": 84.54,
+            "lo": 75.79,
+            "hi": 92.34
+          },
+          "found200": {
+            "mean": 146.51,
+            "lo": 118.77,
+            "hi": 173.76
+          },
+          "checksTo25": {
+            "mean": 30.43,
+            "lo": 26.58,
+            "hi": 36.14
+          },
+          "spent": {
+            "mean": 32.96,
+            "lo": 30.13,
+            "hi": 38.14
+          },
+          "rounds": {
+            "mean": 3.4,
+            "lo": 3,
+            "hi": 4.1
+          }
+        }
+      },
+      "vsToday": {
+        "today-in-rounds": {
+          "found25": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "found50": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "found100": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "found200": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "checksTo25": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "spent": {
+            "mean": -15.13,
+            "lo": -18.84,
+            "hi": -10.89
+          },
+          "rounds": {
+            "mean": 2.7,
+            "lo": 2.2,
+            "hi": 3.3
+          }
+        },
+        "learner": {
+          "found25": {
+            "mean": 0.6,
+            "lo": -0.96,
+            "hi": 2.32
+          },
+          "found50": {
+            "mean": 3.44,
+            "lo": -1,
+            "hi": 8.91
+          },
+          "found100": {
+            "mean": 14.86,
+            "lo": 5.11,
+            "hi": 25.19
+          },
+          "found200": {
+            "mean": 34.54,
+            "lo": 15.04,
+            "hi": 56.07
+          },
+          "checksTo25": {
+            "mean": -1.71,
+            "lo": -6.91,
+            "hi": 2.59
+          },
+          "spent": {
+            "mean": -17.06,
+            "lo": -19.89,
+            "hi": -11.87
+          },
+          "rounds": {
+            "mean": 2.4,
+            "lo": 2,
+            "hi": 3.1
+          }
+        }
+      }
+    },
+    "text-embedding-3-large@1536": {
+      "seeds": 20,
+      "perSegment": [
+        {
+          "segment": "yc-devtools",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 615,
+          "arms": {
+            "today": {
+              "found25": 8.9,
+              "found50": 20.3,
+              "found100": 35.7,
+              "found200": 65.9,
+              "checksTo25": 66.6,
+              "spent": 67.2,
+              "rounds": 4.45
+            },
+            "today-in-rounds": {
+              "found25": 8.9,
+              "found50": 20.3,
+              "found100": 35.7,
+              "found200": 65.9,
+              "checksTo25": 66.6,
+              "spent": 67.2,
+              "rounds": 8.65
+            },
+            "learner": {
+              "found25": 14.3,
+              "found50": 30.65,
+              "found100": 63.05,
+              "found200": 121.15,
+              "checksTo25": 40.35,
+              "spent": 41.5,
+              "rounds": 4.5
+            }
+          }
+        },
+        {
+          "segment": "yc-healthcare",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 702,
+          "arms": {
+            "today": {
+              "found25": 22.45,
+              "found50": 45.85,
+              "found100": 92.6,
+              "found200": 179.25,
+              "checksTo25": 27.65,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 22.45,
+              "found50": 45.85,
+              "found100": 92.6,
+              "found200": 179.25,
+              "checksTo25": 27.65,
+              "spent": 30,
+              "rounds": 3
+            },
+            "learner": {
+              "found25": 22,
+              "found50": 45.1,
+              "found100": 92.45,
+              "found200": 187.1,
+              "checksTo25": 28.1,
+              "spent": 30,
+              "rounds": 3
+            }
+          }
+        },
+        {
+          "segment": "yc-climate-energy",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 238,
+          "arms": {
+            "today": {
+              "found25": 23.4,
+              "found50": 45,
+              "found100": 80.2,
+              "found200": 110,
+              "checksTo25": 26.6,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 23.4,
+              "found50": 45,
+              "found100": 80.2,
+              "found200": 110,
+              "checksTo25": 26.6,
+              "spent": 30,
+              "rounds": 3
+            },
+            "learner": {
+              "found25": 20.8,
+              "found50": 40.8,
+              "found100": 78.5,
+              "found200": 131.75,
+              "checksTo25": 30.3,
+              "spent": 32,
+              "rounds": 3.6
+            }
+          }
+        },
+        {
+          "segment": "yc-logistics",
+          "pool": "yc",
+          "briefLanguage": "en",
+          "candidates": 4997,
+          "good": 245,
+          "arms": {
+            "today": {
+              "found25": 16.65,
+              "found50": 30.45,
+              "found100": 50.85,
+              "found200": 72.9,
+              "checksTo25": 40.4,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 16.65,
+              "found50": 30.45,
+              "found100": 50.85,
+              "found200": 72.9,
+              "checksTo25": 40.4,
+              "spent": 41.8,
+              "rounds": 4.65
+            },
+            "learner": {
+              "found25": 20.6,
+              "found50": 41.6,
+              "found100": 75.8,
+              "found200": 119.1,
+              "checksTo25": 29.85,
+              "spent": 31,
+              "rounds": 3.25
+            }
+          }
+        },
+        {
+          "segment": "brreg-coffee-tea",
+          "pool": "brreg-food",
+          "briefLanguage": "no",
+          "candidates": 3484,
+          "good": 109,
+          "arms": {
+            "today": {
+              "found25": 24.65,
+              "found50": 41.2,
+              "found100": 56.95,
+              "found200": 61.7,
+              "checksTo25": 25.55,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 24.65,
+              "found50": 41.2,
+              "found100": 56.95,
+              "found200": 61.7,
+              "checksTo25": 25.55,
+              "spent": 30.1,
+              "rounds": 3.05
+            },
+            "learner": {
+              "found25": 23,
+              "found50": 48,
+              "found100": 80.65,
+              "found200": 81.75,
+              "checksTo25": 27,
+              "spent": 30,
+              "rounds": 3
+            }
+          }
+        },
+        {
+          "segment": "brreg-breweries",
+          "pool": "brreg-drinks",
+          "briefLanguage": "no",
+          "candidates": 1138,
+          "good": 233,
+          "arms": {
+            "today": {
+              "found25": 21.85,
+              "found50": 44.05,
+              "found100": 84.75,
+              "found200": 139.3,
+              "checksTo25": 29.55,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 21.85,
+              "found50": 44.05,
+              "found100": 84.75,
+              "found200": 139.3,
+              "checksTo25": 29.55,
+              "spent": 30.5,
+              "rounds": 3.25
+            },
+            "learner": {
+              "found25": 21.6,
+              "found50": 45.7,
+              "found100": 93.4,
+              "found200": 168.15,
+              "checksTo25": 28.75,
+              "spent": 30,
+              "rounds": 3
+            }
+          }
+        },
+        {
+          "segment": "brreg-dental-bergen",
+          "pool": "brreg-health-bergen",
+          "briefLanguage": "no",
+          "candidates": 2954,
+          "good": 421,
+          "arms": {
+            "today": {
+              "found25": 17,
+              "found50": 35.35,
+              "found100": 68.1,
+              "found200": 130.55,
+              "checksTo25": 35.95,
+              "spent": 50,
+              "rounds": 1
+            },
+            "today-in-rounds": {
+              "found25": 17,
+              "found50": 35.35,
+              "found100": 68.1,
+              "found200": 130.55,
+              "checksTo25": 35.95,
+              "spent": 38,
+              "rounds": 4
+            },
+            "learner": {
+              "found25": 19.4,
+              "found50": 44.2,
+              "found100": 93.7,
+              "found200": 192.7,
+              "checksTo25": 30.65,
+              "spent": 31.8,
+              "rounds": 3.65
+            }
+          }
+        }
+      ],
+      "overall": {
+        "today": {
+          "found25": {
+            "mean": 19.27,
+            "lo": 15.14,
+            "hi": 22.73
+          },
+          "found50": {
+            "mean": 37.46,
+            "lo": 30.25,
+            "hi": 43.41
+          },
+          "found100": {
+            "mean": 67.02,
+            "lo": 52.83,
+            "hi": 80.24
+          },
+          "found200": {
+            "mean": 108.51,
+            "lo": 80.45,
+            "hi": 139.33
+          },
+          "checksTo25": {
+            "mean": 36.04,
+            "lo": 28.01,
+            "hi": 47.54
+          },
+          "spent": {
+            "mean": 52.46,
+            "lo": 50,
+            "hi": 57.63
+          },
+          "rounds": {
+            "mean": 1.5,
+            "lo": 1,
+            "hi": 2.6
+          }
+        },
+        "today-in-rounds": {
+          "found25": {
+            "mean": 19.27,
+            "lo": 15.14,
+            "hi": 22.73
+          },
+          "found50": {
+            "mean": 37.46,
+            "lo": 30.25,
+            "hi": 43.41
+          },
+          "found100": {
+            "mean": 67.02,
+            "lo": 52.83,
+            "hi": 80.24
+          },
+          "found200": {
+            "mean": 108.51,
+            "lo": 80.45,
+            "hi": 139.33
+          },
+          "checksTo25": {
+            "mean": 36.04,
+            "lo": 28.01,
+            "hi": 47.54
+          },
+          "spent": {
+            "mean": 38.23,
+            "lo": 30.4,
+            "hi": 49.06
+          },
+          "rounds": {
+            "mean": 4.2,
+            "lo": 3.1,
+            "hi": 5.9
+          }
+        },
+        "learner": {
+          "found25": {
+            "mean": 20.24,
+            "lo": 18,
+            "hi": 21.9
+          },
+          "found50": {
+            "mean": 42.29,
+            "lo": 37.94,
+            "hi": 45.56
+          },
+          "found100": {
+            "mean": 82.51,
+            "lo": 74.18,
+            "hi": 90.17
+          },
+          "found200": {
+            "mean": 143.1,
+            "lo": 115.28,
+            "hi": 170.93
+          },
+          "checksTo25": {
+            "mean": 30.71,
+            "lo": 28.36,
+            "hi": 34.29
+          },
+          "spent": {
+            "mean": 32.33,
+            "lo": 30.29,
+            "hi": 35.63
+          },
+          "rounds": {
+            "mean": 3.4,
+            "lo": 3.1,
+            "hi": 3.9
+          }
+        }
+      },
+      "vsToday": {
+        "today-in-rounds": {
+          "found25": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "found50": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "found100": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "found200": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "checksTo25": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          },
+          "spent": {
+            "mean": -14.23,
+            "lo": -19.6,
+            "hi": -8.36
+          },
+          "rounds": {
+            "mean": 2.7,
+            "lo": 2.1,
+            "hi": 3.4
+          }
+        },
+        "learner": {
+          "found25": {
+            "mean": 0.97,
+            "lo": -1.01,
+            "hi": 3.16
+          },
+          "found50": {
+            "mean": 4.84,
+            "lo": 0.56,
+            "hi": 8.68
+          },
+          "found100": {
+            "mean": 15.49,
+            "lo": 6.45,
+            "hi": 23.42
+          },
+          "found200": {
+            "mean": 34.59,
+            "lo": 21.09,
+            "hi": 48.35
+          },
+          "checksTo25": {
+            "mean": -5.33,
+            "lo": -13.42,
+            "hi": 0.76
+          },
+          "spent": {
+            "mean": -20.13,
+            "lo": -22.24,
+            "hi": -18.7
+          },
+          "rounds": {
+            "mean": 1.9,
+            "lo": 1.3,
+            "hi": 2.4
+          }
+        }
+      }
+    }
+  }
+}

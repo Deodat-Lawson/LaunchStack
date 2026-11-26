@@ -66,8 +66,8 @@ Sources, all free and keyless: Photon and the OpenStreetMap API, Overpass,
 the Norwegian company register (Brønnøysundregistrene), the YC company
 directory, and the public pages of company websites. E4 also needs a local
 Ollama with `nomic-embed-text` for embeddings. No paid search engine is called
-anywhere, and no paid model by E1 to E4; the recording script of
-`production-replay/` is the exception (see "Production replay" below).
+anywhere, and no paid model by E1 to E4; the two recording scripts of
+`production-replay/` are the exception (see "Production replay" below).
 
 How the recorder behaves towards those sources:
 
@@ -174,16 +174,24 @@ bootstrap interval over seeds.
 ## Production replay
 
 `production-replay/` puts the benchmark's pools through the ranking code
-Prospects runs, on the app's two built-in embedding models. Its README has
-the numbers; in short:
+Prospects runs, on the app's two built-in embedding models, beside today's
+ranking through the same code. Its README has the numbers; in short:
 
 - **The brief's language (after E4).** The gap between an English and a
   Norwegian brief on Norwegian texts is the local model's: 25.0 against 58.5
   good companies in 100 checks there, 88.3 against 88.5 on
   `gemini-embedding-001` and 74.5 against 69.9 on `text-embedding-3-large`.
   Prospects does not translate the brief.
+- **The shortlist that learns (E4's `linucb`, built into Prospects).** Through
+  production's own loop it finds 80.7 good companies in 100 checks against
+  59.2 on the local model, and about 15 more than today's ranking on the two
+  built-in models. A run fills a 25-place shortlist in about 33 fit
+  checks instead of 50 to 53; most of that is asking ten at a time.
+- **Real fit-check verdicts.** One pool was judged in full by production's fit
+  check. It agrees with the register on 96.8% of the companies, and the learner
+  behaves on its verdicts as it does on the labels.
 
 It has its own runner (`production-replay/run.ts`); `run.ts` above replays E1
-to E4 only. Its recording script is the only paid call in this folder; it
-needs record mode and a spend cap, and says what it will send before it sends
-it.
+to E4 only. Its two recording scripts are the only paid calls in this folder;
+each needs record mode and a spend cap, and says what it will send before it
+sends it.

@@ -1436,6 +1436,7 @@
         "segment": "细分市场已确认",
         "sources": "来源",
         "shortlist": "入围名单",
+        "fitCheck": "匹配度检查",
         "profiles": "画像",
         "people": "联系人"
       },
@@ -1446,6 +1447,10 @@
       "peopleLater": "将随联系人查找功能推出",
       "found": "找到 {count} 个",
       "excluded": "排除 {count} 个",
+      "fitRead": "已读 {checked} 家，排除 {rejected} 家",
+      "fitStopped": "已读 {checked} 家后中断",
+      "fitNotRun": "未能运行",
+      "fitStartedFrom": "此前 {count} 条判断",
       "failedGrounding": "{count} 个未通过依据核验",
       "caps": "{count} 个候选",
       "capsSample": "{count} 个候选 · 示例数据",

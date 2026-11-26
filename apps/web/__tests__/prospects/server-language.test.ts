@@ -129,10 +129,34 @@ const run = (over: Partial<RunRecord>): RunRecord => ({
     ...over,
 });
 
+/** A completed run whose shortlist went through the fit check. */
+const fitChecked = (
+    startedFrom: number,
+    over: { checked?: number; incomplete?: boolean } = {}
+): RunRecord =>
+    run({
+        summary: {
+            ...run({}).summary!,
+            fitCheck: {
+                checked: 34,
+                rounds: 4,
+                rejected: 9,
+                learning: true,
+                startedFrom,
+                ...over,
+            },
+        },
+    });
+
 describe("adapter copies say their English field exactly", () => {
     it("for a run's steps, figures and caps", () => {
         for (const dto of [
             toRunDto(run({})),
+            toRunDto(fitChecked(0)),
+            toRunDto(fitChecked(35)),
+            toRunDto(fitChecked(1)),
+            toRunDto(fitChecked(0, { checked: 10, incomplete: true })),
+            toRunDto(fitChecked(2, { checked: 0, incomplete: true })),
             toRunDto(run({ status: "enriching", summary: null }), {
                 profiled: 1,
                 shortlisted: 3,
@@ -297,6 +321,42 @@ describe("in Chinese", () => {
             "将随联系人查找功能推出"
         );
         expect(sourceDetailCopy("Exa returned 500")).toBeNull();
+    });
+
+    it("words the fit check under the shortlist", () => {
+        const row = (startedFrom: number) =>
+            toRunDto(fitChecked(startedFrom)).steps.find(s => s.id === "shortlist")!.children![0]!;
+        expect(zh(row(0).labelCopy)).toBe("匹配度检查");
+        expect(zh(row(0).detailCopy)).toBe("已读 34 家，排除 9 家");
+        expect(row(0).rightCopy).toBeNull();
+        expect(zh(row(35).rightCopy)).toBe("此前 35 条判断");
+        // English counts one verdict as one.
+        expect(en(row(35).rightCopy)).toBe("35 earlier verdicts");
+        expect(en(row(1).rightCopy)).toBe("1 earlier verdict");
+        expect(zh(row(1).rightCopy)).toBe("此前 1 条判断");
+    });
+
+    it("words a fit check that broke off", () => {
+        const row = (checked: number) =>
+            toRunDto(
+                run({
+                    summary: {
+                        ...run({}).summary!,
+                        fitCheck: {
+                            checked,
+                            rounds: checked > 0 ? 1 : 0,
+                            rejected: 0,
+                            learning: true,
+                            startedFrom: 0,
+                            incomplete: true,
+                        },
+                    },
+                })
+            ).steps.find(s => s.id === "shortlist")!.children![0]!;
+        expect(en(row(10).detailCopy)).toBe("stopped after 10 read");
+        expect(zh(row(10).detailCopy)).toBe("已读 10 家后中断");
+        expect(en(row(0).detailCopy)).toBe("could not run");
+        expect(zh(row(0).detailCopy)).toBe("未能运行");
     });
 
     it("words the lookalike source and its details", () => {

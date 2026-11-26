@@ -242,6 +242,25 @@ export interface SourceCount {
     detail?: string;
 }
 
+/** What the fit check of a run's candidates came to. */
+export interface FitCheckSummary {
+    /** Companies the fit check was asked about. */
+    checked: number;
+    /** Rounds of asking. The fit check makes one model call per twenty companies of a round. */
+    rounds: number;
+    /** Companies it judged would not buy this, or are elsewhere. */
+    rejected: number;
+    /** The ranking re-ranked who was left after every round (./learn). */
+    learning: boolean;
+    /** Verdicts known before the first round: earlier runs' and people's decisions. */
+    startedFrom: number;
+    /**
+     * The check broke off on an error before the shortlist was full: the
+     * places it left open went to the next companies down the ranking, unchecked.
+     */
+    incomplete?: boolean;
+}
+
 export interface RunSummary {
     sources: SourceCount[];
     mentions: number;
@@ -258,6 +277,8 @@ export interface RunSummary {
     warnings: string[];
     tokens: { input: number; output: number; total: number };
     wallMs?: number;
+    /** Absent on runs without a fit check, and on runs from before it was counted. */
+    fitCheck?: FitCheckSummary;
 }
 
 export interface RunRecord {

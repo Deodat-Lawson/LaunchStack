@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest";
 import {
     ALLOWED_TRANSITIONS,
     assertTransition,
+    fitDecision,
     isInPipeline,
     stageRequirements,
     type StageTransitionError,
@@ -155,6 +156,26 @@ describe("stage transition table", () => {
         expect(isInPipeline("contacted")).toBe(true);
         expect(isInPipeline("proposal")).toBe(true);
         expect(isInPipeline("lost")).toBe(false);
+    });
+});
+
+describe("what a deal's stage says about fit", () => {
+    it("reads qualifying, pursuing or winning a deal as a yes, Not a fit as a no, the rest as nothing", () => {
+        const by = Object.fromEntries(
+            RELATIONSHIP_STAGES.map(stage => [stage, fitDecision(stage)])
+        );
+        expect(by).toEqual({
+            lead: null,
+            qualified: true,
+            contacted: true,
+            meeting: true,
+            proposal: true,
+            negotiating: true,
+            won: true,
+            // The stored stage the screens show as "Not a fit".
+            lost: false,
+            nurture: null,
+        });
     });
 });
 

@@ -104,28 +104,44 @@ export function cosine(a: readonly number[], b: readonly number[]): number {
 
 const BATCH = 64;
 
+/** A brief, embedded once: what each company's text is measured against. */
+export interface RelevanceMeter {
+    /** Relevance of each text to the brief, and each text's embedding, in the order given. */
+    measure(texts: readonly string[]): Promise<{ scores: number[]; vectors: number[][] }>;
+}
+
 /**
- * Relevance of each text to the brief, in (-∞, 1]: (sim(text, brief) −
- * sim(text, baseline)) / (1 − sim(brief, baseline)). Above zero is relevant.
+ * Relevance in (-∞, 1]: (sim(text, brief) − sim(text, baseline)) / (1 −
+ * sim(brief, baseline)). Above zero is relevant.
  */
+export async function relevanceMeter(embed: EmbedTexts, brief: string): Promise<RelevanceMeter> {
+    const [briefVector, baselineVector] = await embed([brief, BASELINE_TEXT]);
+    if (!briefVector || !baselineVector) throw new Error("The embedder returned no vectors");
+    const span = 1 - cosine(briefVector, baselineVector);
+    return {
+        async measure(texts) {
+            const scores: number[] = [];
+            const vectors: number[][] = [];
+            for (let i = 0; i < texts.length; i += BATCH) {
+                for (const v of await embed(texts.slice(i, i + BATCH))) {
+                    const toBrief = cosine(v, briefVector);
+                    const toBaseline = cosine(v, baselineVector);
+                    scores.push(span > 0 ? (toBrief - toBaseline) / span : toBrief - toBaseline);
+                    vectors.push(v);
+                }
+            }
+            return { scores, vectors };
+        },
+    };
+}
+
+/** Relevance of each text to the brief (see relevanceMeter). */
 export async function semanticRelevance(
     embed: EmbedTexts,
     brief: string,
     texts: readonly string[]
 ): Promise<number[]> {
-    const [briefVector, baselineVector] = await embed([brief, BASELINE_TEXT]);
-    if (!briefVector || !baselineVector) throw new Error("The embedder returned no vectors");
-    const span = 1 - cosine(briefVector, baselineVector);
-    const out: number[] = [];
-    for (let i = 0; i < texts.length; i += BATCH) {
-        const vectors = await embed(texts.slice(i, i + BATCH));
-        for (const v of vectors) {
-            const toBrief = cosine(v, briefVector);
-            const toBaseline = cosine(v, baselineVector);
-            out.push(span > 0 ? (toBrief - toBaseline) / span : toBrief - toBaseline);
-        }
-    }
-    return out;
+    return (await (await relevanceMeter(embed, brief)).measure(texts)).scores;
 }
 
 /** Word-overlap relevance in [0, 1]: the fallback when no embedder is configured. */
@@ -140,6 +156,10 @@ export interface Relevance {
     /** By meaning (embeddings) or by shared words (no embedder configured). */
     method: "semantic" | "lexical";
     scores: number[];
+    /** By meaning only: each company's embedding, in the order given. A ranking that learns reads them (./learn). */
+    vectors?: number[][];
+    /** By meaning only: more texts against the same brief (verdicts an earlier run kept). */
+    measure?: RelevanceMeter["measure"];
 }
 
 /**
@@ -155,12 +175,14 @@ export async function relevanceOf(
 ): Promise<Relevance> {
     if (embed && companies.length > 0) {
         try {
-            const scores = await semanticRelevance(
-                embed,
-                buyerBrief(program, partnerKinds, seller),
-                companies.map(companyText)
-            );
-            return { method: "semantic", scores };
+            const meter = await relevanceMeter(embed, buyerBrief(program, partnerKinds, seller));
+            const { scores, vectors } = await meter.measure(companies.map(companyText));
+            return {
+                method: "semantic",
+                scores,
+                vectors,
+                measure: texts => meter.measure(texts),
+            };
         } catch (error) {
             console.warn("[distribution] embeddings failed; matching by words instead:", error);
         }

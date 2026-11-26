@@ -155,6 +155,18 @@ export function isPastCandidate(stage: RelationshipStage): boolean {
     return rank !== undefined && rank >= ORDER.get("contacted")!;
 }
 
+/**
+ * What a person's handling of a deal says about whether the company fits the
+ * segment: a yes once they qualified, pursued or won it, a no when they marked
+ * it not a fit (the stored stage `lost`), and nothing while it is an untouched
+ * lead or parked in nurture.
+ */
+export function fitDecision(stage: RelationshipStage): boolean | null {
+    if (stage === "lost") return false;
+    if (stage === "lead" || stage === "nurture") return null;
+    return true;
+}
+
 /** Stages that count as "in pipeline" for the dashboard: past lead and not terminal. */
 export function isInPipeline(stage: RelationshipStage): boolean {
     return stage !== "lead" && !TERMINAL_STAGES.has(stage);

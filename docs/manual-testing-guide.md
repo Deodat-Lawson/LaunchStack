@@ -294,9 +294,22 @@ the brief ("retailers that would buy, stock or resell …") and each company's
 own words are embedded, and a company must read more like that buyer than
 like business in general. With a chat model configured, the closest
 companies are then checked ("would this business buy this?") and a no takes
-them off the shortlist. The run's warnings say how many were left out for
-area, for meaning and by the fit check. Without an embedding model the run
-matches by shared words and says so.
+them off the shortlist. The check goes in rounds of ten: after each round the
+ranking of everyone not checked yet is redone from the verdicts so far, and
+the highest ranked go next, until the shortlist is full. Verdicts are kept,
+one per company and segment, and the next run of the segment starts its
+ranking from them and from your own decisions on its deals (qualified,
+pursued or won is a yes; Not a fit is a no). The fit check's verdicts answer
+one question: rewrite what the segment sells, who buys it or what rules a
+company out, or move its area, and they start afresh; your own decisions
+always count. The run sheet's Shortlist step has a Fit check row: how many
+companies were read, how many were turned away and, from the second run on,
+how many earlier verdicts the ranking started from. If the fit check fails
+part-way the row says where it stopped, and the places it left open go to the
+next companies by meaning, unchecked (a company named outside the area that
+was never read stays out); the run's warnings say so. They also say how many
+companies were left out for area, for meaning and by the fit check. Without an embedding model the run matches by shared words, checks in
+the fixed order, and says so.
 
 The run's `caps` line and the Sources yield labels say which mode produced
 it ("OpenStreetMap" for keyless; "Sample …" for fixtures). There is no

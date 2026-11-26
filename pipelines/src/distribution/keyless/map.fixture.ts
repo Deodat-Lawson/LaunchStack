@@ -51,7 +51,7 @@ const words = (name: string) =>
     fold(name)
         .split(/[^a-z0-9]+/)
         .filter(Boolean);
-const urlOf = (input: RequestInfo | URL): string =>
+const urlOf = (input: Parameters<typeof fetch>[0]): string =>
     typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
 const json = (body: unknown, status = 200) =>
     new Response(JSON.stringify(body), {

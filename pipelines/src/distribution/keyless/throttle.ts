@@ -63,7 +63,7 @@ export function createHostThrottle(options: HostThrottleOptions = {}): HostThrot
 /** The process-wide throttle: every keyless run in this process shares the hosts' queues. */
 export const sharedHostThrottle: HostThrottle = createHostThrottle();
 
-function hostOf(input: RequestInfo | URL): string | null {
+function hostOf(input: Parameters<typeof fetch>[0]): string | null {
     const url = typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
     try {
         return new URL(url).hostname;

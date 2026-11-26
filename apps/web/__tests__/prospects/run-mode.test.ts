@@ -43,6 +43,7 @@ describe("run mode", () => {
             "SERPER_API_KEY",
             "BRAVE_SEARCH_API_KEY",
             "TAVILY_API_KEY",
+            "SEARCHAPI_API_KEY",
             "SEARXNG_URL",
         ] as const;
         const saved: Partial<Record<(typeof names)[number], string>> = {};

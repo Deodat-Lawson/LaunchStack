@@ -130,18 +130,31 @@ const serverSchema = z.object({
     SEARCH_PROVIDER: z.preprocess(
         value => (typeof value === "string" ? normalize(value.trim().toLowerCase()) : value),
         z
-            .enum(["exa", "serper", "brave", "tavily", "searxng", "fallback", "parallel"], {
-                errorMap: () => ({
-                    message:
-                        "SEARCH_PROVIDER must be one of exa, serper, brave, tavily, searxng (or empty to use the first configured one).",
-                }),
-            })
+            .enum(
+                [
+                    "exa",
+                    "serper",
+                    "brave",
+                    "tavily",
+                    "searchapi",
+                    "searxng",
+                    "fallback",
+                    "parallel",
+                ],
+                {
+                    errorMap: () => ({
+                        message:
+                            "SEARCH_PROVIDER must be one of exa, serper, brave, tavily, searchapi, searxng (or empty to use the first configured one).",
+                    }),
+                }
+            )
             .optional()
     ),
     EXA_API_KEY: optionalString(),
     SERPER_API_KEY: optionalString(),
     BRAVE_SEARCH_API_KEY: optionalString(),
     TAVILY_API_KEY: optionalString(),
+    SEARCHAPI_API_KEY: optionalString(),
     // A SearXNG instance with the JSON format enabled, e.g. http://searxng:8080.
     SEARXNG_URL: z.preprocess(normalize, z.string().url().optional()),
     // Foursquare Places API (for Client Prospector)
@@ -645,6 +658,7 @@ function parseServerEnv() {
         SERPER_API_KEY: process.env.SERPER_API_KEY,
         BRAVE_SEARCH_API_KEY: process.env.BRAVE_SEARCH_API_KEY,
         TAVILY_API_KEY: process.env.TAVILY_API_KEY,
+        SEARCHAPI_API_KEY: process.env.SEARCHAPI_API_KEY,
         SEARXNG_URL: process.env.SEARXNG_URL,
         FOURSQUARE_SERVICE_KEY: process.env.FOURSQUARE_SERVICE_KEY,
         OPENSANCTIONS_API_URL: process.env.OPENSANCTIONS_API_URL,

@@ -31,6 +31,10 @@ export function getTavilyApiKey(): string | undefined {
     return read("TAVILY_API_KEY");
 }
 
+export function getSearchApiApiKey(): string | undefined {
+    return read("SEARCHAPI_API_KEY");
+}
+
 /** The SearXNG instance's address, e.g. `http://searxng:8080`. */
 export function getSearxngUrl(): string | undefined {
     return read("SEARXNG_URL");

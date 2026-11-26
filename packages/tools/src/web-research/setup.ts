@@ -1,10 +1,10 @@
 /**
  * Which search engine LaunchStack uses: one choice for every feature.
  *
- *  - SEARCH_PROVIDER names it (exa | serper | brave | tavily | searxng). A
- *    named provider without its key or address turns search off, with the
- *    reason logged and shown in Settings — never a quiet switch to another
- *    engine.
+ *  - SEARCH_PROVIDER names it (exa | serper | brave | tavily | searchapi |
+ *    searxng). A named provider without its key or address turns search off,
+ *    with the reason logged and shown in Settings — never a quiet switch to
+ *    another engine.
  *  - Unset, the first provider whose credential is present wins, in
  *    SEARCH_PROVIDER_IDS order (Exa first, as before this setting existed).
  *  - The retired trend-search strategies `fallback` and `parallel` count as

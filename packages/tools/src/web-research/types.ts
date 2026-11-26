@@ -31,7 +31,14 @@ export interface RawSearchResult {
 // ── Providers ───────────────────────────────────────────────────────────────
 
 /** The search engines LaunchStack can use; SEARCH_PROVIDER names one. */
-export const SEARCH_PROVIDER_IDS = ["exa", "serper", "brave", "tavily", "searxng"] as const;
+export const SEARCH_PROVIDER_IDS = [
+    "exa",
+    "serper",
+    "brave",
+    "tavily",
+    "searchapi",
+    "searxng",
+] as const;
 export type SearchProviderId = (typeof SEARCH_PROVIDER_IDS)[number];
 
 /** Which provider served `executeSearch`; "none" when search is off. */

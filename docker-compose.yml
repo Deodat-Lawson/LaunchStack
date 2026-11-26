@@ -242,15 +242,17 @@ x-shared-env: &shared-env
   FEEDBACK_ADMIN_EMAILS: ${FEEDBACK_ADMIN_EMAILS:-}
   FEEDBACK_WEBHOOK_URL: ${FEEDBACK_WEBHOOK_URL:-}
   # Web search: one engine for every feature. SEARCH_PROVIDER picks it
-  # (exa | serper | brave | tavily | searxng); empty means the first engine
-  # below with a credential, in that order. A named engine without its
-  # credential turns web search off rather than switching engines. Only Exa
-  # has a company index (Prospects company search + lookalikes).
+  # (exa | serper | brave | tavily | searchapi | searxng); empty means the
+  # first engine below with a credential, in that order. A named engine
+  # without its credential turns web search off rather than switching
+  # engines. Only Exa has a company index (Prospects company search +
+  # lookalikes).
   SEARCH_PROVIDER: ${SEARCH_PROVIDER:-}
   EXA_API_KEY: ${EXA_API_KEY:-}
   SERPER_API_KEY: ${SERPER_API_KEY:-}
   BRAVE_SEARCH_API_KEY: ${BRAVE_SEARCH_API_KEY:-}
   TAVILY_API_KEY: ${TAVILY_API_KEY:-}
+  SEARCHAPI_API_KEY: ${SEARCHAPI_API_KEY:-}
   # Base URL of a SearXNG instance with JSON output on — the bundled one is
   # http://searxng:8080 (`--profile search`). Empty by default: the URL counts
   # as a credential, so set it only when an instance is actually running.

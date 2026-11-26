@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { ProviderSearchOptions } from "../types";
 import { brave } from "./brave";
 import { exa } from "./exa";
+import { searchapi } from "./searchapi";
 import { searxng, searxngSearchUrl } from "./searxng";
 import { serper } from "./serper";
 import { tavily } from "./tavily";
@@ -35,6 +36,7 @@ beforeEach(() => {
     vi.stubEnv("SERPER_API_KEY", "serper-test");
     vi.stubEnv("BRAVE_SEARCH_API_KEY", "brave-test");
     vi.stubEnv("TAVILY_API_KEY", "tvly-test");
+    vi.stubEnv("SEARCHAPI_API_KEY", "searchapi-test");
     vi.stubEnv("SEARXNG_URL", "http://searxng:8080/");
 });
 afterEach(() => vi.unstubAllEnvs());
@@ -50,7 +52,7 @@ describe("exa", () => {
 
     it("is the one provider with a company index", () => {
         expect(exa.companies).toBeDefined();
-        for (const other of [serper, brave, tavily, searxng])
+        for (const other of [serper, brave, tavily, searchapi, searxng])
             expect(other.companies).toBeUndefined();
     });
 });
@@ -195,6 +197,122 @@ describe("tavily", () => {
 
         await tavily.search("q", options(fetchImpl, { kind: "news" }));
         expect(JSON.parse(lastCall(fetchImpl).init.body as string).topic).toBe("news");
+    });
+});
+
+describe("searchapi", () => {
+    it("gets Google with a bearer token and keeps result links as Google gives them", async () => {
+        const fetchImpl = vi.fn(async () =>
+            jsonResponse({
+                search_metadata: { status: "Success" },
+                organic_results: [
+                    {
+                        position: 1,
+                        title: "Next.js 16.4",
+                        link: "https://nextjs.org/blog/next-16-4",
+                        snippet: "Cache Components   by default.",
+                        date: "Oct 1, 2026",
+                    },
+                    {
+                        position: 2,
+                        title: "",
+                        link: "https://www.google.com/goto?url=CAESabc",
+                        snippet: "A redirect Google left in the results.",
+                    },
+                    { position: 3, title: "no link" },
+                ],
+            })
+        );
+        const hits = await searchapi.search(
+            "next.js release",
+            options(fetchImpl, { maxResults: 3 })
+        );
+        const { url, init } = lastCall(fetchImpl);
+        const parsed = new URL(url);
+        expect(parsed.origin + parsed.pathname).toBe("https://www.searchapi.io/api/v1/search");
+        expect(Object.fromEntries(parsed.searchParams)).toEqual({
+            engine: "google",
+            q: "next.js release",
+            num: "3",
+        });
+        expect(init.method).toBe("GET");
+        expect(init.body).toBeUndefined();
+        expect((init.headers as Record<string, string>).Authorization).toBe(
+            "Bearer searchapi-test"
+        );
+        expect(hits).toEqual([
+            {
+                title: "Next.js 16.4",
+                url: "https://nextjs.org/blog/next-16-4",
+                snippet: "Cache Components by default.",
+                publishedDate: "Oct 1, 2026",
+            },
+            {
+                title: "https://www.google.com/goto?url=CAESabc",
+                url: "https://www.google.com/goto?url=CAESabc",
+                snippet: "A redirect Google left in the results.",
+            },
+        ]);
+    });
+
+    it("reads Google News for news, in the US English edition, dated in ISO", async () => {
+        const fetchImpl = vi.fn(async () =>
+            jsonResponse({
+                organic_results: [
+                    {
+                        title: "Coffee prices",
+                        link: "https://news.example/coffee",
+                        source: "News Example",
+                        date: "15 hours ago",
+                        iso_date: "2026-11-25T18:28:00Z",
+                        snippet: "Up.",
+                    },
+                ],
+            })
+        );
+        const hits = await searchapi.search("coffee", options(fetchImpl, { kind: "news" }));
+        expect(Object.fromEntries(new URL(lastCall(fetchImpl).url).searchParams)).toEqual({
+            engine: "google_news",
+            q: "coffee",
+            num: "5",
+            gl: "us",
+            hl: "en",
+        });
+        expect(hits).toEqual([
+            {
+                title: "Coffee prices",
+                url: "https://news.example/coffee",
+                snippet: "Up.",
+                publishedDate: "2026-11-25T18:28:00Z",
+            },
+        ]);
+    });
+
+    it("returns nothing when Google has no results (a 200 without organic_results)", async () => {
+        const fetchImpl = vi.fn(async () =>
+            jsonResponse({
+                search_metadata: { status: "Success" },
+                error: "Google didn't return any results.",
+            })
+        );
+        await expect(searchapi.search("q", options(fetchImpl))).resolves.toEqual([]);
+    });
+
+    it("throws on a vendor error, naming only the status", async () => {
+        const fetchImpl = vi.fn(async () => jsonResponse({ error: "Invalid API key." }, 401));
+        await expect(searchapi.search("q", options(fetchImpl))).rejects.toThrow(
+            /^SearchApi search failed \(HTTP 401\)$/
+        );
+    });
+
+    it("needs SEARCHAPI_API_KEY", async () => {
+        vi.stubEnv("SEARCHAPI_API_KEY", "");
+        expect(searchapi.isConfigured()).toBe(false);
+        const fetchImpl = vi.fn();
+        await expect(searchapi.search("q", options(fetchImpl))).rejects.toThrow(
+            "SearchApi search needs SEARCHAPI_API_KEY."
+        );
+        expect(fetchImpl).not.toHaveBeenCalled();
     });
 });
 

@@ -658,13 +658,13 @@ export const GUIDES: Guide[] = [
         summary:
             "Enable supporting capabilities as you need them, without treating every integration as a setup requirement.",
         keywords:
-            "optional search web search search_provider exa serper brave tavily searxng company search lookalikes langchain langsmith tracing images campaigns email sending collaboration slack",
+            "optional search web search search_provider exa serper brave tavily searchapi searxng company search lookalikes langchain langsmith tracing images campaigns email sending collaboration slack",
         blocks: [
             {
                 title: "Web research",
                 body: [
                     "One setting, SEARCH_PROVIDER, picks the engine for every web search: Ask's search_web tool, Prospects, competitor analysis, grant search, document research, predictive analysis, and trend search. Each engine needs one credential, listed below. Settings › Models shows the active engine.",
-                    "Leave SEARCH_PROVIDER unset or empty and the first engine with a credential wins, in the order exa, serper, brave, tavily, searxng. Name an engine and only that engine is used: if its credential is missing, web search is off and the reason is logged, never a silent switch to another engine. The old values fallback and parallel are treated as unset.",
+                    "Leave SEARCH_PROVIDER unset or empty and the first engine with a credential wins, in the order exa, serper, brave, tavily, searchapi, searxng. Name an engine and only that engine is used: if its credential is missing, web search is off and the reason is logged, never a silent switch to another engine. The old values fallback and parallel are treated as unset.",
                     "Only Exa has a company index. With Exa active, Prospects searches it for companies and offers lookalikes; with any other engine, Prospects finds companies through ordinary web search and lookalikes are off.",
                 ],
                 rows: [
@@ -678,6 +678,10 @@ export const GUIDES: Guide[] = [
                     },
                     { name: "brave", detail: "BRAVE_SEARCH_API_KEY. The Brave Search API." },
                     { name: "tavily", detail: "TAVILY_API_KEY." },
+                    {
+                        name: "searchapi",
+                        detail: "SEARCHAPI_API_KEY. Google results through searchapi.io.",
+                    },
                     {
                         name: "searxng",
                         detail: "SEARXNG_URL, the base URL of a SearXNG instance with JSON output enabled. Free and self-hosted: start the bundled one with --profile search and set SEARXNG_URL=http://searxng:8080. Set SEARXNG_SECRET for production.",

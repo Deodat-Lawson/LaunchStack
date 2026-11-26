@@ -24,12 +24,12 @@ import {
 
 const MESSAGE = "Onboarding takes 40% less time than before.";
 
-function seed() {
+function seed(platform = "linkedin") {
     const session = {
         id: "s1",
         createdAt: 1,
         updatedAt: 1,
-        platform: "linkedin",
+        platform,
         prompt: "Announce faster onboarding",
         viewMode: "preview",
         editableMessage: MESSAGE,
@@ -44,10 +44,10 @@ function seed() {
         ],
         activeVariantId: "v1",
         result: {
-            platform: "linkedin",
+            platform,
             message: MESSAGE,
             "image/video": "image",
-            normalizedInput: { platform: "linkedin", prompt: "Announce faster onboarding" },
+            normalizedInput: { platform, prompt: "Announce faster onboarding" },
             research: [
                 { title: "Benchmark A", url: "https://a.example", snippet: "…", source: "web" },
                 { title: "Benchmark B", url: "https://b.example", snippet: "…", source: "web" },
@@ -153,4 +153,71 @@ it("opens the claims tab from the review notice", async () => {
     fireEvent.click(await screen.findByRole("button", { name: "1 claim needs your review" }));
     expect(screen.getByRole("tab", { name: /Claims/ })).toHaveAttribute("aria-selected", "true");
     expect(screen.getByText("A human on every first call")).toBeInTheDocument();
+});
+
+describe("a network Brand posts to, and one it does not", () => {
+    it("LinkedIn's draft can be copied, scheduled or published", async () => {
+        seed("linkedin");
+        render(<MarketingPipelineWorkspace embedded onSchedule={jest.fn()} />);
+        expect(await screen.findByRole("button", { name: "Copy to LinkedIn" })).toBeEnabled();
+        expect(screen.getByRole("button", { name: "Schedule…" })).toBeInTheDocument();
+        expect(screen.getByRole("button", { name: "Publish to LinkedIn" })).toBeInTheDocument();
+        expect(screen.queryByText(/Brand doesn't post to/)).not.toBeInTheDocument();
+    });
+
+    it.each([
+        ["tiktok", "TikTok"],
+        ["hackernews", "Hacker News"],
+        ["instagram", "Instagram"],
+    ])("%s's draft is copy-only: no Publish, no Schedule, and it says so", async (id, label) => {
+        seed(id);
+        const onSchedule = jest.fn();
+        render(<MarketingPipelineWorkspace embedded onSchedule={onSchedule} />);
+        expect(await screen.findByRole("button", { name: `Copy to ${label}` })).toBeEnabled();
+        expect(screen.getByText(`${label} preview`)).toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /Publish/ })).not.toBeInTheDocument();
+        expect(screen.queryByRole("button", { name: /Schedule/ })).not.toBeInTheDocument();
+        expect(
+            screen.getByText(
+                `Brand doesn't post to ${label}. Copy the draft and post it there yourself.`
+            )
+        ).toBeInTheDocument();
+        // Everything else a draft offers is still there.
+        expect(screen.getByRole("button", { name: "Refine with AI" })).toBeEnabled();
+        expect(global.fetch).not.toHaveBeenCalledWith(
+            "/api/marketing-pipeline/publish",
+            expect.anything()
+        );
+    });
+
+    it("the picker offers all thirteen, each with its own card", async () => {
+        render(<MarketingPipelineWorkspace embedded />);
+        const names = [
+            "Reddit",
+            "Twitter / X",
+            "LinkedIn",
+            "Bluesky",
+            "Instagram",
+            "Threads",
+            "Facebook",
+            "TikTok",
+            "YouTube",
+            "Mastodon",
+            "Hacker News",
+            "Product Hunt",
+            "Discord",
+        ];
+        await screen.findByRole("button", { name: /LinkedIn/ });
+        for (const name of names) {
+            expect(screen.getByText(name, { selector: "span" })).toBeInTheDocument();
+        }
+        fireEvent.click(screen.getByRole("button", { name: /Product Hunt/ }));
+        expect(
+            await screen.findByPlaceholderText(
+                "What are you launching, who is it for, and why did you build it?"
+            )
+        ).toBeInTheDocument();
+        // A launch page takes no hashtags, so there is no hashtag field to fill.
+        expect(screen.queryByText("Hashtags")).not.toBeInTheDocument();
+    });
 });

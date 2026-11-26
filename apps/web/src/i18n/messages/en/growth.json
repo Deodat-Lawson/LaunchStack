@@ -770,7 +770,7 @@
   },
   "marketingPipeline": {
     "title": "Marketing Pipeline",
-    "subtitle": "Create campaign-ready posts for Reddit, X, LinkedIn & Bluesky from your company knowledge base",
+    "subtitle": "Create campaign-ready drafts for LinkedIn, X, Instagram, TikTok and more from your company knowledge base",
     "howItWorks": {
       "pick": "Pick a platform",
       "describe": "Describe what to promote",
@@ -935,6 +935,105 @@
           "t2": "Share a behind-the-scenes look at what we're building",
           "t3": "Start a conversation about a trend in our space"
         }
+      },
+      "instagram": {
+        "subtitle": "Visual stories",
+        "bestFor": "Product visuals, behind the scenes, community",
+        "charLimit": "~2,200 chars",
+        "placeholder": "What photo, carousel or Reel is this caption for, and what is the story behind it?",
+        "templates": {
+          "t1": "Caption a behind-the-scenes look at how we build the product",
+          "t2": "Turn a customer result into a carousel caption",
+          "t3": "Announce a new feature with a tip worth saving"
+        }
+      },
+      "threads": {
+        "subtitle": "Open conversation",
+        "bestFor": "Opinions, quick takes, replies",
+        "charLimit": "~500 chars",
+        "placeholder": "What opinion or question do you want to start a conversation with?",
+        "templates": {
+          "t1": "Share a contrarian take on how our industry works",
+          "t2": "Ask our audience how they handle a common problem",
+          "t3": "Post a quick lesson from building this week"
+        }
+      },
+      "facebook": {
+        "subtitle": "Community updates",
+        "bestFor": "Existing customers, local and community audiences",
+        "charLimit": "40–120 words",
+        "placeholder": "What news or story do you want to tell the people who follow your Page?",
+        "templates": {
+          "t1": "Tell our followers about a new feature and why we built it",
+          "t2": "Share a customer story in a few friendly sentences",
+          "t3": "Ask our community a question about their day-to-day work"
+        }
+      },
+      "tiktok": {
+        "subtitle": "Short video scripts",
+        "bestFor": "Demos, founder to camera, quick tips",
+        "charLimit": "20–40 s script + caption",
+        "placeholder": "What should the video show, and what should someone remember after watching it?",
+        "templates": {
+          "t1": "Script a 30-second demo of our most useful feature",
+          "t2": "Explain one mistake our customers make, and the fix",
+          "t3": "Show a before and after of the problem we solve"
+        }
+      },
+      "youtube": {
+        "subtitle": "Searchable video",
+        "bestFor": "Tutorials, demos, deep dives",
+        "charLimit": "Title + outline + description",
+        "placeholder": "What will the viewer be able to do after watching this video?",
+        "templates": {
+          "t1": "Outline a tutorial that walks through our main workflow",
+          "t2": "Plan a demo video for a new feature",
+          "t3": "Explain a concept in our industry and where our product fits"
+        }
+      },
+      "mastodon": {
+        "subtitle": "Open-web communities",
+        "bestFor": "Open-source, privacy and tech communities",
+        "charLimit": "~500 chars",
+        "placeholder": "What did you build or learn that this community would care about?",
+        "templates": {
+          "t1": "Introduce our project to the open-source community",
+          "t2": "Share what we learned building a hard feature",
+          "t3": "Ask the community how they solve a problem we work on"
+        }
+      },
+      "hackernews": {
+        "subtitle": "Show HN launches",
+        "bestFor": "Engineers, founders, technical feedback",
+        "charLimit": "Title ≤ 80 chars + text",
+        "placeholder": "What did you build, how does it work, and what feedback do you want?",
+        "templates": {
+          "t1": "Write a Show HN post for our product",
+          "t2": "Explain the technical approach behind a feature we shipped",
+          "t3": "Share what we learned open-sourcing part of our stack"
+        }
+      },
+      "producthunt": {
+        "subtitle": "Launch-day copy",
+        "bestFor": "Launches, makers, early adopters",
+        "charLimit": "Tagline ≤ 60 · description ≤ 260",
+        "placeholder": "What are you launching, who is it for, and why did you build it?",
+        "templates": {
+          "t1": "Write the launch copy for our product",
+          "t2": "Launch a major new version and say what changed",
+          "t3": "Launch a free tool we built for our community"
+        }
+      },
+      "discord": {
+        "subtitle": "Community announcements",
+        "bestFor": "Your own server, existing users",
+        "charLimit": "~2,000 chars",
+        "placeholder": "What is new for the people in your server, and what should they do next?",
+        "templates": {
+          "t1": "Announce a new feature to our community server",
+          "t2": "Invite members to try a beta and send feedback",
+          "t3": "Share this month's changes with the community"
+        }
       }
     },
     "workspace": {
@@ -969,6 +1068,7 @@
       "publishTitle": "Publish this post directly to {platform}",
       "publishing": "Publishing…",
       "publishTo": "Publish to {platform}",
+      "copyOnly": "Brand doesn't post to {platform}. Copy the draft and post it there yourself.",
       "qualityScore": "Quality score",
       "judge": "judge {model} · rubric {version}",
       "publishedTo": "Published to {platform}.",

@@ -542,6 +542,24 @@ describe("the campaign generator's Publish goes through the workspace's own chan
         expect(response.status).toBe(400);
         expect(mockCreateBrandPosts).not.toHaveBeenCalled();
     });
+
+    // The generator writes for more networks than Brand posts to. Their
+    // drafts are copied out; the screen offers no Publish, and the route
+    // would not take one.
+    it.each(["instagram", "tiktok", "hackernews", "discord"])(
+        "refuses %s: a copy-only network is not one Brand posts to",
+        async platform => {
+            as("member");
+            mockDefaultChannelFor.mockResolvedValue(PAGE);
+            const response = await campaignPublish(
+                req("/api/marketing-pipeline/publish", "POST", { platform, message: "Hi" })
+            );
+            expect(response.status).toBe(400);
+            expect(mockDefaultChannelFor).not.toHaveBeenCalled();
+            expect(mockCreateBrandPosts).not.toHaveBeenCalled();
+            expect(mockPublishBrandPost).not.toHaveBeenCalled();
+        }
+    );
 });
 
 describe("the claim gate: unbacked claims don't go out as the company unacknowledged", () => {

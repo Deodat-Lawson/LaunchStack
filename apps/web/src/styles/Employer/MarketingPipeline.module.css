@@ -303,6 +303,44 @@
     background: #0085ff;
 }
 
+/* The copy-only networks. One class each, shared by the picker's tile and
+   the preview's badge. A network's own colour is the one place a literal
+   belongs: it is the same in both themes and is not ours to tokenise. */
+.networkTileInstagram {
+    background: linear-gradient(
+        45deg,
+        #f09433 0%,
+        #e6683c 25%,
+        #dc2743 50%,
+        #cc2366 75%,
+        #bc1888 100%
+    );
+}
+.networkTileThreads,
+.networkTileTiktok {
+    background: #000000;
+    /* Black tiles, like X's: a hairline keeps them tiles on the dark theme. */
+    box-shadow: inset 0 0 0 1px var(--line);
+}
+.networkTileFacebook {
+    background: #0866ff;
+}
+.networkTileYoutube {
+    background: #ff0000;
+}
+.networkTileMastodon {
+    background: #6364ff;
+}
+.networkTileHackernews {
+    background: #ff6600;
+}
+.networkTileProducthunt {
+    background: #da552f;
+}
+.networkTileDiscord {
+    background: #5865f2;
+}
+
 .platformName {
     font-weight: 600;
     font-size: 1.05rem;
@@ -585,7 +623,16 @@
 .platformPreviewBody ul,
 .platformPreviewBody ol {
     margin: 0.5em 0 0.75em;
-    padding-left: 1.25em;
+    padding-left: 1.5em;
+}
+/* The base reset strips list markers. A script's numbered beats, an outline
+   and an announcement's "what's new" are lists, and the copied text keeps
+   their numbers and dashes, so the preview shows them too. */
+.platformPreviewBody ul {
+    list-style: disc;
+}
+.platformPreviewBody ol {
+    list-style: decimal;
 }
 
 .platformPreviewBody li {
@@ -1981,7 +2028,9 @@
 
 /* ---------------- Dark mode polish on platform-specific brand chips ---------------- */
 
-:global([data-theme="dark"]) .platformLogoX {
+:global([data-theme="dark"]) .platformLogoX,
+:global([data-theme="dark"]) .networkTileThreads,
+:global([data-theme="dark"]) .networkTileTiktok {
     background: #0a0a14;
     box-shadow: 0 0 0 1px var(--line);
 }

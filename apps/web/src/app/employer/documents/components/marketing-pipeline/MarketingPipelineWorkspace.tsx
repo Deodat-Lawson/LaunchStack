@@ -47,6 +47,7 @@ import {
     PIPELINE_STEP_KEY,
     PLATFORM_OPTIONS,
     PROMPT_TEMPLATE_KEYS,
+    isPublishPlatform,
     type ClaimSourceUI,
     type ContentType,
     type FormalityLevel,
@@ -56,12 +57,13 @@ import {
     type PipelineStepState,
     type PlatformFieldConfig,
     type PlatformMeta,
+    type PublishPlatform,
     type ThinkingEntry,
 } from "./shared";
 import { ClaimGateDialog, SUPPORT_TONE, claimVerdict } from "./ClaimGate";
 import { NETWORK_MARKS } from "~/components/icons/brand";
 
-import { PlatformLogo } from "./PlatformLogo";
+import { COPY_ONLY_TILE, PlatformLogo } from "./PlatformLogo";
 import { useMarketingPipelineController } from "./useMarketingPipelineController";
 
 export interface MarketingPipelineWorkspaceProps {
@@ -73,8 +75,17 @@ export interface MarketingPipelineWorkspaceProps {
      * Offered beside Publish when the host can put a post on a calendar: the
      * Brand area hands the edited text to Compose to schedule it.
      */
-    onSchedule?: (draft: { platform: MarketingPlatform; message: string }) => void;
+    onSchedule?: (draft: { platform: PublishPlatform; message: string }) => void;
 }
+
+/** The preview badge's colour: the network's own, as on its picker tile. */
+const PREVIEW_BADGE: Record<MarketingPlatform, string | undefined> = {
+    reddit: styles.platformPreviewBadgeReddit,
+    x: styles.platformPreviewBadgeX,
+    linkedin: styles.platformPreviewBadgeLinkedin,
+    bluesky: styles.platformPreviewBadgeBluesky,
+    ...COPY_ONLY_TILE,
+};
 
 /** The network's mark inside the preview badge (the same glyphs as everywhere else). */
 function PreviewBadgeMark({ platform }: { platform: MarketingPlatform }) {
@@ -1208,6 +1219,9 @@ export function MarketingPipelineWorkspace({
     const platformLabel = result
         ? PLATFORM_OPTIONS.find(p => p.id === result.platform)?.label
         : undefined;
+    // Null for a copy-only network: its draft is copied out, never posted
+    // or scheduled from here.
+    const publishPlatform = result && isPublishPlatform(result.platform) ? result.platform : null;
 
     const handleNewCampaignClick = () => {
         if (result) {
@@ -1613,16 +1627,10 @@ export function MarketingPipelineWorkspace({
                                                             className={styles.platformPreviewHeader}
                                                         >
                                                             <span
-                                                                className={`${styles.platformPreviewBadge} ${
-                                                                    result.platform === "reddit"
-                                                                        ? styles.platformPreviewBadgeReddit
-                                                                        : result.platform === "x"
-                                                                          ? styles.platformPreviewBadgeX
-                                                                          : result.platform ===
-                                                                              "linkedin"
-                                                                            ? styles.platformPreviewBadgeLinkedin
-                                                                            : styles.platformPreviewBadgeBluesky
-                                                                }`}
+                                                                className={cn(
+                                                                    styles.platformPreviewBadge,
+                                                                    PREVIEW_BADGE[result.platform]
+                                                                )}
                                                             >
                                                                 <PreviewBadgeMark
                                                                     platform={result.platform}
@@ -1800,13 +1808,13 @@ export function MarketingPipelineWorkspace({
                                                                           t("workspace.platform"),
                                                                   })}
                                                         </button>
-                                                        {onSchedule && result.platform && (
+                                                        {onSchedule && publishPlatform && (
                                                             <button
                                                                 type="button"
                                                                 className={styles.actionSecondary}
                                                                 onClick={() =>
                                                                     onSchedule({
-                                                                        platform: result.platform,
+                                                                        platform: publishPlatform,
                                                                         message: editableMessage,
                                                                     })
                                                                 }
@@ -1817,37 +1825,50 @@ export function MarketingPipelineWorkspace({
                                                                 {t("workspace.schedule")}
                                                             </button>
                                                         )}
-                                                        <button
-                                                            type="button"
-                                                            className={styles.actionSecondary}
-                                                            onClick={() => void publishPost()}
-                                                            disabled={
-                                                                !editableMessage.trim() ||
-                                                                publishing
-                                                            }
-                                                            title={t("workspace.publishTitle", {
+                                                        {publishPlatform && (
+                                                            <button
+                                                                type="button"
+                                                                className={styles.actionSecondary}
+                                                                onClick={() => void publishPost()}
+                                                                disabled={
+                                                                    !editableMessage.trim() ||
+                                                                    publishing
+                                                                }
+                                                                title={t("workspace.publishTitle", {
+                                                                    platform:
+                                                                        platformLabel ??
+                                                                        t("workspace.thePlatform"),
+                                                                })}
+                                                            >
+                                                                {publishing ? (
+                                                                    <Loader2
+                                                                        size={14}
+                                                                        className={styles.spinIcon}
+                                                                    />
+                                                                ) : (
+                                                                    <Send size={14} />
+                                                                )}
+                                                                {publishing
+                                                                    ? t("workspace.publishing")
+                                                                    : t("workspace.publishTo", {
+                                                                          platform:
+                                                                              platformLabel ??
+                                                                              t(
+                                                                                  "workspace.platform"
+                                                                              ),
+                                                                      })}
+                                                            </button>
+                                                        )}
+                                                    </div>
+                                                    {!publishPlatform && (
+                                                        <p className="text-ink-3 mt-2 text-[0.8125rem] leading-snug">
+                                                            {t("workspace.copyOnly", {
                                                                 platform:
                                                                     platformLabel ??
                                                                     t("workspace.thePlatform"),
                                                             })}
-                                                        >
-                                                            {publishing ? (
-                                                                <Loader2
-                                                                    size={14}
-                                                                    className={styles.spinIcon}
-                                                                />
-                                                            ) : (
-                                                                <Send size={14} />
-                                                            )}
-                                                            {publishing
-                                                                ? t("workspace.publishing")
-                                                                : t("workspace.publishTo", {
-                                                                      platform:
-                                                                          platformLabel ??
-                                                                          t("workspace.platform"),
-                                                                  })}
-                                                        </button>
-                                                    </div>
+                                                        </p>
+                                                    )}
 
                                                     {evalError && (
                                                         <div

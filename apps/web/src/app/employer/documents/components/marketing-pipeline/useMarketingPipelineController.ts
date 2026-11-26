@@ -21,6 +21,8 @@ import {
     type PlatformMeta,
     type ThinkingEntry,
     type ClaimGateClaimUI,
+    isPublishPlatform,
+    rendersMarkdown,
 } from "./shared";
 
 /** How often the screen asks a run for new progress. */
@@ -59,7 +61,7 @@ function buildInitialSteps(): PipelineStepState[] {
 }
 
 /**
- * Reddit renders Markdown natively; every other platform gets plain text.
+ * Reddit and Discord render Markdown natively; every other platform gets plain text.
  * Used by both the copy flow and publishPost so what we publish matches what
  * the user would have pasted.
  */
@@ -67,7 +69,7 @@ export function toPlatformText(
     platform: MarketingSession["platform"] | undefined,
     text: string
 ): string {
-    return platform === "reddit" ? text : markdownToPlainText(text);
+    return rendersMarkdown(platform) ? text : markdownToPlainText(text);
 }
 
 /* ── Quality evaluation (LLM-as-judge; raw scores, no rewrite) ── */
@@ -744,7 +746,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             // plain-text conversion the copy flow produces.
             const targetPlatform = result?.platform ?? platform;
             const message = toPlatformText(targetPlatform, editableMessage).trim();
-            if (!targetPlatform || !message) return;
+            // A copy-only network has no Publish button; this keeps it true
+            // for any other caller too.
+            if (!isPublishPlatform(targetPlatform) || !message) return;
 
             const epoch = postFeedbackEpochRef.current;
             setPublishing(true);

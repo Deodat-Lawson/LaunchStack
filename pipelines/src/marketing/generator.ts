@@ -6,7 +6,7 @@ import { buildPersonaDirective } from "@launchstack/tools/persona";
 import { QUALITY_THRESHOLD, validatePostQuality } from "@launchstack/tools/content-scoring";
 import { invokeMarketingStructured } from "./models";
 import type {
-    MarketingPlatform,
+    CampaignPlatform,
     MarketingResearchResult,
     MessagingStrategy,
     BrandVoice,
@@ -86,15 +86,16 @@ function formatStrategyBlock(strategy: MessagingStrategy): string {
 }
 
 function buildPrompt(args: {
-    platform: MarketingPlatform;
+    platform: CampaignPlatform;
     prompt: string;
     companyContext: string;
     research: MarketingResearchResult[];
     strategy?: MessagingStrategy;
     platformMeta?: PlatformMeta;
 }): string {
+    const profile = getPlatformProfile(args.platform);
     const parts = [
-        `Selected platform: ${args.platform}`,
+        `Selected platform: ${profile.promptName}`,
         `User prompt: ${args.prompt}`,
         "",
         "Company context (source of truth — all product claims must come from here):",
@@ -125,7 +126,6 @@ function buildPrompt(args: {
         );
     }
 
-    const profile = getPlatformProfile(args.platform);
     parts.push(
         "",
         profile.structureTemplate,
@@ -147,9 +147,29 @@ function buildPrompt(args: {
         args.platformMeta?.hashtags?.length
             ? "- Prefer the user's preferred hashtags over generic ones."
             : "",
+        ...formatRuleLines(profile.formatRules),
+        // The schema wants the platform's id; a draft-only network is named
+        // above by its real name, so say which id that is.
+        ...(profile.promptName === args.platform
+            ? []
+            : [`- Set "platform" to "${args.platform}".`]),
         "- Return JSON matching the schema exactly."
     );
     return parts.join("\n");
+}
+
+/**
+ * A network whose post is not one text post (a video script, a launch page,
+ * a forum submission) says so in its profile. Those rules go last and are
+ * told to win, because the task and the system prompt above them describe a
+ * single scroll-stopping post with one CTA.
+ */
+function formatRuleLines(rules: readonly string[] | undefined): string[] {
+    if (!rules?.length) return [];
+    return [
+        "- This platform's format rules win over any rule above, or in your instructions, that conflicts with them:",
+        ...rules.map(rule => `  - ${rule}`),
+    ];
 }
 
 /* ──────────────────────────────────────────────────────────────
@@ -176,7 +196,7 @@ function contentTypeTemplate(type: ContentType | undefined): string {
  * ────────────────────────────────────────────────────────────── */
 
 export async function generateVariants(args: {
-    platform: MarketingPlatform;
+    platform: CampaignPlatform;
     prompt: string;
     companyContext: string;
     research: MarketingResearchResult[];
@@ -278,7 +298,7 @@ const RefinementSchema = z.object({
 });
 
 export async function refineContent(args: {
-    platform: MarketingPlatform;
+    platform: CampaignPlatform;
     originalMessage: string;
     feedback: string;
     companyContext: string;
@@ -295,13 +315,18 @@ Rules:
 
     if (args.brandVoice) systemPrompt += buildVoiceDirective(args.brandVoice);
 
+    const profile = getPlatformProfile(args.platform);
     const response = await invokeMarketingStructured(
         RefinementSchema,
         [
             new SystemMessage(systemPrompt),
             new HumanMessage(
                 [
-                    `Platform: ${args.platform}`,
+                    `Platform: ${profile.promptName}`,
+                    // A post made of labelled parts must come back in the same parts.
+                    ...(profile.formatRules?.length
+                        ? [`Keep this platform's format:\n${profile.structureTemplate}`]
+                        : []),
                     `Original post:\n${args.originalMessage}`,
                     `\nUser feedback: ${args.feedback}`,
                     `\nCompany context:\n${args.companyContext}`,

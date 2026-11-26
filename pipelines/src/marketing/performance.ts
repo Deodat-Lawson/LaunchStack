@@ -1,7 +1,7 @@
 import { eq, and, desc } from "drizzle-orm";
 import { getDb } from "@launchstack/store/client";
 import { marketingContentHistory } from "../schema";
-import type { MarketingPlatform } from "./types";
+import type { CampaignPlatform, MarketingPlatform } from "./types";
 
 interface HistoryRow {
     platform: string;
@@ -14,7 +14,7 @@ interface HistoryRow {
 
 export async function getPerformanceHistory(args: {
     companyId: number;
-    platform: MarketingPlatform;
+    platform: CampaignPlatform;
     limit?: number;
 }): Promise<HistoryRow[]> {
     const db = getDb();
@@ -76,7 +76,7 @@ export function buildPerformanceInsights(history: HistoryRow[]): string[] {
 
 export async function saveGeneratedContent(args: {
     companyId: number;
-    platform: MarketingPlatform;
+    platform: CampaignPlatform;
     message: string;
     angle?: string;
     contentType?: string;

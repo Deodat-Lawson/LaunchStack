@@ -14,8 +14,27 @@ import { z } from "zod";
  * Shared primitives
  * ────────────────────────────────────────────────────────────── */
 
-/** Platforms the Campaign Planner can target. Mirrors MarketingPlatformEnum. */
-export const PlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
+/**
+ * Platforms the Campaign Planner can target. Mirrors CampaignPlatformEnum in
+ * @launchstack/tools/platform-profiles: the four Brand can post to, then the
+ * copy-only ones (`__tests__/lib/evals/campaign-platforms.test.ts` keeps the
+ * two lists, and the limits below, equal to the profiles).
+ */
+export const PlatformEnum = z.enum([
+    "x",
+    "linkedin",
+    "reddit",
+    "bluesky",
+    "instagram",
+    "threads",
+    "facebook",
+    "tiktok",
+    "youtube",
+    "mastodon",
+    "hackernews",
+    "producthunt",
+    "discord",
+]);
 export type Platform = z.infer<typeof PlatformEnum>;
 
 /** Content shapes the generator supports. Mirrors ContentTypeEnum on v2. */
@@ -29,12 +48,25 @@ export type ContentType = z.infer<typeof ContentTypeEnum>;
 export const SeverityEnum = z.enum(["error", "warning", "info"]);
 export type Severity = z.infer<typeof SeverityEnum>;
 
-/** Documented hard limits per platform, used by platform-constraint criteria. */
-export const PLATFORM_CHAR_LIMITS: Readonly<Record<Platform, number>> = {
+/**
+ * Documented hard limits per platform, used by platform-constraint criteria.
+ * Null where the post is several labelled parts (a script and a caption, a
+ * title and a text) and no single number bounds it; the check skips those.
+ */
+export const PLATFORM_CHAR_LIMITS: Readonly<Record<Platform, number | null>> = {
     x: 280,
     bluesky: 300,
     linkedin: 3000,
     reddit: 40000,
+    instagram: 2200,
+    threads: 500,
+    facebook: 63206,
+    mastodon: 500,
+    discord: 2000,
+    tiktok: null,
+    youtube: null,
+    hackernews: null,
+    producthunt: null,
 };
 
 /** Hashtag ceilings the generator prompt claims to enforce. */
@@ -43,6 +75,15 @@ export const PLATFORM_HASHTAG_LIMITS: Readonly<Record<Platform, number>> = {
     linkedin: 3,
     reddit: 0,
     bluesky: 2,
+    instagram: 5,
+    threads: 1,
+    facebook: 2,
+    tiktok: 5,
+    youtube: 3,
+    mastodon: 4,
+    hackernews: 0,
+    producthunt: 0,
+    discord: 0,
 };
 
 /* ──────────────────────────────────────────────────────────────

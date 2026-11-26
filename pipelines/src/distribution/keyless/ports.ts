@@ -5,11 +5,12 @@
  * offices — in the segment's area, with their own addresses and websites.
  * Which kinds of place a segment wants is chosen by meaning from
  * OpenStreetMap's own categories when an embedder is given. The place search
- * returns the whole pool of those places (./pool): Overpass first, since one
- * answered request holds every tagged place; a letter-by-letter Photon sweep
- * when Overpass does not answer; and what was asked is kept, so a second run
- * carries on where the first stopped. The run then ranks the pool and takes
- * its shortlist from all of it.
+ * returns the whole pool of those places (./pool): Overpass first where one
+ * request covers the territory, since one answered request holds every
+ * tagged place; a letter-by-letter Photon sweep when Overpass does not
+ * answer, and for the large countries; and what was asked is kept, so a
+ * second run carries on where the first stopped. The run then ranks the pool
+ * and takes its shortlist from all of it.
  * Every candidate's own website is then read by the page profiler (its
  * homepage and the pages its own links name as contact, about, team or
  * imprint, four requests a site), which records evidence and assembles the
@@ -50,7 +51,8 @@ export const DEFAULT_PLACES_PER_TERRITORY = 2_000;
  * Photon requests one run may send, over all its territories: the sweep, the
  * lookup that places a region on the map, and the name search for a
  * territory where nothing carries the tags. In the benchmark a letter sweep
- * knew about 90% of a country's places of one kind after 64.
+ * knew 90% of a small country's places of one kind after 64, as a mean of
+ * six segments (45% in the largest, 2,637 places).
  */
 export const DEFAULT_SWEEP_REQUESTS_PER_RUN = 64;
 const MAX_SWEEP_REQUESTS_PER_RUN = 500;

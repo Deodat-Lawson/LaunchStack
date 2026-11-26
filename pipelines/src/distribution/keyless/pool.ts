@@ -14,7 +14,8 @@
  *
  * "Complete" is only said of a pool that has been told everything: an
  * Overpass answer for the whole territory, or a sweep with every box
- * answered and every found place's tags read. A failed request settles
+ * answered, none of them too dense to split, and every found place's tags
+ * read. A failed request settles
  * nothing; it waits for a later run. A complete pool that has grown old is
  * filled again, and keeps what it knew until the new filling is complete.
  * An unfinished one never starts over: it carries on, however long ago it
@@ -196,7 +197,10 @@ export interface PlacePoolReport {
     pendingBoxes: number;
     /** Found places whose tags are still to be read. */
     unread: number;
-    /** Boxes still full at the sweep's depth limit: places there may stay hidden. */
+    /**
+     * Boxes still full at the sweep's depth limit. Places there stay hidden,
+     * so a sweep with any cannot make the pool complete.
+     */
     boxesCutOff: number;
     /** What a later run would still ask for this pool. */
     waiting: PoolWaiting;
@@ -553,7 +557,7 @@ async function fillPool(
             photonLeft -= located.photonRequests;
             if (located.box) state.sweep = newSweep(located.box, tags);
         }
-        if (photonLeft > 0 && state.sweep) {
+        if (photonLeft > 0 && state.sweep && sweepPending(state.sweep) > 0) {
             report.asked.push("sweep");
             const known = new Set<string>([...Object.keys(state.places), ...without]);
             for (const hit of state.unread) known.add(hit.id);
@@ -608,9 +612,11 @@ async function fillPool(
             if (read.answered < read.requests)
                 report.problems.push("The OSM API did not answer every read of place tags");
         }
+        // Every box answered, none of them cut off, every tag read: told everything.
         if (
             state.sweep !== null &&
             sweepPending(state.sweep) === 0 &&
+            state.sweep.cutOff === 0 &&
             state.unread.length === 0 &&
             sweepCoversSelectors
         )

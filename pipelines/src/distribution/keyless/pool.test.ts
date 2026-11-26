@@ -815,6 +815,59 @@ describe("what a later run would still ask", () => {
     });
 });
 
+describe("a box too dense to split", () => {
+    /** Sixty shops at one address whose names start alike: no box can hold fewer than a full page. */
+    const oneAddress = (country: string, lon: number, lat: number): FakePlace[] =>
+        Array.from({ length: 60 }, (_, i) => ({
+            type: "N" as const,
+            id: i + 1,
+            name: `Alfa ${i + 1}`,
+            lon,
+            lat,
+            tag: "shop:bicycle",
+            country,
+            website: `https://alfa-${i + 1}.example/`,
+        }));
+
+    it("keeps a swept pool from being called complete, and asks nothing more once every box is answered", async () => {
+        const map = createFakeMap(oneAddress("DE", 10, 51));
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 500, fetchImpl: map.fetchImpl };
+        const germany = { ...request, country: "DE" };
+        const first = await gatherPlacePool(germany, deps);
+        expect(first.report).toMatchObject({
+            complete: false,
+            known: 50,
+            pendingBoxes: 0,
+            boxesCutOff: 1,
+            // Nothing a later run could ask would show the other ten.
+            waiting: { overpass: false, boxes: false, tags: false },
+        });
+        expect(poolPlaces(first.state)).toHaveLength(50);
+
+        const asked = map.calls.length;
+        const second = await gatherPlacePool(germany, deps);
+        expect(map.calls.length).toBe(asked);
+        expect(second.report).toMatchObject({ complete: false, asked: [], boxesCutOff: 1 });
+    });
+
+    it("lets Overpass complete the pool where it can be asked", async () => {
+        const map = createFakeMap(oneAddress("NL", 5, 52), { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 500, fetchImpl: map.fetchImpl };
+        const swept = await gatherPlacePool(request, deps);
+        expect(swept.report).toMatchObject({
+            complete: false,
+            known: 50,
+            boxesCutOff: 1,
+            waiting: { overpass: true, boxes: false, tags: false },
+        });
+        map.options.overpass = "answers";
+        const told = await gatherPlacePool(request, deps);
+        expect(told.report).toMatchObject({ complete: true, completedBy: "overpass", known: 60 });
+    });
+});
+
 describe("a territory where nothing carries the tags", () => {
     const named = [
         {

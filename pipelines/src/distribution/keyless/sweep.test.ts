@@ -16,6 +16,7 @@ import {
     quarterBoxes,
     readPlaceTags,
     runSweep,
+    sweepDepthFor,
     sweepPending,
     type SweepHit,
     type SweepState,
@@ -217,6 +218,44 @@ describe("sweeping", () => {
         expect(found.size).toBe(PHOTON_PAGE);
         // One box per level holds the address; its three siblings come back empty.
         expect(result.sent).toBe(1 + 4 + 4 + 4);
+    });
+
+    it("splits until a box is about a kilometre across, however large the territory", () => {
+        expect(sweepDepthFor(NL)).toBe(9);
+        expect(sweepDepthFor([5.85, 47.25, 15.05, 55.1])).toBe(10);
+        expect(sweepDepthFor([-124.85, 24.4, -66.85, 49.4])).toBe(13);
+        // A region's box is small to begin with: it keeps the base depth.
+        expect(sweepDepthFor([4.55, 52.12, 5.25, 52.62])).toBe(8);
+    });
+
+    it("lists a dense town inside a large country, which eight levels would cut off", async () => {
+        // 300 shops whose names start alike, within a few kilometres, in a box the size of Germany.
+        const DE = [5.85, 47.25, 15.05, 55.1] as const;
+        const places: FakePlace[] = Array.from({ length: 300 }, (_, i) => ({
+            type: "N" as const,
+            id: i + 1,
+            name: `Alfa ${i + 1}`,
+            lon: 10 + (i % 20) * 0.003,
+            lat: 51 + Math.floor(i / 20) * 0.003,
+            tag: TAG,
+            country: "DE",
+        }));
+        const sweep = async (maxDepth?: number) => {
+            const state = newSweep(DE, [TAG], ["a"]);
+            const found = new Set<string>();
+            await runSweep(state, {
+                country: "DE",
+                maxRequests: 10_000,
+                ...(maxDepth === undefined ? {} : { maxDepth }),
+                fetchImpl: createFakeMap(places).fetchImpl,
+                onHits: hits => hits.forEach(hit => found.add(hit.id)),
+            });
+            return { found: found.size, cutOff: state.cutOff };
+        };
+        const shallow = await sweep(8);
+        expect(shallow.cutOff).toBeGreaterThan(0);
+        expect(shallow.found).toBeLessThan(300);
+        expect(await sweep()).toEqual({ found: 300, cutOff: 0 });
     });
 
     it("asks a failed box again on the next run, once per run, and never gives it up", async () => {

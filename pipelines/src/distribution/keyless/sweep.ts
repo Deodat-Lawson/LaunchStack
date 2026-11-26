@@ -8,7 +8,8 @@
  * for the bicycle shops with a name word starting with "a". The sweep asks
  * that for every letter, and whenever a box comes back with a full page it
  * splits the box in four and asks each quarter, until boxes come back short.
- * A box that comes back short is complete.
+ * A box that comes back short is complete. Splitting stops when a box is
+ * about a kilometre across; one still full there is counted as cut off.
  *
  * The sweep is plain data (`SweepState`): a run stops at its request cap and
  * a later run carries on with the boxes still waiting, so nothing is asked
@@ -32,8 +33,12 @@ import type { HostThrottle } from "./throttle";
 
 /** Photon's page size: a box that returns this many may hide more. */
 export const PHOTON_PAGE = 50;
-/** Boxes are not split below this depth; a box still full there is counted as cut off. */
-export const SWEEP_MAX_DEPTH = 8;
+/** A box is split until its longer side is about this short. */
+const SWEEP_CELL_KM = 1;
+/** The depth limit is never lower than this (a region's box is small to begin with)… */
+export const SWEEP_BASE_DEPTH = 8;
+/** …and never higher than this. */
+export const SWEEP_DEPTH_CAP = 14;
 /** The name prefixes asked. Photon folds accents, so "e" also finds "É". */
 export const SWEEP_LETTERS: readonly string[] = "abcdefghijklmnopqrstuvwxyz".split("");
 /**
@@ -109,6 +114,22 @@ export function newSweep(
 /** Boxes still to ask. Zero means every place a letter can reach has been returned. */
 export function sweepPending(state: SweepState): number {
     return state.arms.reduce((sum, arm) => sum + arm.queue.length, state.deferred.length);
+}
+
+/**
+ * How deep a box may be split: until a quarter's longer side is about a
+ * kilometre, so a dense town is listed whatever the size of the territory
+ * around it. The Netherlands gets 9 levels, Germany 10, the United States
+ * 13; a region's box keeps 8. A box still full at that depth is counted as
+ * cut off (`SweepState.cutOff`).
+ */
+export function sweepDepthFor(box: Bbox): number {
+    const [west, south, east, north] = box;
+    const midLatitude = (((south + north) / 2) * Math.PI) / 180;
+    const widthKm = Math.abs(east - west) * 111.32 * Math.cos(midLatitude);
+    const heightKm = Math.abs(north - south) * 110.57;
+    const depth = Math.ceil(Math.log2(Math.max(widthKm, heightKm, 1) / SWEEP_CELL_KM));
+    return Math.min(SWEEP_DEPTH_CAP, Math.max(SWEEP_BASE_DEPTH, depth));
 }
 
 export function quarterBoxes(box: Bbox): [Bbox, Bbox, Bbox, Bbox] {
@@ -212,6 +233,7 @@ export interface SweepRunOptions extends SweepClientOptions {
     country: string;
     /** Photon requests this run may send. */
     maxRequests: number;
+    /** How deep a full box may be split; `sweepDepthFor` the sweep's box when absent. */
     maxDepth?: number;
     /** Receives the places of each answer; the same place can arrive more than once. */
     onHits: (hits: SweepHit[]) => void;
@@ -242,7 +264,7 @@ export async function runSweep(
     options: SweepRunOptions
 ): Promise<SweepRunResult> {
     const base = options.photonUrl ?? PHOTON_URL;
-    const maxDepth = options.maxDepth ?? SWEEP_MAX_DEPTH;
+    const maxDepth = options.maxDepth ?? sweepDepthFor(state.box);
     const country = options.country.toUpperCase();
     const result: SweepRunResult = { sent: 0, answered: 0, failed: 0, stopped: "cap" };
     if (options.maxRequests <= 0) {

@@ -51,8 +51,8 @@ export const DEFAULT_PLACES_PER_TERRITORY = 2_000;
  * Photon requests one run may send, over all its territories: the sweep, the
  * lookup that places a region on the map, and the name search for a
  * territory where nothing carries the tags. In the benchmark a letter sweep
- * knew 90% of a small country's places of one kind after 64, as a mean of
- * six segments (45% in the largest, 2,637 places).
+ * knew about 90% of a small country's places of one kind after 64, as a mean
+ * of six segments (45% in the largest, 2,637 places).
  */
 export const DEFAULT_SWEEP_REQUESTS_PER_RUN = 64;
 const MAX_SWEEP_REQUESTS_PER_RUN = 500;

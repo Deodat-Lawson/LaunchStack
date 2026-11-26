@@ -132,11 +132,9 @@ describe.skipIf(!recorded)("production's place search on the recorded segments",
         }
         const largest = replay.segments.find(s => s.id === "nl-bicycle")!.sweep.resume;
         expect(largest.runs).toBeGreaterThan(3);
-        // One recorded Photon request is a 503 (in the breweries sweep): that
-        // pool waits for it; the other five finish.
-        expect(replay.segments.filter(s => !s.sweep.resume.complete).map(s => s.id)).toEqual([
-            "be-brewery",
-        ]);
+        // Every recorded box has an answer (the one the breweries sweep was
+        // refused on 24 November was asked again on the 26th), so every pool finishes.
+        expect(replay.segments.filter(s => !s.sweep.resume.complete).map(s => s.id)).toEqual([]);
     });
 
     it("matches the committed result file", () => {

@@ -405,53 +405,53 @@
           "32": {
             "photonRequests": 32,
             "osmApiRequests": 5,
-            "known": 234,
-            "knownShare": 0.947,
-            "withWebsite": 150,
-            "withWebsiteShare": 0.938,
-            "placesReturned": 148
+            "known": 240,
+            "knownShare": 0.972,
+            "withWebsite": 156,
+            "withWebsiteShare": 0.975,
+            "placesReturned": 153
           },
           "64": {
             "photonRequests": 34,
             "osmApiRequests": 5,
-            "known": 240,
-            "knownShare": 0.972,
-            "withWebsite": 153,
-            "withWebsiteShare": 0.956,
-            "placesReturned": 150
+            "known": 245,
+            "knownShare": 0.992,
+            "withWebsite": 158,
+            "withWebsiteShare": 0.988,
+            "placesReturned": 155
           },
           "96": {
             "photonRequests": 34,
             "osmApiRequests": 5,
-            "known": 240,
-            "knownShare": 0.972,
-            "withWebsite": 153,
-            "withWebsiteShare": 0.956,
-            "placesReturned": 150
+            "known": 245,
+            "knownShare": 0.992,
+            "withWebsite": 158,
+            "withWebsiteShare": 0.988,
+            "placesReturned": 155
           }
         },
         "requestsToKnow": {
           "50%": 13,
           "80%": 30,
-          "90%": 32,
-          "95%": 33
+          "90%": 31,
+          "95%": 32
         },
         "resume": {
           "capPerRun": 64,
           "runs": 1,
-          "knownAfterRun": [240],
-          "complete": false,
-          "boxesUnanswered": 1,
-          "photonAnswered": 33,
+          "knownAfterRun": [245],
+          "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 34,
           "repeatedPhotonRequests": 0,
-          "photonAnsweredInOneSweep": 33,
+          "photonAnsweredInOneSweep": 34,
           "osmApiRequests": 5,
-          "requestsAfterComplete": null,
-          "known": 240,
-          "knownShare": 0.972,
-          "withWebsite": 153,
-          "withWebsiteShare": 0.956,
-          "placesReturned": 150,
+          "requestsAfterComplete": 0,
+          "known": 245,
+          "knownShare": 0.992,
+          "withWebsite": 158,
+          "withWebsiteShare": 0.988,
+          "placesReturned": 155,
           "boxesCutOffAtDepthLimit": 0
         }
       }
@@ -686,15 +686,15 @@
   "overall": {
     "knownShareAt": {
       "16": 0.454,
-      "32": 0.724,
-      "64": 0.902,
-      "96": 0.942
+      "32": 0.728,
+      "64": 0.906,
+      "96": 0.945
     },
     "withWebsiteShareAt": {
       "16": 0.458,
-      "32": 0.726,
-      "64": 0.899,
-      "96": 0.937
+      "32": 0.732,
+      "64": 0.904,
+      "96": 0.943
     },
     "todayFirstStepWithWebsiteShare": 0.0171,
     "todayWholeSearchWithWebsiteShare": 0.1419

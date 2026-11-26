@@ -118,6 +118,12 @@ export interface OverpassRequest {
     selectors?: readonly string[];
     limit?: number;
     timeoutSeconds?: number;
+    /**
+     * Ask for every named place with the tags, not the first `limit` that
+     * carry a website: the whole population in one answer. Websites are then
+     * read from the tags (`website` or `contact:website`) on our side.
+     */
+    all?: boolean;
 }
 
 export function buildOverpassQuery(
@@ -136,7 +142,8 @@ export function buildOverpassQuery(
         );
         scope = "(area.c)(area.r)";
     }
-    const statements: string[] = selectors.map(s => `nwr${scope}${s}${WEBSITE_FILTER};`);
+    const tagFilter = req.all ? '["name"]' : WEBSITE_FILTER;
+    const statements: string[] = selectors.map(s => `nwr${scope}${s}${tagFilter};`);
     // A name match is cheap inside a city and acceptable in a small country;
     // it is what finds "Nordlager Fulfilment" when no tag says fulfilment.
     if (nameRegex && (area.city || selectors.length === 0)) {
@@ -144,7 +151,10 @@ export function buildOverpassQuery(
     }
     if (statements.length === 0)
         statements.push(`nwr${scope}["office"="company"]${WEBSITE_FILTER};`);
-    return `[out:json][timeout:${timeout}];\n${areaDefs.join("\n")}\n(\n  ${statements.join("\n  ")}\n);\nout center ${limit};`;
+    // `out tags center` prints ids, tags and one position per element, and no
+    // member lists: all a place needs.
+    const out = req.all ? "out tags center;" : `out center ${limit};`;
+    return `[out:json][timeout:${timeout}];\n${areaDefs.join("\n")}\n(\n  ${statements.join("\n  ")}\n);\n${out}`;
 }
 
 export interface OsmPlace {
@@ -170,7 +180,8 @@ interface OverpassElement {
     tags?: Record<string, string>;
 }
 
-const CATEGORY_KEYS = [
+/** Tag keys that say what a place is; kept on a place as "key=value". */
+export const CATEGORY_KEYS = [
     "shop",
     "amenity",
     "office",
@@ -186,8 +197,11 @@ const CATEGORY_KEYS = [
 
 export function mapOverpassElements(
     elements: OverpassElement[],
-    area: { country: string; city: string | null }
+    area: { country: string; city: string | null },
+    /** `distinct: false` keeps every element, also branches that share one website. */
+    options: { distinct?: boolean } = {}
 ): OsmPlace[] {
+    const distinct = options.distinct !== false;
     const out: OsmPlace[] = [];
     const seen = new Set<string>();
     for (const el of elements) {
@@ -199,7 +213,9 @@ export function mapOverpassElements(
         const lat = el.lat ?? el.center?.lat;
         const lng = el.lon ?? el.center?.lon;
         if (lat === undefined || lng === undefined) continue;
-        const key = website ?? `${name.toLowerCase()}|${lat.toFixed(3)}`;
+        const key = distinct
+            ? (website ?? `${name.toLowerCase()}|${lat.toFixed(3)}`)
+            : `${el.type}/${el.id}`;
         if (seen.has(key)) continue;
         seen.add(key);
         const address = [
@@ -224,7 +240,8 @@ export function mapOverpassElements(
     return out;
 }
 
-function normalizeWebsite(raw: string): string | null {
+/** A website tag as a URL: the first of several, a scheme added, null when it is not one. */
+export function normalizeWebsite(raw: string): string | null {
     const first = raw.split(/[;\s]+/)[0]!.trim();
     if (!first) return null;
     const withScheme = /^https?:\/\//i.test(first) ? first : `https://${first}`;
@@ -243,6 +260,8 @@ export interface OverpassClientOptions {
     /** Instances to try in order; defaults to OVERPASS_MIRRORS. */
     urls?: readonly string[];
     userAgent?: string;
+    /** Give up on one instance after this long; none by default. */
+    timeoutMs?: number;
 }
 
 interface OverpassResponse {
@@ -252,6 +271,42 @@ interface OverpassResponse {
 }
 
 async function requestArea(
+    url: string,
+    query: string,
+    options: OverpassClientOptions
+): Promise<OverpassElement[]> {
+    const timed = withTimeout(options.signal, options.timeoutMs);
+    try {
+        return await readArea(url, query, { ...options, signal: timed.signal });
+    } finally {
+        timed.clear();
+    }
+}
+
+/** The caller's signal, also aborted after `timeoutMs` when one is given. */
+export function withTimeout(
+    signal: AbortSignal | undefined,
+    timeoutMs: number | undefined
+): { signal: AbortSignal | undefined; clear: () => void } {
+    if (timeoutMs === undefined) return { signal, clear: () => undefined };
+    const controller = new AbortController();
+    const onAbort = () => controller.abort(signal?.reason);
+    if (signal?.aborted) onAbort();
+    else signal?.addEventListener("abort", onAbort, { once: true });
+    const timer = setTimeout(
+        () => controller.abort(new Error(`no answer after ${Math.round(timeoutMs / 1000)} s`)),
+        timeoutMs
+    );
+    return {
+        signal: controller.signal,
+        clear: () => {
+            clearTimeout(timer);
+            signal?.removeEventListener("abort", onAbort);
+        },
+    };
+}
+
+async function readArea(
     url: string,
     query: string,
     options: OverpassClientOptions
@@ -320,6 +375,82 @@ export async function searchOverpass(
     }
     if (places.length === 0 && lastError) throw lastError;
     return places.slice(0, req.limit ?? 40);
+}
+
+export interface OverpassAttempt {
+    host: string;
+    ok: boolean;
+    ms: number;
+    /** "731 elements", or why the instance did not answer. */
+    detail: string;
+}
+
+export interface OverpassAreaAnswer {
+    /** True when an instance answered; false when every one failed or time ran out. */
+    answered: boolean;
+    /** Named places in the area, with and without a website. */
+    places: OsmPlace[];
+    attempts: OverpassAttempt[];
+}
+
+/**
+ * Every named place with the tags in one area, in one request: the instances
+ * are tried in turn until one answers or `deadline` passes. It never throws:
+ * an unanswered area is a result, because the caller falls back to the sweep.
+ */
+export async function fetchOverpassArea(
+    area: { country: string; city: string | null },
+    req: OverpassRequest,
+    options: OverpassClientOptions & {
+        /** Clock time (ms) after which no further instance is tried. */
+        deadline?: number;
+        now?: () => number;
+    } = {}
+): Promise<OverpassAreaAnswer> {
+    const now = options.now ?? Date.now;
+    const query = buildOverpassQuery(area, { ...req, all: true });
+    const attempts: OverpassAttempt[] = [];
+    for (const url of options.urls ?? OVERPASS_MIRRORS) {
+        if (options.signal?.aborted) break;
+        const left = options.deadline === undefined ? undefined : options.deadline - now();
+        if (left !== undefined && left <= 0) break;
+        const timeoutMs =
+            left === undefined
+                ? options.timeoutMs
+                : Math.min(left, options.timeoutMs ?? Number.POSITIVE_INFINITY);
+        const host = hostOfUrl(url);
+        const started = now();
+        try {
+            const elements = await requestArea(url, query, { ...options, timeoutMs });
+            attempts.push({
+                host,
+                ok: true,
+                ms: now() - started,
+                detail: `${elements.length} elements`,
+            });
+            return {
+                answered: true,
+                places: mapOverpassElements(elements, area, { distinct: false }),
+                attempts,
+            };
+        } catch (error) {
+            attempts.push({
+                host,
+                ok: false,
+                ms: now() - started,
+                detail: (error instanceof Error ? error.message : String(error)).slice(0, 120),
+            });
+        }
+    }
+    return { answered: false, places: [], attempts };
+}
+
+function hostOfUrl(url: string): string {
+    try {
+        return new URL(url).hostname;
+    } catch {
+        return url;
+    }
 }
 
 /** Food service and shops that sell to the public: a retailer for a segment's purposes. */

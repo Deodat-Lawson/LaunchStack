@@ -102,8 +102,9 @@ export interface PhotonRequest {
     limit?: number;
 }
 
-const BOX_LON = 0.35;
-const BOX_LAT = 0.25;
+/** Half the width and height, in degrees, of the box searched around a city centre. */
+export const BOX_LON = 0.35;
+export const BOX_LAT = 0.25;
 
 /** Photon keys that denote a business rather than a street, area or landmark. */
 const BUSINESS_KEYS = new Set([

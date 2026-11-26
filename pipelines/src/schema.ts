@@ -18,6 +18,7 @@ export * from "./founder-weekly-review/schema";
 export * from "./email/schema";
 export * from "./repo-workspace/schema";
 export * from "./distribution/schema";
+export * from "./distribution/cache-schema";
 export * from "./vantage/schema";
 export * from "./proposals/schema";
 export * from "./scenarios/schema";

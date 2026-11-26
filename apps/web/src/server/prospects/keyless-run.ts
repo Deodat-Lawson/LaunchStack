@@ -1,9 +1,9 @@
 /**
  * Run the discovery pipeline in keyless mode for one program, in this
- * process. Keyless mode needs no search key: OpenStreetMap finds real
- * places (shops, cafés, workshops, offices) in the segment's area, each one's
- * own website is read by the page profiler, and persistence, scoring, stages
- * and publishing are the real code. The workspace's embedding model matches
+ * process. Keyless mode needs no search key: OpenStreetMap gives every real
+ * place of the segment's kinds (shops, cafés, workshops, offices) in its area,
+ * the run ranks them and reads the best ones' own websites with the page
+ * profiler, and persistence, scoring, stages and publishing are the real code. The workspace's embedding model matches
  * companies to the segment by meaning, and its chat model (when there is one)
  * checks the shortlist. It is the path Find companies takes whenever the environment has
  * no model or search provider configured, which is every fresh dev setup.
@@ -14,6 +14,7 @@
  * of seconds), which is why this never runs inline in the request.
  */
 import {
+    createDbPlacePoolStore,
     createKeylessPorts,
     runDistributionPipeline,
     type PublishDossierInput,
@@ -94,6 +95,8 @@ export async function runKeylessProspects(args: KeylessRunArgs): Promise<RunSumm
         debitCredits: null,
         embed: await prospectEmbedder(args.companyId),
         judgeFit: await prospectFitJudge(args.companyId),
+        // What the map servers were asked is kept, so the next run starts from it.
+        placePools: createDbPlacePoolStore(),
     });
     // The fit check resolves the workspace's models when it runs.
     const aiUse = { feature: "prospects", userId: args.userId, enforce: false } as const;

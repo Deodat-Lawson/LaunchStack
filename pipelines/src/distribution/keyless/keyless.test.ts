@@ -25,7 +25,13 @@ import { fakeEmbed } from "../semantic.fixture";
 import { searchNominatim } from "./nominatim";
 import { locateCity, photonAreas, photonTagsFor, searchPhoton } from "./photon";
 import { buildKeylessPlan, keywordsFor } from "./plan";
-import { createKeylessPorts } from "./ports";
+import { createFakeMap, fakePopulation, noWait } from "./map.fixture";
+import { createMemoryPlacePoolStore } from "./pool";
+import {
+    DEFAULT_SWEEP_REQUESTS_PER_RUN,
+    createKeylessPorts,
+    readSweepRequestsPerRun,
+} from "./ports";
 import { extractFacts, firstDescription, profileFromPages, readSite } from "./profile";
 
 const urlOf = (input: RequestInfo | URL): string =>
@@ -995,6 +1001,190 @@ describe("keyless ports", () => {
         expect(ports.searchWeb).toBeNull();
         const { plan } = await ports.plan!(planInput);
         expect(plan.queries.filter(q => q.kind === "place")).toHaveLength(2);
-        // Three stubbed sources in turn, with the profiler's polite pauses.
     }, 20_000);
 });
+
+describe("keyless place search", () => {
+    const bicycles = {
+        query: "bicycle shop",
+        categoryIds: ['["shop"="bicycle"]'],
+        territory: { country: "NL" },
+    };
+    const quiet = <T>(work: () => Promise<T>): Promise<T> => {
+        const info = console.info;
+        console.info = () => undefined;
+        return work().finally(() => {
+            console.info = info;
+        });
+    };
+
+    it("hands the whole pool to ranking, not the first 40, one place per website", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places);
+        const ports = createKeylessPorts({
+            fetchImpl: map.fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+        });
+        const found = await quiet(() => ports.searchPlaces!(bicycles));
+        const withSite = places.filter(p => p.website ?? p.contactWebsite);
+        expect(found).toHaveLength(withSite.length);
+        expect(found.length).toBeGreaterThan(400);
+        expect(new Set(found.map(p => p.website)).size).toBe(found.length);
+        expect(found[0]).toMatchObject({
+            fsqId: expect.stringMatching(/^osm:(node|way)\/\d+$/),
+            categories: [{ id: "shop=bicycle", name: "bicycle" }],
+            roles: ["retailer"],
+        });
+        // Overpass was asked first and answered: Photon was never needed.
+        expect(map.calls).toEqual(["overpass overpass-api.de"]);
+    });
+
+    it("cuts a pool larger than the limit instead of passing thousands on", async () => {
+        const map = createFakeMap(fakePopulation(700));
+        const ports = createKeylessPorts({
+            fetchImpl: map.fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+            placesPerTerritory: 100,
+        });
+        expect(await quiet(() => ports.searchPlaces!(bicycles))).toHaveLength(100);
+    });
+
+    it("sweeps Photon when Overpass is down, within the run's request cap, and resumes on the next run", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const placePools = createMemoryPlacePoolStore();
+        const run = () =>
+            createKeylessPorts({
+                fetchImpl: map.fetchImpl,
+                placePools,
+                throttle: noWait,
+                sweepRequestsPerRun: 40,
+            });
+        const first = await quiet(() => run().searchPlaces!(bicycles));
+        expect(map.sweepUrls()).toHaveLength(40);
+        expect(first.length).toBeGreaterThan(40);
+
+        const second = await quiet(() => run().searchPlaces!(bicycles));
+        expect(map.sweepUrls()).toHaveLength(80);
+        expect(new Set(map.sweepUrls()).size).toBe(80);
+        expect(second.length).toBeGreaterThan(first.length);
+        // The first run's places are all still there.
+        const secondIds = new Set(second.map(p => p.fsqId));
+        expect(first.every(p => secondIds.has(p.fsqId))).toBe(true);
+    });
+
+    it("shares one run's cap between the territories it planned", async () => {
+        const places = [
+            ...fakePopulation(400),
+            ...fakePopulation(400, {
+                country: "BE",
+                box: [2.5, 49.45, 6.45, 51.55],
+                firstId: 5_000,
+            }),
+        ];
+        const map = createFakeMap(places, { overpass: 504 });
+        const ports = createKeylessPorts({
+            fetchImpl: map.fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+            sweepRequestsPerRun: 60,
+            embed: null,
+        });
+        const { plan } = await createPlanFor(ports, [{ country: "NL" }, { country: "BE" }]);
+        expect(plan.queries.filter(q => q.kind === "place")).toHaveLength(2);
+        await quiet(() => ports.searchPlaces!(bicycles));
+        expect(map.sweepUrls()).toHaveLength(30);
+        await quiet(() => ports.searchPlaces!({ ...bicycles, territory: { country: "BE" } }));
+        // 30 each: the cap is the run's, whatever the number of territories.
+        expect(map.sweepUrls()).toHaveLength(60);
+        // A third query in the same run has nothing left to send.
+        await quiet(() =>
+            ports.searchPlaces!({ ...bicycles, categoryIds: ['["shop"="sports"]'] }).catch(() => [])
+        );
+        expect(map.sweepUrls()).toHaveLength(60);
+    });
+
+    it("reads the request cap from the environment", () => {
+        expect(DEFAULT_SWEEP_REQUESTS_PER_RUN).toBe(64);
+        expect(readSweepRequestsPerRun({})).toBe(64);
+        expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: " 120 " })).toBe(120);
+        // Zero turns the sweep off: Overpass only.
+        expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "0" })).toBe(0);
+        expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "100000" })).toBe(500);
+        expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "many" })).toBe(64);
+        expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "-5" })).toBe(64);
+    });
+
+    it("looks for the segment's words in place names when nothing carries its tags", async () => {
+        const calls: string[] = [];
+        const fetchImpl: typeof fetch = async url => {
+            const u = urlOf(url);
+            calls.push(new URL(u).hostname);
+            if (u.includes("overpass")) return new Response(JSON.stringify({ elements: [] }));
+            if (u.includes("photon")) return new Response(JSON.stringify({ features: [] }));
+            if (u.includes("nominatim"))
+                return new Response(
+                    JSON.stringify([
+                        {
+                            osm_type: "node",
+                            osm_id: 7,
+                            name: "Koffiebranderij Blanche Dael",
+                            lat: "50.85",
+                            lon: "5.69",
+                            category: "shop",
+                            type: "coffee",
+                            extratags: { website: "https://blanchedael.example" },
+                            address: { city: "Maastricht" },
+                        },
+                    ])
+                );
+            return new Response("not found", { status: 404 });
+        };
+        const ports = createKeylessPorts({
+            fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+            sweepRequestsPerRun: 0,
+        });
+        const found = await quiet(() =>
+            ports.searchPlaces!({
+                query: "specialty coffee",
+                categoryIds: ['["shop"="coffee"]'],
+                territory: { country: "NL" },
+            })
+        );
+        expect(found.map(p => p.name)).toEqual(["Koffiebranderij Blanche Dael"]);
+        // Overpass first, then names: Photon, then Nominatim.
+        expect(calls[0]).toBe("overpass-api.de");
+        expect(calls.indexOf("photon.komoot.io")).toBeGreaterThan(0);
+        expect(calls.lastIndexOf("nominatim.openstreetmap.org")).toBeGreaterThan(
+            calls.lastIndexOf("photon.komoot.io")
+        );
+    });
+
+    it("fails the source, with the reason, when no server answers and nothing is found", async () => {
+        const map = createFakeMap([], { overpass: 504, photonFails: () => true });
+        const ports = createKeylessPorts({
+            fetchImpl: map.fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+        });
+        await expect(quiet(() => ports.searchPlaces!(bicycles))).rejects.toThrow(
+            /Overpass did not answer \(overpass-api\.de: Overpass 504/
+        );
+    });
+});
+
+/** The keyless plan for a segment with these territories, through the ports. */
+async function createPlanFor(
+    ports: ReturnType<typeof createKeylessPorts>,
+    territories: Array<{ country: string }>
+) {
+    return ports.plan!({
+        ...planInput,
+        program: { ...program, targetTerritories: territories },
+        territories,
+    });
+}

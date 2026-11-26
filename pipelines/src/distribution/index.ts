@@ -20,3 +20,4 @@ export * from "./run";
 export * from "./ports";
 export * from "./fixture";
 export * from "./keyless";
+export * from "./place-pools";

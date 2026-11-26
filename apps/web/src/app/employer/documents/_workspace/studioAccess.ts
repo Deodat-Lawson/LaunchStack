@@ -13,6 +13,10 @@
  *   (`labs.betaApps`, Workspace › Labs), which reads as off until the
  *   settings have loaded and when they fail to.
  *
+ * A link can also go to a place still being built inside an app that is not
+ * (Growth's Brand screens, `~/lib/tool-app/beta-places`): `canOpenPlace`
+ * holds such a link to the same switch.
+ *
  * The server holds the same line for the beta apps' APIs
  * (`~/server/beta-apps`), so hiding one here is not the only thing between a
  * workspace and an app it has switched off.
@@ -23,6 +27,7 @@ import { useCallback, useMemo } from "react";
 import type { Permission } from "~/lib/authz/permissions";
 import { BETA_APPS_SETTING } from "~/lib/settings/registry";
 import { useSetting } from "~/lib/settings/useSettings";
+import { opensBetaPlace } from "~/lib/tool-app/beta-places";
 import { TOOL_ALIASES } from "~/lib/tool-app/locations";
 import { usePermissions } from "~/lib/use-permissions";
 
@@ -42,6 +47,21 @@ export function canOpenStudioApp(
 }
 
 /**
+ * Whether an id or a workspace link may be followed: the app it opens may
+ * be opened, and the place in it is not one still being built while the
+ * switch is off (the ⌘K row "Brand", a link to Growth › Brand › Accounts).
+ * False for what names no app.
+ */
+export function canOpenStudioPlace(
+    idOrHref: string,
+    can: (permission: Permission | undefined) => boolean,
+    betaOn: boolean
+): boolean {
+    if (!canOpenStudioApp(studioAppFor(idOrHref), can, betaOn)) return false;
+    return betaOn || !opensBetaPlace(idOrHref);
+}
+
+/**
  * The Studio app an id or a workspace link opens, aliases included: the ⌘K
  * row "Brand" is Growth at `/brand`, and so is `?feature=marketing`.
  */
@@ -58,6 +78,8 @@ export function studioAppFor(idOrHref: string): StudioFeature | undefined {
 export interface StudioAccess {
     /** Whether this person may open `feature` right now. */
     canOpen: (feature: Gated | undefined) => boolean;
+    /** Whether this person may follow a link or ⌘K id into an app right now, its place included. */
+    canOpenPlace: (idOrHref: string) => boolean;
     /** The workspace's beta switch. False until the settings have loaded. */
     betaOn: boolean;
     /** Whether the settings answer has come back (or failed), so a link can stop waiting for it. */
@@ -78,12 +100,16 @@ export function useStudioAccess(): StudioAccess {
         (feature: Gated | undefined) => canOpenStudioApp(feature, can, betaOn),
         [can, betaOn]
     );
+    const canOpenPlace = useCallback(
+        (idOrHref: string) => canOpenStudioPlace(idOrHref, can, betaOn),
+        [can, betaOn]
+    );
     const closedByBeta = useCallback(
         (feature: Gated | undefined) => Boolean(feature?.beta) && !betaOn && can(feature?.requires),
         [can, betaOn]
     );
     return useMemo(
-        () => ({ canOpen, betaOn, betaLoaded, betaFailed, closedByBeta }),
-        [canOpen, betaOn, betaLoaded, betaFailed, closedByBeta]
+        () => ({ canOpen, canOpenPlace, betaOn, betaLoaded, betaFailed, closedByBeta }),
+        [canOpen, canOpenPlace, betaOn, betaLoaded, betaFailed, closedByBeta]
     );
 }

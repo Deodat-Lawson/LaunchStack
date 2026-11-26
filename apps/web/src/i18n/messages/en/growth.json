@@ -21,7 +21,11 @@
       "segment": "Segment",
       "sources": "Sources"
     },
-    "notFoundHome": "Brand overview"
+    "notFoundHome": "Prospects",
+    "brandOff": {
+      "title": "Brand is a beta app",
+      "body": "Beta apps are off in this workspace. Someone who manages the workspace can turn them on in Workspace › Labs. Prospects is here for everyone."
+    }
   },
   "common": {
     "listSeparator": ", ",

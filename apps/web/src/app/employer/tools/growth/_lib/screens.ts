@@ -13,8 +13,12 @@ import { parseToolHref } from "~/lib/tool-app/locations";
 /** First path segments that are Growth's own screens. */
 export const GROWTH_ROOTS = ["brand", "prospects"] as const;
 
-/** Where "/" lands: Growth opens on Brand, Prospects is one click away in the bar. */
-export const GROWTH_HOME = "/brand";
+/**
+ * Where "/" lands: Growth opens on Prospects, which every workspace has.
+ * Brand, still being built, is one click away in the bar while the
+ * workspace has its beta apps on (`~/lib/tool-app/beta-places`).
+ */
+export const GROWTH_HOME = "/prospects";
 
 export type GrowthScreen =
     | { key: "brand-overview" }
@@ -68,12 +72,12 @@ function decode(segment: string): string {
 
 /**
  * The screen for an app-relative path ("/prospects/companies/42"). A query
- * or a trailing slash is ignored; "/" is Brand's overview, the same place
+ * or a trailing slash is ignored; "/" is Prospects' home, the same place
  * the tab's `home` sends it.
  */
 export function growthScreenFor(path: string): GrowthScreen {
     const { path: normalized } = parseToolHref(path);
-    if (normalized === "/") return BRAND.get("")!;
+    if (normalized === "/") return PROSPECTS.get("")!;
     const [area, screen = "", id, ...rest] = normalized.slice(1).split("/");
     if (rest.length > 0) return NOT_FOUND;
     if (area === "prospects" && screen === "companies" && id !== undefined) {

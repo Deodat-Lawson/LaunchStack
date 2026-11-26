@@ -245,8 +245,8 @@
     "labs": {
       "betaApps": {
         "label": "Beta apps",
-        "description": "Shows the apps that are still being built: Growth and Vantage. Off, they are hidden for everyone in the workspace and their data is kept as it is.",
-        "consequence": "Turning it off hides Growth and Vantage for everyone at once. Posts already scheduled in Growth still go out."
+        "description": "Shows the apps that are still being built: Brand (in Growth) and Vantage. Off, they are hidden for everyone in the workspace and their data is kept as it is. Prospects, the rest of Growth, is always on.",
+        "consequence": "Turning it off hides Brand and Vantage for everyone at once. Posts already scheduled in Brand still go out."
       },
       "predictiveGaps": {
         "label": "Predictive gaps",

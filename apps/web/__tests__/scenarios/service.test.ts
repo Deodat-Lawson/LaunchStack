@@ -395,7 +395,7 @@ describe("starting a run", () => {
         [true, true],
         [false, false],
     ])(
-        "reads prospects and post comments only while beta apps are on (on: %s)",
+        "reads prospects either way and post comments only while beta apps are on (on: %s)",
         async (on, kept) => {
             mockBetaAppsOn.mockResolvedValue(on);
             mockEvidence.visibleDocumentIds.mockResolvedValue(new Set());
@@ -411,7 +411,7 @@ describe("starting a run", () => {
                 },
             });
             const input = mockDb.createScenarioRun.mock.calls[0]![0];
-            expect(input.sources).toMatchObject({ prospects: kept, brandComments: kept });
+            expect(input.sources).toMatchObject({ prospects: true, brandComments: kept });
         }
     );
 

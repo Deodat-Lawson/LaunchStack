@@ -73,22 +73,29 @@ beforeEach(() => {
 });
 
 describe("CommandPalette permissions", () => {
-    it("offers Growth, its Brand and Prospects, and Vantage only while beta apps are on", () => {
+    it("offers Growth and its Prospects with beta apps off, and Brand and Vantage only once they are on", () => {
         mockPerms = new Set(ADMIN);
-        for (const query of ["growth", "brand", "prospects", "vantage"]) {
+        let onPickFeature = search("prospects");
+        fireEvent.click(screen.getByText("Prospects"));
+        expect(onPickFeature).toHaveBeenCalledWith("prospects");
+        cleanup();
+        search("growth");
+        expect(screen.getByText("Growth")).toBeInTheDocument();
+        cleanup();
+        for (const query of ["brand", "vantage"]) {
             search(query);
-            for (const name of ["Growth", "Brand", "Prospects", "Vantage"]) {
+            for (const name of ["Brand", "Vantage"]) {
                 expect(screen.queryByText(name)).not.toBeInTheDocument();
             }
             cleanup();
         }
         // What an admin finds instead: the switch itself, in Workspace › Labs.
-        search("growth");
+        search("brand");
         expect(screen.getByText("Beta apps")).toBeInTheDocument();
         cleanup();
 
         mockBetaApps = true;
-        const onPickFeature = search("brand");
+        onPickFeature = search("brand");
         fireEvent.click(screen.getByText("Brand"));
         expect(onPickFeature).toHaveBeenCalledWith("brand");
         cleanup();

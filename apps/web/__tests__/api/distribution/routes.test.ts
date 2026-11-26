@@ -15,7 +15,7 @@ jest.mock("~/server/workspace-models/scope", () => ({
     withWorkspaceChatModels: (_companyId: unknown, _feature: unknown, fn: () => unknown) => fn(),
 }));
 
-// Vantage and Growth are beta apps: the workspace's switch is on here unless a test turns it off.
+// The workspace's beta switch (Vantage, Growth's Brand): on here unless a test turns it off.
 let mockBetaApps = true;
 jest.mock("~/server/settings/store", () => ({
     readWorkspaceSetting: async () => mockBetaApps,
@@ -152,13 +152,17 @@ beforeEach(() => {
     mockIsMeteringEnforced.mockReturnValue(false);
 });
 
-describe("Prospects' older backend goes with Growth, a beta app", () => {
-    it("refuses to start a run while the workspace has beta apps off", async () => {
+describe("Prospects' older backend is for every workspace", () => {
+    it("starts a run while the workspace has beta apps off", async () => {
         mockBetaApps = false;
+        mockDb.getProgram.mockResolvedValue(program);
+        mockDb.createRun.mockResolvedValue({ id: "run-1", status: "queued", companyId: 42n });
         const res = await POST_RUNS(req("/api/distribution/runs", "POST", { programId: "prog-1" }));
-        expect(res.status).toBe(403);
-        expect(await res.json()).toMatchObject({ code: "beta_apps_off" });
-        expect(mockDb.getProgram).not.toHaveBeenCalled();
+        expect(res.status).toBe(202);
+        expect(mockDb.getProgram).toHaveBeenCalled();
+        expect(mockInngestSend).toHaveBeenCalledWith(
+            expect.objectContaining({ name: "distribution/run.requested" })
+        );
     });
 });
 

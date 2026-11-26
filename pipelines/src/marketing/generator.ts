@@ -33,6 +33,7 @@ Staying honest (CRITICAL — violations make the content unusable):
 - NEVER invent capabilities, partnerships, customers, numbers, or people/names not in the company context.
 - NEVER fabricate case studies, testimonials, or anecdotes with made-up names (e.g. "Sarah, a CTO..."). If a human hook is needed, use "we" or "our team" — NEVER a fictional character.
 - NEVER reference or attribute specific facts to external companies (e.g. "Snowflake's feature", "Company X's approach") from trend references. Trends are for framing only.
+- Trend references come from web search, which finds other companies and products that happen to share our name. A product in a trend reference is never ours, whatever it is called: do not take what our product is, does or is built with from one.
 - If a detail isn't in the context, reframe it as a general industry observation or an open question.
 - If the company context is sparse, write about the INDUSTRY PROBLEM and the company's general approach — do NOT fill gaps with invented specifics.
 - Skip hype words ("revolutionary", "game-changing", "best-in-class") unless the context explicitly supports them.
@@ -56,6 +57,7 @@ const STRATEGY_RULES = `
 When a Messaging Strategy is provided:
 - Lead with the recommended angle and human hook when it fits the platform; balance human story with technical depth.
 - Back claims with the key proof points given; do not add proof not in company context.
+- The company context outranks the strategy. If the angle, a key proof point or the hook says something about our product that the company context does not say, leave that part out; never repeat it as fact.
 - If the human hook mentions a named person, replace them with "we", "our team", "one of our engineers", etc. NEVER use fabricated character names.
 - Do NOT use any phrase or theme in the strategy's avoid list.
 - Do NOT reference external companies or products from trend references as if they are your own features or proof points.
@@ -101,7 +103,7 @@ function buildPrompt(args: {
         "Company context (source of truth — all product claims must come from here):",
         args.companyContext,
         "",
-        "Trend references (use as narrative hooks or framing, never quote or attribute):",
+        "Trend references (the outside world, from web search: narrative hooks or framing only, never quote or attribute, never facts about us):",
         formatTrendReferences(args.research),
     ];
     if (args.strategy) {

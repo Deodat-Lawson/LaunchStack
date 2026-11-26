@@ -22,10 +22,25 @@ export type TrendSearchInput = z.infer<typeof TrendSearchInputSchema>;
 
 // ─── Results ─────────────────────────────────────────────────────────────────
 
+/**
+ * Who a search result is about, judged against the company context — a name
+ * is not an identity:
+ * - "market": the wider market, a trend, a platform, or other companies;
+ * - "company": the company the search was run for (the same business);
+ * - "namesake": a different company or product that only shares its name.
+ */
+export const ResultSubjectEnum = z.enum(["market", "company", "namesake"]);
+export type ResultSubject = z.infer<typeof ResultSubjectEnum>;
+
 export interface SearchResult {
     sourceUrl: string;
     summary: string;
     description: string;
+    /**
+     * Never "namesake": the synthesizer drops those. Absent on placeholders
+     * and on results stored before the field existed.
+     */
+    subject?: Exclude<ResultSubject, "namesake">;
 }
 
 export interface TrendSearchOutput {

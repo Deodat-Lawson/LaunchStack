@@ -1,0 +1,672 @@
+{
+  "experiment": "production-replay: the segment brief in the buyers' language",
+  "question": "On Norwegian company texts, does a Norwegian brief rank better than an English one with the app's two built-in embedding models?",
+  "design": {
+    "code": "src/distribution/semantic.ts (semanticRelevance), as production runs it; companies are checked from the top of that ranking down, as production does",
+    "pools": "E4's three Norwegian register pools: the companies' texts are Norwegian",
+    "briefs": {
+      "english": "the segment as an English-writing seller types it",
+      "norwegian": "E4's Norwegian brief: the same segment as a Norwegian seller would type it",
+      "higher": "per company, the higher of its two relevance scores"
+    },
+    "check": "one check reveals one company's hidden label (its register code) and costs 1",
+    "candidates": "a seed's 80% draw of the pool, in the order of its relevance to the brief",
+    "metrics": {
+      "found": "good companies among the first 25, 50, 100, 200 checks of today's fixed ranking",
+      "zeroScoreRule": "whole pool: the share of companies, and of good companies, whose relevance is above zero, which is what production keeps before any fit check"
+    },
+    "embeddingModels": {
+      "nomic-embed-text": "nomic-embed-text (local, the benchmark's model)",
+      "gemini-embedding-001@768": "gemini-embedding-001 at 768 dimensions (index gemini-embedding-768, the one the registry recommends)",
+      "text-embedding-3-large@1536": "text-embedding-3-large at 1536 dimensions (index legacy-openai-1536, the default)"
+    },
+    "intervals": "95% percentile bootstrap, 2,000 resamples: over pools and then seeds, as in E4"
+  },
+  "byEmbedding": {
+    "nomic-embed-text": {
+      "seeds": 20,
+      "perSegment": [
+        {
+          "segment": "brreg-coffee-tea",
+          "pool": "brreg-food",
+          "candidates": 3484,
+          "good": 109,
+          "found": {
+            "english": {
+              "found25": 14.4,
+              "found50": 18.4,
+              "found100": 29.8,
+              "found200": 51.85
+            },
+            "norwegian": {
+              "found25": 13.15,
+              "found50": 20.2,
+              "found100": 28.65,
+              "found200": 41.95
+            },
+            "higher": {
+              "found25": 13.15,
+              "found50": 20.2,
+              "found100": 28.65,
+              "found200": 41.95
+            }
+          },
+          "zeroScoreRule": {
+            "english": {
+              "poolKept": 0.533,
+              "goodKept": 0.927
+            },
+            "norwegian": {
+              "poolKept": 0.995,
+              "goodKept": 1
+            },
+            "higher": {
+              "poolKept": 0.997,
+              "goodKept": 1
+            }
+          }
+        },
+        {
+          "segment": "brreg-breweries",
+          "pool": "brreg-drinks",
+          "candidates": 1138,
+          "good": 233,
+          "found": {
+            "english": {
+              "found25": 8.65,
+              "found50": 19.75,
+              "found100": 30.7,
+              "found200": 58
+            },
+            "norwegian": {
+              "found25": 23.95,
+              "found50": 42.5,
+              "found100": 71.6,
+              "found200": 101.45
+            },
+            "higher": {
+              "found25": 23.95,
+              "found50": 42.5,
+              "found100": 71.6,
+              "found200": 101.45
+            }
+          },
+          "zeroScoreRule": {
+            "english": {
+              "poolKept": 0.389,
+              "goodKept": 0.597
+            },
+            "norwegian": {
+              "poolKept": 0.961,
+              "goodKept": 0.987
+            },
+            "higher": {
+              "poolKept": 0.966,
+              "goodKept": 0.996
+            }
+          }
+        },
+        {
+          "segment": "brreg-dental-bergen",
+          "pool": "brreg-health-bergen",
+          "candidates": 2954,
+          "good": 421,
+          "found": {
+            "english": {
+              "found25": 11.55,
+              "found50": 11.7,
+              "found100": 14.4,
+              "found200": 18.4
+            },
+            "norwegian": {
+              "found25": 22.85,
+              "found50": 40.3,
+              "found100": 75.2,
+              "found200": 132
+            },
+            "higher": {
+              "found25": 22.85,
+              "found50": 40.3,
+              "found100": 75.2,
+              "found200": 132
+            }
+          },
+          "zeroScoreRule": {
+            "english": {
+              "poolKept": 0.235,
+              "goodKept": 0.114
+            },
+            "norwegian": {
+              "poolKept": 0.961,
+              "goodKept": 0.995
+            },
+            "higher": {
+              "poolKept": 0.966,
+              "goodKept": 0.998
+            }
+          }
+        }
+      ],
+      "overall": {
+        "english": {
+          "found25": {
+            "mean": 11.53,
+            "lo": 8.78,
+            "hi": 14.32
+          },
+          "found50": {
+            "mean": 16.62,
+            "lo": 11.73,
+            "hi": 19.67
+          },
+          "found100": {
+            "mean": 24.97,
+            "lo": 14.43,
+            "hi": 30.78
+          },
+          "found200": {
+            "mean": 42.75,
+            "lo": 18.45,
+            "hi": 57.8
+          }
+        },
+        "norwegian": {
+          "found25": {
+            "mean": 19.98,
+            "lo": 13.23,
+            "hi": 23.92
+          },
+          "found50": {
+            "mean": 34.33,
+            "lo": 20.25,
+            "hi": 42.42
+          },
+          "found100": {
+            "mean": 58.48,
+            "lo": 28.73,
+            "hi": 75.08
+          },
+          "found200": {
+            "mean": 91.8,
+            "lo": 42.03,
+            "hi": 131.73
+          }
+        },
+        "higher": {
+          "found25": {
+            "mean": 19.98,
+            "lo": 13.23,
+            "hi": 23.92
+          },
+          "found50": {
+            "mean": 34.33,
+            "lo": 20.25,
+            "hi": 42.42
+          },
+          "found100": {
+            "mean": 58.48,
+            "lo": 28.73,
+            "hi": 75.08
+          },
+          "found200": {
+            "mean": 91.8,
+            "lo": 42.03,
+            "hi": 131.73
+          }
+        }
+      },
+      "norwegianMinusEnglish": {
+        "found25": {
+          "mean": 8.45,
+          "lo": -1.17,
+          "hi": 15.17
+        },
+        "found50": {
+          "mean": 17.72,
+          "lo": 1.88,
+          "hi": 28.53
+        },
+        "found100": {
+          "mean": 33.52,
+          "lo": -1.03,
+          "hi": 60.7
+        },
+        "found200": {
+          "mean": 49.05,
+          "lo": -9.68,
+          "hi": 113.45
+        }
+      }
+    },
+    "gemini-embedding-001@768": {
+      "seeds": 20,
+      "perSegment": [
+        {
+          "segment": "brreg-coffee-tea",
+          "pool": "brreg-food",
+          "candidates": 3484,
+          "good": 109,
+          "found": {
+            "english": {
+              "found25": 25,
+              "found50": 49.8,
+              "found100": 74.35,
+              "found200": 79.05
+            },
+            "norwegian": {
+              "found25": 25,
+              "found50": 49.2,
+              "found100": 70.5,
+              "found200": 76.6
+            },
+            "higher": {
+              "found25": 25,
+              "found50": 49.2,
+              "found100": 70.5,
+              "found200": 76.6
+            }
+          },
+          "zeroScoreRule": {
+            "english": {
+              "poolKept": 0.068,
+              "goodKept": 0.908
+            },
+            "norwegian": {
+              "poolKept": 0.947,
+              "goodKept": 0.991
+            },
+            "higher": {
+              "poolKept": 0.947,
+              "goodKept": 0.991
+            }
+          }
+        },
+        {
+          "segment": "brreg-breweries",
+          "pool": "brreg-drinks",
+          "candidates": 1138,
+          "good": 233,
+          "found": {
+            "english": {
+              "found25": 25,
+              "found50": 47.8,
+              "found100": 92,
+              "found200": 154.6
+            },
+            "norwegian": {
+              "found25": 24.25,
+              "found50": 48.4,
+              "found100": 96.5,
+              "found200": 156.15
+            },
+            "higher": {
+              "found25": 24.25,
+              "found50": 48.4,
+              "found100": 96.5,
+              "found200": 156.15
+            }
+          },
+          "zeroScoreRule": {
+            "english": {
+              "poolKept": 0.439,
+              "goodKept": 0.936
+            },
+            "norwegian": {
+              "poolKept": 0.935,
+              "goodKept": 0.983
+            },
+            "higher": {
+              "poolKept": 0.935,
+              "goodKept": 0.983
+            }
+          }
+        },
+        {
+          "segment": "brreg-dental-bergen",
+          "pool": "brreg-health-bergen",
+          "candidates": 2954,
+          "good": 421,
+          "found": {
+            "english": {
+              "found25": 24.15,
+              "found50": 49.15,
+              "found100": 98.4,
+              "found200": 195.8
+            },
+            "norwegian": {
+              "found25": 25,
+              "found50": 49.25,
+              "found100": 98.35,
+              "found200": 193.7
+            },
+            "higher": {
+              "found25": 25,
+              "found50": 49.25,
+              "found100": 98.35,
+              "found200": 193.7
+            }
+          },
+          "zeroScoreRule": {
+            "english": {
+              "poolKept": 0.137,
+              "goodKept": 0.948
+            },
+            "norwegian": {
+              "poolKept": 0.868,
+              "goodKept": 0.981
+            },
+            "higher": {
+              "poolKept": 0.868,
+              "goodKept": 0.981
+            }
+          }
+        }
+      ],
+      "overall": {
+        "english": {
+          "found25": {
+            "mean": 24.72,
+            "lo": 24.18,
+            "hi": 25
+          },
+          "found50": {
+            "mean": 48.92,
+            "lo": 47.83,
+            "hi": 49.78
+          },
+          "found100": {
+            "mean": 88.25,
+            "lo": 74.47,
+            "hi": 98.35
+          },
+          "found200": {
+            "mean": 143.15,
+            "lo": 79.18,
+            "hi": 195.73
+          }
+        },
+        "norwegian": {
+          "found25": {
+            "mean": 24.75,
+            "lo": 24.27,
+            "hi": 25
+          },
+          "found50": {
+            "mean": 48.95,
+            "lo": 48.45,
+            "hi": 49.33
+          },
+          "found100": {
+            "mean": 88.45,
+            "lo": 70.6,
+            "hi": 98.3
+          },
+          "found200": {
+            "mean": 142.15,
+            "lo": 76.77,
+            "hi": 193.58
+          }
+        },
+        "higher": {
+          "found25": {
+            "mean": 24.75,
+            "lo": 24.27,
+            "hi": 25
+          },
+          "found50": {
+            "mean": 48.95,
+            "lo": 48.45,
+            "hi": 49.33
+          },
+          "found100": {
+            "mean": 88.45,
+            "lo": 70.6,
+            "hi": 98.3
+          },
+          "found200": {
+            "mean": 142.15,
+            "lo": 76.77,
+            "hi": 193.58
+          }
+        }
+      },
+      "norwegianMinusEnglish": {
+        "found25": {
+          "mean": 0.03,
+          "lo": -0.73,
+          "hi": 0.82
+        },
+        "found50": {
+          "mean": 0.03,
+          "lo": -0.58,
+          "hi": 0.57
+        },
+        "found100": {
+          "mean": 0.2,
+          "lo": -3.8,
+          "hi": 4.4
+        },
+        "found200": {
+          "mean": -1,
+          "lo": -2.52,
+          "hi": 1.4
+        }
+      }
+    },
+    "text-embedding-3-large@1536": {
+      "seeds": 20,
+      "perSegment": [
+        {
+          "segment": "brreg-coffee-tea",
+          "pool": "brreg-food",
+          "candidates": 3484,
+          "good": 109,
+          "found": {
+            "english": {
+              "found25": 25,
+              "found50": 42.3,
+              "found100": 62.45,
+              "found200": 70.2
+            },
+            "norwegian": {
+              "found25": 24.65,
+              "found50": 41.2,
+              "found100": 56.95,
+              "found200": 61.7
+            },
+            "higher": {
+              "found25": 24.65,
+              "found50": 41.2,
+              "found100": 56.95,
+              "found200": 61.7
+            }
+          },
+          "zeroScoreRule": {
+            "english": {
+              "poolKept": 0.099,
+              "goodKept": 0.853
+            },
+            "norwegian": {
+              "poolKept": 0.981,
+              "goodKept": 0.991
+            },
+            "higher": {
+              "poolKept": 0.981,
+              "goodKept": 0.991
+            }
+          }
+        },
+        {
+          "segment": "brreg-breweries",
+          "pool": "brreg-drinks",
+          "candidates": 1138,
+          "good": 233,
+          "found": {
+            "english": {
+              "found25": 21.8,
+              "found50": 45.45,
+              "found100": 82.15,
+              "found200": 141.35
+            },
+            "norwegian": {
+              "found25": 21.85,
+              "found50": 44.05,
+              "found100": 84.75,
+              "found200": 139.3
+            },
+            "higher": {
+              "found25": 21.85,
+              "found50": 44.05,
+              "found100": 84.75,
+              "found200": 139.3
+            }
+          },
+          "zeroScoreRule": {
+            "english": {
+              "poolKept": 0.339,
+              "goodKept": 0.927
+            },
+            "norwegian": {
+              "poolKept": 0.944,
+              "goodKept": 0.996
+            },
+            "higher": {
+              "poolKept": 0.944,
+              "goodKept": 0.996
+            }
+          }
+        },
+        {
+          "segment": "brreg-dental-bergen",
+          "pool": "brreg-health-bergen",
+          "candidates": 2954,
+          "good": 421,
+          "found": {
+            "english": {
+              "found25": 18.8,
+              "found50": 39.15,
+              "found100": 78.95,
+              "found200": 143
+            },
+            "norwegian": {
+              "found25": 17,
+              "found50": 35.35,
+              "found100": 68.1,
+              "found200": 130.55
+            },
+            "higher": {
+              "found25": 17,
+              "found50": 35.35,
+              "found100": 68.1,
+              "found200": 130.55
+            }
+          },
+          "zeroScoreRule": {
+            "english": {
+              "poolKept": 0.578,
+              "goodKept": 0.936
+            },
+            "norwegian": {
+              "poolKept": 0.996,
+              "goodKept": 1
+            },
+            "higher": {
+              "poolKept": 0.996,
+              "goodKept": 1
+            }
+          }
+        }
+      ],
+      "overall": {
+        "english": {
+          "found25": {
+            "mean": 21.87,
+            "lo": 18.88,
+            "hi": 25
+          },
+          "found50": {
+            "mean": 42.3,
+            "lo": 39.22,
+            "hi": 45.4
+          },
+          "found100": {
+            "mean": 74.52,
+            "lo": 62.58,
+            "hi": 82
+          },
+          "found200": {
+            "mean": 118.18,
+            "lo": 70.32,
+            "hi": 142.93
+          }
+        },
+        "norwegian": {
+          "found25": {
+            "mean": 21.17,
+            "lo": 17.07,
+            "hi": 24.62
+          },
+          "found50": {
+            "mean": 40.2,
+            "lo": 35.42,
+            "hi": 44.02
+          },
+          "found100": {
+            "mean": 69.93,
+            "lo": 57.1,
+            "hi": 84.6
+          },
+          "found200": {
+            "mean": 110.52,
+            "lo": 61.82,
+            "hi": 138.9
+          }
+        },
+        "higher": {
+          "found25": {
+            "mean": 21.17,
+            "lo": 17.07,
+            "hi": 24.62
+          },
+          "found50": {
+            "mean": 40.2,
+            "lo": 35.42,
+            "hi": 44.02
+          },
+          "found100": {
+            "mean": 69.93,
+            "lo": 57.1,
+            "hi": 84.6
+          },
+          "found200": {
+            "mean": 110.52,
+            "lo": 61.82,
+            "hi": 138.9
+          }
+        }
+      },
+      "norwegianMinusEnglish": {
+        "found25": {
+          "mean": -0.7,
+          "lo": -1.72,
+          "hi": 0.07
+        },
+        "found50": {
+          "mean": -2.1,
+          "lo": -3.73,
+          "hi": -1.02
+        },
+        "found100": {
+          "mean": -4.58,
+          "lo": -10.72,
+          "hi": 2.42
+        },
+        "found200": {
+          "mean": -7.67,
+          "lo": -12.27,
+          "hi": -2.12
+        }
+      }
+    }
+  }
+}

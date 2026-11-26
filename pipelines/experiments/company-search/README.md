@@ -65,8 +65,9 @@ a fresh recording gives slightly different numbers than the ones in
 Sources, all free and keyless: Photon and the OpenStreetMap API, Overpass,
 the Norwegian company register (Brønnøysundregistrene), the YC company
 directory, and the public pages of company websites. E4 also needs a local
-Ollama with `nomic-embed-text` for embeddings. No paid search engine and no
-paid model is called anywhere.
+Ollama with `nomic-embed-text` for embeddings. No paid search engine is called
+anywhere, and no paid model by E1 to E4; the recording script of
+`production-replay/` is the exception (see "Production replay" below).
 
 How the recorder behaves towards those sources:
 
@@ -169,3 +170,20 @@ bootstrap interval over seeds.
   answer: the letter "s" over all of Belgium, HTTP 503. It was asked again on
   26 November, which added two places. The rest of that world, and the five
   other worlds, are as recorded on the 24th.
+
+## Production replay
+
+`production-replay/` puts the benchmark's pools through the ranking code
+Prospects runs, on the app's two built-in embedding models. Its README has
+the numbers; in short:
+
+- **The brief's language (after E4).** The gap between an English and a
+  Norwegian brief on Norwegian texts is the local model's: 25.0 against 58.5
+  good companies in 100 checks there, 88.3 against 88.5 on
+  `gemini-embedding-001` and 74.5 against 69.9 on `text-embedding-3-large`.
+  Prospects does not translate the brief.
+
+It has its own runner (`production-replay/run.ts`); `run.ts` above replays E1
+to E4 only. Its recording script is the only paid call in this folder; it
+needs record mode and a spend cap, and says what it will send before it sends
+it.

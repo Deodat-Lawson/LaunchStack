@@ -5,15 +5,19 @@ fetches? Four experiments answer that for the four places a Prospects run
 spends its budget, each against today's behaviour, on real data from free
 public sources.
 
-| #   | Question                                                         | Today (the baseline)                                     | Where the truth comes from                                        |
-| --- | ---------------------------------------------------------------- | -------------------------------------------------------- | ----------------------------------------------------------------- |
-| E1  | What should a capped place search be asked, and where?           | Production's keyless `searchPhoton`, run unchanged       | Every place of the category in the country, from Overpass         |
-| E2  | Which word and page should a paged keyword search be asked next? | Every planned word once, first page only                 | Every company of the industry class, from the register            |
-| E3  | Which pages of a company's site are worth a fetch?               | Production's `profileFromPages` order (13 guessed paths) | Facts production's own `extractFacts` finds on all recorded pages |
-| E4  | Which candidate should get the next expensive check?             | Production's fixed `semanticRelevance` ranking           | Industry codes and directory tags, hidden from the ranker         |
+| #   | Question                                                         | Today (the baseline)                                   | Where the truth comes from                                        |
+| --- | ---------------------------------------------------------------- | ------------------------------------------------------ | ----------------------------------------------------------------- |
+| E1  | What should a capped place search be asked, and where?           | Production's keyless `searchPhoton`, run unchanged     | Every place of the category in the country, from Overpass         |
+| E2  | Which word and page should a paged keyword search be asked next? | Every planned word once, first page only               | Every company of the industry class, from the register            |
+| E3  | Which pages of a company's site are worth a fetch?               | The site reader's order at the time (13 guessed paths) | Facts production's own `extractFacts` finds on all recorded pages |
+| E4  | Which candidate should get the next expensive check?             | Production's fixed `semanticRelevance` ranking         | Industry codes and directory tags, hidden from the ranker         |
 
 Nothing here ships: `tsconfig.build.json` only builds `src/`. The code is
 type-checked and linted with the rest of the package.
+
+E3's result has been built into production since: the keyless site reader
+follows the homepage's links. `e3-what-to-read/` now also replays that
+reader on the same recording (see its README, "What came of it").
 
 ## Run it
 

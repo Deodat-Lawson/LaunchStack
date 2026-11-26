@@ -1,10 +1,12 @@
 # E3: what to read
 
-Production's keyless site reader (`profileFromPages` in
-`pipelines/src/distribution/keyless/profile.ts`) reads a company's homepage
-and then guesses up to 13 URL paths (`/about`, `/about-us`, `/over-ons`, …)
-until 4 pages were readable. It does not look at the links on the homepage
-and it learns nothing from one site to the next.
+When this experiment ran, production's keyless site reader
+(`profileFromPages` in `pipelines/src/distribution/keyless/profile.ts`) read a
+company's homepage and then guessed up to 13 URL paths (`/about`, `/about-us`,
+`/over-ons`, …) until 4 pages were readable. It did not look at the links on
+the homepage and it learned nothing from one site to the next. That reader is
+called `today` throughout; production has since been changed on the strength
+of the result (see "What came of it").
 
 **Question.** For the same number of HTTP requests per company, do smarter
 ways of choosing pages find more facts?
@@ -74,7 +76,7 @@ which fact types were found on it.
 
 | Policy                                        | What it does                                                                                                                                                                                                                                                                                                                                                                |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `today`                                       | Production's order: homepage, then the 13 guessed paths in order, stop at 4 readable pages.                                                                                                                                                                                                                                                                                 |
+| `today`                                       | The reader's order when the experiment ran: homepage, then the 13 guessed paths in order, stop at 4 readable pages.                                                                                                                                                                                                                                                         |
 | `link-keyword`                                | The homepage's links, best first by a fixed multilingual keyword prior on anchor text and path. No guessed paths.                                                                                                                                                                                                                                                           |
 | `link-keyword+fallback`                       | The same; when the links run out, production's guessed paths the homepage did not link.                                                                                                                                                                                                                                                                                     |
 | `link-keyword@today-spend`                    | `link-keyword`, never allowed more requests on a site than `today` made there (it makes fewer where the homepage has fewer links). Separates "better pages" from "more requests".                                                                                                                                                                                           |
@@ -91,6 +93,47 @@ Norwegian "jobb" counted as careers). It was not touched after that.
 
 The learned policies are run once per budget: a policy that may make 4
 requests per site learns from 3 picks per site, not from 13.
+
+## What came of it
+
+Production's reader now follows the homepage's links (`readSite` in
+`pipelines/src/distribution/keyless/profile.ts`, ranking in `site-links.ts`):
+the links are ranked by the same word list, login, cart, search and "home"
+links are never followed, paths are guessed only when the homepage has no
+link to follow, and a site gets 4 requests instead of up to 14.
+
+`run.ts` replays that reader, as shipped, on the recording and prints it
+beside `today` (`productionReader` in the results file):
+
+|                            | Requests a site | Nothing readable | Fact types of 5 | Contact email |
+| -------------------------- | --------------- | ---------------- | --------------- | ------------- |
+| Guessed paths (`today`)    | 13.3            | 83%              | 2.12            | 58%           |
+| Production's reader now    | 3.9 (at most 4) | 4%               | 2.52            | 74%           |
+| …on Norwegian sites        | 4.0             | 2%               | 2.70            | 83% (was 75%) |
+| …on Dutch and German sites | 4.0             | 2%               | 2.67            | 92% (was 77%) |
+| …on English-language sites | 3.8             | 7%               | 2.18            | 48% (was 23%) |
+
+The difference in fact types, paired by site, is +0.40 (95% interval +0.30
+to +0.50). `link-keyword` at 4 requests, the policy it was built from, found
+2.51 and 74%.
+
+Three things differ from `link-keyword`:
+
+- Links that score below zero (login, cart, search, "home") are left out.
+  One site's only link is of that kind.
+- Paths are guessed only when the homepage has no link to follow (6 of the
+  180 sites), not when the links run out.
+- The guessed paths are tried contact pages first (`/contact`, `/kontakt`,
+  `/about`, …), because only three fit in the budget. The order follows the
+  "Guessed paths, readable when asked" counts in the results file, so on this
+  sample it is chosen with hindsight; it changes the outcome on one site.
+
+Production's word list also covers languages this sample does not have
+(French, Spanish, Portuguese, Italian, Danish, Swedish, Finnish, Polish,
+Czech, and a few Japanese and Chinese words). Those words rank no recorded
+link differently: production orders the recorded links of every homepage as
+the experiment's own list does (`check.sameRanking` in the results file: 180
+of 180).
 
 ## Run it
 
@@ -124,12 +167,26 @@ exchange existed (a DNS failure, for example), so they replay as failures.
 
 ## Checks built in
 
-- **`today` is production.** `run.ts` runs the real `profileFromPages` on
-  every site, with a `fetchPage` built on the recorder and a stub
-  `recordEvidence`, and compares the URLs it asks for (and their order), the
-  number of pages it counts, and the fact types in the dossier it returns
-  with the replayed `today`. The counts are in the results file and on the
-  first lines of the table.
+- **`today` is the reader that was replaced.** Its page order is kept in
+  `legacy.ts`, copied from production as it was (commit 968724695). `run.ts`
+  runs it on every site, with a `fetchPage` built on the recorder, has
+  production's `dossierFromPages` assemble the dossier, and compares the URLs
+  it asks for (and their order), the number of pages it counts, and the fact
+  types in the dossier with the replayed `today`. The counts are in the
+  results file and on the first lines of the table. Until production changed,
+  this check ran the real `profileFromPages`; it matched on 180 of 180 sites
+  then and does now.
+- **Production's reader now is checked the same way.** `production.ts` runs
+  the real `readSite` and `dossierFromPages` with their default limits and
+  compares them with `visitShipped`, the same rule written against the
+  recording. The rule uses this folder's link parser and word list
+  (`html.ts`, `prior.ts`, frozen as they were when the sites were recorded);
+  production has its own copies, so the comparison is one implementation
+  against the other on real pages. A request the recording cannot answer (a
+  link `robots.txt` disallows, which production would fetch and the recorder
+  never did) counts as a failed request.
+- **`production.test.ts`** asserts the gain where the recording exists; it is
+  skipped where it does not (CI).
 - **The oracle is an upper bound.** The exact best score for each budget is
   computed by enumeration (5 fact types) and compared with the greedy oracle.
 - **Every stochastic choice is seeded** (site order, link shuffles, Thompson
@@ -137,17 +194,20 @@ exchange existed (a DNS failure, for example), so they replay as failures.
 
 ## Files
 
-| File          | What                                                             |
-| ------------- | ---------------------------------------------------------------- |
-| `record.ts`   | Live collection.                                                 |
-| `run.ts`      | Offline replay, table and results file.                          |
-| `dataset.ts`  | Builds the sample and its recording, the same way in both modes. |
-| `sources.ts`  | The three directories.                                           |
-| `site.ts`     | What is recorded for one site.                                   |
-| `html.ts`     | Links, `robots.txt` and sitemap parsing.                         |
-| `prior.ts`    | The keyword prior and the link classes.                          |
-| `policies.ts` | The policies.                                                    |
-| `verify.ts`   | The check against the real `profileFromPages`.                   |
+| File                 | What                                                             |
+| -------------------- | ---------------------------------------------------------------- |
+| `record.ts`          | Live collection.                                                 |
+| `run.ts`             | Offline replay, table and results file.                          |
+| `dataset.ts`         | Builds the sample and its recording, the same way in both modes. |
+| `sources.ts`         | The three directories.                                           |
+| `site.ts`            | What is recorded for one site.                                   |
+| `html.ts`            | Links, `robots.txt` and sitemap parsing.                         |
+| `prior.ts`           | The keyword prior and the link classes.                          |
+| `policies.ts`        | The policies.                                                    |
+| `legacy.ts`          | The guessed-path reader's page order, as production had it.      |
+| `verify.ts`          | The check of `today` against that reader.                        |
+| `production.ts`      | Production's reader now, replayed on the recording.              |
+| `production.test.ts` | The same as a test; runs only where the recording is.            |
 
 ## Limits
 
@@ -180,6 +240,8 @@ exchange existed (a DNS failure, for example), so they replay as failures.
 - **`robots.txt` is honoured by the experiment, not by production.** A
   disallowed path was never recorded, so no policy asks for it and it costs
   nothing; the results file counts how many guessed paths that removed.
+  Production's reader does ask for such links: on this sample 3 requests on 2
+  sites, which the replay counts as failed.
 - **No clock.** A request costs 1 whether it took 50 ms or timed out after
   10 s. Production also stops a candidate after 40 s; the results file says
   on how many sites the recorded response times would have triggered that.

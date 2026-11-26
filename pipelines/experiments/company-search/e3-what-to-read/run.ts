@@ -4,7 +4,8 @@
  *   pnpm exec tsx experiments/company-search/e3-what-to-read/run.ts
  *
  * Rebuilds the sample from the recording, replays every policy at budgets of
- * 2, 4, 6, 8 and 14 requests, prints a compact table and writes
+ * 2, 4, 6, 8 and 14 requests, runs production's reader as it is now on the
+ * same sites, prints a compact table and writes
  * ../results/e3-what-to-read.json. Two runs give byte-identical JSON.
  */
 import { mkdirSync, writeFileSync } from "node:fs";
@@ -41,6 +42,7 @@ import {
     type VisitSummary,
 } from "./policies";
 import { LINK_CLASSES, priorWeights, type LinkClass } from "./prior";
+import { measureProductionReader, productionTable } from "./production";
 import {
     FACT,
     FACT_TYPES,
@@ -76,7 +78,7 @@ const POLICIES = [
 type PolicyId = (typeof POLICIES)[number];
 
 const POLICY_NOTES: Record<PolicyId, string> = {
-    today: "Production's order: the homepage, then its 13 guessed paths in order, stopping once 4 pages were readable.",
+    today: "The reader's order when the experiment ran (production's, until it followed links): the homepage, then its 13 guessed paths in order, stopping once 4 pages were readable.",
     "link-keyword":
         "The homepage's own links, best first by a fixed multilingual keyword prior on anchor text and path; no guessed paths.",
     "link-keyword+fallback":
@@ -523,6 +525,7 @@ async function main(): Promise<void> {
     const sites = dataset.sites;
     if (sites.length === 0) throw new Error("No sites in the recording.");
     const check = await checkTodayAgainstProduction(dataset.ctx, sites);
+    const production = await measureProductionReader(dataset.ctx, sites);
     const simulation = simulate(sites);
 
     const ceilings = sites.map(site => factCount(ceilingMask(site)));
@@ -828,8 +831,8 @@ async function main(): Promise<void> {
             `(${sample.httpExchangesRecorded} HTTP exchanges with redirect hops), ${sample.requestsPerSite.mean.toFixed(1)} per site on average and at most ${sample.requestsPerSite.max}.`
     );
     findings.push(
-        `The replayed today policy asks for the same URLs in the same order as the real profileFromPages on ${check.sameRequests} of ${check.sites} sites, ` +
-            `and the dossier it returns holds the same fact types on ${check.sameFacts} of the ${check.dossiers} sites where production's gate let a dossier through.`
+        `The replayed today policy asks for the same URLs in the same order as the guessed-path reader (production's reader when the experiment ran; its page order is kept in legacy.ts) on ${check.sameRequests} of ${check.sites} sites, ` +
+            `and the dossier production assembles from those pages holds the same fact types on ${check.sameFacts} of the ${check.dossiers} sites where production's gate let a dossier through.`
     );
     findings.push(
         `today spends ${all.meanRequests!.toFixed(1)} requests per site on average (median ${all.medianRequests}, max ${all.maxRequests}); ` +
@@ -955,6 +958,31 @@ async function main(): Promise<void> {
             `production's 40 s time budget would have cut today short on ${all.sitesWhereThe40sTimeBudgetWouldCutIn} site(s) at the recorded response times; ` +
             `candidates whose homepage could not be read are not in the sample (${GROUPS.map(g => `${g.id}: ${dataset.sample[g.id].screened - dataset.sample[g.id].accepted} of ${dataset.sample[g.id].screened} tried`).join(", ")}).`
     );
+    {
+        const now = production.byScope.all;
+        const pc = production.check;
+        findings.push(
+            `Built into production since (${production.version}: the homepage's links by their words, guessed paths only when there is no link to follow, ${production.requestsPerSite} requests a site). ` +
+                `Run on the recording, production's reader finds ${now.production.meanScore.mean.toFixed(2)} of 5 fact types and a contact email on ${percent(now.production.found.email)} of sites ` +
+                `for ${now.production.requests.mean.toFixed(1)} requests a site (${percent(now.production.requests.wastedShare)} return nothing readable, at most ${now.production.requests.max} on any site), ` +
+                `against ${now.today.meanScore.toFixed(2)} and ${percent(now.today.email)} for ${now.today.meanRequests.toFixed(1)} requests with guessed paths ` +
+                `(${delta(now.versusToday.score)} fact types, paired over ${now.sites} sites).`
+        );
+        findings.push(
+            `Production's reader now, by group, contact email found: ` +
+                GROUPS.map(
+                    g =>
+                        `${g.id} ${percent(production.byScope[g.id].production.found.email)} (guessed paths ${percent(production.byScope[g.id].today.email)})`
+                ).join("; ") +
+                "."
+        );
+        findings.push(
+            `Production's own link parser and word list rank the recorded links of ${pc.sameRanking} of ${pc.sites} homepages exactly as the experiment's do, and ` +
+                `production's reader asks for the same URLs in the same order as the replayed rule on ${pc.sameRequests} of ${pc.sites} sites; ` +
+                `${pc.requestsNotRecorded} request(s) on ${pc.sitesWithRequestsNotRecorded} site(s) went to a link the recording does not hold (robots.txt disallows it, or it lies beyond the ${MAX_HOMEPAGE_LINKS} recorded links) and count as failed requests; ` +
+                `it guessed paths on ${pc.sitesGuessingPaths} site(s) whose homepage has no link to follow.`
+        );
+    }
 
     const result = {
         experiment: "e3-what-to-read",
@@ -990,6 +1018,7 @@ async function main(): Promise<void> {
         epsilon: EPSILON,
         keywordPrior: priorWeights(),
         todayCheckAgainstProduction: check,
+        productionReader: production,
         today,
         guessedPaths,
         policies,
@@ -1005,7 +1034,7 @@ async function main(): Promise<void> {
         `e3-what-to-read: ${sites.length} sites (${groupSizes}), ${SEEDS} seeds for random and learned policies`
     );
     lines.push(
-        `today vs production's profileFromPages: same requests on ${check.sameRequests}/${check.sites} sites, same facts on ${check.sameFacts}/${check.dossiers} dossiers`
+        `today vs the guessed-path reader it replays (legacy.ts): same requests on ${check.sameRequests}/${check.sites} sites, same facts on ${check.sameFacts}/${check.dossiers} dossiers`
     );
     lines.push("");
     lines.push(
@@ -1104,6 +1133,8 @@ async function main(): Promise<void> {
             return `${cls} ${b.mean.toFixed(2)} (${b.pulls.toFixed(0)})`;
         }).join(", ")
     );
+    lines.push("");
+    lines.push(...productionTable(production));
     lines.push("");
     lines.push(`wrote ${path.relative(process.cwd(), RESULTS_FILE)}`);
     console.log(lines.join("\n"));

@@ -1,23 +1,33 @@
 /**
- * Does the replayed `today` policy do what production does? Runs the real
- * `profileFromPages` on every recorded site, with a `fetchPage` built on the
- * recorder, and compares:
+ * Does the replayed `today` policy do what the guessed-path reader did? That
+ * reader was production when this experiment ran; its page order now lives in
+ * `./legacy.ts`. This runs it on every recorded site, with a `fetchPage`
+ * built on the recorder, has production's `dossierFromPages` assemble the
+ * dossier from the pages it read, and compares:
  *  - the URLs it asks for, in order, with the replay's;
  *  - how many pages it counts as read;
- *  - which fact types end up in the dossier it assembles.
+ *  - which fact types end up in the dossier.
+ *
+ * `./production.ts` makes the same comparison for the reader production has
+ * now.
  */
 import type { ReadablePage } from "@launchstack/tools/web-research";
 
-import type { DossierAgentInput, RecordedEvidence } from "../../../src/distribution/dossier-agent";
-import { profileFromPages } from "../../../src/distribution/keyless/profile";
+import type {
+    DossierAgentInput,
+    DossierAgentResult,
+    RecordedEvidence,
+} from "../../../src/distribution/dossier-agent";
+import { dossierFromPages } from "../../../src/distribution/keyless/profile";
+import { readSiteAsBefore } from "./legacy";
 import { MAX_BUDGET, visitToday } from "./policies";
 import { FACT, fetchThrough, type FetchContext, type SiteRecord } from "./site";
 
 export interface TodayCheck {
     sites: number;
-    /** Sites where production asked for exactly the replay's URLs, in the replay's order. */
+    /** Sites where the guessed-path reader asked for exactly the replay's URLs, in the replay's order. */
     sameRequests: number;
-    /** Sites where production counted as many readable pages as the replay. */
+    /** Sites where it counted as many readable pages as the replay. */
     samePageCount: number;
     /** Sites where production's grounding gate let a dossier through. */
     dossiers: number;
@@ -32,7 +42,7 @@ export interface TodayCheck {
 
 const NO_DESCRIPTION = "The site has no clear description of what the organisation does.";
 
-function inputFor(site: SiteRecord): DossierAgentInput {
+export function inputFor(site: SiteRecord): DossierAgentInput {
     const domain = new URL(site.homeUrl).hostname;
     const epoch = new Date(0);
     return {
@@ -84,6 +94,25 @@ function inputFor(site: SiteRecord): DossierAgentInput {
     };
 }
 
+/** A `recordEvidence` that keeps nothing: the checks only read the dossier. */
+export function countingEvidence(): (evidence: Omit<RecordedEvidence, "id">) => Promise<number> {
+    let evidenceId = 0;
+    return () => Promise.resolve(++evidenceId);
+}
+
+/** The fact types a dossier holds (bits of FACT), or null when the gate let none through. */
+export function factsInDossier(result: DossierAgentResult): number | null {
+    if (result.outcome.status !== "ok") return null;
+    const dossier = result.outcome.dossier;
+    let mask = 0;
+    if (dossier.contactChannels.length > 0) mask |= FACT.email;
+    if (!dossier.openQuestions.includes(NO_DESCRIPTION)) mask |= FACT.description;
+    if (dossier.sizeBand !== "unknown") mask |= FACT.staff;
+    if (dossier.certifications.length > 0) mask |= FACT.certification;
+    if (dossier.roles.length > 0) mask |= FACT.role;
+    return mask;
+}
+
 export async function checkTodayAgainstProduction(
     ctx: FetchContext,
     sites: readonly SiteRecord[]
@@ -113,10 +142,12 @@ export async function checkTodayAgainstProduction(
             if (!fetched.ok) throw new Error(fetched.code);
             return fetched.page;
         };
-        let evidenceId = 0;
-        const recordEvidence = (_evidence: Omit<RecordedEvidence, "id">): Promise<number> =>
-            Promise.resolve(++evidenceId);
-        const result = await profileFromPages({ fetchPage, recordEvidence }, inputFor(site));
+        const pages = await readSiteAsBefore(fetchPage, site.homeUrl);
+        const result = await dossierFromPages(
+            { recordEvidence: countingEvidence() },
+            inputFor(site),
+            pages
+        );
 
         const replay = visitToday(site, MAX_BUDGET);
         const sameRequests =
@@ -126,15 +157,9 @@ export async function checkTodayAgainstProduction(
         if (sameRequests) check.sameRequests += 1;
         if (samePageCount) check.samePageCount += 1;
         let sameFacts = true;
-        if (result.outcome.status === "ok") {
+        const mask = factsInDossier(result);
+        if (mask !== null) {
             check.dossiers += 1;
-            const dossier = result.outcome.dossier;
-            let mask = 0;
-            if (dossier.contactChannels.length > 0) mask |= FACT.email;
-            if (!dossier.openQuestions.includes(NO_DESCRIPTION)) mask |= FACT.description;
-            if (dossier.sizeBand !== "unknown") mask |= FACT.staff;
-            if (dossier.certifications.length > 0) mask |= FACT.certification;
-            if (dossier.roles.length > 0) mask |= FACT.role;
             sameFacts = mask === replay.mask;
             if (sameFacts) check.sameFacts += 1;
         }

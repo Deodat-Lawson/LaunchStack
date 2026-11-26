@@ -7,6 +7,12 @@
  * for a contact address, what the company does, how big it is, which
  * certificates it holds and what it calls itself. Languages: English, Dutch,
  * German, Norwegian, with a few French, Spanish and Italian words.
+ *
+ * This is the list as measured, and it stays as it is: the recording holds
+ * the 25 links per homepage that this list ranks first. Production's reader
+ * has its own copy, which may grow (more languages), in
+ * `pipelines/src/distribution/keyless/site-links.ts`; `production.ts` checks
+ * that the two rank the recorded links alike.
  */
 
 export const LINK_CLASSES = [

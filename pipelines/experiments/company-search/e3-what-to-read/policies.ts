@@ -182,6 +182,34 @@ export function visitLinkKeywordFallback(site: SiteRecord, budget: number): Visi
     return visit;
 }
 
+/**
+ * The rule production's reader follows since this experiment (`readSite` in
+ * src/distribution/keyless/profile.ts): the homepage's links, best prior
+ * score first, without the login, cart, search and "home" links (score below
+ * 0); and guessed paths, in production's order, only when the homepage has no
+ * such link. `verify.ts` runs the real reader and compares it with this.
+ */
+export function visitShipped(
+    site: SiteRecord,
+    budget: number,
+    guessedPaths: readonly string[]
+): Visit {
+    const visit = new Visit(site, budget);
+    const usable = site.links.filter(link => link.score >= 0);
+    if (usable.length > 0) {
+        followLinks(visit, usable);
+        return visit;
+    }
+    const byPath = new Map(site.guessed.map(guess => [guess.path, guess]));
+    for (const path of guessedPaths) {
+        if (visit.full) break;
+        const guess = byPath.get(path);
+        if (!guess?.allowed || visit.known(guess.url)) continue;
+        visit.fetch(guess.url);
+    }
+    return visit;
+}
+
 /** The same links in random order: what choosing among them without any idea is worth. */
 export function visitRandomLink(site: SiteRecord, budget: number, rng: Rng): Visit {
     const visit = new Visit(site, budget);

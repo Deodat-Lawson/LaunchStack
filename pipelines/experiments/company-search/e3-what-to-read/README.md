@@ -117,10 +117,19 @@ The difference in fact types, paired by site, is +0.40 (95% interval +0.30
 to +0.50). `link-keyword` at 4 requests, the policy it was built from, found
 2.51 and 74%.
 
-Three things differ from `link-keyword`:
+Four things differ from `link-keyword`:
 
 - Links that score below zero (login, cart, search, "home") are left out.
   One site's only link is of that kind.
+- A link the page calls nothing but "log in", "account", "cart" or "search",
+  and a link with such a word in any part of its path, is left out too. The
+  experiment took the best of the path and every text, so a "Log in" pointing
+  at a shop platform's `/customer_authentication/redirect` counted as a page
+  about customers. A live run showed it: one request of a shop's four went
+  into a sign-in redirect. On the recording this leaves out 10 links on 10
+  sites, none among a site's first three (`check.linksLeftOut` in the results
+  file), so nothing measured at 4 requests moves; replayed by hand at 6, 8
+  and 14 requests, no site's facts change either.
 - Paths are guessed only when the homepage has no link to follow (6 of the
   180 sites), not when the links run out.
 - The guessed paths are tried contact pages first (`/contact`, `/kontakt`,
@@ -131,9 +140,9 @@ Three things differ from `link-keyword`:
 Production's word list also covers languages this sample does not have
 (French, Spanish, Portuguese, Italian, Danish, Swedish, Finnish, Polish,
 Czech, and a few Japanese and Chinese words). Those words rank no recorded
-link differently: production orders the recorded links of every homepage as
-the experiment's own list does (`check.sameRanking` in the results file: 180
-of 180).
+link differently: the recorded links production follows are in the order the
+experiment's own list gives them on every homepage (`check.sameRanking` in
+the results file: 180 of 180).
 
 ## Run it
 

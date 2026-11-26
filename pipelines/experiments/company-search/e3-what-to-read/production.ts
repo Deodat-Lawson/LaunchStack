@@ -11,7 +11,9 @@
  *  - whether it asked for the URLs the replayed rule (`visitShipped`) asks
  *    for. The rule ranks links with the experiment's own word list and link
  *    parser; production has its own copies of both, so this is a check of
- *    one implementation against the other on real pages.
+ *    one implementation against the other on real pages. Production is
+ *    stricter about which links are login, account, cart or search links;
+ *    those it leaves out are counted, and the order of the rest is compared.
  *
  * Two things the recording cannot answer. Production does not read
  * robots.txt, the recorder did: a link robots.txt disallows was never
@@ -82,9 +84,18 @@ export interface ProductionReport {
         samePageCount: number;
         /**
          * Sites where production's link parser and word list put the recorded
-         * links of the homepage in the experiment's order, with its scores.
+         * links it follows in the experiment's order.
          */
         sameRanking: number;
+        /**
+         * Recorded links the experiment's list would follow and production
+         * does not (it is stricter about login, account, cart and search
+         * links), and the sites they are on.
+         */
+        linksLeftOut: number;
+        sitesWithLinksLeftOut: number;
+        /** Of those links, the ones among the first three the experiment's list would follow. */
+        linksLeftOutOfFirstThree: number;
         /** Sites where production's grounding gate let a dossier through. */
         dossiers: number;
         /** Of the sites with the same requests and a dossier, those holding the replay's fact types. */
@@ -126,6 +137,9 @@ export async function measureProductionReader(
         sameRequests: 0,
         samePageCount: 0,
         sameRanking: 0,
+        linksLeftOut: 0,
+        sitesWithLinksLeftOut: 0,
+        linksLeftOutOfFirstThree: 0,
         dossiers: 0,
         sameFacts: 0,
         requestsNotRecorded: 0,
@@ -159,7 +173,25 @@ export async function measureProductionReader(
         );
         const mask = factsInDossier(result);
 
-        const replay = visitShipped(site, budget, GUESSED_PATHS);
+        // Which links production follows is its own rule; their order is checked
+        // against the experiment's, over every recorded link and not only the first few.
+        const production = read.pages[0] ? rankSiteLinks(read.pages[0]) : [];
+        const followed = new Set(production.map(link => link.url));
+        const recorded = new Set(site.links.map(link => link.url));
+        const usable = site.links.filter(link => link.score >= 0);
+        const expected = usable.filter(link => followed.has(link.url));
+        const ranked = production.filter(link => recorded.has(link.url));
+        const sameRanking =
+            ranked.length === expected.length &&
+            ranked.every((link, i) => link.url === expected[i]!.url);
+        if (sameRanking) check.sameRanking += 1;
+        check.linksLeftOut += usable.length - expected.length;
+        if (usable.length > expected.length) check.sitesWithLinksLeftOut += 1;
+        check.linksLeftOutOfFirstThree += usable
+            .slice(0, 3)
+            .filter(link => !followed.has(link.url)).length;
+
+        const replay = visitShipped(site, budget, GUESSED_PATHS, url => followed.has(url));
         const sameRequests =
             asked.length === replay.asked.length &&
             asked.every((url, i) => url === replay.asked[i]);
@@ -172,19 +204,6 @@ export async function measureProductionReader(
         check.requestsNotRecorded += notRecorded;
         if (notRecorded > 0) check.sitesWithRequestsNotRecorded += 1;
         if (read.guessed) check.sitesGuessingPaths += 1;
-
-        // Every recorded link, not only the first few: does production rank them alike?
-        const expected = site.links.filter(link => link.score >= 0);
-        const recorded = new Set(site.links.map(link => link.url));
-        const ranked = read.pages[0]
-            ? rankSiteLinks(read.pages[0]).filter(link => recorded.has(link.url))
-            : [];
-        const sameRanking =
-            ranked.length === expected.length &&
-            ranked.every(
-                (link, i) => link.url === expected[i]!.url && link.score === expected[i]!.score
-            );
-        if (sameRanking) check.sameRanking += 1;
         if (!sameRequests || !samePageCount || !sameFacts || !sameRanking)
             check.differing.push(site.id);
 
@@ -312,7 +331,8 @@ export function productionTable(report: ProductionReport): string[] {
     }
     const check = report.check;
     lines.push(
-        `same ranking of the recorded links as the experiment's word list on ${check.sameRanking}/${check.sites} homepages; ` +
+        `the recorded links production follows are in the experiment's order on ${check.sameRanking}/${check.sites} homepages ` +
+            `(${check.linksLeftOut} link(s) on ${check.sitesWithLinksLeftOut} site(s) left out as login, account, cart or search links); ` +
             `same requests as the replayed rule on ${check.sameRequests}/${check.sites} sites, and the same fact types in the dossier on ${check.sameFacts} of those; ` +
             `${check.requestsNotRecorded} request(s) on ${check.sitesWithRequestsNotRecorded} site(s) went to a link the recording does not hold and count as failed; ` +
             `paths were guessed on ${check.sitesGuessingPaths} site(s); at most ${report.byScope.all.production.requests.max} requests on any site`

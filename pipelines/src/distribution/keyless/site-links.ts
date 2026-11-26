@@ -160,7 +160,7 @@ const CJK_UTILITY = /ログイン|カート|検索|登录|登入|登錄|购物�
 
 /** Utility links nobody opens to learn about a company: never followed. */
 const UTILITY =
-    /\b(cart|basket|winkelwagen|winkelmand|warenkorb|handlekurv|handlevogn|checkout|kassa|kasse|my account|mijn account|mein konto|min side|min konto|account|login|log in|inloggen|anmelden|einloggen|logg inn|sign in|signin|sign up|signup|register|registreren|registrieren|registrer|wishlist|verlanglijst|wunschliste|onskeliste|search|zoeken|suche|sok|sitemap|rss|feed|wp login|wp admin|admin|password|wachtwoord|passwort)\b/;
+    /\b(cart|basket|winkelwagen|winkelmand|warenkorb|handlekurv|handlevogn|checkout|kassa|kasse|my account|mijn account|mein konto|min side|min konto|account|login|log in|inloggen|anmelden|einloggen|logg inn|sign in|signin|sign up|signup|register|registreren|registrieren|registrer|wishlist|verlanglijst|wunschliste|onskeliste|search|zoeken|suche|sok|sitemap|rss|feed|wp login|wp admin|admin|password|wachtwoord|passwort|authentication|authenticate|oauth|sso)\b/;
 const HOME_ANCHOR =
     /^(home|homepage|start|startseite|startpagina|hjem|forside|hovedside|accueil|inicio)$/;
 const HOME_SEGMENT = /^(home|index|index html|index htm|index php|start|startseite|hjem|forside)$/;
@@ -232,9 +232,18 @@ export function scoreLink(anchor: string, url: string): LinkScore {
     const lastUsable = last !== "" && wordCount(last) <= MAX_SEGMENT_WORDS;
     const first = segments.length > 1 ? segments[0]! : "";
 
+    // A login, cart or search page is one wherever the word sits: in the
+    // link's text, or in any part of its path ("/account/orders", a shop
+    // platform's "/customer_authentication/redirect").
+    const label = anchor.trim();
+    const shortLabel = label.length > 0 && label.length <= MAX_CJK_ANCHOR_CHARS;
     if (
         (anchorUsable && (UTILITY.test(a) || HOME_ANCHOR.test(a))) ||
-        (lastUsable && (UTILITY.test(last) || HOME_SEGMENT.test(last)))
+        (shortLabel && CJK_UTILITY.test(label)) ||
+        segments.some(
+            segment => wordCount(segment) <= MAX_SEGMENT_WORDS && UTILITY.test(segment)
+        ) ||
+        (lastUsable && HOME_SEGMENT.test(last))
     ) {
         return { cls: "other", score: -1 };
     }
@@ -273,9 +282,7 @@ export function scoreLink(anchor: string, url: string): LinkScore {
             best = { cls: rule.cls, score };
     }
 
-    const label = anchor.trim();
-    if (label.length > 0 && label.length <= MAX_CJK_ANCHOR_CHARS) {
-        if (best === null && CJK_UTILITY.test(label)) return { cls: "other", score: -1 };
+    if (shortLabel) {
         for (const { rule, re } of CJK_RULES) {
             if (re.test(label) && (best === null || rule.weight > best.score))
                 best = { cls: rule.cls, score: rule.weight };
@@ -311,7 +318,8 @@ export interface SiteLink {
  * The links of a page that are worth a request, best first: other pages of
  * the same site (never a file, another host, or the page itself), each scored
  * by its best text, ties in page order. Login, cart, search and "home" links
- * are left out.
+ * are left out: those the page calls nothing else, and those whose path says
+ * so in any part.
  *
  * Empty when the page has no such link, or when it carries no links at all (a
  * page that did not come from `fetchReadable`).
@@ -362,12 +370,15 @@ export function rankSiteLinks(page: Pick<ReadablePage, "url" | "finalUrl" | "lin
     const ranked: Array<SiteLink & { order: number }> = [];
     let order = 0;
     for (const [key, link] of found) {
-        let best = scoreLink("", link.url);
-        for (const text of link.texts) {
-            const scored = scoreLink(text, link.url);
-            if (scored.score > best.score) best = scored;
-        }
-        if (best.score >= 0) ranked.push({ ...link, key, cls: best.cls, score: best.score, order });
+        const byPath = scoreLink("", link.url);
+        const byText = link.texts.map(text => scoreLink(text, link.url));
+        let best = byPath;
+        for (const reading of byText) if (reading.score > best.score) best = reading;
+        // A link the page calls nothing but "Log in" is a login link wherever
+        // it points; the path alone speaks only for a link without words.
+        const utility =
+            byText.length > 0 ? byText.every(reading => reading.score < 0) : byPath.score < 0;
+        if (!utility) ranked.push({ ...link, key, cls: best.cls, score: best.score, order });
         order += 1;
     }
     ranked.sort((a, b) => b.score - a.score || a.order - b.order);

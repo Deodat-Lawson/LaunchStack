@@ -127,6 +127,10 @@ describe("scoreLink", () => {
             ["Home", "/index.html"],
             ["", "/wp-admin"],
             ["ログイン", "/p/17"],
+            // The word can sit anywhere in the path, not only at its end.
+            ["Bestelhistorie", "/mijn-account/orders/"],
+            ["Kaffeeabo verwalten", "/de/account/subscription"],
+            ["", "/customer_authentication/redirect"],
         ] as const)
             expect(scoreLink(label, on(path)).score, `${label} ${path}`).toBe(-1);
     });
@@ -169,6 +173,30 @@ describe("rankSiteLinks", () => {
         ]);
         expect(ranked[0]!.texts).toEqual(["Stuur ons een bericht", "Contact"]);
         expect(ranked[0]!.key).toBe("https://www.acme.example/contact");
+    });
+
+    it("leaves out a link the page calls nothing but a login, wherever it points", () => {
+        const ranked = rankSiteLinks(
+            page([
+                // A shop platform's sign-in: "customer" in its path is not a page about customers.
+                {
+                    url: "https://www.acme.example/customer_authentication/redirect?locale=nl",
+                    text: "Inloggen",
+                },
+                { url: "https://www.acme.example/portal", text: "Log in" },
+                { url: "https://www.acme.example/portal", text: "Mijn account" },
+                // Called a login once and by its own name once: the name counts.
+                { url: "https://www.acme.example/klanten", text: "Inloggen" },
+                { url: "https://www.acme.example/klanten", text: "Onze klanten" },
+                // No words at all: the path speaks for it.
+                { url: "https://www.acme.example/over-ons", text: "" },
+                { url: "https://www.acme.example/zoeken", text: "" },
+            ])
+        );
+        expect(ranked.map(link => [new URL(link.url).pathname, link.cls, link.score])).toEqual([
+            ["/over-ons", "about", 8],
+            ["/klanten", "products", 3.5],
+        ]);
     });
 
     it("has nothing to offer for a page without links, or one that only links to itself", () => {

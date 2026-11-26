@@ -30,8 +30,9 @@ export const KEYLESS_PROFILER_ID = "keyless/page-reader";
  * Paths to try when the homepage has no link a reader can follow (a single
  * page, or navigation drawn by script). Contact pages first, and the two
  * commonest spellings before the rest, because only a few guesses fit in the
- * request budget: on 180 recorded company sites these paths answered with a
- * page on one site in four at best, most of them on one in ten or fewer.
+ * request budget: on 180 recorded company sites the best of these paths
+ * answered with a page on three sites in ten, most of them on one in ten or
+ * fewer.
  */
 export const GUESSED_PATHS = [
     "/contact",

@@ -187,15 +187,20 @@ export function visitLinkKeywordFallback(site: SiteRecord, budget: number): Visi
  * src/distribution/keyless/profile.ts): the homepage's links, best prior
  * score first, without the login, cart, search and "home" links (score below
  * 0); and guessed paths, in production's order, only when the homepage has no
- * such link. `verify.ts` runs the real reader and compares it with this.
+ * such link. `production.ts` runs the real reader and compares it with this.
+ *
+ * Production is stricter than this folder's word list about what a login link
+ * is (see the README), so `follows` says which links it still follows; their
+ * order is this folder's.
  */
 export function visitShipped(
     site: SiteRecord,
     budget: number,
-    guessedPaths: readonly string[]
+    guessedPaths: readonly string[],
+    follows: (url: string) => boolean = () => true
 ): Visit {
     const visit = new Visit(site, budget);
-    const usable = site.links.filter(link => link.score >= 0);
+    const usable = site.links.filter(link => link.score >= 0 && follows(link.url));
     if (usable.length > 0) {
         followLinks(visit, usable);
         return visit;

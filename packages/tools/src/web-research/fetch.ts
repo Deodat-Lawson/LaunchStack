@@ -376,10 +376,11 @@ function firstNonEmpty(...values: Array<string | null>): string {
 }
 
 /** The most links kept per page; far above any real navigation. */
-export const MAX_PAGE_LINKS = 5_000;
+const MAX_PAGE_LINKS = 5_000;
 
 /**
- * HTML → the page's links, in document order, one entry per `<a href>`.
+ * HTML → the page's links, in document order, one entry per `<a href>`, at
+ * most `maxLinks` of them.
  *
  * Relative targets are resolved against `pageUrl` (or the page's `<base>`),
  * fragments are dropped, and only http(s) targets are kept: a link to a place

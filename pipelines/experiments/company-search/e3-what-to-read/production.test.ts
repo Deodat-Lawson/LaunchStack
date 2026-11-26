@@ -44,6 +44,9 @@ describe.skipIf(!recorded)("production's site reader on the recorded sites", () 
         // Production's own link parser and word list choose the pages the
         // experiment's choose, except where the recording has no answer.
         expect(report.check.sameRanking).toBe(report.check.sites);
+        // Stricter than the experiment's list about login links, and only about those.
+        expect(report.check.linksLeftOut).toBeLessThanOrEqual(report.check.sites / 10);
+        expect(report.check.linksLeftOutOfFirstThree).toBe(0);
         expect(report.check.dossiers).toBe(report.check.sites);
         expect(report.check.sameRequests).toBeGreaterThanOrEqual(
             report.check.sites - report.check.sitesWithRequestsNotRecorded

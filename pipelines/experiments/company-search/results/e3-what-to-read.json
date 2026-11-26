@@ -350,6 +350,9 @@
       "sameRequests": 178,
       "samePageCount": 179,
       "sameRanking": 180,
+      "linksLeftOut": 10,
+      "sitesWithLinksLeftOut": 10,
+      "linksLeftOutOfFirstThree": 0,
       "dossiers": 180,
       "sameFacts": 178,
       "requestsNotRecorded": 3,
@@ -16135,6 +16138,6 @@
     "Limits: 65 of 180 homepages had more same-site links than were recorded (the 25 best by the keyword prior were); 1 site was given up on while recording; robots.txt removed 2 guessed path(s) on 1 site(s) and 87 homepage links; production's 40 s time budget would have cut today short on 1 site(s) at the recorded response times; candidates whose homepage could not be read are not in the sample (no: 6 of 66 tried, nlde: 17 of 77 tried, en: 3 of 63 tried).",
     "Built into production since (keyless-profile/v2: the homepage's links by their words, guessed paths only when there is no link to follow, 4 requests a site). Run on the recording, production's reader finds 2.52 of 5 fact types and a contact email on 74% of sites for 3.9 requests a site (4% return nothing readable, at most 4 on any site), against 2.12 and 58% for 13.3 requests with guessed paths (+0.40 [+0.30, +0.50] fact types, paired over 180 sites).",
     "Production's reader now, by group, contact email found: no 83% (guessed paths 75%); nlde 92% (guessed paths 77%); en 48% (guessed paths 23%).",
-    "Production's own link parser and word list rank the recorded links of 180 of 180 homepages exactly as the experiment's do, and production's reader asks for the same URLs in the same order as the replayed rule on 178 of 180 sites; 3 request(s) on 2 site(s) went to a link the recording does not hold (robots.txt disallows it, or it lies beyond the 25 recorded links) and count as failed requests; it guessed paths on 6 site(s) whose homepage has no link to follow."
+    "Production's own link parser and word list put the recorded links it follows in the experiment's order on 180 of 180 homepages (it leaves out 10 link(s) on 10 site(s) as login, account, cart or search links, 0 of them among a site's first three), and production's reader asks for the same URLs in the same order as the replayed rule on 178 of 180 sites; 3 request(s) on 2 site(s) went to a link the recording does not hold (robots.txt disallows it, or it lies beyond the 25 recorded links) and count as failed requests; it guessed paths on 6 site(s) whose homepage has no link to follow."
   ]
 }

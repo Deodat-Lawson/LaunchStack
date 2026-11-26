@@ -977,7 +977,8 @@ async function main(): Promise<void> {
                 "."
         );
         findings.push(
-            `Production's own link parser and word list rank the recorded links of ${pc.sameRanking} of ${pc.sites} homepages exactly as the experiment's do, and ` +
+            `Production's own link parser and word list put the recorded links it follows in the experiment's order on ${pc.sameRanking} of ${pc.sites} homepages ` +
+                `(it leaves out ${pc.linksLeftOut} link(s) on ${pc.sitesWithLinksLeftOut} site(s) as login, account, cart or search links, ${pc.linksLeftOutOfFirstThree} of them among a site's first three), and ` +
                 `production's reader asks for the same URLs in the same order as the replayed rule on ${pc.sameRequests} of ${pc.sites} sites; ` +
                 `${pc.requestsNotRecorded} request(s) on ${pc.sitesWithRequestsNotRecorded} site(s) went to a link the recording does not hold (robots.txt disallows it, or it lies beyond the ${MAX_HOMEPAGE_LINKS} recorded links) and count as failed requests; ` +
                 `it guessed paths on ${pc.sitesGuessingPaths} site(s) whose homepage has no link to follow.`

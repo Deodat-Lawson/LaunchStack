@@ -5,6 +5,8 @@
  * true and are worth pinning: every screen the old `/employer/tools/growth`
  * pages served still has a path inside the tab (and nothing else does), and
  * a link on a Growth screen moves inside the tab instead of loading a page.
+ * And one thing about who sees what: Prospects is for every workspace, while
+ * Brand's screens show only with the workspace's beta apps on.
  */
 
 import React from "react";
@@ -18,7 +20,25 @@ import {
 } from "~/app/employer/tools/growth/_lib/screens";
 import type * as ProspectsApiModule from "~/app/employer/tools/growth/prospects/api";
 import type * as ToolLinkModule from "~/components/tool-app/ToolLink";
+import type * as UseSettings from "~/lib/settings/useSettings";
 import { toolTargetFromHref } from "~/lib/tool-app/locations";
+
+// The workspace's beta switch (`labs.betaApps`): on unless a test turns it off.
+let mockBeta: { value: boolean; loaded: boolean; error: string | null } = {
+    value: true,
+    loaded: true,
+    error: null,
+};
+jest.mock("~/lib/settings/useSettings", () => {
+    const actual = jest.requireActual<typeof UseSettings>("~/lib/settings/useSettings");
+    return {
+        ...actual,
+        useSetting: (key: string) => {
+            if (key !== "labs.betaApps") throw new Error(`unexpected setting ${key}`);
+            return { ...mockBeta, resolved: null };
+        },
+    };
+});
 
 // The screens fetch and render a lot; the frame and the switch are what is
 // under test, so each screen is a probe naming itself. Overview carries a
@@ -120,7 +140,7 @@ import { GrowthTool } from "~/app/employer/tools/growth/GrowthTool";
 
 describe("growthScreenFor", () => {
     it.each([
-        ["/", { key: "brand-overview" }],
+        ["/", { key: "prospects-home" }],
         ["/brand", { key: "brand-overview" }],
         ["/brand/", { key: "brand-overview" }],
         ["/brand/compose", { key: "brand-compose" }],
@@ -165,8 +185,8 @@ describe("growthScreenFor", () => {
         expect(growthScreenFor(path)).toEqual({ key: "not-found" });
     });
 
-    it("lands on Brand, and every old Growth URL maps to a screen in the tab", () => {
-        expect(growthScreenFor(GROWTH_HOME)).toEqual({ key: "brand-overview" });
+    it("lands on Prospects, and every old Growth URL maps to a screen in the tab", () => {
+        expect(growthScreenFor(GROWTH_HOME)).toEqual({ key: "prospects-home" });
         expect([...GROWTH_ROOTS]).toEqual(["brand", "prospects"]);
         for (const old of [
             "/employer/tools/growth",
@@ -184,6 +204,10 @@ describe("growthScreenFor", () => {
 });
 
 describe("GrowthTool", () => {
+    beforeEach(() => {
+        mockBeta = { value: true, loaded: true, error: null };
+    });
+
     function currentScreen() {
         return screen.getByTestId("screen").textContent;
     }
@@ -196,11 +220,16 @@ describe("GrowthTool", () => {
         return { openHref };
     }
 
-    it("opens on Brand and moves between screens inside the tab", async () => {
+    it("opens on Prospects and moves between screens inside the tab", async () => {
         const startUrl = window.location.href;
         await mount("/");
-        expect(currentScreen()).toBe("brand-overview");
+        expect(currentScreen()).toBe("prospects-home");
 
+        // Prospects comes first; Brand is the other half of the switch.
+        const halves = screen.getAllByRole("radio").map(r => r.textContent);
+        expect(halves).toEqual(["Prospects", "Brand"]);
+        fireEvent.click(screen.getByRole("radio", { name: "Brand" }));
+        expect(currentScreen()).toBe("brand-overview");
         const tabs = screen.getByRole("navigation", { name: "Growth screens" });
         const calendar = within(tabs).getByRole("link", { name: "Calendar" });
         // A real link to share or ⌘-click, pointing at the tab, not an old page.
@@ -216,6 +245,8 @@ describe("GrowthTool", () => {
         // The tab's own history.
         fireEvent.click(screen.getAllByRole("button", { name: "Back" })[0]!);
         expect(currentScreen()).toBe("brand-overview");
+        fireEvent.click(screen.getAllByRole("button", { name: "Back" })[0]!);
+        expect(currentScreen()).toBe("prospects-home");
     });
 
     it("follows a screen's ToolLink to a company, and hands site links to the workspace", async () => {
@@ -245,7 +276,40 @@ describe("GrowthTool", () => {
     it("says so for a path it has no screen for", async () => {
         await mount("/prospects/nope");
         expect(screen.getByText("This screen does not exist")).toBeInTheDocument();
-        fireEvent.click(screen.getByRole("button", { name: "Go to Brand overview" }));
-        expect(currentScreen()).toBe("brand-overview");
+        fireEvent.click(screen.getByRole("button", { name: "Go to Prospects" }));
+        expect(currentScreen()).toBe("prospects-home");
+    });
+
+    describe("with the workspace's beta apps off", () => {
+        beforeEach(() => {
+            mockBeta = { value: false, loaded: true, error: null };
+        });
+
+        it("opens on Prospects and has no Brand screens in the bar", async () => {
+            await mount("/");
+            expect(currentScreen()).toBe("prospects-home");
+            expect(screen.queryByRole("radio", { name: "Brand" })).not.toBeInTheDocument();
+            const tabs = screen.getByRole("navigation", { name: "Growth screens" });
+            expect(within(tabs).getByRole("link", { name: /Companies/ })).toBeInTheDocument();
+            for (const name of ["Overview", "Compose", "Calendar", "Accounts"]) {
+                expect(within(tabs).queryByRole("link", { name })).not.toBeInTheDocument();
+            }
+        });
+
+        it("says Brand is a beta app on a link to one of its screens, and offers Prospects", async () => {
+            await mount("/brand/accounts");
+            expect(screen.queryByTestId("screen")).not.toBeInTheDocument();
+            expect(screen.getByText("Brand is a beta app")).toBeInTheDocument();
+            expect(screen.getByText(/Workspace › Labs/)).toBeInTheDocument();
+            fireEvent.click(screen.getByRole("button", { name: "Go to Prospects" }));
+            expect(currentScreen()).toBe("prospects-home");
+        });
+
+        it("waits for the settings before turning a Brand link away", async () => {
+            mockBeta = { value: false, loaded: false, error: null };
+            await mount("/brand/compose");
+            expect(screen.queryByText("Brand is a beta app")).not.toBeInTheDocument();
+            expect(screen.queryByTestId("screen")).not.toBeInTheDocument();
+        });
     });
 });

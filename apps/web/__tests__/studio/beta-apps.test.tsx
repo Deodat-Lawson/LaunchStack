@@ -1,11 +1,13 @@
 /** @jest-environment jsdom */
 /**
- * The workspace's beta switch (`labs.betaApps`, Workspace › Labs): the Studio
- * apps still being built — Growth and Vantage — are hidden everywhere while
- * it is off, and drawn with a Beta badge while it is on. The rule is one
- * function every surface asks (`canOpenStudioApp` / `useStudioAccess`); the
- * picker here stands for the rest. The APIs' half is pinned in the route
- * tests (`beta_apps_off`).
+ * The workspace's beta switch (`labs.betaApps`, Workspace › Labs): what is
+ * still being built — the Vantage app, and Brand's screens inside Growth —
+ * is hidden everywhere while it is off, and Vantage is drawn with a Beta
+ * badge while it is on. Growth itself, with Prospects, is for every
+ * workspace. The rule is one pair of functions every surface asks
+ * (`canOpenStudioApp`, `canOpenStudioPlace` / `useStudioAccess`); the picker
+ * here stands for the rest. The APIs' half is pinned in the route tests
+ * (`beta_apps_off`).
  */
 import React from "react";
 import { render, screen } from "@testing-library/react";
@@ -38,10 +40,15 @@ jest.mock("~/lib/use-permissions", () => ({
     }),
 }));
 
-import { canOpenStudioApp, studioAppFor } from "~/app/employer/documents/_workspace/studioAccess";
+import {
+    canOpenStudioApp,
+    canOpenStudioPlace,
+    studioAppFor,
+} from "~/app/employer/documents/_workspace/studioAccess";
 import { StudioDrawer } from "~/app/employer/documents/_workspace/StudioDrawer";
 import { STUDIO_GROUPS } from "~/app/employer/documents/_workspace/types";
 import { BETA_APPS_SETTING, getSetting } from "~/lib/settings/registry";
+import { isBetaPlace, opensBetaPlace } from "~/lib/tool-app/beta-places";
 
 const all = () => true;
 
@@ -51,11 +58,29 @@ beforeEach(() => {
 });
 
 describe("which apps are beta", () => {
-    it("is Growth and Vantage, and nothing else", () => {
+    it("is Vantage, and nothing else, as a whole app", () => {
         const beta = STUDIO_GROUPS.flatMap(group => group.features)
             .filter(feature => feature.beta)
             .map(feature => feature.id);
-        expect(beta.sort()).toEqual(["growth", "vantage"]);
+        expect(beta).toEqual(["vantage"]);
+    });
+
+    it("is Brand inside Growth, and not Prospects", () => {
+        expect(isBetaPlace("growth", "/brand")).toBe(true);
+        expect(isBetaPlace("growth", "/brand/accounts?connected=linkedin")).toBe(true);
+        expect(isBetaPlace("growth", "/brand/")).toBe(true);
+        expect(isBetaPlace("growth", "/prospects/companies/42")).toBe(false);
+        expect(isBetaPlace("growth", "/")).toBe(false);
+        expect(isBetaPlace("growth", "/brandnew")).toBe(false);
+        expect(isBetaPlace("proposals", "/brand")).toBe(false);
+        expect(isBetaPlace("constructor", "/brand")).toBe(false);
+        expect(opensBetaPlace("brand")).toBe(true);
+        expect(opensBetaPlace("marketing")).toBe(true);
+        expect(opensBetaPlace("prospects")).toBe(false);
+        expect(opensBetaPlace("/employer/documents?feature=growth&at=/brand/accounts")).toBe(true);
+        expect(opensBetaPlace("/employer/tools/marketing-pipeline")).toBe(true);
+        expect(opensBetaPlace("/employer/documents?feature=growth&at=%2Fprospects")).toBe(false);
+        expect(opensBetaPlace("/employer/documents?feature=growth")).toBe(false);
     });
 
     it("is switched by a workspace setting only admins change, off by default", () => {
@@ -72,15 +97,16 @@ describe("which apps are beta", () => {
 });
 
 describe("canOpenStudioApp", () => {
-    const growth = studioAppFor("growth");
+    const vantage = studioAppFor("vantage");
     const team = studioAppFor("team");
 
     it("closes a beta app while the switch is off, whatever the role", () => {
-        expect(canOpenStudioApp(growth, all, false)).toBe(false);
-        expect(canOpenStudioApp(growth, all, true)).toBe(true);
+        expect(canOpenStudioApp(vantage, all, false)).toBe(false);
+        expect(canOpenStudioApp(vantage, all, true)).toBe(true);
     });
 
-    it("leaves every other app to its permission", () => {
+    it("leaves every other app to its permission, Growth included", () => {
+        expect(canOpenStudioApp(studioAppFor("growth"), all, false)).toBe(true);
         expect(canOpenStudioApp(studioAppFor("proposals"), all, false)).toBe(true);
         expect(canOpenStudioApp(team, () => false, true)).toBe(false);
         expect(canOpenStudioApp(team, all, false)).toBe(true);
@@ -88,6 +114,28 @@ describe("canOpenStudioApp", () => {
 
     it("refuses what names no app", () => {
         expect(canOpenStudioApp(undefined, all, true)).toBe(false);
+    });
+});
+
+describe("canOpenStudioPlace", () => {
+    it("opens Prospects with the switch off, and Brand only with it on", () => {
+        for (const link of ["prospects", "/employer/documents?feature=growth&at=%2Fprospects"]) {
+            expect(canOpenStudioPlace(link, all, false)).toBe(true);
+        }
+        for (const link of [
+            "brand",
+            "marketing",
+            "/employer/documents?feature=growth&at=/brand/accounts",
+        ]) {
+            expect(canOpenStudioPlace(link, all, false)).toBe(false);
+            expect(canOpenStudioPlace(link, all, true)).toBe(true);
+        }
+    });
+
+    it("holds a place to its app's own gates", () => {
+        expect(canOpenStudioPlace("/employer/documents?feature=vantage", all, false)).toBe(false);
+        expect(canOpenStudioPlace("people-access", all, false)).toBe(true);
+        expect(canOpenStudioPlace("nothing-here", all, true)).toBe(false);
     });
 });
 
@@ -113,25 +161,26 @@ describe("the Studio picker", () => {
         render(<StudioDrawer open onClose={() => undefined} onPickFeature={() => undefined} />);
     }
 
-    it("lists neither app while the workspace has beta apps off", () => {
+    it("lists Growth but not Vantage while the workspace has beta apps off", () => {
         open();
         expect(screen.getByText("Proposals")).toBeInTheDocument();
-        expect(screen.queryByText("Growth")).not.toBeInTheDocument();
+        expect(screen.getByText("Growth")).toBeInTheDocument();
         expect(screen.queryByText("Vantage")).not.toBeInTheDocument();
         expect(screen.queryByText("Beta")).not.toBeInTheDocument();
     });
 
-    it("lists both, each marked Beta, once they are on", () => {
+    it("lists Vantage, marked Beta, once they are on", () => {
         mockBeta = { value: true, loaded: true, error: null };
         open();
         expect(screen.getByText("Growth")).toBeInTheDocument();
         expect(screen.getByText("Vantage")).toBeInTheDocument();
-        expect(screen.getAllByText("Beta")).toHaveLength(2);
+        expect(screen.getAllByText("Beta")).toHaveLength(1);
     });
 
-    it("keeps them out until the settings have answered", () => {
+    it("keeps Vantage out until the settings have answered, and Growth in", () => {
         mockBeta = { value: false, loaded: false, error: null };
         open();
-        expect(screen.queryByText("Growth")).not.toBeInTheDocument();
+        expect(screen.getByText("Growth")).toBeInTheDocument();
+        expect(screen.queryByText("Vantage")).not.toBeInTheDocument();
     });
 });

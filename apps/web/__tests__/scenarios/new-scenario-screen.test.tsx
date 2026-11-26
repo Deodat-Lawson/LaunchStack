@@ -229,7 +229,7 @@ describe("New scenario", () => {
     });
 });
 
-describe("Growth's sources (a beta app)", () => {
+describe("Growth's sources (Brand is beta, Prospects is not)", () => {
     it("offers prospects and post comments while the workspace has beta apps on", async () => {
         mount();
         await subjectBox();
@@ -237,7 +237,7 @@ describe("Growth's sources (a beta app)", () => {
         expect(screen.getByText("Comments on your posts")).toBeInTheDocument();
     });
 
-    it("offers neither once the server says beta apps are off", async () => {
+    it("still offers Prospects, but not Brand's comments, once the server says beta apps are off", async () => {
         resetScenariosSim({ betaApps: false });
         mount();
         await describeSituation("We raise prices.");
@@ -245,7 +245,7 @@ describe("Growth's sources (a beta app)", () => {
             await jest.advanceTimersByTimeAsync(10);
         });
         expect(screen.getByText("Search my files")).toBeInTheDocument();
-        expect(screen.queryByText("Prospects")).not.toBeInTheDocument();
+        expect(screen.getByText("Prospects")).toBeInTheDocument();
         expect(screen.queryByText("Comments on your posts")).not.toBeInTheDocument();
     });
 });

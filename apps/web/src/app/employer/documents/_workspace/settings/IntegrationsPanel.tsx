@@ -266,7 +266,7 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
     const refreshConnectors = connectors.refresh;
     // LinkedIn and Bluesky are reconnected in Growth, which is hidden while
     // the workspace's beta switch is off; the row then offers no Reconnect.
-    const { canOpen } = useStudioAccess();
+    const { canOpenPlace } = useStudioAccess();
     const [disconnecting, setDisconnecting] = useState<string | null>(null);
     /** The connection a Disconnect from its menu has been asked for, pending the confirm dialog. */
     const [pendingDisconnect, setPendingDisconnect] = useState<{
@@ -349,11 +349,12 @@ export function IntegrationsPanel({ onActions }: SettingsSectionProps) {
                         connectors.data?.connections.map(row => {
                             const label = PROVIDER_LABELS[row.provider] ?? row.provider;
                             const reconnectLink = reconnectHref(row.provider);
-                            const reconnectApp = reconnectLink
-                                ? studioAppFor(reconnectLink)
-                                : undefined;
+                            // A link into an app the person may open, and not
+                            // into a place still being built while beta apps
+                            // are off (Growth › Brand › Accounts).
                             const reconnectTo =
-                                reconnectLink && (!reconnectApp || canOpen(reconnectApp))
+                                reconnectLink &&
+                                (!studioAppFor(reconnectLink) || canOpenPlace(reconnectLink))
                                     ? reconnectLink
                                     : null;
                             return (

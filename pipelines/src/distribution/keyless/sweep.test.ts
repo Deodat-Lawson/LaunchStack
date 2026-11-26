@@ -109,32 +109,37 @@ describe("sweeping", () => {
         expect(asked[26]).not.toContain("@3.3000,50.7000,7.2500,53.6000");
     });
 
-    it("stops at the request cap and a later run carries on without repeating a request", async () => {
-        const places = fakePopulation(700);
-        const whole = createFakeMap(places);
-        const oneGo = await sweepAll(newSweep(NL, [TAG]), whole.fetchImpl);
+    it.each([1, 7, 20])(
+        "stops at a cap of %i requests and later runs carry on without repeating one",
+        async cap => {
+            const places = fakePopulation(700);
+            const whole = createFakeMap(places);
+            const oneGo = await sweepAll(newSweep(NL, [TAG]), whole.fetchImpl);
 
-        const map = createFakeMap(places);
-        const found = new Map<string, SweepHit>();
-        let state = newSweep(NL, [TAG]);
-        let runs = 0;
-        for (;;) {
-            const run = await sweepAll(state, map.fetchImpl, 20);
-            for (const [id, hit] of run.found) found.set(id, hit);
-            runs += 1;
-            expect(run.result.sent).toBeLessThanOrEqual(20);
-            if (run.result.stopped === "complete") break;
-            expect(run.result.stopped).toBe("cap");
-            // Between runs the sweep is stored as JSON.
-            state = JSON.parse(JSON.stringify(state)) as SweepState;
+            const map = createFakeMap(places);
+            const found = new Map<string, SweepHit>();
+            let state = newSweep(NL, [TAG]);
+            let runs = 0;
+            for (;;) {
+                const run = await sweepAll(state, map.fetchImpl, cap);
+                for (const [id, hit] of run.found) found.set(id, hit);
+                runs += 1;
+                expect(run.result.sent).toBeLessThanOrEqual(cap);
+                if (run.result.stopped === "complete") break;
+                expect(run.result.stopped).toBe("cap");
+                // Between runs the sweep is stored as JSON.
+                state = JSON.parse(JSON.stringify(state)) as SweepState;
+            }
+            const urls = map.sweepUrls();
+            // No run is spent finding out that the sweep is over.
+            expect(runs).toBe(Math.ceil(urls.length / cap));
+            expect(new Set(urls).size).toBe(urls.length);
+            // Stopping and resuming costs nothing: the same requests, in the
+            // same order, as one long run.
+            expect(urls).toEqual(whole.sweepUrls());
+            expect(found.size).toBe(oneGo.found.size);
         }
-        expect(runs).toBeGreaterThan(2);
-        const urls = map.sweepUrls();
-        expect(new Set(urls).size).toBe(urls.length);
-        // Stopping and resuming costs nothing: the same requests as one long run.
-        expect(urls).toEqual(whole.sweepUrls());
-        expect(found.size).toBe(oneGo.found.size);
-    });
+    );
 
     it("counts a request's time limit from when it is sent, not from when it joined the queue", async () => {
         const map = createFakeMap(fakePopulation(60));

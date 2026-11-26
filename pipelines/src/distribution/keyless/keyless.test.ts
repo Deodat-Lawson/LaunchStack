@@ -6,7 +6,7 @@
  */
 import { describe, expect, it } from "vitest";
 
-import type { ReadablePage } from "@launchstack/tools/web-research";
+import type { PageLink, ReadablePage } from "@launchstack/tools/web-research";
 
 import type { PlanInput } from "../plan";
 import type { PartnerOrgRecord, ProgramRecord } from "../types";
@@ -26,7 +26,7 @@ import { searchNominatim } from "./nominatim";
 import { locateCity, photonAreas, photonTagsFor, searchPhoton } from "./photon";
 import { buildKeylessPlan, keywordsFor } from "./plan";
 import { createKeylessPorts } from "./ports";
-import { extractFacts, firstDescription, profileFromPages } from "./profile";
+import { extractFacts, firstDescription, profileFromPages, readSite } from "./profile";
 
 const urlOf = (input: RequestInfo | URL): string =>
     typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
@@ -525,20 +525,27 @@ describe("Photon + OSM API", () => {
 });
 
 describe("page profiler", () => {
-    const page = (url: string, title: string, text: string): ReadablePage => ({
+    const page = (url: string, title: string, text: string, links?: PageLink[]): ReadablePage => ({
         url,
         finalUrl: url,
         status: 200,
         contentType: "text/html",
         title,
         text,
+        ...(links ? { links } : {}),
         truncated: false,
         fetchedAt: new Date().toISOString(),
     });
     const home = page(
         "https://bocca.example/",
         "Bocca Coffee Roasters",
-        "Menu Shop Wholesale About Contact. Bocca is a specialty coffee roaster in Amsterdam supplying cafés, restaurants and offices across the Netherlands and Belgium with freshly roasted beans. We are a wholesaler for over 400 hospitality customers. Certified organic (EU Organic) and Fairtrade. Contact wholesale@bocca.example for prices. © 2026"
+        "Menu Shop Wholesale About Contact. Bocca is a specialty coffee roaster in Amsterdam supplying cafés, restaurants and offices across the Netherlands and Belgium with freshly roasted beans. We are a wholesaler for over 400 hospitality customers. Certified organic (EU Organic) and Fairtrade. Contact wholesale@bocca.example for prices. © 2026",
+        [
+            { url: "https://bocca.example/", text: "Home" },
+            { url: "https://bocca.example/shop", text: "Shop" },
+            { url: "https://bocca.example/about", text: "About" },
+            { url: "https://instagram.com/bocca", text: "Instagram" },
+        ]
     );
     const about = page(
         "https://bocca.example/about",
@@ -659,6 +666,216 @@ describe("page profiler", () => {
         ]);
         expect(recorded.every(e => e.sourceUrl.startsWith("https://bocca.example/"))).toBe(true);
         expect(result.modelId).toBe("keyless/page-reader");
+        expect(result.promptVersion).toBe("keyless-profile/v2");
+    });
+
+    describe("which pages it reads", () => {
+        const body =
+            "Welkom bij Bocca. Wij branden specialty koffie in Amsterdam voor horeca en kantoren in heel Nederland, elke week vers en met de hand verpakt.";
+        const site = "https://bocca.example";
+        const site_ = (path: string): string => `${site}${path}`;
+        const input = { org, seedUrls: [site_("/")] };
+        /** A `fetchPage` over a map of pages; anything else is a 404. Records what was asked. */
+        const serve = (pages: Record<string, ReadablePage>) => {
+            const asked: string[] = [];
+            const fetchPage = async (url: string): Promise<ReadablePage> => {
+                asked.push(url);
+                const found = pages[url];
+                if (!found) throw new Error("404");
+                return found;
+            };
+            return { asked, fetchPage };
+        };
+
+        it("follows the homepage's own links, best words first, and never guesses a path", async () => {
+            const linked = page(site_("/"), "Bocca", body, [
+                { url: site_("/"), text: "Home" },
+                { url: site_("/webshop"), text: "Webshop" },
+                { url: site_("/nieuws"), text: "Nieuws" },
+                { url: site_("/het-verhaal-van-bocca"), text: "Over ons" },
+                { url: site_("/werken-bij"), text: "Werken bij Bocca" },
+                { url: site_("/klantenservice/bereik-ons"), text: "Contact" },
+                { url: site_("/mijn-account"), text: "Inloggen" },
+                { url: site_("/colofon"), text: "Colofon" },
+                { url: "https://instagram.com/bocca", text: "Instagram" },
+            ]);
+            const { asked, fetchPage } = serve({
+                [site_("/")]: linked,
+                [site_("/klantenservice/bereik-ons")]: page(
+                    site_("/klantenservice/bereik-ons"),
+                    "Contact",
+                    `${body} Mail naar verkoop@bocca.example.`
+                ),
+                [site_("/colofon")]: page(site_("/colofon"), "Colofon", `${body} KvK 12345678.`),
+                [site_("/het-verhaal-van-bocca")]: page(
+                    site_("/het-verhaal-van-bocca"),
+                    "Over",
+                    body
+                ),
+                [site_("/werken-bij")]: page(site_("/werken-bij"), "Vacatures", body),
+            });
+            const read = await readSite({ fetchPage }, input);
+            // Contact, then the imprint, then about: the paths say none of that, the words do.
+            expect(asked).toEqual([
+                site_("/"),
+                site_("/klantenservice/bereik-ons"),
+                site_("/colofon"),
+                site_("/het-verhaal-van-bocca"),
+            ]);
+            expect(read.requested).toEqual(asked);
+            expect(read.pages).toHaveLength(4);
+            expect(read.guessed).toBe(false);
+        });
+
+        it("guesses paths only when the homepage has no link to follow", async () => {
+            const bare = page(site_("/"), "Bocca", body, [
+                { url: site_("/"), text: "Bocca" },
+                { url: site_("/login"), text: "Log in" },
+                { url: "https://instagram.com/bocca", text: "Instagram" },
+            ]);
+            const contact = page(site_("/contact"), "Contact", `${body} Bel 020 123 45 67.`);
+            const { asked, fetchPage } = serve({
+                [site_("/")]: bare,
+                [site_("/contact")]: contact,
+            });
+            const read = await readSite({ fetchPage }, input);
+            expect(asked).toEqual([
+                site_("/"),
+                site_("/contact"),
+                site_("/kontakt"),
+                site_("/about"),
+            ]);
+            expect(read.guessed).toBe(true);
+            expect(read.pages).toEqual([bare, contact]);
+
+            // One link is enough to stop guessing, even when it leaves requests unused.
+            const one = serve({
+                [site_("/")]: page(site_("/"), "Bocca", body, [
+                    { url: site_("/koffie"), text: "Onze koffie" },
+                ]),
+            });
+            const single = await readSite({ fetchPage: one.fetchPage }, input);
+            expect(one.asked).toEqual([site_("/"), site_("/koffie")]);
+            expect(single.guessed).toBe(false);
+        });
+
+        it("counts every request against the budget, whatever comes back", async () => {
+            const many = page(
+                site_("/"),
+                "Bocca",
+                body,
+                ["contact", "about", "team", "careers", "products", "blog"].map(word => ({
+                    url: site_(`/${word}`),
+                    text: word,
+                }))
+            );
+            const thin = page(site_("/about"), "About", "Coming soon.");
+            const gone = { ...page(site_("/team"), "Not found", body), status: 404 };
+            const { asked, fetchPage } = serve({
+                [site_("/")]: many,
+                [site_("/about")]: thin,
+                [site_("/team")]: gone,
+                [site_("/careers")]: page(site_("/careers"), "Careers", body),
+            });
+            // /contact throws, /about is too thin to read, /team is a 404 page: three requests, no page.
+            const read = await readSite({ fetchPage }, input);
+            expect(asked).toEqual([site_("/"), site_("/contact"), site_("/about"), site_("/team")]);
+            expect(read.pages).toEqual([many]);
+
+            const wider = serve({
+                [site_("/")]: many,
+                [site_("/careers")]: page(site_("/careers"), "Careers", body),
+            });
+            const more = await readSite({ fetchPage: wider.fetchPage }, input, { maxRequests: 6 });
+            expect(wider.asked).toHaveLength(6);
+            expect(more.pages.map(p => p.finalUrl)).toEqual([site_("/"), site_("/careers")]);
+
+            const none = serve({ [site_("/")]: many });
+            await readSite({ fetchPage: none.fetchPage }, input, { maxRequests: 1 });
+            expect(none.asked).toEqual([site_("/")]);
+        });
+
+        it("does not spend a request on a page it already read through a redirect", async () => {
+            const linked = page(site_("/"), "Bocca", body, [
+                { url: site_("/contact-us"), text: "Contact" },
+                { url: site_("/contact"), text: "Contact page" },
+                { url: site_("/about"), text: "About" },
+                { url: site_("/team"), text: "Team" },
+                { url: site_("/jobs"), text: "Jobs" },
+            ]);
+            const { asked, fetchPage } = serve({
+                [site_("/")]: linked,
+                // /contact-us answers as /contact.
+                [site_("/contact-us")]: {
+                    ...page(site_("/contact"), "Contact", `${body} Bel ons.`),
+                    url: site_("/contact-us"),
+                },
+                [site_("/about")]: page(site_("/about"), "About", `${body} Sinds 2000.`),
+                [site_("/team")]: page(site_("/team"), "Team", `${body} Ons team.`),
+            });
+            const read = await readSite({ fetchPage }, input);
+            expect(asked).toEqual([
+                site_("/"),
+                site_("/contact-us"),
+                site_("/about"),
+                site_("/team"),
+            ]);
+            expect(read.pages).toHaveLength(4);
+        });
+
+        it("reads nothing more when the homepage cannot be read, or the run was stopped", async () => {
+            const down = serve({});
+            const read = await readSite({ fetchPage: down.fetchPage }, input);
+            expect(down.asked).toEqual([site_("/")]);
+            expect(read).toEqual({ pages: [], requested: [site_("/")], guessed: false });
+
+            const stopped = new AbortController();
+            stopped.abort();
+            const idle = serve({ [site_("/")]: home });
+            await readSite({ fetchPage: idle.fetchPage, signal: stopped.signal }, input);
+            expect(idle.asked).toEqual([]);
+        });
+    });
+
+    it("reads within the request budget its ports were given", async () => {
+        const run = async (requestsPerCandidate?: number): Promise<string[]> => {
+            const asked: string[] = [];
+            const ports = createKeylessPorts(
+                requestsPerCandidate === undefined ? {} : { requestsPerCandidate }
+            );
+            await ports.profile!(
+                {
+                    model: ports.model,
+                    fetchPage: async (url: string) => {
+                        asked.push(url);
+                        if (url === "https://bocca.example/") return home;
+                        if (url === "https://bocca.example/about") return about;
+                        throw new Error("404");
+                    },
+                    searchWeb: null,
+                    searchPlaces: null,
+                    tradeData: null,
+                    recordEvidence: async () => asked.length,
+                },
+                {
+                    program,
+                    sellerSummary: "Acme Roasters",
+                    org,
+                    kind: "wholesaler",
+                    territory: { country: "NL" },
+                    seedUrls: ["https://bocca.example/"],
+                    hsCodes: [],
+                }
+            );
+            return asked;
+        };
+        // The homepage links two pages of its own: about, then the shop.
+        expect(await run()).toEqual([
+            "https://bocca.example/",
+            "https://bocca.example/about",
+            "https://bocca.example/shop",
+        ]);
+        expect(await run(2)).toEqual(["https://bocca.example/", "https://bocca.example/about"]);
     });
 
     it("leaves roles empty when the site names none instead of echoing the requested kind", async () => {

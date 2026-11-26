@@ -1,7 +1,8 @@
 /**
- * The keyless profiler: reads an organisation's own website (home plus a few
- * well-known pages) and produces the same dossier the research agent
- * would, with every claim recorded as evidence that quotes a fetched page.
+ * The keyless profiler: reads an organisation's own website (the homepage,
+ * then the pages its own links name as contact, about, team or imprint) and
+ * produces the same dossier the research agent would, with every claim
+ * recorded as evidence that quotes a fetched page.
  * No model. It cannot reason, so it only states what the pages literally
  * say: what they call themselves, where they are, how to reach them, which
  * certifications they list, roughly how big they are.
@@ -19,26 +20,34 @@ import {
 } from "../dossier-agent";
 import { DossierSchema, type Dossier, type EvidenceKind, type PartnerKind } from "../types";
 import { countriesMentioned, countryName } from "./geo";
+import { rankSiteLinks } from "./site-links";
 
-export const KEYLESS_PROFILE_VERSION = "keyless-profile/v1";
+/** v2: follows the homepage's own links; v1 guessed 13 paths on every site. */
+export const KEYLESS_PROFILE_VERSION = "keyless-profile/v2";
 export const KEYLESS_PROFILER_ID = "keyless/page-reader";
 
-/** Pages worth trying after the home page, in the languages of the target markets. */
-const EXTRA_PATHS = [
+/**
+ * Paths to try when the homepage has no link a reader can follow (a single
+ * page, or navigation drawn by script). Contact pages first, and the two
+ * commonest spellings before the rest, because only a few guesses fit in the
+ * request budget: on 180 recorded company sites these paths answered with a
+ * page on one site in four at best, most of them on one in ten or fewer.
+ */
+export const GUESSED_PATHS = [
+    "/contact",
+    "/kontakt",
     "/about",
+    "/impressum",
     "/about-us",
+    "/contact-us",
     "/over-ons",
     "/ueber-uns",
     "/unternehmen",
-    "/contact",
-    "/contact-us",
-    "/kontakt",
-    "/impressum",
     "/careers",
     "/jobs",
     "/vacatures",
     "/karriere",
-];
+] as const;
 
 const EMAIL_RE = /\b[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}\b/gi;
 const GENERIC_LOCAL =
@@ -223,40 +232,79 @@ export function extractFacts(
 const ZERO_USAGE: ChatTokenUsage = { inputTokens: 0, outputTokens: 0, totalTokens: 0 };
 
 export interface KeylessProfileLimits {
-    maxPages: number;
+    /**
+     * HTTP requests per site, the homepage included. Every request counts,
+     * whatever comes back: a page, a 404, a timeout.
+     */
+    maxRequests: number;
     /** Whole-candidate budget; pages after this are not fetched. */
     budgetMs: number;
 }
 
-const DEFAULT_LIMITS: KeylessProfileLimits = { maxPages: 4, budgetMs: 40_000 };
+/**
+ * Four requests: the homepage and its three best links. On 180 recorded
+ * company sites that found a contact address on 74% of sites and 2.5 of the 5
+ * kinds of fact; each further request added about two points.
+ */
+export const DEFAULT_KEYLESS_LIMITS: KeylessProfileLimits = { maxRequests: 4, budgetMs: 40_000 };
+
+/** A page is worth reading when it answered and says something. */
+const MIN_READABLE_CHARS = 120;
+
+export interface SiteRead {
+    /** The pages that could be read, in the order they were read; the homepage first. */
+    pages: ReadablePage[];
+    /** Every URL asked for, in order, whatever came back. */
+    requested: string[];
+    /** True when the homepage had no link to follow and paths were guessed instead. */
+    guessed: boolean;
+}
+
+function guessedUrls(homeUrl: string): string[] {
+    const urls: string[] = [];
+    for (const path of GUESSED_PATHS) {
+        try {
+            urls.push(new URL(path, homeUrl).href);
+        } catch {
+            /* a homepage address that cannot be a base has no paths to guess */
+        }
+    }
+    return urls;
+}
 
 /**
- * Fetch the site, extract facts, record each as evidence, assemble the
- * dossier and run it through the same grounding gate the agent faces.
+ * Read one site within the request budget: the homepage, then the pages its
+ * own links point at, best first (see ./site-links). Only when the homepage
+ * has no usable link are well-known paths guessed.
  */
-export async function profileFromPages(
-    ports: Pick<DossierAgentPorts, "fetchPage" | "recordEvidence" | "signal">,
-    input: DossierAgentInput,
+export async function readSite(
+    ports: Pick<DossierAgentPorts, "fetchPage" | "signal">,
+    input: Pick<DossierAgentInput, "org" | "seedUrls">,
     limits: Partial<KeylessProfileLimits> = {}
-): Promise<DossierAgentResult> {
-    const { maxPages, budgetMs } = { ...DEFAULT_LIMITS, ...limits };
+): Promise<SiteRead> {
+    const { maxRequests, budgetMs } = { ...DEFAULT_KEYLESS_LIMITS, ...limits };
     const startedAt = Date.now();
+    const read: SiteRead = { pages: [], requested: [], guessed: false };
+    /** Keys of the pages read, under the URL asked for and the URL that answered. */
     const fetched = new Set<string>();
-    const fetchedUrls: string[] = [];
-    const pages: ReadablePage[] = [];
-    const evidence = new Map<number, RecordedEvidence>();
+    const asked = new Set<string>();
+
+    const mayAsk = (): boolean =>
+        read.requested.length < maxRequests &&
+        !ports.signal?.aborted &&
+        Date.now() - startedAt <= budgetMs;
 
     const tryFetch = async (url: string): Promise<ReadablePage | null> => {
-        if (ports.signal?.aborted || Date.now() - startedAt > budgetMs) return null;
+        read.requested.push(url);
+        asked.add(normalizeUrlForMatch(url));
         try {
             const page = await ports.fetchPage(url);
-            if (page.status >= 400 || page.text.trim().length < 120) return null;
+            if (page.status >= 400 || page.text.trim().length < MIN_READABLE_CHARS) return null;
             const key = normalizeUrlForMatch(page.finalUrl);
             if (fetched.has(key)) return null;
             fetched.add(key);
             fetched.add(normalizeUrlForMatch(page.url));
-            fetchedUrls.push(page.finalUrl);
-            pages.push(page);
+            read.pages.push(page);
             return page;
         } catch {
             return null;
@@ -269,20 +317,50 @@ export async function profileFromPages(
             : input.org.domain
               ? [`https://${input.org.domain}/`]
               : [];
-    const home = seeds.length ? await tryFetch(seeds[0]!) : null;
-    if (home) {
-        const base = home.finalUrl;
-        for (const path of EXTRA_PATHS) {
-            if (pages.length >= maxPages) break;
-            let url: string;
-            try {
-                url = new URL(path, base).href;
-            } catch {
-                continue;
-            }
-            await tryFetch(url);
-        }
+    const home = seeds.length && mayAsk() ? await tryFetch(seeds[0]!) : null;
+    if (!home) return read;
+
+    const links = rankSiteLinks(home).map(link => link.url);
+    read.guessed = links.length === 0;
+    for (const url of read.guessed ? guessedUrls(home.finalUrl) : links) {
+        if (!mayAsk()) break;
+        const key = normalizeUrlForMatch(url);
+        // Asked already, or the address of a page already read through a redirect.
+        if (asked.has(key) || fetched.has(key)) continue;
+        await tryFetch(url);
     }
+    return read;
+}
+
+/**
+ * Fetch the site, extract facts, record each as evidence, assemble the
+ * dossier and run it through the same grounding gate the agent faces.
+ */
+export async function profileFromPages(
+    ports: Pick<DossierAgentPorts, "fetchPage" | "recordEvidence" | "signal">,
+    input: DossierAgentInput,
+    limits: Partial<KeylessProfileLimits> = {}
+): Promise<DossierAgentResult> {
+    const { pages } = await readSite(ports, input, limits);
+    return dossierFromPages(ports, input, pages);
+}
+
+/**
+ * What the pages of a site literally say, as a dossier: every fact recorded
+ * as evidence that quotes the page it came from.
+ */
+export async function dossierFromPages(
+    ports: Pick<DossierAgentPorts, "recordEvidence">,
+    input: DossierAgentInput,
+    pages: readonly ReadablePage[]
+): Promise<DossierAgentResult> {
+    const fetched = new Set<string>();
+    for (const page of pages) {
+        fetched.add(normalizeUrlForMatch(page.finalUrl));
+        fetched.add(normalizeUrlForMatch(page.url));
+    }
+    const fetchedUrls = pages.map(page => page.finalUrl);
+    const evidence = new Map<number, RecordedEvidence>();
 
     const finish = (outcome: DossierAgentResult["outcome"]): DossierAgentResult => ({
         outcome,

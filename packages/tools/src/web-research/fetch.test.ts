@@ -7,6 +7,7 @@ import { describe, expect, it, vi } from "vitest";
 import {
     UnsafeUrlError,
     assertPublicUrl,
+    extractPageLinks,
     fetchReadable,
     htmlToReadableText,
     isPrivateAddress,
@@ -92,6 +93,61 @@ describe("htmlToReadableText", () => {
     });
 });
 
+describe("extractPageLinks", () => {
+    it("keeps each link's target and words, with relative targets resolved", () => {
+        const html = `
+            <nav>
+              <a href="/kontakt">Kontakt</a>
+              <a class="item" href='about-us/#team'>About <b>us</b></a>
+              <a href="https://other.example/shop">Shop</a>
+              <a href="/ueber-uns">&Uuml;ber&nbsp;uns</a>
+              <a href="/team" aria-label="Our team"><svg><title>icon</title></svg></a>
+              <a href="/jobs"><img src="j.png" alt="Careers"></a>
+              <a href="/bare"></a>
+            </nav>`;
+        expect(extractPageLinks(html, "https://acme.example/de/")).toEqual([
+            { url: "https://acme.example/kontakt", text: "Kontakt" },
+            { url: "https://acme.example/de/about-us/", text: "About us" },
+            { url: "https://other.example/shop", text: "Shop" },
+            { url: "https://acme.example/ueber-uns", text: "Über uns" },
+            { url: "https://acme.example/team", text: "Our team" },
+            { url: "https://acme.example/jobs", text: "Careers" },
+            { url: "https://acme.example/bare", text: "" },
+        ]);
+    });
+
+    it("leaves out what a reader cannot go to", () => {
+        const html = `
+            <a href="#top">Back to top</a>
+            <a href="mailto:info@acme.example">Mail us</a>
+            <a href="tel:+31201234567">Call us</a>
+            <a href="javascript:void(0)">Menu</a>
+            <a name="anchor">No target</a>
+            <script>document.write('<a href="/from-script">x</a>')</script>
+            <!-- <a href="/commented-out">x</a> -->
+            <a href="/real">Real</a>`;
+        expect(extractPageLinks(html, "https://acme.example/")).toEqual([
+            { url: "https://acme.example/real", text: "Real" },
+        ]);
+    });
+
+    it("resolves against the page's base, and stops at the cap", () => {
+        expect(
+            extractPageLinks(
+                '<head><base href="https://acme.example/nl/"></head><a href="contact.html">Contact</a>',
+                "https://acme.example/"
+            )
+        ).toEqual([{ url: "https://acme.example/nl/contact.html", text: "Contact" }]);
+        const many = Array.from({ length: 10 }, (_, i) => `<a href="/p${i}">P${i}</a>`).join("");
+        expect(extractPageLinks(many, "https://acme.example/", 3).map(l => l.url)).toEqual([
+            "https://acme.example/p0",
+            "https://acme.example/p1",
+            "https://acme.example/p2",
+        ]);
+        expect(extractPageLinks("<a href='/x'>x</a>", "not a url")).toEqual([]);
+    });
+});
+
 describe("fetchReadable", () => {
     function fakeFetch(routes: Record<string, () => Response>): typeof fetch {
         return (async (input: RequestInfo | URL) => {
@@ -124,6 +180,38 @@ describe("fetchReadable", () => {
         expect(page.title).toBe("B");
         expect(page.text).toBe("Hello world");
         expect(page.truncated).toBe(false);
+    });
+
+    it("keeps the page's links beside its text, resolved against the URL that answered", async () => {
+        const fetchImpl = fakeFetch({
+            "https://example.com/": () =>
+                new Response(null, { status: 301, headers: { location: "/nl/" } }),
+            "https://example.com/nl/": () =>
+                new Response(
+                    '<html><body><p>Welkom</p><a href="contact">Neem contact op</a> <a href="https://partner.example/">Partner</a></body></html>',
+                    { status: 200, headers: { "content-type": "text/html" } }
+                ),
+            "https://example.com/data.json": () =>
+                new Response('{"html":"<a href=\\"/x\\">x</a>"}', {
+                    status: 200,
+                    headers: { "content-type": "application/json" },
+                }),
+        });
+        const page = await fetchReadable("https://example.com/", {
+            fetchImpl,
+            lookup: publicLookup,
+        });
+        expect(page.links).toEqual([
+            { url: "https://example.com/nl/contact", text: "Neem contact op" },
+            { url: "https://partner.example/", text: "Partner" },
+        ]);
+        // The text is what it was before links were kept: a relative target is not written into it.
+        expect(page.text).toBe("Welkom\nNeem contact op Partner (https://partner.example/)");
+        const data = await fetchReadable("https://example.com/data.json", {
+            fetchImpl,
+            lookup: publicLookup,
+        });
+        expect(data.links).toBeUndefined();
     });
 
     it("refuses a redirect into a private network", async () => {

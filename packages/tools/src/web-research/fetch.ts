@@ -10,7 +10,9 @@
  *    cannot reach an internal service;
  *  - redirects are followed manually, at most three, each re-checked;
  *  - bodies are capped (2 MB default) and the cap is reported, not hidden;
- *  - scripts, styles and markup are stripped; whitespace is collapsed.
+ *  - scripts, styles and markup are stripped; whitespace is collapsed;
+ *  - the page's links are kept beside the text, each with its target and
+ *    its words, so a caller can follow a site's own navigation.
  *
  * Page content is *data*. Callers hand it to a model as untrusted text.
  */
@@ -21,6 +23,17 @@ import { Agent, fetch as undiciFetch } from "undici";
 
 import { ToolError } from "../contract";
 
+/** One link of a fetched page. */
+export interface PageLink {
+    /** Where it points: an absolute http(s) URL, without its fragment. */
+    url: string;
+    /**
+     * The link's words: its visible text, or for an icon link its aria-label,
+     * title or image alt. Empty when it has none.
+     */
+    text: string;
+}
+
 export interface ReadablePage {
     /** The URL requested. */
     url: string;
@@ -30,6 +43,14 @@ export interface ReadablePage {
     contentType: string | null;
     title: string | null;
     text: string;
+    /**
+     * Every link of the page in document order, relative targets resolved
+     * against the URL that answered. `text` keeps a link's words but only an
+     * absolute target, so the page's own navigation is read from here. Absent
+     * when the response was not HTML, or when a page did not come from
+     * `fetchReadable`.
+     */
+    links?: PageLink[];
     /** True when the body was cut at `maxBytes`. */
     truncated: boolean;
     fetchedAt: string;
@@ -294,6 +315,131 @@ export function htmlToReadableText(html: string): { title: string | null; text: 
     return { title, text };
 }
 
+/**
+ * Named entities that turn up in link words (German, Scandinavian, Dutch and
+ * French navigation, and the arrows around "next"). `decodeEntities` handles
+ * the numeric ones.
+ */
+const LINK_TEXT_ENTITIES: Record<string, string> = {
+    uuml: "ü",
+    Uuml: "Ü",
+    ouml: "ö",
+    Ouml: "Ö",
+    auml: "ä",
+    Auml: "Ä",
+    szlig: "ß",
+    oslash: "ø",
+    Oslash: "Ø",
+    aring: "å",
+    Aring: "Å",
+    aelig: "æ",
+    AElig: "Æ",
+    eacute: "é",
+    Eacute: "É",
+    egrave: "è",
+    Egrave: "È",
+    euml: "ë",
+    iuml: "ï",
+    raquo: " ",
+    laquo: " ",
+    rsaquo: " ",
+    lsaquo: " ",
+    ndash: "-",
+    mdash: "-",
+};
+
+function decodeLinkText(text: string): string {
+    return decodeEntities(text).replace(
+        /&([a-z]+);/gi,
+        (whole, name: string) =>
+            LINK_TEXT_ENTITIES[name] ?? LINK_TEXT_ENTITIES[name.toLowerCase()] ?? whole
+    );
+}
+
+const ATTRIBUTE_PATTERNS = new Map<string, RegExp>();
+
+/** The decoded value of one attribute of a tag, or null when the tag does not carry it. */
+function attributeValue(attributes: string, name: string): string | null {
+    let pattern = ATTRIBUTE_PATTERNS.get(name);
+    if (!pattern) {
+        pattern = new RegExp(`(?:^|\\s)${name}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s"'>]+))`, "i");
+        ATTRIBUTE_PATTERNS.set(name, pattern);
+    }
+    const match = pattern.exec(attributes);
+    if (!match) return null;
+    return decodeLinkText(match[1] ?? match[2] ?? match[3] ?? "").trim();
+}
+
+function firstNonEmpty(...values: Array<string | null>): string {
+    for (const value of values) if (value) return value;
+    return "";
+}
+
+/** The most links kept per page; far above any real navigation. */
+export const MAX_PAGE_LINKS = 5_000;
+
+/**
+ * HTML → the page's links, in document order, one entry per `<a href>`.
+ *
+ * Relative targets are resolved against `pageUrl` (or the page's `<base>`),
+ * fragments are dropped, and only http(s) targets are kept: a link to a place
+ * on the same page, a `mailto:` or a script is not somewhere a reader can go.
+ * A link drawn as an icon has no text of its own, so its aria-label, title or
+ * image alt stands in.
+ */
+export function extractPageLinks(
+    html: string,
+    pageUrl: string,
+    maxLinks: number = MAX_PAGE_LINKS
+): PageLink[] {
+    let page: URL;
+    try {
+        page = new URL(pageUrl);
+    } catch {
+        return [];
+    }
+    const body = html
+        .replace(/<!--[\s\S]*?-->/g, " ")
+        .replace(/<(script|style|template|svg)\b[^>]*>[\s\S]*?<\/\1>/gi, " ");
+    let base = page;
+    const baseTag = /<base\b([^>]*)>/i.exec(body);
+    const baseHref = baseTag ? attributeValue(baseTag[1] ?? "", "href") : null;
+    if (baseHref) {
+        try {
+            base = new URL(baseHref, page);
+        } catch {
+            base = page;
+        }
+    }
+    const links: PageLink[] = [];
+    for (const match of body.matchAll(/<a\b([^>]*)>([\s\S]{0,4000}?)<\/a\s*>/gi)) {
+        if (links.length >= maxLinks) break;
+        const attributes = match[1] ?? "";
+        const href = attributeValue(attributes, "href");
+        if (!href || href.startsWith("#")) continue;
+        let target: URL;
+        try {
+            target = new URL(href, base);
+        } catch {
+            continue;
+        }
+        if (target.protocol !== "http:" && target.protocol !== "https:") continue;
+        target.hash = "";
+        const inner = match[2] ?? "";
+        const visible = decodeLinkText(inner.replace(/<[^>]*>/g, " "))
+            .replace(/\s+/g, " ")
+            .trim();
+        const text = firstNonEmpty(
+            visible,
+            attributeValue(attributes, "aria-label"),
+            attributeValue(attributes, "title"),
+            attributeValue(/<img\b([^>]*)>/i.exec(inner)?.[1] ?? "", "alt")
+        );
+        links.push({ url: target.href, text });
+    }
+    return links;
+}
+
 async function readBodyCapped(
     response: Response,
     maxBytes: number
@@ -406,6 +552,7 @@ export async function fetchReadable(
                 contentType,
                 title: readable.title,
                 text: readable.text,
+                ...(isHtml ? { links: extractPageLinks(raw, current.toString()) } : {}),
                 truncated,
                 fetchedAt: new Date().toISOString(),
             };

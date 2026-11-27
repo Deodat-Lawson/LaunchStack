@@ -107,18 +107,73 @@ export function isPrivateAddress(address: string): boolean {
         return PRIVATE_V4.some(([base, bits]) => inCidr(ip, base, bits));
     }
     if (kind === 6) {
-        const lower = address.toLowerCase();
-        if (lower === "::" || lower === "::1") return true;
-        // IPv4-mapped (::ffff:a.b.c.d) — judge the embedded v4.
-        const mapped = /^::ffff:(\d{1,3}(?:\.\d{1,3}){3})$/.exec(lower);
-        if (mapped) return isPrivateAddress(mapped[1]!);
-        if (lower.startsWith("fc") || lower.startsWith("fd")) return true; // fc00::/7
-        if (/^fe[89ab]/.test(lower)) return true; // fe80::/10
-        if (lower.startsWith("ff")) return true; // multicast
-        if (lower.startsWith("2001:db8")) return true; // documentation
+        const words = ipv6Words(address);
+        if (!words) return true; // unparseable: fail closed
+        if (words.every(w => w === 0)) return true; // :: unspecified
+        if (words.slice(0, 7).every(w => w === 0) && words[7] === 1) return true; // ::1
+        // An address that carries an IPv4 is judged by that IPv4, whatever
+        // the notation: `new URL("http://[::ffff:127.0.0.1]/")` hands back
+        // the host as `::ffff:7f00:1`, which a dotted-only check let through.
+        const v4 = embeddedIPv4(words);
+        if (v4) return isPrivateAddress(v4);
+        const first = words[0]!;
+        if ((first & 0xfe00) === 0xfc00) return true; // fc00::/7 unique local
+        if ((first & 0xffc0) === 0xfe80) return true; // fe80::/10 link-local
+        if ((first & 0xffc0) === 0xfec0) return true; // fec0::/10 site-local (deprecated)
+        if ((first & 0xff00) === 0xff00) return true; // ff00::/8 multicast
+        if (first === 0x2001 && words[1] === 0x0db8) return true; // 2001:db8::/32 documentation
         return false;
     }
     return true;
+}
+
+/**
+ * An IPv6 literal as its eight 16-bit words: `::` expanded, a dotted IPv4
+ * tail (`::ffff:127.0.0.1`) folded into two words, a zone (`%eth0`) dropped,
+ * any case. Null when it is not an IPv6 address.
+ */
+function ipv6Words(address: string): number[] | null {
+    let hex = address.split("%")[0]!.toLowerCase();
+    if (isIP(hex) !== 6) return null;
+    const tail = /^(.*:)(\d{1,3}(?:\.\d{1,3}){3})$/.exec(hex);
+    if (tail) {
+        const octets = tail[2]!.split(".").map(Number);
+        if (octets.some(o => o > 255)) return null;
+        const [o1, o2, o3, o4] = octets as [number, number, number, number];
+        hex = `${tail[1]}${((o1 << 8) | o2).toString(16)}:${((o3 << 8) | o4).toString(16)}`;
+    }
+    const halves = hex.split("::");
+    if (halves.length > 2) return null;
+    const groups = (part: string) => (part === "" ? [] : part.split(":").map(g => parseInt(g, 16)));
+    let words: number[];
+    if (halves.length === 2) {
+        const left = groups(halves[0]!);
+        const right = groups(halves[1]!);
+        const fill = 8 - left.length - right.length;
+        if (fill < 0) return null;
+        words = [...left, ...new Array<number>(fill).fill(0), ...right];
+    } else {
+        words = groups(hex);
+    }
+    if (words.length !== 8 || words.some(w => Number.isNaN(w) || w < 0 || w > 0xffff)) return null;
+    return words;
+}
+
+/**
+ * The IPv4 an IPv6 address stands for, when it is in a prefix that embeds
+ * one: IPv4-mapped `::ffff:0:0/96`, IPv4-compatible `::/96`, NAT64
+ * `64:ff9b::/96` (all in the low 32 bits) and 6to4 `2002::/16` (bits 16–47).
+ */
+function embeddedIPv4(words: number[]): string | null {
+    const dotted = (hi: number, lo: number) => `${hi >> 8}.${hi & 0xff}.${lo >> 8}.${lo & 0xff}`;
+    const zeros = (from: number, to: number) => words.slice(from, to).every(w => w === 0);
+    if (zeros(0, 5) && words[5] === 0xffff) return dotted(words[6]!, words[7]!); // mapped
+    if (zeros(0, 6)) return dotted(words[6]!, words[7]!); // compatible
+    if (words[0] === 0x0064 && words[1] === 0xff9b && zeros(2, 6)) {
+        return dotted(words[6]!, words[7]!); // NAT64
+    }
+    if (words[0] === 0x2002) return dotted(words[1]!, words[2]!); // 6to4
+    return null;
 }
 
 const defaultLookup: HostLookup = async hostname => {

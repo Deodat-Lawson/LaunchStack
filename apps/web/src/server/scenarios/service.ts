@@ -283,8 +283,8 @@ function cleanSources(raw: Partial<ScenarioSourcesInput> | undefined): ScenarioS
 }
 
 /**
- * The sources a run may read: well-formed, within limits, without Growth's
- * sources while beta apps are off, and only files the creator can open
+ * The sources a run may read: well-formed, within limits, without Brand's
+ * post comments while beta apps are off, and only files the creator can open
  * (dropped here and again when evidence is gathered).
  */
 export async function cleanScenarioSources(
@@ -292,10 +292,10 @@ export async function cleanScenarioSources(
     raw: Partial<ScenarioSourcesInput> | undefined
 ): Promise<ScenarioSourcesInput> {
     const sources = cleanSources(raw);
-    // Prospects and post comments are Growth's: not read while the workspace
-    // has its beta apps off, whatever the form sent.
-    if ((sources.prospects || sources.brandComments) && !(await betaAppsOn(ctx.companyId))) {
-        sources.prospects = false;
+    // Comments on your posts are Brand's, still being built: not read while
+    // the workspace has its beta apps off, whatever the form sent. Prospects
+    // is for every workspace.
+    if (sources.brandComments && !(await betaAppsOn(ctx.companyId))) {
         sources.brandComments = false;
     }
     if (sources.documentIds.length > SCENARIO_LIMITS.documentsMax) {
@@ -488,7 +488,7 @@ export async function scenarioSourceOptions(ctx: Ctx): Promise<ScenarioSourceOpt
             status: fileStatus(d),
             aboutCompany: isCounted(d),
         })),
-        prospects: betaApps ? (prospects?.n ?? 0) : 0,
+        prospects: prospects?.n ?? 0,
         brandComments: betaApps ? (comments?.n ?? 0) : 0,
         companyProfile: (profile?.n ?? 0) > 0,
         canUpload: ctx.can("documents.upload"),

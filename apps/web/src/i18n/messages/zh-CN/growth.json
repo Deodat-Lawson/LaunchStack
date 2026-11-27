@@ -21,7 +21,11 @@
       "segment": "细分市场",
       "sources": "来源"
     },
-    "notFoundHome": "品牌概览"
+    "notFoundHome": "潜在客户",
+    "brandOff": {
+      "title": "品牌是测试版应用",
+      "body": "本工作区已关闭测试版应用。管理工作区的人可以在“工作区 › 实验室”中开启。潜在客户对所有人开放。"
+    }
   },
   "common": {
     "listSeparator": "、",

@@ -157,7 +157,7 @@ export function CommandPalette({
     const { can } = usePermissions();
     // Brand and Prospects rows are Growth's, so they go with it while the
     // workspace's beta switch is off.
-    const { canOpen } = useStudioAccess();
+    const { canOpen, canOpenPlace } = useStudioAccess();
     const [idx, setIdx] = useState(0);
     const inputRef = useRef<HTMLInputElement>(null);
 
@@ -213,10 +213,10 @@ export function CommandPalette({
                 if (!can(f.requires)) return false;
                 const app = resolveStudioFeature(f.id);
                 if (app) return canOpen(app);
-                // A row for a place inside a beta app (Brand, Prospects) goes
-                // with the app while the workspace has beta apps off.
-                const host = studioAppFor(f.id);
-                if (host?.beta && !canOpen(host)) return false;
+                // A row for a place inside an app goes with the app, and a
+                // place still being built (Brand, inside Growth) with the
+                // workspace's beta switch. Prospects is for everyone.
+                if (studioAppFor(f.id) && !canOpenPlace(f.id)) return false;
                 const section = settingsSectionOfHref(f.href);
                 return section ? canSeeSettingsSection(section, can) : true;
             })
@@ -362,6 +362,7 @@ export function CommandPalette({
         people,
         can,
         canOpen,
+        canOpenPlace,
         t,
         studio,
         tSourceTypes,

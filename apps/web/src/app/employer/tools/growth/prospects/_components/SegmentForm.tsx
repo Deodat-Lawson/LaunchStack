@@ -8,12 +8,22 @@ import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import { Spinner } from "~/components/ui/spinner";
 import { Textarea } from "~/components/ui/textarea";
+import {
+    SEGMENT_LIMITS,
+    fitSegmentName,
+    segmentLimitProblems,
+    type SegmentLimitProblem,
+} from "~/lib/prospects/segment-limits";
 import { useResource } from "~/lib/tools/useResource";
+import { cn } from "~/lib/utils";
 
 import { prospectsApi, type NewSegmentInput } from "../api";
 
 /** Either comma: people typing Chinese reach for the full-width one. */
 const LIST_SPLIT = /[,，、]/;
+
+/** "What you sell" shows how much it holds from this share of its limit on. */
+const COUNT_FROM = 0.8;
 
 /**
  * Who you sell to, in three answers: what you sell, who buys it, and where.
@@ -60,15 +70,34 @@ export function SegmentForm({
         .split(/[;\n]+/)
         .map(s => s.trim())
         .filter(Boolean);
-    const valid = offering.trim().length > 0 && industries.length > 0 && places.length > 0;
+    // Over a limit says so beside the answer, before anything is sent.
+    const problems = segmentLimitProblems({ offering: offering.trim(), industries, places });
+    const problemFor = (field: SegmentLimitProblem["field"]) =>
+        problems.find(p => p.field === field);
+    const problemText = (problem: SegmentLimitProblem) =>
+        t(problem.key, { count: problem.count, max: problem.max });
+    const buyersProblem = problemFor("buyers");
+    const placesProblem = problemFor("places");
+    const offeringProblem = problemFor("offering");
+    const offeringLength = offering.trim().length;
+    const showCount = offeringLength >= SEGMENT_LIMITS.offering * COUNT_FROM;
+
+    const valid =
+        offering.trim().length > 0 &&
+        industries.length > 0 &&
+        places.length > 0 &&
+        problems.length === 0;
 
     const submit = () => {
         if (!valid || busy) return;
         onSubmit({
-            name: t("defaultName", {
-                buyers: industries.slice(0, 2).join(", "),
-                where: places[0]!,
-            }),
+            // Made from the answers, so cut to fit rather than refused.
+            name: fitSegmentName(
+                t("defaultName", {
+                    buyers: industries.slice(0, 2).join(", "),
+                    where: places[0]!,
+                })
+            ),
             offering: offering.trim(),
             industries,
             places,
@@ -93,10 +122,15 @@ export function SegmentForm({
                     onChange={e => setBuyers(e.target.value)}
                     placeholder={t("buyersPlaceholder")}
                     autoFocus={autoFocus}
+                    aria-invalid={buyersProblem ? true : undefined}
                     aria-describedby={`${idPrefix}-buyers-hint`}
                 />
-                <p id={`${idPrefix}-buyers-hint`} className="text-ink-3 text-xs">
-                    {t("buyersHint")}
+                <p
+                    id={`${idPrefix}-buyers-hint`}
+                    className={cn("text-xs", buyersProblem ? "text-danger" : "text-ink-3")}
+                    role={buyersProblem ? "alert" : undefined}
+                >
+                    {buyersProblem ? problemText(buyersProblem) : t("buyersHint")}
                 </p>
             </div>
             <div className="grid gap-1.5">
@@ -111,12 +145,19 @@ export function SegmentForm({
                         setTouched(v => ({ ...v, where: true }));
                     }}
                     placeholder={t("wherePlaceholder")}
+                    aria-invalid={placesProblem ? true : undefined}
                     aria-describedby={`${idPrefix}-where-hint`}
                 />
-                <p id={`${idPrefix}-where-hint`} className="text-ink-3 text-xs">
-                    {draft?.basis.headquarters && !touched.where
-                        ? t("whereFromProfile")
-                        : t("whereHint")}
+                <p
+                    id={`${idPrefix}-where-hint`}
+                    className={cn("text-xs", placesProblem ? "text-danger" : "text-ink-3")}
+                    role={placesProblem ? "alert" : undefined}
+                >
+                    {placesProblem
+                        ? problemText(placesProblem)
+                        : draft?.basis.headquarters && !touched.where
+                          ? t("whereFromProfile")
+                          : t("whereHint")}
                 </p>
             </div>
             <div className="grid gap-1.5">
@@ -132,13 +173,36 @@ export function SegmentForm({
                         setTouched(v => ({ ...v, offering: true }));
                     }}
                     placeholder={t("offeringPlaceholder")}
+                    aria-invalid={offeringProblem ? true : undefined}
                     aria-describedby={`${idPrefix}-offering-hint`}
                 />
-                <p id={`${idPrefix}-offering-hint`} className="text-ink-3 text-xs">
-                    {draft?.basis.profile && !touched.offering
-                        ? t("offeringFromProfile")
-                        : t("offeringHint")}
-                </p>
+                <div className="flex items-start justify-between gap-3">
+                    <p
+                        id={`${idPrefix}-offering-hint`}
+                        className={cn("text-xs", offeringProblem ? "text-danger" : "text-ink-3")}
+                        role={offeringProblem ? "alert" : undefined}
+                    >
+                        {offeringProblem
+                            ? problemText(offeringProblem)
+                            : draft?.basis.profile && !touched.offering
+                              ? t("offeringFromProfile")
+                              : t("offeringHint")}
+                    </p>
+                    {showCount && (
+                        <span
+                            data-testid={`${idPrefix}-offering-count`}
+                            className={cn(
+                                "shrink-0 text-xs tabular-nums",
+                                offeringProblem ? "text-danger" : "text-ink-3"
+                            )}
+                        >
+                            {t("offeringCount", {
+                                count: offeringLength,
+                                max: SEGMENT_LIMITS.offering,
+                            })}
+                        </span>
+                    )}
+                </div>
             </div>
             <div className="flex items-center justify-end gap-2">
                 <Button type="submit" size="sm" disabled={!valid || busy}>

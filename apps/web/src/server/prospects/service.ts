@@ -72,6 +72,7 @@ import { db } from "~/server/db";
 import { companyMetadata } from "~/server/db/schema";
 import { copy, isCopy, type Copy } from "~/i18n/copy";
 import { englishCopy } from "~/i18n/translate";
+import { segmentLimitProblems } from "~/lib/prospects/segment-limits";
 
 import {
     FIT_THRESHOLD,
@@ -300,6 +301,17 @@ function parseTerritory(value: string): Territory | null {
     return region ? { country: country.toUpperCase(), region } : { country: country.toUpperCase() };
 }
 
+/** Refuses an edit over the limits a new segment has, naming the answer and the limit. */
+function tooLongForSegment(answers: Parameters<typeof segmentLimitProblems>[0]): void {
+    const [problem] = segmentLimitProblems(answers);
+    if (!problem) return;
+    throw new ProspectsError(
+        copy(`growth.server.errors.${problem.key}`, { count: problem.count, max: problem.max }),
+        400,
+        { field: problem.field }
+    );
+}
+
 export async function patchSegment(
     ctx: ProspectsCtx,
     programId: string,
@@ -316,10 +328,14 @@ export async function patchSegment(
         const text = Array.isArray(value) ? value.join(", ") : value;
         switch (key) {
             case "offering":
-                if (text.trim()) patch.offering = text.trim();
+                if (text.trim()) {
+                    tooLongForSegment({ offering: text.trim() });
+                    patch.offering = text.trim();
+                }
                 break;
             case "industries":
-                patch.categories = list.slice(0, 20);
+                tooLongForSegment({ industries: list });
+                patch.categories = list;
                 break;
             case "geographies": {
                 const territories = list

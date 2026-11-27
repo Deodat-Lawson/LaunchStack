@@ -24,6 +24,8 @@ import type {
     StepStatus,
     TodoItem,
 } from "~/app/employer/tools/growth/prospects/api";
+import { translatorFor } from "~/i18n/translate";
+import { fitSegmentName, segmentLimitProblems } from "~/lib/prospects/segment-limits";
 
 import {
     COMPANIES,
@@ -711,13 +713,31 @@ export async function simulate(url: string, init?: RequestInit): Promise<Respons
     // /segments
     if (parts[0] === "segments") {
         if (parts.length === 1 && method === "POST") {
+            // Refuses what the route refuses, in its words.
+            const say = translatorFor("en", "growth.server.errors");
             const body = await readBody(init);
-            const name = typeof body.name === "string" ? body.name.trim() : "";
+            const list = (value: unknown) =>
+                Array.isArray(value)
+                    ? (value as unknown[])
+                          .filter((v): v is string => typeof v === "string")
+                          .map(v => v.trim())
+                          .filter(Boolean)
+                    : [];
+            const name = fitSegmentName(typeof body.name === "string" ? body.name : "");
             const offering = typeof body.offering === "string" ? body.offering.trim() : "";
-            const industries = Array.isArray(body.industries) ? (body.industries as string[]) : [];
-            const countries = Array.isArray(body.countries) ? (body.countries as string[]) : [];
-            if (!name || !offering || countries.length === 0)
-                return err(400, "Name, what you sell and at least one country are required");
+            const industries = list(body.industries);
+            const countries = [...list(body.countries), ...list(body.places)];
+            if (!name || !offering) return err(400, say("newSegmentRequired"));
+            const [problem] = segmentLimitProblems({
+                offering,
+                industries,
+                places: list(body.places),
+            });
+            if (problem)
+                return err(400, say(problem.key, { count: problem.count, max: problem.max }), {
+                    field: problem.field,
+                });
+            if (countries.length === 0) return err(400, say("sayWhere"), { field: "places" });
             const seg: WorldSegment = {
                 id: `seg-${store.seq++}`,
                 name,

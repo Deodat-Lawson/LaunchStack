@@ -96,3 +96,41 @@ describe("patchSegment seedDomains", () => {
         });
     });
 });
+
+describe("patchSegment long answers", () => {
+    it("refuses “What you sell” over its limit, naming it, and saves nothing", async () => {
+        const refused = await patchSegment(ctx, "prog-1", {
+            offering: "x".repeat(4_321),
+        }).catch((e: unknown) => e);
+        expect(refused).toMatchObject({
+            status: 400,
+            message: "“What you sell” is 4,321 characters; it can be up to 4,000.",
+            extra: { field: "offering" },
+        });
+        expect(mockUpdateProgram).not.toHaveBeenCalled();
+    });
+
+    it("refuses a kind of buyer over its limit, and more kinds than fit", async () => {
+        await expect(
+            patchSegment(ctx, "prog-1", { industries: ["restaurants", "y".repeat(250)] })
+        ).rejects.toMatchObject({
+            status: 400,
+            message:
+                "Each kind of buyer can be up to 200 characters; one is 250. Separate kinds with commas.",
+        });
+        await expect(
+            patchSegment(ctx, "prog-1", {
+                industries: Array.from({ length: 21 }, (_, i) => `kind ${i}`),
+            })
+        ).rejects.toMatchObject({
+            message: "Up to 20 kinds of buyer fit in one segment; this has 21.",
+        });
+    });
+
+    it("saves long answers that fit", async () => {
+        await patchSegment(ctx, "prog-1", { offering: "x".repeat(4_000) });
+        expect(mockUpdateProgram).toHaveBeenCalledWith("prog-1", 1n, {
+            offering: "x".repeat(4_000),
+        });
+    });
+});

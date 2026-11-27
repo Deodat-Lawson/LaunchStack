@@ -380,7 +380,13 @@
       "offeringFromProfile": "Drafted from your company profile. Edit it to fit this group of customers.",
       "submit": "Find companies",
       "failed": "Could not start the search",
-      "defaultName": "{buyers} · {where}"
+      "defaultName": "{buyers} · {where}",
+      "buyerTooLong": "One kind of buyer is {count, number} characters; each can be up to {max, number}. Separate kinds with commas.",
+      "buyersTooMany": "{count, number} kinds of buyer; up to {max, number} fit in one segment.",
+      "placeTooLong": "One place is {count, number} characters; each can be up to {max, number}. Separate places with “;”.",
+      "placesTooMany": "{count, number} places; up to {max, number} fit in one segment.",
+      "offeringTooLong": "{count, number} characters; this can be up to {max, number}.",
+      "offeringCount": "{count, number} / {max, number}"
     }
   },
   "brand": {
@@ -1142,7 +1148,12 @@
       "newSegmentRequired": "Name, what you sell and where to look are required",
       "sourceSettingsLater": "Source settings arrive with the source registry; keys in the environment decide for now",
       "customerDomainInvalid": "“{value}” is not a website. Use a domain such as acme.com.",
-      "customerDomainsTooMany": "List up to {max} customer websites."
+      "customerDomainsTooMany": "List up to {max} customer websites.",
+      "offeringTooLong": "“What you sell” is {count, number} characters; it can be up to {max, number}.",
+      "buyerTooLong": "Each kind of buyer can be up to {max, number} characters; one is {count, number}. Separate kinds with commas.",
+      "buyersTooMany": "Up to {max, number} kinds of buyer fit in one segment; this has {count, number}.",
+      "placeTooLong": "Each place can be up to {max, number} characters; one is {count, number}. Separate places with “;”.",
+      "placesTooMany": "Up to {max, number} places fit in one segment; this has {count, number}."
     },
     "stageErrors": {
       "unknownStage": "Unknown stage \"{to}\".",

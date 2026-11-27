@@ -28,6 +28,7 @@ const SEARCH_ENV = [
     "SERPER_API_KEY",
     "BRAVE_SEARCH_API_KEY",
     "TAVILY_API_KEY",
+    "SEARCHAPI_API_KEY",
     "SEARXNG_URL",
 ] as const;
 const ORIGINAL_ENV = Object.fromEntries(SEARCH_ENV.map(name => [name, process.env[name]]));

@@ -9,6 +9,7 @@ const CREDENTIALS = {
     serper: ["SERPER_API_KEY", "serper-test"],
     brave: ["BRAVE_SEARCH_API_KEY", "brave-test"],
     tavily: ["TAVILY_API_KEY", "tvly-test"],
+    searchapi: ["SEARCHAPI_API_KEY", "searchapi-test"],
     searxng: ["SEARXNG_URL", "http://searxng:8080"],
 } as const;
 
@@ -81,9 +82,11 @@ describe("resolveSearchSetup", () => {
         });
     });
 
-    it("picks the first configured provider when unset: exa, serper, brave, tavily, searxng", () => {
+    it("picks the first configured provider when unset: exa, serper, brave, tavily, searchapi, searxng", () => {
         configure("searxng");
         expect(resolveSearchSetup().provider?.id).toBe("searxng");
+        configure("searchapi");
+        expect(resolveSearchSetup().provider?.id).toBe("searchapi");
         configure("tavily");
         expect(resolveSearchSetup().provider?.id).toBe("tavily");
         configure("brave");
@@ -142,6 +145,7 @@ describe("describeSearchSetup", () => {
             ["serper", true, false],
             ["brave", false, false],
             ["tavily", false, false],
+            ["searchapi", false, false],
             ["searxng", false, false],
         ]);
         expect(JSON.stringify(view)).not.toContain("exa-test");

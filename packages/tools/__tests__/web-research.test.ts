@@ -56,6 +56,7 @@ describe("executeSearch", () => {
             "SERPER_API_KEY",
             "BRAVE_SEARCH_API_KEY",
             "TAVILY_API_KEY",
+            "SEARCHAPI_API_KEY",
             "SEARXNG_URL",
         ]) {
             vi.stubEnv(name, "");

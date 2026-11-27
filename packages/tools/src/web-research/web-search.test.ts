@@ -16,6 +16,7 @@ const SEARCH_ENV = [
     "SERPER_API_KEY",
     "BRAVE_SEARCH_API_KEY",
     "TAVILY_API_KEY",
+    "SEARCHAPI_API_KEY",
     "SEARXNG_URL",
 ] as const;
 
@@ -309,6 +310,7 @@ describe("counting searches", () => {
         vi.stubEnv("SERPER_API_KEY", "serper-test");
         vi.stubEnv("BRAVE_SEARCH_API_KEY", "brave-test");
         vi.stubEnv("TAVILY_API_KEY", "tvly-test");
+        vi.stubEnv("SEARCHAPI_API_KEY", "searchapi-test");
         vi.stubEnv("SEARXNG_URL", "http://searxng:8080");
     });
     afterEach(() => {
@@ -348,7 +350,7 @@ describe("counting searches", () => {
         );
 
         const { events, error } = await counting(async () => {
-            for (const engine of ["exa", "serper", "brave", "tavily", "searxng"]) {
+            for (const engine of ["exa", "serper", "brave", "tavily", "searchapi", "searxng"]) {
                 vi.stubEnv("SEARCH_PROVIDER", engine);
                 await searchWeb("q", { fetchImpl });
             }
@@ -362,6 +364,7 @@ describe("counting searches", () => {
             searched("serper"),
             searched("brave"),
             searched("tavily"),
+            searched("searchapi"),
             searched("searxng"),
             searched("exa"),
         ]);

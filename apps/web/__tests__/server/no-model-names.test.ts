@@ -44,6 +44,7 @@ const SEARCH_ENV = [
     "SERPER_API_KEY",
     "BRAVE_SEARCH_API_KEY",
     "TAVILY_API_KEY",
+    "SEARCHAPI_API_KEY",
     "SEARXNG_URL",
 ] as const;
 const EXA_KEY = "exa-secret-key-1234";
@@ -241,6 +242,7 @@ describe("Models › web search", () => {
             ["serper", false],
             ["brave", false],
             ["tavily", false],
+            ["searchapi", false],
             ["searxng", true],
         ]);
         expect(webSearchOverview().providers.filter(engine => engine.companies)).toEqual([

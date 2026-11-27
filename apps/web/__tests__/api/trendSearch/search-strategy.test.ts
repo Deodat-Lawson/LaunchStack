@@ -3,7 +3,7 @@
  * Feature: provider-agnostic web search — one SEARCH_PROVIDER for every feature.
  *
  *  - Unset: the first configured provider wins, in the order
- *    exa → serper → brave → tavily → searxng.
+ *    exa → serper → brave → tavily → searchapi → searxng.
  *  - Named and configured: that provider, whatever else is configured.
  *  - Named without its credential: search is off (providerUsed "none", no
  *    request), never a quiet switch to another engine.
@@ -28,6 +28,7 @@ const SEARCH_ENV = [
     "SERPER_API_KEY",
     "BRAVE_SEARCH_API_KEY",
     "TAVILY_API_KEY",
+    "SEARCHAPI_API_KEY",
     "SEARXNG_URL",
 ] as const;
 const ORIGINAL_ENV = Object.fromEntries(SEARCH_ENV.map(name => [name, process.env[name]]));
@@ -39,6 +40,7 @@ const CREDENTIALS: Record<SearchProviderId, readonly [string, string]> = {
     serper: ["SERPER_API_KEY", "test-serper-key"],
     brave: ["BRAVE_SEARCH_API_KEY", "test-brave-key"],
     tavily: ["TAVILY_API_KEY", "test-tavily-key"],
+    searchapi: ["SEARCHAPI_API_KEY", "test-searchapi-key"],
     searxng: ["SEARXNG_URL", SEARXNG_BASE],
 };
 
@@ -60,6 +62,7 @@ function providerOf(url: string): SearchProviderId | null {
     if (url.startsWith("https://google.serper.dev/")) return "serper";
     if (url.startsWith("https://api.search.brave.com/")) return "brave";
     if (url === "https://api.tavily.com/search") return "tavily";
+    if (url.startsWith("https://www.searchapi.io/")) return "searchapi";
     if (url.startsWith(`${SEARXNG_BASE}/`)) return "searxng";
     return null;
 }
@@ -76,6 +79,8 @@ function answerFor(provider: SearchProviderId): unknown {
             return { results: [{ url, title: "Brave hit", description: "B" }] };
         case "tavily":
             return { results: [{ url, title: "Tavily hit", content: "T" }] };
+        case "searchapi":
+            return { organic_results: [{ link: url, title: "SearchApi hit", snippet: "A" }] };
         case "searxng":
             return { results: [{ url, title: "SearXNG hit", content: "X" }] };
     }
@@ -109,7 +114,15 @@ describe("executeSearch provider selection", () => {
     let warnSpy: jest.SpyInstance;
 
     function callsByProvider(): Record<SearchProviderId | "other", number> {
-        const counts = { exa: 0, serper: 0, brave: 0, tavily: 0, searxng: 0, other: 0 };
+        const counts = {
+            exa: 0,
+            serper: 0,
+            brave: 0,
+            tavily: 0,
+            searchapi: 0,
+            searxng: 0,
+            other: 0,
+        };
         for (const [input] of fetchSpy.mock.calls as [RequestInfo | URL, RequestInit?][]) {
             counts[providerOf(urlOf(input)) ?? "other"]++;
         }
@@ -147,8 +160,15 @@ describe("executeSearch provider selection", () => {
     });
 
     describe("SEARCH_PROVIDER unset: the first configured provider, in order", () => {
-        it("the order is exa, serper, brave, tavily, searxng", () => {
-            expect(SEARCH_PROVIDER_IDS).toEqual(["exa", "serper", "brave", "tavily", "searxng"]);
+        it("the order is exa, serper, brave, tavily, searchapi, searxng", () => {
+            expect(SEARCH_PROVIDER_IDS).toEqual([
+                "exa",
+                "serper",
+                "brave",
+                "tavily",
+                "searchapi",
+                "searxng",
+            ]);
         });
 
         it.each(SEARCH_PROVIDER_IDS.map((id, i) => [id, SEARCH_PROVIDER_IDS.slice(i)] as const))(
@@ -399,6 +419,11 @@ describe("executeSearch provider selection", () => {
             tavily: ({ url, body }) => {
                 expect(url.href).toBe("https://api.tavily.com/search");
                 expect(body).toMatchObject({ query: "test query", topic: "news" });
+            },
+            searchapi: ({ url }) => {
+                expect(url.origin + url.pathname).toBe("https://www.searchapi.io/api/v1/search");
+                expect(url.searchParams.get("engine")).toBe("google_news");
+                expect(url.searchParams.get("q")).toBe("test query");
             },
             searxng: ({ url }) => {
                 expect(url.origin + url.pathname).toBe(`${SEARXNG_BASE}/search`);

@@ -1,6 +1,7 @@
 import type { SearchProvider, SearchProviderId } from "../types";
 import { brave } from "./brave";
 import { exa } from "./exa";
+import { searchapi } from "./searchapi";
 import { searxng } from "./searxng";
 import { serper } from "./serper";
 import { tavily } from "./tavily";
@@ -15,5 +16,6 @@ export const SEARCH_PROVIDERS: Readonly<Record<SearchProviderId, SearchProvider>
     serper,
     brave,
     tavily,
+    searchapi,
     searxng,
 };

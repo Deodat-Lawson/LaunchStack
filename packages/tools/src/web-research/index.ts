@@ -2,10 +2,11 @@
  * web-research — web search through one provider-agnostic layer, plus page
  * reading and a shared TTL cache.
  *
- * `SEARCH_PROVIDER` picks the engine (Exa, Serper, Brave, Tavily or SearXNG;
- * see ./setup) and every search goes to it: `searchWeb` for the whole web,
- * `executeSearch` below for news (trend research, with retry and URL dedup),
- * `searchCompanies` / `describeCompanies` where the engine has a company index.
+ * `SEARCH_PROVIDER` picks the engine (Exa, Serper, Brave, Tavily, SearchApi or
+ * SearXNG; see ./setup) and every search goes to it: `searchWeb` for the whole
+ * web, `executeSearch` below for news (trend research, with retry and URL
+ * dedup), `searchCompanies` / `describeCompanies` where the engine has a
+ * company index.
  *
  * Moved down from packages/features/src/trend-search (unification PR-3): this
  * is the capability; the trend-search vertical keeps its query planning,

@@ -78,6 +78,7 @@ const SEARCH_CREDENTIALS = {
     serper: "SERPER_API_KEY",
     brave: "BRAVE_SEARCH_API_KEY",
     tavily: "TAVILY_API_KEY",
+    searchapi: "SEARCHAPI_API_KEY",
     searxng: "SEARXNG_URL",
 };
 /** web-research/setup.ts RETIRED_SETTINGS: accepted by env.ts, treated as unset. */
@@ -859,9 +860,13 @@ function checkOptional(env, out) {
         searxngHost === "searxng" &&
         (named === "searxng" ||
             (!named &&
-                !["EXA_API_KEY", "SERPER_API_KEY", "BRAVE_SEARCH_API_KEY", "TAVILY_API_KEY"].some(
-                    has
-                )));
+                ![
+                    "EXA_API_KEY",
+                    "SERPER_API_KEY",
+                    "BRAVE_SEARCH_API_KEY",
+                    "TAVILY_API_KEY",
+                    "SEARCHAPI_API_KEY",
+                ].some(has)));
     if (usesBundledSearxng && !profiles.includes("search")) {
         out.push(
             warn(

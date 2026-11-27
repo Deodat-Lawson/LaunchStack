@@ -21,6 +21,7 @@ const SEARCH_ENV = [
     "SERPER_API_KEY",
     "BRAVE_SEARCH_API_KEY",
     "TAVILY_API_KEY",
+    "SEARCHAPI_API_KEY",
     "SEARXNG_URL",
 ] as const;
 const ORIGINAL_ENV = Object.fromEntries(SEARCH_ENV.map(name => [name, process.env[name]]));
@@ -32,6 +33,7 @@ const CREDENTIALS: Record<SearchProviderId, readonly [string, string]> = {
     serper: ["SERPER_API_KEY", "test-serper-key"],
     brave: ["BRAVE_SEARCH_API_KEY", "test-brave-key"],
     tavily: ["TAVILY_API_KEY", "test-tavily-key"],
+    searchapi: ["SEARCHAPI_API_KEY", "test-searchapi-key"],
     searxng: ["SEARXNG_URL", SEARXNG_BASE],
 };
 
@@ -78,6 +80,7 @@ const NEWS_ENDPOINT: Record<SearchProviderId, string> = {
     serper: "https://google.serper.dev/news",
     brave: "https://api.search.brave.com/res/v1/news/search",
     tavily: "https://api.tavily.com/search",
+    searchapi: "https://www.searchapi.io/api/v1/search",
     searxng: `${SEARXNG_BASE}/search`,
 };
 
@@ -86,6 +89,7 @@ function providerOf(url: string): SearchProviderId | null {
     if (url.startsWith("https://google.serper.dev/")) return "serper";
     if (url.startsWith("https://api.search.brave.com/")) return "brave";
     if (url === "https://api.tavily.com/search") return "tavily";
+    if (url.startsWith("https://www.searchapi.io/")) return "searchapi";
     if (url.startsWith(`${SEARXNG_BASE}/`)) return "searxng";
     return null;
 }
@@ -102,6 +106,8 @@ function isNewsRequest(call: Call): boolean {
             return call.body?.topic === "news";
         case "searxng":
             return url.searchParams.get("categories") === "news";
+        case "searchapi":
+            return url.searchParams.get("engine") === "google_news";
         default:
             return true;
     }
@@ -124,6 +130,14 @@ function answer(provider: SearchProviderId, items: Item[]): unknown {
         case "searxng":
             return {
                 results: items.map(i => ({ url: i.url, title: i.title, content: i.content })),
+            };
+        case "searchapi":
+            return {
+                organic_results: items.map(i => ({
+                    link: i.url,
+                    title: i.title,
+                    snippet: i.content,
+                })),
             };
     }
 }

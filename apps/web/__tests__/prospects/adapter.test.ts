@@ -459,7 +459,7 @@ describe("searchSourceAvailability", () => {
     });
     const on = { web: true, news: true };
     const engines = (exaConfigured: boolean): SearchSetupView["providers"] =>
-        (["exa", "serper", "brave", "tavily", "searxng"] as const).map(id => ({
+        (["exa", "serper", "brave", "tavily", "searchapi", "searxng"] as const).map(id => ({
             id,
             label: id,
             credential: `${id.toUpperCase()}_KEY`,
@@ -584,7 +584,7 @@ describe("searchSourceAvailability", () => {
                 web: false,
                 lookalike: false,
                 engine: null,
-                webRequires: "SEARCH_PROVIDER=exa|serper|brave|tavily|searxng",
+                webRequires: "SEARCH_PROVIDER=exa|serper|brave|tavily|searchapi|searxng",
                 lookalikeRequires: "SEARCH_PROVIDER=exa",
             },
         ],

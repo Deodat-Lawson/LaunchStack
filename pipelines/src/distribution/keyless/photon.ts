@@ -89,7 +89,9 @@ function extentOf(feature: PhotonFeature): Bbox | null {
     const [a, b, c, d] = extent as [number, number, number, number];
     if (![a, b, c, d].every(n => Number.isFinite(n))) return null;
     const box: Bbox = [Math.min(a, c), Math.min(b, d), Math.max(a, c), Math.max(b, d)];
-    return box[2] > box[0] && box[3] > box[1] ? box : null;
+    // An outline that crosses the date line comes out as a box running the
+    // other way round the globe: wider than half of it, and of no use here.
+    return box[2] > box[0] && box[3] > box[1] && box[2] - box[0] <= 180 ? box : null;
 }
 
 /**

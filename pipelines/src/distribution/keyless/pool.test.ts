@@ -927,6 +927,30 @@ describe("a region", () => {
         expect(map.calls.length).toBe(asked);
     });
 
+    it("does not take an outline that crosses the date line for a box", async () => {
+        // West 172.4, east -129.9: read as a box it would run the other way round the globe.
+        const map = createFakeMap(shops, {
+            overpass: "empty",
+            cities: {
+                Alaska: {
+                    lon: -150,
+                    lat: 64,
+                    country: "US",
+                    kind: "state",
+                    extent: [172.4, 51.2, -129.9, 71.4],
+                },
+            },
+        });
+        const { report } = await gatherPlacePool(
+            { ...request, country: "US", region: "Alaska" },
+            { store: createMemoryPlacePoolStore(), photonRequests: 500, fetchImpl: map.fetchImpl }
+        );
+        expect(new URL(map.sweepUrls()[0]!).searchParams.get("bbox")).toBe(
+            "-150.3500,63.7500,-149.6500,64.2500"
+        );
+        expect(report).toMatchObject({ complete: false, sweepCoversTerritory: false });
+    });
+
     it("does not take a box around a point for the region, whatever kind of place the point is", async () => {
         // Photon gives a town as a point: the box around it finds its shops and settles nothing.
         const town = fakePopulation(80, { box: [4.8, 52.3, 5.0, 52.42] });

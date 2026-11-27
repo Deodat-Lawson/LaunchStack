@@ -20,6 +20,7 @@
  * body-stream helper to show why the await matters.
  */
 
+import { once } from "node:events";
 import { readFileSync } from "node:fs";
 import { Readable } from "node:stream";
 
@@ -74,8 +75,13 @@ function routeHandlerRequest(body: Readable) {
 async function middlewareRan(req: Readable) {
     const body = getCloneableBody(req, 128 * 1024 * 1024);
     const middlewareCopy = body.cloneBodyStream();
-    // The middleware reads only headers; its copy is never consumed.
-    await new Promise(resolve => setTimeout(resolve, 5));
+    // The middleware reads only headers; its copy is never consumed. It
+    // returns while the upload is still arriving, so wait for the upload's
+    // first piece, not for a clock. A fixed 5 ms could run out before anything
+    // had been read whenever the process paused for about 3 ms right here (a
+    // garbage collection is enough): the request was then still untouched and
+    // the unawaited case below did not throw.
+    await once(req, "data");
     return { body, middlewareCopy };
 }
 

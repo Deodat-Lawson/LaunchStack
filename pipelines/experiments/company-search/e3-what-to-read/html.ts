@@ -1,7 +1,12 @@
 /**
- * What the experiment reads from raw responses that production throws away:
- * the links of a page (production's readable text drops relative link
- * targets), the rules of a robots.txt and the URLs of a sitemap.
+ * What the experiment reads from raw responses that production threw away
+ * when it ran: the links of a page (production's readable text drops relative
+ * link targets), the rules of a robots.txt and the URLs of a sitemap.
+ *
+ * Production keeps a page's links since (`extractPageLinks` in
+ * packages/tools/src/web-research/fetch.ts, `rankSiteLinks` in
+ * pipelines/src/distribution/keyless/site-links.ts). The parser here is the
+ * one the recording was made with and stays as it is.
  */
 import { normalizeUrlForMatch } from "../../../src/distribution/dossier-agent";
 

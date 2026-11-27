@@ -1,7 +1,7 @@
 /**
  * One site, as the experiment records it: robots.txt, the homepage, a
- * sitemap, production's 13 guessed paths and the best of the homepage's own
- * links. Every fetch goes through production's `fetchReadable` on top of the
+ * sitemap, the 13 paths production guessed at the time and the best of the
+ * homepage's own links. Every fetch goes through production's `fetchReadable` on top of the
  * recorder, so redirects and the readable-text conversion are production's,
  * and the same code replays offline from the cache.
  *
@@ -29,10 +29,10 @@ import { pathSegments, scoreLink, type LinkClass } from "./prior";
 import { isHubHost, type Candidate, type GroupId } from "./sources";
 
 /**
- * Production's guessed paths, in production's order. The constant is private
- * to `pipelines/src/distribution/keyless/profile.ts`, so it is repeated here;
- * `run.ts` checks the copy by running the real `profileFromPages` on every
- * site and comparing the URLs it asks for.
+ * The paths production guessed when the experiment ran, in the order it tried
+ * them (`pipelines/src/distribution/keyless/profile.ts` at commit 968724695).
+ * Production guesses only as a fallback now, and in another order; this is
+ * the list the recording was made with and the `today` policy replays.
  */
 export const PRODUCTION_EXTRA_PATHS = [
     "/about",

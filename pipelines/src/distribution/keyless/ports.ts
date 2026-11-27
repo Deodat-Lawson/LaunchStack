@@ -5,8 +5,10 @@
  * shops, cafés, workshops, offices — in the segment's area, with their own
  * addresses and websites. Which kinds of place a segment wants is chosen by
  * meaning from OpenStreetMap's own categories when an embedder is given.
- * Every candidate's own website is then read by the page profiler, which
- * records evidence and assembles the dossier the research agent would.
+ * Every candidate's own website is then read by the page profiler (its
+ * homepage and the pages its own links name as contact, about, team or
+ * imprint, four requests a site), which records evidence and assembles the
+ * dossier the research agent would.
  * Persistence, exclusions, scoring, stages and publishing are the real code,
  * exactly as in live and fixture modes.
  *
@@ -48,8 +50,8 @@ export interface KeylessPortsOptions {
     embed?: EmbedTexts | null;
     /** Chat-model check of the shortlist (a workspace with a model and no search keys). */
     judgeFit?: JudgeFit | null;
-    /** Pages read per candidate (default 4). */
-    pagesPerCandidate?: number;
+    /** Requests per candidate site, the homepage included (default 4). */
+    requestsPerCandidate?: number;
 }
 
 const noModel: AgentModelPort = {
@@ -173,7 +175,13 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
             playbookHash: KEYLESS_PLAYBOOK_HASH,
         }),
         profile: (ports, input) =>
-            profileFromPages(ports, input, { maxPages: options.pagesPerCandidate ?? 4 }),
+            profileFromPages(
+                ports,
+                input,
+                options.requestsPerCandidate === undefined
+                    ? {}
+                    : { maxRequests: options.requestsPerCandidate }
+            ),
     };
 }
 

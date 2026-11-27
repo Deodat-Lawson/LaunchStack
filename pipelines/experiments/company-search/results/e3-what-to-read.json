@@ -326,6 +326,246 @@
     "disallowedSites": 1,
     "differing": []
   },
+  "productionReader": {
+    "reader": "readSite and dossierFromPages (the two halves of profileFromPages) in pipelines/src/distribution/keyless/profile.ts, with their default limits",
+    "version": "keyless-profile/v2",
+    "requestsPerSite": 4,
+    "guessedPaths": [
+      "/contact",
+      "/kontakt",
+      "/about",
+      "/impressum",
+      "/about-us",
+      "/contact-us",
+      "/over-ons",
+      "/ueber-uns",
+      "/unternehmen",
+      "/careers",
+      "/jobs",
+      "/vacatures",
+      "/karriere"
+    ],
+    "check": {
+      "sites": 180,
+      "sameRequests": 178,
+      "samePageCount": 179,
+      "sameRanking": 180,
+      "linksLeftOut": 10,
+      "sitesWithLinksLeftOut": 10,
+      "linksLeftOutOfFirstThree": 0,
+      "dossiers": 180,
+      "sameFacts": 178,
+      "requestsNotRecorded": 3,
+      "sitesWithRequestsNotRecorded": 2,
+      "sitesGuessingPaths": 6,
+      "differing": [
+        "nlde-15",
+        "nlde-45"
+      ]
+    },
+    "byScope": {
+      "all": {
+        "sites": 180,
+        "production": {
+          "meanScore": {
+            "mean": 2.517,
+            "lo": 2.389,
+            "hi": 2.639
+          },
+          "found": {
+            "email": 0.744,
+            "description": 0.983,
+            "staff": 0.067,
+            "certification": 0.383,
+            "role": 0.339
+          },
+          "requests": {
+            "mean": 3.911,
+            "max": 4,
+            "wastedShare": 0.036
+          }
+        },
+        "today": {
+          "meanScore": 2.117,
+          "email": 0.583,
+          "meanRequests": 13.317
+        },
+        "linkKeywordAtSameBudget": {
+          "meanScore": 2.511,
+          "email": 0.744
+        },
+        "versusToday": {
+          "score": {
+            "mean": 0.4,
+            "lo": 0.3,
+            "hi": 0.5
+          },
+          "email": {
+            "mean": 0.161,
+            "lo": 0.111,
+            "hi": 0.217
+          }
+        },
+        "versusLinkKeywordAtSameBudget": {
+          "score": {
+            "mean": 0.006,
+            "lo": 0,
+            "hi": 0.017
+          }
+        }
+      },
+      "no": {
+        "sites": 60,
+        "production": {
+          "meanScore": {
+            "mean": 2.7,
+            "lo": 2.5,
+            "hi": 2.9
+          },
+          "found": {
+            "email": 0.833,
+            "description": 0.95,
+            "staff": 0.067,
+            "certification": 0.7,
+            "role": 0.15
+          },
+          "requests": {
+            "mean": 3.967,
+            "max": 4,
+            "wastedShare": 0.017
+          }
+        },
+        "today": {
+          "meanScore": 2.183,
+          "email": 0.75,
+          "meanRequests": 13.25
+        },
+        "linkKeywordAtSameBudget": {
+          "meanScore": 2.7,
+          "email": 0.833
+        },
+        "versusToday": {
+          "score": {
+            "mean": 0.517,
+            "lo": 0.317,
+            "hi": 0.717
+          },
+          "email": {
+            "mean": 0.083,
+            "lo": 0.017,
+            "hi": 0.167
+          }
+        },
+        "versusLinkKeywordAtSameBudget": {
+          "score": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          }
+        }
+      },
+      "nlde": {
+        "sites": 60,
+        "production": {
+          "meanScore": {
+            "mean": 2.667,
+            "lo": 2.467,
+            "hi": 2.85
+          },
+          "found": {
+            "email": 0.917,
+            "description": 1,
+            "staff": 0.05,
+            "certification": 0.133,
+            "role": 0.567
+          },
+          "requests": {
+            "mean": 3.983,
+            "max": 4,
+            "wastedShare": 0.021
+          }
+        },
+        "today": {
+          "meanScore": 2.433,
+          "email": 0.767,
+          "meanRequests": 13.383
+        },
+        "linkKeywordAtSameBudget": {
+          "meanScore": 2.667,
+          "email": 0.917
+        },
+        "versusToday": {
+          "score": {
+            "mean": 0.233,
+            "lo": 0.117,
+            "hi": 0.35
+          },
+          "email": {
+            "mean": 0.15,
+            "lo": 0.067,
+            "hi": 0.25
+          }
+        },
+        "versusLinkKeywordAtSameBudget": {
+          "score": {
+            "mean": 0,
+            "lo": 0,
+            "hi": 0
+          }
+        }
+      },
+      "en": {
+        "sites": 60,
+        "production": {
+          "meanScore": {
+            "mean": 2.183,
+            "lo": 1.967,
+            "hi": 2.4
+          },
+          "found": {
+            "email": 0.483,
+            "description": 1,
+            "staff": 0.083,
+            "certification": 0.317,
+            "role": 0.3
+          },
+          "requests": {
+            "mean": 3.783,
+            "max": 4,
+            "wastedShare": 0.07
+          }
+        },
+        "today": {
+          "meanScore": 1.733,
+          "email": 0.233,
+          "meanRequests": 13.317
+        },
+        "linkKeywordAtSameBudget": {
+          "meanScore": 2.167,
+          "email": 0.483
+        },
+        "versusToday": {
+          "score": {
+            "mean": 0.45,
+            "lo": 0.267,
+            "hi": 0.65
+          },
+          "email": {
+            "mean": 0.25,
+            "lo": 0.15,
+            "hi": 0.367
+          }
+        },
+        "versusLinkKeywordAtSameBudget": {
+          "score": {
+            "mean": 0.017,
+            "lo": 0,
+            "hi": 0.05
+          }
+        }
+      }
+    }
+  },
   "today": {
     "all": {
       "sites": 180,
@@ -500,7 +740,7 @@
   ],
   "policies": {
     "today": {
-      "what": "Production's order: the homepage, then its 13 guessed paths in order, stopping once 4 pages were readable.",
+      "what": "The reader's order when the experiment ran (production's, until it followed links): the homepage, then its 13 guessed paths in order, stopping once 4 pages were readable.",
       "budgets": {
         "2": {
           "all": {
@@ -15870,7 +16110,7 @@
   },
   "findings": [
     "Sample: 180 sites with a readable homepage (no 60, nlde 60, en 60); 5956 requests recorded on them (6694 HTTP exchanges with redirect hops), 33.1 per site on average and at most 45.",
-    "The replayed today policy asks for the same URLs in the same order as the real profileFromPages on 180 of 180 sites, and the dossier it returns holds the same fact types on 180 of the 180 sites where production's gate let a dossier through.",
+    "The replayed today policy asks for the same URLs in the same order as the guessed-path reader (production's reader when the experiment ran; its page order is kept in legacy.ts) on 180 of 180 sites, and the dossier production assembles from those pages holds the same fact types on 180 of the 180 sites where production's gate let a dossier through.",
     "today spends 13.3 requests per site on average (median 14, max 14); 83% of them return nothing readable (90% of the guessed paths), 154 of 180 sites use all 14 requests and 150 never reach 4 readable pages.",
     "The guessed paths add a fact type to what the homepage already gave on 46 of 180 sites; of the 229 guessed pages today counts as readable, 14 repeat the text of a page it already had.",
     "Guessed paths, readable when asked: /about 43/180, /about-us 13/180, /over-ons 17/180, /ueber-uns 7/175, /unternehmen 1/174, /contact 49/173, /contact-us 2/172, /kontakt 40/172, /impressum 16/170, /careers 23/168, /jobs 4/160, /vacatures 7/158, /karriere 7/155.",
@@ -15895,6 +16135,9 @@
     "Share of recorded links whose page holds a fact type the homepage lacks, by class: legal 49% (271 links), contact 33% (164 links), team 29% (28 links), quality 25% (88 links), about 25% (219 links), careers 22% (85 links), news 19% (252 links), other 13% (827 links), products 12% (771 links), shop 10% (77 links).",
     "A usable sitemap was found on 152 of 180 sites (/sitemap.xml itself answered with a sitemap on 152); sitemap-first pays 1.7 requests on average before its first page, finds 2.24 at 4 requests and 2.91 at 14.",
     "The homepage alone gives 1.84 of 5 fact types on average and all recorded pages together 3.04; on 53 of 180 sites no recorded page adds anything to the homepage.",
-    "Limits: 65 of 180 homepages had more same-site links than were recorded (the 25 best by the keyword prior were); 1 site was given up on while recording; robots.txt removed 2 guessed path(s) on 1 site(s) and 87 homepage links; production's 40 s time budget would have cut today short on 1 site(s) at the recorded response times; candidates whose homepage could not be read are not in the sample (no: 6 of 66 tried, nlde: 17 of 77 tried, en: 3 of 63 tried)."
+    "Limits: 65 of 180 homepages had more same-site links than were recorded (the 25 best by the keyword prior were); 1 site was given up on while recording; robots.txt removed 2 guessed path(s) on 1 site(s) and 87 homepage links; production's 40 s time budget would have cut today short on 1 site(s) at the recorded response times; candidates whose homepage could not be read are not in the sample (no: 6 of 66 tried, nlde: 17 of 77 tried, en: 3 of 63 tried).",
+    "Built into production since (keyless-profile/v2: the homepage's links by their words, guessed paths only when there is no link to follow, 4 requests a site). Run on the recording, production's reader finds 2.52 of 5 fact types and a contact email on 74% of sites for 3.9 requests a site (4% return nothing readable, at most 4 on any site), against 2.12 and 58% for 13.3 requests with guessed paths (+0.40 [+0.30, +0.50] fact types, paired over 180 sites).",
+    "Production's reader now, by group, contact email found: no 83% (guessed paths 75%); nlde 92% (guessed paths 77%); en 48% (guessed paths 23%).",
+    "Production's own link parser and word list put the recorded links it follows in the experiment's order on 180 of 180 homepages (it leaves out 10 link(s) on 10 site(s) as login, account, cart or search links, 0 of them among a site's first three), and production's reader asks for the same URLs in the same order as the replayed rule on 178 of 180 sites; 3 request(s) on 2 site(s) went to a link the recording does not hold (robots.txt disallows it, or it lies beyond the 25 recorded links) and count as failed requests; it guessed paths on 6 site(s) whose homepage has no link to follow."
   ]
 }

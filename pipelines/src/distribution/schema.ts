@@ -1,7 +1,7 @@
 /**
  * Drizzle schema for the distribution pipeline (design §4.3).
  *
- * Nine product tables, all company-scoped with cascade delete, prefixed
+ * Ten product tables, all company-scoped with cascade delete, prefixed
  * `pdr_ai_v2_` by the shared helper. Columns added by later migrations must
  * be declared LAST (the pg_dump parity gate compares column order).
  */
@@ -10,6 +10,7 @@ import type { InferSelectModel } from "drizzle-orm";
 import {
     bigint,
     bigserial,
+    boolean,
     date,
     doublePrecision,
     index,
@@ -379,3 +380,61 @@ export const marketEdges = pgTable(
     })
 );
 export type MarketEdgeRow = InferSelectModel<typeof marketEdges>;
+
+// ─── Fit verdicts ────────────────────────────────────────────────────────────
+
+/**
+ * What the fit check said about a company for a segment: one row per
+ * organisation and program, holding the latest verdict. Kept so the next
+ * run's ranking starts from what earlier runs learned (./learn) instead of
+ * from nothing. People's own decisions need no row here: they are the stage
+ * of the deal (won, lost).
+ *
+ * A company the fit check turned away never gets a partner_orgs row, so the
+ * verdict carries the company's own words as the ranking read them.
+ */
+export const distributionFitVerdicts = pgTable(
+    "distribution_fit_verdicts",
+    {
+        id: bigserial("id", { mode: "number" }).primaryKey(),
+        companyId: bigint("company_id", { mode: "bigint" })
+            .notNull()
+            .references(() => company.id, { onDelete: "cascade" }),
+        programId: varchar("program_id", { length: 256 })
+            .notNull()
+            .references(() => distributionPrograms.id, { onDelete: "cascade" }),
+        /** From @launchstack/tools/org-resolver, as partner_orgs.resolve_key. */
+        resolveKey: varchar("resolve_key", { length: 512 }).notNull(),
+        name: varchar("name", { length: 512 }).notNull(),
+        /** The company's listing in its own words (./semantic's companyText): what a ranking reads. */
+        text: text("text").notNull(),
+        fit: boolean("fit").notNull(),
+        reason: text("reason"),
+        /** `listing`: judged on its listing, before research. `research`: judged on what research found. */
+        basis: varchar("basis", { length: 16, enum: ["listing", "research"] }).notNull(),
+        /**
+         * Hash of the question the fit check was asked (./shortlist's
+         * segmentKey): a rewritten or moved segment starts afresh.
+         */
+        segmentKey: varchar("segment_key", { length: 64 }).notNull(),
+        runId: varchar("run_id", { length: 256 }).references(() => distributionRuns.id, {
+            onDelete: "set null",
+        }),
+        judgedAt: timestamp("judged_at", { withTimezone: true })
+            .default(sql`CURRENT_TIMESTAMP`)
+            .notNull(),
+    },
+    table => ({
+        programOrgUnique: uniqueIndex("distribution_fit_verdicts_program_org_unique").on(
+            table.companyId,
+            table.programId,
+            table.resolveKey
+        ),
+        companyIdx: index("distribution_fit_verdicts_company_idx").on(table.companyId),
+        programIdx: index("distribution_fit_verdicts_program_idx").on(
+            table.programId,
+            table.judgedAt
+        ),
+    })
+);
+export type DistributionFitVerdictRow = InferSelectModel<typeof distributionFitVerdicts>;

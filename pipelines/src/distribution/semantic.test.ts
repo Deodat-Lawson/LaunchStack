@@ -87,6 +87,20 @@ describe("relevance by meaning", () => {
         expect(semantic.method).toBe("semantic");
     });
 
+    it("hands back each company's embedding, and measures more texts against the same brief", async () => {
+        const companies = [{ name: "Specialty coffee importer" }, { name: "Mango" }];
+        const semantic = await relevanceOf(fakeEmbed, program, ["retailer"], companies);
+        expect(semantic.vectors).toEqual(await fakeEmbed(companies.map(c => c.name)));
+        // A verdict an earlier run kept, on a company that is not a candidate now.
+        const more = await semantic.measure!(["Specialty coffee importer", "Tea room"]);
+        expect(more.scores[0]).toBe(semantic.scores[0]);
+        expect(more.vectors).toHaveLength(2);
+        // Matched by words there is nothing to hand back, and nothing learns.
+        const lexical = await relevanceOf(null, program, ["retailer"], companies);
+        expect(lexical.vectors).toBeUndefined();
+        expect(lexical.measure).toBeUndefined();
+    });
+
     it("turns relevance into a share of the rubric's topic points", () => {
         expect(relevanceShare(-0.2, "semantic")).toBe(0);
         expect(relevanceShare(0.2, "semantic")).toBeCloseTo(0.5);

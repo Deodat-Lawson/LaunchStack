@@ -1436,6 +1436,7 @@
         "segment": "Segment confirmed",
         "sources": "Sources",
         "shortlist": "Shortlist",
+        "fitCheck": "Fit check",
         "profiles": "Profiles",
         "people": "People"
       },
@@ -1446,6 +1447,10 @@
       "peopleLater": "arrives with people lookup",
       "found": "{count} found",
       "excluded": "{count} excluded",
+      "fitRead": "{checked} read, {rejected} turned away",
+      "fitStopped": "stopped after {checked} read",
+      "fitNotRun": "could not run",
+      "fitStartedFrom": "{count, plural, one {# earlier verdict} other {# earlier verdicts}}",
       "failedGrounding": "{count} failed grounding",
       "caps": "{count} candidates",
       "capsSample": "{count} candidates · sample data",

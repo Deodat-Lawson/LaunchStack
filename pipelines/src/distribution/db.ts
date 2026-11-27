@@ -16,6 +16,7 @@ import { normalizeDomain, normalizeOrgName } from "@launchstack/tools/org-resolv
 import {
     dealStageHistory,
     distributionAgreements,
+    distributionFitVerdicts,
     distributionPrograms,
     distributionRuns,
     partnerEvidence,
@@ -30,8 +31,10 @@ import {
     type PartnerRelationshipRow,
     type RelationshipEventRow,
 } from "./schema";
+import { companyText } from "./semantic";
 import {
     assertTransition,
+    fitDecision,
     IN_MOTION_STAGES,
     isPastCandidate,
     STALE_AFTER_DAYS,
@@ -929,6 +932,178 @@ export async function listWonDomains(
         0,
         limit
     );
+}
+
+// ─── Fit verdicts ────────────────────────────────────────────────────────────
+
+export interface FitVerdictInput {
+    resolveKey: string;
+    name: string;
+    /** The company's listing in its own words (./semantic's companyText), as a ranking reads it. */
+    text: string;
+    fit: boolean;
+    reason?: string | null;
+}
+
+/**
+ * Keep what the fit check said, one row per company and segment; the newest
+ * verdict replaces the one before it. What research found outranks a look at
+ * the listing: a later listing verdict for the same segment leaves a research
+ * verdict in place.
+ */
+export async function saveFitVerdicts(args: {
+    companyId: bigint;
+    programId: string;
+    runId: string | null;
+    basis: "listing" | "research";
+    /** ./shortlist's segmentKey of what the run asked the fit check. */
+    segmentKey: string;
+    verdicts: readonly FitVerdictInput[];
+}): Promise<void> {
+    // One statement may not touch a row twice: the last verdict on a company wins.
+    const byKey = new Map(args.verdicts.map(v => [v.resolveKey, v]));
+    if (byKey.size === 0) return;
+    const db = getDb();
+    const judgedAt = new Date();
+    const rows = [...byKey.values()].map(v => ({
+        companyId: args.companyId,
+        programId: args.programId,
+        resolveKey: v.resolveKey,
+        name: v.name.slice(0, 512),
+        text: v.text.slice(0, 2_000),
+        fit: v.fit,
+        reason: v.reason ? v.reason.slice(0, 600) : null,
+        basis: args.basis,
+        segmentKey: args.segmentKey,
+        runId: args.runId,
+        judgedAt,
+    }));
+    const CHUNK = 200;
+    for (let i = 0; i < rows.length; i += CHUNK) {
+        await db
+            .insert(distributionFitVerdicts)
+            .values(rows.slice(i, i + CHUNK))
+            .onConflictDoUpdate({
+                target: [
+                    distributionFitVerdicts.companyId,
+                    distributionFitVerdicts.programId,
+                    distributionFitVerdicts.resolveKey,
+                ],
+                set: {
+                    name: sql`excluded.name`,
+                    text: sql`excluded.text`,
+                    fit: sql`excluded.fit`,
+                    reason: sql`excluded.reason`,
+                    basis: sql`excluded.basis`,
+                    segmentKey: sql`excluded.segment_key`,
+                    runId: sql`excluded.run_id`,
+                    judgedAt: sql`excluded.judged_at`,
+                },
+                setWhere: sql`not (${distributionFitVerdicts.basis} = 'research' and excluded.basis = 'listing' and ${distributionFitVerdicts.segmentKey} = excluded.segment_key)`,
+            });
+    }
+}
+
+/** A verdict a run starts from. */
+export interface FitExample {
+    resolveKey: string;
+    /** The company's listing in its own words. */
+    text: string;
+    good: boolean;
+    /** Whose verdict: a person's handling of the deal, or the fit check's. */
+    source: "person" | "research" | "listing";
+}
+
+/**
+ * Verdicts one run reads: enough to learn from, bounded so a run's start stays
+ * a handful of embedding calls (./semantic embeds 64 texts a call, so seven).
+ */
+const FIT_EXAMPLES = 400;
+
+/**
+ * What is already known about who fits a segment, for the next run's ranking
+ * to start from: people's own decisions on its deals (qualified, pursued or
+ * won is a yes; not a fit is a no), then the fit check's stored verdicts for
+ * the question this run asks, newest first. A person's decision replaces the
+ * fit check's on the same company, and counts whatever the segment said when
+ * it was made: a person judged the company, not a wording.
+ */
+export async function listFitExamples(args: {
+    companyId: bigint;
+    programId: string;
+    /**
+     * ./shortlist's segmentKey of what the run asks: the fit check's verdicts
+     * on another wording, area or kind of buyer are left out.
+     */
+    segmentKey: string;
+    limit?: number;
+}): Promise<FitExample[]> {
+    const limit = args.limit ?? FIT_EXAMPLES;
+    const db = getDb();
+    const deals = await db
+        .select({
+            stage: partnerRelationships.stage,
+            resolveKey: partnerOrgs.resolveKey,
+            name: partnerOrgs.name,
+            categories: partnerOrgs.categories,
+            description: partnerOrgs.description,
+        })
+        .from(partnerRelationships)
+        .innerJoin(partnerOrgs, eq(partnerOrgs.id, partnerRelationships.orgId))
+        .where(
+            and(
+                eq(partnerRelationships.companyId, args.companyId),
+                eq(partnerRelationships.programId, args.programId)
+            )
+        )
+        .orderBy(desc(partnerRelationships.stageChangedAt));
+    const out = new Map<string, FitExample>();
+    for (const row of deals) {
+        const good = fitDecision(row.stage);
+        // An organisation with deals in two kinds: its most recently moved one speaks.
+        if (good === null || out.has(row.resolveKey)) continue;
+        if (out.size >= limit) break;
+        out.set(row.resolveKey, {
+            resolveKey: row.resolveKey,
+            text: companyText({
+                name: row.name,
+                categories: row.categories ?? [],
+                description: row.description,
+            }),
+            good,
+            source: "person",
+        });
+    }
+    if (out.size < limit) {
+        const stored = await db
+            .select({
+                resolveKey: distributionFitVerdicts.resolveKey,
+                text: distributionFitVerdicts.text,
+                fit: distributionFitVerdicts.fit,
+                basis: distributionFitVerdicts.basis,
+            })
+            .from(distributionFitVerdicts)
+            .where(
+                and(
+                    eq(distributionFitVerdicts.companyId, args.companyId),
+                    eq(distributionFitVerdicts.programId, args.programId),
+                    eq(distributionFitVerdicts.segmentKey, args.segmentKey)
+                )
+            )
+            .orderBy(desc(distributionFitVerdicts.judgedAt), desc(distributionFitVerdicts.id))
+            .limit(limit);
+        for (const row of stored) {
+            if (out.size >= limit) break;
+            if (out.has(row.resolveKey)) continue;
+            out.set(row.resolveKey, {
+                resolveKey: row.resolveKey,
+                text: row.text,
+                good: row.fit,
+                source: row.basis,
+            });
+        }
+    }
+    return [...out.values()];
 }
 
 // ─── Events and transitions ──────────────────────────────────────────────────

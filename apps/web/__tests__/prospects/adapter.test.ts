@@ -316,6 +316,118 @@ describe("runs", () => {
         expect(sources.children!.map(c => c.status)).toEqual(["done", "skipped", "done"]);
     });
 
+    /** A completed run's summary, before any fit check is counted in it. */
+    const summary = {
+        sources: [{ source: "web" as const, queries: 4, results: 60, status: "ok" as const }],
+        mentions: 60,
+        resolved: 51,
+        excluded: 0,
+        shortlisted: 25,
+        enriched: 25,
+        gateRejections: 0,
+        budgetExhausted: 0,
+        screened: 0,
+        flagged: 0,
+        published: 0,
+        degraded: false,
+        warnings: [],
+        tokens: { input: 0, output: 0, total: 0 },
+    };
+
+    it("says under the shortlist what the fit check read and what the ranking already knew", () => {
+        const shortlist = (fitCheck?: {
+            checked: number;
+            rounds: number;
+            rejected: number;
+            learning: boolean;
+            startedFrom: number;
+            incomplete?: boolean;
+        }) =>
+            toRunDto(
+                run({
+                    status: "completed",
+                    summary: { ...summary, ...(fitCheck ? { fitCheck } : {}) },
+                })
+            ).steps.find(s => s.id === "shortlist")!;
+
+        // A run without a fit check, and every run from before it was counted: no row.
+        expect(shortlist().children).toBeUndefined();
+
+        const first = shortlist({
+            checked: 34,
+            rounds: 4,
+            rejected: 9,
+            learning: true,
+            startedFrom: 0,
+        }).children!;
+        expect(first.map(c => [c.id, c.label, c.detail, c.right, c.status])).toEqual([
+            ["fit-check", "Fit check", "34 read, 9 turned away", null, "done"],
+        ]);
+        expect(first[0]!.detailCopy).toEqual({
+            key: "growth.server.runs.fitRead",
+            values: { checked: "34", rejected: "9" },
+        });
+
+        const later = shortlist({
+            checked: 30,
+            rounds: 3,
+            rejected: 5,
+            learning: true,
+            startedFrom: 35,
+        }).children![0]!;
+        expect(later.right).toBe("35 earlier verdicts");
+        // A number, so the catalogue can say "1 earlier verdict".
+        expect(later.rightCopy).toEqual({
+            key: "growth.server.runs.fitStartedFrom",
+            values: { count: 35 },
+        });
+        const one = shortlist({
+            checked: 30,
+            rounds: 3,
+            rejected: 5,
+            learning: true,
+            startedFrom: 1,
+        }).children![0]!;
+        expect(one.right).toBe("1 earlier verdict");
+    });
+
+    it("shows a fit check that broke off as failed, with what it got through", () => {
+        const row = (checked: number, rejected: number) =>
+            toRunDto(
+                run({
+                    status: "completed",
+                    summary: {
+                        ...summary,
+                        fitCheck: {
+                            checked,
+                            rounds: checked > 0 ? 1 : 0,
+                            rejected,
+                            learning: true,
+                            startedFrom: 0,
+                            incomplete: true,
+                        },
+                    },
+                })
+            ).steps.find(s => s.id === "shortlist")!.children![0]!;
+
+        // The model failed on its second round: ten were read.
+        const stopped = row(10, 8);
+        expect([stopped.label, stopped.detail, stopped.status]).toEqual([
+            "Fit check",
+            "stopped after 10 read",
+            "failed",
+        ]);
+        expect(stopped.detailCopy).toEqual({
+            key: "growth.server.runs.fitStopped",
+            values: { checked: "10" },
+        });
+
+        // It failed at once: no tick over "0 read, 0 turned away".
+        const never = row(0, 0);
+        expect([never.detail, never.status]).toEqual(["could not run", "failed"]);
+        expect(never.detailCopy).toEqual({ key: "growth.server.runs.fitNotRun" });
+    });
+
     it("lists every source, lookalikes included, before a run has a summary", () => {
         const dto = toRunDto(
             run({ status: "gathering", options: { maxCandidates: 25, mode: "live" } })

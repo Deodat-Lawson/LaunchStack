@@ -12,6 +12,8 @@ export * from "./plan";
 export * from "./gather";
 export * from "./score";
 export * from "./semantic";
+export * from "./learn";
+export * from "./shortlist";
 export * from "./geocode";
 export * from "./judge";
 export * from "./render";

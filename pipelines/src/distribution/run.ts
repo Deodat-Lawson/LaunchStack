@@ -39,6 +39,7 @@ import {
     type GatherPorts,
     type SearchCompaniesPort,
 } from "./gather";
+import { createShortlistLearner, type EarlierVerdict, type ShortlistLearner } from "./learn";
 import { planDiscovery, type PlanInput, type SellerProfile } from "./plan";
 import { makeDossierCreationKey, makeDossierFilename, renderDossierMarkdown } from "./render";
 import { bestTerritoryFit, placeLabel } from "./locate";
@@ -50,9 +51,12 @@ import {
     relevanceShare,
     type EmbedTexts,
     type JudgeFit,
+    type Relevance,
 } from "./semantic";
+import { fillShortlist, segmentKey } from "./shortlist";
 import type {
     DiscoveryPlan,
+    FitCheckSummary,
     PartnerKind,
     ProgramRecord,
     RelationshipRecord,
@@ -155,9 +159,6 @@ export interface DistributionPorts {
     judgeFit?: JudgeFit | null;
 }
 
-/** Companies the model checks per open shortlist place, each round down the ranking. */
-const JUDGE_POOL_FACTOR = 2;
-
 export interface RunContext {
     runId: string;
     companyId: bigint;
@@ -201,6 +202,72 @@ export interface PrepareRunResult {
     excluded: number;
     warnings: string[];
     profile: SellerProfile;
+    /** What the fit check of the shortlist came to; absent when there was none. */
+    fitCheck?: FitCheckSummary;
+}
+
+/**
+ * A ranking that learns, over the queue's companies in its order: from the
+ * fit check's verdicts as they arrive, and before that from what is already
+ * known about the segment (./db's listFitExamples). Null when companies were
+ * matched by shared words, and when nothing could be learned: no fit check to
+ * come and no earlier verdict. A failure here never stops a run: earlier
+ * verdicts that cannot be read are done without, and when the learner cannot
+ * be built the fixed ranking takes over.
+ */
+async function startLearner(args: {
+    ctx: RunContext;
+    relevance: Relevance;
+    queue: readonly ResolvedOrg[];
+    scoreOf: ReadonlyMap<string, number>;
+    vectorOf: ReadonlyMap<string, number[] | undefined>;
+    /** ./shortlist's segmentKey of what this run asks the fit check. */
+    verdictKey: string;
+    /** A fit check follows: explore what is still unknown. Without one, rank by what is known. */
+    fitCheck: boolean;
+}): Promise<ShortlistLearner | null> {
+    const { ctx, relevance, queue } = args;
+    if (relevance.method !== "semantic" || queue.length === 0) return null;
+    const vectors: number[][] = [];
+    for (const org of queue) {
+        const vector = args.vectorOf.get(org.resolveKey);
+        if (!vector || vector.length === 0) return null;
+        vectors.push(vector);
+    }
+    let earlier: EarlierVerdict[] = [];
+    try {
+        const examples = await db.listFitExamples({
+            companyId: ctx.companyId,
+            programId: ctx.programId,
+            segmentKey: args.verdictKey,
+        });
+        if (examples.length > 0 && relevance.measure) {
+            const measured = await relevance.measure(examples.map(e => e.text));
+            earlier = examples.flatMap((example, i) => {
+                const vector = measured.vectors[i];
+                return vector
+                    ? [{ vector, relevance: measured.scores[i] ?? 0, good: example.good }]
+                    : [];
+            });
+        }
+    } catch (error) {
+        console.warn(
+            `${LOG_PREFIX} earlier verdicts unavailable; the ranking starts fresh:`,
+            error
+        );
+    }
+    if (!args.fitCheck && earlier.length === 0) return null;
+    try {
+        return await createShortlistLearner({
+            vectors,
+            relevance: queue.map(org => args.scoreOf.get(org.resolveKey) ?? 0),
+            earlier,
+            settings: args.fitCheck ? undefined : { bonus: 0 },
+        });
+    } catch (error) {
+        console.warn(`${LOG_PREFIX} the ranking could not learn; keeping the fixed order:`, error);
+        return null;
+    }
 }
 
 function pickKind(org: ResolvedOrg, wanted: PartnerKind[]): PartnerKind {
@@ -395,6 +462,7 @@ export async function prepareRun(
 
             const relevance = await relevanceOf(ports.embed, program, partnerKinds, orgs, profile);
             const scoreOf = new Map(orgs.map((o, i) => [o.resolveKey, relevance.scores[i] ?? 0]));
+            const vectorOf = new Map(orgs.map((o, i) => [o.resolveKey, relevance.vectors?.[i]]));
             if (relevance.method === "lexical")
                 warnings.push(
                     "No embedding model is configured, so companies were matched by shared words rather than by meaning."
@@ -407,12 +475,14 @@ export async function prepareRun(
             // the text states, a real domain, and mentions.
             const wanted = new Set<string>(partnerKinds);
             const FIT_RANK = { in: 2, unknown: 1, out: 0 };
+            // Relevance, until earlier verdicts say more (no fit check to ask).
+            let rankScoreOf: ReadonlyMap<string, number> = scoreOf;
             const byRank = (a: ResolvedOrg, b: ResolvedOrg) => {
                 const fitA = FIT_RANK[fitOf.get(a.resolveKey) ?? "unknown"];
                 const fitB = FIT_RANK[fitOf.get(b.resolveKey) ?? "unknown"];
                 if (fitA !== fitB) return fitB - fitA;
-                const relA = scoreOf.get(a.resolveKey) ?? 0;
-                const relB = scoreOf.get(b.resolveKey) ?? 0;
+                const relA = rankScoreOf.get(a.resolveKey) ?? 0;
+                const relB = rankScoreOf.get(b.resolveKey) ?? 0;
                 if (relA !== relB) return relB - relA;
                 const roleA = a.roles.some(r => wanted.has(r)) ? 1 : 0;
                 const roleB = b.roles.some(r => wanted.has(r)) ? 1 : 0;
@@ -424,48 +494,99 @@ export async function prepareRun(
             };
 
             let notBuyers = 0;
-            // Companies the fit check saw; the shortlist comes from these alone.
+            // Companies the fit check saw; the shortlist comes from these alone,
+            // unless the check broke off: then the places it left open go to
+            // the next companies down the ranking, unchecked (those named
+            // outside the area stay out, as they do with no fit check at all).
             let checked: Set<string> | null = null;
-            if (ports.judgeFit && orgs.length > 0) {
-                const queue = [...orgs].sort(byRank);
-                const seen = new Set<string>();
-                const rejected = new Set<string>();
-                // Down the ranking until the shortlist is full or no one is
-                // left: a batch of no's must not end the run with an empty list.
-                let at = 0;
-                let kept = 0;
-                try {
-                    while (at < queue.length && kept < options.maxCandidates) {
-                        const room = options.maxCandidates - kept;
-                        const batch = queue.slice(at, at + room * JUDGE_POOL_FACTOR);
-                        at += batch.length;
-                        const verdicts = await ports.judgeFit({
-                            brief: buyerBrief(program, partnerKinds, profile),
-                            where: territories.map(placeLabel).join("; "),
-                            seller: profile,
-                            candidates: batch.map(o => ({
-                                id: o.resolveKey,
-                                name: o.name,
-                                text: companyText(o),
-                            })),
-                        });
-                        for (const o of batch) {
-                            seen.add(o.resolveKey);
-                            const verdict = verdicts.get(o.resolveKey);
-                            if (verdict && !verdict.fit) {
-                                rejected.add(o.resolveKey);
-                                console.info(
-                                    `${LOG_PREFIX} fit check left out ${o.name}: ${verdict.reason}`
-                                );
-                            } else kept += 1;
-                        }
-                    }
-                } catch (error) {
-                    console.warn(`${LOG_PREFIX} fit check failed; keeping the ranking:`, error);
-                    warnings.push(
-                        "The fit check could not finish; part of the list is ranked by meaning only."
+            let brokeOff = false;
+            let fitCheck: FitCheckSummary | undefined;
+            // What this run asks the fit check: kept verdicts answer this and no other question.
+            const verdictKey = segmentKey(program, options);
+            // The fixed ranking, and over it a ranking that learns: from the
+            // fit check's verdicts round by round, and from what earlier runs
+            // and people's own decisions already said about this segment.
+            const queue = [...orgs].sort(byRank);
+            const learner = await startLearner({
+                ctx,
+                relevance,
+                queue,
+                scoreOf,
+                vectorOf,
+                verdictKey,
+                fitCheck: Boolean(ports.judgeFit),
+            });
+            const startedFrom = learner?.learnedFrom ?? 0;
+            if (ports.judgeFit && queue.length > 0) {
+                const judgeFit = ports.judgeFit;
+                const brief = buyerBrief(program, partnerKinds, profile);
+                const where = territories.map(placeLabel).join("; ");
+                const textOf = new Map(queue.map(o => [o.resolveKey, companyText(o)]));
+                // Down the ranking until the shortlist is full or no one is left.
+                const outcome = await fillShortlist({
+                    queue: queue.map(o => ({
+                        id: o.resolveKey,
+                        name: o.name,
+                        text: textOf.get(o.resolveKey)!,
+                    })),
+                    wanted: options.maxCandidates,
+                    judge: batch => judgeFit({ brief, where, seller: profile, candidates: batch }),
+                    learner,
+                    tierOf: index => FIT_RANK[fitOf.get(queue[index]!.resolveKey) ?? "unknown"],
+                });
+                if (outcome.error) {
+                    brokeOff = true;
+                    console.warn(
+                        `${LOG_PREFIX} fit check failed; keeping the ranking:`,
+                        outcome.error
                     );
                 }
+                if (outcome.learnerQuit)
+                    console.warn(
+                        `${LOG_PREFIX} the ranking could not go on learning; the fixed order took over`
+                    );
+                const seen = new Set(outcome.checked);
+                const rejected = new Set<string>();
+                for (const o of queue) {
+                    const verdict = outcome.verdicts.get(o.resolveKey);
+                    if (!verdict || verdict.fit) continue;
+                    rejected.add(o.resolveKey);
+                    console.info(`${LOG_PREFIX} fit check left out ${o.name}: ${verdict.reason}`);
+                }
+                // Kept for the next run's ranking to start from.
+                try {
+                    await db.saveFitVerdicts({
+                        companyId: ctx.companyId,
+                        programId: ctx.programId,
+                        runId: ctx.runId,
+                        basis: "listing",
+                        segmentKey: verdictKey,
+                        verdicts: queue.flatMap(o => {
+                            const verdict = outcome.verdicts.get(o.resolveKey);
+                            return verdict
+                                ? [
+                                      {
+                                          resolveKey: o.resolveKey,
+                                          name: o.name,
+                                          text: textOf.get(o.resolveKey)!,
+                                          fit: verdict.fit,
+                                          reason: verdict.reason,
+                                      },
+                                  ]
+                                : [];
+                        }),
+                    });
+                } catch (error) {
+                    console.warn(`${LOG_PREFIX} could not keep the fit check's verdicts:`, error);
+                }
+                fitCheck = {
+                    checked: outcome.checked.length,
+                    rounds: outcome.rounds,
+                    rejected: rejected.size,
+                    learning: learner !== null && !outcome.learnerQuit,
+                    startedFrom,
+                    ...(brokeOff ? { incomplete: true } : {}),
+                };
                 notBuyers = rejected.size;
                 orgs = orgs.filter(o => !rejected.has(o.resolveKey));
                 if (seen.size > 0) checked = seen;
@@ -475,6 +596,10 @@ export async function prepareRun(
                 orgs = orgs
                     .filter(o => !isOut(o) || seen.has(o.resolveKey))
                     .map(o => (isOut(o) ? { ...o, country: null, region: null, city: null } : o));
+            } else if (learner) {
+                // No fit check to ask: order by what earlier verdicts taught.
+                const predicted = learner.predicted();
+                rankScoreOf = new Map(queue.map((o, i) => [o.resolveKey, predicted[i] ?? 0]));
             }
             if (outOfArea + offTopic + notBuyers > 0)
                 warnings.push(
@@ -482,9 +607,26 @@ export async function prepareRun(
                 );
 
             const ranked = [...orgs].sort(byRank);
-            const shortlist = ranked
-                .filter(o => !checked || checked.has(o.resolveKey))
-                .slice(0, options.maxCandidates);
+            const read = checked;
+            const shortlist = (
+                read && brokeOff
+                    ? [
+                          ...ranked.filter(o => read.has(o.resolveKey)),
+                          ...ranked.filter(o => !read.has(o.resolveKey)),
+                      ]
+                    : ranked.filter(o => !read || read.has(o.resolveKey))
+            ).slice(0, options.maxCandidates);
+            // Say what the list is after a check that broke off. A company named
+            // outside the area that the check never read is out all the same, so
+            // the list can be short of its places, and then nobody on it is unread.
+            if (brokeOff)
+                warnings.push(
+                    !read
+                        ? "The fit check could not run; nobody on the list was checked."
+                        : shortlist.some(o => !read.has(o.resolveKey))
+                          ? "The fit check could not finish; part of the list is ranked by meaning only."
+                          : "The fit check could not finish; the list holds only the companies it read."
+                );
             const saved = await db.upsertOrgs({
                 companyId: ctx.companyId,
                 runId: ctx.runId,
@@ -535,10 +677,16 @@ export async function prepareRun(
                         items.findIndex(i => i.orgId === b.orgId)
                 )
                 .map(r => r.id);
-            return { resolved: orgs.length, excluded, candidateIds, mentions: mentions.length };
+            return {
+                resolved: orgs.length,
+                excluded,
+                candidateIds,
+                mentions: mentions.length,
+                fitCheck,
+            };
         },
         report: value => ({
-            detail: `${value.resolved} organisations, ${value.excluded} excluded, ${value.candidateIds.length} shortlisted`,
+            detail: `${value.resolved} organisations, ${value.excluded} excluded, ${value.candidateIds.length} shortlisted${value.fitCheck ? `, ${value.fitCheck.checked} checked for fit in ${value.fitCheck.rounds} round${value.fitCheck.rounds === 1 ? "" : "s"}` : ""}`,
         }),
     });
 
@@ -554,6 +702,7 @@ export async function prepareRun(
         excluded: resolvedResult.excluded,
         warnings,
         profile,
+        ...(resolvedResult.fitCheck ? { fitCheck: resolvedResult.fitCheck } : {}),
     };
 }
 
@@ -721,6 +870,40 @@ export async function enrichCandidate(
                 rejectedBecause = verdict.reason;
                 console.info(`${LOG_PREFIX} research ruled out ${org.name}: ${verdict.reason}`);
             }
+            // What research found outranks the look at the listing: the next
+            // run's ranking learns from it, under the listing's own words and
+            // the key this run's listing verdicts are kept under.
+            if (verdict)
+                await db
+                    .getRun(ctx.runId, ctx.companyId)
+                    .then(run =>
+                        db.saveFitVerdicts({
+                            companyId: ctx.companyId,
+                            programId: ctx.programId,
+                            runId: ctx.runId,
+                            basis: "research",
+                            segmentKey: segmentKey(program, run?.options),
+                            verdicts: [
+                                {
+                                    resolveKey: org.resolveKey,
+                                    name: org.name,
+                                    text: companyText({
+                                        name: org.name,
+                                        categories: org.categories,
+                                        description: org.description,
+                                    }),
+                                    fit: verdict.fit,
+                                    reason: verdict.reason,
+                                },
+                            ],
+                        })
+                    )
+                    .catch((error: unknown) =>
+                        console.warn(
+                            `${LOG_PREFIX} could not keep the verdict on ${org.name}:`,
+                            error
+                        )
+                    );
         } catch (error) {
             console.warn(`${LOG_PREFIX} fit check after research failed for ${org.name}:`, error);
         }
@@ -869,7 +1052,8 @@ export async function finalizeRun(
     prepared: Pick<
         PrepareRunResult,
         "sources" | "mentions" | "resolved" | "excluded" | "warnings" | "candidateRelationshipIds"
-    >,
+    > &
+        Pick<Partial<PrepareRunResult>, "fitCheck">,
     enriched: EnrichCandidateResult[],
     startedAt: Date
 ): Promise<RunSummary> {
@@ -899,6 +1083,7 @@ export async function finalizeRun(
         warnings: prepared.warnings,
         tokens,
         wallMs: Date.now() - startedAt.getTime(),
+        ...(prepared.fitCheck ? { fitCheck: prepared.fitCheck } : {}),
     };
     await db.updateRun(ctx.runId, ctx.companyId, {
         status: "completed",

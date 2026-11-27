@@ -1,6 +1,6 @@
 {
     "name": "@launchstack/orchestration",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "description": "Durable work between the features (ADR-003): the pipeline events written in the same transaction as the state change they announce, the Postgres outbox store with SKIP LOCKED claiming, the worker's processing tick with bounded retries, transactional source-lifecycle acceptance, and the ports the pipeline stages implement.",
     "license": "Apache-2.0",
     "type": "module",

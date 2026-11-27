@@ -1,4 +1,5 @@
-import type { MarketingPlatform, MarketingResearchResult } from "./types";
+import { getPlatformProfile } from "@launchstack/tools/platform-profiles";
+import type { CampaignPlatform, MarketingResearchResult } from "./types";
 import type { PlannedQuery } from "@launchstack/pipelines/trend-search";
 import { runTrendSearch } from "@launchstack/pipelines/trend-search";
 import {
@@ -7,11 +8,13 @@ import {
 } from "@launchstack/pipelines/trend-search/cache";
 
 function buildTrendQueries(
-    platform: MarketingPlatform,
+    campaignPlatform: CampaignPlatform,
     companyName: string,
     prompt: string,
     companyIndustry?: string
 ): PlannedQuery[] {
+    // The network's name as a search engine knows it ("Hacker News", not "hackernews").
+    const platform = getPlatformProfile(campaignPlatform).promptName;
     const year = new Date().getFullYear();
     const industryHint = companyIndustry ? ` ${companyIndustry}` : "";
 
@@ -35,7 +38,7 @@ function buildTrendQueries(
 }
 
 export async function researchPlatformTrends(args: {
-    platform: MarketingPlatform;
+    platform: CampaignPlatform;
     prompt: string;
     companyName: string;
     companyContext: string;

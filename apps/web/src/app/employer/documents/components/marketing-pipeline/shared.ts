@@ -1,6 +1,44 @@
 import type { RewriteWorkflowStateSnapshot } from "~/app/employer/documents/components/marketing-pipeline/RewriteWorkflow";
 
-export type MarketingPlatform = "x" | "linkedin" | "reddit" | "bluesky";
+/** The networks Brand can post to: these get Publish and Schedule. */
+export type PublishPlatform = "x" | "linkedin" | "reddit" | "bluesky";
+
+/**
+ * Every network the generator writes for. The ones past the first four are
+ * copy-only: the draft is written, refined and scored here, and a person
+ * posts it. Mirrors `CampaignPlatformEnum` in @launchstack/tools
+ * (`__tests__/marketing-pipeline/platform-options.test.ts` keeps them equal).
+ */
+export type MarketingPlatform =
+    | PublishPlatform
+    | "instagram"
+    | "threads"
+    | "facebook"
+    | "tiktok"
+    | "youtube"
+    | "mastodon"
+    | "hackernews"
+    | "producthunt"
+    | "discord";
+
+const PUBLISH_PLATFORMS: readonly string[] = ["x", "linkedin", "reddit", "bluesky"];
+
+/** Whether Brand can post to this network, or the draft is copy-only. */
+export function isPublishPlatform(
+    platform: MarketingPlatform | null | undefined
+): platform is PublishPlatform {
+    return platform != null && PUBLISH_PLATFORMS.includes(platform);
+}
+
+/**
+ * Networks that render Markdown, so a copied draft keeps it. Everywhere else
+ * `**bold**` would post as asterisks.
+ */
+const MARKDOWN_PLATFORMS: readonly string[] = ["reddit", "discord"];
+
+export function rendersMarkdown(platform: MarketingPlatform | null | undefined): boolean {
+    return platform != null && MARKDOWN_PLATFORMS.includes(platform);
+}
 
 /* ──────────────────────────────────────────────────────────────
  * Pipeline progress types (mirrors backend PipelineStepId)
@@ -328,9 +366,101 @@ export const PLATFORM_OPTIONS: PlatformOption[] = [
             },
         ],
     },
+    // Copy-only from here on. A hashtag field's cap is the network's profile
+    // cap (`maxHashtags`); a network that uses none has no field.
+    {
+        id: "instagram",
+        label: "Instagram",
+        platformFields: [
+            {
+                type: "hashtags",
+                maxItems: 5,
+                suggestions: [
+                    "#StartupLife",
+                    "#SmallBusiness",
+                    "#BehindTheScenes",
+                    "#FounderStory",
+                    "#ProductDesign",
+                    "#BuildInPublic",
+                ],
+            },
+        ],
+    },
+    {
+        id: "threads",
+        label: "Threads",
+        platformFields: [
+            {
+                type: "hashtags",
+                maxItems: 1,
+                suggestions: ["#Startups", "#Tech", "#AI", "#Marketing", "#BuildInPublic"],
+            },
+        ],
+    },
+    {
+        id: "facebook",
+        label: "Facebook",
+        platformFields: [
+            {
+                type: "hashtags",
+                maxItems: 2,
+                suggestions: ["#SmallBusiness", "#Community", "#NewFeature", "#CustomerStory"],
+            },
+        ],
+    },
+    {
+        id: "tiktok",
+        label: "TikTok",
+        platformFields: [
+            {
+                type: "hashtags",
+                maxItems: 5,
+                suggestions: [
+                    "#StartupTok",
+                    "#TechTok",
+                    "#SmallBusiness",
+                    "#BuildInPublic",
+                    "#AITools",
+                    "#DayInTheLife",
+                ],
+            },
+        ],
+    },
+    {
+        id: "youtube",
+        label: "YouTube",
+        platformFields: [
+            {
+                type: "hashtags",
+                maxItems: 3,
+                suggestions: ["#Tutorial", "#Startups", "#AI", "#SaaS", "#ProductDemo", "#HowTo"],
+            },
+        ],
+    },
+    {
+        id: "mastodon",
+        label: "Mastodon",
+        platformFields: [
+            {
+                type: "hashtags",
+                maxItems: 4,
+                suggestions: [
+                    "#OpenSource",
+                    "#FOSS",
+                    "#Fediverse",
+                    "#SelfHosted",
+                    "#Privacy",
+                    "#IndieWeb",
+                ],
+            },
+        ],
+    },
+    { id: "hackernews", label: "Hacker News" },
+    { id: "producthunt", label: "Product Hunt" },
+    { id: "discord", label: "Discord" },
 ];
 
-/** Strip Markdown to plain text for platforms that don't render it (LinkedIn, X, Bluesky). */
+/** Strip Markdown to plain text for platforms that don't render it (see `rendersMarkdown`). */
 export function markdownToPlainText(text: string): string {
     return text
         .replace(/\*\*(.+?)\*\*/g, "$1")

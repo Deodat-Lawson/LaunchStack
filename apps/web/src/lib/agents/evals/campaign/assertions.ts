@@ -221,7 +221,9 @@ export const platformCharLimit: DeterministicAssertion = {
         // Fixture-first: a mislabeled output must not switch the limit.
         const platform = context.fixture?.platform ?? output?.platform;
         const limit = platform ? PLATFORM_CHAR_LIMITS[platform] : undefined;
-        if (!limit) return pass(this, this.id, "Unknown platform; skipped.");
+        if (!limit) {
+            return pass(this, this.id, "No single character limit for this platform; skipped.");
+        }
         const m = messages(output);
         if (m.length === 0) return fail(this, this.id, "No output to measure.");
         const over = m

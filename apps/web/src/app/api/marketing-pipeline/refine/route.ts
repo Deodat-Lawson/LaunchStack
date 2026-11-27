@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { refineContent } from "@launchstack/pipelines/marketing";
 import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
-import { MarketingPlatformEnum, BrandVoiceSchema } from "@launchstack/pipelines/marketing";
+import { CampaignPlatformEnum, BrandVoiceSchema } from "@launchstack/pipelines/marketing";
 import { requireBetaAppContext } from "~/server/beta-apps";
 import { refuseAtAiAllowance } from "~/server/ai-usage/refusal";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
@@ -12,7 +12,7 @@ export const runtime = "nodejs";
 export const maxDuration = 30;
 
 const RefineInputSchema = z.object({
-    platform: MarketingPlatformEnum,
+    platform: CampaignPlatformEnum,
     originalMessage: z.string().min(1),
     feedback: z.string().min(1).max(1000),
     brandVoice: BrandVoiceSchema.optional(),

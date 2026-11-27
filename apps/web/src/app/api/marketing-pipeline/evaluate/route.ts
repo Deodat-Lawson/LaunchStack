@@ -1,6 +1,10 @@
 import { z } from "zod";
 
-import { REFERENCE_POSTS } from "@launchstack/tools/platform-profiles";
+import {
+    DraftOnlyPlatformEnum,
+    platformNormsReference,
+    REFERENCE_POSTS,
+} from "@launchstack/tools/platform-profiles";
 
 import { buildCompanyKnowledgeContext } from "@launchstack/pipelines/marketing";
 import { scorePost, type ReferencePlatform } from "@launchstack/pipelines/marketing/benchmark";
@@ -81,9 +85,13 @@ export async function POST(request: Request) {
                 );
             }
 
-            // The judge is typed for x/linkedin/reddit; bluesky falls back to the x
-            // rubric with an empty reference.
-            const judgePlatform: ReferencePlatform =
+            // The judge has curated references for x/linkedin/reddit; bluesky
+            // falls back to the x rubric with an empty reference. A draft-only
+            // network (Instagram, Hacker News, …) is judged as itself, against
+            // its profile's norms: an X rubric would mark a video script down
+            // for not being a 280-character post.
+            const draftOnly = DraftOnlyPlatformEnum.safeParse(platform);
+            const curatedPlatform: ReferencePlatform =
                 platform === "linkedin" || platform === "reddit" ? platform : "x";
 
             const companyId = Number(ctx.data.companyId);
@@ -115,11 +123,13 @@ export async function POST(request: Request) {
             });
 
             const scored = await scorePost({
-                platform: judgePlatform,
+                platform: draftOnly.success ? draftOnly.data : curatedPlatform,
                 companyContext,
                 post: message,
                 // Read the reference md for the SAME platform the post was generated for.
-                referenceMarkdown: REFERENCE_POSTS[platform as ReferencePlatform] ?? "",
+                referenceMarkdown: draftOnly.success
+                    ? platformNormsReference(draftOnly.data)
+                    : (REFERENCE_POSTS[platform as ReferencePlatform] ?? ""),
             });
 
             return ok(scored);

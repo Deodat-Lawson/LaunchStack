@@ -6,18 +6,61 @@
  * templates and few-shot examples (generator.ts), hashtag caps (generator.ts
  * prompt assembly), hard character limits (publish.ts truncation), and the
  * judge's reference posts (benchmark/references/*.md, now ./references.ts).
- * All values are frozen as they were at extraction time.
+ * The original four's values are frozen as they were at extraction time.
+ *
+ * Two vocabularies live here. `MarketingPlatform` is where Brand can post;
+ * `CampaignPlatform` is everything the generator can write for, a superset.
+ * A draft-only network needs a profile and nothing else.
  */
 
 import { z } from "zod";
 
+import { DRAFT_ONLY_PROFILES } from "./draft-only";
 import { REFERENCE_POSTS } from "./references";
 
 export { REFERENCE_POSTS } from "./references";
 export type { ReferencePlatform } from "./references";
 
+/**
+ * The networks Brand can post to. The publish adapters, `brand_posts`,
+ * channels and accounts all key on these four, and only these.
+ */
 export const MarketingPlatformEnum = z.enum(["x", "linkedin", "reddit", "bluesky"]);
 export type MarketingPlatform = z.infer<typeof MarketingPlatformEnum>;
+
+/**
+ * Networks the campaign generator writes for and nothing here posts to: the
+ * draft is copied out and a person posts it. They have a profile below and
+ * no adapter, no channel and no account.
+ */
+export const DraftOnlyPlatformEnum = z.enum([
+    "instagram",
+    "threads",
+    "facebook",
+    "tiktok",
+    "youtube",
+    "mastodon",
+    "hackernews",
+    "producthunt",
+    "discord",
+]);
+export type DraftOnlyPlatform = z.infer<typeof DraftOnlyPlatformEnum>;
+
+/**
+ * Every network the campaign generator writes for: the four Brand can post
+ * to, then the draft-only ones. Generation, refinement and scoring take this;
+ * anything that publishes takes `MarketingPlatform`.
+ */
+export const CampaignPlatformEnum = z.enum([
+    ...MarketingPlatformEnum.options,
+    ...DraftOnlyPlatformEnum.options,
+]);
+export type CampaignPlatform = z.infer<typeof CampaignPlatformEnum>;
+
+/** Whether Brand can post to this network, or the draft is copy-only. */
+export function isPublishPlatform(platform: string): platform is MarketingPlatform {
+    return MarketingPlatformEnum.safeParse(platform).success;
+}
 
 export interface PlatformMeta {
     subreddit?: string;
@@ -25,7 +68,20 @@ export interface PlatformMeta {
 }
 
 export interface PlatformProfile {
-    id: MarketingPlatform;
+    id: CampaignPlatform;
+    /**
+     * The network's name as prompts and search queries say it. The original
+     * four say their id ("x", "linkedin"), frozen with the rest of their
+     * profile; a draft-only network says its real name ("Hacker News"),
+     * because "hackernews marketing trends" finds nothing.
+     */
+    promptName: string;
+    /**
+     * Rules for a format the generic post rules get wrong: a video script, a
+     * launch page, a forum submission. They join the generation task and win
+     * over it, and refinement and the quality gate keep the format too.
+     */
+    formatRules?: readonly string[];
     /** Campaign-level posting guidance (formerly run.ts buildPlatformGuidelines). */
     guidelines(meta?: PlatformMeta): string;
     /** Post-structure directives for the generation prompt. */
@@ -52,9 +108,10 @@ const DEFAULT_STRUCTURE = [
     "Tone: Clear, conversational, value-first. Write like a person, not a brand.",
 ].join("\n");
 
-export const PLATFORM_PROFILES: Record<MarketingPlatform, PlatformProfile> = {
+export const PLATFORM_PROFILES: Record<CampaignPlatform, PlatformProfile> = {
     x: {
         id: "x",
+        promptName: "x",
         guidelines: () =>
             [
                 "- Keep posts tight and high-signal; front-load the hook in the first line.",
@@ -89,6 +146,7 @@ What's the one workflow you'd automate first?
     },
     linkedin: {
         id: "linkedin",
+        promptName: "linkedin",
         guidelines: () =>
             [
                 "- Use a strong first line that clearly states the outcome or insight.",
@@ -174,6 +232,7 @@ Why this is bad: Generic opener, feature bullet list reads like a product page, 
     },
     reddit: {
         id: "reddit",
+        promptName: "reddit",
         guidelines: meta => {
             const lines = [
                 "- Speak like a real community member, not a brand account.",
@@ -217,6 +276,7 @@ Curious if anyone else has tried automating parts of their marketing workflow. W
     },
     bluesky: {
         id: "bluesky",
+        promptName: "bluesky",
         guidelines: () => DEFAULT_GUIDELINES,
         structureTemplate: DEFAULT_STRUCTURE,
         examples: `Example of a strong Bluesky post (for style reference only — do NOT copy content):
@@ -229,8 +289,29 @@ We rebuilt our pipeline around that idea. Early results are promising.
         hardCharLimit: 300,
         referencePosts: null,
     },
+    ...DRAFT_ONLY_PROFILES,
 };
 
-export function getPlatformProfile(platform: MarketingPlatform): PlatformProfile {
+export function getPlatformProfile(platform: CampaignPlatform): PlatformProfile {
     return PLATFORM_PROFILES[platform];
+}
+
+/**
+ * What the judge calibrates against for a network with no curated reference
+ * posts: the network's own norms and the one example its profile carries.
+ * (The curated three use `REFERENCE_POSTS`.)
+ */
+export function platformNormsReference(platform: DraftOnlyPlatform): string {
+    const profile = PLATFORM_PROFILES[platform];
+    return [
+        `# ${profile.promptName}: platform standard`,
+        "",
+        "No curated GOOD and BAD examples exist for this platform yet. Judge the candidate against the norms below instead, and treat the example as the expected format, not as a ceiling.",
+        "",
+        `## ${profile.promptName} platform norms`,
+        profile.structureTemplate,
+        "",
+        "## Expected format",
+        profile.examples,
+    ].join("\n");
 }

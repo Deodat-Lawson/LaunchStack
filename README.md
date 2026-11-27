@@ -312,7 +312,7 @@ The registration functions store state on `globalThis` (20 `createSlot` call sit
 - PostgreSQL + pgvector semantic retrieval for RAG
 - AI chat with agent guardrails (PII filter, grounding, confidence gate)
 - Predictive document analysis — eight document types are defined, though the request validator currently accepts only `contract`, `financial`, `technical`, `compliance` and `general`
-- Marketing pipeline for Reddit, X, LinkedIn, Bluesky
+- Marketing pipeline: campaign drafts for 13 networks (Reddit, X, LinkedIn and Bluesky, which it can also post to; Instagram, Threads, Facebook, TikTok, YouTube, Mastodon, Hacker News, Product Hunt and Discord as copy-only drafts)
 - Inngest-backed background jobs
 - Optional LangSmith tracing
 

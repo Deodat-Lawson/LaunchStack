@@ -111,10 +111,21 @@ export const MessagingStrategySchema = z.object({
 });
 
 // Platform vocabulary moved to @launchstack/tools/platform-profiles (PR-5).
-export { MarketingPlatformEnum } from "@launchstack/tools/platform-profiles";
-export type { MarketingPlatform } from "@launchstack/tools/platform-profiles";
-import { MarketingPlatformEnum } from "@launchstack/tools/platform-profiles";
-import type { MarketingPlatform } from "@launchstack/tools/platform-profiles";
+// Two of them: `MarketingPlatform` is where Brand can post, `CampaignPlatform`
+// is everything the generator writes for (a superset; the rest are copy-only).
+export {
+    CampaignPlatformEnum,
+    DraftOnlyPlatformEnum,
+    MarketingPlatformEnum,
+    isPublishPlatform,
+} from "@launchstack/tools/platform-profiles";
+export type {
+    CampaignPlatform,
+    DraftOnlyPlatform,
+    MarketingPlatform,
+} from "@launchstack/tools/platform-profiles";
+import { CampaignPlatformEnum } from "@launchstack/tools/platform-profiles";
+import type { CampaignPlatform } from "@launchstack/tools/platform-profiles";
 
 export const PlatformMetaSchema = z
     .object({
@@ -139,7 +150,7 @@ export const ContentTypeEnum = z.enum(["post", "thread", "ad_copy", "email", "mu
 export type ContentType = z.infer<typeof ContentTypeEnum>;
 
 export const MarketingPipelineInputSchema = z.object({
-    platform: MarketingPlatformEnum,
+    platform: CampaignPlatformEnum,
     prompt: z.string().min(1).max(2000).optional(),
     maxResearchResults: z.number().int().min(1).max(12).optional(),
     platformMeta: PlatformMetaSchema,
@@ -160,11 +171,11 @@ export interface MarketingResearchResult {
     title: string;
     url: string;
     snippet: string;
-    source: MarketingPlatform;
+    source: CampaignPlatform;
 }
 
 export const MarketingPipelineOutputSchema = z.object({
-    platform: MarketingPlatformEnum,
+    platform: CampaignPlatformEnum,
     message: z.string().min(1),
     "image/video": z.enum(["image", "video"]),
 });
@@ -173,7 +184,7 @@ export type MarketingPipelineOutput = z.infer<typeof MarketingPipelineOutputSche
 export interface MarketingPipelineResult extends MarketingPipelineOutput {
     research: MarketingResearchResult[];
     normalizedInput: {
-        platform: MarketingPlatform;
+        platform: CampaignPlatform;
         prompt: string;
     };
     /** Positioning angle used for this campaign (issue #232). */

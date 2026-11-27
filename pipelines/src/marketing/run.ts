@@ -263,7 +263,7 @@ export async function runMarketingPipeline(args: {
                     data: {
                         topics: normalized.slice(0, 4).map(r => ({ title: r.title, url: r.url })),
                     },
-                    narration: `Researching what's trending on ${normalizedInput.platform}... Found ${normalized.length} relevant topic${normalized.length !== 1 ? "s" : ""}: ${topicTitles || "none"}. These will frame the narrative hooks.`,
+                    narration: `Researching what's trending on ${getPlatformProfile(normalizedInput.platform).promptName}... Found ${normalized.length} relevant topic${normalized.length !== 1 ? "s" : ""}: ${topicTitles || "none"}. These will frame the narrative hooks.`,
                 };
             },
         }),
@@ -460,7 +460,7 @@ export async function runMarketingPipeline(args: {
                           }
                         : {}),
                 },
-                narration: `Writing ${generated.length} content variant${generated.length !== 1 ? "s" : ""} in parallel, one per strategy angle — each tailored to ${normalizedInput.platform} conventions. Results: ${generated.map(v => `${v.variantId} (${v.message.length} chars, ${v.mediaType})`).join("; ")}.${rankedNote}`,
+                narration: `Writing ${generated.length} content variant${generated.length !== 1 ? "s" : ""} in parallel, one per strategy angle — each tailored to ${getPlatformProfile(normalizedInput.platform).promptName} conventions. Results: ${generated.map(v => `${v.variantId} (${v.message.length} chars, ${v.mediaType})`).join("; ")}.${rankedNote}`,
             };
         },
     });

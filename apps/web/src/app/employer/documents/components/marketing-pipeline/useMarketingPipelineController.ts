@@ -21,6 +21,8 @@ import {
     type PlatformMeta,
     type ThinkingEntry,
     type ClaimGateClaimUI,
+    isPublishPlatform,
+    rendersMarkdown,
 } from "./shared";
 
 /** How often the screen asks a run for new progress. */
@@ -59,7 +61,7 @@ function buildInitialSteps(): PipelineStepState[] {
 }
 
 /**
- * Reddit renders Markdown natively; every other platform gets plain text.
+ * Reddit and Discord render Markdown natively; every other platform gets plain text.
  * Used by both the copy flow and publishPost so what we publish matches what
  * the user would have pasted.
  */
@@ -67,7 +69,7 @@ export function toPlatformText(
     platform: MarketingSession["platform"] | undefined,
     text: string
 ): string {
-    return platform === "reddit" ? text : markdownToPlainText(text);
+    return rendersMarkdown(platform) ? text : markdownToPlainText(text);
 }
 
 /* ── Quality evaluation (LLM-as-judge; raw scores, no rewrite) ── */
@@ -130,6 +132,20 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     // switch, pipeline rerun, message edit). In-flight evaluate/publish
     // responses check it so they never paint feedback for a previous post.
     const postFeedbackEpochRef = useRef(0);
+
+    // Set once someone picks a network or writes in the brief on this screen.
+    // Recovery below answers after a round trip to the server, and must not
+    // swap a finished draft (and its network) in over what they have started:
+    // the brief they then type would be sent for the wrong network.
+    const startedHereRef = useRef(false);
+    const pickPlatform = useCallback((next: MarketingSession["platform"]) => {
+        startedHereRef.current = true;
+        setPlatform(next);
+    }, []);
+    const writePrompt = useCallback((next: string) => {
+        startedHereRef.current = true;
+        setPrompt(next);
+    }, []);
 
     const selectedPlatform = PLATFORM_OPTIONS.find(option => option.id === platform) ?? null;
 
@@ -611,7 +627,8 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                         .slice(0, MAX_MARKETING_SESSIONS);
                 });
                 // An interaction while the lookup was in flight takes precedence.
-                if (postFeedbackEpochRef.current !== feedbackEpoch) return;
+                if (postFeedbackEpochRef.current !== feedbackEpoch || startedHereRef.current)
+                    return;
                 const active = data.runs[0];
                 if (active) {
                     void watchRun(active.id, active.input);
@@ -744,7 +761,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
             // plain-text conversion the copy flow produces.
             const targetPlatform = result?.platform ?? platform;
             const message = toPlatformText(targetPlatform, editableMessage).trim();
-            if (!targetPlatform || !message) return;
+            // A copy-only network has no Publish button; this keeps it true
+            // for any other caller too.
+            if (!isPublishPlatform(targetPlatform) || !message) return;
 
             const epoch = postFeedbackEpochRef.current;
             setPublishing(true);
@@ -910,9 +929,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
 
     return {
         platform,
-        setPlatform,
+        setPlatform: pickPlatform,
         prompt,
-        setPrompt,
+        setPrompt: writePrompt,
         loading,
         error,
         setError,

@@ -40,8 +40,27 @@ post's factual claims back to source documents.
 
 ### 1.2 Platforms
 
-`x`, `linkedin`, `reddit`, `bluesky` (`packages/tools/src/platform-profiles/index.ts:19`,
-re-exported by `pipelines/src/marketing/types.ts:113-117`).
+Two vocabularies, both in `packages/tools/src/platform-profiles/index.ts` and
+re-exported by `pipelines/src/marketing/types.ts`:
+
+- **`MarketingPlatform`** — `x`, `linkedin`, `reddit`, `bluesky`. The networks
+  Brand can post to: publish adapters, `brand_posts`, channels and accounts key
+  on these four only.
+- **`CampaignPlatform`** — those four plus the draft-only ones (2026-11):
+  `instagram`, `threads`, `facebook`, `tiktok`, `youtube`, `mastodon`,
+  `hackernews`, `producthunt`, `discord`. Generation, refinement and scoring
+  take this. A draft-only network has a profile
+  (`platform-profiles/draft-only.ts`) and nothing else: no adapter, no channel,
+  no Publish or Schedule in the UI, and the publish route refuses it. Four of
+  them (TikTok, YouTube, Hacker News, Product Hunt) are written as labelled
+  parts (a script and caption, a title and text) rather than one post; their
+  profile's `formatRules` join the generation task and win over the generic
+  one-post rules. Hacker News and Product Hunt have to say what the product
+  is, so where the company context does not say (what it is, how it works,
+  why it was built, how it differs) the draft carries a blank in square
+  brackets, such as `[one line: what the product is]`, for the person posting
+  to fill in. The convention sits in those two structure templates, so the
+  quality gate, refinement and the judge keep a blank rather than fill it.
 
 ### 1.3 Content types
 
@@ -53,7 +72,7 @@ directive, while `post` uses the base prompt (`generator.ts:159-171`).
 
 | Field                    | Required | Constraint                                      | Use                        |
 | ------------------------ | -------- | ----------------------------------------------- | -------------------------- |
-| `platform`               | Yes      | `x` \| `linkedin` \| `reddit` \| `bluesky`      | Platform formatting        |
+| `platform`               | Yes      | any `CampaignPlatform` (§1.2)                   | Platform formatting        |
 | `prompt`                 | No       | 1–2000 chars (defaults to a generic prompt)     | Campaign request           |
 | `maxResearchResults`     | No       | 1–12                                            | Trend research depth       |
 | `platformMeta.subreddit` | No       | ≤100 chars                                      | Reddit generation context; does not change publish destination |

@@ -16,9 +16,10 @@ import {
     type ResultItem,
     type TermCursor,
 } from "./discovery";
-import { NotRecordedError, Recorder } from "./recorder";
+import { NotRecordedError, Recorder, failOnUnrecorded } from "./recorder";
 import { createRng, hashSeed } from "./rng";
 import { bootstrapMean, mean, pairedDifference, quantile, sd } from "./stats";
+import { MissingRecordingsError, StaleRecordingsError, requireWorlds } from "./worlds";
 
 describe("rng", () => {
     it("replays the same stream for the same seed", () => {
@@ -193,6 +194,53 @@ describe("discovery simulation", () => {
         expect(asked).toEqual(["a", "ab"]);
     });
 
+    it("does not let a request that got no answer rule out the words under it", () => {
+        // The same prefix interface, but the request for "a" got no answer when
+        // it was recorded: it is spent, and it says nothing about "ab".
+        const items: ResultItem[] = [
+            { id: "1", name: "abc", target: true },
+            { id: "2", name: "abd", target: true },
+        ];
+        const asked: string[] = [];
+        const env: DiscoveryEnv = {
+            cap: 5,
+            planTerms: ["a", "ab"],
+            letterTerms: [],
+            allTerms: () => ["a", "ab"],
+            hasTerm: () => true,
+            open: term => {
+                let done = false;
+                return {
+                    pending: () => (done ? 0 : 1),
+                    peek: () => (done ? null : term === "a" ? [] : items),
+                    next: () => {
+                        done = true;
+                        asked.push(term);
+                        return term === "a" ? null : items;
+                    },
+                    complete: () => done && term !== "a",
+                };
+            },
+            tokens: text => [text.toLowerCase()],
+            wordMatches: (nameWord, queryWord) => nameWord.startsWith(queryWord),
+            keysOf: nameWord => [nameWord],
+        };
+        for (const policy of policySet({ cap: 5, letters: false })) {
+            for (let seed = 1; seed < 8; seed++) {
+                asked.length = 0;
+                const trace = simulate(env, policy, { budget: 5, seed });
+                // Whatever the order, "ab" is still asked and finds both places.
+                expect(asked).toContain("ab");
+                expect(at(trace.found, 5)).toBe(2);
+                // The unanswered request was spent like any other, and found nothing.
+                expect(trace.requests).toBe(asked.length);
+                if (asked[0] === "a") expect(trace.found[0]).toBe(0);
+            }
+        }
+        // The oracle spends nothing on it while a request that pays is left.
+        expect(simulateOracle(env, 5).found[0]).toBe(2);
+    });
+
     it("estimates a population from capture counts", () => {
         // 4 seen once, 2 seen twice: Chao1 = 6 + 4*3 / (2*3) = 8; coverage = 1 - 4/8.
         const captures = new Map([
@@ -211,8 +259,15 @@ describe("recorder", () => {
     let dir: string;
     let url: string;
     let hits = 0;
+    /** While true, /flaky answers 503, the way a busy public server does. */
+    let busy = true;
     const server = createServer((request, response) => {
         hits += 1;
+        if (request.url === "/flaky" && busy) {
+            response.writeHead(503, { "content-type": "text/plain" });
+            response.end("try later");
+            return;
+        }
         if (request.url === "/missing") {
             response.writeHead(404, { "content-type": "text/plain" });
             response.end("nope");
@@ -254,6 +309,96 @@ describe("recorder", () => {
         const replayed = await new Recorder({ dir, mode: "replay" }).fetchImpl(`${url}/missing`);
         expect(replayed.status).toBe(404);
         expect(await replayed.text()).toBe("nope");
+    });
+
+    it("sends a request that carried no answer again only when asked to, and only while recording", async () => {
+        const recording = new Recorder({ dir, mode: "record", minDelayMs: 0 });
+        const first = await recording.exchange(`${url}/flaky`);
+        expect(first.status).toBe(503);
+        const before = hits;
+
+        // The failure is the recording: asking again without the option replays it.
+        expect((await recording.exchange(`${url}/flaky`)).status).toBe(503);
+        // Replay never goes out, with or without the option.
+        const replay = new Recorder({ dir, mode: "replay" });
+        expect(
+            (await replay.exchange(`${url}/flaky`, undefined, { retryFailure: true })).status
+        ).toBe(503);
+        expect(hits).toBe(before);
+
+        // Recording, with the option: the request goes out again and replaces the failure.
+        busy = false;
+        const again = await recording.exchange(`${url}/flaky`, undefined, { retryFailure: true });
+        expect(again.status).toBe(200);
+        expect(hits).toBe(before + 1);
+        expect((await replay.exchange(`${url}/flaky`)).status).toBe(200);
+
+        // A failure that did carry an answer (a 404) is never sent again.
+        await recording.exchange(`${url}/missing`, undefined, { retryFailure: true });
+        expect(hits).toBe(before + 1);
+    });
+});
+
+describe("a request missing from the recording, inside code that swallows errors", () => {
+    /** Stands in for a production client: any fetch error becomes "nothing found". */
+    async function lenientClient(fetchImpl: typeof fetch): Promise<string[]> {
+        try {
+            await fetchImpl("https://example.invalid/search");
+            return ["found"];
+        } catch {
+            return [];
+        }
+    }
+
+    it("is noticed after the client returns", async () => {
+        const unrecorded: typeof fetch = async () => {
+            throw new NotRecordedError("GET", "https://example.invalid/search");
+        };
+        const strict = failOnUnrecorded(unrecorded);
+        expect(await lenientClient(strict.fetchImpl)).toEqual([]);
+        expect(() => strict.assertAllRecorded()).toThrow(NotRecordedError);
+    });
+
+    it("leaves an ordinary failure to the client", async () => {
+        const down: typeof fetch = async () => {
+            throw new Error("connection refused");
+        };
+        const strict = failOnUnrecorded(down);
+        expect(await lenientClient(strict.fetchImpl)).toEqual([]);
+        expect(() => strict.assertAllRecorded()).not.toThrow();
+    });
+});
+
+describe("recorded worlds", () => {
+    const segments = [{ id: "a" }, { id: "b" }, { id: "c" }];
+
+    it("returns every world, in segment order, when all are recorded", () => {
+        expect(requireWorlds("test", segments, id => ({ of: id }))).toEqual([
+            { of: "a" },
+            { of: "b" },
+            { of: "c" },
+        ]);
+    });
+
+    it("throws before anything is computed when a recording is missing, naming each one", () => {
+        const load = (id: string) => (id === "a" ? { of: id } : null);
+        expect(() => requireWorlds("test", segments, load)).toThrow(/no recording for b, c/);
+        expect(() => requireWorlds("test", segments, load)).toThrow(/Nothing was written/);
+        expect(() => requireWorlds("test", segments, load)).toThrow(MissingRecordingsError);
+    });
+
+    it("refuses a world written by an older recorder, and says how to rebuild it", () => {
+        const load = (id: string) => ({ of: id, format: id === "b" ? 1 : 2 });
+        const format = {
+            isCurrent: (world: { format: number }) => world.format === 2,
+            rebuild: "pnpm exec tsx record.ts",
+        };
+        expect(() => requireWorlds("test", segments, load, format)).toThrow(StaleRecordingsError);
+        expect(() => requireWorlds("test", segments, load, format)).toThrow(
+            /world of b was written by an older recorder.*pnpm exec tsx record\.ts/s
+        );
+        // Without a format to check, any world is taken as it is.
+        expect(requireWorlds("test", segments, load)).toHaveLength(3);
     });
 });
 

@@ -207,6 +207,33 @@ it("recovers a draft that completed after its screen was closed, even in a new t
     expect(polls).toHaveLength(1);
 });
 
+it("keeps the network someone picked while past runs were still loading", async () => {
+    // The lookup of past runs answers late: a cold server, a slow connection.
+    let answer!: (response: Response) => void;
+    (global.fetch as jest.Mock).mockImplementation((input: RequestInfo | URL) => {
+        const url = urlOf(input);
+        if (url === "/api/marketing-pipeline/runs")
+            return new Promise<Response>(resolve => {
+                answer = resolve;
+            });
+        throw new Error(`unexpected fetch ${url}`);
+    });
+    const { result } = renderHook(() => useMarketingPipelineController({ debug: false }));
+    await act(async () => {
+        result.current.setPlatform("hackernews");
+        result.current.setPrompt("Write a Show HN post");
+    });
+    await act(async () => {
+        answer(await respond({ runs: [], completedRuns: [view("completed", 5, 5)] }));
+    });
+    // The finished LinkedIn draft joins the history; it does not take the screen,
+    // or the brief being typed would go out for LinkedIn.
+    expect(result.current.platform).toBe("hackernews");
+    expect(result.current.prompt).toBe("Write a Show HN post");
+    expect(result.current.result).toBeNull();
+    expect(result.current.sessions.some(session => session.id === "run-1")).toBe(true);
+});
+
 it("does not overwrite saved edits or duplicate a recovered run on another visit", async () => {
     script = [() => respond({ run: view("completed", 0, 5) })];
     const first = renderHook(() => useMarketingPipelineController({ debug: false }));

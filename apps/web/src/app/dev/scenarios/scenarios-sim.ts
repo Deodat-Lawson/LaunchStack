@@ -113,7 +113,7 @@ interface SimRun {
 export interface ScenariosSimOptions {
     empty: boolean;
     credits: "ok" | "short" | "race";
-    /** The workspace's beta switch: off, Growth's prospects and post comments are not offered. */
+    /** The workspace's beta switch: off, Brand's post comments are not offered. */
     betaApps: boolean;
 }
 
@@ -858,7 +858,6 @@ export async function simulateScenarios(
         return json({
             ...SOURCE_OPTIONS,
             documents: filesAt(S, now),
-            prospects: betaApps ? SOURCE_OPTIONS.prospects : 0,
             brandComments: betaApps ? SOURCE_OPTIONS.brandComments : 0,
             betaApps,
         });

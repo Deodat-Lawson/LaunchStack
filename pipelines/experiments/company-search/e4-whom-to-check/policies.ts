@@ -538,6 +538,9 @@ function logreg(hyper: Hyper["logreg"], options: LogregOptions): Policy {
                 stale = false;
             };
 
+            // `remaining` is the number of untaken companies at this moment: it
+            // is counted down on every pick, also inside a batch, so a random
+            // draw never lands past the companies that are still unchecked.
             const takeRandom = (): number | null => {
                 if (remaining <= 0) return null;
                 let skip = sampler.int(remaining);
@@ -558,6 +561,7 @@ function logreg(hyper: Hyper["logreg"], options: LogregOptions): Policy {
                     const out: number[] = [];
                     if (options.epsilon <= 0) {
                         out.push(...takeTop(active, taken, scores, count));
+                        remaining -= out.length;
                     } else {
                         for (let i = 0; i < count; i++) {
                             const explore = sampler.next() < options.epsilon;
@@ -566,9 +570,9 @@ function logreg(hyper: Hyper["logreg"], options: LogregOptions): Policy {
                                 : (takeTop(active, taken, scores, 1)[0] ?? null);
                             if (j === null) break;
                             out.push(j);
+                            remaining -= 1;
                         }
                     }
-                    remaining -= out.length;
                     return out;
                 },
                 observe(index, good) {

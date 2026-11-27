@@ -355,18 +355,29 @@ describe("company facts", () => {
 });
 
 describe("other sources", () => {
-    it("reads Growth sources only while beta apps are on, and says so when they are off", async () => {
+    it("reads prospects either way and post comments only while beta apps are on", async () => {
         betaAppsOn.mockResolvedValue(false);
+        listPartners.mockResolvedValue([
+            {
+                org: {
+                    id: "org1",
+                    name: "Contoso",
+                    categories: ["logistics"],
+                    sizeBand: "50-200",
+                    description: "Runs depots.",
+                },
+                relationship: { fitScore: 0.8, fitRationale: "Uses Acme Legacy.", stage: "lead" },
+            },
+        ]);
         const off = await collectScenarioSources(
             run,
             spec({ prospects: true, brandComments: true })
         );
-        expect(off.sections).toEqual([]);
+        // Prospects is for every workspace; comments on Brand's posts are beta.
+        expect(off.sections.map(s => [s.sourceType, s.sourceId])).toEqual([["prospect", "org1"]]);
         expect(off.omissions.map(o => [o.sourceType, o.reason])).toEqual([
-            ["prospect", "no_access"],
             ["brand_comment", "no_access"],
         ]);
-        expect(listPartners).not.toHaveBeenCalled();
 
         betaAppsOn.mockResolvedValue(true);
         listPartners.mockResolvedValue([

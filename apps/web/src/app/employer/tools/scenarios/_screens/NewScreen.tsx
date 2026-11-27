@@ -190,9 +190,10 @@ export function NewScreen() {
         );
     };
 
-    // Prospects and post comments come from Growth, a beta app: no switch
-    // for either while the workspace has its beta apps off.
-    const growthSources = offered?.betaApps !== false;
+    // Comments on your posts come from Brand, still being built: no switch
+    // for them while the workspace has its beta apps off. Prospects is for
+    // every workspace.
+    const brandSources = offered?.betaApps !== false;
     const allSwitches: SourceSwitch[] = [
         {
             id: "profile",
@@ -245,9 +246,7 @@ export function NewScreen() {
             disabled: offered ? offered.brandComments === 0 : true,
         },
     ];
-    const switches = growthSources
-        ? allSwitches
-        : allSwitches.filter(s => s.id !== "prospects" && s.id !== "comments");
+    const switches = brandSources ? allSwitches : allSwitches.filter(s => s.id !== "comments");
 
     const hasNotes = notes.trim().length > 0;
     const builtFrom = [
@@ -285,8 +284,8 @@ export function NewScreen() {
             sources: {
                 documentIds: docs,
                 searchFiles,
-                prospects: growthSources && prospects && (offered?.prospects ?? 0) > 0,
-                brandComments: growthSources && brandComments && (offered?.brandComments ?? 0) > 0,
+                prospects: prospects && (offered?.prospects ?? 0) > 0,
+                brandComments: brandSources && brandComments && (offered?.brandComments ?? 0) > 0,
                 companyProfile: profileOn,
                 notes: notes.trim(),
             },

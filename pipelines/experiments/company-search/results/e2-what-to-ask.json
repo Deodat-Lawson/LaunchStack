@@ -20,6 +20,7 @@
         "mined": 4
       },
       "recordingRequests": 91,
+      "wordsCutShort": [],
       "today": {
         "requests": 5,
         "targetsFound": 25
@@ -1018,6 +1019,7 @@
         "mined": 10
       },
       "recordingRequests": 171,
+      "wordsCutShort": [],
       "today": {
         "requests": 6,
         "targetsFound": 45
@@ -2016,6 +2018,7 @@
         "mined": 19
       },
       "recordingRequests": 296,
+      "wordsCutShort": [],
       "today": {
         "requests": 7,
         "targetsFound": 28
@@ -3014,6 +3017,7 @@
         "mined": 60
       },
       "recordingRequests": 610,
+      "wordsCutShort": [],
       "today": {
         "requests": 5,
         "targetsFound": 56
@@ -4012,6 +4016,7 @@
         "mined": 60
       },
       "recordingRequests": 708,
+      "wordsCutShort": [],
       "today": {
         "requests": 5,
         "targetsFound": 85
@@ -5010,6 +5015,7 @@
         "mined": 60
       },
       "recordingRequests": 674,
+      "wordsCutShort": [],
       "today": {
         "requests": 5,
         "targetsFound": 84

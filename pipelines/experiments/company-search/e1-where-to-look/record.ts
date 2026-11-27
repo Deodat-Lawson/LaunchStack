@@ -8,7 +8,10 @@
  *  2. for every search word a policy could ask (the words known up front,
  *     the letters a to z, and the words that occur in found places' names),
  *     a quadtree sweep of Photon from the country box down, splitting every
- *     box that came back full;
+ *     box that came back full. A box whose request gets no answer is tried
+ *     again, here and whenever the segment is recorded again, and is kept as
+ *     a hole (`NodeAnswer.failed`) for as long as it has none: never as an
+ *     empty box;
  *  3. the OSM tags of every place found (who has a website);
  *  4. the true population from Overpass, with every attempt logged, since
  *     the public mirrors are often at capacity.
@@ -20,21 +23,17 @@
 import { nativeTermsFor } from "../../../src/distribution/keyless/geo";
 import { createKeylessPorts } from "../../../src/distribution/keyless/ports";
 import { searchPhoton } from "../../../src/distribution/keyless/photon";
-import { Recorder } from "../lib/recorder";
-import { SEGMENTS, type Bbox, type PlaceSegment } from "./segments";
 import {
-    PHOTON_CAP,
-    childBboxes,
-    loadWorld,
-    nameTokens,
-    photonUrl,
-    saveWorld,
-    type NodeAnswer,
-    type Place,
-    type World,
-} from "./world";
+    Recorder,
+    answered,
+    exchangeWithRetries,
+    failOnUnrecorded,
+    failureDetail,
+} from "../lib/recorder";
+import { SEGMENTS, type PlaceSegment } from "./segments";
+import { sweep } from "./sweep";
+import { WORLD_FORMAT, loadWorld, nameTokens, saveWorld, type Place, type World } from "./world";
 
-const MAX_DEPTH = 8;
 /** Mined words recorded per round, most frequent first. */
 const MINED_PER_ROUND = [70, 30];
 /**
@@ -55,16 +54,6 @@ const OVERPASS_MIRRORS = [
 const OVERPASS_ROUNDS = 5;
 const LETTERS = "abcdefghijklmnopqrstuvwxyz".split("");
 
-interface PhotonFeature {
-    geometry?: { coordinates?: [number, number] };
-    properties: {
-        osm_type?: "N" | "W" | "R";
-        osm_id?: number;
-        name?: string;
-        countrycode?: string;
-    };
-}
-
 function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -79,62 +68,6 @@ function websiteOf(tags: Record<string, string> | undefined): string | null {
     } catch {
         return null;
     }
-}
-
-function inCountryPlaces(features: PhotonFeature[], country: string): Place[] {
-    const out: Place[] = [];
-    for (const f of features) {
-        const p = f.properties;
-        const coords = f.geometry?.coordinates;
-        if (!p.osm_id || !p.osm_type || !p.name || !coords) continue;
-        if ((p.countrycode ?? "").toUpperCase() !== country) continue;
-        out.push({ id: `${p.osm_type}${p.osm_id}`, name: p.name, lon: coords[0], lat: coords[1] });
-    }
-    return out;
-}
-
-/** The whole quadtree for one search word. */
-async function sweep(
-    segment: PlaceSegment,
-    term: string,
-    recorder: Recorder,
-    places: Record<string, Place>
-): Promise<{ nodes: Record<string, NodeAnswer>; requests: number }> {
-    const nodes: Record<string, NodeAnswer> = {};
-    let requests = 0;
-    const queue: Array<{ id: string; bbox: Bbox; depth: number }> = [
-        { id: "r", bbox: segment.bbox, depth: 0 },
-    ];
-    while (queue.length > 0) {
-        const node = queue.shift()!;
-        let features: PhotonFeature[];
-        try {
-            features = (
-                await recorder.getJson<{ features: PhotonFeature[] }>(
-                    photonUrl(segment, term, node.bbox)
-                )
-            ).features;
-        } catch (error) {
-            console.warn(`  photon failed for "${term}" ${node.id}: ${String(error)}`);
-            features = [];
-        }
-        requests += 1;
-        const found = inCountryPlaces(features, segment.country);
-        for (const p of found) places[p.id] ??= p;
-        const capped = features.length >= PHOTON_CAP;
-        nodes[node.id] = {
-            id: node.id,
-            bbox: node.bbox,
-            depth: node.depth,
-            places: found.map(p => p.id),
-            capped,
-        };
-        if (capped && node.depth < MAX_DEPTH) {
-            for (const [i, bbox] of childBboxes(node.bbox).entries())
-                queue.push({ id: `${node.id}.${i}`, bbox, depth: node.depth + 1 });
-        }
-    }
-    return { nodes, requests };
 }
 
 /** Words in found names, most frequent first, that are not recorded yet. */
@@ -157,6 +90,11 @@ function minedTerms(
         .map(([token]) => token);
 }
 
+/**
+ * Which of the places carry a website in their OSM tags. A look-up that gets
+ * no answer is tried again while recording and then stops the run: storing
+ * its places as "no website" would be a guess. An unrecorded look-up throws.
+ */
 async function fetchWebsites(ids: readonly string[], recorder: Recorder): Promise<string[]> {
     const byType: Record<"node" | "way" | "relation", string[]> = {
         node: [],
@@ -172,19 +110,27 @@ async function fetchWebsites(ids: readonly string[], recorder: Recorder): Promis
         const list = byType[type];
         for (let i = 0; i < list.length; i += 100) {
             const chunk = list.slice(i, i + 100);
-            try {
-                const json = await recorder.getJson<{
-                    elements: Array<{ type: string; id: number; tags?: Record<string, string> }>;
-                }>(`${OSM_API_URL}/${type}s.json?${type}s=${chunk.join(",")}`);
-                for (const el of json.elements) {
-                    if (websiteOf(el.tags) && el.tags?.name)
-                        withWebsite.push(`${type[0]!.toUpperCase()}${el.id}`);
+            const exchange = await exchangeWithRetries(
+                recorder,
+                `${OSM_API_URL}/${type}s.json?${type}s=${chunk.join(",")}`,
+                {
+                    onFailure: (failed, attempt, attempts) =>
+                        console.warn(
+                            `  osm api gave no answer for ${chunk.length} ${type}s (try ${attempt} of ${attempts}): ${failureDetail(failed)}`
+                        ),
                 }
-            } catch (error) {
-                console.warn(
-                    `  osm api chunk failed (${type}, ${chunk.length} ids):`,
-                    String(error)
+            );
+            if (!answered(exchange)) {
+                throw new Error(
+                    `The OSM API gave no answer for the tags of ${chunk.length} ${type}s (${failureDetail(exchange)}). Which of them have a website is unknown, so this world is not saved. Record the segment again.`
                 );
+            }
+            const json = JSON.parse(exchange.body) as {
+                elements: Array<{ type: string; id: number; tags?: Record<string, string> }>;
+            };
+            for (const el of json.elements) {
+                if (websiteOf(el.tags) && el.tags?.name)
+                    withWebsite.push(`${type[0]!.toUpperCase()}${el.id}`);
             }
         }
     }
@@ -198,12 +144,15 @@ async function runProduction(
 ): Promise<World["production"]> {
     let photonRequests = 0;
     let osmApiRequests = 0;
+    // Production catches fetch errors and returns what it has, so a request
+    // missing from the recording is checked for after it returns.
+    const strict = failOnUnrecorded(recorder.fetchImpl);
     const counting: typeof fetch = async (input, init) => {
         const url =
             typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
         if (url.startsWith("https://photon.komoot.io/")) photonRequests += 1;
         else osmApiRequests += 1;
-        return recorder.fetchImpl(input, init);
+        return strict.fetchImpl(input, init);
     };
     // keyless/ports.ts splits the planned query on whitespace before calling searchPhoton.
     const keywords = segment.keywords.join(" ").split(/\s+/).filter(Boolean);
@@ -217,6 +166,7 @@ async function runProduction(
         },
         { fetchImpl: counting }
     );
+    strict.assertAllRecorded();
     const [key, value] = segment.tag.split(":");
     const onTarget = kept.filter(p => p.categories.includes(`${key}=${value}`));
     return {
@@ -237,13 +187,14 @@ async function runProductionFull(
 ): Promise<NonNullable<World["productionFull"]>> {
     const requestsByHost: Record<string, number> = {};
     const failedByHost: Record<string, number> = {};
+    const strict = failOnUnrecorded(recorder.fetchImpl);
     const counting: typeof fetch = async (input, init) => {
         const url =
             typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
         const host = new URL(url).hostname;
         requestsByHost[host] = (requestsByHost[host] ?? 0) + 1;
         try {
-            const response = await recorder.fetchImpl(input, init);
+            const response = await strict.fetchImpl(input, init);
             if (!response.ok) failedByHost[host] = (failedByHost[host] ?? 0) + 1;
             return response;
         } catch (error) {
@@ -259,6 +210,8 @@ async function runProductionFull(
             categoryIds: [segment.selector],
             territory: { country: segment.country },
         });
+        // A failed server is part of this live sample; a request missing from the recording is not.
+        strict.assertAllRecorded();
         return {
             requestsByHost,
             failedByHost,
@@ -268,6 +221,7 @@ async function runProductionFull(
             error: null,
         };
     } catch (error) {
+        strict.assertAllRecorded();
         return {
             requestsByHost,
             failedByHost,
@@ -370,12 +324,14 @@ async function main(): Promise<void> {
         const places: Record<string, Place> = {};
         const sweeps: World["sweeps"] = {};
         let photonRequests = 0;
+        let unanswered = 0;
         const run = async (terms: readonly string[]): Promise<void> => {
             for (const term of terms) {
                 if (sweeps[term]) continue;
                 const swept = await sweep(segment, term, recorder, places);
                 sweeps[term] = swept.nodes;
                 photonRequests += swept.requests;
+                unanswered += swept.unanswered;
             }
         };
         const keywords = segment.keywords.join(" ").split(/\s+/).filter(Boolean);
@@ -401,6 +357,12 @@ async function main(): Promise<void> {
             );
         }
 
+        if (unanswered > 0) {
+            console.warn(
+                `  ${unanswered} sweep request(s) got no answer and are kept as holes in this world; record this segment again to fill them`
+            );
+        }
+
         const withWebsite = await fetchWebsites(Object.keys(places), recorder);
         console.log(`  with a website: ${withWebsite.length} of ${Object.keys(places).length}`);
         const previous = loadWorld(segment.id);
@@ -412,6 +374,7 @@ async function main(): Promise<void> {
             `  overpass truth: ${truth?.all.length ?? 0} named places, ${truth?.withWebsite.length ?? 0} with a website (${truth?.attempts.filter(a => a.ok).length ?? 0}/${truth?.attempts.length ?? 0} attempts answered)`
         );
         saveWorld({
+            format: WORLD_FORMAT,
             segment,
             sweeps,
             terms: { plan, letters: LETTERS, mined },

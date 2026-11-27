@@ -16,7 +16,8 @@ import { z } from "zod";
 import type { ResolveChatModelOptions } from "@launchstack/llm";
 
 import { invokeToolStructured } from "../llm";
-import type { MarketingPlatform, ReferencePlatform } from "../platform-profiles";
+import { getPlatformProfile } from "../platform-profiles";
+import type { CampaignPlatform, DraftOnlyPlatform, ReferencePlatform } from "../platform-profiles";
 import {
     buildJudgeHumanPrompt,
     JUDGE_RUBRIC_VERSION,
@@ -37,18 +38,27 @@ export const CONTENT_SCORING_MODELS = {
 
 // ─── Offline judge (raw scores, never rewrites) ──────────────────────────────
 
+/**
+ * A network the judge can be told a post is for: one with curated reference
+ * posts, or a draft-only one, judged against its profile's norms.
+ */
+export type JudgePlatform = ReferencePlatform | DraftOnlyPlatform;
+
 export interface JudgePostInput {
-    platform: ReferencePlatform;
+    platform: JudgePlatform;
     /** Company-context window the post was generated from (mirror of generation). */
     companyContext: string;
     /** The candidate post to score. */
     post: string;
-    /** Calibration examples (see platform-profiles REFERENCE_POSTS). */
+    /**
+     * Calibration examples (platform-profiles `REFERENCE_POSTS`), or for a
+     * draft-only network its norms (`platformNormsReference`).
+     */
     referenceMarkdown: string;
 }
 
 export interface ScoredPost extends JudgeResult {
-    platform: ReferencePlatform;
+    platform: JudgePlatform;
     judgeModel: string;
     rubricVersion: string;
 }
@@ -63,7 +73,8 @@ export async function scorePost(input: JudgePostInput): Promise<ScoredPost> {
             new SystemMessage(JUDGE_SYSTEM_PROMPT),
             new HumanMessage(
                 buildJudgeHumanPrompt({
-                    platform: input.platform,
+                    // "Hacker News", not "hackernews"; the curated three say their id.
+                    platform: getPlatformProfile(input.platform).promptName,
                     referenceMarkdown: input.referenceMarkdown,
                     companyContext: input.companyContext,
                     post: input.post,
@@ -132,7 +143,7 @@ export function buildVariantRanking(scores: Array<QualityScore | null>): Variant
  */
 export async function rankVariants(args: {
     posts: string[];
-    platform: MarketingPlatform;
+    platform: CampaignPlatform;
 }): Promise<VariantRanking> {
     const settled = await Promise.allSettled(
         args.posts.map(post => validatePostQuality(post, args.platform))
@@ -144,8 +155,14 @@ export async function rankVariants(args: {
 
 export async function validatePostQuality(
     post: string,
-    platform: MarketingPlatform
+    campaignPlatform: CampaignPlatform
 ): Promise<QualityScore> {
+    const profile = getPlatformProfile(campaignPlatform);
+    const platform = profile.promptName;
+    // A post made of labelled parts is scored as that format, and a rewrite keeps it.
+    const format = profile.formatRules?.length
+        ? `\n\nThis platform's post is written in a set format. Score it as that format, and keep the format in any rewrite:\n${profile.structureTemplate}`
+        : "";
     const { result } = await invokeToolStructured(
         CONTENT_SCORING_MODELS.qualityGate,
         QualityScoreSchema,
@@ -159,7 +176,7 @@ export async function validatePostQuality(
 5. Structure (is it narrative-driven rather than a feature list?)
 
 If score < ${QUALITY_THRESHOLD}, provide a "rewrite" field with an improved version that fixes the issues.
-Flag specific issues in "issues" array.`
+Flag specific issues in "issues" array.${format}`
             ),
             new HumanMessage(post),
         ],

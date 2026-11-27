@@ -388,15 +388,17 @@ export const SETTINGS: readonly SettingDefinition[] = [
     {
         // Read by `useStudioAccess` (which apps a person sees) and by
         // `~/server/beta-apps` (whether the apps' APIs answer). The apps are
-        // the Studio entries marked `beta` in `_workspace/types.ts`.
+        // the Studio entries marked `beta` in `_workspace/types.ts` (Vantage)
+        // and the places in `~/lib/tool-app/beta-places` (Growth's Brand).
+        // Prospects, the rest of Growth, is not behind it.
         key: BETA_APPS_SETTING,
         section: "labs",
         label: "Beta apps",
         description:
-            "Shows the apps that are still being built: Growth and Vantage. Off, they are hidden for everyone in the workspace and their data is kept as it is.",
+            "Shows the apps that are still being built: Brand (in Growth) and Vantage. Off, they are hidden for everyone in the workspace and their data is kept as it is. Prospects, the rest of Growth, is always on.",
         consequence:
-            "Turning it off hides Growth and Vantage for everyone at once. Posts already scheduled in Growth still go out.",
-        aliases: ["beta", "growth", "vantage", "brand", "prospects", "unfinished", "preview"],
+            "Turning it off hides Brand and Vantage for everyone at once. Posts already scheduled in Brand still go out.",
+        aliases: ["beta", "vantage", "brand", "unfinished", "preview"],
         scopes: ["workspace"],
         permission: "settings.manage",
         schema: z.boolean(),

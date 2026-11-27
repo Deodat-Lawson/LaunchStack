@@ -18,6 +18,7 @@ import { availableParallelism } from "node:os";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
+import { NotRecordedError } from "../lib/recorder";
 import { GRIDS, HYPER, SIMULATION, TUNING } from "./config";
 import { createRecorder, createVectorSource, POOL_IDS } from "./data";
 import { type JobResult, type JobSpec, runJob, type TaskSpec } from "./job";
@@ -30,10 +31,23 @@ const RESULTS_FILE = path.resolve(HERE, "..", "results", "e4-whom-to-check.json"
 const TUNING_FILE = path.join(HERE, "tuning.json");
 
 const started = Date.now();
-const decision = await decidePrefixMode(
-    createRecorder("replay"),
-    createVectorSource({ offline: true })
-);
+let decision: Awaited<ReturnType<typeof decidePrefixMode>>;
+try {
+    decision = await decidePrefixMode(
+        createRecorder("replay"),
+        createVectorSource({ offline: true })
+    );
+} catch (error) {
+    // A fresh checkout has no recordings: say so and stop. Nothing has been written yet.
+    const missing =
+        error instanceof NotRecordedError ||
+        (error instanceof Error && error.message.includes("not in the cache"));
+    if (!missing) throw error;
+    console.error(
+        `${error instanceof Error ? error.message : String(error)}\nThe recording is missing or incomplete, and nothing was written. Record first:\n  COMPANY_SEARCH_BENCH_MODE=record pnpm exec tsx experiments/company-search/e4-whom-to-check/record.ts`
+    );
+    process.exit(1);
+}
 
 const requested = Number(process.env.E4_WORKERS ?? "");
 /** Processes at once: E4_WORKERS, else one per job while a processor stays free for everything else. */

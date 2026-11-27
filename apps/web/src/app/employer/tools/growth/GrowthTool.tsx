@@ -19,6 +19,9 @@ import {
 import { useTranslations } from "next-intl";
 
 import { ProspectsMark } from "~/components/icons/prospects";
+import { BETA_APPS_SETTING } from "~/lib/settings/registry";
+import { useSetting } from "~/lib/settings/useSettings";
+import { isBetaPlace } from "~/lib/tool-app/beta-places";
 import { SkeletonRows } from "~/components/tools/SkeletonRows";
 import { Skeleton } from "~/components/ui/skeleton";
 import { ToolFrame, ToolNotFound, type ToolNavGroup } from "~/components/tool-app/ToolFrame";
@@ -47,8 +50,10 @@ import { SegmentScreen } from "./prospects/_screens/SegmentScreen";
 import { SourcesScreen } from "./prospects/_screens/SourcesScreen";
 
 /**
- * Growth: one tool for making the company known (Brand) and finding the
- * companies that will buy (Prospects), as a tab of the workspace.
+ * Growth: one tool for finding the companies that will buy (Prospects) and
+ * making the company known (Brand), as a tab of the workspace. Prospects is
+ * for every workspace; Brand is still being built and shows only while the
+ * workspace has its beta apps on (`~/lib/tool-app/beta-places`).
  *
  * It used to be its own route tree under `/employer/tools/growth`, so
  * opening it left the workspace and closed every other tab. Now the tab
@@ -68,16 +73,28 @@ export function GrowthTool({ host }: { host?: ToolHost }) {
 }
 
 /**
- * One bar for the two halves of growing a company. Brand has no unit of
- * navigation beyond the week, so its group is plain screens; Prospects keeps
- * the segment switcher, since every screen there is about one segment. The
- * run sheet is the frame's overlay so any screen's "Find companies" can open
- * it, and it covers this tab only.
+ * Whether Brand's screens show: the workspace's beta switch, which reads as
+ * off until the settings have answered and when they fail to. `loaded` lets
+ * a Brand link wait for the answer instead of being turned away early.
+ */
+function useBrandAccess(): { on: boolean; loaded: boolean } {
+    const beta = useSetting<boolean>(BETA_APPS_SETTING);
+    return { on: beta.value === true, loaded: beta.loaded || Boolean(beta.error) };
+}
+
+/**
+ * One bar for the two halves of growing a company. Prospects keeps the
+ * segment switcher, since every screen there is about one segment; Brand has
+ * no unit of navigation beyond the week, so its group is plain screens, and
+ * it is there only while the workspace has its beta apps on. The run sheet
+ * is the frame's overlay so any screen's "Find companies" can open it, and
+ * it covers this tab only.
  */
 function GrowthFrame() {
     const t = useTranslations("growth.tool");
     const path = useToolPathname();
-    const groups = useGrowthGroups();
+    const brand = useBrandAccess();
+    const groups = useGrowthGroups(brand.on);
     return (
         <ToolFrame
             title={t("title")}
@@ -92,17 +109,58 @@ function GrowthFrame() {
                 when every screen was a page — one company's half-typed next
                 step must not carry over to the next company. A query change
                 (the Companies filters) keeps the screen and its focus. */}
-            <GrowthScreenView key={path} screen={growthScreenFor(path)} />
+            <GrowthScreenView
+                key={path}
+                screen={growthScreenFor(path)}
+                brand={isBetaPlace("growth", path) ? brand : null}
+            />
         </ToolFrame>
     );
 }
 
-function useGrowthGroups(): ToolNavGroup[] {
+function useGrowthGroups(brandOn: boolean): ToolNavGroup[] {
     const t = useTranslations("growth.tool");
     const { segment } = useProspects();
     const paths = useGrowthPaths();
     const counts = segment?.counts;
+    const prospects: ToolNavGroup = {
+        id: "prospects",
+        label: t("groups.prospects"),
+        toolbar: <SegmentSwitcher compact />,
+        header: <SegmentSwitcher />,
+        items: [
+            { to: paths.prospects(""), label: t("nav.home"), icon: House, exact: true },
+            {
+                to: paths.prospects("/companies"),
+                label: t("nav.companies"),
+                icon: Building2,
+                count: counts?.companies,
+            },
+            {
+                to: paths.prospects("/people"),
+                label: t("nav.people"),
+                icon: Users,
+                count: counts?.people,
+            },
+            {
+                to: paths.prospects("/deals"),
+                label: t("nav.deals"),
+                icon: Handshake,
+                count: counts?.deals,
+            },
+            { to: paths.prospects("/runs"), label: t("nav.runs"), icon: History },
+            { to: paths.prospects("/segment"), label: t("nav.segment"), icon: Target },
+            {
+                to: paths.prospects("/sources"),
+                label: t("nav.sources"),
+                icon: Database,
+                count: counts?.sources,
+            },
+        ],
+    };
+    if (!brandOn) return [prospects];
     return [
+        prospects,
         {
             id: "brand",
             label: t("groups.brand"),
@@ -125,48 +183,34 @@ function useGrowthGroups(): ToolNavGroup[] {
                 { to: paths.brand("/accounts"), label: t("nav.accounts"), icon: AtSign },
             ],
         },
-        {
-            id: "prospects",
-            label: t("groups.prospects"),
-            toolbar: <SegmentSwitcher compact />,
-            header: <SegmentSwitcher />,
-            items: [
-                { to: paths.prospects(""), label: t("nav.home"), icon: House, exact: true },
-                {
-                    to: paths.prospects("/companies"),
-                    label: t("nav.companies"),
-                    icon: Building2,
-                    count: counts?.companies,
-                },
-                {
-                    to: paths.prospects("/people"),
-                    label: t("nav.people"),
-                    icon: Users,
-                    count: counts?.people,
-                },
-                {
-                    to: paths.prospects("/deals"),
-                    label: t("nav.deals"),
-                    icon: Handshake,
-                    count: counts?.deals,
-                },
-                { to: paths.prospects("/runs"), label: t("nav.runs"), icon: History },
-                { to: paths.prospects("/segment"), label: t("nav.segment"), icon: Target },
-                {
-                    to: paths.prospects("/sources"),
-                    label: t("nav.sources"),
-                    icon: Database,
-                    count: counts?.sources,
-                },
-            ],
-        },
     ];
 }
 
-/** The element for a screen key; the path → key half lives in `_lib/screens.ts`. */
-function GrowthScreenView({ screen }: { screen: GrowthScreen }) {
+/**
+ * The element for a screen key; the path → key half lives in `_lib/screens.ts`.
+ * `brand` is the beta switch's answer when the path is one of Brand's
+ * screens, which wait for it and say why they are not there while it is off.
+ */
+function GrowthScreenView({
+    screen,
+    brand,
+}: {
+    screen: GrowthScreen;
+    brand: { on: boolean; loaded: boolean } | null;
+}) {
     const t = useTranslations("growth.tool");
     const { segmentId, segmentsLoading } = useProspects();
+    if (brand && !brand.on) {
+        if (!brand.loaded) return <ProspectsLoading />;
+        return (
+            <ToolNotFound
+                home={GROWTH_HOME}
+                homeLabel={t("notFoundHome")}
+                title={t("brandOff.title")}
+                body={t("brandOff.body")}
+            />
+        );
+    }
     // Every Prospects screen is about one segment. Until the segment list has
     // answered there is no segment to ask about, and a screen asked anyway
     // says "No companies in this segment yet" — on every reload of a restored

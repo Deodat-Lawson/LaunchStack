@@ -33,9 +33,9 @@ jest.mock("~/server/history/loaders", () => {
         "weekly-review",
         "vantage",
     ];
-    // As in the real list: Vantage's agendas and Prospects' older runs are
-    // a beta app's rows.
-    const beta = new Set<HistoryKind>(["distribution", "vantage"]);
+    // As in the real list (pinned in __tests__/prospects/prospects-not-beta):
+    // Vantage's agendas are a beta app's rows; Prospects' older runs are not.
+    const beta = new Set<HistoryKind>(["vantage"]);
     return {
         PIPELINE_LOADERS: kinds.map(kind => ({
             kind,
@@ -103,10 +103,11 @@ describe("loadWorkspaceHistory", () => {
 
         const page = await loadWorkspaceHistory(OWNER);
 
-        expect(page.entries.map(e => e.id)).toEqual(["chat:s1", "e1"]);
+        // Prospects' runs stay: Prospects is for every workspace.
+        expect(page.entries.map(e => e.id)).toEqual(["d1", "chat:s1", "e1"]);
         expect(mockBetaAppsOn).toHaveBeenCalledWith(BigInt(5));
         expect(mockLoad.vantage).not.toHaveBeenCalled();
-        expect(mockLoad.distribution).not.toHaveBeenCalled();
+        expect(mockLoad.distribution).toHaveBeenCalled();
         // Left out on purpose, not lost: nothing is reported missing.
         expect(page.degraded).toEqual([]);
     });
@@ -121,7 +122,7 @@ describe("loadWorkspaceHistory", () => {
     });
 
     it("does not ask about the switch when no beta app's rows are wanted", async () => {
-        await loadWorkspaceHistory({ ...OWNER, kinds: ["chat", "email"] });
+        await loadWorkspaceHistory({ ...OWNER, kinds: ["chat", "email", "distribution"] });
         expect(mockBetaAppsOn).not.toHaveBeenCalled();
     });
 

@@ -13,7 +13,12 @@ import path from "node:path";
 import { gunzipSync } from "node:zlib";
 
 import { searchPhoton } from "../../../src/distribution/keyless/photon";
-import type { RecordedExchange, Recorder } from "../lib/recorder";
+import {
+    NotRecordedError,
+    failOnUnrecorded,
+    type RecordedExchange,
+    type Recorder,
+} from "../lib/recorder";
 import { createRng, hashSeed } from "../lib/rng";
 import { bareHost } from "./html";
 
@@ -338,15 +343,19 @@ export async function loadCandidates(
         statuses.set(key, (statuses.get(key) ?? 0) + 1);
         if (status === "ERR" || isFailure(status)) failed += 1;
     };
+    // Production's Photon search catches every fetch error and returns what it
+    // has. A request that is missing from the recording is not a failed
+    // request: it is checked for once the search returns, and stops the run.
+    const strict = failOnUnrecorded(recorder.fetchImpl);
     const fetchImpl: typeof fetch = async (input, init) => {
         const url =
             typeof input === "string" ? input : input instanceof URL ? input.href : input.url;
         try {
-            const response = await recorder.fetchImpl(input, init);
+            const response = await strict.fetchImpl(input, init);
             note(url, response.status);
             return response;
         } catch (error) {
-            note(url, "ERR");
+            if (!(error instanceof NotRecordedError)) note(url, "ERR");
             throw error;
         }
     };
@@ -356,6 +365,7 @@ export async function loadCandidates(
         nlde: await lowlandsAndGermany(fetchImpl),
         en: await english(recorder),
     };
+    strict.assertAllRecorded();
     const seen = new Set<string>();
     const candidates: Record<GroupId, Candidate[]> = { no: [], nlde: [], en: [] };
     for (const group of GROUPS) {

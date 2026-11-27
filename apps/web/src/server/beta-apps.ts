@@ -1,17 +1,18 @@
 /**
  * The server's half of the workspace's beta switch (`labs.betaApps`,
- * Workspace › Labs). While it is off, the apps still being built (Growth and
- * Vantage, marked `beta` in the Studio registry) are hidden in the browser
- * and their APIs refuse here, so a hidden app is off and not just out of
- * sight.
+ * Workspace › Labs). While it is off, what is still being built (Vantage,
+ * marked `beta` in the Studio registry, and Growth's Brand screens, in
+ * `~/lib/tool-app/beta-places`) is hidden in the browser and its APIs refuse
+ * here, so a hidden app is off and not just out of sight.
  *
- * Refused: `/api/vantage`, `/api/brand`, `/api/prospects`,
- * `/api/marketing-pipeline` and `/api/distribution` (Prospects' older
- * backend), all through `requireBetaAppContext`. History leaves out the
- * beta apps' rows (`server/history`).
+ * Refused: `/api/vantage`, `/api/brand` and `/api/marketing-pipeline`
+ * (Brand's campaigns), all through `requireBetaAppContext`. History leaves
+ * out Vantage's rows (`server/history`); Scenarios leaves out comments on
+ * Brand's posts. Prospects (`/api/prospects`, and `/api/distribution`, its
+ * older backend) is for every workspace and is not behind the switch.
  *
  * Not stopped: work the workspace already set going. A post scheduled in
- * Growth still publishes, and the insight sync still runs, because those are
+ * Brand still publishes, and the insight sync still runs, because those are
  * Inngest functions acting on the workspace's own earlier decision; turning
  * beta back on shows everything as it was. Nothing is deleted either way.
  */

@@ -574,8 +574,9 @@ export async function collectScenarioSources(
     const query = spec.subject;
     const subject = new Set(tokenize(query));
     const companyId = run.companyId;
-    const wantsGrowth = s.prospects || s.brandComments;
-    const growth = wantsGrowth ? await betaAppsOn(companyId) : false;
+    // Comments on your posts are Brand's, still being built: read only while
+    // the workspace has its beta apps on. Prospects is for every workspace.
+    const brandOn = s.brandComments ? await betaAppsOn(companyId) : false;
 
     const parts = await Promise.all([
         Promise.resolve<SourceCollection>({
@@ -598,27 +599,17 @@ export async function collectScenarioSources(
                   searchSourceSections(companyId, scope, query)
               )
             : EMPTY,
-        // Prospects and post comments are Growth's: read only while beta apps are on.
         s.prospects
-            ? growth
-                ? guarded(
-                      { sourceType: "prospect", sourceId: "prospects", label: "Prospects" },
-                      async () => ({
-                          sections: unversioned(
-                              await prospectDrafts(companyId),
-                              "prospect",
-                              byOrder
-                          ),
-                          omissions: [],
-                      })
-                  )
-                : {
-                      sections: [],
-                      omissions: [omission("prospect", "prospects", "Prospects", "no_access")],
-                  }
+            ? guarded(
+                  { sourceType: "prospect", sourceId: "prospects", label: "Prospects" },
+                  async () => ({
+                      sections: unversioned(await prospectDrafts(companyId), "prospect", byOrder),
+                      omissions: [],
+                  })
+              )
             : EMPTY,
         s.brandComments
-            ? growth
+            ? brandOn
                 ? guarded(
                       {
                           sourceType: "brand_comment",

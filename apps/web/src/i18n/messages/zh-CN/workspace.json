@@ -139,7 +139,7 @@
       "description": "把 Claude Code 和 Codex 对话作为来源"
     },
     "growth": {
-      "description": "品牌与潜在客户合而为一：排期并发布帖子，找到可能购买的公司，推进交易"
+      "description": "潜在客户与品牌（测试版）合而为一：找到可能购买的公司，推进交易，排期并发布帖子"
     },
     "brand": {
       "label": "品牌",

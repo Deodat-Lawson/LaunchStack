@@ -451,7 +451,7 @@ export const DEMOTED_FEATURES: readonly DemotedFeature[] = [
         id: "growth",
         label: "Growth",
         Icon: IconGrowth,
-        desc: "Brand and Prospects in one app: schedule and publish posts, find the companies that would buy, run the deals",
+        desc: "Prospects and Brand (beta) in one app: find the companies that would buy, run the deals, schedule and publish posts",
         href: "/employer/documents?feature=growth",
     },
     {
@@ -691,15 +691,17 @@ export const STUDIO_GROUPS: readonly StudioGroup[] = [
         features: [
             {
                 // The whole growth motion in one tab, with its screens in a
-                // rail inside it: Brand (compose, schedule, calendar,
-                // campaigns, accounts) and Prospects (segment, companies,
-                // people, deals, runs, sources).
+                // rail inside it: Prospects (segment, companies, people,
+                // deals, runs, sources) and Brand (compose, schedule,
+                // calendar, campaigns, accounts). Not beta as a whole:
+                // Prospects is for every workspace, while Brand is a place
+                // still being built inside it (`~/lib/tool-app/beta-places`)
+                // that shows only with beta apps on.
                 id: "growth",
                 label: "Growth",
                 Icon: IconGrowth,
-                desc: "Make the company known and find the companies that will buy — Brand schedules and publishes across networks, Prospects finds buyers with cited profiles and runs the deals",
+                desc: "Find the companies that will buy and make the company known — Prospects finds buyers with cited profiles and runs the deals, Brand (beta) schedules and publishes across networks",
                 href: "/employer/documents?feature=growth",
-                beta: true,
             },
             {
                 // A writing app: the proposal is the unit of work, and every

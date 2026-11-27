@@ -33,6 +33,34 @@ describe("isPrivateAddress", () => {
             "fe80::1",
             "::ffff:127.0.0.1",
             "::ffff:10.0.0.1",
+            "::",
+            "fec0::1",
+            "ff02::1",
+            "2001:db8::1",
+        ]) {
+            expect(isPrivateAddress(ip), ip).toBe(true);
+        }
+    });
+    it("judges an IPv6 that carries an IPv4 by that IPv4, in every notation", () => {
+        for (const ip of [
+            // IPv4-mapped in hex: what `new URL()` turns [::ffff:127.0.0.1] into.
+            "::ffff:7f00:1",
+            "::ffff:a9fe:a9fe", // 169.254.169.254, the cloud metadata service
+            "::ffff:a00:1", // 10.0.0.1
+            "::FFFF:7F00:1",
+            "0:0:0:0:0:ffff:7f00:1",
+            "0000:0000:0000:0000:0000:ffff:7f00:0001",
+            // IPv4-compatible (::/96).
+            "::7f00:1",
+            "::127.0.0.1",
+            // NAT64 (64:ff9b::/96).
+            "64:ff9b::7f00:1",
+            "64:ff9b::a9fe:a9fe",
+            // 6to4 (2002::/16).
+            "2002:7f00:1::1",
+            "2002:a9fe:a9fe::",
+            // A zone does not hide a link-local address.
+            "fe80::1%eth0",
         ]) {
             expect(isPrivateAddress(ip), ip).toBe(true);
         }
@@ -42,6 +70,9 @@ describe("isPrivateAddress", () => {
         expect(isPrivateAddress("172.32.0.1")).toBe(false);
         expect(isPrivateAddress("2606:4700::1111")).toBe(false);
         expect(isPrivateAddress("::ffff:93.184.216.34")).toBe(false);
+        expect(isPrivateAddress("::ffff:5db8:d822")).toBe(false); // 93.184.216.34 in hex
+        expect(isPrivateAddress("64:ff9b::808:808")).toBe(false); // NAT64 of 8.8.8.8
+        expect(isPrivateAddress("2002:808:808::1")).toBe(false); // 6to4 of 8.8.8.8
     });
 });
 
@@ -68,6 +99,18 @@ describe("assertPublicUrl", () => {
                 "192.168.0.2",
             ])
         ).rejects.toBeInstanceOf(UnsafeUrlError);
+    });
+    it("refuses a bracketed IPv6 literal that maps to a private IPv4", async () => {
+        // The URL parser rewrites both hosts to hex (::ffff:7f00:1, ::ffff:a9fe:a9fe).
+        for (const raw of [
+            "http://[::ffff:127.0.0.1]/",
+            "http://[::ffff:169.254.169.254]/latest/meta-data",
+            "http://[64:ff9b::10.0.0.1]/",
+        ]) {
+            await expect(assertPublicUrl(raw, publicLookup), raw).rejects.toBeInstanceOf(
+                UnsafeUrlError
+            );
+        }
     });
     it("accepts a public resolution", async () => {
         const url = await assertPublicUrl("https://example.com/path?q=1", publicLookup);

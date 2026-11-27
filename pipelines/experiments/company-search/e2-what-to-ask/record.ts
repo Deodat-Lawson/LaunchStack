@@ -9,16 +9,9 @@
  * Mined words come only from recorded results, never from the truth list.
  */
 import { Recorder } from "../lib/recorder";
+import { recordTerm, rows, type RegisterPage } from "./pages";
 import { SEGMENTS, type RegisterSegment } from "./segments";
-import {
-    PAGE_SIZE,
-    classUrl,
-    nameTokens,
-    saveWorld,
-    searchUrl,
-    type Company,
-    type RegisterWorld,
-} from "./world";
+import { WORLD_FORMAT, classUrl, nameTokens, saveWorld, type RegisterWorld } from "./world";
 
 /**
  * Pages recorded per word: a policy can go this deep and no deeper. Planned
@@ -29,50 +22,6 @@ const MAX_PAGES = 10;
 const MAX_PAGES_PLAN = 40;
 const MINED_PER_ROUND = [40, 20];
 const MIN_NAME_COUNT = 2;
-
-interface RegisterPage {
-    _embedded?: {
-        enheter?: Array<{
-            organisasjonsnummer: string;
-            navn: string;
-            naeringskode1?: { kode: string };
-        }>;
-    };
-    page?: { totalElements: number; totalPages: number };
-}
-
-function rows(page: RegisterPage): Company[] {
-    return (page._embedded?.enheter ?? []).map(e => ({
-        id: e.organisasjonsnummer,
-        name: e.navn,
-        code: e.naeringskode1?.kode ?? null,
-    }));
-}
-
-async function recordTerm(
-    term: string,
-    recorder: Recorder,
-    maxPages: number
-): Promise<{ pages: Company[][]; total: number; requests: number }> {
-    const pages: Company[][] = [];
-    let total = 0;
-    let requests = 0;
-    for (let page = 0; page < maxPages; page++) {
-        let json: RegisterPage;
-        try {
-            json = await recorder.getJson<RegisterPage>(searchUrl(term, page));
-        } catch (error) {
-            console.warn(`  search failed for "${term}" page ${page}: ${String(error)}`);
-            break;
-        }
-        requests += 1;
-        const found = rows(json);
-        total = json.page?.totalElements ?? total;
-        pages.push(found);
-        if (found.length < PAGE_SIZE || page + 1 >= (json.page?.totalPages ?? 0)) break;
-    }
-    return { pages, total, requests };
-}
 
 function minedTerms(
     world: Pick<RegisterWorld, "pages" | "segment">,
@@ -116,6 +65,7 @@ async function main(): Promise<void> {
     for (const segment of segments) {
         console.log(`\n== ${segment.id} (${segment.label})`);
         const world: RegisterWorld = {
+            format: WORLD_FORMAT,
             segment,
             pages: {},
             totals: {},
@@ -130,6 +80,7 @@ async function main(): Promise<void> {
                 world.pages[term] = recorded.pages;
                 world.totals[term] = recorded.total;
                 world.requests += recorded.requests;
+                if (recorded.cutShort) (world.cutShort ??= []).push(term);
             }
         };
         await run(world.terms.plan, MAX_PAGES_PLAN);
@@ -149,6 +100,11 @@ async function main(): Promise<void> {
         console.log(
             `  target class: ${world.truth.length} companies; recorded pages reach ${reachable.size}`
         );
+        if (world.cutShort && world.cutShort.length > 0) {
+            console.warn(
+                `  ${world.cutShort.length} word(s) were cut short by a request that got no answer (${world.cutShort.join(", ")}); record this segment again to fill them`
+            );
+        }
         saveWorld(world);
     }
     console.log(`\nlive requests: ${recorder.live}, replayed: ${recorder.replayed}`);

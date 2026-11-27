@@ -1,4 +1,5 @@
-import type { MarketingPlatform, MarketingResearchResult } from "./types";
+import { getPlatformProfile } from "@launchstack/tools/platform-profiles";
+import type { CampaignPlatform, MarketingResearchResult } from "./types";
 import type { PlannedQuery } from "@launchstack/pipelines/trend-search";
 import { runTrendSearch } from "@launchstack/pipelines/trend-search";
 import {
@@ -7,11 +8,13 @@ import {
 } from "@launchstack/pipelines/trend-search/cache";
 
 function buildTrendQueries(
-    platform: MarketingPlatform,
+    campaignPlatform: CampaignPlatform,
     companyName: string,
     prompt: string,
     companyIndustry?: string
 ): PlannedQuery[] {
+    // The network's name as a search engine knows it ("Hacker News", not "hackernews").
+    const platform = getPlatformProfile(campaignPlatform).promptName;
     const year = new Date().getFullYear();
     const industryHint = companyIndustry ? ` ${companyIndustry}` : "";
 
@@ -35,7 +38,7 @@ function buildTrendQueries(
 }
 
 export async function researchPlatformTrends(args: {
-    platform: MarketingPlatform;
+    platform: CampaignPlatform;
     prompt: string;
     companyName: string;
     companyContext: string;
@@ -58,7 +61,7 @@ export async function researchPlatformTrends(args: {
             setCachedTrendSearch(prompt, companyContext, trendOutput);
         }
 
-        const top = trendOutput.results.slice(0, maxResults);
+        const top = trendOutput.results.filter(isOutsideWorld).slice(0, maxResults);
 
         return top.map<MarketingResearchResult>(item => ({
             title: item.summary?.trim() || "Untitled",
@@ -72,4 +75,19 @@ export async function researchPlatformTrends(args: {
         console.warn("[marketing-pipeline] trend search failed:", error);
         return [];
     }
+}
+
+type TrendResult = Awaited<ReturnType<typeof runTrendSearch>>["results"][number];
+
+/**
+ * Trend research is the outside world: hooks and framing for a post, never
+ * facts about us. The synthesizer says who each result is about (and has
+ * already dropped same-name companies and products); only the market's are
+ * kept. A result it took to be about our own company goes too: what is true
+ * of us comes from the workspace's documents, and a result that looks like us
+ * is as likely a namesake the model fell for. A result with no subject (an
+ * older cached search) is kept.
+ */
+function isOutsideWorld(result: TrendResult): boolean {
+    return result.subject === undefined || result.subject === "market";
 }

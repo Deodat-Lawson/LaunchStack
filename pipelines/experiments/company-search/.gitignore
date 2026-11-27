@@ -1,0 +1,3 @@
+# Recorded HTTP exchanges and embedding vectors. They hold public register
+# records and page text that can include contact details: never commit them.
+.cache/

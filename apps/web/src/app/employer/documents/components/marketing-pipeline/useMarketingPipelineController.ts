@@ -133,6 +133,20 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
     // responses check it so they never paint feedback for a previous post.
     const postFeedbackEpochRef = useRef(0);
 
+    // Set once someone picks a network or writes in the brief on this screen.
+    // Recovery below answers after a round trip to the server, and must not
+    // swap a finished draft (and its network) in over what they have started:
+    // the brief they then type would be sent for the wrong network.
+    const startedHereRef = useRef(false);
+    const pickPlatform = useCallback((next: MarketingSession["platform"]) => {
+        startedHereRef.current = true;
+        setPlatform(next);
+    }, []);
+    const writePrompt = useCallback((next: string) => {
+        startedHereRef.current = true;
+        setPrompt(next);
+    }, []);
+
     const selectedPlatform = PLATFORM_OPTIONS.find(option => option.id === platform) ?? null;
 
     /** Clear per-post feedback (eval scores + publish status) on post change. */
@@ -613,7 +627,8 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
                         .slice(0, MAX_MARKETING_SESSIONS);
                 });
                 // An interaction while the lookup was in flight takes precedence.
-                if (postFeedbackEpochRef.current !== feedbackEpoch) return;
+                if (postFeedbackEpochRef.current !== feedbackEpoch || startedHereRef.current)
+                    return;
                 const active = data.runs[0];
                 if (active) {
                     void watchRun(active.id, active.input);
@@ -914,9 +929,9 @@ export function useMarketingPipelineController(options: { debug: boolean }) {
 
     return {
         platform,
-        setPlatform,
+        setPlatform: pickPlatform,
         prompt,
-        setPrompt,
+        setPrompt: writePrompt,
         loading,
         error,
         setError,

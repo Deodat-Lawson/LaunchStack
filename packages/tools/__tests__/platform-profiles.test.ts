@@ -140,6 +140,34 @@ describe("draft-only profiles", () => {
         }
     });
 
+    it("a Show HN and a launch page leave a blank where the documents are silent", () => {
+        const withBlanks = ["hackernews", "producthunt"] as const;
+        for (const platform of withBlanks) {
+            const profile = getPlatformProfile(platform);
+            const rules = profile.formatRules!.join("\n");
+            // The writer is told what goes in the slot instead of a guess...
+            expect(rules).toContain("write a blank in square brackets");
+            expect(rules).toContain("[one line: what the product is]");
+            // ...and that a release's schedule is not what the product does.
+            expect(rules).toContain("never a description of the product");
+            // The gate, a refine pass and the judge all read the structure template.
+            expect(profile.structureTemplate).toContain(
+                "keep a blank as written unless you are given the missing fact"
+            );
+            expect(platformNormsReference(platform)).toContain("never count one as a flaw");
+        }
+        // No other network has to say what the product is, so no other one gets blanks.
+        for (const platform of CampaignPlatformEnum.options) {
+            if ((withBlanks as readonly string[]).includes(platform)) continue;
+            const profile = getPlatformProfile(platform);
+            // (TikTok's script uses square brackets for what is on screen, which is not a blank.)
+            expect(profile.structureTemplate).not.toContain("blank in square brackets");
+            expect((profile.formatRules ?? []).join("\n")).not.toContain(
+                "blank in square brackets"
+            );
+        }
+    });
+
     it("an example never breaks its own network's limits", () => {
         const exampleBody = (examples: string) => /"""\n([\s\S]*?)\n"""/.exec(examples)![1]!;
         for (const platform of DraftOnlyPlatformEnum.options) {

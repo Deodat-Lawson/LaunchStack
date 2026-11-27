@@ -19,10 +19,21 @@ const LABELLED_PARTS =
 
 /**
  * A launch page and a Show HN both have to say what the product is, which is
- * exactly where a thin company context gets filled in with a guess.
+ * exactly where a thin company context gets filled in with a guess. Telling
+ * the writer not to guess was not enough: the format still asks for the
+ * sentence, so it built one out of whatever the context did have (a rollout
+ * plan became "what the product does"). A blank gives it something correct to
+ * put in that slot, and shows the person posting what their documents lack.
  */
-const NO_GUESSING =
-    "Say what the product is only in the terms the company context uses. If the context does not say what it does, write about what the context does describe (the launch, the change, the problem it names) and do not guess a product category or a feature set.";
+const BLANK_NOT_GUESS =
+    "What the product is, what it does, how it works, who it is for, why it was built and how it differs from other tools may be said only where the company context says so. A ship date, a price or a rollout plan is a fact about a release, never a description of the product: do not turn one into what the product does. Where a part needs one of those facts and the company context does not give it, write a blank in square brackets that names what is missing, for example [one line: what the product is], and write the rest from what the context does say. A blank is correct and expected. A guess makes the draft unusable.";
+
+/**
+ * The same convention for whoever reads the draft after the writer: the
+ * quality gate, a refine pass and the judge all see the structure template.
+ */
+const BLANKS_STAY =
+    "- A blank in square brackets, such as [one line: what the product is], marks a fact the company's documents do not give. It is left for the person posting to fill in: keep a blank as written unless you are given the missing fact, never replace one with a guess, and never count one as a flaw.";
 
 export const DRAFT_ONLY_PROFILES: Record<DraftOnlyPlatform, PlatformProfile> = {
     instagram: {
@@ -283,9 +294,9 @@ Has anyone else kept a human review step on purpose? Curious how you draw the li
             "Write a Show HN submission in the labelled parts of the platform structure: a title and a text.",
             "No hook, no scroll-stopping first line and no call to action: the first sentence states what it is, and the only ask is for feedback.",
             "The title and the text are plain text: no Markdown inside them, no bullets, no emoji, no hashtags, no exclamation marks.",
-            "Technical detail must come from the company context. If the context has none, describe the approach in general terms rather than inventing a stack.",
+            "Technical detail must come from the company context. If the context has none, leave a blank for it, such as [how it works: two or three sentences from the team], rather than inventing a stack or an approach.",
             "Say who you are only as far as the company context does. “We” is enough: never invent a team size, a role (“solo developer”) or a backstory.",
-            NO_GUESSING,
+            BLANK_NOT_GUESS,
         ],
         guidelines: () =>
             [
@@ -304,6 +315,7 @@ Has anyone else kept a human review step on purpose? Curious how you draw the li
             "Constraints:",
             "- Plain text inside each part: blank lines between paragraphs and nothing else.",
             "- Never “excited”, “game-changing”, “revolutionary”, “check out” or “sign up today”.",
+            BLANKS_STAY,
             "Tone: An engineer explaining their own work to other engineers: modest, specific, factual.",
         ].join("\n"),
         examples: `Example of a strong Hacker News submission (for style reference only — do NOT copy content):
@@ -330,8 +342,8 @@ We'd like feedback on the claim check in particular, and on where the drafts sti
         formatRules: [
             "Write launch-page copy in the labelled parts of the platform structure: a tagline, a description and the maker's first comment.",
             "The tagline and description state what the product does; they are not hooks. The single question goes at the end of the first comment.",
-            "The first comment is first person and tells why it was built, from the company context. Never invent a founder's name or backstory.",
-            NO_GUESSING,
+            "The first comment is first person and tells why it was built, from the company context. If the context does not say why, leave a blank for it, such as [why we built it: two or three sentences from the team]. Never invent a founder's name, a backstory or a customer anecdote.",
+            BLANK_NOT_GUESS,
         ],
         guidelines: () =>
             [
@@ -351,6 +363,7 @@ We'd like feedback on the claim check in particular, and on where the drafts sti
             "Constraints:",
             "- Never ask for upvotes or support.",
             "- No hashtags.",
+            BLANKS_STAY,
             "Tone: A maker talking to other makers: personal, direct, grateful without gushing.",
         ].join("\n"),
         examples: `Example of strong Product Hunt copy (for style reference only — do NOT copy content):

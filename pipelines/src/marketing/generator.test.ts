@@ -98,6 +98,19 @@ describe("the generation prompt", () => {
         expect(hn).toContain("No hook, no scroll-stopping first line and no call to action");
         expect(hn).toContain("- Use at most 0 hashtags.");
     });
+
+    it("tells Hacker News and Product Hunt to leave a blank, not a guess", async () => {
+        for (const platform of ["hackernews", "producthunt"] as const) {
+            mockInvoke.mockClear();
+            const prompt = await generateFor(platform);
+            expect(prompt).toContain("write a blank in square brackets");
+            expect(prompt).toContain("[one line: what the product is]");
+            expect(prompt).toContain("A guess makes the draft unusable.");
+        }
+        // The original four are never asked for one.
+        mockInvoke.mockClear();
+        expect(await generateFor("linkedin")).not.toContain("blank in square brackets");
+    });
 });
 
 describe("refinement keeps the format", () => {
@@ -114,6 +127,12 @@ describe("refinement keeps the format", () => {
         expect(shown()).toContain("Platform: YouTube\n");
         expect(shown()).toContain("Keep this platform's format:");
         expect(shown()).toContain("- OUTLINE: 3–5 numbered sections");
+    });
+
+    it("keeps a launch draft's blanks unless the feedback fills them", async () => {
+        await refine("producthunt");
+        expect(shown()).toContain("Keep this platform's format:");
+        expect(shown()).toContain("keep a blank as written unless you are given the missing fact");
     });
 
     it("leaves the original four's refinement as it was", async () => {

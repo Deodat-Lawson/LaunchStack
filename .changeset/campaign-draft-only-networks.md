@@ -17,3 +17,9 @@ script, a launch page, a Show HN submission). The pipeline's input, the
 generator, refinement, the quality gate and trend research take
 `CampaignPlatform`; the judge scores a draft-only network against its
 profile's norms (`platformNormsReference`) instead of the X rubric.
+
+Hacker News and Product Hunt drafts leave a blank in square brackets (for
+example `[one line: what the product is]`) where the company context does not
+say what the product is, how it works, why it was built or how it differs,
+instead of a guess. Their structure templates tell the gate, refinement and
+the judge to keep a blank.

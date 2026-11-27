@@ -55,7 +55,12 @@ re-exported by `pipelines/src/marketing/types.ts`:
   them (TikTok, YouTube, Hacker News, Product Hunt) are written as labelled
   parts (a script and caption, a title and text) rather than one post; their
   profile's `formatRules` join the generation task and win over the generic
-  one-post rules.
+  one-post rules. Hacker News and Product Hunt have to say what the product
+  is, so where the company context does not say (what it is, how it works,
+  why it was built, how it differs) the draft carries a blank in square
+  brackets, such as `[one line: what the product is]`, for the person posting
+  to fill in. The convention sits in those two structure templates, so the
+  quality gate, refinement and the judge keep a blank rather than fill it.
 
 ### 1.3 Content types
 

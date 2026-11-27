@@ -343,6 +343,10 @@ describe("in Chinese", () => {
             "more places on the next run"
         );
         expect(zh(sourceDetailCopy("more places on the next run"))).toBe("下次运行会找到更多地点");
+        expect(en(sourceDetailCopy("not every place could be listed"))).toBe(
+            "not every place could be listed"
+        );
+        expect(zh(sourceDetailCopy("not every place could be listed"))).toBe("未能列出所有地点");
         expect(zh(sourceDetailCopy("2 of 5 customers failed"))).toBe("5 个客户中有 2 个查询失败");
 
         const rows = sourceRows(

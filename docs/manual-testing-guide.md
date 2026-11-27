@@ -281,7 +281,13 @@ their switches are locked.
   for the same kinds and territory asks the servers nothing when the pool is
   complete, and carries on with the sweep when it is not: until then the run
   sheet and the Runs table read "OpenStreetMap · more places on the next
-  run". The run ranks the whole pool and shortlists from it; the server log
+  run". A region is swept over its own outline when Photon knows it. When
+  all that could be swept is a box around its centre, a box was too dense to
+  split, or names in the country are often not in Latin letters (the sweep
+  asks by letter), the sweep cannot make the pool complete: only an Overpass
+  answer can, and once no server is left to ask the row reads "not every
+  place could be listed". The run ranks the whole pool and shortlists from
+  it; the server log
   has one line per territory ("place pool NL shop=bicycle: 1722 places with a
   website of 2637 known, complete (overpass) …"). Each
   shortlisted site is read by the page profiler

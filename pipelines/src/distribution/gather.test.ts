@@ -13,6 +13,8 @@ import {
     mentionFromWebResult,
     moreOnNextRun,
     MORE_PLACES_DETAIL,
+    notEveryPlace,
+    NOT_ALL_PLACES_DETAIL,
     type CompanySearchPortOptions,
 } from "./gather";
 import type { PlannedSourceQuery } from "./types";
@@ -198,6 +200,30 @@ describe("gather", () => {
         const whole = await run(false);
         expect(whole.sources.find(s => s.source === "place")).toMatchObject({ status: "ok" });
         expect(whole.sources.find(s => s.source === "place")!.detail).toBeUndefined();
+    });
+
+    it("says so when a place search returns all it could list and knows that is not everything", async () => {
+        const place = (id: string) => ({
+            fsqId: id,
+            name: `Shop ${id}`,
+            website: `https://${id}.example/`,
+            formattedAddress: "Amsterdam",
+            location: { lat: 52.37, lng: 4.9 },
+            categories: [{ id: "shop=coffee", name: "coffee" }],
+        });
+        const result = await gather([placeQuery], {
+            searchWeb: null,
+            searchPlaces: () => Promise.resolve(notEveryPlace([place("a"), place("b")])),
+            tradeData: null,
+            hsCodes: [],
+        });
+        expect(result.sources.find(s => s.source === "place")).toMatchObject({
+            status: "degraded",
+            results: 2,
+            detail: NOT_ALL_PLACES_DETAIL,
+        });
+        expect(NOT_ALL_PLACES_DETAIL).toBe("not every place could be listed");
+        expect(result.mentions).toHaveLength(2);
     });
 
     it("reports skipped sources with a reason when not configured", async () => {

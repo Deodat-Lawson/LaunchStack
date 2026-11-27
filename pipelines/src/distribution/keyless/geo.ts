@@ -24,6 +24,12 @@ export interface CountryInfo {
      * and leaves out far-off islands and territories.
      */
     box: Bbox;
+    /**
+     * True when places' names are often written in a script other than
+     * Latin. The place sweep asks by Latin letter, so there it cannot reach
+     * every name.
+     */
+    otherScripts?: boolean;
 }
 
 export const COUNTRIES: Record<string, CountryInfo> = {
@@ -187,6 +193,7 @@ export const COUNTRIES: Record<string, CountryInfo> = {
         cities: ["Tokyo", "Osaka"],
         small: false,
         box: [128.5, 30.9, 145.85, 45.55],
+        otherScripts: true,
     },
     SG: {
         name: "Singapore",
@@ -201,6 +208,7 @@ export const COUNTRIES: Record<string, CountryInfo> = {
         cities: ["Mumbai", "Bengaluru", "Delhi"],
         small: false,
         box: [68.1, 6.75, 97.4, 35.5],
+        otherScripts: true,
     },
     BR: {
         name: "Brazil",
@@ -225,6 +233,16 @@ export function countryName(code: string): string {
 /** The country's sweep box, or null for a country the table does not list. */
 export function countryBox(code: string): Bbox | null {
     return COUNTRIES[code.toUpperCase()]?.box ?? null;
+}
+
+/**
+ * Can a sweep by Latin letter reach every place's name there? Only said of a
+ * country the table lists and does not mark as writing names in other
+ * scripts: an unknown country is not vouched for.
+ */
+export function latinLettersReachNames(code: string): boolean {
+    const info = COUNTRIES[code.toUpperCase()];
+    return info !== undefined && info.otherScripts !== true;
 }
 
 /** Every spelling a directory might use for the country, lower-cased. */

@@ -340,14 +340,16 @@ async function readArea(
     }
     const json = (await response.json()) as OverpassResponse;
     const elements = json.elements ?? [];
-    // A remark with some elements is an answer cut short by the server's
-    // time or memory limit: fine for a sample, not for "every place".
+    // A remark is the server saying the answer is not what was asked for,
+    // most often cut short by its time or memory limit. With some elements
+    // that is fine for a sample; for "every place" any remark refuses it.
+    const remark = json.remark?.trim();
     if (
-        json.remark &&
-        /timed out|out of memory|error/i.test(json.remark) &&
-        (elements.length === 0 || options.wholeAnswer)
+        remark &&
+        (options.wholeAnswer ||
+            (elements.length === 0 && /timed out|out of memory|error/i.test(remark)))
     )
-        throw new Error(`Overpass remark: ${json.remark.slice(0, 120)}`);
+        throw new Error(`Overpass remark: ${remark.slice(0, 120)}`);
     return elements;
 }
 

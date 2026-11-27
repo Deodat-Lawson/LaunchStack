@@ -503,7 +503,7 @@ describe("Photon + OSM API", () => {
                 );
             return new Response("nope", { status: 404 });
         };
-        expect(await locateCity("Amsterdam", "NL", { fetchImpl })).toEqual({
+        expect(await locateCity("Amsterdam", "NL", { fetchImpl })).toMatchObject({
             lat: 52.37,
             lon: 4.9,
         });
@@ -1131,7 +1131,52 @@ describe("keyless place search", () => {
         expect(later.mentions.length).toBeGreaterThan(first.mentions.length);
     });
 
-    it("does not promise more places when a later run has nothing left to ask", async () => {
+    it("says more places are to come even when the run's requests found none yet", async () => {
+        // Four kinds are 104 whole-country boxes; ten requests answer the first ten, all
+        // empty. Overpass, which the name search then tries city by city, is down: that is
+        // not a failed search while the sweep is being answered and has more to ask.
+        const map = createFakeMap(fakePopulation(50, { tag: "shop:outdoor" }), { overpass: 504 });
+        const ports = createKeylessPorts({
+            fetchImpl: map.fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+            sweepRequestsPerRun: 10,
+        });
+        const found = await quiet(() =>
+            gather(
+                [
+                    {
+                        kind: "place",
+                        territory: { country: "DE" },
+                        partnerKind: "retailer",
+                        query: "bicycle shop",
+                        label: "openstreetmap",
+                        rationale: "r",
+                        categoryIds: ["a", "b", "c", "d"].map(v => `["shop"="${v}"]`),
+                    },
+                ],
+                {
+                    searchWeb: null,
+                    searchPlaces: q =>
+                        ports.searchPlaces!({
+                            query: q.query,
+                            categoryIds: q.categoryIds,
+                            territory: q.territory,
+                        }),
+                    tradeData: null,
+                    hsCodes: [],
+                }
+            )
+        );
+        expect(map.sweepUrls()).toHaveLength(10);
+        expect(found.sources.find(s => s.source === "place")).toMatchObject({
+            status: "degraded",
+            results: 0,
+            detail: "more places on the next run",
+        });
+    });
+
+    it("says it could not list every place, not that more will come, when a later run has nothing left to ask", async () => {
         const named = [
             {
                 osm_type: "node",
@@ -1204,8 +1249,11 @@ describe("keyless place search", () => {
             }),
             { query: "specialty coffee", categoryIds: [], territory: { country: "NL" } }
         );
-        expect(first).toMatchObject({ status: "ok", results: 1 });
-        expect(first.detail).toBeUndefined();
+        expect(first).toMatchObject({
+            status: "degraded",
+            results: 1,
+            detail: "not every place could be listed",
+        });
 
         // A large country is only ever swept, and this deployment asks Photon nothing.
         const noPhoton = onlyByName();
@@ -1223,8 +1271,11 @@ describe("keyless place search", () => {
             }
         );
         expect(noPhoton.map.count("photon")).toBe(0);
-        expect(second).toMatchObject({ status: "ok", results: 1 });
-        expect(second.detail).toBeUndefined();
+        expect(second).toMatchObject({
+            status: "degraded",
+            results: 1,
+            detail: "not every place could be listed",
+        });
     });
 
     it("shares one run's cap between the territories it planned", async () => {

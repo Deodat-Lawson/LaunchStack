@@ -371,9 +371,9 @@ export interface TagReadResult {
     /** Ids read that carry no website (or are gone): never read again. */
     without: string[];
     /**
-     * Hits not read: their request failed, or the reads stopped before
-     * reaching them. They stay unread until a read succeeds; a failure is
-     * never taken to mean "no website".
+     * Hits not read: their request failed, the answer left them out, or the
+     * reads stopped before reaching them. They stay unread until a read
+     * succeeds; a failure is never taken to mean "no website".
      */
     unread: SweepHit[];
     /** Requests sent, and how many of them were answered. */
@@ -428,7 +428,14 @@ export async function readPlaceTags(
             result.answered += 1;
             const byId = new Map(elements.map(el => [`osm:${el.type}/${el.id}`, el]));
             for (const hit of chunk) {
-                const place = placeFromTags(hit, byId.get(hit.id), country);
+                const element = byId.get(hit.id);
+                // An id the answer does not mention has not been told: it stays unread.
+                // (The API returns every id it was asked for, deleted ones included.)
+                if (!element) {
+                    result.unread.push(hit);
+                    continue;
+                }
+                const place = placeFromTags(hit, element, country);
                 if (place) result.places.push(place);
                 else result.without.push(hit.id);
             }

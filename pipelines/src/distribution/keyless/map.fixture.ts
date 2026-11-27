@@ -21,13 +21,14 @@ export interface FakePlace {
     city?: string;
 }
 
-export type OverpassMode = "answers" | 504 | 429 | "empty" | "cut";
+export type OverpassMode = "answers" | 504 | 429 | "empty" | "cut" | "noted";
 
 export interface FakeMapOptions {
     /**
      * What an Overpass instance does: answer with every place, fail with this
-     * status, answer with nothing, or ("cut") run out of time and return half
-     * the places with a remark saying so.
+     * status, answer with nothing, ("cut") run out of time and return half
+     * the places with a remark saying so, or ("noted") return half the places
+     * with a remark that names no error.
      */
     overpass?: OverpassMode;
     /** Per instance host, overriding `overpass`. */
@@ -39,8 +40,23 @@ export interface FakeMapOptions {
      * request), or the status to fail with (503 for an API that is down).
      */
     osmApiFails?: (url: string) => boolean | number;
-    /** Where Photon places a city asked for by name: "Hamburg" → its centre. */
-    cities?: Record<string, { lon: number; lat: number; country: string }>;
+    /**
+     * Where Photon places a city or area asked for by name: "Hamburg" → its
+     * centre, its kind ("city" unless given; "county", "state"…) and, when
+     * given, the box of its outline as west, south, east, north.
+     */
+    cities?: Record<
+        string,
+        {
+            lon: number;
+            lat: number;
+            country: string;
+            kind?: string;
+            extent?: readonly [number, number, number, number];
+        }
+    >;
+    /** OSM API answers leave these ids out, though they were asked for. */
+    osmApiOmits?: (id: number) => boolean;
 }
 
 export interface FakeMap {
@@ -102,9 +118,21 @@ export function createFakeMap(places: readonly FakePlace[], options: FakeMapOpti
                                       geometry: { coordinates: [city.lon, city.lat] },
                                       properties: {
                                           osm_key: "place",
-                                          osm_value: "city",
+                                          osm_value: city.kind ?? "city",
+                                          type: city.kind ?? "city",
                                           countrycode: city.country,
                                           name: q.split(",")[0],
+                                          // Photon's order: west, north, east, south.
+                                          ...(city.extent
+                                              ? {
+                                                    extent: [
+                                                        city.extent[0],
+                                                        city.extent[3],
+                                                        city.extent[2],
+                                                        city.extent[1],
+                                                    ],
+                                                }
+                                              : {}),
                                       },
                                   },
                               ]
@@ -154,7 +182,12 @@ export function createFakeMap(places: readonly FakePlace[], options: FakeMapOpti
             return Promise.resolve(
                 json({
                     elements: places
-                        .filter(p => p.type === type && ids.includes(p.id))
+                        .filter(
+                            p =>
+                                p.type === type &&
+                                ids.includes(p.id) &&
+                                !options.osmApiOmits?.(p.id)
+                        )
                         .map(p => ({
                             type: type === "N" ? "node" : "way",
                             id: p.id,
@@ -177,7 +210,7 @@ export function createFakeMap(places: readonly FakePlace[], options: FakeMapOpti
             overpassQueries.push(body);
             const mode = options.overpassByHost?.[host] ?? options.overpass ?? "answers";
             if (mode === "empty") return Promise.resolve(json({ elements: [] }));
-            if (mode !== "answers" && mode !== "cut")
+            if (mode !== "answers" && mode !== "cut" && mode !== "noted")
                 return Promise.resolve(new Response("<html>busy</html>", { status: mode }));
             const country = /"ISO3166-1"="([A-Z]{2})"/.exec(body)?.[1];
             const selectors = [...body.matchAll(/\["([a-z_]+)"="([a-z_]+)"\]\["name"\]/g)].map(
@@ -208,7 +241,12 @@ export function createFakeMap(places: readonly FakePlace[], options: FakeMapOpti
                               elements: elements.slice(0, Math.ceil(elements.length / 2)),
                               remark: 'runtime error: Query timed out in "query" at line 4 after 90 seconds.',
                           }
-                        : { elements }
+                        : mode === "noted"
+                          ? {
+                                elements: elements.slice(0, Math.ceil(elements.length / 2)),
+                                remark: "runtime remark: the area was reduced.",
+                            }
+                          : { elements }
                 )
             );
         }

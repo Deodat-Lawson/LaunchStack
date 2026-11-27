@@ -8,14 +8,18 @@
  * 2. When Overpass does not answer, or the country is too large to ask as
  *    one, Photon is swept letter by letter (./sweep) for at most the run's
  *    request cap, and the tags of what was found are read from the OSM API.
+ *    A country is swept over its box; a region over its own outline's box
+ *    when Photon knows it, else over a box around its centre, which may not
+ *    hold all of it. It asks by Latin letter, so it reaches every name only
+ *    where names are written in Latin letters.
  * 3. What was asked and what was found are stored. A later run starts from
  *    there: a complete pool costs no request at all, an unfinished one
  *    carries on with what is still waiting.
  *
  * "Complete" is only said of a pool that has been told everything: an
- * Overpass answer for the whole territory, or a sweep with every box
- * answered, none of them too dense to split, and every found place's tags
- * read. A failed request settles
+ * Overpass answer for the whole territory, or a sweep of a box that holds
+ * the whole territory, with every box answered, none of them too dense to
+ * split, and every found place's tags read. A failed request settles
  * nothing; it waits for a later run. A complete pool that has grown old is
  * filled again, and keeps what it knew until the new filling is complete.
  * An unfinished one never starts over: it carries on, however long ago it
@@ -29,6 +33,7 @@ import { createHash } from "node:crypto";
 
 import {
     countryBox,
+    latinLettersReachNames,
     nativeTermsFor,
     oneAreaCoversTerritory,
     overpassAreas,
@@ -63,7 +68,7 @@ import {
 } from "./sweep";
 import { requestHost, throttledFetch, type HostThrottle } from "./throttle";
 
-export const PLACE_POOL_VERSION = 1;
+export const PLACE_POOL_VERSION = 2;
 /** The pool is stored again after this many answered sweep requests, so a run cut short loses little. */
 const SAVE_EVERY_ANSWERS = 8;
 /** Places a name search may add: it is a stand-in for an empty pool, not a pool. */
@@ -95,6 +100,14 @@ export interface PlacePoolState {
     /** True once Overpass has answered for the whole territory, even with nothing. */
     overpassAnswered: boolean;
     sweep: SweepState | null;
+    /**
+     * True when the sweep can reach every place of the territory: its box is
+     * the country's, or that of a region's own outline, and names there are
+     * written in the letters it asks by. False for a box around a region's
+     * centre, and where names are often in another script: such a sweep
+     * finds places, and cannot speak for the territory.
+     */
+    sweepCoversTerritory: boolean;
     /** How the last sweep run ended, and how many of its requests were answered. */
     lastSweep: { stopped: SweepRunResult["stopped"]; answered: number } | null;
     /**
@@ -113,8 +126,11 @@ export interface PlacePoolState {
     /** True once every place in scope is known and nothing is waiting. */
     complete: boolean;
     completedBy: "overpass" | "sweep" | null;
-    /** When it became complete: what its age is counted from. */
-    completedAt: string | null;
+    /**
+     * When this filling ended: it became complete, or had nothing left that a
+     * server could be asked. Its age is counted from here.
+     */
+    endedAt: string | null;
     startedAt: string;
     updatedAt: string;
     /** Requests sent for this pool, over every run. */
@@ -204,8 +220,12 @@ export interface PlacePoolReport {
     boxesCutOff: number;
     /** What a later run would still ask for this pool. */
     waiting: PoolWaiting;
+    /** Whether the sweep's box holds the whole territory; null when there is no sweep. */
+    sweepCoversTerritory: boolean | null;
     overpassAttempts: OverpassAttempt[];
     sweepStopped: SweepRunResult["stopped"] | null;
+    /** Sweep requests this call had answered. */
+    sweepAnswered: number;
     /** What did not answer on the way, in words. */
     problems: string[];
 }
@@ -239,13 +259,14 @@ function emptyPool(request: PlacePoolRequest, now: number): PlacePoolState {
         unread: [],
         overpassAnswered: false,
         sweep: null,
+        sweepCoversTerritory: false,
         lastSweep: null,
         byName: [],
         namesSearched: false,
         carried: [],
         complete: false,
         completedBy: null,
-        completedAt: null,
+        endedAt: null,
         startedAt: at,
         updatedAt: at,
         requests: { overpass: 0, photon: 0, osmApi: 0, nominatim: 0 },
@@ -292,6 +313,11 @@ export function poolWaiting(state: PlacePoolState): PoolWaiting {
         boxes: canSweep && (state.sweep === null || sweepPending(state.sweep) > 0),
         tags: state.unread.length > 0,
     };
+}
+
+function nothingWaiting(state: PlacePoolState): boolean {
+    const waiting = poolWaiting(state);
+    return !waiting.overpass && !waiting.boxes && !waiting.tags;
 }
 
 /** A stable pseudo-random number per id: an order that favours no letter, city or age. */
@@ -388,7 +414,7 @@ async function fillPool(
         const empty = placesKnown(pool) === 0;
         if (pool.complete)
             return (
-                age(pool.completedAt ?? pool.updatedAt) >
+                age(pool.endedAt ?? pool.updatedAt) >
                 (empty ? limits.maxEmptyAgeMs : limits.maxAgeMs)
             );
         // Not complete. With nothing found and no box answered there is no
@@ -397,10 +423,9 @@ async function fillPool(
             return age(pool.startedAt) > limits.maxEmptyAgeMs;
         // Otherwise it carries on from where it stopped, however long ago:
         // starting over would ask answered boxes again. Only a pool with
-        // nothing left to ask is filled afresh.
-        const waiting = poolWaiting(pool);
-        const stuck = !waiting.overpass && !waiting.boxes && !waiting.tags;
-        return stuck && age(pool.startedAt) > limits.maxAgeMs;
+        // nothing left to ask is filled afresh, and its age counts from when
+        // that filling ended, not from when it began.
+        return nothingWaiting(pool) && age(pool.endedAt ?? pool.updatedAt) > limits.maxAgeMs;
     };
     const state: PlacePoolState = !stored
         ? emptyPool(request, now())
@@ -419,8 +444,10 @@ async function fillPool(
         unread: 0,
         boxesCutOff: 0,
         waiting: { overpass: false, boxes: false, tags: false },
+        sweepCoversTerritory: null,
         overpassAttempts: [],
         sweepStopped: null,
+        sweepAnswered: 0,
         problems: [],
     };
     const without = new Set(state.without);
@@ -448,6 +475,7 @@ async function fillPool(
         report.unread = state.unread.length;
         report.boxesCutOff = state.sweep?.cutOff ?? 0;
         report.waiting = poolWaiting(state);
+        report.sweepCoversTerritory = state.sweep ? state.sweepCoversTerritory : null;
         return { state, report };
     };
     /** A place a server has just described, with a website. */
@@ -471,7 +499,7 @@ async function fillPool(
         carried.clear();
         state.complete = true;
         state.completedBy = by;
-        state.completedAt = new Date(now()).toISOString();
+        state.endedAt = new Date(now()).toISOString();
     };
     const count = (kind: keyof PlacePoolReport["requests"], requests: number) => {
         report.requests[kind] += requests;
@@ -555,7 +583,10 @@ async function fillPool(
             const located = await sweepBox(country, region, politeFetch, deps.signal);
             count("photon", located.photonRequests);
             photonLeft -= located.photonRequests;
-            if (located.box) state.sweep = newSweep(located.box, tags);
+            if (located.box) {
+                state.sweep = newSweep(located.box, tags);
+                state.sweepCoversTerritory = located.covers;
+            }
         }
         if (photonLeft > 0 && state.sweep && sweepPending(state.sweep) > 0) {
             report.asked.push("sweep");
@@ -592,6 +623,7 @@ async function fillPool(
             state.requests.photon = before.state + result.sent;
             photonLeft -= result.sent;
             report.sweepStopped = result.stopped;
+            report.sweepAnswered = result.answered;
             state.lastSweep = { stopped: result.stopped, answered: result.answered };
             if (result.stopped === "failing")
                 report.problems.push("Photon stopped answering during the place sweep");
@@ -612,9 +644,11 @@ async function fillPool(
             if (read.answered < read.requests)
                 report.problems.push("The OSM API did not answer every read of place tags");
         }
-        // Every box answered, none of them cut off, every tag read: told everything.
+        // The box holds the territory, every box in it answered, none of them
+        // cut off, every tag read: told everything.
         if (
             state.sweep !== null &&
+            state.sweepCoversTerritory &&
             sweepPending(state.sweep) === 0 &&
             state.sweep.cutOff === 0 &&
             state.unread.length === 0 &&
@@ -652,32 +686,41 @@ async function fillPool(
         }
         await save();
     }
+    // Not everything is known and no server is left to ask: this filling has
+    // ended. Its age counts from now, so a later run does not start it over
+    // just because it began long ago.
+    if (!state.complete && state.endedAt === null && nothingWaiting(state)) {
+        state.endedAt = new Date(now()).toISOString();
+        await save();
+    }
     return finish();
 }
 
 /**
- * The box the sweep covers: around the region's centre (one Photon request
- * to place it), or the whole country (from the table, no request).
+ * The box the sweep covers, and whether it holds the whole territory. A
+ * country: its box from the table, no request. A region (one Photon request
+ * to place it): the box around its own outline when Photon knows it; else a
+ * box around its centre, and nothing says that holds all of it. Nor does
+ * any box hold every place where names are often written in another script
+ * than the Latin letters the sweep asks by.
  */
 async function sweepBox(
     country: string,
     region: string | null,
     politeFetch: typeof fetch,
     signal: AbortSignal | undefined
-): Promise<{ box: Bbox | null; photonRequests: number }> {
-    if (!region) return { box: countryBox(country), photonRequests: 0 };
-    const centre = await locateCity(region, country, { fetchImpl: politeFetch, signal }).catch(
+): Promise<{ box: Bbox | null; covers: boolean; photonRequests: number }> {
+    // The sweep asks by Latin letter: it reaches every name only where names are written in them.
+    const lettersReach = latinLettersReachNames(country);
+    if (!region) return { box: countryBox(country), covers: lettersReach, photonRequests: 0 };
+    const place = await locateCity(region, country, { fetchImpl: politeFetch, signal }).catch(
         () => null
     );
+    if (!place) return { box: null, covers: false, photonRequests: 1 };
+    if (place.extent) return { box: place.extent, covers: lettersReach, photonRequests: 1 };
     return {
-        box: centre
-            ? [
-                  centre.lon - BOX_LON,
-                  centre.lat - BOX_LAT,
-                  centre.lon + BOX_LON,
-                  centre.lat + BOX_LAT,
-              ]
-            : null,
+        box: [place.lon - BOX_LON, place.lat - BOX_LAT, place.lon + BOX_LON, place.lat + BOX_LAT],
+        covers: false,
         photonRequests: 1,
     };
 }

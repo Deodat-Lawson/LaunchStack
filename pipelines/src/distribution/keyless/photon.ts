@@ -9,7 +9,7 @@
  * Photon ranks by text match and ignores location unless boxed, so every
  * search is confined to a bounding box around a city centre.
  */
-import { COUNTRIES, countryName } from "./geo";
+import { COUNTRIES, countryName, type Bbox } from "./geo";
 import { KEYLESS_USER_AGENT, type OsmPlace } from "./osm";
 
 export const PHOTON_URL = "https://photon.komoot.io/api/";
@@ -22,6 +22,10 @@ interface PhotonFeature {
         osm_id?: number;
         osm_key?: string;
         osm_value?: string;
+        /** Photon's own kind of place: "city", "district", "county", "state", "house"… */
+        type?: string;
+        /** The outline's box, as west, north, east, south. Absent for a point. */
+        extent?: number[];
         name?: string;
         city?: string;
         countrycode?: string;
@@ -71,12 +75,32 @@ async function getJson<T>(url: string, options: PhotonClientOptions): Promise<T>
     return (await response.json()) as T;
 }
 
-/** The centre of a city for the bounding box; null when Photon cannot place it in the country. */
+/** Where Photon places a named city or area. */
+export interface LocatedPlace {
+    lat: number;
+    lon: number;
+    /** The box around the place's own outline, when Photon knows one. */
+    extent: Bbox | null;
+}
+
+function extentOf(feature: PhotonFeature): Bbox | null {
+    const extent = feature.properties.extent;
+    if (!Array.isArray(extent) || extent.length !== 4) return null;
+    const [a, b, c, d] = extent as [number, number, number, number];
+    if (![a, b, c, d].every(n => Number.isFinite(n))) return null;
+    const box: Bbox = [Math.min(a, c), Math.min(b, d), Math.max(a, c), Math.max(b, d)];
+    return box[2] > box[0] && box[3] > box[1] ? box : null;
+}
+
+/**
+ * The centre of a city or area, and its outline's box when Photon knows it;
+ * null when Photon cannot place it in the country.
+ */
 export async function locateCity(
     city: string,
     country: string,
     options: PhotonClientOptions
-): Promise<{ lat: number; lon: number } | null> {
+): Promise<LocatedPlace | null> {
     const params = new URLSearchParams({ q: `${city}, ${countryName(country)}`, limit: "5" });
     const json = await getJson<{ features: PhotonFeature[] }>(
         `${options.photonUrl ?? PHOTON_URL}?${params.toString()}`,
@@ -89,8 +113,8 @@ export async function locateCity(
             (f.properties.osm_key === "place" || f.properties.osm_key === "boundary")
     );
     const coords = hit?.geometry?.coordinates;
-    if (!coords) return null;
-    return { lat: coords[1], lon: coords[0] };
+    if (!hit || !coords) return null;
+    return { lat: coords[1], lon: coords[0], extent: extentOf(hit) };
 }
 
 export interface PhotonRequest {

@@ -28,7 +28,7 @@
 import type { AgentModelPort } from "@launchstack/llm";
 import { fetchReadable } from "@launchstack/tools/web-research";
 
-import { moreOnNextRun } from "../gather";
+import { moreOnNextRun, notEveryPlace } from "../gather";
 import type { DistributionPorts, PublishDossierInput } from "../run";
 import type { EmbedTexts, JudgeFit } from "../semantic";
 import { rolesForOsmCategories, KEYLESS_USER_AGENT } from "./osm";
@@ -126,7 +126,11 @@ function describePool(where: string, selectors: readonly string[], report: Place
         : waiting.length > 0
           ? `not complete: ${waiting.join(", ")} on the next run`
           : "not complete";
-    const cutOff = report.boxesCutOff > 0 ? `; ${report.boxesCutOff} boxes too dense to split` : "";
+    const cutOff =
+        (report.boxesCutOff > 0 ? `; ${report.boxesCutOff} boxes too dense to split` : "") +
+        (report.sweepCoversTerritory === false
+            ? "; the sweep cannot reach every place of the area"
+            : "");
     return `place pool ${where} ${selectorLabel(selectors)}: ${report.withWebsite} places with a website of ${report.known} known, ${state}${cutOff}; requests this run: overpass ${sent.overpass}, photon ${sent.photon}, osm api ${sent.osmApi}, nominatim ${sent.nominatim}`;
 }
 
@@ -175,10 +179,18 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
             photonRequestsLeft = Math.max(0, photonRequestsLeft - report.requests.photon);
             console.info(`[distribution] ${describePool(where, selectors, report)}`);
 
+            // Not everything in the territory is known yet, and a later run
+            // has something left to ask (a sweep only when Photon may be
+            // asked at all).
+            const { waiting } = report;
+            const more = waiting.overpass || waiting.tags || (waiting.boxes && photonCap > 0);
             const places = poolPlaces(state, max);
             // Nothing found and something did not answer: the source failed.
+            // Unless the sweep is being answered and has more to ask: then
+            // the run is only not far enough along to have found a place.
             const problem = report.problems[0];
-            if (places.length === 0 && problem) throw new Error(problem);
+            if (places.length === 0 && problem && !(more && report.sweepAnswered > 0))
+                throw new Error(problem);
             const found = places.map(p => ({
                 fsqId: p.id,
                 name: p.name,
@@ -188,12 +200,10 @@ export function createKeylessPorts(options: KeylessPortsOptions = {}): Distribut
                 categories: p.categories.map(c => ({ id: c, name: c.split("=")[1] ?? c })),
                 roles: rolesForOsmCategories(p.categories),
             }));
-            // Not everything in the territory is known yet, and a later run
-            // has something left to ask (a sweep only when Photon may be
-            // asked at all): say so, so the run can.
-            const { waiting } = report;
-            const more = waiting.overpass || waiting.tags || (waiting.boxes && photonCap > 0);
-            return more && found.length > 0 ? moreOnNextRun(found) : found;
+            // Say when more is to come, or when this is not everything and
+            // no server is left to ask, so the run can.
+            if (more) return moreOnNextRun(found);
+            return report.complete || found.length === 0 ? found : notEveryPlace(found);
         },
         tradeData: null,
         compliance: null,

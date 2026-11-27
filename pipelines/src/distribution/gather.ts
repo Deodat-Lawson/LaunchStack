@@ -109,6 +109,24 @@ function hasMoreOnNextRun(places: readonly unknown[]): boolean {
     return (places as { [MORE_ON_NEXT_RUN]?: boolean })[MORE_ON_NEXT_RUN] === true;
 }
 
+/**
+ * The place source's detail when a search knows it has not seen everything
+ * and has nothing left to ask: what it returns is all it can list.
+ */
+export const NOT_ALL_PLACES_DETAIL = "not every place could be listed";
+
+const NOT_ALL_PLACES = Symbol.for("launchstack.distribution.notEveryPlaceListed");
+
+/** Marks a place search's results as all it could list, and known not to be everything. */
+export function notEveryPlace<T>(places: T[]): T[] {
+    Object.defineProperty(places, NOT_ALL_PLACES, { value: true });
+    return places;
+}
+
+function hasNotEveryPlace(places: readonly unknown[]): boolean {
+    return (places as { [NOT_ALL_PLACES]?: boolean })[NOT_ALL_PLACES] === true;
+}
+
 export interface GatherResult {
     mentions: OrgMention[];
     sources: SourceCount[];
@@ -432,12 +450,14 @@ export async function gather(
             let total = 0;
             let failures = 0;
             let unfinished = 0;
+            let partial = 0;
             for (const query of placeQueries) {
                 if (ports.signal?.aborted) break;
                 try {
                     const places = await ports.searchPlaces(query);
                     total += places.length;
                     if (hasMoreOnNextRun(places)) unfinished += 1;
+                    else if (hasNotEveryPlace(places)) partial += 1;
                     for (const place of places) {
                         mentions.push({
                             name: place.name,
@@ -461,7 +481,7 @@ export async function gather(
             const status =
                 failures === placeQueries.length
                     ? "failed"
-                    : failures > 0 || total === 0 || unfinished > 0
+                    : failures > 0 || total === 0 || unfinished > 0 || partial > 0
                       ? "degraded"
                       : "ok";
             sources.push({
@@ -474,7 +494,9 @@ export async function gather(
                         ? `${failures} queries failed`
                         : unfinished > 0
                           ? MORE_PLACES_DETAIL
-                          : undefined,
+                          : partial > 0
+                            ? NOT_ALL_PLACES_DETAIL
+                            : undefined,
             });
         })()
     );

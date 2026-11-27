@@ -210,6 +210,9 @@ const PAGE_GAP_PX = 16;
  */
 const DRAW_BEHIND = 1;
 const DRAW_AHEAD = 1.5;
+
+/** How far below the top of the view a jump to a page puts the page's top. */
+const JUMP_MARGIN_PX = 12;
 /** Letter, as the size of a page not measured yet. */
 const DEFAULT_PAGE_SIZE: PageSize = { width: 612, height: 792 };
 
@@ -363,6 +366,14 @@ function quadsOfRange(range: Range, pageRect: DOMRect): PdfQuad[] {
 
 function textLayerOf(pageEl: HTMLElement): Element | null {
     return pageEl.querySelector(".react-pdf__Page__textContent");
+}
+
+/**
+ * False while the viewer sits in a `hidden` ancestor (a background tab of
+ * the workspace): nothing in it has a size or an offset, and it cannot scroll.
+ */
+function hasLayout(container: HTMLElement): boolean {
+    return container.clientHeight > 0;
 }
 
 /** The pages in order, as [number, element]. */
@@ -659,6 +670,15 @@ export function PdfViewerWithNotes({
     const [contentsTab, setContentsTab] = useState<PdfContentsTab>(() =>
         saved?.tab === "outline" ? "outline" : "thumbnails"
     );
+    /**
+     * Whether the pages have a layout at all. A workspace tab that is not the
+     * active one keeps its viewer mounted inside a `hidden` ancestor, where
+     * every page measures 0 at offset 0 and nothing scrolls: "the pages in
+     * view" would be every page of the book, and a jump would go nowhere.
+     * Until it is shown, nothing more is drawn and jumps wait
+     * (`jumpWhenShown`).
+     */
+    const [laidOut, setLaidOut] = useState(false);
     useEffect(() => {
         const root = rootRef.current;
         const container = containerRef.current;
@@ -670,6 +690,7 @@ export function PdfViewerWithNotes({
                     if (width > 0) setAvailableWidth(width);
                     const height = Math.floor(entry.contentRect.height);
                     if (height > 0) setAvailableHeight(height);
+                    setLaidOut(width > 0 && height > 0);
                 } else if (width > 0) {
                     setViewerWidth(width);
                 }
@@ -761,6 +782,10 @@ export function PdfViewerWithNotes({
     const updateDrawn = useCallback(() => {
         const container = containerRef.current;
         if (!container) return;
+        // No layout (a background tab): every page would count as in view,
+        // and a book would draw every page at once. Keep the window as it is
+        // until the viewer is shown.
+        if (!hasLayout(container)) return;
         const top = container.scrollTop - container.clientHeight * DRAW_BEHIND;
         const bottom = container.scrollTop + container.clientHeight * (1 + DRAW_AHEAD);
         let first = 0;
@@ -791,8 +816,28 @@ export function PdfViewerWithNotes({
      * a page's real size arrived — moves every offset in pixels while the
      * scroll position stays put, which would land the reader on another
      * page; this puts the same page back at the same place instead.
+     *
+     * A jump to a page holds that page's top `viewY` pixels below the top of
+     * the view instead, until the reader scrolls. The host's layout can
+     * still be settling after the jump — a document rail that docks or
+     * floats once it knows its width — and the page asked for must not slide
+     * up out of view as the pages grow.
      */
-    const viewAnchor = useRef<{ page: number; frac: number } | null>(null);
+    const viewAnchor = useRef<{ page: number; frac: number; viewY?: number } | null>(null);
+    /** Where the held jump left the scroll position: its own scroll events are not the reader's. */
+    const jumpScrollTop = useRef<number | null>(null);
+    /** Put the page at `viewAnchor` back where it was in the view, if it has moved. */
+    const restoreViewAnchor = useCallback(() => {
+        const container = containerRef.current;
+        const anchor = viewAnchor.current;
+        if (!container || !anchor) return;
+        const pageEl = pageRefs.current.get(anchor.page);
+        if (!pageEl) return;
+        const viewY = anchor.viewY ?? container.clientHeight / 3;
+        const top = Math.max(0, pageEl.offsetTop + anchor.frac * pageEl.offsetHeight - viewY);
+        if (anchor.viewY !== undefined) jumpScrollTop.current = top;
+        if (Math.abs(container.scrollTop - top) > 1) container.scrollTop = top;
+    }, []);
     const noteViewAnchor = useCallback((page: number, scrollTop: number) => {
         const container = containerRef.current;
         const pageEl = pageRefs.current.get(page);
@@ -802,6 +847,12 @@ export function PdfViewerWithNotes({
             page,
             frac: pageEl.offsetHeight > 0 ? (probe - pageEl.offsetTop) / pageEl.offsetHeight : 0,
         };
+        jumpScrollTop.current = null;
+    }, []);
+    /** A jump that put the top of `page` at the top of the view, held until the reader scrolls. */
+    const holdPageJump = useCallback((page: number, scrollTop: number) => {
+        viewAnchor.current = { page, frac: 0, viewY: JUMP_MARGIN_PX };
+        jumpScrollTop.current = scrollTop;
     }, []);
 
     const applyZoom = useCallback((next: Zoom, at?: { x: number; y: number }) => {
@@ -862,19 +913,11 @@ export function PdfViewerWithNotes({
             container.scrollLeft =
                 zoomedPage.offsetLeft + anchor.fracX * zoomedPage.offsetWidth - anchor.viewX;
             noteViewAnchor(anchor.page, container.scrollTop);
-        } else if (viewAnchor.current) {
-            const { page, frac } = viewAnchor.current;
-            const pageEl = pageRefs.current.get(page);
-            if (pageEl) {
-                const top = Math.max(
-                    0,
-                    pageEl.offsetTop + frac * pageEl.offsetHeight - container.clientHeight / 3
-                );
-                if (Math.abs(container.scrollTop - top) > 1) container.scrollTop = top;
-            }
+        } else {
+            restoreViewAnchor();
         }
         updateDrawn();
-    }, [pageScale, pageSizes, updateDrawn, noteViewAnchor]);
+    }, [pageScale, pageSizes, updateDrawn, noteViewAnchor, restoreViewAnchor]);
 
     const zoomIn = useCallback(() => {
         const current = pageScaleRef.current;
@@ -1008,7 +1051,11 @@ export function PdfViewerWithNotes({
                     else break;
                 }
                 setCurrentPage(page);
-                noteViewAnchor(page, container.scrollTop);
+                // A held jump's own scroll keeps the hold; the reader's ends it.
+                const held = jumpScrollTop.current;
+                if (held === null || Math.abs(container.scrollTop - held) > 1) {
+                    noteViewAnchor(page, container.scrollTop);
+                }
                 updateDrawn();
             });
         };
@@ -1019,17 +1066,26 @@ export function PdfViewerWithNotes({
         };
     }, [updateDrawn, noteViewAnchor]);
 
+    /** A jump asked for while the viewer had no layout, made once it is shown. */
+    const jumpWhenShown = useRef<{ page: number; quad?: PdfQuad } | null>(null);
+
     const goToPage = useCallback(
         (page: number) => {
             const container = containerRef.current;
             const pageEl = pageRefs.current.get(page);
             if (!container || !pageEl) return;
-            container.scrollTo({ top: pageEl.offsetTop - 12 });
+            if (!hasLayout(container)) {
+                jumpWhenShown.current = { page };
+                setCurrentPage(page);
+                return;
+            }
+            const top = Math.max(0, pageEl.offsetTop - JUMP_MARGIN_PX);
+            container.scrollTo({ top });
             setCurrentPage(page);
-            noteViewAnchor(page, Math.max(0, pageEl.offsetTop - 12));
+            holdPageJump(page, top);
             updateDrawn();
         },
-        [updateDrawn, noteViewAnchor]
+        [updateDrawn, holdPageJump]
     );
 
     /** Bring a box on a page into view, a third of the way down. */
@@ -1038,9 +1094,15 @@ export function PdfViewerWithNotes({
             const container = containerRef.current;
             const pageEl = pageRefs.current.get(page);
             if (!container || !pageEl) return;
+            if (!hasLayout(container)) {
+                jumpWhenShown.current = { page, quad };
+                setCurrentPage(page);
+                return;
+            }
             if (!quad) {
-                container.scrollTo({ top: pageEl.offsetTop - 12 });
-                noteViewAnchor(page, Math.max(0, pageEl.offsetTop - 12));
+                const top = Math.max(0, pageEl.offsetTop - JUMP_MARGIN_PX);
+                container.scrollTo({ top });
+                holdPageJump(page, top);
                 updateDrawn();
                 return;
             }
@@ -1057,10 +1119,25 @@ export function PdfViewerWithNotes({
                         : container.scrollLeft,
             });
             viewAnchor.current = { page, frac: quad[1] };
+            jumpScrollTop.current = null;
             updateDrawn();
         },
-        [updateDrawn, noteViewAnchor]
+        [updateDrawn, holdPageJump]
     );
+
+    // Shown, for the first time or again: make the jump asked for while the
+    // viewer had no layout, or else keep the reader's place, and draw the
+    // pages around it. A layout effect, so the jump lands in the same frame
+    // as the pages' first real size.
+    useLayoutEffect(() => {
+        if (!laidOut) return;
+        const jump = jumpWhenShown.current;
+        jumpWhenShown.current = null;
+        if (jump?.quad) scrollToQuad(jump.page, jump.quad);
+        else if (jump) goToPage(jump.page);
+        else restoreViewAnchor();
+        updateDrawn();
+    }, [laidOut, goToPage, scrollToQuad, restoreViewAnchor, updateDrawn]);
 
     // A selected pin can outlive the jump that selected it. In particular,
     // the host rebuilds `notes` on a header click or when starting/saving a

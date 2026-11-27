@@ -94,6 +94,11 @@ jest.mock("react-pdf", () => {
 let columnWidth = 1232;
 /** How tall the visible area is: a little under one page. */
 const VIEW_HEIGHT = 700;
+/**
+ * The viewer sits in a background tab: inside a `hidden` ancestor, where
+ * every box measures 0 at offset 0 and nothing scrolls, as with display: none.
+ */
+let inBackgroundTab = false;
 const resizeObservers = new Set<FakeResizeObserver>();
 class FakeResizeObserver {
     private readonly targets = new Set<Element>();
@@ -110,7 +115,9 @@ class FakeResizeObserver {
                 target =>
                     ({
                         target,
-                        contentRect: { width: columnWidth, height: VIEW_HEIGHT },
+                        contentRect: inBackgroundTab
+                            ? { width: 0, height: 0 }
+                            : { width: columnWidth, height: VIEW_HEIGHT },
                     }) as ResizeObserverEntry
             ),
             this as unknown as ResizeObserver
@@ -125,6 +132,21 @@ class FakeResizeObserver {
 /** The column changes width, as dragging a rail would. */
 function resizeColumnTo(width: number) {
     columnWidth = width;
+    act(() => {
+        for (const observer of resizeObservers) observer.fire();
+    });
+}
+
+/**
+ * The reader switches to the tab, or away from it. Hiding drops the scroll
+ * position, the worst a browser may do with a box that loses its layout.
+ */
+function showTab(shown: boolean) {
+    inBackgroundTab = !shown;
+    if (!shown) {
+        const scroll = document.querySelector('[data-testid="pdf-scroll"]');
+        if (scroll) (scroll as unknown as { __scrollTop: number }).__scrollTop = 0;
+    }
     act(() => {
         for (const observer of resizeObservers) observer.fire();
     });
@@ -181,6 +203,7 @@ beforeAll(() => {
         ] as unknown as DOMRectList;
     Element.prototype.scrollIntoView = () => undefined;
     Element.prototype.scrollTo = function (this: Element, options?: ScrollToOptions | number) {
+        if (inBackgroundTab) return;
         if (typeof options === "object" && typeof options.top === "number") {
             (this as unknown as { __scrollTop: number }).__scrollTop = Math.max(0, options.top);
         }
@@ -195,33 +218,36 @@ beforeAll(() => {
         configurable: true,
         get(this: HTMLElement) {
             const page = pageOf(this);
-            return page ? FIRST_PAGE_TOP + (page - 1) * (boxHeight(this) + PAGE_GAP) : 0;
+            if (!page || inBackgroundTab) return 0;
+            return FIRST_PAGE_TOP + (page - 1) * (boxHeight(this) + PAGE_GAP);
         },
     });
     Object.defineProperty(HTMLElement.prototype, "offsetHeight", {
         configurable: true,
         get(this: HTMLElement) {
-            return pageOf(this) ? boxHeight(this) : 0;
+            return pageOf(this) && !inBackgroundTab ? boxHeight(this) : 0;
         },
     });
     Object.defineProperty(HTMLElement.prototype, "offsetWidth", {
         configurable: true,
         get(this: HTMLElement) {
-            return pageOf(this) ? 600 : 0;
+            return pageOf(this) && !inBackgroundTab ? 600 : 0;
         },
     });
     Object.defineProperty(HTMLElement.prototype, "clientHeight", {
         configurable: true,
         get(this: HTMLElement) {
-            return this.dataset.testid === "pdf-scroll" ? VIEW_HEIGHT : 0;
+            return this.dataset.testid === "pdf-scroll" && !inBackgroundTab ? VIEW_HEIGHT : 0;
         },
     });
     Object.defineProperty(HTMLElement.prototype, "scrollTop", {
         configurable: true,
         get(this: HTMLElement) {
+            if (inBackgroundTab) return 0;
             return (this as unknown as { __scrollTop?: number }).__scrollTop ?? 0;
         },
         set(this: HTMLElement, value: number) {
+            if (inBackgroundTab) return;
             (this as unknown as { __scrollTop: number }).__scrollTop = Math.max(0, value);
         },
     });
@@ -236,6 +262,7 @@ beforeEach(() => {
     mockOutline = [];
     columnWidth = 1232;
     layoutRects = false;
+    inBackgroundTab = false;
     window.localStorage.clear();
 });
 
@@ -516,6 +543,102 @@ describe("PdfViewerWithNotes pages in view", () => {
         await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("150%"));
         expect(Array.from(mockPageScales.keys()).sort((a, b) => a - b)).toEqual([1, 2]);
         expect(mockPageScales.get(2)).toBe(1.5);
+    });
+});
+
+describe("PdfViewerWithNotes in a background tab", () => {
+    /** Let the page sizes, the text cache and every effect run their course. */
+    const settle = () =>
+        act(async () => {
+            await new Promise(resolve => setTimeout(resolve, 50));
+        });
+
+    it("draws no more than the first page until shown, then only the pages in view", async () => {
+        mockNumPages = 30;
+        layoutRects = true;
+        inBackgroundTab = true;
+        renderViewer();
+        const bar = await toolbar();
+        expect(bar.getByText("of 30")).toBeInTheDocument();
+        expect(document.querySelectorAll("[data-pdf-page]")).toHaveLength(30);
+
+        // With no layout every page measures 0 at offset 0, so all thirty
+        // would count as in view.
+        await settle();
+        expect(drawnPages()).toEqual([1]);
+
+        showTab(true);
+        await waitFor(() => expect(drawnPages()).toEqual([1, 2]));
+    });
+
+    it("picks up where the reader left off once the tab is shown", async () => {
+        window.localStorage.setItem(
+            "pdf-view:doc-9",
+            JSON.stringify({ page: 21, zoom: 0.5, contents: false })
+        );
+        mockNumPages = 30;
+        layoutRects = true;
+        inBackgroundTab = true;
+        renderViewer({ persistKey: "doc-9" });
+        const bar = await toolbar();
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("21"));
+        await settle();
+        expect(drawnPages()).toEqual([1]);
+
+        // The zoom is fixed, so showing the tab changes no scale: the jump
+        // has to be made because it was asked for, not as a side effect.
+        showTab(true);
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-scroll").scrollTop).toBe(pageTop(21, 0.5) - 12)
+        );
+        await waitFor(() => expect(drawnPages()).toContain(21));
+        expect(drawnPages()).not.toContain(1);
+        expect(bar.getByLabelText("Page number")).toHaveValue("21");
+    });
+
+    it("keeps a resumed page at the top while the host's layout settles", async () => {
+        window.localStorage.setItem(
+            "pdf-view:doc-9",
+            JSON.stringify({ page: 21, zoom: "auto", contents: false })
+        );
+        mockNumPages = 30;
+        layoutRects = true;
+        inBackgroundTab = true;
+        renderViewer({ persistKey: "doc-9" });
+        const bar = await toolbar();
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("21"));
+        await settle();
+
+        // Shown first in a narrower column (the document's side rail still
+        // docked beside it), then widened when the rail floats away: the
+        // pages grow from 100% to 125% after the jump was made.
+        columnWidth = 632;
+        showTab(true);
+        await waitFor(() =>
+            expect(screen.getByTestId("pdf-scroll").scrollTop).toBe(pageTop(21) - 12)
+        );
+        resizeColumnTo(1232);
+        await waitFor(() => expect(bar.getByTestId("pdf-zoom-level")).toHaveTextContent("125%"));
+        expect(screen.getByTestId("pdf-scroll").scrollTop).toBe(pageTop(21, 1.25) - 12);
+    });
+
+    it("keeps the reader's place when they switch away and back", async () => {
+        mockNumPages = 30;
+        layoutRects = true;
+        renderViewer();
+        const bar = await toolbar();
+        scrollPagesTo(pageTop(21, 1.25));
+        await waitFor(() => expect(bar.getByLabelText("Page number")).toHaveValue("21"));
+
+        showTab(false);
+        await settle();
+        showTab(true);
+
+        await waitFor(() => expect(drawnPages()).toContain(21));
+        const scrollTop = screen.getByTestId("pdf-scroll").scrollTop;
+        expect(scrollTop).toBeGreaterThanOrEqual(pageTop(21, 1.25) - VIEW_HEIGHT / 3);
+        expect(scrollTop).toBeLessThan(pageTop(22, 1.25));
+        expect(bar.getByLabelText("Page number")).toHaveValue("21");
     });
 });
 

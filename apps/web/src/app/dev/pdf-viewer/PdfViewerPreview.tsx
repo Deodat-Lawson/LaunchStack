@@ -17,7 +17,11 @@ const PdfViewerWithNotes = dynamic(
  * column of any width, with in-memory notes and highlights and a simulated
  * citation click — so a 300-page book can be tried without a workspace.
  *
- *   /dev/pdf-viewer?url=<pdf url>&width=580
+ *   /dev/pdf-viewer?url=<pdf url>&width=580&hidden=1
+ *
+ * `hidden=1` opens the viewer as a background tab: mounted inside a `hidden`
+ * ancestor, as the workspace keeps every open tab but the active one, so it
+ * loads with no layout at all until "Background tab" is switched off.
  *
  * The URL must be same-origin or served with CORS headers, since pdf.js
  * fetches it from the page. Gated by the server page.
@@ -29,6 +33,7 @@ export function PdfViewerPreview() {
     const [url, setUrl] = useState("");
     const [draftUrl, setDraftUrl] = useState("");
     const [width, setWidth] = useState<number | null>(null);
+    const [backgroundTab, setBackgroundTab] = useState(false);
     const [notes, setNotes] = useState<PdfNoteLite[]>([]);
     const [citeText, setCiteText] = useState("");
     const [citePage, setCitePage] = useState("");
@@ -46,6 +51,7 @@ export function PdfViewerPreview() {
         setDraftUrl(fromQuery);
         const w = Number(params.get("width"));
         setWidth(Number.isFinite(w) && w > 0 ? w : null);
+        setBackgroundTab(params.get("hidden") === "1");
     }, [params]);
 
     if (!params) return null;
@@ -161,6 +167,20 @@ export function PdfViewerPreview() {
                 </button>
                 <button
                     type="button"
+                    data-testid="background-tab"
+                    aria-pressed={backgroundTab}
+                    onClick={() => setBackgroundTab(value => !value)}
+                    style={{
+                        ...button,
+                        ...(backgroundTab
+                            ? { background: "var(--brand-soft)", color: "var(--brand-ink)" }
+                            : null),
+                    }}
+                >
+                    Background tab
+                </button>
+                <button
+                    type="button"
                     style={button}
                     onClick={() => {
                         const root = document.documentElement;
@@ -174,14 +194,31 @@ export function PdfViewerPreview() {
                     {lastAsk ? ` · asked: "${lastAsk.slice(0, 40)}"` : ""}
                 </span>
             </div>
+            {backgroundTab && (
+                <div
+                    data-testid="harness-background-note"
+                    style={{ padding: 40, color: "var(--ink-3)", textAlign: "center" }}
+                >
+                    The viewer is mounted in a background tab. Switch off “Background tab” to show
+                    it.
+                </div>
+            )}
+            {/* `hidden` with no display of its own, as a workspace tab that is
+                not the active one: the viewer stays mounted with no layout. */}
             <div
-                style={{
-                    flex: 1,
-                    minHeight: 0,
-                    display: "flex",
-                    justifyContent: "center",
-                    background: "var(--surface-2)",
-                }}
+                data-testid="harness-tab"
+                hidden={backgroundTab}
+                style={
+                    backgroundTab
+                        ? undefined
+                        : {
+                              flex: 1,
+                              minHeight: 0,
+                              display: "flex",
+                              justifyContent: "center",
+                              background: "var(--surface-2)",
+                          }
+                }
             >
                 <div
                     data-testid="harness-column"

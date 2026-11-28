@@ -805,6 +805,227 @@ describe("keeping the pool", () => {
         expect(fresh.state.carried).toEqual([]);
     });
 
+    const de: PlacePoolRequest = { ...request, country: "DE" };
+    const radladen = (id: number, name: string, website?: string): FakePlace => ({
+        type: "N",
+        id,
+        name,
+        lon: 9 + id / 100,
+        lat: 51,
+        tag: "shop:bicycle",
+        country: "DE",
+        ...(website ? { website } : {}),
+    });
+
+    it("reads the tags of what it knew again when the sweep fills a pool again", async () => {
+        const map = createFakeMap([
+            radladen(1, "Alt Rad", "https://alt-rad.example/"),
+            radladen(2, "Berg Rad"),
+            radladen(3, "Clara Rad", "https://clara-rad.example/"),
+            radladen(4, "Dorf Rad", "https://dorf-rad.example/"),
+            radladen(5, "Eck Rad", "https://eck-rad.example/"),
+        ]);
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 64, now: () => clock };
+        const first = await gatherPlacePool(de, { ...deps, fetchImpl: map.fetchImpl });
+        expect(first.report).toMatchObject({ complete: true, completedBy: "sweep", known: 5 });
+        expect(first.state.without).toEqual(["osm:node/2"]);
+        // Germany is swept, never asked of Overpass: the sweep is all a refresh has.
+        expect(map.count("overpass")).toBe(0);
+
+        // A month on: one site moved, one shop got a site, one lost its site, one closed.
+        const changed = createFakeMap([
+            radladen(1, "Alt Rad", "https://neu-rad.example/"),
+            radladen(2, "Berg Rad", "https://berg-rad.example/"),
+            radladen(3, "Clara Rad"),
+            radladen(5, "Eck Rad", "https://eck-rad.example/"),
+        ]);
+        clock += 31 * DAY;
+        const again = await gatherPlacePool(de, { ...deps, fetchImpl: changed.fetchImpl });
+        expect(again.report).toMatchObject({ complete: true, completedBy: "sweep", known: 4 });
+        // The four that are still listed are read again, in one request to the OSM API.
+        expect(changed.count("photon")).toBe(26);
+        expect(changed.count("osmapi")).toBe(1);
+        expect(again.state.places["osm:node/1"]?.website).toBe("https://neu-rad.example/");
+        expect(again.state.places["osm:node/2"]?.website).toBe("https://berg-rad.example/");
+        expect(again.state.places["osm:node/3"]).toBeUndefined();
+        expect(again.state.places["osm:node/4"]).toBeUndefined();
+        expect(again.state.places["osm:node/5"]?.website).toBe("https://eck-rad.example/");
+        expect(again.state.without).toEqual(["osm:node/3"]);
+        expect(again.state.carried).toEqual([]);
+        expect(again.state.unread).toEqual([]);
+    });
+
+    it("keeps the old website while a place's tags cannot be read again, and reads them on a later run", async () => {
+        const map = createFakeMap([
+            radladen(1, "Alt Rad", "https://alt-rad.example/"),
+            radladen(2, "Berg Rad"),
+        ]);
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 64, now: () => clock };
+        await gatherPlacePool(de, { ...deps, fetchImpl: map.fetchImpl });
+
+        const changed = createFakeMap(
+            [
+                radladen(1, "Alt Rad", "https://neu-rad.example/"),
+                radladen(2, "Berg Rad", "https://berg-rad.example/"),
+            ],
+            { osmApiFails: () => 503 }
+        );
+        clock += 31 * DAY;
+        const down = await gatherPlacePool(de, { ...deps, fetchImpl: changed.fetchImpl });
+        // Photon listed both again, and that says nothing about their websites.
+        expect(down.report).toMatchObject({
+            complete: false,
+            known: 2,
+            unread: 2,
+            waiting: { overpass: false, boxes: false, tags: true },
+        });
+        expect(down.state.places["osm:node/1"]?.website).toBe("https://alt-rad.example/");
+        expect(down.state.places["osm:node/2"]).toBeUndefined();
+        expect([...down.state.carried].sort()).toEqual(["osm:node/1", "osm:node/2"]);
+
+        changed.options.osmApiFails = undefined;
+        const sweptOnce = changed.count("photon");
+        const up = await gatherPlacePool(de, { ...deps, fetchImpl: changed.fetchImpl });
+        expect(up.report).toMatchObject({ complete: true, completedBy: "sweep", known: 2 });
+        expect(changed.count("photon")).toBe(sweptOnce);
+        expect(up.state.places["osm:node/1"]?.website).toBe("https://neu-rad.example/");
+        expect(up.state.places["osm:node/2"]?.website).toBe("https://berg-rad.example/");
+        expect(up.state.carried).toEqual([]);
+    });
+
+    /** The ids whose tags these requests asked the OSM API for, one entry per time asked. */
+    const idsRead = (calls: readonly string[]) =>
+        calls
+            .filter(call => call.startsWith("osmapi "))
+            .flatMap(call => {
+                const url = new URL(call.slice("osmapi ".length));
+                const type = url.pathname.includes("/nodes") ? "node" : "way";
+                return (url.searchParams.get(`${type}s`) ?? "")
+                    .split(",")
+                    .map(id => `osm:${type}/${id}`);
+            });
+
+    it("reads each place once per filling, over as many runs as the new filling takes", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, fetchImpl: map.fetchImpl, now: () => clock };
+        const original = await gatherPlacePool(request, { ...deps, photonRequests: 100_000 });
+        expect(original.report).toMatchObject({ completedBy: "sweep", known: 700 });
+        const everyId = places.map(idOf).sort();
+        expect(idsRead(map.calls).sort()).toEqual(everyId);
+
+        // A month on, in runs of 40 Photon requests.
+        clock += 31 * DAY;
+        const mark = map.calls.length;
+        let run = await gatherPlacePool(request, { ...deps, photonRequests: 40 });
+        let runs = 1;
+        // Not complete after one run, and the run still has every place the old filling knew.
+        expect(run.report).toMatchObject({ complete: false, known: 700 });
+        expect(Object.keys(run.state.places).sort()).toEqual(
+            Object.keys(original.state.places).sort()
+        );
+        while (!run.report.complete) {
+            run = await gatherPlacePool(request, { ...deps, photonRequests: 40 });
+            runs += 1;
+        }
+        expect(runs).toBeGreaterThan(2);
+        expect(run.report).toMatchObject({ completedBy: "sweep", known: 700 });
+        expect(run.state.carried).toEqual([]);
+        const refresh = map.calls.slice(mark);
+        // Every place's tags were read again, none of them twice, and no box was asked twice.
+        expect(idsRead(refresh).sort()).toEqual(everyId);
+        const boxes = refresh.filter(call => call.startsWith("photon "));
+        expect(new Set(boxes).size).toBe(boxes.length);
+    });
+
+    it("loses nothing when a run of the new filling is cut short", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 100_000, now: () => clock };
+        const original = await gatherPlacePool(request, { ...deps, fetchImpl: map.fetchImpl });
+        expect(original.report).toMatchObject({ completedBy: "sweep", known: 700 });
+
+        // A month on, the caller gives up after the tenth Photon answer.
+        clock += 31 * DAY;
+        const mark = map.calls.length;
+        const controller = new AbortController();
+        let answers = 0;
+        const cutShort: typeof fetch = async (input, init) => {
+            const response = await map.fetchImpl(input, init);
+            if (hostOf(input) === "photon.komoot.io" && ++answers === 10) controller.abort();
+            return response;
+        };
+        const cut = await gatherPlacePool(request, {
+            ...deps,
+            fetchImpl: cutShort,
+            signal: controller.signal,
+        });
+        expect(cut.report).toMatchObject({ complete: false, known: 700, sweepStopped: "aborted" });
+        // What it found again waits for its tags: none was read after the stop,
+        // and the run still has every place with the description it had.
+        expect(cut.report.unread).toBeGreaterThan(0);
+        expect(idsRead(map.calls.slice(mark))).toEqual([]);
+        expect(cut.state.places).toEqual(original.state.places);
+
+        let run = cut;
+        while (!run.report.complete)
+            run = await gatherPlacePool(request, { ...deps, fetchImpl: map.fetchImpl });
+        expect(run.report).toMatchObject({ completedBy: "sweep", known: 700 });
+        expect(run.state.carried).toEqual([]);
+        const refresh = map.calls.slice(mark);
+        expect(idsRead(refresh).sort()).toEqual(places.map(idOf).sort());
+        const boxes = refresh.filter(call => call.startsWith("photon "));
+        expect(new Set(boxes).size).toBe(boxes.length);
+    });
+
+    it("lets an Overpass answer complete a new filling the sweep had begun", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places);
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 30, now: () => clock };
+        const original = await gatherPlacePool(request, { ...deps, fetchImpl: map.fetchImpl });
+        expect(original.report).toMatchObject({ completedBy: "overpass", known: 700 });
+
+        // A month on Overpass is down and the sweep begins the new filling. The
+        // OSM API is down too, so what it found again waits for its tags.
+        clock += 31 * DAY;
+        map.options.overpass = 504;
+        map.options.osmApiFails = () => 503;
+        const begun = await gatherPlacePool(request, { ...deps, fetchImpl: map.fetchImpl });
+        expect(begun.report).toMatchObject({ complete: false, known: 700 });
+        expect(begun.report.pendingBoxes).toBeGreaterThan(30);
+        expect(begun.report.unread).toBeGreaterThan(0);
+        expect(begun.state.carried).toHaveLength(700);
+
+        // Overpass answers on the next run, with one shop gone: its answer
+        // describes every place, and nothing is left waiting.
+        const gone = withSite(places)[0]!;
+        const changed = createFakeMap(places.filter(p => p !== gone));
+        const settled = await gatherPlacePool(request, { ...deps, fetchImpl: changed.fetchImpl });
+        expect(settled.report).toMatchObject({
+            asked: ["overpass"],
+            complete: true,
+            completedBy: "overpass",
+            known: 699,
+            unread: 0,
+        });
+        expect(settled.state.carried).toEqual([]);
+        expect(settled.state.unread).toEqual([]);
+        expect(settled.state.sweep).toBeNull();
+        expect(settled.state.places[idOf(gone)]).toBeUndefined();
+        expect(changed.count("photon")).toBe(0);
+        expect(changed.count("osmapi")).toBe(0);
+    });
+
     it("asks again after a day when the answer was that nothing is there", async () => {
         const empty = createFakeMap([], { overpass: "empty" });
         const store = createMemoryPlacePoolStore();

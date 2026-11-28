@@ -22,8 +22,10 @@
  * split, and every found place's tags read. A failed request settles
  * nothing; it waits for a later run. A complete pool that has grown old is
  * filled again, and keeps what it knew until the new filling is complete.
- * An unfinished one never starts over: it carries on, however long ago it
- * stopped, so no answered request is asked twice.
+ * The new filling takes no tag from the old one on trust: every place it
+ * finds again is described again, so a website that moved, went or appeared
+ * is picked up. An unfinished pool never starts over: it carries on, however
+ * long ago it stopped, so no answered request is asked twice.
  *
  * The pool is public map data and holds nothing about who asked for it, so
  * the store is shared between workspaces: each tag and territory is swept
@@ -93,9 +95,9 @@ export interface PlacePoolState {
     selectors: string[];
     /** Places with a website, by OSM id ("osm:node/123"). */
     places: Record<string, OsmPlace>;
-    /** Ids of places read and found to carry no website: counted, never read again. */
+    /** Ids of places read and found to carry no website: counted, and not read again in this filling. */
     without: string[];
-    /** Found by the sweep; tags not read yet. */
+    /** Found by the sweep in this filling, new or carried; its tags are not read in it yet. */
     unread: SweepHit[];
     /** True once Overpass has answered for the whole territory, even with nothing. */
     overpassAnswered: boolean;
@@ -118,9 +120,15 @@ export interface PlacePoolState {
     /** True once the name search has been answered for this filling. */
     namesSearched: boolean;
     /**
-     * Ids kept from the filling this one replaces. They leave the list when
-     * a server vouches for them again, and leave the pool if it completes
-     * without them: a refresh never knows less than what it replaces.
+     * Ids kept from the filling this one replaces, with what that filling
+     * knew of them. One leaves the list when a server describes it again (an
+     * Overpass answer, or its tags read after the sweep found it), and
+     * leaves the pool if this filling completes without that. Until then the
+     * pool keeps the old description, so a run during a refresh has every
+     * place the old filling had, and old tags are never passed off as new.
+     * A filling that cannot complete keeps the ones nobody described; one
+     * that completes by sweep drops them, a closed place and a place whose
+     * name no letter reaches alike.
      */
     carried: string[];
     /** True once every place in scope is known and nothing is waiting. */
@@ -590,8 +598,11 @@ async function fillPool(
         }
         if (photonLeft > 0 && state.sweep && sweepPending(state.sweep) > 0) {
             report.asked.push("sweep");
-            const known = new Set<string>([...Object.keys(state.places), ...without]);
-            for (const hit of state.unread) known.add(hit.id);
+            // Found, and waiting for their tags to be read.
+            const waiting = new Set<string>(state.unread.map(hit => hit.id));
+            // Described in this filling: kept, and no longer among the carried.
+            const described = (id: string) =>
+                !carried.has(id) && (state.places[id] !== undefined || without.has(id));
             const before = { report: report.requests.photon, state: state.requests.photon };
             let sinceSave = 0;
             const result = await runSweep(state.sweep, {
@@ -602,10 +613,12 @@ async function fillPool(
                 signal: deps.signal,
                 onHits: hits => {
                     for (const hit of hits) {
-                        // Photon still lists it: the old filling was right that it exists.
-                        carried.delete(hit.id);
-                        if (known.has(hit.id)) continue;
-                        known.add(hit.id);
+                        if (waiting.has(hit.id) || described(hit.id)) continue;
+                        // New, or known only from the filling this one
+                        // replaces. Photon says it exists and nothing of its
+                        // website, so a carried place is read again too, and
+                        // stays carried until that read describes it.
+                        waiting.add(hit.id);
                         state.unread.push(hit);
                     }
                 },

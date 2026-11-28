@@ -368,7 +368,7 @@ interface OsmElement {
 export interface TagReadResult {
     /** Places that carry a name and a website. */
     places: OsmPlace[];
-    /** Ids read that carry no website (or are gone): never read again. */
+    /** Ids read that carry no website (or are gone): not read again in the same filling. */
     without: string[];
     /**
      * Hits not read: their request failed, the answer left them out, or the

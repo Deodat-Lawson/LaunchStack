@@ -153,7 +153,10 @@ export function buildOverpassQuery(
     if (statements.length === 0)
         statements.push(`nwr${scope}["office"="company"]${WEBSITE_FILTER};`);
     // `out tags center` prints ids, tags and one position per element, and no
-    // member lists: all a place needs.
+    // member lists: all a place needs. A node gets its own position (the
+    // server prints it with any geometry word, though the manual's wording
+    // suggests otherwise), a way or relation the centre of its box. A whole
+    // answer in which an element comes without one is refused in `readArea`.
     const out = req.all ? "out tags center;" : `out center ${limit};`;
     return `[out:json][timeout:${timeout}];\n${areaDefs.join("\n")}\n(\n  ${statements.join("\n  ")}\n);\n${out}`;
 }
@@ -179,6 +182,13 @@ interface OverpassElement {
     lon?: number;
     center?: { lat: number; lon: number };
     tags?: Record<string, string>;
+}
+
+/** Where an element is: a node's own position, or the centre a way or relation was given. */
+function positionOf(el: OverpassElement): { lat: number; lng: number } | null {
+    const lat = el.lat ?? el.center?.lat;
+    const lng = el.lon ?? el.center?.lon;
+    return typeof lat === "number" && typeof lng === "number" ? { lat, lng } : null;
 }
 
 /** Tag keys that say what a place is; kept on a place as "key=value". */
@@ -211,9 +221,9 @@ export function mapOverpassElements(
         if (!name) continue;
         const rawSite = tags.website ?? tags["contact:website"] ?? null;
         const website = rawSite ? normalizeWebsite(rawSite) : null;
-        const lat = el.lat ?? el.center?.lat;
-        const lng = el.lon ?? el.center?.lon;
-        if (lat === undefined || lng === undefined) continue;
+        const position = positionOf(el);
+        if (!position) continue;
+        const { lat, lng } = position;
         const key = distinct
             ? (website ?? `${name.toLowerCase()}|${lat.toFixed(3)}`)
             : `${el.type}/${el.id}`;
@@ -263,7 +273,11 @@ export interface OverpassClientOptions {
     userAgent?: string;
     /** Give up on one instance after this long; none by default. */
     timeoutMs?: number;
-    /** Refuse an answer the server says it cut short, even when it holds elements. */
+    /**
+     * Refuse an answer that cannot be the whole population: one the server
+     * says it cut short, even when it holds elements, and one in which an
+     * element comes without a position.
+     */
     wholeAnswer?: boolean;
 }
 
@@ -350,6 +364,19 @@ async function readArea(
             (elements.length === 0 && /timed out|out of memory|error/i.test(remark)))
     )
         throw new Error(`Overpass remark: ${remark.slice(0, 120)}`);
+    // Everything an area query returns can be placed, and the query asks for
+    // one position per element: a node has its own, a way has nodes, and a
+    // relation is only returned through a node or way member inside the
+    // area. An element that comes without a position says this instance
+    // printed something else than was asked, and each such place would be
+    // dropped as unplaceable: for "every place" that is no answer either.
+    if (options.wholeAnswer) {
+        const unplaced = elements.filter(el => positionOf(el) === null).length;
+        if (unplaced > 0)
+            throw new Error(
+                `Overpass answer without positions: ${unplaced} of ${elements.length} elements`
+            );
+    }
     return elements;
 }
 

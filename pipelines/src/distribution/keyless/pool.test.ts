@@ -188,6 +188,152 @@ describe("Overpass first", () => {
         expect(report.problems[0]).toMatch(/Overpass did not answer/);
     });
 
+    it("does not take an answer whose places come without a position for the whole population", async () => {
+        const places = fakePopulation(60);
+        // Every instance prints as `out tags;` alone would: no position for a
+        // node, no centre for a way. Each place could only be dropped.
+        const map = createFakeMap(places, { overpass: "unplaced" });
+        const store = createMemoryPlacePoolStore();
+        const first = await gatherPlacePool(request, {
+            store,
+            photonRequests: 0,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(first.report.overpassAttempts.map(a => a.ok)).toEqual([false, false, false]);
+        expect(first.report.overpassAttempts[0]!.detail).toBe(
+            "Overpass answer without positions: 60 of 60 elements"
+        );
+        expect(first.report).toMatchObject({ complete: false, completedBy: null, known: 0 });
+        expect(first.state.overpassAnswered).toBe(false);
+
+        // The sweep still finds every place.
+        const swept = await gatherPlacePool(request, {
+            store,
+            photonRequests: 100_000,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(swept.report).toMatchObject({ complete: true, completedBy: "sweep", known: 60 });
+
+        // One instance that prints positions is enough.
+        const mixed = createFakeMap(places, { overpassByHost: { "overpass-api.de": "unplaced" } });
+        const { report } = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 0,
+            fetchImpl: mixed.fetchImpl,
+        });
+        expect(report.overpassAttempts.map(a => a.ok)).toEqual([false, true]);
+        expect(report).toMatchObject({ complete: true, completedBy: "overpass", known: 60 });
+    });
+
+    it("refuses such an answer for a single node, for the ways alone, and for a relation without a centre", async () => {
+        type Element = Record<string, unknown>;
+        const places = fakePopulation(60);
+        expect(places.filter(p => p.type === "W")).toHaveLength(7);
+        /** A run whose Overpass answers are changed on the way back. */
+        const answered = async (change: (elements: Element[]) => Element[]) => {
+            const map = createFakeMap(places);
+            const fetchImpl: typeof fetch = async (input, init) => {
+                const response = await map.fetchImpl(input, init);
+                if (hostOf(input) !== "overpass-api.de" || !response.ok) return response;
+                const body = (await response.json()) as { elements: Element[] };
+                return new Response(JSON.stringify({ elements: change(body.elements) }));
+            };
+            const { report } = await gatherPlacePool(request, {
+                store: createMemoryPlacePoolStore(),
+                photonRequests: 0,
+                fetchImpl,
+                overpassUrls: ["https://overpass-api.de/api/interpreter"],
+            });
+            return report;
+        };
+        const without = (element: Element, ...keys: string[]) => {
+            const copy = { ...element };
+            for (const key of keys) Reflect.deleteProperty(copy, key);
+            return copy;
+        };
+        const refused = (detail: string) => ({
+            overpassAttempts: [expect.objectContaining({ ok: false, detail })],
+            complete: false,
+            completedBy: null,
+            known: 0,
+        });
+
+        // One node of 53 without its position.
+        const oneNode = await answered(elements => {
+            const first = elements.findIndex(el => el.type === "node");
+            return elements.map((el, i) => (i === first ? without(el, "lat", "lon") : el));
+        });
+        expect(oneNode).toMatchObject(
+            refused("Overpass answer without positions: 1 of 60 elements")
+        );
+
+        // Every node placed, and no way given a centre.
+        const noCentres = await answered(elements => elements.map(el => without(el, "center")));
+        expect(noCentres).toMatchObject(
+            refused("Overpass answer without positions: 7 of 60 elements")
+        );
+
+        // An area query returns a relation only through a member that has a
+        // position, so one without a centre is the same sign.
+        const bareRelation = await answered(elements => [
+            ...elements,
+            { type: "relation", id: 77, tags: { name: "Fietsen Verzameld", shop: "bicycle" } },
+        ]);
+        expect(bareRelation).toMatchObject(
+            refused("Overpass answer without positions: 1 of 61 elements")
+        );
+
+        // Left as it came, the same answer is taken.
+        const whole = await answered(elements => elements);
+        expect(whole).toMatchObject({ complete: true, completedBy: "overpass", known: 60 });
+    });
+
+    it("is asked through a pretend server that prints positions the way the real one does", async () => {
+        const map = createFakeMap(fakePopulation(30));
+        const printed = async (out: string) => {
+            const response = await map.fetchImpl("https://overpass-api.de/api/interpreter", {
+                method: "POST",
+                body: new URLSearchParams({
+                    data: `[out:json];\narea["ISO3166-1"="NL"]->.c;\nnwr(area.c)["shop"="bicycle"]["name"];\n${out}`,
+                }),
+            });
+            const { elements } = (await response.json()) as {
+                elements: Array<{ type: string; lat?: number; center?: object; tags?: object }>;
+            };
+            const share = (type: string, has: (el: (typeof elements)[number]) => boolean) => {
+                const all = elements.filter(el => el.type === type);
+                return `${all.filter(has).length}/${all.length}`;
+            };
+            return {
+                nodesPlaced: share("node", el => el.lat !== undefined),
+                waysCentred: share("way", el => el.center !== undefined),
+                tagged: elements.every(el => el.tags !== undefined),
+            };
+        };
+        // What the pool sends: a node's own position, a way's centre, the tags.
+        expect(await printed("out tags center;")).toEqual({
+            nodesPlaced: "26/26",
+            waysCentred: "4/4",
+            tagged: true,
+        });
+        // `tags` alone prints no position at all; `center` alone keeps the tags.
+        expect(await printed("out tags;")).toEqual({
+            nodesPlaced: "0/26",
+            waysCentred: "0/4",
+            tagged: true,
+        });
+        expect(await printed("out center 40;")).toEqual({
+            nodesPlaced: "26/26",
+            waysCentred: "4/4",
+            tagged: true,
+        });
+        expect(await printed("out ids center;")).toEqual({
+            nodesPlaced: "26/26",
+            waysCentred: "4/4",
+            tagged: false,
+        });
+    });
+
     it("does not ask Overpass for a country too large for one request: it is swept, whole", async () => {
         const places = fakePopulation(700, { country: "DE", box: DE_BOX });
         const de: PlacePoolRequest = { ...request, country: "DE" };

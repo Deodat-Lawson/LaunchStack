@@ -21,14 +21,16 @@ export interface FakePlace {
     city?: string;
 }
 
-export type OverpassMode = "answers" | 504 | 429 | "empty" | "cut" | "noted";
+export type OverpassMode = "answers" | 504 | 429 | "empty" | "cut" | "noted" | "unplaced";
 
 export interface FakeMapOptions {
     /**
      * What an Overpass instance does: answer with every place, fail with this
      * status, answer with nothing, ("cut") run out of time and return half
-     * the places with a remark saying so, or ("noted") return half the places
-     * with a remark that names no error.
+     * the places with a remark saying so, ("noted") return half the places
+     * with a remark that names no error, or ("unplaced") answer with every
+     * place and no position for any, as `out tags;` alone would print,
+     * whatever the query's `out` says.
      */
     overpass?: OverpassMode;
     /** Per instance host, overriding `overpass`. */
@@ -83,6 +85,25 @@ const json = (body: unknown, status = 200) =>
         status,
         headers: { "content-type": "application/json" },
     });
+
+/**
+ * What a query's `out` statement prints, as the real server does (Overpass
+ * API 0.7.62, `output_json.cc`, and the answers recorded from it): tags
+ * unless the level is `ids` or `skel`; a node's own position at the levels
+ * that carry coordinates (`skel`, `body`, `meta`) and with any geometry word,
+ * `center` included; a centre for a way only with `center`.
+ */
+function printedBy(query: string): { tags: boolean; nodePosition: boolean; center: boolean } {
+    const statement = /\bout\b([^;]*);\s*$/.exec(query)?.[1] ?? "";
+    const said = new Set(statement.split(/\s+/).filter(Boolean));
+    const level = ["ids", "skel", "tags", "meta"].find(word => said.has(word)) ?? "body";
+    const geometry = said.has("center") || said.has("geom") || said.has("bb");
+    return {
+        tags: level !== "ids" && level !== "skel",
+        nodePosition: geometry || (level !== "ids" && level !== "tags"),
+        center: said.has("center"),
+    };
+}
 
 export function createFakeMap(places: readonly FakePlace[], options: FakeMapOptions = {}): FakeMap {
     const calls: string[] = [];
@@ -210,30 +231,27 @@ export function createFakeMap(places: readonly FakePlace[], options: FakeMapOpti
             overpassQueries.push(body);
             const mode = options.overpassByHost?.[host] ?? options.overpass ?? "answers";
             if (mode === "empty") return Promise.resolve(json({ elements: [] }));
-            if (mode !== "answers" && mode !== "cut" && mode !== "noted")
+            if (typeof mode === "number")
                 return Promise.resolve(new Response("<html>busy</html>", { status: mode }));
             const country = /"ISO3166-1"="([A-Z]{2})"/.exec(body)?.[1];
             const selectors = [...body.matchAll(/\["([a-z_]+)"="([a-z_]+)"\]\["name"\]/g)].map(
                 m => `${m[1]}:${m[2]}`
             );
+            const printed = printedBy(mode === "unplaced" ? "out tags;" : body);
             const elements = places
                 .filter(p => p.country === country && selectors.includes(p.tag))
-                .map(p =>
-                    p.type === "N"
-                        ? {
-                              type: "node",
-                              id: p.id,
-                              lat: p.lat,
-                              lon: p.lon,
-                              tags: tagsOf(p),
-                          }
-                        : {
-                              type: "way",
-                              id: p.id,
-                              center: { lat: p.lat, lon: p.lon },
-                              tags: tagsOf(p),
-                          }
-                );
+                .map(p => ({
+                    type: p.type === "N" ? "node" : "way",
+                    id: p.id,
+                    ...(p.type === "W"
+                        ? printed.center
+                            ? { center: { lat: p.lat, lon: p.lon } }
+                            : {}
+                        : printed.nodePosition
+                          ? { lat: p.lat, lon: p.lon }
+                          : {}),
+                    ...(printed.tags ? { tags: tagsOf(p) } : {}),
+                }));
             return Promise.resolve(
                 json(
                     mode === "cut"

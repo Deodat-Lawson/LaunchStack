@@ -29,6 +29,7 @@ export const planHash = (tasks: VantageTask[]) =>
                             title,
                             description,
                             acceptanceCriterion,
+                            workType,
                             priority,
                             assigneeType,
                             assigneeId,
@@ -41,6 +42,7 @@ export const planHash = (tasks: VantageTask[]) =>
                             title,
                             description,
                             acceptanceCriterion,
+                            workType,
                             priority,
                             assigneeType,
                             assigneeId,
@@ -142,7 +144,12 @@ export function createVantageV2Repository(db: WeeklyReviewDatabase) {
     async function selected(q: WeeklyReviewQuery, a: WeeklyReviewActor, tasks: VantageTask[]) {
         const settings = await loadSettings(q, a);
         const personas = await eligiblePersonas(q, a);
-        for (const t of tasks)
+        for (const t of tasks) {
+            if (
+                t.assigneeType === "persona" &&
+                !["analysis", "comparison", "draft"].includes(t.workType ?? "")
+            )
+                throw new WeeklyReviewConflict("task_read_only_work_required", 400);
             if (
                 t.assigneeType === "owner"
                     ? t.assigneeId !== a.userId
@@ -150,6 +157,7 @@ export function createVantageV2Repository(db: WeeklyReviewDatabase) {
                       !personas.some(p => p.id === t.assigneeId)
             )
                 throw new WeeklyReviewConflict("task_assignee_invalid", 400);
+        }
     }
     async function mutate(
         a: WeeklyReviewActor,
@@ -247,6 +255,18 @@ export function createVantageV2Repository(db: WeeklyReviewDatabase) {
             const { expectedVersion, ...patch } = TaskPatch.parse(input);
             if (patch.assigneeType === "owner") patch.assigneeId = a.userId;
             return mutate(a, id, expectedVersion, async (q, p, t) => {
+                const assignmentChanged =
+                    (patch.assigneeType !== undefined && patch.assigneeType !== t.assigneeType) ||
+                    (patch.assigneeId !== undefined && patch.assigneeId !== t.assigneeId);
+                const criterionChanged =
+                    patch.acceptanceCriterion !== undefined &&
+                    patch.acceptanceCriterion !== t.acceptanceCriterion;
+                if (
+                    (patch.assigneeType ?? t.assigneeType) === "persona" &&
+                    (assignmentChanged || criterionChanged) &&
+                    !patch.workType
+                )
+                    throw new WeeklyReviewConflict("task_read_only_work_required", 400);
                 Object.assign(t, patch);
                 t.status = "proposed";
                 delete t.result;

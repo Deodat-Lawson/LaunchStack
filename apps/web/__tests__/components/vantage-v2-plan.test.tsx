@@ -157,6 +157,32 @@ test("read-only access disables mutations and Chinese controls render", async ()
     expect(screen.getByRole("button", { name: "保存目标与智能体" })).toBeDisabled();
 });
 
+test("editing a persona criterion asks the owner to classify the revised work before saving", async () => {
+    plan.tasks[0] = {
+        ...plan.tasks[0]!,
+        workType: "analysis",
+        assigneeType: "persona",
+        assigneeId: "agent",
+    };
+    jest.mocked(v2Api.settings).mockResolvedValue({
+        goals: [],
+        personaIds: ["agent"],
+        personas: [{ id: "agent", name: "Analyst" }],
+    });
+    renderWithLocale(<V2PlanPanel review={review} canEdit onInspect={jest.fn()} />, "en");
+    fireEvent.change(await screen.findByRole("textbox", { name: "Acceptance criterion" }), {
+        target: { value: "Compare the risks using the frozen brief." },
+    });
+    expect(screen.getByRole("button", { name: "Save task" })).toBeDisabled();
+    expect(screen.getByRole("combobox", { name: "Work type" })).toHaveTextContent(
+        "Choose a work type"
+    );
+    expect(
+        screen.getByText("Choose the read-only work that satisfies this acceptance criterion.")
+    ).toBeVisible();
+    expect(v2Api.edit).not.toHaveBeenCalled();
+});
+
 test("saving one task preserves an unchanged sibling's unsaved draft", async () => {
     plan.tasks.push({ ...plan.tasks[0]!, id: "sibling", title: "Second task" });
     jest.mocked(v2Api.edit).mockImplementation(async () => {

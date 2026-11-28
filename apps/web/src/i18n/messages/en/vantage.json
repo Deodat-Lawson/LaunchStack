@@ -812,6 +812,15 @@
     "refresh": "Refresh plan",
     "approvalHint": "Approval binds this exact version and hash. Saving an edit clears execution consent and requires another whole-plan approval.",
     "acceptanceCriterion": "Acceptance criterion",
+    "workType": "Work type",
+    "chooseWorkType": "Choose a work type",
+    "confirmReadOnlyWork": "Choose the read-only work that satisfies this acceptance criterion.",
+    "workTypes": {
+      "analysis": "Analysis",
+      "comparison": "Comparison",
+      "draft": "Draft",
+      "human_action": "Human action (owner only)"
+    },
     "latestAttempt": "Latest attempt {number}: {status}",
     "attemptLease": "Attempt lease until {date}",
     "hash": "Plan hash: {hash}",

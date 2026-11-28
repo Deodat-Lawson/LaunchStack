@@ -31,6 +31,7 @@ const task: VantageTask = {
     title: "Draft",
     description: "Review",
     acceptanceCriterion: "Reviewed summary",
+    workType: "draft",
     priority: "medium",
     assigneeType: "persona",
     assigneeId: "agent",
@@ -39,15 +40,15 @@ const task: VantageTask = {
     version: 1,
     status: "proposed",
 };
-function fixture() {
+function fixture(initialTask = task) {
     const plan: VantagePlan = {
         id: "plan",
         reviewId: "review",
         version: 1,
-        hash: planHash([task]),
+        hash: planHash([initialTask]),
         approvedVersion: null,
         approvedHash: null,
-        tasks: [{ ...task }],
+        tasks: [{ ...initialTask }],
         discarded: [],
     };
     let row: Record<string, unknown> = {
@@ -60,10 +61,11 @@ function fixture() {
             .ciphertext,
     };
     let trow: Record<string, unknown> = {
-        ...task,
-        assignee_type: task.assigneeType,
-        assignee_id: task.assigneeId,
-        ciphertext: encryptSecret(JSON.stringify(task), taskAAD(actor, task.id)).ciphertext,
+        ...initialTask,
+        assignee_type: initialTask.assigneeType,
+        assignee_id: initialTask.assigneeId,
+        ciphertext: encryptSecret(JSON.stringify(initialTask), taskAAD(actor, initialTask.id))
+            .ciphertext,
     };
     const queries: string[] = [];
     const q: WeeklyReviewQuery = async (text, args = []) => {
@@ -200,6 +202,67 @@ it("hash binds exact task content and recipient while ignoring progress", () => 
     expect(planHash([task])).toBe(planHash([{ ...task, status: "running", version: 4 }]));
     expect(planHash([task])).not.toBe(planHash([{ ...task, assigneeId: "other" }]));
     expect(planHash([task])).not.toBe(planHash([{ ...task, title: "Changed" }]));
+    expect(planHash([task])).not.toBe(planHash([{ ...task, workType: "comparison" }]));
+});
+
+it("retains human work on readback until the owner explicitly changes it to persona work", async () => {
+    const f = fixture({
+        ...task,
+        workType: "human_action",
+        assigneeType: "owner",
+        assigneeId: actor.userId,
+    });
+    await f.repo.approve(actor, "review", 1, f.plan.hash);
+    const reassign = { expectedVersion: 1, assigneeType: "persona", assigneeId: "agent" };
+    for (const patch of [reassign, { ...reassign, workType: "human_action" }]) {
+        await expect(f.repo.patch(actor, "task", patch)).rejects.toMatchObject({
+            code: "task_read_only_work_required",
+        });
+    }
+    const before = (await f.repo.get(actor, "review")).plan;
+    expect(before?.approvedHash).toBe(f.plan.hash);
+    expect(before?.tasks[0]).toMatchObject({ assigneeType: "owner", workType: "human_action" });
+    await f.repo.patch(actor, "task", {
+        ...reassign,
+        workType: "analysis",
+        acceptanceCriterion: "Summarize the available evidence for the owner.",
+    });
+    const edited = (await f.repo.get(actor, "review")).plan!;
+    expect(edited.tasks[0]).toMatchObject({ assigneeId: "agent", workType: "analysis" });
+    expect(edited.approvedHash).toBeNull();
+    expect(
+        (await f.repo.approve(actor, "review", edited.version, edited.hash)).plan.tasks[0]?.status
+    ).toBe("queued");
+});
+
+it("requires the owner to confirm the work type of a changed persona acceptance criterion", async () => {
+    const f = fixture();
+    const edit = { expectedVersion: 1, acceptanceCriterion: "Compare the documented risks." };
+    await expect(f.repo.patch(actor, "task", edit)).rejects.toMatchObject({
+        code: "task_read_only_work_required",
+    });
+    await expect(
+        f.repo.patch(actor, "task", { ...edit, workType: "human_action" })
+    ).rejects.toMatchObject({
+        code: "task_read_only_work_required",
+    });
+    const changed = await f.repo.patch(actor, "task", { ...edit, workType: "comparison" });
+    expect(changed.plan.tasks[0]?.workType).toBe("comparison");
+});
+
+it("reads a legacy persona spec without inventing its type and requires classification for a new approval", async () => {
+    const f = fixture({ ...task, workType: undefined });
+    const prior = (await f.repo.get(actor, "review")).plan!;
+    expect(prior.tasks[0]).not.toHaveProperty("workType");
+    await expect(f.repo.approve(actor, "review", prior.version, prior.hash)).rejects.toMatchObject({
+        code: "task_read_only_work_required",
+    });
+    const edited = await f.repo.patch(actor, "task", { expectedVersion: 1, workType: "draft" });
+    expect(edited.plan.hash).not.toBe(prior.hash);
+    expect(
+        (await f.repo.approve(actor, "review", edited.plan.version, edited.plan.hash)).plan.tasks[0]
+            ?.status
+    ).toBe("queued");
 });
 
 it("shows typed current result and attempt, then clears both after an approved edit", async () => {

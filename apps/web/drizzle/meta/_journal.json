@@ -421,6 +421,13 @@
       "when": 1795842878577,
       "tag": "20261128051438_vantage_v2",
       "breakpoints": true
+    },
+    {
+      "idx": 60,
+      "version": "7",
+      "when": 1795883174670,
+      "tag": "20261128162614_vantage_v2_complete_approval",
+      "breakpoints": true
     }
   ]
 }

@@ -31,7 +31,7 @@ export const vantageV2Plans = pgTable(
         review: unique("vantage_v2_plan_review").on(t.reviewId),
         approval: check(
             "vantage_v2_plan_approval",
-            sql`(${t.approvedVersion} IS NULL AND ${t.approvedHash} IS NULL) OR (${t.approvedVersion}=${t.version} AND ${t.approvedHash}=${t.hash})`
+            sql`(${t.approvedVersion} IS NULL AND ${t.approvedHash} IS NULL) OR (${t.approvedVersion} IS NOT NULL AND ${t.approvedHash} IS NOT NULL AND ${t.approvedVersion}=${t.version} AND ${t.approvedHash}=${t.hash})`
         ),
     })
 );

@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import postgres from "postgres";
 import { fingerprint } from "@launchstack/pipelines/vantage/weekly-review-validation";
 import { calculateWeeklyReviewBudget } from "@launchstack/pipelines/vantage/weekly-review-v21";
+import { judgeDeploymentDiagnostics } from "~/server/vantage/weekly-review-judge-policy";
 import { createWeeklyReviewRepository } from "~/server/vantage/weekly-review-repository";
 import type { TopicFreeze } from "~/server/vantage/weekly-review-topic-freeze";
 import {
@@ -346,6 +347,7 @@ const manifest = {
             summary: { mode: context.mode, lane: context.lane, seedReasons: [], outcome: "frozen" },
         };
         const snapshotHash = fingerprint(frozen.input);
+        const deployment = judgeDeploymentDiagnostics("fixture-generation", "fixture-judge", false);
         const success = { statusClass: "success", httpStatus: 200 };
         const [, exploration] = await Promise.all([
             repository.completeProviderAttempt(actor, id, digest, success),
@@ -358,6 +360,7 @@ const manifest = {
                 timing: { explorationCompletedAt: new Date().toISOString() },
             }),
             otherRequest.freezeTopic(actor, id, async () => frozen),
+            repository.recordJudgeDeployment(actor, id, deployment),
             repository.authorizeDispatch(actor, id, "generation", null, snapshotHash),
         ]);
         const [, generation] = await Promise.all([
@@ -386,6 +389,9 @@ const manifest = {
             createHash("sha256").update(JSON.stringify(value)).digest("hex");
         const evidence = {
             schemaVersion: "vantage-admission/v2",
+            generationModel: deployment.generationModel,
+            judgeModel: deployment.judgeModel,
+            judgeIndependent: deployment.independent,
             candidateId: id,
             reportHash: hash(report),
             inputHash: hash(frozen.input),
@@ -417,6 +423,7 @@ const manifest = {
             status: "accepted",
             review_version: 2,
             failureRecord: null,
+            judgeDeployment: deployment,
         });
         expect(status.providerAttempts.map(attempt => attempt.stage).sort()).toEqual([
             "digest",

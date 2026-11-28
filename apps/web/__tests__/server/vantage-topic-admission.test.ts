@@ -20,6 +20,7 @@ import {
     type WeeklyReviewV21,
 } from "@launchstack/pipelines/vantage/weekly-review-v21";
 import { createWeeklyReviewRepository } from "~/server/vantage/weekly-review-repository";
+import type { WeeklyReviewJudgeDeployment } from "~/server/vantage/weekly-review-judge-policy";
 import type { FrozenDependency, WeeklyReviewQuery } from "~/server/vantage/weekly-review-types";
 
 import {
@@ -28,7 +29,18 @@ import {
     type TopicManifest,
 } from "~/server/vantage/weekly-review-topic-types";
 
-function fixture(reservedWeek: string | Date = "2026-11-09", dynamic = false) {
+const sharedDeployment: WeeklyReviewJudgeDeployment = {
+    generationModel: "shared",
+    judgeModel: "shared",
+    independent: false,
+    sharedDeploymentAllowed: true,
+};
+
+function fixture(
+    recordedDeployment: WeeklyReviewJudgeDeployment | null = sharedDeployment,
+    reservedWeek: string | Date = "2026-11-09",
+    dynamic = false
+) {
     const text = "Approved revenue evidence. Other details.";
     const asOf = "2026-11-13T12:00:00.000Z";
     const prepared = compileScopedEvidence(
@@ -208,6 +220,9 @@ function fixture(reservedWeek: string | Date = "2026-11-09", dynamic = false) {
     const evidence = {
         ...(dynamic ? { selectionDiagnostics: { dynamicRetrieval: trace, omitted: [] } } : {}),
         schemaVersion: "vantage-admission/v3",
+        generationModel: recordedDeployment?.generationModel ?? sharedDeployment.generationModel,
+        judgeModel: recordedDeployment?.judgeModel ?? sharedDeployment.judgeModel,
+        judgeIndependent: recordedDeployment?.independent ?? sharedDeployment.independent,
         candidateId: id,
         reportHash: reviewFingerprint(report),
         inputHash: reviewFingerprint(input),
@@ -275,6 +290,7 @@ function fixture(reservedWeek: string | Date = "2026-11-09", dynamic = false) {
                     snapshot_commitment: {
                         snapshotHash: fingerprint(input),
                         dependencyHash: fingerprint(dependencies),
+                        judgeDeployment: recordedDeployment,
                     },
                 },
             ];
@@ -312,7 +328,6 @@ it("accepts a correctly bound topic snapshot and allowlists its read DTO", async
     const f = fixture();
     const evidence = {
         ...f.evidence,
-        judgeIndependent: false,
         trace: { secret: "private exploration trace" },
         manifest: { secret: "private manifest" },
     };
@@ -328,6 +343,48 @@ it("accepts a correctly bound topic snapshot and allowlists its read DTO", async
     expect(saved.evidence).not.toHaveProperty("inputSnapshot.retrievalContext");
     expect(saved.evidence).toHaveProperty("judgeIndependent", false);
 });
+
+it("admits and preserves an independent Judge when the recorded deployments differ", async () => {
+    const f = fixture({ ...sharedDeployment, judgeModel: "independent-judge", independent: true });
+    await expect(f.accept()).resolves.toBe(f.id);
+    expect((await f.read()).evidence).toHaveProperty("judgeIndependent", true);
+});
+
+it.each([
+    ["missing independence flag", sharedDeployment, { judgeIndependent: undefined }],
+    ["shared Judge marked independent", sharedDeployment, { judgeIndependent: true }],
+    [
+        "independent Judge marked shared",
+        { ...sharedDeployment, judgeModel: "independent-judge", independent: true },
+        { judgeIndependent: false },
+    ],
+    ["missing recorded deployments", null, {}],
+    ["contradictory recorded flag", { ...sharedDeployment, independent: true }, {}],
+    [
+        "shared Judge without permission",
+        { ...sharedDeployment, sharedDeploymentAllowed: false },
+        {},
+    ],
+    ["unrecorded Generation deployment", sharedDeployment, { generationModel: "different" }],
+    ["unrecorded Judge deployment", sharedDeployment, { judgeModel: "different" }],
+] as const)(
+    "rejects %s before storing or activating the report",
+    async (_, deployment, overrides) => {
+        const f = fixture(deployment);
+        await expect(f.accept({ ...f.evidence, ...overrides })).rejects.toThrow(
+            "candidate_admission_invalid"
+        );
+        expect(f.calls).not.toEqual(
+            expect.arrayContaining([expect.stringContaining("SET status='accepted'")])
+        );
+        expect(f.calls).not.toEqual(
+            expect.arrayContaining([
+                expect.stringContaining("INSERT INTO pdr_ai_v2_vantage_weekly_review_active"),
+            ])
+        );
+    }
+);
+
 it("the run mode forces topic binding even if evidence claims legacy admission", async () => {
     const f = fixture();
     await expect(

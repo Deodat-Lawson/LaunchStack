@@ -812,6 +812,15 @@
     "refresh": "\u5237\u65b0\u8ba1\u5212",
     "approvalHint": "批准绑定此确切版本与哈希值。保存修改会清除执行许可，之后需要重新批准整个计划。",
     "acceptanceCriterion": "验收标准",
+    "workType": "工作类型",
+    "chooseWorkType": "选择工作类型",
+    "confirmReadOnlyWork": "请选择能满足当前验收标准的只读工作类型。",
+    "workTypes": {
+      "analysis": "分析",
+      "comparison": "比较",
+      "draft": "起草",
+      "human_action": "人工操作（仅限所有者）"
+    },
     "latestAttempt": "最近第 {number} 次尝试：{status}",
     "attemptLease": "尝试租约截止：{date}",
     "hash": "\u8ba1\u5212\u54c8\u5e0c\u503c\uff1a{hash}",

@@ -45,6 +45,7 @@ function fixture(patch: Record<string, unknown> = {}) {
         plan_hash: "hash",
         approved_version: 1,
         approved_hash: "hash",
+        version: 3,
         expires_at: "future",
         status: "running",
         assignee_type: "persona",
@@ -57,7 +58,7 @@ function fixture(patch: Record<string, unknown> = {}) {
     };
     const query = jest.fn(
         async (sql: string, parameters: unknown[] = []): Promise<Record<string, unknown>[]> => {
-            if (sql.startsWith("SELECT t.*")) return [row];
+            if (sql.startsWith("SELECT t.*")) return [{ ...row }];
             if (sql.includes("collab_agent_persona")) return [{ role: "analyst" }];
             if (sql.startsWith("SELECT 1"))
                 return parameters[0] === "expired" ? [] : [{ "?column?": 1 }];
@@ -121,7 +122,26 @@ test("revoked authority before claim records a blocked attempt without model dis
     expect(await repository.claim("task")).toBeNull();
     expect(query).toHaveBeenCalledWith(
         expect.stringContaining("status='blocked',reason='task_authority_revoked'"),
-        ["task", expect.any(String)]
+        ["task", expect.any(String), 3, "plan", 1, "hash", 1, "hash"]
     );
     expect(query.mock.calls.some(([sql]) => sql.includes("status='running'"))).toBe(false);
+});
+
+test("a refusal keeps the approval observed before the authority check", async () => {
+    const { repository, query, row } = fixture({ status: "queued" });
+    jest.mocked(assertVantageV2Authority).mockImplementationOnce(async () => {
+        Object.assign(row, {
+            version: 5,
+            plan_version: 2,
+            plan_hash: "new",
+            approved_version: 2,
+            approved_hash: "new",
+        });
+        throw new WeeklyReviewConflict("review_access_denied", 403);
+    });
+    expect(await repository.claim("task")).toBeNull();
+    expect(query).toHaveBeenCalledWith(
+        expect.stringContaining("status='blocked',reason='task_authority_revoked'"),
+        ["task", expect.any(String), 3, "plan", 1, "hash", 1, "hash"]
+    );
 });

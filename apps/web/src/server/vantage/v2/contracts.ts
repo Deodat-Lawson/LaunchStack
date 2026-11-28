@@ -12,6 +12,7 @@ export const TaskInput = z
         title: z.string().trim().min(1).max(200),
         description: z.string().trim().min(1).max(3000),
         acceptanceCriterion: z.string().trim().min(1).max(1000),
+        workType: z.enum(["analysis", "comparison", "draft", "human_action"]),
         priority: z.enum(["low", "medium", "high"]),
         assigneeType: z.enum(["owner", "persona"]),
         assigneeId: z.string().min(1).max(200),
@@ -39,7 +40,10 @@ export type TaskStatus =
     | "cancelled"
     | "failed"
     | "blocked";
-export type VantageTask = z.infer<typeof TaskInput> & {
+type TaskSpec = z.infer<typeof TaskInput>;
+export type VantageTask = Omit<TaskSpec, "workType"> & {
+    /** Older encrypted specs predate work-type persistence. */
+    workType?: TaskSpec["workType"];
     id: string;
     parentId: string | null;
     version: number;

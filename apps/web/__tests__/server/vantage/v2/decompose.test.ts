@@ -68,7 +68,7 @@ it("keeps read-only analysis with a selected persona and human actions with the 
         ["persona", "analyst"],
         ["owner", "owner"],
     ]);
-    expect(result.tasks.every(t => !("workType" in t))).toBe(true);
+    expect(result.tasks.map(t => t.workType)).toEqual(["analysis", "human_action"]);
     expect(result.discarded).toEqual([]);
 });
 it("rejects unspecified or unsupported capabilities for persona work", () => {
@@ -129,6 +129,7 @@ it("supplies selected persona roles and read-only capabilities for role-based as
     const result = await decomposeReview(review, "owner", personas, [], model);
     expect(model).toHaveBeenCalledTimes(1);
     expect(result.tasks.map(t => t.assigneeId)).toEqual(["analyst", "writer", "owner"]);
+    expect(result.tasks.map(t => t.workType)).toEqual(["comparison", "draft", "human_action"]);
 });
 it("bounds each topic and the full conceptual tree", () => {
     const tasks = [

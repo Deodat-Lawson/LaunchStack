@@ -31,10 +31,14 @@ const identity = (row: Record<string, unknown>) => ({
 export function createTaskExecutionRepository(
     database: WeeklyReviewDatabase = weeklyReviewDatabase
 ) {
-    async function locked(query: WeeklyReviewQuery, taskId: string) {
-        const select =
-            "SELECT t.*,p.review_id,p.company_id,p.owner_id,p.version AS plan_version,p.hash AS plan_hash,p.approved_version,p.approved_hash FROM pdr_ai_v2_vantage_v2_tasks t JOIN pdr_ai_v2_vantage_v2_plans p ON p.id=t.plan_id WHERE t.id=$1::uuid";
-        const observed = (await query(select, [taskId]))[0];
+    const select =
+        "SELECT t.*,p.review_id,p.company_id,p.owner_id,p.version AS plan_version,p.hash AS plan_hash,p.approved_version,p.approved_hash FROM pdr_ai_v2_vantage_v2_tasks t JOIN pdr_ai_v2_vantage_v2_plans p ON p.id=t.plan_id WHERE t.id=$1::uuid";
+    async function locked(
+        query: WeeklyReviewQuery,
+        taskId: string,
+        initial?: Record<string, unknown>
+    ) {
+        const observed = initial ?? (await query(select, [taskId]))[0];
         if (!observed || !vantageV2Enabled()) throw unavailable();
         // Match owner mutation order: V1 epoch/source guard before plan/task locks.
         await assertVantageV2Authority(query, identity(observed), String(observed.review_id));
@@ -87,9 +91,12 @@ export function createTaskExecutionRepository(
             await authorize(query, row, claim);
         },
         async claim(taskId: string): Promise<TaskExecutionClaim | null> {
+            let observed: Record<string, unknown> | undefined;
             try {
                 return await database.transaction(async query => {
-                    const row = await locked(query, taskId);
+                    observed = (await query(select, [taskId]))[0];
+                    if (!observed) return null;
+                    const row = await locked(query, taskId, observed);
                     // An expired attempt terminalizes. Replayed deliveries cannot silently restart it.
                     if (row.status !== "queued") return null;
                     const { persona } = await authorize(query, row);
@@ -128,11 +135,40 @@ export function createTaskExecutionRepository(
                 });
             } catch (error) {
                 if (!(error instanceof WeeklyReviewConflict)) throw error;
-                // Denied dispatch stays visible as a blocked attempt, without private error text.
+                if (observed?.status !== "queued" || observed.assignee_type !== "persona")
+                    return null;
+                const {
+                    plan_id,
+                    plan_version,
+                    plan_hash,
+                    approved_version,
+                    approved_hash,
+                    version,
+                } = observed;
+                // Lock the observed approval before the task update, in owner-edit order.
                 await database.transaction(query =>
                     query(
-                        "UPDATE pdr_ai_v2_vantage_v2_tasks SET status='blocked',reason='task_authority_revoked',attempt=attempt+1,attempt_id=$2::uuid,claim_token=NULL,lease_until=NULL,version=version+1 WHERE id=$1::uuid AND status='queued' AND assignee_type='persona'",
-                        [taskId, randomUUID()]
+                        `UPDATE pdr_ai_v2_vantage_v2_tasks
+                         SET status='blocked',reason='task_authority_revoked',attempt=attempt+1,
+                             attempt_id=$2::uuid,claim_token=NULL,lease_until=NULL,version=version+1
+                         WHERE id=$1::uuid AND version=$3 AND status='queued' AND assignee_type='persona'
+                           AND plan_id IN (
+                               SELECT id FROM pdr_ai_v2_vantage_v2_plans
+                               WHERE id=$4::uuid AND version=$5 AND hash=$6
+                                 AND approved_version IS NOT DISTINCT FROM $7::int
+                                 AND approved_hash IS NOT DISTINCT FROM $8::text
+                               FOR UPDATE
+                           )`,
+                        [
+                            taskId,
+                            randomUUID(),
+                            version,
+                            plan_id,
+                            plan_version,
+                            plan_hash,
+                            approved_version,
+                            approved_hash,
+                        ]
                     ).then(() => undefined)
                 );
                 return null;

@@ -1243,6 +1243,9 @@ export function createWeeklyReviewRepository(
                     evaluationHash?: string;
                     evaluationInputBytes?: number;
                     judgeInputBytes?: number;
+                    generationModel?: string;
+                    judgeModel?: string;
+                    judgeIndependent?: boolean;
                     inputSnapshot?: WeeklyReviewInput;
                     selectionDiagnostics?: Record<string, unknown>;
                     scopedEvidence?: WeeklyReviewInput["scopedEvidence"];
@@ -1292,7 +1295,19 @@ export function createWeeklyReviewRepository(
                     const commitment = record.snapshot_commitment as {
                         snapshotHash?: string;
                         dependencyHash?: string;
+                        judgeDeployment?: unknown;
                     } | null;
+                    const deployment = readJudgeDeploymentDiagnostics(commitment?.judgeDeployment);
+                    if (
+                        !deployment ||
+                        deployment.independent !==
+                            (deployment.generationModel !== deployment.judgeModel) ||
+                        (!deployment.independent && !deployment.sharedDeploymentAllowed) ||
+                        evidence.generationModel !== deployment.generationModel ||
+                        evidence.judgeModel !== deployment.judgeModel ||
+                        evidence.judgeIndependent !== deployment.independent
+                    )
+                        throw new WeeklyReviewConflict("candidate_admission_invalid");
                     const context = snapshot?.retrievalContext;
                     if (
                         !snapshot ||

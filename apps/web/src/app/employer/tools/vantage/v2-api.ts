@@ -1,4 +1,5 @@
 import { VantageApiError } from "./api";
+import type { VantageTask } from "~/server/vantage/v2/contracts";
 
 export type V2Settings = {
     goals: string[];
@@ -12,6 +13,7 @@ export type V2Task = {
     title: string;
     description: string;
     acceptanceCriterion: string;
+    workType?: VantageTask["workType"];
     priority: "low" | "medium" | "high";
     assigneeType: "owner" | "persona";
     assigneeId: string;
@@ -56,7 +58,13 @@ export type V2Plan = {
 export type V2Action = "run" | "accept" | "rework" | "cancel" | "complete";
 export type V2TaskPatch = Pick<
     V2Task,
-    "title" | "description" | "acceptanceCriterion" | "priority" | "assigneeType" | "assigneeId"
+    | "title"
+    | "description"
+    | "acceptanceCriterion"
+    | "workType"
+    | "priority"
+    | "assigneeType"
+    | "assigneeId"
 >;
 
 async function request<T>(path: string, method = "GET", payload?: unknown): Promise<T> {

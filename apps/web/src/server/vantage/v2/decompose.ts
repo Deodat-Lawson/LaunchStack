@@ -1,5 +1,4 @@
 import { randomUUID } from "node:crypto";
-import { z } from "zod";
 import { TaskInput, type VantageTask } from "./contracts";
 import type { ReadWeeklyReview } from "../weekly-review-repository";
 export type DecomposeModel = (prompt: string) => Promise<string>;
@@ -8,9 +7,7 @@ export interface DecompositionPersona {
     name: string;
     role: string;
 }
-const TaskProposal = TaskInput.extend({
-    workType: z.enum(["analysis", "comparison", "draft", "human_action"]).optional(),
-});
+const TaskProposal = TaskInput.partial({ workType: true });
 export function validateTaskProposals(
     raw: unknown,
     review: ReadWeeklyReview,
@@ -28,10 +25,10 @@ export function validateTaskProposals(
         let reason: string | undefined;
         if (!parsed.success) reason = "task_shape_invalid";
         else {
-            const { workType, ...t } = parsed.data;
+            const t = parsed.data;
             // The model classifies requirements, while the closed worker tool set
             // remains the execution boundary. Human actions always belong to the owner.
-            if (workType === "human_action") {
+            if (t.workType === "human_action") {
                 t.assigneeType = "owner";
                 t.assigneeId = owner;
             }
@@ -43,7 +40,7 @@ export function validateTaskProposals(
                     : !personas.some(persona => persona.id === t.assigneeId)
             )
                 reason = "task_assignee_invalid";
-            else if (t.assigneeType === "persona" && !workType)
+            else if (t.assigneeType === "persona" && !t.workType)
                 reason = "task_capability_unspecified";
             else if ((counts.get(t.topicId) ?? 0) >= 4 || tasks.length + topics.size + 1 >= 15)
                 reason = "task_limit";
@@ -51,6 +48,7 @@ export function validateTaskProposals(
                 counts.set(t.topicId, (counts.get(t.topicId) ?? 0) + 1);
                 tasks.push({
                     ...t,
+                    workType: t.workType ?? "human_action",
                     id: randomUUID(),
                     parentId: null,
                     version: 1,

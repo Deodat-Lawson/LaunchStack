@@ -256,7 +256,15 @@ export function V2PlanPanel({
                                 {t(approved ? "approved" : "unapproved")}
                             </StatusWord>
                             <Button
-                                disabled={!canEdit || busy || approved || dirty.size > 0}
+                                disabled={
+                                    !canEdit ||
+                                    busy ||
+                                    approved ||
+                                    dirty.size > 0 ||
+                                    plan.tasks.some(
+                                        task => task.assigneeType === "persona" && !task.workType
+                                    )
+                                }
                                 onClick={() => void mutate(() => v2Api.approve(plan))}
                             >
                                 {t("approve")}
@@ -370,6 +378,7 @@ function V2TaskEditor({
     const [title, setTitle] = useState(task.title);
     const [description, setDescription] = useState(task.description);
     const [acceptanceCriterion, setAcceptanceCriterion] = useState(task.acceptanceCriterion);
+    const [workType, setWorkType] = useState(task.workType);
     const [priority, setPriority] = useState(task.priority);
     const [assignee, setAssignee] = useState(
         task.assigneeType === "owner" ? "owner" : task.assigneeId
@@ -457,6 +466,7 @@ function V2TaskEditor({
                         maxLength={1000}
                         onChange={event => {
                             setAcceptanceCriterion(event.target.value);
+                            if (assignee !== "owner") setWorkType(undefined);
                             change();
                         }}
                     />
@@ -486,6 +496,7 @@ function V2TaskEditor({
                         value={assignee}
                         onValueChange={value => {
                             setAssignee(value);
+                            if (value !== "owner") setWorkType(undefined);
                             change();
                         }}
                     >
@@ -502,6 +513,32 @@ function V2TaskEditor({
                         </SelectContent>
                     </Select>
                 </Field>
+                <Field label={t("workType")}>
+                    <Select
+                        value={workType ?? ""}
+                        onValueChange={value => {
+                            setWorkType(value as V2Task["workType"]);
+                            if (value === "human_action") setAssignee("owner");
+                            change();
+                        }}
+                    >
+                        <SelectTrigger aria-label={t("workType")}>
+                            <SelectValue placeholder={t("chooseWorkType")} />
+                        </SelectTrigger>
+                        <SelectContent>
+                            {(["analysis", "comparison", "draft", "human_action"] as const).map(
+                                value => (
+                                    <SelectItem key={value} value={value}>
+                                        {t(`workTypes.${value}`)}
+                                    </SelectItem>
+                                )
+                            )}
+                        </SelectContent>
+                    </Select>
+                </Field>
+                {assignee !== "owner" && !workType ? (
+                    <p className="text-ink-2 text-sm">{t("confirmReadOnlyWork")}</p>
+                ) : null}
                 <div className="flex flex-wrap gap-2">
                     <Button
                         variant="outline"
@@ -509,13 +546,15 @@ function V2TaskEditor({
                             !changed ||
                             !title.trim() ||
                             !description.trim() ||
-                            !acceptanceCriterion.trim()
+                            !acceptanceCriterion.trim() ||
+                            (assignee !== "owner" && (!workType || workType === "human_action"))
                         }
                         onClick={() =>
                             onSave({
                                 title,
                                 description,
                                 acceptanceCriterion,
+                                workType,
                                 priority,
                                 assigneeType: assignee === "owner" ? "owner" : "persona",
                                 assigneeId: assignee === "owner" ? "" : assignee,

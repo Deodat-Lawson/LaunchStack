@@ -11,7 +11,7 @@ export const settingsAAD = (a: WeeklyReviewActor) =>
     "vantage-v2-settings:" + a.companyId + ":" + a.userId;
 export async function eligiblePersonas(q: WeeklyReviewQuery, a: WeeklyReviewActor) {
     return q(
-        "SELECT id,display_name AS name FROM pdr_ai_v2_collab_agent_persona WHERE company_id=$1::bigint AND archived=false",
+        "SELECT id,display_name AS name,role FROM pdr_ai_v2_collab_agent_persona WHERE company_id=$1::bigint AND archived=false",
         [a.companyId]
     );
 }

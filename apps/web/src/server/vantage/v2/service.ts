@@ -17,13 +17,17 @@ export async function createVantageV2Plan(actor: WeeklyReviewActor, id: string) 
         if (existing.plan) return existing;
         const review = await weeklyReviewServices().repository.get(actor, id);
         const settings = await getVantageV2Settings(actor);
-        const personaIds = settings.personaIds.filter(id =>
-            settings.personas.some(p => p.id === id)
-        );
+        const personas = settings.personas
+            .filter(persona => settings.personaIds.includes(String(persona.id)))
+            .map(persona => ({
+                id: String(persona.id),
+                name: String(persona.name).slice(0, 128),
+                role: String(persona.role).slice(0, 128),
+            }));
         const proposed = await decomposeReview(
             review,
             actor.userId,
-            personaIds,
+            personas,
             settings.goals,
             prompt => generateVantageV2Tasks(actor, id, [new HumanMessage(prompt)])
         );

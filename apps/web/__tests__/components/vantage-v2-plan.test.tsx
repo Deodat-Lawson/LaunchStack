@@ -19,7 +19,14 @@ jest.mock("~/app/employer/tools/vantage/v2-api", () => ({
         saveSettings: jest.fn(),
     },
 }));
-const review: any = { id: "review-1", evidence: {}, report: { topics: [], keyFigures: [] } };
+const review: any = {
+    id: "review-1",
+    evidence: {},
+    report: {
+        topics: [{ id: "topic", title: "Choose an option", facts: [], conflicts: [] }],
+        keyFigures: [],
+    },
+};
 let plan: V2Plan;
 beforeEach(() => {
     jest.resetAllMocks();
@@ -33,23 +40,8 @@ beforeEach(() => {
         discarded: [],
         tasks: [
             {
-                id: "root",
-                parentId: null,
-                topicId: "",
-                title: "Accepted brief",
-                description: "Brief root",
-                acceptanceCriterion: "Accepted brief",
-                priority: "medium",
-                assigneeType: "owner",
-                assigneeId: "me",
-                status: "proposed",
-                version: 1,
-                refs: [],
-                provenance: "proposal",
-            },
-            {
                 id: "task",
-                parentId: "root",
+                parentId: null,
                 topicId: "topic",
                 title: "Compare options",
                 description: "Review the options",
@@ -72,6 +64,13 @@ beforeEach(() => {
     jest.mocked(v2Api.plan).mockImplementation(async () => ({ plan }));
     jest.mocked(v2Api.approve).mockResolvedValue({});
     jest.mocked(v2Api.action).mockResolvedValue({});
+});
+
+test("top-level proposals appear as editable tasks under the accepted decision topic", async () => {
+    renderWithLocale(<V2PlanPanel review={review} canEdit onInspect={jest.fn()} />, "en");
+    expect(await screen.findByRole("heading", { name: "Choose an option" })).toBeInTheDocument();
+    expect(screen.getByRole("textbox", { name: "Task title" })).toHaveValue("Compare options");
+    expect(screen.getByRole("button", { name: "Remove task" })).toBeEnabled();
 });
 
 test("approval binds exact displayed version/hash and stale approval refreshes without replay", async () => {
@@ -159,7 +158,7 @@ test("read-only access disables mutations and Chinese controls render", async ()
 });
 
 test("saving one task preserves an unchanged sibling's unsaved draft", async () => {
-    plan.tasks.push({ ...plan.tasks[1]!, id: "sibling", title: "Second task" });
+    plan.tasks.push({ ...plan.tasks[0]!, id: "sibling", title: "Second task" });
     jest.mocked(v2Api.edit).mockImplementation(async () => {
         plan = {
             ...plan,
@@ -187,7 +186,7 @@ test("degraded brief and safe task failure remain visible with a manual Run cont
         approvedVersion: 3,
         approvedHash: "hash-three",
         tasks: plan.tasks.map(task =>
-            task.parentId
+            task.id === "task"
                 ? {
                       ...task,
                       assigneeType: "persona",
@@ -234,7 +233,7 @@ test("typed result renders findings with inspectable refs and questions, unknown
         approvedVersion: 3,
         approvedHash: "hash-three",
         tasks: plan.tasks.map(task =>
-            task.parentId
+            task.id === "task"
                 ? {
                       ...task,
                       assigneeType: "persona",
@@ -264,4 +263,28 @@ test("typed result renders findings with inspectable refs and questions, unknown
     expect(screen.queryByText(/unrecognized-internal-detail/)).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /doc:1@v1/ }));
     expect(inspect).toHaveBeenCalledWith("doc:1@v1");
+});
+
+test("an accepted result stays visible without asking the owner to review it again", async () => {
+    plan = {
+        ...plan,
+        approvedVersion: 3,
+        approvedHash: "hash-three",
+        tasks: [
+            {
+                ...plan.tasks[0]!,
+                assigneeType: "persona",
+                status: "completed",
+                structuredResult: {
+                    summary: "A comparison the owner accepted",
+                    claims: [],
+                    unknowns: [],
+                    disposition: "ready_for_review",
+                },
+            },
+        ],
+    };
+    renderWithLocale(<V2PlanPanel review={review} canEdit onInspect={jest.fn()} />, "en");
+    expect(await screen.findByText("A comparison the owner accepted")).toBeInTheDocument();
+    expect(screen.queryByText("Agent draft awaiting your review.")).not.toBeInTheDocument();
 });

@@ -169,6 +169,12 @@ export function V2PlanPanel({
             : null;
     const degraded =
         degradation !== null && typeof degradation === "object" && "reason" in degradation;
+    const tasksByTopic = new Map<string, V2Task[]>();
+    for (const task of plan?.tasks ?? []) {
+        const tasks = tasksByTopic.get(task.topicId);
+        if (tasks) tasks.push(task);
+        else tasksByTopic.set(task.topicId, [task]);
+    }
     return (
         <Card className="space-y-5 p-5" aria-busy={loading || busy}>
             <header className="space-y-1">
@@ -270,51 +276,47 @@ export function V2PlanPanel({
                         <p className="text-ink-3 break-all font-mono text-xs">
                             {t("hash", { hash: plan.hash })}
                         </p>
-                        {plan.tasks
-                            .filter(task => task.parentId === null)
-                            .map(root => (
+                        {[...tasksByTopic].map(([topicId, tasks]) => {
+                            const topic = review.report.topics.find(item => item.id === topicId);
+                            return (
                                 <div
-                                    key={root.id}
+                                    key={topicId}
                                     className="border-line space-y-3 border-l-2 pl-4"
                                 >
-                                    <h3 className="font-semibold">{root.title}</h3>
-                                    <p className="text-ink-2 whitespace-pre-wrap text-sm">
-                                        {root.description}
-                                    </p>
-                                    {plan.tasks
-                                        .filter(task => task.parentId === root.id)
-                                        .map(task => (
-                                            <V2TaskEditor
-                                                key={`${task.id}:${task.version}:${resetEpoch}`}
-                                                task={task}
-                                                settings={settings}
-                                                review={review}
-                                                approved={approved}
-                                                disabled={!canEdit || busy}
-                                                onInspect={onInspect}
-                                                onDirty={value =>
-                                                    setDirty(previous => {
-                                                        const next = new Set(previous);
-                                                        if (value) next.add(task.id);
-                                                        else next.delete(task.id);
-                                                        return next;
-                                                    })
-                                                }
-                                                onSave={patch =>
-                                                    void mutate(() => v2Api.edit(task, patch))
-                                                }
-                                                onDelete={() =>
-                                                    void mutate(() => v2Api.remove(task))
-                                                }
-                                                onAction={(action, result) =>
-                                                    void mutate(() =>
-                                                        v2Api.action(task, action, result)
-                                                    )
-                                                }
-                                            />
-                                        ))}
+                                    {topic ? (
+                                        <h3 className="font-semibold">{topic.title}</h3>
+                                    ) : null}
+                                    {tasks.map(task => (
+                                        <V2TaskEditor
+                                            key={`${task.id}:${task.version}:${resetEpoch}`}
+                                            task={task}
+                                            settings={settings}
+                                            review={review}
+                                            approved={approved}
+                                            disabled={!canEdit || busy}
+                                            onInspect={onInspect}
+                                            onDirty={value =>
+                                                setDirty(previous => {
+                                                    const next = new Set(previous);
+                                                    if (value) next.add(task.id);
+                                                    else next.delete(task.id);
+                                                    return next;
+                                                })
+                                            }
+                                            onSave={patch =>
+                                                void mutate(() => v2Api.edit(task, patch))
+                                            }
+                                            onDelete={() => void mutate(() => v2Api.remove(task))}
+                                            onAction={(action, result) =>
+                                                void mutate(() =>
+                                                    v2Api.action(task, action, result)
+                                                )
+                                            }
+                                        />
+                                    ))}
                                 </div>
-                            ))}
+                            );
+                        })}
                         {plan.discarded.length ? (
                             <p className="text-ink-3 text-sm">
                                 {t("discarded", { count: plan.discarded.length })}
@@ -565,13 +567,16 @@ function V2TaskEditor({
                             </ul>
                         </div>
                     ) : null}
-                    <p className="text-ink-3 text-sm">
-                        {t(
-                            task.structuredResult.disposition === "blocked"
-                                ? "resultBlocked"
-                                : "resultReview"
-                        )}
-                    </p>
+                    {task.structuredResult.disposition === "blocked" ||
+                    task.status === "submitted" ? (
+                        <p className="text-ink-3 text-sm">
+                            {t(
+                                task.structuredResult.disposition === "blocked"
+                                    ? "resultBlocked"
+                                    : "resultReview"
+                            )}
+                        </p>
+                    ) : null}
                 </section>
             ) : task.result ? (
                 <div className="bg-panel-2 space-y-1 rounded-md p-3">

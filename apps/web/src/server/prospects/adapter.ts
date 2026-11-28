@@ -958,6 +958,10 @@ const SOURCE_DETAIL: Record<string, Copy> = {
     // Runs recorded before the search engine became a setting.
     "needs EXA_API_KEY": copy("growth.server.sources.details.lookalikeNeedsExa"),
     "no customers yet": copy("growth.server.sources.details.noCustomersYet"),
+    // The free place search keeps what it has asked: its pool is not complete yet.
+    "more places on the next run": copy("growth.server.sources.details.morePlacesNextRun"),
+    // …or it is not complete and no free server is left to ask.
+    "not every place could be listed": copy("growth.server.sources.details.notEveryPlace"),
 };
 
 export function sourceDetailCopy(detail: string | null | undefined): Copy | null {

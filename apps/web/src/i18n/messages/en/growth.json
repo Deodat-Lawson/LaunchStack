@@ -1421,6 +1421,8 @@
         "territoriesFailed": "{count} territories failed",
         "lookalikeNeedsExa": "needs Exa as the search engine",
         "noCustomersYet": "no customers yet",
+        "morePlacesNextRun": "more places on the next run",
+        "notEveryPlace": "not every place could be listed",
         "fromCustomers": "{count, plural, one {from # customer} other {from # customers}}",
         "customersFailed": "{failed} of {total} customers failed"
       },

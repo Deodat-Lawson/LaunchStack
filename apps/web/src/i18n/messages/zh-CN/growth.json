@@ -1421,6 +1421,8 @@
         "territoriesFailed": "{count} 个地区查询失败",
         "lookalikeNeedsExa": "需要将搜索引擎设为 Exa",
         "noCustomersYet": "还没有客户",
+        "morePlacesNextRun": "下次运行会找到更多地点",
+        "notEveryPlace": "未能列出所有地点",
         "fromCustomers": "{count, plural, other {来自 # 个客户}}",
         "customersFailed": "{total} 个客户中有 {failed} 个查询失败"
       },

@@ -1,0 +1,702 @@
+{
+  "experiment": "e1-production-sweep",
+  "question": "What does production's keyless place search return for each recorded segment: when Overpass answers, and when it does not and Photon is swept under a request cap?",
+  "costModel": "A cap counts Photon requests. Reading websites costs one OSM API request per 100 places found, reported beside it. Shares are of the named places Overpass lists for the segment.",
+  "budgets": [16, 32, 64, 96],
+  "segments": [
+    {
+      "id": "dk-bicycle",
+      "label": "Bicycle shops · Denmark",
+      "category": "shop:bicycle",
+      "population": {
+        "overpassNamed": 731,
+        "overpassWithWebsite": 397
+      },
+      "today": {
+        "photonRequests": 8,
+        "osmApiRequests": 2,
+        "placesKept": 11,
+        "onTargetWithWebsite": 5
+      },
+      "todayWholeSearch": {
+        "kept": 39,
+        "onTarget": 33
+      },
+      "overpassFirst": {
+        "requests": {
+          "photon": 0,
+          "osmApi": 0,
+          "overpass": 1
+        },
+        "known": 731,
+        "knownShare": 1,
+        "withWebsite": 397,
+        "withWebsiteShare": 1,
+        "placesReturned": 362,
+        "complete": true,
+        "secondRun": {
+          "requests": {
+            "photon": 0,
+            "osmApi": 0,
+            "overpass": 0
+          },
+          "placesReturned": 362
+        }
+      },
+      "sweep": {
+        "atBudget": {
+          "8": {
+            "photonRequests": 8,
+            "osmApiRequests": 4,
+            "known": 220,
+            "knownShare": 0.3,
+            "withWebsite": 124,
+            "withWebsiteShare": 0.312,
+            "placesReturned": 105
+          },
+          "16": {
+            "photonRequests": 16,
+            "osmApiRequests": 5,
+            "known": 380,
+            "knownShare": 0.518,
+            "withWebsite": 207,
+            "withWebsiteShare": 0.521,
+            "placesReturned": 186
+          },
+          "32": {
+            "photonRequests": 32,
+            "osmApiRequests": 7,
+            "known": 588,
+            "knownShare": 0.803,
+            "withWebsite": 319,
+            "withWebsiteShare": 0.804,
+            "placesReturned": 291
+          },
+          "64": {
+            "photonRequests": 64,
+            "osmApiRequests": 9,
+            "known": 729,
+            "knownShare": 0.996,
+            "withWebsite": 396,
+            "withWebsiteShare": 0.997,
+            "placesReturned": 361
+          },
+          "96": {
+            "photonRequests": 66,
+            "osmApiRequests": 9,
+            "known": 730,
+            "knownShare": 0.997,
+            "withWebsite": 396,
+            "withWebsiteShare": 0.997,
+            "placesReturned": 361
+          }
+        },
+        "requestsToKnow": {
+          "50%": 16,
+          "80%": 32,
+          "90%": 39,
+          "95%": 52
+        },
+        "resume": {
+          "capPerRun": 64,
+          "runs": 2,
+          "knownAfterRun": [729, 730],
+          "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 66,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 66,
+          "osmApiRequests": 10,
+          "requestsAfterComplete": 0,
+          "known": 730,
+          "knownShare": 0.997,
+          "withWebsite": 396,
+          "withWebsiteShare": 0.997,
+          "placesReturned": 361,
+          "boxesCutOffAtDepthLimit": 0
+        }
+      }
+    },
+    {
+      "id": "be-chocolate",
+      "label": "Chocolate shops · Belgium",
+      "category": "shop:chocolate",
+      "population": {
+        "overpassNamed": 615,
+        "overpassWithWebsite": 323
+      },
+      "today": {
+        "photonRequests": 12,
+        "osmApiRequests": 2,
+        "placesKept": 40,
+        "onTargetWithWebsite": 17
+      },
+      "todayWholeSearch": {
+        "kept": 40,
+        "onTarget": 17
+      },
+      "overpassFirst": {
+        "requests": {
+          "photon": 0,
+          "osmApi": 0,
+          "overpass": 1
+        },
+        "known": 615,
+        "knownShare": 1,
+        "withWebsite": 323,
+        "withWebsiteShare": 1,
+        "placesReturned": 264,
+        "complete": true,
+        "secondRun": {
+          "requests": {
+            "photon": 0,
+            "osmApi": 0,
+            "overpass": 0
+          },
+          "placesReturned": 264
+        }
+      },
+      "sweep": {
+        "atBudget": {
+          "12": {
+            "photonRequests": 12,
+            "osmApiRequests": 3,
+            "known": 199,
+            "knownShare": 0.324,
+            "withWebsite": 97,
+            "withWebsiteShare": 0.3,
+            "placesReturned": 80
+          },
+          "16": {
+            "photonRequests": 16,
+            "osmApiRequests": 4,
+            "known": 309,
+            "knownShare": 0.502,
+            "withWebsite": 166,
+            "withWebsiteShare": 0.514,
+            "placesReturned": 131
+          },
+          "32": {
+            "photonRequests": 32,
+            "osmApiRequests": 5,
+            "known": 433,
+            "knownShare": 0.704,
+            "withWebsite": 230,
+            "withWebsiteShare": 0.712,
+            "placesReturned": 191
+          },
+          "64": {
+            "photonRequests": 58,
+            "osmApiRequests": 7,
+            "known": 615,
+            "knownShare": 1,
+            "withWebsite": 323,
+            "withWebsiteShare": 1,
+            "placesReturned": 264
+          },
+          "96": {
+            "photonRequests": 58,
+            "osmApiRequests": 7,
+            "known": 615,
+            "knownShare": 1,
+            "withWebsite": 323,
+            "withWebsiteShare": 1,
+            "placesReturned": 264
+          }
+        },
+        "requestsToKnow": {
+          "50%": 16,
+          "80%": 38,
+          "90%": 43,
+          "95%": 48
+        },
+        "resume": {
+          "capPerRun": 64,
+          "runs": 1,
+          "knownAfterRun": [615],
+          "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 58,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 58,
+          "osmApiRequests": 7,
+          "requestsAfterComplete": 0,
+          "known": 615,
+          "knownShare": 1,
+          "withWebsite": 323,
+          "withWebsiteShare": 1,
+          "placesReturned": 264,
+          "boxesCutOffAtDepthLimit": 0
+        }
+      }
+    },
+    {
+      "id": "ie-dentist",
+      "label": "Dental practices · Ireland",
+      "category": "amenity:dentist",
+      "population": {
+        "overpassNamed": 523,
+        "overpassWithWebsite": 218
+      },
+      "today": {
+        "photonRequests": 6,
+        "osmApiRequests": 2,
+        "placesKept": 2,
+        "onTargetWithWebsite": 2
+      },
+      "todayWholeSearch": {
+        "kept": 40,
+        "onTarget": 40
+      },
+      "overpassFirst": {
+        "requests": {
+          "photon": 0,
+          "osmApi": 0,
+          "overpass": 1
+        },
+        "known": 523,
+        "knownShare": 1,
+        "withWebsite": 218,
+        "withWebsiteShare": 1,
+        "placesReturned": 210,
+        "complete": true,
+        "secondRun": {
+          "requests": {
+            "photon": 0,
+            "osmApi": 0,
+            "overpass": 0
+          },
+          "placesReturned": 210
+        }
+      },
+      "sweep": {
+        "atBudget": {
+          "6": {
+            "photonRequests": 6,
+            "osmApiRequests": 3,
+            "known": 190,
+            "knownShare": 0.363,
+            "withWebsite": 77,
+            "withWebsiteShare": 0.353,
+            "placesReturned": 74
+          },
+          "16": {
+            "photonRequests": 16,
+            "osmApiRequests": 5,
+            "known": 354,
+            "knownShare": 0.677,
+            "withWebsite": 146,
+            "withWebsiteShare": 0.67,
+            "placesReturned": 142
+          },
+          "32": {
+            "photonRequests": 32,
+            "osmApiRequests": 6,
+            "known": 485,
+            "knownShare": 0.925,
+            "withWebsite": 208,
+            "withWebsiteShare": 0.954,
+            "placesReturned": 201
+          },
+          "64": {
+            "photonRequests": 46,
+            "osmApiRequests": 6,
+            "known": 522,
+            "knownShare": 0.994,
+            "withWebsite": 218,
+            "withWebsiteShare": 1,
+            "placesReturned": 210
+          },
+          "96": {
+            "photonRequests": 46,
+            "osmApiRequests": 6,
+            "known": 522,
+            "knownShare": 0.994,
+            "withWebsite": 218,
+            "withWebsiteShare": 1,
+            "placesReturned": 210
+          }
+        },
+        "requestsToKnow": {
+          "50%": 12,
+          "80%": 19,
+          "90%": 28,
+          "95%": 33
+        },
+        "resume": {
+          "capPerRun": 64,
+          "runs": 1,
+          "knownAfterRun": [522],
+          "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 46,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 46,
+          "osmApiRequests": 6,
+          "requestsAfterComplete": 0,
+          "known": 522,
+          "knownShare": 0.994,
+          "withWebsite": 218,
+          "withWebsiteShare": 1,
+          "placesReturned": 210,
+          "boxesCutOffAtDepthLimit": 0
+        }
+      }
+    },
+    {
+      "id": "be-brewery",
+      "label": "Craft breweries · Belgium",
+      "category": "craft:brewery",
+      "population": {
+        "overpassNamed": 246,
+        "overpassWithWebsite": 160
+      },
+      "today": {
+        "photonRequests": 9,
+        "osmApiRequests": 2,
+        "placesKept": 6,
+        "onTargetWithWebsite": 4
+      },
+      "todayWholeSearch": {
+        "kept": 40,
+        "onTarget": 38
+      },
+      "overpassFirst": {
+        "requests": {
+          "photon": 0,
+          "osmApi": 0,
+          "overpass": 1
+        },
+        "known": 246,
+        "knownShare": 1,
+        "withWebsite": 160,
+        "withWebsiteShare": 1,
+        "placesReturned": 157,
+        "complete": true,
+        "secondRun": {
+          "requests": {
+            "photon": 0,
+            "osmApi": 0,
+            "overpass": 0
+          },
+          "placesReturned": 157
+        }
+      },
+      "sweep": {
+        "atBudget": {
+          "9": {
+            "photonRequests": 9,
+            "osmApiRequests": 3,
+            "known": 90,
+            "knownShare": 0.362,
+            "withWebsite": 69,
+            "withWebsiteShare": 0.431,
+            "placesReturned": 67
+          },
+          "16": {
+            "photonRequests": 16,
+            "osmApiRequests": 3,
+            "known": 133,
+            "knownShare": 0.537,
+            "withWebsite": 96,
+            "withWebsiteShare": 0.6,
+            "placesReturned": 94
+          },
+          "32": {
+            "photonRequests": 32,
+            "osmApiRequests": 5,
+            "known": 240,
+            "knownShare": 0.972,
+            "withWebsite": 156,
+            "withWebsiteShare": 0.975,
+            "placesReturned": 153
+          },
+          "64": {
+            "photonRequests": 34,
+            "osmApiRequests": 5,
+            "known": 245,
+            "knownShare": 0.992,
+            "withWebsite": 158,
+            "withWebsiteShare": 0.988,
+            "placesReturned": 155
+          },
+          "96": {
+            "photonRequests": 34,
+            "osmApiRequests": 5,
+            "known": 245,
+            "knownShare": 0.992,
+            "withWebsite": 158,
+            "withWebsiteShare": 0.988,
+            "placesReturned": 155
+          }
+        },
+        "requestsToKnow": {
+          "50%": 13,
+          "80%": 30,
+          "90%": 31,
+          "95%": 32
+        },
+        "resume": {
+          "capPerRun": 64,
+          "runs": 1,
+          "knownAfterRun": [245],
+          "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 34,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 34,
+          "osmApiRequests": 5,
+          "requestsAfterComplete": 0,
+          "known": 245,
+          "knownShare": 0.992,
+          "withWebsite": 158,
+          "withWebsiteShare": 0.988,
+          "placesReturned": 155,
+          "boxesCutOffAtDepthLimit": 0
+        }
+      }
+    },
+    {
+      "id": "nl-bicycle",
+      "label": "Bicycle shops · Netherlands",
+      "category": "shop:bicycle",
+      "population": {
+        "overpassNamed": 2637,
+        "overpassWithWebsite": 1722
+      },
+      "today": {
+        "photonRequests": 12,
+        "osmApiRequests": 2,
+        "placesKept": 11,
+        "onTargetWithWebsite": 5
+      },
+      "todayWholeSearch": {
+        "kept": 40,
+        "onTarget": 34
+      },
+      "overpassFirst": {
+        "requests": {
+          "photon": 0,
+          "osmApi": 0,
+          "overpass": 1
+        },
+        "known": 2637,
+        "knownShare": 1,
+        "withWebsite": 1722,
+        "withWebsiteShare": 1,
+        "placesReturned": 1630,
+        "complete": true,
+        "secondRun": {
+          "requests": {
+            "photon": 0,
+            "osmApi": 0,
+            "overpass": 0
+          },
+          "placesReturned": 1630
+        }
+      },
+      "sweep": {
+        "atBudget": {
+          "12": {
+            "photonRequests": 12,
+            "osmApiRequests": 5,
+            "known": 364,
+            "knownShare": 0.138,
+            "withWebsite": 233,
+            "withWebsiteShare": 0.135,
+            "placesReturned": 231
+          },
+          "16": {
+            "photonRequests": 16,
+            "osmApiRequests": 6,
+            "known": 471,
+            "knownShare": 0.178,
+            "withWebsite": 295,
+            "withWebsiteShare": 0.171,
+            "placesReturned": 292
+          },
+          "32": {
+            "photonRequests": 32,
+            "osmApiRequests": 9,
+            "known": 731,
+            "knownShare": 0.277,
+            "withWebsite": 454,
+            "withWebsiteShare": 0.264,
+            "placesReturned": 445
+          },
+          "64": {
+            "photonRequests": 64,
+            "osmApiRequests": 13,
+            "known": 1193,
+            "knownShare": 0.452,
+            "withWebsite": 760,
+            "withWebsiteShare": 0.441,
+            "placesReturned": 740
+          },
+          "96": {
+            "photonRequests": 96,
+            "osmApiRequests": 19,
+            "known": 1809,
+            "knownShare": 0.686,
+            "withWebsite": 1156,
+            "withWebsiteShare": 0.671,
+            "placesReturned": 1112
+          }
+        },
+        "requestsToKnow": {
+          "50%": 70,
+          "80%": 149,
+          "90%": 212,
+          "95%": 251
+        },
+        "resume": {
+          "capPerRun": 64,
+          "runs": 5,
+          "knownAfterRun": [1193, 1975, 2358, 2532, 2608],
+          "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 282,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 282,
+          "osmApiRequests": 31,
+          "requestsAfterComplete": 0,
+          "known": 2608,
+          "knownShare": 0.989,
+          "withWebsite": 1707,
+          "withWebsiteShare": 0.991,
+          "placesReturned": 1615,
+          "boxesCutOffAtDepthLimit": 0
+        }
+      }
+    },
+    {
+      "id": "dk-dentist",
+      "label": "Dental practices · Denmark",
+      "category": "amenity:dentist",
+      "population": {
+        "overpassNamed": 317,
+        "overpassWithWebsite": 142
+      },
+      "today": {
+        "photonRequests": 6,
+        "osmApiRequests": 1,
+        "placesKept": 0,
+        "onTargetWithWebsite": 0
+      },
+      "todayWholeSearch": {
+        "kept": 39,
+        "onTarget": 39
+      },
+      "overpassFirst": {
+        "requests": {
+          "photon": 0,
+          "osmApi": 0,
+          "overpass": 1
+        },
+        "known": 317,
+        "knownShare": 1,
+        "withWebsite": 142,
+        "withWebsiteShare": 1,
+        "placesReturned": 136,
+        "complete": true,
+        "secondRun": {
+          "requests": {
+            "photon": 0,
+            "osmApi": 0,
+            "overpass": 0
+          },
+          "placesReturned": 136
+        }
+      },
+      "sweep": {
+        "atBudget": {
+          "6": {
+            "photonRequests": 6,
+            "osmApiRequests": 2,
+            "known": 37,
+            "knownShare": 0.117,
+            "withWebsite": 14,
+            "withWebsiteShare": 0.099,
+            "placesReturned": 14
+          },
+          "16": {
+            "photonRequests": 16,
+            "osmApiRequests": 2,
+            "known": 98,
+            "knownShare": 0.309,
+            "withWebsite": 39,
+            "withWebsiteShare": 0.275,
+            "placesReturned": 37
+          },
+          "32": {
+            "photonRequests": 32,
+            "osmApiRequests": 3,
+            "known": 218,
+            "knownShare": 0.688,
+            "withWebsite": 97,
+            "withWebsiteShare": 0.683,
+            "placesReturned": 93
+          },
+          "64": {
+            "photonRequests": 54,
+            "osmApiRequests": 4,
+            "known": 317,
+            "knownShare": 1,
+            "withWebsite": 142,
+            "withWebsiteShare": 1,
+            "placesReturned": 136
+          },
+          "96": {
+            "photonRequests": 54,
+            "osmApiRequests": 4,
+            "known": 317,
+            "knownShare": 1,
+            "withWebsite": 142,
+            "withWebsiteShare": 1,
+            "placesReturned": 136
+          }
+        },
+        "requestsToKnow": {
+          "50%": 21,
+          "80%": 35,
+          "90%": 44,
+          "95%": 51
+        },
+        "resume": {
+          "capPerRun": 64,
+          "runs": 1,
+          "knownAfterRun": [317],
+          "complete": true,
+          "boxesUnanswered": 0,
+          "photonAnswered": 54,
+          "repeatedPhotonRequests": 0,
+          "photonAnsweredInOneSweep": 54,
+          "osmApiRequests": 4,
+          "requestsAfterComplete": 0,
+          "known": 317,
+          "knownShare": 1,
+          "withWebsite": 142,
+          "withWebsiteShare": 1,
+          "placesReturned": 136,
+          "boxesCutOffAtDepthLimit": 0
+        }
+      }
+    }
+  ],
+  "overall": {
+    "knownShareAt": {
+      "16": 0.454,
+      "32": 0.728,
+      "64": 0.906,
+      "96": 0.945
+    },
+    "withWebsiteShareAt": {
+      "16": 0.458,
+      "32": 0.732,
+      "64": 0.904,
+      "96": 0.943
+    },
+    "todayFirstStepWithWebsiteShare": 0.0171,
+    "todayWholeSearchWithWebsiteShare": 0.1419
+  }
+}

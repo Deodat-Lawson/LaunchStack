@@ -15,6 +15,7 @@ import { fileURLToPath } from "node:url";
 
 const EXPERIMENTS: Record<string, string> = {
     e1: "e1-where-to-look/run.ts",
+    "e1-production": "e1-where-to-look/production-sweep.ts",
     e2: "e2-what-to-ask/run.ts",
     e3: "e3-what-to-read/run.ts",
     e4: "e4-whom-to-check/run.ts",

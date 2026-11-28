@@ -1,9 +1,13 @@
 /**
  * Small geography tables the keyless sources need: country names in the
- * forms directories print them, and the cities to split a country-wide
- * OpenStreetMap query into when the country is too large for one request.
+ * forms directories print them, the cities to split a country-wide
+ * OpenStreetMap query into when the country is too large for one request,
+ * and a rough map box per country for the place sweep.
  * Deliberately short; anything not listed falls back to the ISO code.
  */
+
+/** A map box in degrees: west, south, east, north. */
+export type Bbox = readonly [minLon: number, minLat: number, maxLon: number, maxLat: number];
 
 export interface CountryInfo {
     /** English name as a directory prints it. */
@@ -14,6 +18,18 @@ export interface CountryInfo {
     cities: string[];
     /** True when a country-wide Overpass query is cheap enough to run as one. */
     small: boolean;
+    /**
+     * Rough box around the country's main landmass, the root of the place
+     * sweep. It may reach into neighbours (results are kept by country code)
+     * and leaves out far-off islands and territories.
+     */
+    box: Bbox;
+    /**
+     * True when places' names are often written in a script other than
+     * Latin. The place sweep asks by Latin letter, so there it cannot reach
+     * every name.
+     */
+    otherScripts?: boolean;
 }
 
 export const COUNTRIES: Record<string, CountryInfo> = {
@@ -22,107 +38,211 @@ export const COUNTRIES: Record<string, CountryInfo> = {
         aliases: ["the Netherlands", "Nederland", "Holland"],
         cities: ["Amsterdam", "Rotterdam", "Utrecht", "Eindhoven"],
         small: true,
+        box: [3.3, 50.7, 7.25, 53.6],
     },
     BE: {
         name: "Belgium",
         aliases: ["België", "Belgique"],
         cities: ["Brussels", "Antwerp", "Ghent"],
         small: true,
+        box: [2.5, 49.45, 6.45, 51.55],
     },
-    LU: { name: "Luxembourg", aliases: [], cities: ["Luxembourg"], small: true },
+    LU: {
+        name: "Luxembourg",
+        aliases: [],
+        cities: ["Luxembourg"],
+        small: true,
+        box: [5.7, 49.4, 6.55, 50.2],
+    },
     DE: {
         name: "Germany",
         aliases: ["Deutschland"],
         cities: ["Berlin", "Hamburg", "Munich", "Cologne", "Frankfurt"],
         small: false,
+        box: [5.85, 47.25, 15.05, 55.1],
     },
     AT: {
         name: "Austria",
         aliases: ["Österreich"],
         cities: ["Vienna", "Graz", "Linz"],
         small: true,
+        box: [9.5, 46.35, 17.2, 49.05],
     },
     CH: {
         name: "Switzerland",
         aliases: ["Schweiz", "Suisse", "Svizzera"],
         cities: ["Zürich", "Geneva", "Basel"],
         small: true,
+        box: [5.95, 45.8, 10.5, 47.85],
     },
     FR: {
         name: "France",
         aliases: [],
         cities: ["Paris", "Lyon", "Marseille", "Toulouse"],
         small: false,
+        box: [-5.15, 41.3, 9.6, 51.1],
     },
     GB: {
         name: "United Kingdom",
         aliases: ["UK", "England", "Scotland", "Wales", "Great Britain"],
         cities: ["London", "Manchester", "Birmingham", "Leeds", "Glasgow"],
         small: false,
+        box: [-8.65, 49.85, 1.8, 60.9],
     },
-    IE: { name: "Ireland", aliases: [], cities: ["Dublin", "Cork"], small: true },
+    IE: {
+        name: "Ireland",
+        aliases: [],
+        cities: ["Dublin", "Cork"],
+        small: true,
+        box: [-10.7, 51.3, -5.9, 55.5],
+    },
     ES: {
         name: "Spain",
         aliases: ["España"],
         cities: ["Madrid", "Barcelona", "Valencia", "Seville"],
         small: false,
+        box: [-9.35, 35.9, 4.35, 43.8],
     },
-    PT: { name: "Portugal", aliases: [], cities: ["Lisbon", "Porto"], small: true },
+    PT: {
+        name: "Portugal",
+        aliases: [],
+        cities: ["Lisbon", "Porto"],
+        small: true,
+        box: [-9.55, 36.95, -6.15, 42.2],
+    },
     IT: {
         name: "Italy",
         aliases: ["Italia"],
         cities: ["Milan", "Rome", "Turin", "Bologna"],
         small: false,
+        box: [6.6, 35.45, 18.55, 47.1],
     },
-    DK: { name: "Denmark", aliases: ["Danmark"], cities: ["Copenhagen", "Aarhus"], small: true },
+    DK: {
+        name: "Denmark",
+        aliases: ["Danmark"],
+        cities: ["Copenhagen", "Aarhus"],
+        small: true,
+        box: [8.0, 54.5, 15.3, 57.8],
+    },
     SE: {
         name: "Sweden",
         aliases: ["Sverige"],
         cities: ["Stockholm", "Gothenburg", "Malmö"],
         small: true,
+        box: [11.1, 55.3, 24.2, 69.1],
     },
-    NO: { name: "Norway", aliases: ["Norge"], cities: ["Oslo", "Bergen"], small: true },
-    FI: { name: "Finland", aliases: ["Suomi"], cities: ["Helsinki", "Tampere"], small: true },
+    NO: {
+        name: "Norway",
+        aliases: ["Norge"],
+        cities: ["Oslo", "Bergen"],
+        small: true,
+        box: [4.5, 57.95, 31.2, 71.2],
+    },
+    FI: {
+        name: "Finland",
+        aliases: ["Suomi"],
+        cities: ["Helsinki", "Tampere"],
+        small: true,
+        box: [19.3, 59.7, 31.6, 70.1],
+    },
     PL: {
         name: "Poland",
         aliases: ["Polska"],
         cities: ["Warsaw", "Kraków", "Wrocław"],
         small: false,
+        box: [14.1, 49.0, 24.15, 54.85],
     },
-    CZ: { name: "Czechia", aliases: ["Czech Republic"], cities: ["Prague", "Brno"], small: true },
+    CZ: {
+        name: "Czechia",
+        aliases: ["Czech Republic"],
+        cities: ["Prague", "Brno"],
+        small: true,
+        box: [12.05, 48.55, 18.9, 51.1],
+    },
     US: {
         name: "United States",
         aliases: ["USA", "United States of America", "US"],
         cities: ["New York", "Los Angeles", "Chicago", "Houston", "San Francisco"],
         small: false,
+        box: [-124.85, 24.4, -66.85, 49.4],
     },
-    CA: { name: "Canada", aliases: [], cities: ["Toronto", "Vancouver", "Montreal"], small: false },
+    CA: {
+        name: "Canada",
+        aliases: [],
+        cities: ["Toronto", "Vancouver", "Montreal"],
+        small: false,
+        box: [-141.0, 41.65, -52.6, 70.0],
+    },
     AU: {
         name: "Australia",
         aliases: [],
         cities: ["Sydney", "Melbourne", "Brisbane"],
         small: false,
+        box: [112.9, -43.75, 153.65, -10.05],
     },
-    NZ: { name: "New Zealand", aliases: [], cities: ["Auckland", "Wellington"], small: true },
-    JP: { name: "Japan", aliases: [], cities: ["Tokyo", "Osaka"], small: false },
-    SG: { name: "Singapore", aliases: [], cities: ["Singapore"], small: true },
-    IN: { name: "India", aliases: [], cities: ["Mumbai", "Bengaluru", "Delhi"], small: false },
+    NZ: {
+        name: "New Zealand",
+        aliases: [],
+        cities: ["Auckland", "Wellington"],
+        small: true,
+        box: [166.4, -47.3, 178.6, -34.35],
+    },
+    JP: {
+        name: "Japan",
+        aliases: [],
+        cities: ["Tokyo", "Osaka"],
+        small: false,
+        box: [128.5, 30.9, 145.85, 45.55],
+        otherScripts: true,
+    },
+    SG: {
+        name: "Singapore",
+        aliases: [],
+        cities: ["Singapore"],
+        small: true,
+        box: [103.6, 1.15, 104.1, 1.48],
+    },
+    IN: {
+        name: "India",
+        aliases: [],
+        cities: ["Mumbai", "Bengaluru", "Delhi"],
+        small: false,
+        box: [68.1, 6.75, 97.4, 35.5],
+        otherScripts: true,
+    },
     BR: {
         name: "Brazil",
         aliases: ["Brasil"],
         cities: ["São Paulo", "Rio de Janeiro"],
         small: false,
+        box: [-74.0, -33.75, -34.75, 5.3],
     },
     MX: {
         name: "Mexico",
         aliases: ["México"],
         cities: ["Mexico City", "Guadalajara", "Monterrey"],
         small: false,
+        box: [-118.4, 14.5, -86.7, 32.75],
     },
 };
 
 export function countryName(code: string): string {
     return COUNTRIES[code.toUpperCase()]?.name ?? code.toUpperCase();
+}
+
+/** The country's sweep box, or null for a country the table does not list. */
+export function countryBox(code: string): Bbox | null {
+    return COUNTRIES[code.toUpperCase()]?.box ?? null;
+}
+
+/**
+ * Can a sweep by Latin letter reach every place's name there? Only said of a
+ * country the table lists and does not mark as writing names in other
+ * scripts: an unknown country is not vouched for.
+ */
+export function latinLettersReachNames(code: string): boolean {
+    const info = COUNTRIES[code.toUpperCase()];
+    return info !== undefined && info.otherScripts !== true;
 }
 
 /** Every spelling a directory might use for the country, lower-cased. */
@@ -142,6 +262,17 @@ export function overpassAreas(
     const info = COUNTRIES[cc];
     if (!info || info.small) return [{ country: cc, city: null }];
     return info.cities.slice(0, 4).map(city => ({ country: cc, city }));
+}
+
+/**
+ * Can one OpenStreetMap area stand for the whole territory? True for a named
+ * region and for a country small enough to ask as one; false for a large
+ * country, where `overpassAreas` names its largest cities only.
+ */
+export function oneAreaCoversTerritory(country: string, region?: string | null): boolean {
+    if (region) return true;
+    const info = COUNTRIES[country.toUpperCase()];
+    return !info || info.small;
 }
 
 /** Country mentions in free text, as ISO codes; the territory's own country counts once. */

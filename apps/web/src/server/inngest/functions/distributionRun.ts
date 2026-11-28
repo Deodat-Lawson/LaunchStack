@@ -8,6 +8,7 @@
  */
 import {
     DistributionRunEventDataSchema,
+    createDbPlacePoolStore,
     createDefaultPorts,
     createKeylessPorts,
     enrichCandidate,
@@ -101,6 +102,7 @@ export const distributionRunJob = inngest.createFunction(
                     debitCredits: null,
                     embed,
                     judgeFit: await prospectFitJudge(companyId),
+                    placePools: createDbPlacePoolStore(),
                 });
             return createDefaultPorts({
                 publishDossier,

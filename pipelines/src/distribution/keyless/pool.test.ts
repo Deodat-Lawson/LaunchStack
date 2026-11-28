@@ -1,0 +1,1641 @@
+/**
+ * The place pool: Overpass first, the Photon sweep when Overpass does not
+ * answer, and a store that lets a second run start where the first stopped.
+ * The map servers are pretend ones (./map.fixture) that count every request.
+ */
+import { describe, expect, it } from "vitest";
+
+import { createFakeMap, fakePopulation, type FakePlace } from "./map.fixture";
+import {
+    PLACE_POOL_VERSION,
+    createMemoryPlacePoolStore,
+    gatherPlacePool,
+    placePoolKey,
+    placesKnown,
+    poolPlaces,
+    type PlacePoolRequest,
+    type PlacePoolState,
+    type PlacePoolStore,
+} from "./pool";
+import { sweepPending } from "./sweep";
+import type { HostThrottle } from "./throttle";
+
+const request: PlacePoolRequest = {
+    country: "NL",
+    keywords: ["bicycle", "shop"],
+    selectors: ['["shop"="bicycle"]'],
+};
+const DE_BOX = [5.85, 47.25, 15.05, 55.1] as const;
+const idOf = (p: FakePlace) => `osm:${p.type === "N" ? "node" : "way"}/${p.id}`;
+const withSite = (places: readonly FakePlace[]) =>
+    places.filter(p => p.website ?? p.contactWebsite);
+const hostOf = (input: Parameters<typeof fetch>[0]) =>
+    new URL(typeof input === "string" ? input : input instanceof URL ? input.href : input.url)
+        .hostname;
+
+/** How many Photon requests a whole sweep of these places takes. */
+async function wholeSweep(places: readonly FakePlace[], poolRequest = request): Promise<number> {
+    const scratch = createFakeMap(places, { overpass: 504 });
+    await gatherPlacePool(poolRequest, {
+        store: createMemoryPlacePoolStore(),
+        photonRequests: 100_000,
+        fetchImpl: scratch.fetchImpl,
+    });
+    return scratch.sweepUrls().length;
+}
+
+describe("Overpass first", () => {
+    it("takes the whole population from one answered request and asks nothing else", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places);
+        const store = createMemoryPlacePoolStore();
+        const { state, report } = await gatherPlacePool(request, {
+            store,
+            photonRequests: 64,
+            fetchImpl: map.fetchImpl,
+        });
+
+        expect(map.calls).toEqual(["overpass overpass-api.de"]);
+        expect(report).toMatchObject({
+            asked: ["overpass"],
+            complete: true,
+            completedBy: "overpass",
+            known: 700,
+            withWebsite: withSite(places).length,
+            requests: { overpass: 1, photon: 0, osmApi: 0, nominatim: 0 },
+            pendingBoxes: 0,
+            problems: [],
+        });
+        expect(report.overpassAttempts).toEqual([
+            expect.objectContaining({ host: "overpass-api.de", ok: true, detail: "700 elements" }),
+        ]);
+        // Every named place with the tag, positions and tags only, and time to answer.
+        expect(map.overpassQueries[0]).toBe(
+            '[out:json][timeout:90];\narea["ISO3166-1"="NL"]->.c;\n(\n  nwr(area.c)["shop"="bicycle"]["name"];\n);\nout tags center;'
+        );
+        // A site given as contact:website counts as a website.
+        const viaContact = places.find(p => p.contactWebsite)!;
+        expect(state.places[idOf(viaContact)]?.website).toBe(
+            `https://place-${viaContact.id}.example/`
+        );
+    });
+
+    it("answers a second run from the stored pool with no request at all", async () => {
+        const map = createFakeMap(fakePopulation(300));
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 64, fetchImpl: map.fetchImpl };
+        const first = await gatherPlacePool(request, deps);
+        const before = map.calls.length;
+        const second = await gatherPlacePool(request, deps);
+        expect(map.calls.length).toBe(before);
+        expect(second.report).toMatchObject({
+            asked: [],
+            complete: true,
+            requests: { overpass: 0, photon: 0, osmApi: 0, nominatim: 0 },
+        });
+        expect(poolPlaces(second.state)).toEqual(poolPlaces(first.state));
+    });
+
+    it("tries the next instance when one is overloaded", async () => {
+        const map = createFakeMap(fakePopulation(50), {
+            overpassByHost: { "overpass-api.de": 504, "maps.mail.ru": 429 },
+        });
+        const { report } = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 64,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(map.calls).toEqual([
+            "overpass overpass-api.de",
+            "overpass maps.mail.ru",
+            "overpass overpass.kumi.systems",
+        ]);
+        expect(report.overpassAttempts.map(a => a.ok)).toEqual([false, false, true]);
+        expect(report.complete).toBe(true);
+        expect(map.count("photon")).toBe(0);
+    });
+
+    it("gives an instance that does not answer a time limit, then moves on", async () => {
+        const places = fakePopulation(40);
+        const map = createFakeMap(places);
+        const hanging: typeof fetch = (input, init) => {
+            if (hostOf(input) !== "overpass-api.de") return map.fetchImpl(input, init);
+            map.calls.push("overpass overpass-api.de");
+            return new Promise<Response>((_, reject) => {
+                init?.signal?.addEventListener("abort", () => {
+                    const reason: unknown = init.signal?.reason;
+                    reject(reason instanceof Error ? reason : new Error("aborted"));
+                });
+            });
+        };
+        const { report } = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 0,
+            fetchImpl: hanging,
+            limits: { overpassTimeoutMs: 30 },
+        });
+        expect(report.overpassAttempts[0]).toMatchObject({
+            host: "overpass-api.de",
+            ok: false,
+            detail: "no answer after 0 s",
+        });
+        expect(report.overpassAttempts[1]).toMatchObject({ host: "maps.mail.ru", ok: true });
+        expect(report.complete).toBe(true);
+    });
+
+    it("does not take an answer the server cut short for the whole population", async () => {
+        const places = fakePopulation(200);
+        // Two instances run out of time and return half; the third answers in full.
+        const map = createFakeMap(places, {
+            overpassByHost: { "overpass-api.de": "cut", "maps.mail.ru": "cut" },
+        });
+        const { report } = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 0,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(report.overpassAttempts.map(a => a.ok)).toEqual([false, false, true]);
+        expect(report.overpassAttempts[0]!.detail).toMatch(/^Overpass remark: runtime error/);
+        expect(report).toMatchObject({ complete: true, known: 200 });
+
+        // Every instance cut short: the pool is not complete, and the sweep takes over.
+        const allCut = createFakeMap(fakePopulation(700), { overpass: "cut" });
+        const swept = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 26,
+            fetchImpl: allCut.fetchImpl,
+        });
+        expect(swept.report).toMatchObject({
+            asked: ["overpass", "sweep"],
+            complete: false,
+            completedBy: null,
+            requests: { overpass: 3, photon: 26 },
+        });
+        expect(swept.state.overpassAnswered).toBe(false);
+        expect(swept.report.problems[0]).toMatch(/^Overpass did not answer \(overpass-api\.de: /);
+    });
+
+    it("does not take an answer that carries any remark for the whole population", async () => {
+        const places = fakePopulation(200);
+        const map = createFakeMap(places, { overpass: "noted" });
+        const { report } = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 0,
+            fetchImpl: map.fetchImpl,
+        });
+        // Half the places came with "runtime remark: …": not an answer to "every place".
+        expect(report).toMatchObject({ complete: false, known: 0 });
+        expect(report.problems[0]).toMatch(/Overpass did not answer/);
+    });
+
+    it("does not take an answer whose places come without a position for the whole population", async () => {
+        const places = fakePopulation(60);
+        // Every instance prints as `out tags;` alone would: no position for a
+        // node, no centre for a way. Each place could only be dropped.
+        const map = createFakeMap(places, { overpass: "unplaced" });
+        const store = createMemoryPlacePoolStore();
+        const first = await gatherPlacePool(request, {
+            store,
+            photonRequests: 0,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(first.report.overpassAttempts.map(a => a.ok)).toEqual([false, false, false]);
+        expect(first.report.overpassAttempts[0]!.detail).toBe(
+            "Overpass answer without positions: 60 of 60 elements"
+        );
+        expect(first.report).toMatchObject({ complete: false, completedBy: null, known: 0 });
+        expect(first.state.overpassAnswered).toBe(false);
+
+        // The sweep still finds every place.
+        const swept = await gatherPlacePool(request, {
+            store,
+            photonRequests: 100_000,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(swept.report).toMatchObject({ complete: true, completedBy: "sweep", known: 60 });
+
+        // One instance that prints positions is enough.
+        const mixed = createFakeMap(places, { overpassByHost: { "overpass-api.de": "unplaced" } });
+        const { report } = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 0,
+            fetchImpl: mixed.fetchImpl,
+        });
+        expect(report.overpassAttempts.map(a => a.ok)).toEqual([false, true]);
+        expect(report).toMatchObject({ complete: true, completedBy: "overpass", known: 60 });
+    });
+
+    it("refuses such an answer for a single node, for the ways alone, and for a relation without a centre", async () => {
+        type Element = Record<string, unknown>;
+        const places = fakePopulation(60);
+        expect(places.filter(p => p.type === "W")).toHaveLength(7);
+        /** A run whose Overpass answers are changed on the way back. */
+        const answered = async (change: (elements: Element[]) => Element[]) => {
+            const map = createFakeMap(places);
+            const fetchImpl: typeof fetch = async (input, init) => {
+                const response = await map.fetchImpl(input, init);
+                if (hostOf(input) !== "overpass-api.de" || !response.ok) return response;
+                const body = (await response.json()) as { elements: Element[] };
+                return new Response(JSON.stringify({ elements: change(body.elements) }));
+            };
+            const { report } = await gatherPlacePool(request, {
+                store: createMemoryPlacePoolStore(),
+                photonRequests: 0,
+                fetchImpl,
+                overpassUrls: ["https://overpass-api.de/api/interpreter"],
+            });
+            return report;
+        };
+        const without = (element: Element, ...keys: string[]) => {
+            const copy = { ...element };
+            for (const key of keys) Reflect.deleteProperty(copy, key);
+            return copy;
+        };
+        const refused = (detail: string) => ({
+            overpassAttempts: [expect.objectContaining({ ok: false, detail })],
+            complete: false,
+            completedBy: null,
+            known: 0,
+        });
+
+        // One node of 53 without its position.
+        const oneNode = await answered(elements => {
+            const first = elements.findIndex(el => el.type === "node");
+            return elements.map((el, i) => (i === first ? without(el, "lat", "lon") : el));
+        });
+        expect(oneNode).toMatchObject(
+            refused("Overpass answer without positions: 1 of 60 elements")
+        );
+
+        // Every node placed, and no way given a centre.
+        const noCentres = await answered(elements => elements.map(el => without(el, "center")));
+        expect(noCentres).toMatchObject(
+            refused("Overpass answer without positions: 7 of 60 elements")
+        );
+
+        // An area query returns a relation only through a member that has a
+        // position, so one without a centre is the same sign.
+        const bareRelation = await answered(elements => [
+            ...elements,
+            { type: "relation", id: 77, tags: { name: "Fietsen Verzameld", shop: "bicycle" } },
+        ]);
+        expect(bareRelation).toMatchObject(
+            refused("Overpass answer without positions: 1 of 61 elements")
+        );
+
+        // Left as it came, the same answer is taken.
+        const whole = await answered(elements => elements);
+        expect(whole).toMatchObject({ complete: true, completedBy: "overpass", known: 60 });
+    });
+
+    it("is asked through a pretend server that prints positions the way the real one does", async () => {
+        const map = createFakeMap(fakePopulation(30));
+        const printed = async (out: string) => {
+            const response = await map.fetchImpl("https://overpass-api.de/api/interpreter", {
+                method: "POST",
+                body: new URLSearchParams({
+                    data: `[out:json];\narea["ISO3166-1"="NL"]->.c;\nnwr(area.c)["shop"="bicycle"]["name"];\n${out}`,
+                }),
+            });
+            const { elements } = (await response.json()) as {
+                elements: Array<{ type: string; lat?: number; center?: object; tags?: object }>;
+            };
+            const share = (type: string, has: (el: (typeof elements)[number]) => boolean) => {
+                const all = elements.filter(el => el.type === type);
+                return `${all.filter(has).length}/${all.length}`;
+            };
+            return {
+                nodesPlaced: share("node", el => el.lat !== undefined),
+                waysCentred: share("way", el => el.center !== undefined),
+                tagged: elements.every(el => el.tags !== undefined),
+            };
+        };
+        // What the pool sends: a node's own position, a way's centre, the tags.
+        expect(await printed("out tags center;")).toEqual({
+            nodesPlaced: "26/26",
+            waysCentred: "4/4",
+            tagged: true,
+        });
+        // `tags` alone prints no position at all; `center` alone keeps the tags.
+        expect(await printed("out tags;")).toEqual({
+            nodesPlaced: "0/26",
+            waysCentred: "0/4",
+            tagged: true,
+        });
+        expect(await printed("out center 40;")).toEqual({
+            nodesPlaced: "26/26",
+            waysCentred: "4/4",
+            tagged: true,
+        });
+        expect(await printed("out ids center;")).toEqual({
+            nodesPlaced: "26/26",
+            waysCentred: "4/4",
+            tagged: false,
+        });
+    });
+
+    it("does not ask Overpass for a country too large for one request: it is swept, whole", async () => {
+        const places = fakePopulation(700, { country: "DE", box: DE_BOX });
+        const de: PlacePoolRequest = { ...request, country: "DE" };
+        const whole = await wholeSweep(places, de);
+        const map = createFakeMap(places);
+        const store = createMemoryPlacePoolStore();
+        const run = () =>
+            gatherPlacePool(de, { store, photonRequests: 64, fetchImpl: map.fetchImpl });
+
+        const first = await run();
+        // Four city answers would not be the country: Overpass is left alone.
+        expect(map.count("overpass")).toBe(0);
+        expect(first.report).toMatchObject({ asked: ["sweep"], complete: false });
+        expect(new URL(map.sweepUrls()[0]!).searchParams.get("bbox")).toBe(
+            "5.8500,47.2500,15.0500,55.1000"
+        );
+        let last = first;
+        while (!last.report.complete) last = await run();
+        // Complete means the whole country was swept, not its largest cities.
+        expect(last.report).toMatchObject({ completedBy: "sweep", known: 700 });
+        expect(map.sweepUrls()).toHaveLength(whole);
+        expect(map.count("overpass")).toBe(0);
+    });
+});
+
+describe("the sweep, when Overpass does not answer", () => {
+    it("sweeps Photon up to the cap, reads websites, and stores what is left to ask", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const { state, report } = await gatherPlacePool(request, {
+            store,
+            photonRequests: 40,
+            fetchImpl: map.fetchImpl,
+        });
+
+        // Order: Overpass (all three instances), then Photon, then the OSM API.
+        expect(map.calls.slice(0, 3).every(c => c.startsWith("overpass "))).toBe(true);
+        expect(map.calls.findIndex(c => c.startsWith("osmapi "))).toBeGreaterThan(
+            map.calls.map(c => c.startsWith("photon ")).lastIndexOf(true)
+        );
+        expect(report).toMatchObject({
+            asked: ["overpass", "sweep"],
+            complete: false,
+            sweepStopped: "cap",
+            requests: { overpass: 3, photon: 40 },
+            unread: 0,
+        });
+        expect(map.sweepUrls()).toHaveLength(40);
+        expect(report.known).toBeGreaterThan(300);
+        expect(report.known).toBeLessThan(700);
+        expect(report.pendingBoxes).toBeGreaterThan(0);
+        expect(state.unread).toEqual([]);
+        // Every found place was looked up, 100 per request and type.
+        expect(report.requests.osmApi).toBe(map.count("osmapi"));
+        expect(report.withWebsite + state.without.length).toBe(report.known);
+        // What the store holds is what the next run starts from.
+        const stored = await store.load(placePoolKey(request));
+        expect(stored && sweepPending(stored.sweep!)).toBe(report.pendingBoxes);
+    });
+
+    it("sends every Photon and OSM API request through its host's queue, and Overpass through none", async () => {
+        const map = createFakeMap(fakePopulation(300), { overpass: 504 });
+        const queued: string[] = [];
+        const throttle: HostThrottle = (host, task) => {
+            queued.push(host);
+            return task();
+        };
+        await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 30,
+            fetchImpl: map.fetchImpl,
+            throttle,
+        });
+        expect(map.count("overpass")).toBe(3);
+        expect(queued.filter(host => host === "photon.komoot.io")).toHaveLength(30);
+        expect(queued.filter(host => host === "api.openstreetmap.org")).toHaveLength(
+            map.count("osmapi")
+        );
+        expect(map.count("osmapi")).toBeGreaterThan(0);
+        // An Overpass request can take a minute: runs do not wait in line for each other's.
+        expect(new Set(queued)).toEqual(new Set(["photon.komoot.io", "api.openstreetmap.org"]));
+    });
+
+    it("carries on from the stored sweep on later runs, never repeating a request, until every place is known", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 40, fetchImpl: map.fetchImpl };
+        const knownAfter: number[] = [];
+        let last = await gatherPlacePool(request, deps);
+        knownAfter.push(last.report.known);
+        while (!last.report.complete) {
+            last = await gatherPlacePool(request, deps);
+            knownAfter.push(last.report.known);
+            expect(last.report.requests.photon).toBeLessThanOrEqual(40);
+        }
+        expect(knownAfter.length).toBeGreaterThan(2);
+        // Each run knows more than the one before.
+        expect([...knownAfter].sort((a, b) => a - b)).toEqual(knownAfter);
+        expect(last.report).toMatchObject({ complete: true, completedBy: "sweep", known: 700 });
+        expect(new Set(Object.keys(last.state.places))).toEqual(
+            new Set(withSite(places).map(idOf))
+        );
+        // No Photon request and no tag lookup was ever sent twice.
+        const sweep = map.sweepUrls();
+        expect(new Set(sweep).size).toBe(sweep.length);
+        const lookups = map.calls.filter(c => c.startsWith("osmapi "));
+        const lookedUp = lookups.flatMap(c => new URL(c.slice(7)).search.split("=")[1]!.split(","));
+        expect(new Set(lookedUp).size).toBe(lookedUp.length);
+
+        // Complete: the next run asks no server at all.
+        const before = map.calls.length;
+        await gatherPlacePool(request, deps);
+        expect(map.calls.length).toBe(before);
+    });
+
+    it("stores the sweep as it goes, so a run cut short repeats little", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const inner = createMemoryPlacePoolStore();
+        const stored: PlacePoolState[] = [];
+        const store: PlacePoolStore = {
+            load: key => inner.load(key),
+            save: async (key, state) => {
+                stored.push(structuredClone(state));
+                await inner.save(key, state);
+            },
+        };
+        await gatherPlacePool(request, { store, photonRequests: 40, fetchImpl: map.fetchImpl });
+        // Stored after every eighth answered request, not only at the end of the run.
+        const during = stored.filter(s => s.sweep && s.sweep.answered > 0 && s.sweep.answered < 40);
+        expect(during.map(s => s.sweep!.answered)).toEqual([8, 16, 24, 32]);
+
+        // The process dies after the 24th answer; a new one starts from what was stored then.
+        const atCrash = during[2]!;
+        expect(placesKnown(atCrash)).toBeGreaterThan(0);
+        expect(atCrash.requests.photon).toBe(24);
+        const afterCrash = createMemoryPlacePoolStore();
+        await afterCrash.save(placePoolKey(request), atCrash);
+        const answeredBefore = map.sweepUrls().slice(0, 24);
+        const again = createFakeMap(places, { overpass: 504 });
+        const resumed = await gatherPlacePool(request, {
+            store: afterCrash,
+            photonRequests: 40,
+            fetchImpl: again.fetchImpl,
+        });
+        // Nothing answered before the stored point is asked again.
+        expect(again.sweepUrls().filter(url => answeredBefore.includes(url))).toEqual([]);
+        expect(resumed.report.known).toBeGreaterThan(placesKnown(atCrash));
+    });
+
+    it("asks Overpass again on the next run while much of the sweep is left, and stops sweeping once it answers", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 30, fetchImpl: map.fetchImpl };
+        const first = await gatherPlacePool(request, deps);
+        expect(first.report.pendingBoxes).toBeGreaterThan(30);
+
+        map.options.overpass = "answers";
+        const photonBefore = map.count("photon");
+        const second = await gatherPlacePool(request, deps);
+        expect(second.report).toMatchObject({
+            asked: ["overpass"],
+            complete: true,
+            completedBy: "overpass",
+            known: 700,
+            pendingBoxes: 0,
+        });
+        expect(map.count("photon")).toBe(photonBefore);
+        expect(second.state.sweep).toBeNull();
+    });
+
+    it("finishes a sweep that fits in this run's cap instead of waiting on Overpass again", async () => {
+        const places = fakePopulation(700);
+        const whole = await wholeSweep(places);
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const first = await gatherPlacePool(request, {
+            store,
+            photonRequests: whole - 12,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(first.report.complete).toBe(false);
+        expect(first.report.pendingBoxes).toBeGreaterThan(0);
+        expect(first.report.pendingBoxes).toBeLessThanOrEqual(12);
+        const overpassBefore = map.count("overpass");
+        const second = await gatherPlacePool(request, {
+            store,
+            photonRequests: 64,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(map.count("overpass")).toBe(overpassBefore);
+        expect(second.report).toMatchObject({
+            asked: ["sweep"],
+            complete: true,
+            completedBy: "sweep",
+            known: 700,
+        });
+        expect(map.sweepUrls()).toHaveLength(whole);
+    });
+
+    it("sweeps a region over its outline's box, the lookup inside the cap, when Overpass has nothing", async () => {
+        const hamburg = fakePopulation(80, { country: "DE", box: [9.8, 53.4, 10.2, 53.7] });
+        const cities = {
+            Hamburg: {
+                lon: 10.0,
+                lat: 53.55,
+                country: "DE",
+                extent: [9.73, 53.39, 10.33, 53.74] as const,
+            },
+        };
+        const inHamburg: PlacePoolRequest = { ...request, country: "DE", region: "Hamburg" };
+        const map = createFakeMap(hamburg, { overpass: "empty", cities });
+        const { report } = await gatherPlacePool(inHamburg, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 200,
+            fetchImpl: map.fetchImpl,
+        });
+        // A region is one area, so Overpass is asked; its empty answer settles nothing.
+        expect(report).toMatchObject({
+            asked: ["overpass", "sweep"],
+            complete: true,
+            completedBy: "sweep",
+            known: 80,
+        });
+        expect(new URL(map.sweepUrls()[0]!).searchParams.get("bbox")).toBe(
+            "9.7300,53.3900,10.3300,53.7400"
+        );
+        // Placing the region on the map is one more Photon request, and it is counted.
+        expect(map.count("photon")).toBe(map.sweepUrls().length + 1);
+        expect(report.requests.photon).toBe(map.count("photon"));
+
+        // …inside the cap: a cap of 10 is the lookup and nine boxes.
+        const capped = createFakeMap(hamburg, { overpass: 504, cities });
+        const tight = await gatherPlacePool(inHamburg, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 10,
+            fetchImpl: capped.fetchImpl,
+        });
+        expect(capped.count("photon")).toBe(10);
+        expect(tight.report.requests.photon).toBe(10);
+    });
+
+    it("sweeps every tag it was given, and is complete only when all of them are", async () => {
+        const tags = ["shop:bicycle", "shop:sports", "craft:bicycle_repair", "shop:outdoor"];
+        const places = tags.flatMap((tag, i) =>
+            fakePopulation(60, { tag, firstId: 1 + i * 1_000 })
+        );
+        const four: PlacePoolRequest = {
+            ...request,
+            selectors: tags.map(tag => `["${tag.split(":")[0]}"="${tag.split(":")[1]}"]`),
+        };
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const run = () =>
+            gatherPlacePool(four, { store, photonRequests: 64, fetchImpl: map.fetchImpl });
+        const first = await run();
+        // 104 whole-box requests come before any tag is done: three tags are not four.
+        expect(first.state.sweep!.arms).toHaveLength(4 * 26);
+        expect(first.report.complete).toBe(false);
+        let last = first;
+        while (!last.report.complete) last = await run();
+        expect(last.report).toMatchObject({ completedBy: "sweep", known: 240 });
+        const asked = new Set(map.sweepUrls().map(u => new URL(u).searchParams.get("osm_tag")));
+        expect(asked).toEqual(new Set(tags));
+    });
+
+    it("does not sweep without a tag to filter by, and asks Photon nothing when the cap is zero", async () => {
+        const map = createFakeMap(fakePopulation(50), { overpass: 504 });
+        const noTags = await gatherPlacePool(
+            { country: "NL", keywords: ["fulfilment"], selectors: [] },
+            { store: createMemoryPlacePoolStore(), photonRequests: 0, fetchImpl: map.fetchImpl }
+        );
+        expect(noTags.report.asked).toEqual(["overpass", "names"]);
+        const capZero = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 0,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(capZero.report.asked).toEqual(["overpass", "names"]);
+        expect(map.count("photon")).toBe(0);
+    });
+});
+
+describe("a failed request settles nothing", () => {
+    it("does not call a pool complete, or a place without a website, because tag reads failed", async () => {
+        const places = fakePopulation(300);
+        const sites = withSite(places).length;
+        // Overpass is down and the OSM API refuses every read, run after run.
+        const map = createFakeMap(places, { overpass: 504, osmApiFails: () => true });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 64, fetchImpl: map.fetchImpl };
+        for (let run = 1; run <= 3; run++) {
+            const { state, report } = await gatherPlacePool(request, deps);
+            expect(report.complete).toBe(false);
+            expect(state.without).toEqual([]);
+            expect(report.withWebsite).toBe(0);
+            expect(report.problems).toContain(
+                "The OSM API did not answer every read of place tags"
+            );
+        }
+        // Every box was swept once; the found places wait to be read.
+        const waiting = await store.load(placePoolKey(request));
+        expect(waiting).toMatchObject({ complete: false });
+        expect(sweepPending(waiting!.sweep!)).toBe(0);
+        expect(waiting!.unread).toHaveLength(300);
+        expect(new Set(map.sweepUrls()).size).toBe(map.sweepUrls().length);
+
+        // The servers come back: every website is there.
+        map.options.osmApiFails = undefined;
+        map.options.overpass = "answers";
+        const healed = await gatherPlacePool(request, deps);
+        expect(healed.report).toMatchObject({ complete: true, known: 300, withWebsite: sites });
+    });
+
+    it("keeps a place unread while the API's answers leave it out, and never takes that for 'no website'", async () => {
+        const places = fakePopulation(60);
+        const left = new Set(places.slice(0, 5).map(p => p.id));
+        const map = createFakeMap(places, { overpass: 504, osmApiOmits: id => left.has(id) });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 500, fetchImpl: map.fetchImpl };
+        const first = await gatherPlacePool(request, deps);
+        expect(first.report).toMatchObject({
+            complete: false,
+            unread: 5,
+            waiting: { overpass: true, boxes: false, tags: true },
+        });
+        expect(first.state.without.some(id => left.has(Number(id.split("/")[1])))).toBe(false);
+
+        map.options.osmApiOmits = undefined;
+        const second = await gatherPlacePool(request, deps);
+        expect(second.report).toMatchObject({ complete: true, completedBy: "sweep", known: 60 });
+    });
+
+    it("reads the tags it could not read on a later run, and stops asking an API that is down after three tries", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504, osmApiFails: () => 503 });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 100_000, fetchImpl: map.fetchImpl };
+        const first = await gatherPlacePool(request, deps);
+        expect(first.report).toMatchObject({ complete: false, known: 700, unread: 700 });
+        // Seven hundred places are eight requests; three failures in a row end the reads.
+        expect(map.count("osmapi")).toBe(3);
+        // With the sweep done and reads failing, Overpass is asked again on the next run.
+        const overpassBefore = map.count("overpass");
+        const photonBefore = map.count("photon");
+        map.options.osmApiFails = undefined;
+        const second = await gatherPlacePool(request, deps);
+        expect(map.count("overpass")).toBe(overpassBefore + 3);
+        expect(map.count("photon")).toBe(photonBefore);
+        expect(second.report).toMatchObject({
+            complete: true,
+            completedBy: "sweep",
+            known: 700,
+            withWebsite: withSite(places).length,
+            unread: 0,
+        });
+    });
+
+    it("keeps a pool open while one box will not answer, and lets Overpass close it", async () => {
+        const places = fakePopulation(300);
+        const map = createFakeMap(places, {
+            overpass: 504,
+            photonFails: url => new URL(url).searchParams.get("q") === "b",
+        });
+        const store = createMemoryPlacePoolStore();
+        const run = () =>
+            gatherPlacePool(request, { store, photonRequests: 64, fetchImpl: map.fetchImpl });
+
+        const first = await run();
+        expect(first.report).toMatchObject({ complete: false, pendingBoxes: 1 });
+        // The box is asked once more per run; the pool is never "complete" with it missing.
+        const overpassAfterFirst = map.count("overpass");
+        const second = await run();
+        expect(second.report).toMatchObject({
+            asked: ["sweep"],
+            complete: false,
+            pendingBoxes: 1,
+            requests: { photon: 1, overpass: 0 },
+        });
+        // A run that got no answer from Photon turns to Overpass again next time.
+        const third = await run();
+        expect(map.count("overpass")).toBe(overpassAfterFirst + 3);
+        expect(third.report).toMatchObject({ complete: false, pendingBoxes: 1 });
+        map.options.overpass = "answers";
+        const fourth = await run();
+        expect(fourth.report).toMatchObject({
+            complete: true,
+            completedBy: "overpass",
+            known: 300,
+        });
+    });
+
+    it("turns to Overpass again after Photon stopped answering, even with few boxes left", async () => {
+        const places = fakePopulation(700);
+        const whole = await wholeSweep(places);
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const run = (photonRequests: number) =>
+            gatherPlacePool(request, { store, photonRequests, fetchImpl: map.fetchImpl });
+        await run(whole - 12);
+        // Photon goes down. The few boxes left fit in a run, so Overpass is not asked first…
+        map.options.photonFails = () => true;
+        const overpassBefore = map.count("overpass");
+        const failing = await run(64);
+        expect(map.count("overpass")).toBe(overpassBefore);
+        expect(failing.report).toMatchObject({ sweepStopped: "failing", complete: false });
+        expect(failing.report.problems).toContain(
+            "Photon stopped answering during the place sweep"
+        );
+        // …but once Photon has failed a run, the next one asks Overpass, which now answers.
+        map.options.overpass = "answers";
+        const through = await run(64);
+        expect(through.report).toMatchObject({
+            asked: ["overpass"],
+            complete: true,
+            completedBy: "overpass",
+            known: 700,
+        });
+    });
+});
+
+describe("keeping the pool", () => {
+    const DAY = 24 * 60 * 60 * 1000;
+
+    it("fills a pool again once it is older than the limit, and keeps what it knew until the new filling is complete", async () => {
+        const places = fakePopulation(60);
+        const map = createFakeMap(places);
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 0, fetchImpl: map.fetchImpl, now: () => clock };
+        const original = await gatherPlacePool(request, deps);
+        clock += 29 * DAY;
+        await gatherPlacePool(request, deps);
+        expect(map.count("overpass")).toBe(1);
+
+        // Past the limit, with every server down: the run still gets the old places.
+        clock += 2 * DAY;
+        map.options.overpass = 504;
+        const stale = await gatherPlacePool(request, deps);
+        expect(map.count("overpass")).toBe(4);
+        expect(stale.report).toMatchObject({ complete: false, known: 60 });
+        expect(poolPlaces(stale.state)).toEqual(poolPlaces(original.state));
+        expect(stale.state.startedAt).toBe(new Date(clock).toISOString());
+
+        // The servers answer again, with one shop gone and one new: the pool follows.
+        const gone = withSite(places)[0]!;
+        const opened: FakePlace = {
+            type: "N",
+            id: 9_001,
+            name: "Nieuw Rijwiel 9001",
+            lon: 5,
+            lat: 52,
+            tag: "shop:bicycle",
+            country: "NL",
+            website: "https://place-9001.example/",
+        };
+        const changed = createFakeMap([...places.filter(p => p !== gone), opened]);
+        const fresh = await gatherPlacePool(request, { ...deps, fetchImpl: changed.fetchImpl });
+        expect(fresh.report).toMatchObject({
+            complete: true,
+            completedBy: "overpass",
+            known: 60,
+        });
+        expect(fresh.state.places[idOf(gone)]).toBeUndefined();
+        expect(fresh.state.places[idOf(opened)]?.website).toBe("https://place-9001.example/");
+        expect(fresh.state.carried).toEqual([]);
+    });
+
+    const de: PlacePoolRequest = { ...request, country: "DE" };
+    const radladen = (id: number, name: string, website?: string): FakePlace => ({
+        type: "N",
+        id,
+        name,
+        lon: 9 + id / 100,
+        lat: 51,
+        tag: "shop:bicycle",
+        country: "DE",
+        ...(website ? { website } : {}),
+    });
+
+    it("reads the tags of what it knew again when the sweep fills a pool again", async () => {
+        const map = createFakeMap([
+            radladen(1, "Alt Rad", "https://alt-rad.example/"),
+            radladen(2, "Berg Rad"),
+            radladen(3, "Clara Rad", "https://clara-rad.example/"),
+            radladen(4, "Dorf Rad", "https://dorf-rad.example/"),
+            radladen(5, "Eck Rad", "https://eck-rad.example/"),
+        ]);
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 64, now: () => clock };
+        const first = await gatherPlacePool(de, { ...deps, fetchImpl: map.fetchImpl });
+        expect(first.report).toMatchObject({ complete: true, completedBy: "sweep", known: 5 });
+        expect(first.state.without).toEqual(["osm:node/2"]);
+        // Germany is swept, never asked of Overpass: the sweep is all a refresh has.
+        expect(map.count("overpass")).toBe(0);
+
+        // A month on: one site moved, one shop got a site, one lost its site, one closed.
+        const changed = createFakeMap([
+            radladen(1, "Alt Rad", "https://neu-rad.example/"),
+            radladen(2, "Berg Rad", "https://berg-rad.example/"),
+            radladen(3, "Clara Rad"),
+            radladen(5, "Eck Rad", "https://eck-rad.example/"),
+        ]);
+        clock += 31 * DAY;
+        const again = await gatherPlacePool(de, { ...deps, fetchImpl: changed.fetchImpl });
+        expect(again.report).toMatchObject({ complete: true, completedBy: "sweep", known: 4 });
+        // The four that are still listed are read again, in one request to the OSM API.
+        expect(changed.count("photon")).toBe(26);
+        expect(changed.count("osmapi")).toBe(1);
+        expect(again.state.places["osm:node/1"]?.website).toBe("https://neu-rad.example/");
+        expect(again.state.places["osm:node/2"]?.website).toBe("https://berg-rad.example/");
+        expect(again.state.places["osm:node/3"]).toBeUndefined();
+        expect(again.state.places["osm:node/4"]).toBeUndefined();
+        expect(again.state.places["osm:node/5"]?.website).toBe("https://eck-rad.example/");
+        expect(again.state.without).toEqual(["osm:node/3"]);
+        expect(again.state.carried).toEqual([]);
+        expect(again.state.unread).toEqual([]);
+    });
+
+    it("keeps the old website while a place's tags cannot be read again, and reads them on a later run", async () => {
+        const map = createFakeMap([
+            radladen(1, "Alt Rad", "https://alt-rad.example/"),
+            radladen(2, "Berg Rad"),
+        ]);
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 64, now: () => clock };
+        await gatherPlacePool(de, { ...deps, fetchImpl: map.fetchImpl });
+
+        const changed = createFakeMap(
+            [
+                radladen(1, "Alt Rad", "https://neu-rad.example/"),
+                radladen(2, "Berg Rad", "https://berg-rad.example/"),
+            ],
+            { osmApiFails: () => 503 }
+        );
+        clock += 31 * DAY;
+        const down = await gatherPlacePool(de, { ...deps, fetchImpl: changed.fetchImpl });
+        // Photon listed both again, and that says nothing about their websites.
+        expect(down.report).toMatchObject({
+            complete: false,
+            known: 2,
+            unread: 2,
+            waiting: { overpass: false, boxes: false, tags: true },
+        });
+        expect(down.state.places["osm:node/1"]?.website).toBe("https://alt-rad.example/");
+        expect(down.state.places["osm:node/2"]).toBeUndefined();
+        expect([...down.state.carried].sort()).toEqual(["osm:node/1", "osm:node/2"]);
+
+        changed.options.osmApiFails = undefined;
+        const sweptOnce = changed.count("photon");
+        const up = await gatherPlacePool(de, { ...deps, fetchImpl: changed.fetchImpl });
+        expect(up.report).toMatchObject({ complete: true, completedBy: "sweep", known: 2 });
+        expect(changed.count("photon")).toBe(sweptOnce);
+        expect(up.state.places["osm:node/1"]?.website).toBe("https://neu-rad.example/");
+        expect(up.state.places["osm:node/2"]?.website).toBe("https://berg-rad.example/");
+        expect(up.state.carried).toEqual([]);
+    });
+
+    /** The ids whose tags these requests asked the OSM API for, one entry per time asked. */
+    const idsRead = (calls: readonly string[]) =>
+        calls
+            .filter(call => call.startsWith("osmapi "))
+            .flatMap(call => {
+                const url = new URL(call.slice("osmapi ".length));
+                const type = url.pathname.includes("/nodes") ? "node" : "way";
+                return (url.searchParams.get(`${type}s`) ?? "")
+                    .split(",")
+                    .map(id => `osm:${type}/${id}`);
+            });
+
+    it("reads each place once per filling, over as many runs as the new filling takes", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, fetchImpl: map.fetchImpl, now: () => clock };
+        const original = await gatherPlacePool(request, { ...deps, photonRequests: 100_000 });
+        expect(original.report).toMatchObject({ completedBy: "sweep", known: 700 });
+        const everyId = places.map(idOf).sort();
+        expect(idsRead(map.calls).sort()).toEqual(everyId);
+
+        // A month on, in runs of 40 Photon requests.
+        clock += 31 * DAY;
+        const mark = map.calls.length;
+        let run = await gatherPlacePool(request, { ...deps, photonRequests: 40 });
+        let runs = 1;
+        // Not complete after one run, and the run still has every place the old filling knew.
+        expect(run.report).toMatchObject({ complete: false, known: 700 });
+        expect(Object.keys(run.state.places).sort()).toEqual(
+            Object.keys(original.state.places).sort()
+        );
+        while (!run.report.complete) {
+            run = await gatherPlacePool(request, { ...deps, photonRequests: 40 });
+            runs += 1;
+        }
+        expect(runs).toBeGreaterThan(2);
+        expect(run.report).toMatchObject({ completedBy: "sweep", known: 700 });
+        expect(run.state.carried).toEqual([]);
+        const refresh = map.calls.slice(mark);
+        // Every place's tags were read again, none of them twice, and no box was asked twice.
+        expect(idsRead(refresh).sort()).toEqual(everyId);
+        const boxes = refresh.filter(call => call.startsWith("photon "));
+        expect(new Set(boxes).size).toBe(boxes.length);
+    });
+
+    it("loses nothing when a run of the new filling is cut short", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 100_000, now: () => clock };
+        const original = await gatherPlacePool(request, { ...deps, fetchImpl: map.fetchImpl });
+        expect(original.report).toMatchObject({ completedBy: "sweep", known: 700 });
+
+        // A month on, the caller gives up after the tenth Photon answer.
+        clock += 31 * DAY;
+        const mark = map.calls.length;
+        const controller = new AbortController();
+        let answers = 0;
+        const cutShort: typeof fetch = async (input, init) => {
+            const response = await map.fetchImpl(input, init);
+            if (hostOf(input) === "photon.komoot.io" && ++answers === 10) controller.abort();
+            return response;
+        };
+        const cut = await gatherPlacePool(request, {
+            ...deps,
+            fetchImpl: cutShort,
+            signal: controller.signal,
+        });
+        expect(cut.report).toMatchObject({ complete: false, known: 700, sweepStopped: "aborted" });
+        // What it found again waits for its tags: none was read after the stop,
+        // and the run still has every place with the description it had.
+        expect(cut.report.unread).toBeGreaterThan(0);
+        expect(idsRead(map.calls.slice(mark))).toEqual([]);
+        expect(cut.state.places).toEqual(original.state.places);
+
+        let run = cut;
+        while (!run.report.complete)
+            run = await gatherPlacePool(request, { ...deps, fetchImpl: map.fetchImpl });
+        expect(run.report).toMatchObject({ completedBy: "sweep", known: 700 });
+        expect(run.state.carried).toEqual([]);
+        const refresh = map.calls.slice(mark);
+        expect(idsRead(refresh).sort()).toEqual(places.map(idOf).sort());
+        const boxes = refresh.filter(call => call.startsWith("photon "));
+        expect(new Set(boxes).size).toBe(boxes.length);
+    });
+
+    it("lets an Overpass answer complete a new filling the sweep had begun", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places);
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 30, now: () => clock };
+        const original = await gatherPlacePool(request, { ...deps, fetchImpl: map.fetchImpl });
+        expect(original.report).toMatchObject({ completedBy: "overpass", known: 700 });
+
+        // A month on Overpass is down and the sweep begins the new filling. The
+        // OSM API is down too, so what it found again waits for its tags.
+        clock += 31 * DAY;
+        map.options.overpass = 504;
+        map.options.osmApiFails = () => 503;
+        const begun = await gatherPlacePool(request, { ...deps, fetchImpl: map.fetchImpl });
+        expect(begun.report).toMatchObject({ complete: false, known: 700 });
+        expect(begun.report.pendingBoxes).toBeGreaterThan(30);
+        expect(begun.report.unread).toBeGreaterThan(0);
+        expect(begun.state.carried).toHaveLength(700);
+
+        // Overpass answers on the next run, with one shop gone: its answer
+        // describes every place, and nothing is left waiting.
+        const gone = withSite(places)[0]!;
+        const changed = createFakeMap(places.filter(p => p !== gone));
+        const settled = await gatherPlacePool(request, { ...deps, fetchImpl: changed.fetchImpl });
+        expect(settled.report).toMatchObject({
+            asked: ["overpass"],
+            complete: true,
+            completedBy: "overpass",
+            known: 699,
+            unread: 0,
+        });
+        expect(settled.state.carried).toEqual([]);
+        expect(settled.state.unread).toEqual([]);
+        expect(settled.state.sweep).toBeNull();
+        expect(settled.state.places[idOf(gone)]).toBeUndefined();
+        expect(changed.count("photon")).toBe(0);
+        expect(changed.count("osmapi")).toBe(0);
+    });
+
+    it("asks again after a day when the answer was that nothing is there", async () => {
+        const empty = createFakeMap([], { overpass: "empty" });
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 0, fetchImpl: empty.fetchImpl, now: () => clock };
+        await gatherPlacePool(request, deps);
+        await gatherPlacePool(request, deps);
+        expect(empty.count("overpass")).toBe(1);
+        clock += 25 * 60 * 60 * 1000;
+        await gatherPlacePool(request, deps);
+        expect(empty.count("overpass")).toBe(2);
+    });
+
+    it("carries an unfinished sweep on however long ago it stopped, and counts a pool's age from when it was complete", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 40, fetchImpl: map.fetchImpl, now: () => clock };
+        let last = await gatherPlacePool(request, deps);
+        expect(last.report.complete).toBe(false);
+        // Runs five weeks apart: each carries on, none starts the sweep over.
+        let runs = 1;
+        while (!last.report.complete) {
+            clock += 35 * DAY;
+            last = await gatherPlacePool(request, deps);
+            runs += 1;
+        }
+        expect(runs).toBeGreaterThan(2);
+        expect(last.report).toMatchObject({ completedBy: "sweep", known: 700 });
+        expect(last.state.startedAt).toBe("2026-11-24T00:00:00.000Z");
+        expect(last.state.endedAt).toBe(new Date(clock).toISOString());
+        const sweep = map.sweepUrls();
+        expect(new Set(sweep).size).toBe(sweep.length);
+
+        // Complete ten weeks after it started: its age counts from now, not from then.
+        const asked = map.calls.length;
+        clock += 29 * DAY;
+        await gatherPlacePool(request, deps);
+        expect(map.calls.length).toBe(asked);
+        clock += 2 * DAY;
+        const refilled = await gatherPlacePool(request, deps);
+        expect(map.calls.length).toBeGreaterThan(asked);
+        expect(refilled.report.known).toBe(700);
+    });
+
+    it("carries on a sweep that has found nothing yet, instead of asking its answered boxes again", async () => {
+        const four: PlacePoolRequest = {
+            ...request,
+            selectors: ["a", "b", "c", "d"].map(value => `["shop"="${value}"]`),
+        };
+        const map = createFakeMap([], { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 64, fetchImpl: map.fetchImpl, now: () => clock };
+        // Four tags are 104 boxes: more than one run's 64, and none holds a place.
+        const first = await gatherPlacePool(four, deps);
+        expect(first.report).toMatchObject({ complete: false, known: 0, pendingBoxes: 40 });
+        clock += 7 * DAY;
+        const second = await gatherPlacePool(four, deps);
+        expect(second.report).toMatchObject({ complete: true, completedBy: "sweep", known: 0 });
+        const sweep = map.sweepUrls();
+        expect(sweep).toHaveLength(104);
+        expect(new Set(sweep).size).toBe(104);
+    });
+
+    it("keys a pool by the selectors it asks for: the first four", () => {
+        const five = ["a", "b", "c", "d", "e"].map(value => `["shop"="${value}"]`);
+        const key = placePoolKey({ ...request, selectors: five });
+        expect(placePoolKey({ ...request, selectors: five.slice(0, 4) })).toBe(key);
+        expect(placePoolKey({ ...request, selectors: [...five.slice(0, 4)].reverse() })).toBe(key);
+        expect(placePoolKey({ ...request, selectors: five.slice(1) })).not.toBe(key);
+    });
+
+    it("keeps one pool per territory, tag set and (inside a region) name words", () => {
+        const key = placePoolKey(request);
+        expect(key).toMatch(/^[0-9a-f]{64}$/);
+        // Country-wide, the words do not change what is asked.
+        expect(placePoolKey({ ...request, keywords: ["cycling"] })).toBe(key);
+        expect(placePoolKey({ ...request, country: "nl" })).toBe(key);
+        expect(placePoolKey({ ...request, country: "BE" })).not.toBe(key);
+        expect(placePoolKey({ ...request, selectors: ['["craft"="brewery"]'] })).not.toBe(key);
+        const utrecht = placePoolKey({ ...request, region: "Utrecht" });
+        expect(utrecht).not.toBe(key);
+        // Inside a region Overpass matches names too, so the words are part of the pool.
+        expect(placePoolKey({ ...request, region: "Utrecht", keywords: ["cycling"] })).not.toBe(
+            utrecht
+        );
+    });
+
+    it("works without a working store: the search still answers", async () => {
+        const map = createFakeMap(fakePopulation(40));
+        const broken: PlacePoolStore = {
+            load: () => Promise.reject(new Error("relation does not exist")),
+            save: () => Promise.reject(new Error("relation does not exist")),
+        };
+        const { state, report } = await gatherPlacePool(request, {
+            store: broken,
+            photonRequests: 64,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(report.complete).toBe(true);
+        expect(poolPlaces(state).length).toBeGreaterThan(0);
+    });
+
+    it("ignores a stored pool written by another version", async () => {
+        const map = createFakeMap(fakePopulation(40));
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 0, fetchImpl: map.fetchImpl };
+        const { state } = await gatherPlacePool(request, deps);
+        await store.save(placePoolKey(request), { ...state, version: PLACE_POOL_VERSION + 1 });
+        await gatherPlacePool(request, deps);
+        expect(map.count("overpass")).toBe(2);
+    });
+
+    it("makes two runs for the same pool at the same moment share one set of requests", async () => {
+        const map = createFakeMap(fakePopulation(200), { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 500, fetchImpl: map.fetchImpl };
+        const [a, b] = await Promise.all([
+            gatherPlacePool(request, deps),
+            gatherPlacePool(request, deps),
+        ]);
+        expect(a.report.complete).toBe(true);
+        expect(b.report).toMatchObject({ complete: true, asked: [], requests: { photon: 0 } });
+        const sweep = map.sweepUrls();
+        expect(new Set(sweep).size).toBe(sweep.length);
+    });
+});
+
+describe("what a later run would still ask", () => {
+    const nothing = { overpass: false, boxes: false, tags: false };
+
+    it("says Overpass and the sweep's boxes are waiting after a sweep cut by the cap, and nothing once complete", async () => {
+        const map = createFakeMap(fakePopulation(700), { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 40, fetchImpl: map.fetchImpl };
+        const cut = await gatherPlacePool(request, deps);
+        expect(cut.report.waiting).toEqual({ overpass: true, boxes: true, tags: false });
+        map.options.overpass = "answers";
+        const done = await gatherPlacePool(request, deps);
+        expect(done.report).toMatchObject({ complete: true, waiting: nothing });
+    });
+
+    it("says found places are waiting for their tags while the OSM API is down", async () => {
+        const map = createFakeMap(fakePopulation(60), { overpass: 504, osmApiFails: () => 503 });
+        const { report } = await gatherPlacePool(request, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 500,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(report.unread).toBe(60);
+        expect(report.waiting).toEqual({ overpass: true, boxes: false, tags: true });
+    });
+
+    it("says the sweep has yet to start when the cap left it no request", async () => {
+        const map = createFakeMap(fakePopulation(60, { country: "DE", box: DE_BOX }));
+        const { report } = await gatherPlacePool(
+            { ...request, country: "DE" },
+            { store: createMemoryPlacePoolStore(), photonRequests: 0, fetchImpl: map.fetchImpl }
+        );
+        // Too large for one Overpass request, so only the sweep can fill it.
+        expect(report).toMatchObject({
+            complete: false,
+            waiting: { overpass: false, boxes: true, tags: false },
+        });
+    });
+
+    it("says nothing is waiting, without calling the pool complete, when no server can be asked for more", async () => {
+        // No tag to filter by: Overpass answered (nothing by that name) and a sweep cannot run.
+        const noTag = createFakeMap([], { overpass: "empty" });
+        const named = await gatherPlacePool(
+            { country: "NL", keywords: ["fulfilment"], selectors: [] },
+            { store: createMemoryPlacePoolStore(), photonRequests: 64, fetchImpl: noTag.fetchImpl }
+        );
+        expect(named.report).toMatchObject({ complete: false, waiting: nothing });
+
+        // A country with no box in the table: Overpass is the only source, and it has answered.
+        const noBox = createFakeMap([], { overpass: "empty" });
+        const hungary = { ...request, country: "HU" };
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 64, fetchImpl: noBox.fetchImpl };
+        const first = await gatherPlacePool(hungary, deps);
+        expect(first.report).toMatchObject({ complete: false, waiting: nothing });
+        expect(noBox.sweepUrls()).toEqual([]);
+        // While Overpass has not answered, it is what waits.
+        noBox.options.overpass = 504;
+        const down = await gatherPlacePool(
+            { ...request, country: "HU", selectors: ['["shop"="books"]'] },
+            deps
+        );
+        expect(down.report.waiting).toEqual({ overpass: true, boxes: false, tags: false });
+    });
+});
+
+describe("a region", () => {
+    // A state about 4 by 2 degrees, with shops all over it; Photon places its name at the middle.
+    const STATE = [-79.5, 37.9, -75.5, 39.9] as const;
+    const shops = fakePopulation(600, { country: "US", box: STATE });
+    const maryland: PlacePoolRequest = { ...request, country: "US", region: "Maryland" };
+    const centre = { lon: -77.5, lat: 38.9, country: "US" };
+    const aroundCentre = shops.filter(
+        p => Math.abs(p.lon - centre.lon) <= 0.35 && Math.abs(p.lat - centre.lat) <= 0.25
+    ).length;
+
+    it("is swept over its own outline when Photon knows it, however far that reaches from the centre", async () => {
+        const map = createFakeMap(shops, {
+            overpass: 504,
+            cities: { Maryland: { ...centre, kind: "state", extent: STATE } },
+        });
+        const { report, state } = await gatherPlacePool(maryland, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 2_000,
+            fetchImpl: map.fetchImpl,
+        });
+        expect(aroundCentre).toBeLessThan(60);
+        expect(report).toMatchObject({
+            complete: true,
+            completedBy: "sweep",
+            known: 600,
+            sweepCoversTerritory: true,
+        });
+        expect(state.sweep!.box).toEqual(STATE);
+    });
+
+    it("is not called complete when all that could be swept is a box around the middle of a state", async () => {
+        // Photon gives the state as a point with no outline.
+        const map = createFakeMap(shops, {
+            overpass: 504,
+            cities: { Maryland: { ...centre, kind: "state" } },
+        });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 2_000, fetchImpl: map.fetchImpl };
+        const swept = await gatherPlacePool(maryland, deps);
+        expect(swept.report).toMatchObject({
+            complete: false,
+            known: aroundCentre,
+            pendingBoxes: 0,
+            sweepCoversTerritory: false,
+            // Overpass, which knows the region's own area, is still to answer.
+            waiting: { overpass: true, boxes: false, tags: false },
+        });
+
+        // It answers on a later run: the pool is then the whole state.
+        map.options.overpass = "answers";
+        const told = await gatherPlacePool(maryland, deps);
+        expect(told.report).toMatchObject({ complete: true, completedBy: "overpass", known: 600 });
+    });
+
+    it("stays open, and asks nothing more, when Overpass knows no area by that name either", async () => {
+        const map = createFakeMap(shops, {
+            overpass: "empty",
+            cities: { Maryland: { ...centre, kind: "state" } },
+        });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 2_000, fetchImpl: map.fetchImpl };
+        const first = await gatherPlacePool(maryland, deps);
+        expect(first.report).toMatchObject({
+            complete: false,
+            known: aroundCentre,
+            sweepCoversTerritory: false,
+            waiting: { overpass: false, boxes: false, tags: false },
+        });
+        const asked = map.calls.length;
+        await gatherPlacePool(maryland, deps);
+        expect(map.calls.length).toBe(asked);
+    });
+
+    it("does not take an outline that crosses the date line for a box", async () => {
+        // West 172.4, east -129.9: read as a box it would run the other way round the globe.
+        const map = createFakeMap(shops, {
+            overpass: "empty",
+            cities: {
+                Alaska: {
+                    lon: -150,
+                    lat: 64,
+                    country: "US",
+                    kind: "state",
+                    extent: [172.4, 51.2, -129.9, 71.4],
+                },
+            },
+        });
+        const { report } = await gatherPlacePool(
+            { ...request, country: "US", region: "Alaska" },
+            { store: createMemoryPlacePoolStore(), photonRequests: 500, fetchImpl: map.fetchImpl }
+        );
+        expect(new URL(map.sweepUrls()[0]!).searchParams.get("bbox")).toBe(
+            "-150.3500,63.7500,-149.6500,64.2500"
+        );
+        expect(report).toMatchObject({ complete: false, sweepCoversTerritory: false });
+    });
+
+    it("does not take a box around a point for the region, whatever kind of place the point is", async () => {
+        // Photon gives a town as a point: the box around it finds its shops and settles nothing.
+        const town = fakePopulation(80, { box: [4.8, 52.3, 5.0, 52.42] });
+        const map = createFakeMap(town, {
+            overpass: "empty",
+            cities: { Utrecht: { lon: 4.9, lat: 52.36, country: "NL" } },
+        });
+        const { report, state } = await gatherPlacePool(
+            { ...request, region: "Utrecht" },
+            { store: createMemoryPlacePoolStore(), photonRequests: 500, fetchImpl: map.fetchImpl }
+        );
+        expect(report).toMatchObject({
+            complete: false,
+            known: 80,
+            sweepCoversTerritory: false,
+            waiting: { overpass: false, boxes: false, tags: false },
+        });
+        expect(new URL(map.sweepUrls()[0]!).searchParams.get("bbox")).toBe(
+            "4.5500,52.1100,5.2500,52.6100"
+        );
+        expect(state.endedAt).not.toBeNull();
+    });
+});
+
+describe("a country where names are often not in Latin letters", () => {
+    it("is swept for what the letters reach, and the sweep does not make its pool complete", async () => {
+        const JAPAN = [128.5, 30.9, 145.85, 45.55] as const;
+        const map = createFakeMap(fakePopulation(200, { country: "JP", box: JAPAN }));
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 2_000, fetchImpl: map.fetchImpl };
+        const japan = { ...request, country: "JP" };
+        const first = await gatherPlacePool(japan, deps);
+        // Every shop here has a Latin name, so all are found; the pool still cannot say
+        // that this is everyone, and Japan is too large to ask Overpass as one.
+        expect(first.report).toMatchObject({
+            complete: false,
+            known: 200,
+            pendingBoxes: 0,
+            sweepCoversTerritory: false,
+            waiting: { overpass: false, boxes: false, tags: false },
+        });
+        const asked = map.calls.length;
+        await gatherPlacePool(japan, deps);
+        expect(map.calls.length).toBe(asked);
+    });
+});
+
+describe("a box too dense to split", () => {
+    /** Sixty shops at one address whose names start alike: no box can hold fewer than a full page. */
+    const oneAddress = (country: string, lon: number, lat: number): FakePlace[] =>
+        Array.from({ length: 60 }, (_, i) => ({
+            type: "N" as const,
+            id: i + 1,
+            name: `Alfa ${i + 1}`,
+            lon,
+            lat,
+            tag: "shop:bicycle",
+            country,
+            website: `https://alfa-${i + 1}.example/`,
+        }));
+
+    it("keeps a swept pool from being called complete, and asks nothing more once every box is answered", async () => {
+        const map = createFakeMap(oneAddress("DE", 10, 51));
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 500, fetchImpl: map.fetchImpl };
+        const germany = { ...request, country: "DE" };
+        const first = await gatherPlacePool(germany, deps);
+        expect(first.report).toMatchObject({
+            complete: false,
+            known: 50,
+            pendingBoxes: 0,
+            boxesCutOff: 1,
+            // Nothing a later run could ask would show the other ten.
+            waiting: { overpass: false, boxes: false, tags: false },
+        });
+        expect(poolPlaces(first.state)).toHaveLength(50);
+
+        const asked = map.calls.length;
+        const second = await gatherPlacePool(germany, deps);
+        expect(map.calls.length).toBe(asked);
+        expect(second.report).toMatchObject({ complete: false, asked: [], boxesCutOff: 1 });
+    });
+
+    it("counts such a pool's age from when its sweep ended, so later runs do not start it over", async () => {
+        const map = createFakeMap(oneAddress("DE", 10, 51));
+        const store = createMemoryPlacePoolStore();
+        let clock = Date.parse("2026-11-24T00:00:00Z");
+        const deps = { store, photonRequests: 40, fetchImpl: map.fetchImpl, now: () => clock };
+        const germany = { ...request, country: "DE" };
+        const DAY = 24 * 60 * 60 * 1000;
+        // Two runs five weeks apart to answer every box; the second ends the sweep.
+        const first = await gatherPlacePool(germany, deps);
+        expect(first.report.pendingBoxes).toBeGreaterThan(0);
+        clock += 35 * DAY;
+        const second = await gatherPlacePool(germany, deps);
+        expect(second.report).toMatchObject({ complete: false, pendingBoxes: 0, boxesCutOff: 1 });
+        expect(second.state.endedAt).toBe(new Date(clock).toISOString());
+
+        // A week later the pool is 42 days from its start and 7 from its end: nothing is asked.
+        const asked = map.calls.length;
+        clock += 7 * DAY;
+        await gatherPlacePool(germany, deps);
+        expect(map.calls.length).toBe(asked);
+        // Thirty days after it ended it is filled afresh, like a complete pool.
+        clock += 24 * DAY;
+        await gatherPlacePool(germany, deps);
+        expect(map.calls.length).toBeGreaterThan(asked);
+        const sweep = map.sweepUrls();
+        expect(sweep.length).toBeGreaterThan(new Set(sweep).size);
+    });
+
+    it("lets Overpass complete the pool where it can be asked", async () => {
+        const map = createFakeMap(oneAddress("NL", 5, 52), { overpass: 504 });
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 500, fetchImpl: map.fetchImpl };
+        const swept = await gatherPlacePool(request, deps);
+        expect(swept.report).toMatchObject({
+            complete: false,
+            known: 50,
+            boxesCutOff: 1,
+            waiting: { overpass: true, boxes: false, tags: false },
+        });
+        map.options.overpass = "answers";
+        const told = await gatherPlacePool(request, deps);
+        expect(told.report).toMatchObject({ complete: true, completedBy: "overpass", known: 60 });
+    });
+});
+
+describe("a territory where nothing carries the tags", () => {
+    const named = [
+        {
+            osm_type: "node",
+            osm_id: 7,
+            name: "Koffiebranderij Blanche Dael",
+            lat: "50.85",
+            lon: "5.69",
+            category: "shop",
+            type: "coffee",
+            extratags: { website: "https://blanchedael.example" },
+            address: { city: "Maastricht" },
+        },
+    ];
+    /** No tagged place anywhere; Nominatim knows one by name. */
+    const nothingTagged = (overpass: "empty" | 504 = "empty") => {
+        const map = createFakeMap([], { overpass });
+        const fetchImpl: typeof fetch = (input, init) => {
+            if (hostOf(input) !== "nominatim.openstreetmap.org") return map.fetchImpl(input, init);
+            map.calls.push("nominatim (one place by name)");
+            return Promise.resolve(new Response(JSON.stringify(named)));
+        };
+        return { map, fetchImpl };
+    };
+    const coffee: PlacePoolRequest = {
+        country: "NL",
+        keywords: ["specialty", "coffee"],
+        selectors: ['["shop"="coffee"]'],
+    };
+
+    it("looks for the segment's words in place names once, and keeps what it found", async () => {
+        const { map, fetchImpl } = nothingTagged();
+        const store = createMemoryPlacePoolStore();
+        const deps = { store, photonRequests: 64, fetchImpl };
+        const first = await gatherPlacePool(coffee, deps);
+        expect(first.report.asked).toEqual(["overpass", "sweep", "names"]);
+        // The sweep found nothing in 26 requests; the name search then asked
+        // Photon for the three largest cities, inside the same cap.
+        expect(first.report.requests).toMatchObject({ overpass: 1, photon: 26 + 3 });
+        expect(first.report.requests.nominatim).toBeGreaterThan(0);
+        expect(first.report).toMatchObject({ complete: true, completedBy: "sweep", known: 0 });
+        expect(poolPlaces(first.state).map(p => p.name)).toEqual(["Koffiebranderij Blanche Dael"]);
+
+        // A second run asks nobody: what the names gave is in the pool.
+        const before = map.calls.length;
+        const second = await gatherPlacePool(coffee, deps);
+        expect(map.calls.length).toBe(before);
+        expect(poolPlaces(second.state).map(p => p.name)).toEqual(["Koffiebranderij Blanche Dael"]);
+    });
+
+    it("keeps the name search's Photon requests inside the run's cap", async () => {
+        const tight = nothingTagged();
+        const { report } = await gatherPlacePool(coffee, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 27,
+            fetchImpl: tight.fetchImpl,
+        });
+        expect(tight.map.count("photon")).toBe(27);
+        expect(report.requests.photon).toBe(27);
+
+        const none = nothingTagged();
+        const { state } = await gatherPlacePool(coffee, {
+            store: createMemoryPlacePoolStore(),
+            photonRequests: 0,
+            fetchImpl: none.fetchImpl,
+        });
+        expect(none.map.count("photon")).toBe(0);
+        expect(poolPlaces(state)).toHaveLength(1);
+    });
+
+    it("searches names again next run when no server answered, instead of concluding there are none", async () => {
+        const down = createFakeMap([], { overpass: 504, photonFails: () => true });
+        const silent: typeof fetch = (input, init) =>
+            hostOf(input) === "nominatim.openstreetmap.org"
+                ? Promise.resolve(new Response("busy", { status: 503 }))
+                : down.fetchImpl(input, init);
+        const store = createMemoryPlacePoolStore();
+        const first = await gatherPlacePool(coffee, {
+            store,
+            photonRequests: 64,
+            fetchImpl: silent,
+        });
+        expect(first.state.namesSearched).toBe(false);
+        expect(first.report.problems.length).toBeGreaterThan(0);
+        expect(poolPlaces(first.state)).toEqual([]);
+
+        const back = nothingTagged();
+        const second = await gatherPlacePool(coffee, {
+            store,
+            photonRequests: 64,
+            fetchImpl: back.fetchImpl,
+        });
+        expect(second.state.namesSearched).toBe(true);
+        expect(poolPlaces(second.state)).toHaveLength(1);
+    });
+
+    it("prefers tagged places as soon as there are any", async () => {
+        const { fetchImpl } = nothingTagged(504);
+        const store = createMemoryPlacePoolStore();
+        // Overpass down and no Photon allowed: only the names answer.
+        const first = await gatherPlacePool(coffee, { store, photonRequests: 0, fetchImpl });
+        expect(poolPlaces(first.state)).toHaveLength(1);
+        expect(first.report.complete).toBe(false);
+
+        // Next run Overpass answers with coffee shops: the pool is those, not the name match.
+        const shops = fakePopulation(30, { tag: "shop:coffee" });
+        const answering = createFakeMap(shops);
+        const second = await gatherPlacePool(coffee, {
+            store,
+            photonRequests: 0,
+            fetchImpl: answering.fetchImpl,
+        });
+        expect(second.report).toMatchObject({ complete: true, completedBy: "overpass" });
+        expect(poolPlaces(second.state)).toHaveLength(withSite(shops).length);
+        expect(poolPlaces(second.state).some(p => p.name.startsWith("Koffiebranderij"))).toBe(
+            false
+        );
+    });
+});
+
+describe("the pool as a list for ranking", () => {
+    const place = (id: number, website: string | null) => ({
+        id: `osm:node/${id}`,
+        name: `Place ${id}`,
+        website,
+        address: "NL",
+        lat: 52,
+        lng: 5,
+        categories: ["shop=bicycle"],
+        country: "NL",
+        city: null,
+    });
+    const pool = (places: ReturnType<typeof place>[]): PlacePoolState => ({
+        version: PLACE_POOL_VERSION,
+        country: "NL",
+        region: null,
+        selectors: [],
+        places: Object.fromEntries(places.map(p => [p.id, p])),
+        without: ["osm:node/9001"],
+        unread: [],
+        overpassAnswered: true,
+        sweep: null,
+        sweepCoversTerritory: false,
+        lastSweep: null,
+        byName: [],
+        namesSearched: false,
+        carried: [],
+        complete: true,
+        completedBy: "overpass",
+        endedAt: "2026-11-24T00:00:00.000Z",
+        startedAt: "2026-11-24T00:00:00.000Z",
+        updatedAt: "2026-11-24T00:00:00.000Z",
+        requests: { overpass: 1, photon: 0, osmApi: 0, nominatim: 0 },
+    });
+
+    it("lists one place per website", () => {
+        const state = pool([
+            place(1, "https://chain.example/"),
+            place(2, "https://chain.example/"),
+            place(3, "https://own.example/"),
+        ]);
+        expect(placesKnown(state)).toBe(4);
+        const listed = poolPlaces(state);
+        expect(listed.map(p => p.website).sort()).toEqual([
+            "https://chain.example/",
+            "https://own.example/",
+        ]);
+    });
+
+    it("cuts a pool over the limit to a spread that does not follow id order, the same every time", () => {
+        const state = pool(
+            Array.from({ length: 500 }, (_, i) => place(i + 1, `https://p${i + 1}.example/`))
+        );
+        const cut = poolPlaces(state, 50);
+        expect(cut).toHaveLength(50);
+        expect(poolPlaces(state, 50)).toEqual(cut);
+        const ids = cut.map(p => Number(p.id.split("/")[1]));
+        // Not the first 50 by id: the cut reaches across the whole pool.
+        expect(Math.max(...ids)).toBeGreaterThan(400);
+        expect(ids.filter(id => id <= 250).length).toBeGreaterThan(10);
+        expect(ids.filter(id => id > 250).length).toBeGreaterThan(10);
+        // A larger limit keeps the smaller cut and adds to it.
+        expect(poolPlaces(state, 80).slice(0, 50)).toEqual(cut);
+    });
+
+    it("gives the places found by name only while no tagged place has a website", () => {
+        const byName = [place(70, "https://named.example/")];
+        expect(poolPlaces({ ...pool([]), byName })).toEqual(byName);
+        expect(
+            poolPlaces({ ...pool([place(1, "https://tagged.example/")]), byName }).map(p => p.id)
+        ).toEqual(["osm:node/1"]);
+    });
+});

@@ -8,6 +8,7 @@ import { describe, expect, it } from "vitest";
 
 import type { PageLink, ReadablePage } from "@launchstack/tools/web-research";
 
+import { gather } from "../gather";
 import type { PlanInput } from "../plan";
 import type { PartnerOrgRecord, ProgramRecord } from "../types";
 import { countriesMentioned, nativeTermsFor, overpassAreas } from "./geo";
@@ -25,7 +26,13 @@ import { fakeEmbed } from "../semantic.fixture";
 import { searchNominatim } from "./nominatim";
 import { locateCity, photonAreas, photonTagsFor, searchPhoton } from "./photon";
 import { buildKeylessPlan, keywordsFor } from "./plan";
-import { createKeylessPorts } from "./ports";
+import { createFakeMap, fakePopulation, noWait } from "./map.fixture";
+import { createMemoryPlacePoolStore } from "./pool";
+import {
+    DEFAULT_SWEEP_REQUESTS_PER_RUN,
+    createKeylessPorts,
+    readSweepRequestsPerRun,
+} from "./ports";
 import { extractFacts, firstDescription, profileFromPages, readSite } from "./profile";
 
 const urlOf = (input: RequestInfo | URL): string =>
@@ -496,7 +503,7 @@ describe("Photon + OSM API", () => {
                 );
             return new Response("nope", { status: 404 });
         };
-        expect(await locateCity("Amsterdam", "NL", { fetchImpl })).toEqual({
+        expect(await locateCity("Amsterdam", "NL", { fetchImpl })).toMatchObject({
             lat: 52.37,
             lon: 4.9,
         });
@@ -995,6 +1002,410 @@ describe("keyless ports", () => {
         expect(ports.searchWeb).toBeNull();
         const { plan } = await ports.plan!(planInput);
         expect(plan.queries.filter(q => q.kind === "place")).toHaveLength(2);
-        // Three stubbed sources in turn, with the profiler's polite pauses.
     }, 20_000);
 });
+
+describe("keyless place search", () => {
+    const bicycles = {
+        query: "bicycle shop",
+        categoryIds: ['["shop"="bicycle"]'],
+        territory: { country: "NL" },
+    };
+    const quiet = <T>(work: () => Promise<T>): Promise<T> => {
+        const info = console.info;
+        console.info = () => undefined;
+        return work().finally(() => {
+            console.info = info;
+        });
+    };
+
+    it("hands the whole pool to ranking, not the first 40, one place per website", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places);
+        const ports = createKeylessPorts({
+            fetchImpl: map.fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+        });
+        const found = await quiet(() => ports.searchPlaces!(bicycles));
+        const withSite = places.filter(p => p.website ?? p.contactWebsite);
+        expect(found).toHaveLength(withSite.length);
+        expect(found.length).toBeGreaterThan(400);
+        expect(new Set(found.map(p => p.website)).size).toBe(found.length);
+        expect(found[0]).toMatchObject({
+            fsqId: expect.stringMatching(/^osm:(node|way)\/\d+$/),
+            categories: [{ id: "shop=bicycle", name: "bicycle" }],
+            roles: ["retailer"],
+        });
+        // Overpass was asked first and answered: Photon was never needed.
+        expect(map.calls).toEqual(["overpass overpass-api.de"]);
+    });
+
+    it("cuts a pool larger than the limit instead of passing thousands on", async () => {
+        const map = createFakeMap(fakePopulation(700));
+        const ports = createKeylessPorts({
+            fetchImpl: map.fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+            placesPerTerritory: 100,
+        });
+        expect(await quiet(() => ports.searchPlaces!(bicycles))).toHaveLength(100);
+    });
+
+    it("sweeps Photon when Overpass is down, within the run's request cap, and resumes on the next run", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const placePools = createMemoryPlacePoolStore();
+        const run = () =>
+            createKeylessPorts({
+                fetchImpl: map.fetchImpl,
+                placePools,
+                throttle: noWait,
+                sweepRequestsPerRun: 40,
+            });
+        const first = await quiet(() => run().searchPlaces!(bicycles));
+        expect(map.sweepUrls()).toHaveLength(40);
+        expect(first.length).toBeGreaterThan(40);
+
+        const second = await quiet(() => run().searchPlaces!(bicycles));
+        expect(map.sweepUrls()).toHaveLength(80);
+        expect(new Set(map.sweepUrls()).size).toBe(80);
+        expect(second.length).toBeGreaterThan(first.length);
+        // The first run's places are all still there.
+        const secondIds = new Set(second.map(p => p.fsqId));
+        expect(first.every(p => secondIds.has(p.fsqId))).toBe(true);
+    });
+
+    it("tells the run when a pool is not the whole territory yet, and stops telling it once it is", async () => {
+        const places = fakePopulation(700);
+        const map = createFakeMap(places, { overpass: 504 });
+        const placePools = createMemoryPlacePoolStore();
+        const gathered = () => {
+            const ports = createKeylessPorts({
+                fetchImpl: map.fetchImpl,
+                placePools,
+                throttle: noWait,
+                sweepRequestsPerRun: 40,
+            });
+            return quiet(() =>
+                gather(
+                    [
+                        {
+                            kind: "place",
+                            territory: { country: "NL" },
+                            partnerKind: "retailer",
+                            query: bicycles.query,
+                            label: "openstreetmap",
+                            rationale: "r",
+                            categoryIds: bicycles.categoryIds,
+                        },
+                    ],
+                    {
+                        searchWeb: null,
+                        searchPlaces: query =>
+                            ports.searchPlaces!({
+                                query: query.query,
+                                categoryIds: query.categoryIds,
+                                territory: query.territory,
+                            }),
+                        tradeData: null,
+                        hsCodes: [],
+                    }
+                )
+            );
+        };
+        // Overpass is down and 40 requests are not the whole sweep.
+        const first = await gathered();
+        expect(first.sources.find(s => s.source === "place")).toMatchObject({
+            status: "degraded",
+            detail: "more places on the next run",
+        });
+        expect(first.mentions.length).toBeGreaterThan(40);
+
+        // Overpass answers on a later run: the pool is complete and the source reads ok.
+        map.options.overpass = "answers";
+        const later = await gathered();
+        const source = later.sources.find(s => s.source === "place")!;
+        expect(source.status).toBe("ok");
+        expect(source.detail).toBeUndefined();
+        expect(later.mentions.length).toBeGreaterThan(first.mentions.length);
+    });
+
+    it("says more places are to come even when the run's requests found none yet", async () => {
+        // Four kinds are 104 whole-country boxes; ten requests answer the first ten, all
+        // empty. Overpass, which the name search then tries city by city, is down: that is
+        // not a failed search while the sweep is being answered and has more to ask.
+        const map = createFakeMap(fakePopulation(50, { tag: "shop:outdoor" }), { overpass: 504 });
+        const ports = createKeylessPorts({
+            fetchImpl: map.fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+            sweepRequestsPerRun: 10,
+        });
+        const found = await quiet(() =>
+            gather(
+                [
+                    {
+                        kind: "place",
+                        territory: { country: "DE" },
+                        partnerKind: "retailer",
+                        query: "bicycle shop",
+                        label: "openstreetmap",
+                        rationale: "r",
+                        categoryIds: ["a", "b", "c", "d"].map(v => `["shop"="${v}"]`),
+                    },
+                ],
+                {
+                    searchWeb: null,
+                    searchPlaces: q =>
+                        ports.searchPlaces!({
+                            query: q.query,
+                            categoryIds: q.categoryIds,
+                            territory: q.territory,
+                        }),
+                    tradeData: null,
+                    hsCodes: [],
+                }
+            )
+        );
+        expect(map.sweepUrls()).toHaveLength(10);
+        expect(found.sources.find(s => s.source === "place")).toMatchObject({
+            status: "degraded",
+            results: 0,
+            detail: "more places on the next run",
+        });
+    });
+
+    it("says it could not list every place, not that more will come, when a later run has nothing left to ask", async () => {
+        const named = [
+            {
+                osm_type: "node",
+                osm_id: 7,
+                name: "Koffiebranderij Blanche Dael",
+                lat: "50.85",
+                lon: "5.69",
+                category: "shop",
+                type: "coffee",
+                extratags: { website: "https://blanchedael.example" },
+                address: { city: "Maastricht" },
+            },
+        ];
+        /** No tagged place anywhere; Nominatim knows one by name. */
+        const onlyByName = () => {
+            const map = createFakeMap([], { overpass: "empty" });
+            const fetchImpl: typeof fetch = (input, init) => {
+                const url =
+                    typeof input === "string"
+                        ? input
+                        : input instanceof URL
+                          ? input.href
+                          : input.url;
+                return new URL(url).hostname === "nominatim.openstreetmap.org"
+                    ? Promise.resolve(new Response(JSON.stringify(named)))
+                    : map.fetchImpl(input, init);
+            };
+            return { map, fetchImpl };
+        };
+        const placeSource = async (
+            ports: ReturnType<typeof createKeylessPorts>,
+            query: { query: string; categoryIds: string[]; territory: { country: string } }
+        ) => {
+            const result = await quiet(() =>
+                gather(
+                    [
+                        {
+                            kind: "place",
+                            territory: query.territory,
+                            partnerKind: "retailer",
+                            query: query.query,
+                            label: "openstreetmap",
+                            rationale: "r",
+                            categoryIds: query.categoryIds,
+                        },
+                    ],
+                    {
+                        searchWeb: null,
+                        searchPlaces: q =>
+                            ports.searchPlaces!({
+                                query: q.query,
+                                categoryIds: q.categoryIds,
+                                territory: q.territory,
+                            }),
+                        tradeData: null,
+                        hsCodes: [],
+                    }
+                )
+            );
+            return result.sources.find(s => s.source === "place")!;
+        };
+
+        // No category was chosen: Overpass has answered and there is no tag to sweep by.
+        const noTag = onlyByName();
+        const first = await placeSource(
+            createKeylessPorts({
+                fetchImpl: noTag.fetchImpl,
+                placePools: createMemoryPlacePoolStore(),
+                throttle: noWait,
+            }),
+            { query: "specialty coffee", categoryIds: [], territory: { country: "NL" } }
+        );
+        expect(first).toMatchObject({
+            status: "degraded",
+            results: 1,
+            detail: "not every place could be listed",
+        });
+
+        // A large country is only ever swept, and this deployment asks Photon nothing.
+        const noPhoton = onlyByName();
+        const second = await placeSource(
+            createKeylessPorts({
+                fetchImpl: noPhoton.fetchImpl,
+                placePools: createMemoryPlacePoolStore(),
+                throttle: noWait,
+                sweepRequestsPerRun: 0,
+            }),
+            {
+                query: "specialty coffee",
+                categoryIds: ['["shop"="coffee"]'],
+                territory: { country: "DE" },
+            }
+        );
+        expect(noPhoton.map.count("photon")).toBe(0);
+        expect(second).toMatchObject({
+            status: "degraded",
+            results: 1,
+            detail: "not every place could be listed",
+        });
+    });
+
+    it("shares one run's cap between the territories it planned", async () => {
+        const places = [
+            ...fakePopulation(400),
+            ...fakePopulation(400, {
+                country: "BE",
+                box: [2.5, 49.45, 6.45, 51.55],
+                firstId: 5_000,
+            }),
+        ];
+        const map = createFakeMap(places, { overpass: 504 });
+        const ports = createKeylessPorts({
+            fetchImpl: map.fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+            sweepRequestsPerRun: 60,
+            embed: null,
+        });
+        const { plan } = await createPlanFor(ports, [{ country: "NL" }, { country: "BE" }]);
+        expect(plan.queries.filter(q => q.kind === "place")).toHaveLength(2);
+        await quiet(() => ports.searchPlaces!(bicycles));
+        expect(map.sweepUrls()).toHaveLength(30);
+        await quiet(() => ports.searchPlaces!({ ...bicycles, territory: { country: "BE" } }));
+        // 30 each: the cap is the run's, whatever the number of territories.
+        expect(map.sweepUrls()).toHaveLength(60);
+        // A third query in the same run has nothing left to send: not a sweep
+        // request, and not the name search's Photon requests either.
+        await quiet(() =>
+            ports.searchPlaces!({ ...bicycles, categoryIds: ['["shop"="sports"]'] }).catch(() => [])
+        );
+        expect(map.sweepUrls()).toHaveLength(60);
+        expect(map.count("photon")).toBe(60);
+    });
+
+    it("reads the request cap from the environment", () => {
+        expect(DEFAULT_SWEEP_REQUESTS_PER_RUN).toBe(64);
+        expect(readSweepRequestsPerRun({})).toBe(64);
+        expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: " 120 " })).toBe(120);
+        // Zero: Photon is asked nothing; Overpass only.
+        expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "0" })).toBe(0);
+        expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "100000" })).toBe(500);
+        expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "many" })).toBe(64);
+        expect(readSweepRequestsPerRun({ PROSPECTS_PLACE_SWEEP_REQUESTS: "-5" })).toBe(64);
+    });
+
+    it("looks for the segment's words in place names when nothing carries its tags", async () => {
+        const nameSearch = (sweepRequestsPerRun?: number) => {
+            const calls: string[] = [];
+            const fetchImpl: typeof fetch = async url => {
+                const u = urlOf(url);
+                calls.push(new URL(u).hostname);
+                if (u.includes("overpass")) return new Response(JSON.stringify({ elements: [] }));
+                if (u.includes("photon")) return new Response(JSON.stringify({ features: [] }));
+                if (u.includes("nominatim"))
+                    return new Response(
+                        JSON.stringify([
+                            {
+                                osm_type: "node",
+                                osm_id: 7,
+                                name: "Koffiebranderij Blanche Dael",
+                                lat: "50.85",
+                                lon: "5.69",
+                                category: "shop",
+                                type: "coffee",
+                                extratags: { website: "https://blanchedael.example" },
+                                address: { city: "Maastricht" },
+                            },
+                        ])
+                    );
+                return new Response("not found", { status: 404 });
+            };
+            const ports = createKeylessPorts({
+                fetchImpl,
+                placePools: createMemoryPlacePoolStore(),
+                throttle: noWait,
+                sweepRequestsPerRun,
+            });
+            const found = quiet(() =>
+                ports.searchPlaces!({
+                    query: "specialty coffee",
+                    categoryIds: ['["shop"="coffee"]'],
+                    territory: { country: "NL" },
+                })
+            );
+            return { calls, found };
+        };
+
+        const { calls, found } = nameSearch();
+        expect((await found).map(p => p.name)).toEqual(["Koffiebranderij Blanche Dael"]);
+        // Overpass first; then Photon (the sweep finds nothing, then the name
+        // search); Nominatim last.
+        expect(calls[0]).toBe("overpass-api.de");
+        const photon = calls.filter(host => host === "photon.komoot.io").length;
+        // 26 letters, then a city lookup for each of the three largest cities.
+        expect(photon).toBe(26 + 3);
+        expect(calls.lastIndexOf("nominatim.openstreetmap.org")).toBeGreaterThan(
+            calls.lastIndexOf("photon.komoot.io")
+        );
+
+        // The cap holds for the name search too: with a cap of 27, one lookup; with 0, none.
+        const tight = nameSearch(27);
+        await tight.found;
+        expect(tight.calls.filter(host => host === "photon.komoot.io")).toHaveLength(27);
+        const none = nameSearch(0);
+        expect((await none.found).map(p => p.name)).toEqual(["Koffiebranderij Blanche Dael"]);
+        expect(none.calls).not.toContain("photon.komoot.io");
+    });
+
+    it("fails the source, with the reason, when no server answers and nothing is found", async () => {
+        const map = createFakeMap([], { overpass: 504, photonFails: () => true });
+        const ports = createKeylessPorts({
+            fetchImpl: map.fetchImpl,
+            placePools: createMemoryPlacePoolStore(),
+            throttle: noWait,
+        });
+        await expect(quiet(() => ports.searchPlaces!(bicycles))).rejects.toThrow(
+            /Overpass did not answer \(overpass-api\.de: Overpass 504/
+        );
+    });
+});
+
+/** The keyless plan for a segment with these territories, through the ports. */
+async function createPlanFor(
+    ports: ReturnType<typeof createKeylessPorts>,
+    territories: Array<{ country: string }>
+) {
+    return ports.plan!({
+        ...planInput,
+        program: { ...program, targetTerritories: territories },
+        territories,
+    });
+}

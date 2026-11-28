@@ -73,6 +73,7 @@ it("offers an old explicit watch before the denied recent pool and pins its vers
 async function lexicalFixture(
     options: {
         question?: string;
+        goals?: string[];
         watched?: string[];
         carryover?: string[];
         changed?: string[];
@@ -180,6 +181,7 @@ async function lexicalFixture(
         roleRevision: null,
         expectedActiveId: null,
         configuration: { provider: "seeds", scoped: false },
+        goals: options.goals,
         carryover: options.carryover
             ? { priorRunId: "prior", reviewVersion: 1, seedIds: options.carryover }
             : "unavailable",
@@ -203,6 +205,17 @@ it("offers the question match at recency rank 61 while retaining watches, carryo
     expect(seed.documents.slice(-3).map(document => document.id)).toEqual(["71", "70", "69"]);
     expect(seed.manifest.lane).toHaveLength(3);
     expect(requested).toHaveLength(71);
+});
+
+it("uses owner goals to rank an otherwise excluded seed without changing the independent lane", async () => {
+    const changed = ["71", "70", "69"];
+    const baseline = await lexicalFixture({ changed });
+    const guided = await lexicalFixture({ changed, goals: ["Decide the gearbox spindle release"] });
+    expect(baseline.seed.documents.some(document => document.id === "11")).toBe(false);
+    expect(guided.seed.documents[0]).toMatchObject({ id: "11", reason: "question" });
+    expect(guided.seed.manifest.lane).toEqual(baseline.seed.manifest.lane);
+    expect(guided.seed.documents).toHaveLength(baseline.seed.documents.length);
+    expect(JSON.stringify(guided.seed.manifest)).not.toContain("Decide the gearbox spindle");
 });
 
 it("filters denied metadata before lexical body reads and keeps no-match recency", async () => {

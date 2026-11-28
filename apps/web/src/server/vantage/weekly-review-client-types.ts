@@ -42,6 +42,7 @@ export interface WeeklyReviewListDto {
 export interface WeeklyReviewContextDto {
     enabled: boolean;
     scopedEvidenceEnabled: boolean;
+    v2Enabled?: boolean;
     canConfigure: boolean;
     documents: { id: string; title: string; category: string }[];
     policy: {

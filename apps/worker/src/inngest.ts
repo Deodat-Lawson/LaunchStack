@@ -49,11 +49,13 @@ import {
 } from "~/server/inngest/functions/microsoft365Sync";
 import { outlookSyncCron, outlookSyncJob } from "~/server/inngest/functions/outlookSync";
 import { assistantConversationFollowUpJob } from "~/server/inngest/functions/assistantConversationFollowUp";
+import { vantageTaskJob } from "~/server/vantage/v2/worker";
 
 export function createInngestHandler() {
     return serve({
         client: inngest,
         functions: [
+            vantageTaskJob,
             trendSearchJob,
             clientProspectorJob,
             predictiveAnalysisJob,

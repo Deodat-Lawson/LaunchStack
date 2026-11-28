@@ -414,6 +414,13 @@
       "when": 1795471200000,
       "tag": "20261123220000_vantage_failure_attempt_accounting",
       "breakpoints": true
+    },
+    {
+      "idx": 59,
+      "version": "7",
+      "when": 1795842878577,
+      "tag": "20261128051438_vantage_v2",
+      "breakpoints": true
     }
   ]
 }

@@ -1,5 +1,21 @@
 import { z } from "zod";
 export const TOPIC_RETRIEVAL_VERSION = "vantage-topic-retrieval/v1" as const;
+export const TopicExplorationDegradationSchema = z.discriminatedUnion("provenance", [
+    z
+        .object({
+            code: z.literal("topic_exploration_degraded:non_submission"),
+            reason: z.enum(["submission_missing", "submission_invalid"]),
+            provenance: z.literal("successful_canonical_excerpt_reads"),
+        })
+        .strict(),
+    z
+        .object({
+            code: z.literal("topic_exploration_degraded:lexical_backfill"),
+            reason: z.enum(["provider", "timeout", "nothing_read"]),
+            provenance: z.literal("lexical_seed_backfill"),
+        })
+        .strict(),
+]);
 export const TopicRetrievalContextSchema = z
     .object({
         schemaVersion: z.literal(TOPIC_RETRIEVAL_VERSION),
@@ -41,14 +57,7 @@ export const TopicRetrievalContextSchema = z
             })
             .strict(),
         traceHash: z.string().regex(/^[a-f0-9]{64}$/),
-        degradation: z
-            .object({
-                code: z.literal("topic_exploration_degraded:non_submission"),
-                reason: z.enum(["submission_missing", "submission_invalid"]),
-                provenance: z.literal("successful_canonical_excerpt_reads"),
-            })
-            .strict()
-            .optional(),
+        degradation: TopicExplorationDegradationSchema.optional(),
     })
     .strict();
 export type TopicRetrievalContext = z.infer<typeof TopicRetrievalContextSchema>;

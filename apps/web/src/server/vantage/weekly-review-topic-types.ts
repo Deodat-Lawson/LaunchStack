@@ -58,6 +58,7 @@ export type TopicSeed = {
     manifest: TopicManifest;
     context: WeeklyReviewContext;
     documents: (TopicOffer & { text: string; title: string; category: string })[];
+    goals?: readonly string[];
 };
 export const topicManifestHash = (manifest: TopicManifest) => fingerprint(manifest);
 export function topicInputHash(manifest: TopicManifest) {

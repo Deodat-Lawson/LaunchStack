@@ -62,7 +62,7 @@ export async function fitTopicEvidence(
         acquiredParentBytes = 0;
     const authorizedScopes = new Map<string, Awaited<ReturnType<typeof read>>>();
     const degradation = result?.degradation;
-    const seedWindows = false;
+    const seedWindows = degradation?.provenance === "lexical_seed_backfill";
     const offered = new Map(seed.documents.map(document => [document.ref, document]));
     const selections = new Map<string, Span[]>();
     for (const item of result?.selected ??
@@ -117,6 +117,7 @@ export async function fitTopicEvidence(
             role: context.role,
             mandatoryCoverage: context.mandatoryCoverage,
             sources: nextSources,
+            ...(context.companyBackground ? { companyBackground: context.companyBackground } : {}),
             ...(nextProofs.length ? { scopedEvidence: nextProofs } : {}),
         };
         const contextFields = {
@@ -230,7 +231,9 @@ export async function fitTopicEvidence(
         if (!document || sources.length >= 16) return false;
         const span = lexicalBackfillSpan(
             document.text,
-            manifest.topics,
+            seed.goals?.length
+                ? [...manifest.topics, { openQuestions: [...seed.goals], keywords: [] }]
+                : manifest.topics,
             evidenceCapBytes - evidenceBytes()
         );
         return span !== null && addDocument(ref, mergeTopicSpans([span], document.text), asLane);

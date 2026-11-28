@@ -34,3 +34,5 @@ export * from "@launchstack/pipelines/schema";
 
 export * from "./vantage-weekly-review";
 export * from "./vantage-personal-topics";
+
+export * from "./vantage-v2";

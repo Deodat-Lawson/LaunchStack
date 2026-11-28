@@ -134,6 +134,7 @@ export interface WeeklyReviewInput {
     mandatoryCoverage: { required: number; included: number };
     scopedEvidence?: PreparedScopedEvidence["dependency"][];
     retrievalContext?: WeeklyReviewRetrievalContext | TopicRetrievalContext;
+    companyBackground?: { description?: string; industry?: string };
     sources: {
         ref: string;
         version: string;
@@ -198,6 +199,13 @@ export function validateWeeklyReviewV21(raw: unknown, input: WeeklyReviewInput):
 }
 /** Structural binding only. The host must revalidate current authority and full parent hashes. */
 export function validateScopedWeeklyReviewInput(input: WeeklyReviewInput): void {
+    if (input.companyBackground !== undefined) {
+        z.object({ description: z.string().optional(), industry: z.string().optional() })
+            .strict()
+            .parse(input.companyBackground);
+        if (Buffer.byteLength(JSON.stringify(input.companyBackground)) > 2000)
+            throw new Error("company_background_too_large");
+    }
     if (input.retrievalContext !== undefined) validateRetrieval(input.retrievalContext);
     if (input.scopedEvidence === undefined) {
         if (input.sources.some(source => source.ref.startsWith("unit:")))
@@ -266,6 +274,9 @@ function projectWeeklyReviewEvaluation(
                 ...(input.retrievalContext === undefined
                     ? {}
                     : { retrievalContext: input.retrievalContext }),
+                ...(input.companyBackground === undefined
+                    ? {}
+                    : { uncitableCompanyBackground: input.companyBackground }),
             }),
             asOf: input.asOf,
             contextCompleteness: "complete",
@@ -559,6 +570,9 @@ export async function runWeeklyReviewV21(
                         (input.retrievalContext === undefined
                             ? ""
                             : WEEKLY_REVIEW_RETRIEVAL_PROMPT) +
+                        (input.companyBackground
+                            ? " Company background is contextual only. Never cite it or use it as evidence for a factual claim. Use the frozen sources for evidence."
+                            : "") +
                         " Maximum serialized UTF-8 report bytes: " +
                         maxReportBytes +
                         ". Prefer fewer topics to fit this bound."

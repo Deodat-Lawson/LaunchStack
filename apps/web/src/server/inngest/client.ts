@@ -233,6 +233,7 @@ export type AssistantConversationFollowUpEvent = {
 };
 
 export type Events =
+    | { name: "vantage/task.requested"; data: { taskId: string } }
     | TrendSearchEvent
     | ClientProspectorEvent
     | PredictiveAnalysisEvent

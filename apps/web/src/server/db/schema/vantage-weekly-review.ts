@@ -98,7 +98,7 @@ export const vantageWeeklyReviewProviderAttempts = pgTable(
         ),
         stageValid: check(
             "vantage_review_provider_attempt_stage",
-            sql`${t.stage} IN ('digest','exploration','generation','judge')`
+            sql`${t.stage} IN ('digest','exploration','generation','judge','decomposition','task_execution')`
         ),
         ordinalValid: check("vantage_review_provider_attempt_ordinal", sql`${t.attemptOrdinal}>0`),
         bytesValid: check(

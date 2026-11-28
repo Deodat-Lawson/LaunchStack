@@ -5,6 +5,7 @@ import type {
 import type { TopicSeed } from "./weekly-review-topic-types";
 import type { SelectionDiagnostics } from "./weekly-review-internal-selection";
 import type { WeeklyReviewRetrievalContext } from "@launchstack/pipelines/vantage/dynamic-retrieval-v3";
+import type { WeeklyReviewInput } from "@launchstack/pipelines/vantage/weekly-review-v21";
 import type { ChatUsageEvent } from "@launchstack/llm";
 import type { Tx } from "~/server/workspace/db-types";
 export type {
@@ -81,4 +82,5 @@ export interface WeeklyReviewContext {
     selectionDiagnostics?: SelectionDiagnostics;
     retrievalContext?: WeeklyReviewRetrievalContext;
     topicSeed?: TopicSeed;
+    companyBackground?: WeeklyReviewInput["companyBackground"];
 }

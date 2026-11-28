@@ -18,6 +18,7 @@ import {
 import { getEngine } from "~/server/engine";
 import { requireBetaAppContext } from "~/server/beta-apps";
 import { recordAiUsage } from "~/server/ai-usage/record";
+import { vantageV2Enabled } from "./v2/enabled";
 import { resolveConfiguredChatModel } from "~/lib/models";
 import { withWorkspaceChatModels } from "~/server/workspace-models/scope";
 import {
@@ -178,10 +179,12 @@ export async function generateWeeklyReview(
     const prior = await repository.findByKey(actor, args.weekStart, args.key);
     if (prior) return replay(prior);
     const topicProvider = topicFirstProvider();
+    const v2 = vantageV2Enabled();
     const identity = { candidateId: randomUUID(), asOf: new Date().toISOString() };
     stage("gathering");
     const context = await authority.collectWeeklyReviewContext(actor, args.weekStart, identity, {
         provider: topicProvider,
+        ...(v2 ? { v2 } : {}),
         expectedActiveId: args.expectedActiveId,
         carryover: query => repository.topicCarryover(query, actor, args.weekStart),
     });
@@ -433,6 +436,7 @@ export async function generateWeeklyReview(
                                 providers,
                                 query,
                                 authorizeStep,
+                                ...(v2 ? { lexicalFallback: true } : {}),
                                 record: values =>
                                     repository.recordExploration(current, reserved.id, values),
                             });

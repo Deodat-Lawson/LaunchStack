@@ -12,6 +12,8 @@ import {
 import type { WeeklyReviewAuthorityActor } from "./weekly-review-authority";
 import { parseConfirmedBusinessRole } from "./weekly-review-business-role";
 import { collectTopicSeed } from "./weekly-review-topic-seed";
+import { readCompanyBackground } from "./v2/company-background";
+import { loadSettings } from "./v2/settings";
 import {
     TOPIC_FIRST_LIMITS,
     type TopicManifest,
@@ -249,6 +251,7 @@ export async function collectInternalWeeklyReviewContext(
     topic?: {
         provider: TopicProvider;
         expectedActiveId: string | null;
+        v2?: boolean;
         carryover(query: WeeklyReviewQuery): Promise<TopicManifest["carryover"]>;
     }
 ): Promise<WeeklyReviewContext> {
@@ -319,6 +322,10 @@ export async function collectInternalWeeklyReviewContext(
             }
         }
         if (topic) {
+            const settings = topic.v2 ? await loadSettings(query, actor) : undefined;
+            const companyBackground = topic.v2
+                ? await readCompanyBackground(query, actor.companyId)
+                : undefined;
             const context: WeeklyReviewContext = {
                 actor: expected,
                 week,
@@ -336,6 +343,7 @@ export async function collectInternalWeeklyReviewContext(
                     ...(scope ? { scope } : {}),
                 })),
                 inputIdentity: identity,
+                ...(companyBackground ? { companyBackground } : {}),
                 ...(scopedEvidence.length ? { scopedEvidence } : {}),
             };
             const seed = await collectTopicSeed(query, actor, context, {
@@ -348,6 +356,7 @@ export async function collectInternalWeeklyReviewContext(
                 expectedActiveId: topic.expectedActiveId,
                 configuration: { provider: topic.provider, scoped: scopedEnabled },
                 carryover: await topic.carryover(query),
+                ...(settings?.goals.length ? { goals: settings.goals } : {}),
             });
             return { ...context, topicSeed: seed };
         }

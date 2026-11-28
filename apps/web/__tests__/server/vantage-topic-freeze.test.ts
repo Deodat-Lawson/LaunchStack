@@ -1,10 +1,13 @@
 import { fitTopicEvidence, mergeTopicSpans } from "~/server/vantage/weekly-review-topic-freeze";
-import {
-    type TopicSeed,
-} from "~/server/vantage/weekly-review-topic-types";
+import { type TopicSeed } from "~/server/vantage/weekly-review-topic-types";
 import type { createScopedSourceReader } from "~/server/vantage/weekly-review-scoped-selection";
-import type { PreparedTopicSelection } from "~/server/vantage/weekly-review-topic-run";
+import {
+    prepareTopicSelection,
+    type PreparedTopicSelection,
+} from "~/server/vantage/weekly-review-topic-run";
 import { TopicRetrievalContextSchema } from "@launchstack/pipelines/vantage/topic-retrieval-v1";
+import { deterministicDigestProvider } from "@launchstack/store/document-digests";
+import { boundCompanyBackground } from "~/server/vantage/v2/company-background";
 import { WeeklyReviewConflict } from "~/server/vantage/weekly-review-types";
 const date = "2026-11-15T00:00:00.000Z";
 function fixture(): TopicSeed {
@@ -350,6 +353,107 @@ async function backfillFixture() {
     };
     return { seed, chosen, extra, read, result };
 }
+
+it.each(["provider", "timeout", "nothing_read"] as const)(
+    "falls back to authorized lexical seed windows on %s",
+    async reason => {
+        const { seed, read } = await backfillFixture();
+        seed.manifest.configuration.provider = "scripted";
+        seed.manifest.lane = [seed.documents[0]!.ref];
+        seed.context.companyBackground = boundCompanyBackground({
+            description: "🧭".repeat(1400),
+            industry: "Research tools",
+            internalNotes: "Not projected",
+        });
+        const authorizeStep = jest.fn<Promise<void>, [string]>().mockResolvedValue(undefined);
+        const selection = await prepareTopicSelection({
+            seed,
+            actor: {
+                ...seed.context.actor,
+                role: "owner",
+                canRead: true,
+                canMutate: true,
+                documentScope: { kind: "everything" },
+            },
+            query: async () => [],
+            deadlineAt: Date.now() + 5000,
+            digests: new Map(),
+            providers: {
+                digest: deterministicDigestProvider,
+                exploration: () => ({
+                    async respond() {
+                        if (reason === "provider") throw new Error("provider offline");
+                        if (reason === "timeout")
+                            throw new Error("topic_exploration_failed:timeout");
+                        return {
+                            text: "",
+                            toolCalls: [
+                                { id: "1", name: "submit_result", arguments: { selected: [] } },
+                            ],
+                        };
+                    },
+                }),
+            },
+            lexicalFallback: true,
+            authorizeStep,
+            record: async () => {},
+        });
+        expect(selection).toMatchObject({
+            selected: [],
+            degradation: { reason, provenance: "lexical_seed_backfill" },
+        });
+        expect(authorizeStep).toHaveBeenLastCalledWith("retained-tool");
+        const frozen = await fitTopicEvidence("run", seed, selection, read);
+        expect(frozen.summary.lane.outcome).toBe("admitted");
+        expect(frozen.summary.outcome).toBe("degraded");
+        expect(frozen.input.sources.slice(1).every(source => source.text.includes("launch"))).toBe(
+            true
+        );
+        expect(frozen.input.sources).toHaveLength(3);
+        expect(frozen.input.companyBackground).toEqual(seed.context.companyBackground);
+        expect(
+            Buffer.byteLength(JSON.stringify(frozen.input.companyBackground))
+        ).toBeLessThanOrEqual(2000);
+        expect(frozen.input.sources.some(source => source.ref.includes("companyBackground"))).toBe(
+            false
+        );
+    }
+);
+
+it("fails closed when fallback authorization is revoked", async () => {
+    const { seed } = await backfillFixture();
+    seed.manifest.configuration.provider = "scripted";
+    await expect(
+        prepareTopicSelection({
+            seed,
+            actor: {
+                ...seed.context.actor,
+                role: "owner",
+                canRead: true,
+                canMutate: true,
+                documentScope: { kind: "everything" },
+            },
+            query: async () => [],
+            deadlineAt: Date.now() + 5000,
+            digests: new Map(),
+            providers: {
+                digest: deterministicDigestProvider,
+                exploration: () => ({
+                    respond: async () => {
+                        throw new Error("provider offline");
+                    },
+                }),
+            },
+            lexicalFallback: true,
+            authorizeStep: async checkpoint => {
+                if (checkpoint === "retained-tool")
+                    throw new WeeklyReviewConflict("topic_authority_revoked", 403);
+            },
+            record: async () => {},
+        })
+    ).rejects.toMatchObject({ code: "topic_authority_revoked", status: 403 });
+});
+
 it.each(["source_access_denied", "source_authority_changed", "retrieval_acquisition_timeout"])(
     "fails closed on %s during question-ranked backfill",
     async code => {

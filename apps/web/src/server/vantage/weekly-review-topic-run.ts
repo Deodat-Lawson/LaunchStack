@@ -17,6 +17,7 @@ import type {
 } from "./weekly-review-authority";
 import {
     createScriptedExplorationPort,
+    TopicExplorationProviderFailure,
     explorationDocumentHandle,
     runTopicExploration,
     topicExplorationFailureCode,
@@ -181,6 +182,7 @@ export async function prepareTopicSelection(options: {
     deadlineAt: number;
     digests: ReadonlyMap<string, DocumentDigest>;
     evidenceCapBytes?: number;
+    lexicalFallback?: boolean;
     providers?: TopicSelectionProviders;
     /** Renew Beta, actor, capabilities and exact pinned source authority at each use. */
     authorizeStep?: (checkpoint: TopicAuthorityCheckpoint) => Promise<void>;
@@ -208,7 +210,7 @@ export async function prepareTopicSelection(options: {
                 controller.abort();
                 reject(expired());
             },
-            Math.max(0, deadlineAt - Date.now())
+            Math.max(0, (options.lexicalFallback ? explorationDeadline : deadlineAt) - Date.now())
         );
     });
     try {
@@ -296,6 +298,7 @@ export async function prepareTopicSelection(options: {
                     deadlineAt: explorationDeadline,
                     hardDeadlineAt: deadlineAt,
                     signal: controller.signal,
+                    lexicalFallback: options.lexicalFallback,
                 });
                 return {
                     selected: result.selected,
@@ -304,6 +307,29 @@ export async function prepareTopicSelection(options: {
             })(),
         ]);
     } catch (error) {
+        if (options.lexicalFallback && error instanceof Error && Date.now() < deadlineAt) {
+            const reason =
+                error.message === "topic_exploration_failed:timeout"
+                    ? "timeout"
+                    : error.message === "topic_exploration_failed:nothing_read"
+                      ? "nothing_read"
+                      : error instanceof TopicExplorationProviderFailure
+                        ? "provider"
+                        : undefined;
+            if (reason) {
+                if (!options.authorizeStep)
+                    throw new WeeklyReviewConflict("topic_authority_revoked", 403);
+                await options.authorizeStep("retained-tool");
+                return {
+                    selected: [],
+                    degradation: {
+                        code: "topic_exploration_degraded:lexical_backfill",
+                        reason,
+                        provenance: "lexical_seed_backfill",
+                    },
+                };
+            }
+        }
         if (error instanceof WeeklyReviewConflict) throw error;
         if (controller.signal.aborted || Date.now() >= deadlineAt) throw expired();
         const code = topicExplorationFailureCode(error);

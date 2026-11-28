@@ -201,6 +201,8 @@ export function weeklyReviewFailureRecord(
 
 export const PROVIDER_ATTEMPT_STAGES = ["digest", "exploration", "generation", "judge"] as const;
 export type WeeklyReviewProviderStage = (typeof PROVIDER_ATTEMPT_STAGES)[number];
+export const VANTAGE_V2_MODEL_STAGES = ["decomposition", "task_execution"] as const;
+export type VantageV2ModelStage = (typeof VANTAGE_V2_MODEL_STAGES)[number];
 export interface WeeklyReviewProviderAttemptInput {
     stage: WeeklyReviewProviderStage;
     /** One based within a logical provider operation; concurrent digests may share it. */
@@ -262,7 +264,7 @@ const date = (value: unknown): string | null => {
 };
 export interface WeeklyReviewProviderAttempt {
     id: string;
-    stage: WeeklyReviewProviderStage | "unknown";
+    stage: WeeklyReviewProviderStage | VantageV2ModelStage | "unknown";
     attempt: number | null;
     messageBytes: number | null;
     startedAt: string | null;
@@ -278,7 +280,11 @@ export function weeklyReviewProviderAttempt(input: unknown): WeeklyReviewProvide
             typeof value.id === "string" && /^[a-f0-9-]{36}$/i.test(value.id)
                 ? value.id
                 : "unavailable",
-        stage: member(value.stage, [...PROVIDER_ATTEMPT_STAGES, "unknown"], "unknown"),
+        stage: member(
+            value.stage,
+            [...PROVIDER_ATTEMPT_STAGES, ...VANTAGE_V2_MODEL_STAGES, "unknown"],
+            "unknown"
+        ),
         attempt: safeReviewCount(value.attempt_ordinal),
         messageBytes: safeReviewCount(value.message_bytes),
         startedAt: date(value.started_at),

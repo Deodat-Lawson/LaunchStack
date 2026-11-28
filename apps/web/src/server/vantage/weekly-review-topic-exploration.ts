@@ -1,6 +1,8 @@
 import { createHash } from "node:crypto";
 import { z } from "zod";
 import type { TopicAuthorityCheckpoint } from "./weekly-review-authority";
+import { WeeklyReviewConflict } from "./weekly-review-types";
+import type { TopicRetrievalContext } from "@launchstack/pipelines/vantage/topic-retrieval-v1";
 import {
     AgentStepLimitError,
     runAgent,
@@ -21,7 +23,7 @@ export function topicExplorationFailureCode(error: unknown): string {
     const message = error instanceof Error ? error.message : "";
     if (message === "topic_authority_revoked") return message;
     if (
-        /^topic_exploration_failed:(timeout|call_limit|trace_limit|not_offered|range_invalid|transport_no_http|http_[45][0-9]{2}|provider_response_invalid|submission_invalid|submission_missing|provider)$/.test(
+        /^topic_exploration_failed:(timeout|call_limit|trace_limit|not_offered|range_invalid|transport_no_http|http_[45][0-9]{2}|provider_response_invalid|submission_invalid|submission_missing|nothing_read|provider)$/.test(
             message
         )
     )
@@ -145,11 +147,8 @@ export const TopicExplorationResultSchema = z
     })
     .strict();
 export type TopicExplorationResult = z.infer<typeof TopicExplorationResultSchema>;
-export type TopicExplorationDegradation = {
-    code: "topic_exploration_degraded:non_submission";
-    reason: "submission_missing" | "submission_invalid";
-    provenance: "successful_canonical_excerpt_reads";
-};
+export type TopicExplorationDegradation = NonNullable<TopicRetrievalContext["degradation"]>;
+export class TopicExplorationProviderFailure extends Error {}
 export type TopicEvidenceBudget = {
     maxEvidenceBytes: number;
     maxSourceUnits: number;
@@ -308,6 +307,7 @@ export async function runTopicExploration(input: {
     /** Authoritative expiry; required to recover an earlier soft final-response deadline. */
     hardDeadlineAt?: number;
     signal?: AbortSignal;
+    lexicalFallback?: boolean;
 }): Promise<
     TopicExplorationResult & { trace: ExplorationTrace; degradation?: TopicExplorationDegradation }
 > {
@@ -670,6 +670,11 @@ export async function runTopicExploration(input: {
             awaitingFinalResponse = submissionOnly;
             try {
                 response = await input.port.respond(prepared);
+            } catch (error) {
+                if (!input.lexicalFallback || error instanceof WeeklyReviewConflict) throw error;
+                const code = topicExplorationFailureCode(error);
+                if (code === "topic_authority_revoked") throw error;
+                throw new TopicExplorationProviderFailure(code, { cause: error });
             } finally {
                 // Trace persistence and validation are never treated as an awaiting model response.
                 awaitingFinalResponse = false;
@@ -878,12 +883,16 @@ export async function runTopicExploration(input: {
             timeout,
         ]);
         check();
+        if (input.lexicalFallback && documents.size && !candidateReads.selected.length)
+            throw new Error("topic_exploration_failed:nothing_read");
         return { ...TopicExplorationResultSchema.parse(result.output), trace };
     } catch (error) {
         // A completed non-submission, or our own earlier soft deadline while awaiting
         // a final response, may recover. Late model responses remain fenced by abort.
         const softRecovery =
             softFinalResponseExpired && error instanceof TopicSoftFinalNonSubmission;
+        if (input.lexicalFallback && softRecovery && !fatal)
+            throw new Error("topic_exploration_failed:timeout");
         const checkRecovery = () => {
             if (!softRecovery) {
                 check();
@@ -938,7 +947,7 @@ export async function runTopicExploration(input: {
                 if (previous.spans.length) byRef.set(candidate.ref, previous);
             }
             const recovered = finalSchema.safeParse({ selected: [...byRef.values()] });
-            if (recovered.success) {
+            if (recovered.success && (!input.lexicalFallback || recovered.data.selected.length)) {
                 const degradation: TopicExplorationDegradation = {
                     code: "topic_exploration_degraded:non_submission",
                     reason:
@@ -961,9 +970,11 @@ export async function runTopicExploration(input: {
             fatal ??
             (error instanceof AgentStepLimitError || error instanceof TopicFinalNonSubmission
                 ? new Error(
-                      invalidSubmission
-                          ? "topic_exploration_failed:submission_invalid"
-                          : "topic_exploration_failed:submission_missing"
+                      input.lexicalFallback && !candidateReads.selected.length
+                          ? "topic_exploration_failed:nothing_read"
+                          : invalidSubmission
+                            ? "topic_exploration_failed:submission_invalid"
+                            : "topic_exploration_failed:submission_missing"
                   )
                 : error instanceof Error && error.message === "agent_tool_call_limit"
                   ? new Error("topic_exploration_failed:call_limit")

@@ -30,6 +30,15 @@ jest.mock("~/components/ui/select", () => ({
     SelectItem: ({ children, value }: any) => <option value={value}>{children}</option>,
 }));
 const proposal = "Propose five customer calls before increasing paid spend";
+
+test("V2 settings, approval and degradation controls stay hidden when the server flag is off", () => {
+    data.context.v2Enabled = false;
+    data.review.evidence = { topicRetrieval: { degradation: { reason: "provider" } } };
+    renderWithLocale(<ThisWeekScreen />, "en");
+    expect(screen.queryByRole("heading", { name: "Plan and progress" })).not.toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: "Approve whole plan" })).not.toBeInTheDocument();
+    expect(screen.queryByText(/Some topic research was unavailable/)).not.toBeInTheDocument();
+});
 function report(id = "run-a") {
     return {
         id,

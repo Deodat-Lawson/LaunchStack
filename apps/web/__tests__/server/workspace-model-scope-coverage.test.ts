@@ -155,6 +155,17 @@ const COVERAGE: Record<string, Coverage> = Object.fromEntries<Coverage>([
         "apps/web/src/server/vantage/weekly-review-service.ts",
         "all generation and Judge stages enter workspace scope"
     ),
+    self(
+        "apps/web/src/server/vantage/v2/model-journal.ts",
+        "decomposition resolves and invokes the model inside the accepted brief owner's workspace"
+    ),
+    [
+        "apps/web/src/server/vantage/v2/task-model.ts",
+        {
+            scopedBy: ["apps/web/src/server/vantage/v2/worker.ts"],
+            note: "the queued task enters the owner's workspace scope inside the Inngest step",
+        },
+    ],
     [
         "apps/web/src/server/vantage/weekly-review-topic-run.ts",
         {

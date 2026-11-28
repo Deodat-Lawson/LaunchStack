@@ -245,9 +245,10 @@ export async function requireWorkspaceContext(
  */
 export async function resolveMemberContext(
     authUserId: string,
-    companyId: bigint
+    companyId: bigint,
+    executor?: Executor
 ): Promise<WorkspaceContext | null> {
-    const [row] = await db
+    const [row] = await (executor ?? db)
         .select({
             userPk: users.id,
             role: userCompanyMemberships.role,
@@ -263,7 +264,7 @@ export async function resolveMemberContext(
         )
         .where(eq(users.userId, authUserId));
     if (!row || row.status !== "active") return null;
-    const permissions = await resolvePermissionsForRole(companyId, row.role);
+    const permissions = await resolvePermissionsForRole(companyId, row.role, executor);
     return buildWorkspaceContext({
         authUserId,
         userPk: BigInt(row.userPk),
@@ -271,6 +272,7 @@ export async function resolveMemberContext(
         role: row.role,
         status: "active",
         permissions,
+        ...(executor ? { resolveScope: subject => resolveDocumentScope(subject, executor) } : {}),
     });
 }
 

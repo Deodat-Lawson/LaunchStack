@@ -35,12 +35,14 @@ import {
 } from "./weekly-review-topic-types";
 import {
     PROVIDER_ATTEMPT_STAGES,
+    VANTAGE_V2_MODEL_STAGES,
     safeReviewCount,
     safeWeeklyReviewProviderOutcome,
     weeklyReviewFailureRecord,
     weeklyReviewProviderAttempt,
     type WeeklyReviewFailureInput,
     type WeeklyReviewProviderAttemptInput,
+    type VantageV2ModelStage,
 } from "./weekly-review-failure-record";
 import { recordWeeklyReviewAttemptUsage } from "./weekly-review-attempt-usage";
 
@@ -380,6 +382,41 @@ export function createWeeklyReviewRepository(
                 [id, actor.companyId, actor.userId]
             )
         );
+    async function readAccepted(
+        query: WeeklyReviewQuery,
+        actor: WeeklyReviewActor,
+        id: string,
+        phase: "read" | "decision" = "read"
+    ): Promise<ReadWeeklyReview> {
+        const row = await rowFor(query, actor, id);
+        if (row.status !== "accepted") throw new WeeklyReviewConflict("review_not_accepted", 404);
+        await authority(query, actor, dependenciesOf(row), phase);
+        const payload = parseStoredReport(
+            decryptSecret(
+                String(row.ciphertext),
+                "vantage-report:" + actor.companyId + ":" + actor.userId + ":" + id
+            )
+        );
+        if (
+            payload.id !== id ||
+            payload.companyId !== actor.companyId ||
+            payload.ownerId !== actor.userId ||
+            payload.schema !== row.schema_version
+        )
+            throw new WeeklyReviewConflict("review_identity_invalid", 403);
+        const decisions = await query(
+            "SELECT ciphertext FROM pdr_ai_v2_vantage_weekly_review_decisions WHERE company_id=$1::bigint AND run_id=$2::uuid ORDER BY version",
+            [actor.companyId, id]
+        );
+        return {
+            ...payload,
+            evidence: reportReadEvidence(payload.evidence, row.retrieval_mode === "topic_first"),
+            version: Number(row.review_version),
+            decisions: decisions.map(item =>
+                parseStoredDecision(decryptSecret(String(item.ciphertext)))
+            ),
+        };
+    }
     const topicAuthority = (
         query: WeeklyReviewQuery,
         actor: WeeklyReviewActor,
@@ -1044,6 +1081,30 @@ export function createWeeklyReviewRepository(
                 return attemptId;
             });
         },
+        /** Append an attempt after the V2 caller checks its accepted brief and task fence. */
+        async journalAcceptedAttempt(
+            query: WeeklyReviewQuery,
+            actor: WeeklyReviewActor,
+            id: string,
+            input: { stage: VantageV2ModelStage; attempt: number; messageBytes: number | null }
+        ): Promise<string> {
+            if (!VANTAGE_V2_MODEL_STAGES.includes(input.stage))
+                throw new WeeklyReviewConflict("invalid_provider_attempt", 400);
+            const attemptId = randomUUID();
+            await query(
+                "INSERT INTO pdr_ai_v2_vantage_weekly_review_provider_attempts(id,run_id,company_id,owner_id,stage,attempt_ordinal,message_bytes) VALUES($1::uuid,$2::uuid,$3::bigint,$4,$5,$6,$7)",
+                [
+                    attemptId,
+                    id,
+                    actor.companyId,
+                    actor.userId,
+                    input.stage,
+                    input.attempt,
+                    input.messageBytes,
+                ]
+            );
+            return attemptId;
+        },
         /** Settlement cannot send content or resurrect a run. A revoked actor may
          * settle an already-journaled attempt using only owner scope and safe metering. */
         completeProviderAttempt(
@@ -1474,41 +1535,9 @@ export function createWeeklyReviewRepository(
                 return id;
             });
         },
+        readAccepted,
         get(actor: WeeklyReviewActor, id: string): Promise<ReadWeeklyReview> {
-            return transact(async query => {
-                const row = await rowFor(query, actor, id);
-                if (row.status !== "accepted")
-                    throw new WeeklyReviewConflict("review_not_accepted", 404);
-                await authority(query, actor, dependenciesOf(row), "read");
-                const payload = parseStoredReport(
-                    decryptSecret(
-                        String(row.ciphertext),
-                        "vantage-report:" + actor.companyId + ":" + actor.userId + ":" + id
-                    )
-                );
-                if (
-                    payload.id !== id ||
-                    payload.companyId !== actor.companyId ||
-                    payload.ownerId !== actor.userId ||
-                    payload.schema !== row.schema_version
-                )
-                    throw new WeeklyReviewConflict("review_identity_invalid", 403);
-                const decisions = await query(
-                    "SELECT ciphertext FROM pdr_ai_v2_vantage_weekly_review_decisions WHERE company_id=$1::bigint AND run_id=$2::uuid ORDER BY version",
-                    [actor.companyId, id]
-                );
-                return {
-                    ...payload,
-                    evidence: reportReadEvidence(
-                        payload.evidence,
-                        row.retrieval_mode === "topic_first"
-                    ),
-                    version: Number(row.review_version),
-                    decisions: decisions.map(item =>
-                        parseStoredDecision(decryptSecret(String(item.ciphertext)))
-                    ),
-                };
-            });
+            return transact(query => readAccepted(query, actor, id));
         },
         list(actor: WeeklyReviewActor) {
             return transact(async query => {

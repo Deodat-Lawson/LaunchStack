@@ -6,6 +6,7 @@ import {
     weeklyReviewServices,
 } from "~/server/vantage/weekly-review-service";
 import { WeeklyReviewConflict } from "~/server/vantage/weekly-review-types";
+import { vantageV2Enabled } from "~/server/vantage/v2/enabled";
 import {
     WeeklyReviewSourceScopesSchema,
     configuredSourceScopes,
@@ -49,6 +50,7 @@ export async function GET() {
                     return {
                         documents,
                         enabled: weeklyReviewEnabled(),
+                        ...(vantageV2Enabled() ? { v2Enabled: true } : {}),
                         scopedEvidenceEnabled: true,
                         canConfigure,
                         policy: policy

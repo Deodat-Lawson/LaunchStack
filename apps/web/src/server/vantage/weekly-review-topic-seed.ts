@@ -50,6 +50,7 @@ export async function collectTopicSeed(
         expectedActiveId: string | null;
         configuration: { provider: TopicProvider; scoped: boolean };
         carryover: TopicManifest["carryover"];
+        goals?: readonly string[];
     }
 ): Promise<TopicSeed> {
     const access = (row: Record<string, unknown>) =>
@@ -109,15 +110,16 @@ export async function collectTopicSeed(
     for (const row of changed) add(row, "change");
     for (const row of recent) add(row, "recency");
 
-    const guidance = topics
-        .flatMap(topic => [
+    const guidance = [
+        ...topics.flatMap(topic => [
             ...topic.openQuestions,
             ...topic.decisionChangers,
             ...topic.keywords,
             ...topic.people,
             ...topic.metrics,
-        ])
-        .join("\n");
+        ]),
+        ...(input.goals ?? []),
+    ].join("\n");
     const lexicalEnabled = guidance.trim().length > 0;
     const initialEntries = [...ranked.values()];
     const acquisitionOrder = [
@@ -275,5 +277,5 @@ export async function collectTopicSeed(
         carryover: input.carryover,
     };
     if (!actor.canMutate) throw new WeeklyReviewConflict("review_mutation_denied", 403);
-    return { context, manifest, documents };
+    return { context, manifest, documents, ...(input.goals?.length ? { goals: input.goals } : {}) };
 }

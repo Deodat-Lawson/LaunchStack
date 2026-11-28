@@ -29,6 +29,7 @@ import { ReviewCitationDialog } from "../_components/ReviewCitationDialog";
 import { ReviewCitationChips, reviewSources } from "../_components/ReviewCitationChips";
 import { ReviewGenerationProgress } from "../_components/ReviewGenerationProgress";
 import { ReportSources } from "../_components/ReportSources";
+import { V2PlanPanel } from "../_components/V2PlanPanel";
 import s from "../_components/review-layout.module.css";
 
 type Draft = { text: string };
@@ -208,6 +209,18 @@ export function ThisWeekScreen({ week: initialWeek }: { week?: string | null }) 
                             </Button>
                         </div>
                         <ReviewGenerationProgress generation={generation} />
+                        {context?.v2Enabled === true ? (
+                            <V2PlanPanel
+                                key={review?.id ?? "no-brief"}
+                                review={review}
+                                canEdit={
+                                    data.ready &&
+                                    !generation.running &&
+                                    data.roleContext?.canEdit === true
+                                }
+                                onInspect={inspect}
+                            />
+                        ) : null}
                         {data.loadError ? (
                             <InlineError
                                 message={errorText(data.loadError)}

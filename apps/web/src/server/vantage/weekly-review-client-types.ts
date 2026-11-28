@@ -23,6 +23,7 @@ export type WeeklyReviewDto = Omit<ReadWeeklyReview, "report" | "evidence"> & {
     };
     evidence: {
         qualityEvidence?: string;
+        judgeIndependent?: boolean;
         inputSnapshot?: WeeklyReviewInput;
         [key: string]: unknown;
     };

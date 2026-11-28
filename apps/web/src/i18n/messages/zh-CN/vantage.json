@@ -594,6 +594,7 @@
     "company-architecture": "公司架构",
     "workspace-required": "公司必需文档",
     "personal-star": "个人收藏",
+    "sharedJudgeTesting": "测试模式：生成与评审使用了相同的部署，评审并非独立进行。",
     "sourcePreviewUnavailable": "无法查看所选精确版本或当前访问被拒绝。请重新查看来源并选择其他版本。",
     "retrySourceInspection": "重新查看来源",
     "staleScopeConfiguration": "来源配置已更改。保存前请重新加载此页面。",

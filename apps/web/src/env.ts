@@ -82,6 +82,10 @@ const serverSchema = z.object({
     EMBEDDING_SECRETS_KEY: optionalString(),
     VANTAGE_WEEKLY_REVIEW_ENABLED: z.preprocess(normalize, z.enum(["true", "false"]).optional()),
     VANTAGE_V2_ENABLED: z.preprocess(normalize, z.enum(["true", "false"]).optional()),
+    VANTAGE_ALLOW_SHARED_JUDGE_DEPLOYMENT: z.preprocess(
+        normalize,
+        z.enum(["true", "false"]).optional()
+    ),
     VANTAGE_WEEKLY_REVIEW_GENERATION_ROUTE: optionalVantageRoute(),
     VANTAGE_WEEKLY_REVIEW_JUDGE_ROUTE: optionalVantageRoute(),
     VANTAGE_TOPIC_FIRST_DIGEST_ROUTE: optionalVantageRoute(),
@@ -622,6 +626,7 @@ function parseServerEnv() {
         EMBEDDING_SECRETS_KEY: process.env.EMBEDDING_SECRETS_KEY,
         VANTAGE_WEEKLY_REVIEW_ENABLED: process.env.VANTAGE_WEEKLY_REVIEW_ENABLED,
         VANTAGE_V2_ENABLED: process.env.VANTAGE_V2_ENABLED,
+        VANTAGE_ALLOW_SHARED_JUDGE_DEPLOYMENT: process.env.VANTAGE_ALLOW_SHARED_JUDGE_DEPLOYMENT,
         VANTAGE_WEEKLY_REVIEW_GENERATION_ROUTE: process.env.VANTAGE_WEEKLY_REVIEW_GENERATION_ROUTE,
         VANTAGE_WEEKLY_REVIEW_JUDGE_ROUTE: process.env.VANTAGE_WEEKLY_REVIEW_JUDGE_ROUTE,
         VANTAGE_TOPIC_FIRST_DIGEST_ROUTE: process.env.VANTAGE_TOPIC_FIRST_DIGEST_ROUTE,

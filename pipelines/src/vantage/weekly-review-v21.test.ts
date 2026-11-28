@@ -244,11 +244,44 @@ describe("canonical V2.1 contract and admission", () => {
         expect(p.authorizeDispatch).not.toHaveBeenCalled();
         expect(p.invoke).not.toHaveBeenCalled();
     });
-    it("rejects identical model identities before transport", async () => {
+    it.each([undefined, false])(
+        "rejects identical identities with override %s before transport",
+        async override => {
+            const p = ports();
+            p.judge = p.generation;
+            await expect(
+                runWeeklyReviewV21(input(), {
+                    ...p,
+                    invoke: p.invoke as never,
+                    allowSharedJudgeDeployment: override,
+                })
+            ).rejects.toThrow("independent_judge_required");
+            expect(p.invoke).not.toHaveBeenCalled();
+        }
+    );
+    it("allows shared identities only with the explicit testing override and records dependence", async () => {
         const p = ports();
         p.judge = p.generation;
-        await expect(run(p)).rejects.toThrow("independent_judge_required");
-        expect(p.invoke).not.toHaveBeenCalled();
+        const result = await runWeeklyReviewV21(input(), {
+            ...p,
+            invoke: p.invoke as never,
+            allowSharedJudgeDeployment: true,
+        });
+        expect(result.evidence.judgeIndependent).toBe(false);
+        expect(result.evidence.generationModel).toBe(result.evidence.judgeModel);
+        expect(p.authorizeDispatch.mock.calls.map(call => call[0])).toEqual([
+            "generation",
+            "judge",
+        ]);
+    });
+    it("keeps distinct identities independent when the testing override is enabled", async () => {
+        const p = ports();
+        const result = await runWeeklyReviewV21(input(), {
+            ...p,
+            invoke: p.invoke as never,
+            allowSharedJudgeDeployment: true,
+        });
+        expect(result.evidence.judgeIndependent).toBe(true);
     });
     it("revocation before Generation prevents transport", async () => {
         const p = ports();

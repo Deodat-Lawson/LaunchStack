@@ -145,3 +145,58 @@ A disposable session value surfaced in local error diagnostics during verificati
    ```
 
 5. Open the web app at `http://localhost:3393`, using the same hostname as `BETTER_AUTH_URL` for redirects and cookies. Sign in as a local member with document read and edit capability, turn on Beta apps for that workspace and add eligible documents and an active persona. In Vantage, save goals and the persona, generate a brief, create a plan and approve it with a persona task. Follow `vantage/task.requested` in the local Inngest dashboard at `http://127.0.0.1:8293`, then review the task result in Vantage.
+
+## Follow-up from `2f50ff235fe8`
+
+The starting worktree and `origin/vantage/port-to-main-20261123` both resolved to `2f50ff235fe87cd8df9cce5c42227a1563979097`.
+
+### Scenario comparison
+
+Ran the isolated Scenario store suite three times at each revision, alternating baseline and HEAD. Both frozen source snapshots used Node 24.19.0, the same installed dependencies and PostgreSQL 17.11 on loopback. Each run used a new disposable database and applied the engine and product migrations for its own revision.
+
+| Revision       |   Round 1 |   Round 2 |             Round 3 |
+| -------------- | --------: | --------: | ------------------: |
+| `1ed145010ab1` | 12 passed | 12 passed | 11 passed, 1 failed |
+| `2f50ff235fe8` | 12 passed | 12 passed | 11 passed, 1 failed |
+
+Both failures came from `lets competing workers converge` at [the assertion that every worker reached `done`](../../pipelines/src/scenarios/v2/store.integration.test.ts#L330). The test, Scenario implementation and shared package sources are identical across the two pins. The baseline reproduced the failure, so Scenario code was left unchanged.
+
+### Session artifact check
+
+Scanned both commits in `1ed145010ab1..2f50ff235fe8`, covering 80 changed paths and 87 unique blobs, including the report and every version of the pushed screenshots. The checks covered the installed Better Auth session format, cookie assignments, serialized tokens, credential headers, browser-state and log paths, and PNG metadata. The 15 strings that matched the bare 32-character shape were TypeScript identifiers. There were no other hits. All 16 screenshots matched their Git blob hashes. Visual inspection and local OCR of each screenshot showed synthetic UI data and plan hashes, with no visible cookies or session tokens. The check used token structure and syntax classification, with the revoked value kept out of the scan.
+
+### Shared Judge testing
+
+`VANTAGE_ALLOW_SHARED_JUDGE_DEPLOYMENT=true` enables the testing exception. With the switch unset or false, identical deployment IDs still produce `independent_judge_required`. The admission checks and Judge evaluation still run with the testing exception.
+
+The run stores the selected deployment IDs, independence flag and override state in its manifest. Owner status exposes the record under `judgeDeployment` and retains it after terminal failure cleanup. Accepted evidence includes `judgeIndependent`. A shared-deployment run carries `qualityEvidence: shared-judge-test` and a localized notice in the brief.
+
+### Live 12-document Harborlight result
+
+Run `37a38d54-52c7-43d9-9dcd-6138590056d6` was admitted in 81.352 seconds with 12 evidence units and 13,406 excerpt bytes. The local Azure profile used `gpt-6-luna` for Generation and Judge, with low reasoning effort on Judge. The saved manifest and owner status both reported `independent: false` and `sharedDeploymentAllowed: true`. Accepted evidence reported `judgeIndependent: false` and `qualityEvidence: shared-judge-test`.
+
+| Admitted decision topic                                              | Proposed tasks | Persona | Owner |
+| -------------------------------------------------------------------- | -------------: | ------: | ----: |
+| Pilot continuation and open expansion gates                          |              0 |       0 |     0 |
+| Rollback decision accountability and unverified production readiness |              3 |       2 |     1 |
+| Usage across different populations and separate reporting            |              0 |       0 |     0 |
+| **Total**                                                            |          **3** |   **2** | **1** |
+
+The first decomposition pass proposed three tasks and kept all three. There were zero drops, no drop reason codes and no repair call. The read-only evidence analyst received **Analyze rollback decision-accountability evidence** and **Draft a rollback decision-owner acceptance record**. The owner received **Obtain and record accepted rollback decision ownership**. Each task used two frozen refs.
+
+| Stage         | Azure requests |  Estimated USD |
+| ------------- | -------------: | -------------: |
+| Digest        |             10 |     0.00445490 |
+| Exploration   |              4 |     0.00219427 |
+| Generation    |              1 |     0.00267970 |
+| Judge         |              1 |     0.00247630 |
+| Decomposition |              1 |     0.00276750 |
+| **Total**     |         **17** | **0.01457267** |
+
+All 17 requests returned HTTP 200 and settled in both the relay and the application journal. The estimate applies Luna's configured rates of USD 0.10 per million uncached input tokens, USD 0.01 per million cached input tokens, and USD 0.50 per million output tokens. The conservative comparison was USD 0.04073700, below the USD 5 cap. The session created for this live fixture was revoked after verification.
+
+### Follow-up checks
+
+- Workspace typecheck, monolithic lint with a 10,240 MB heap, and `pnpm build` passed. Lint reported 26 warnings and no errors. Build generated all 212 static pages.
+- The full package run passed 2,182 tests across 18 workspaces, with one skip. The Scenario suite passed in that run and remained unchanged after the isolated comparison above.
+- The full web run passed 10,098 tests across 812 suites, with 18 skipped tests and six skipped suites. The environment-template assertion was among the skips because it requires opening the template.

@@ -54,6 +54,7 @@ function fixture() {
         attempts: [] as Record<string, unknown>[],
         active: null as string | null,
         trace: { synthetic: true } as object | null,
+        snapshotCommitment: { snapshotHash: "snapshot" } as Record<string, unknown>,
         usage: [] as Parameters<NonNullable<WeeklyReviewQuery["recordAiUsage"]>>[],
     };
     const meter = jest.fn(async () => {});
@@ -76,7 +77,19 @@ function fixture() {
                         ? [local.row]
                         : [];
                 if (sql.startsWith("SELECT * FROM pdr_ai_v2_vantage_weekly_review_run_manifests"))
-                    return [{ manifest, manifest_hash: topicManifestHash(manifest) }];
+                    return [
+                        {
+                            manifest,
+                            manifest_hash: topicManifestHash(manifest),
+                            snapshot_commitment: local.snapshotCommitment,
+                        },
+                    ];
+                if (sql.includes("AS judge_deployment"))
+                    return [{ judge_deployment: local.snapshotCommitment.judgeDeployment }];
+                if (sql.includes("jsonb_build_object('judgeDeployment'")) {
+                    local.snapshotCommitment.judgeDeployment = JSON.parse(String(args[1]));
+                    return [];
+                }
                 if (sql.startsWith("SELECT run_id"))
                     return local.active ? [{ run_id: local.active }] : [];
                 if (
@@ -178,6 +191,39 @@ const start = (f: ReturnType<typeof fixture>, attempt = 1) =>
         snapshotHash: "snapshot",
         expectedActiveId: null,
     });
+
+it("retains non-independent Judge diagnostics after failure clears trace and ciphertext", async () => {
+    const f = fixture();
+    f.state.row.generation_dispatched = false;
+    const deployment = {
+        generationModel: "luna",
+        judgeModel: "luna",
+        independent: false,
+        sharedDeploymentAllowed: true,
+    };
+    await f.repository.recordJudgeDeployment(actor, id, deployment);
+    await f.repository.fail(actor, id, "judge_admission_failed", { stage: "judge" });
+    expect(f.state.trace).toBeNull();
+    expect(f.state.row.ciphertext).toBeNull();
+    expect((await f.repository.status(actor, id)).judgeDeployment).toEqual(deployment);
+    expect(f.state.snapshotCommitment.snapshotHash).toBe("snapshot");
+});
+
+it("records the distinct default and cannot replace policy after Generation dispatch", async () => {
+    const f = fixture();
+    const deployment = {
+        generationModel: "generation",
+        judgeModel: "judge",
+        independent: true,
+        sharedDeploymentAllowed: false,
+    };
+    await expect(f.repository.recordJudgeDeployment(actor, id, deployment)).rejects.toThrow(
+        "dispatch_already_reserved_or_invalid_order"
+    );
+    f.state.row.generation_dispatched = false;
+    await f.repository.recordJudgeDeployment(actor, id, deployment);
+    expect((await f.repository.status(actor, id)).judgeDeployment).toEqual(deployment);
+});
 
 it("journals each physical retry and reported metering without rewriting dispatch reservations", async () => {
     const f = fixture(),
@@ -392,7 +438,7 @@ it("lists legacy failures with a safe fallback and only issues SELECTs on owner 
     });
     expect(f.state.trace).toEqual({ synthetic: true });
     const reads = f.sqlLog.filter(item => !item.sql.startsWith("SET "));
-    expect(reads).toHaveLength(6);
+    expect(reads).toHaveLength(7);
     expect(
         reads.every(item => item.sql.startsWith("SELECT ") && !item.sql.includes("FOR UPDATE"))
     ).toBe(true);

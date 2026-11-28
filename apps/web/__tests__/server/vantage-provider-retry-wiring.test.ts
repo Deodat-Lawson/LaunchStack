@@ -116,6 +116,7 @@ function fixture(
         beginDigestPreparation: jest.fn(),
         recordDigestPreparation: jest.fn(),
         recordExploration: jest.fn(),
+        recordJudgeDeployment: jest.fn(),
         claimExploration: jest.fn(async () => Date.now() + 150000),
         freezeTopic: jest.fn(async () => ({ input })),
         authorizeDispatch: jest.fn(),
@@ -273,6 +274,28 @@ it("wires all four stages with journaled physical attempts and unchanged retry d
                 expectedActiveId: null,
             })
         );
+    } finally {
+        f.restore();
+    }
+});
+it.each([false, true])("captures the shared Judge switch %s before dispatch", async enabled => {
+    const f = fixture();
+    process.env.VANTAGE_ALLOW_SHARED_JUDGE_DEPLOYMENT = String(enabled);
+    try {
+        await f.run();
+        expect(runWeeklyReviewV21).toHaveBeenCalledWith(
+            expect.anything(),
+            expect.objectContaining({ allowSharedJudgeDeployment: enabled })
+        );
+        expect(f.repository.recordJudgeDeployment).toHaveBeenCalledWith(expect.anything(), "run", {
+            generationModel: "fake",
+            judgeModel: "fake",
+            independent: false,
+            sharedDeploymentAllowed: enabled,
+        });
+        const recorded = f.repository.recordJudgeDeployment.mock.invocationCallOrder[0]!;
+        const dispatched = f.repository.authorizeDispatch.mock.invocationCallOrder[0]!;
+        expect(recorded).toBeLessThan(dispatched);
     } finally {
         f.restore();
     }

@@ -283,6 +283,11 @@ export function ThisWeekScreen({ week: initialWeek }: { week?: string | null }) 
                                         {review.report.headline}
                                     </h1>
                                     <p className={s.prose}>{review.report.brief}</p>
+                                    {review.evidence.judgeIndependent === false ? (
+                                        <p role="status" className="text-warn-ink text-sm">
+                                            {t("sharedJudgeTesting")}
+                                        </p>
+                                    ) : null}
                                     <Collapsible>
                                         <CollapsibleTrigger asChild>
                                             <Button

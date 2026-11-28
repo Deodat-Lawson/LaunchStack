@@ -594,6 +594,7 @@
     "company-architecture": "Company Architecture",
     "workspace-required": "Required company document",
     "personal-star": "Personal star",
+    "sharedJudgeTesting": "Testing mode: Generation and Judge used the same deployment. Judge was not independent.",
     "sourcePreviewUnavailable": "The selected exact version could not be inspected or current access was denied. Inspect this source again to choose another version.",
     "retrySourceInspection": "Inspect source again",
     "staleScopeConfiguration": "Source configuration changed. Reload this page before saving.",

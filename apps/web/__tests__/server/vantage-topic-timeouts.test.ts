@@ -48,7 +48,10 @@ jest.mock("~/server/vantage/weekly-review-topic-run", () => ({
     resolveTopicSelectionProviders: jest.fn(),
 }));
 jest.mock("~/server/vantage/weekly-review-test-provider", () => ({
-    weeklyReviewTestPorts: () => ({}),
+    weeklyReviewTestPorts: () => ({
+        generation: { modelId: "fixture-generation" },
+        judge: { modelId: "fixture-judge" },
+    }),
 }));
 jest.mock("@launchstack/pipelines/vantage", () =>
     jest.requireActual("../../../../pipelines/src/vantage/week")
@@ -124,6 +127,7 @@ it.each(["digest", "exploring", "writing", "checking", "authority", ...timingFai
                 }),
                 claimExploration: jest.fn(async () => Date.now() + 1000),
                 freezeTopic: jest.fn(async () => ({ input })),
+                recordJudgeDeployment: jest.fn(),
                 authorizeDispatch: jest.fn(),
                 accept: jest.fn(async () => {
                     state.active = "candidate";

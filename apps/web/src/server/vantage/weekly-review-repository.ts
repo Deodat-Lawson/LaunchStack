@@ -45,6 +45,10 @@ import {
     type VantageV2ModelStage,
 } from "./weekly-review-failure-record";
 import { recordWeeklyReviewAttemptUsage } from "./weekly-review-attempt-usage";
+import {
+    readJudgeDeploymentDiagnostics,
+    type WeeklyReviewJudgeDeployment,
+} from "./weekly-review-judge-policy";
 
 const WeeklyReviewV21SchemaForCarryover = z.object({
     topics: z.array(
@@ -130,6 +134,9 @@ function reportReadEvidence(value: unknown, topicRun: boolean): unknown {
                 title,
             })),
             qualityEvidence: evidence.qualityEvidence,
+            ...(typeof evidence.judgeIndependent === "boolean"
+                ? { judgeIndependent: evidence.judgeIndependent }
+                : {}),
             scopedEvidence: snapshot.scopedEvidence,
             budget: evidence.budget,
             retrievalMode: "topic-first",
@@ -693,6 +700,29 @@ export function createWeeklyReviewRepository(
                     ]
                 );
                 return frozen;
+            });
+        },
+        recordJudgeDeployment(
+            actor: WeeklyReviewActor,
+            id: string,
+            deployment: WeeklyReviewJudgeDeployment
+        ) {
+            return runTransaction(actor, id, async query => {
+                const row = await rowFor(query, actor, id, true);
+                if (
+                    row.status !== "reserved" ||
+                    row.retrieval_mode !== "topic_first" ||
+                    !row.snapshot_hash ||
+                    row.generation_dispatched
+                )
+                    throw new WeeklyReviewConflict("dispatch_already_reserved_or_invalid_order");
+                await authority(query, actor, dependenciesOf(row), "dispatch");
+                const diagnostics = readJudgeDeploymentDiagnostics(deployment);
+                if (!diagnostics) throw new WeeklyReviewConflict("review_model_unavailable");
+                await query(
+                    "UPDATE pdr_ai_v2_vantage_weekly_review_run_manifests SET snapshot_commitment=COALESCE(snapshot_commitment,'{}'::jsonb)||jsonb_build_object('judgeDeployment',$2::jsonb) WHERE run_id=$1::uuid",
+                    [id, JSON.stringify(diagnostics)]
+                );
             });
         },
         recordExploration(
@@ -1551,12 +1581,17 @@ export function createWeeklyReviewRepository(
         status(actor: WeeklyReviewActor, id: string) {
             return transact(async query => {
                 const row = await rowFor(query, actor, id);
+                const [manifest] = await query(
+                    "SELECT snapshot_commitment->'judgeDeployment' AS judge_deployment FROM pdr_ai_v2_vantage_weekly_review_run_manifests WHERE run_id=$1::uuid AND company_id=$2::bigint AND owner_id=$3",
+                    [id, actor.companyId, actor.userId]
+                );
                 const attempts = await query(
                     "SELECT id,stage,attempt_ordinal,message_bytes,started_at,settled_at,outcome FROM pdr_ai_v2_vantage_weekly_review_provider_attempts WHERE company_id=$1::bigint AND owner_id=$2 AND run_id=$3::uuid ORDER BY started_at DESC,id DESC LIMIT 257",
                     [actor.companyId, actor.userId, id]
                 );
                 return {
                     ...runSummary(row),
+                    judgeDeployment: readJudgeDeploymentDiagnostics(manifest?.judge_deployment),
                     providerAttempts: attempts.slice(0, 256).map(weeklyReviewProviderAttempt),
                     providerAttemptsTruncated: attempts.length > 256,
                 };

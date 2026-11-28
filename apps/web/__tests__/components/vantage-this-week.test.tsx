@@ -31,6 +31,16 @@ jest.mock("~/components/ui/select", () => ({
 }));
 const proposal = "Propose five customer calls before increasing paid spend";
 
+test("shared Judge testing notice is explicit only for dependent runs", () => {
+    data.review.evidence = { judgeIndependent: false, qualityEvidence: "shared-judge-test" };
+    renderWithLocale(<ThisWeekScreen />, "en");
+    expect(
+        screen.getByText(
+            "Testing mode: Generation and Judge used the same deployment. Judge was not independent."
+        )
+    ).toBeInTheDocument();
+});
+
 test("V2 settings, approval and degradation controls stay hidden when the server flag is off", () => {
     data.context.v2Enabled = false;
     data.review.evidence = { topicRetrieval: { degradation: { reason: "provider" } } };

@@ -48,6 +48,10 @@ import {
 } from "./weekly-review-topic-types";
 import { weeklyReviewTestPorts } from "./weekly-review-test-provider";
 import {
+    allowSharedJudgeDeployment,
+    judgeDeploymentDiagnostics,
+} from "./weekly-review-judge-policy";
+import {
     safeWeeklyReviewFailureCode,
     weeklyReviewFailureRecord,
     type WeeklyReviewFailureStage,
@@ -307,6 +311,7 @@ export async function generateWeeklyReview(
         return policy;
     };
     const budgetPorts = { budgetProfile: "topic-first" as const };
+    const sharedJudgeAllowed = allowSharedJudgeDeployment();
     const authorizeDispatch = async (kind: "generation" | "judge") => {
         checkRun();
         failureStage = kind;
@@ -456,13 +461,24 @@ export async function generateWeeklyReview(
                     checkRun();
                     failureStage = "generation";
                     const test = weeklyReviewTestPorts(input);
-                    if (test)
+                    if (test) {
+                        await repository.recordJudgeDeployment(
+                            current,
+                            reserved.id,
+                            judgeDeploymentDiagnostics(
+                                test.generation.modelId,
+                                test.judge.modelId,
+                                sharedJudgeAllowed
+                            )
+                        );
                         return runWeeklyReviewV21(input, {
                             ...test,
                             ...budgetPorts,
                             authorizeDispatch,
                             onGenerationComplete,
+                            allowSharedJudgeDeployment: sharedJudgeAllowed,
                         });
+                    }
                     const generationRoute =
                         process.env.VANTAGE_WEEKLY_REVIEW_GENERATION_ROUTE ?? "default";
                     const judgeRoute = process.env.VANTAGE_WEEKLY_REVIEW_JUDGE_ROUTE ?? "reasoning";
@@ -487,12 +503,22 @@ export async function generateWeeklyReview(
                         judge.behavior.parameters.maxOutputTokens !== "supported"
                     )
                         throw Error("review_model_unavailable");
+                    await repository.recordJudgeDeployment(
+                        current,
+                        reserved.id,
+                        judgeDeploymentDiagnostics(
+                            generation.modelId,
+                            judge.modelId,
+                            sharedJudgeAllowed
+                        )
+                    );
                     return runWeeklyReviewV21(input, {
                         generation,
                         judge,
                         ...budgetPorts,
                         authorizeDispatch,
                         onGenerationComplete,
+                        allowSharedJudgeDeployment: sharedJudgeAllowed,
                     });
                 }
             ),
@@ -521,7 +547,9 @@ export async function generateWeeklyReview(
                 qualityEvidence:
                     process.env.VANTAGE_WEEKLY_REVIEW_TEST_PROVIDER === "true"
                         ? "injected-deterministic"
-                        : "independent-configured-models",
+                        : result.evidence.judgeIndependent
+                          ? "independent-configured-models"
+                          : "shared-judge-test",
             },
             expectedActiveId: args.expectedActiveId,
         });

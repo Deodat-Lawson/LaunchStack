@@ -474,6 +474,8 @@ export async function runWeeklyReviewV21(
     ports: {
         generation: ResolvedChatModel;
         judge: ResolvedChatModel;
+        /** Explicit testing override; the default requires separate deployments. */
+        allowSharedJudgeDeployment?: boolean;
         authorizeDispatch: (kind: "generation" | "judge") => Promise<void>;
         invoke?: typeof invokeStructuredAttempt;
         validationJudge?: ValidationJudge;
@@ -495,7 +497,9 @@ export async function runWeeklyReviewV21(
     validateScopedWeeklyReviewInput(input);
     if (!topic && (input.scopedEvidence !== undefined) !== (ports.budgetProfile === "scoped-v2"))
         throw Error("scoped_budget_profile_mismatch");
-    if (ports.generation.modelId === ports.judge.modelId) throw Error("independent_judge_required");
+    const judgeIndependent = ports.generation.modelId !== ports.judge.modelId;
+    if (!judgeIndependent && ports.allowSharedJudgeDeployment !== true)
+        throw Error("independent_judge_required");
     if (
         input.mandatoryCoverage.required !== input.mandatoryCoverage.included ||
         input.mandatoryCoverage.required < 1 ||
@@ -785,6 +789,7 @@ export async function runWeeklyReviewV21(
             outputUnitIds: outputUnits(evaluation).map(unit => unit.id),
             generationModel: ports.generation.modelId,
             judgeModel: ports.judge.modelId,
+            judgeIndependent,
             usage: answer.usage,
         },
     };

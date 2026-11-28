@@ -312,6 +312,7 @@ it("accepts a correctly bound topic snapshot and allowlists its read DTO", async
     const f = fixture();
     const evidence = {
         ...f.evidence,
+        judgeIndependent: false,
         trace: { secret: "private exploration trace" },
         manifest: { secret: "private manifest" },
     };
@@ -325,6 +326,7 @@ it("accepts a correctly bound topic snapshot and allowlists its read DTO", async
     expect(saved.evidence).not.toHaveProperty("trace");
     expect(saved.evidence).not.toHaveProperty("manifest");
     expect(saved.evidence).not.toHaveProperty("inputSnapshot.retrievalContext");
+    expect(saved.evidence).toHaveProperty("judgeIndependent", false);
 });
 it("the run mode forces topic binding even if evidence claims legacy admission", async () => {
     const f = fixture();
